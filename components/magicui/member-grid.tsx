@@ -84,7 +84,14 @@ export function MemberGrid({ members, className }: MemberGridProps) {
                   <span
                     className="px-2 py-1 rounded-full text-xs font-medium text-white"
                     style={{
-                      background: member.role === "火力" ? "#e53e3e" : member.role === "控位" ? "#4299e1" : "#38a169",
+                      background: 
+                        member.role === "火力" ? "#e53e3e" : 
+                        member.role === "控位" ? "#4299e1" : 
+                        member.role === "后勤" ? "#38a169" :
+                        member.role === "会长" ? "#d69e2e" :
+                        member.role === "技术" ? "#805ad5" :
+                        member.role === "外交" ? "#e53e3e" :
+                        "#38a169",
                     }}
                   >
                     {member.role}

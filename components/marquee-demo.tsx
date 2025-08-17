@@ -22,7 +22,7 @@ const guildMembers = [
   },
   {
     name: "今夕_啵咕",
-    username: "后勤",
+    username: "外交",
     body: "活动登记，积分管理。上分如风，稳住我们能赢。",
     img: "https://avatar.vercel.sh/bogu",
   },

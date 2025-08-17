@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>弹弹堂 · 今夕公会</title>
+<meta name="color-scheme" content="light dark" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b1020; --text:#e8edf6; --muted:#a5b2cc; --brand:#60a5fa; --lime:#22c55e; --amber:#f59e0b; --pink:#fb7185;
+  --radius:16px; --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:16px/1.65 "Noto Sans SC", system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color:var(--text);
+  background:
+    linear-gradient(180deg, rgba(8,12,24,.72), rgba(8,12,24,.72)),
+    url("bg.jpg") center / cover no-repeat fixed,
+    radial-gradient(1200px 800px at 90% -10%, #1b2a55 0%, transparent 60%),
+    radial-gradient(1100px 650px at -10% 10%, #0f2b3f 0%, transparent 60%),
+    linear-gradient(180deg, #0b1224, var(--bg));
+  background-blend-mode: normal, overlay, normal, normal, normal;
+}
+a{color:inherit}
+
+header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(1.2) blur(8px);background:rgba(11,16,32,.6);border-bottom:1px solid rgba(255,255,255,.06)}
+.container{max-width:1180px;margin:auto;padding:0 16px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.logo-img{width:40px;height:40px;border-radius:12px;object-fit:cover;box-shadow:0 0 0 3px rgba(255,255,255,.08) inset}
+.logo h1{font:600 18px/1 "ZCOOL KuaiLe","Noto Sans SC",cursive; letter-spacing:.5px; margin:0}
+.nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+.nav a{opacity:.92;text-decoration:none}
+.nav a:hover{opacity:1}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));cursor:pointer;text-decoration:none}
+.btn.primary{background:linear-gradient(180deg,#2a5bd7,#1a3b8f);border:none;color:#fff}
+
+section{padding:36px 0}
+.hero{padding:64px 0 28px}
+.hero-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card.pad{padding:24px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(96,165,250,.18);color:#cfe3ff;border:1px solid rgba(96,165,250,.3);padding:6px 12px;border-radius:999px;font-size:13px}
+h2{margin:.2em 0 .4em;font:700 34px/1.2 "ZCOOL KuaiLe","Noto Sans SC",cursive;letter-spacing:.5px}
+p.lead{color:#d5def0}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.item{padding:18px;position:relative;overflow:hidden}
+.item::before{
+  content:""; position:absolute; inset:-1px; border-radius:20px;
+  padding:1px; background:conic-gradient(from 160deg at 30% 10%, #60a5fa, #22c55e, #f59e0b, #fb7185, #60a5fa);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
+}
+.item h3{
+  margin:.2em 0 .3em;
+  font:600 20px/1.25 "ZCOOL KuaiLe","Noto Sans SC",cursive;
+  letter-spacing:.3px; display:flex; align-items:center; gap:.5em;
+}
+.item h3 i{font-size:18px; opacity:.9}
+.item .bling{
+  font:400 18px/1.25 "Ma Shan Zheng","ZCOOL KuaiLe",cursive;
+  color:#ffe9a6; text-shadow:0 0 18px rgba(245,158,11,.55);
+}
+.muted{color:var(--muted)}
+
+.backtop{position:fixed;right:16px;bottom:16px;z-index:40;display:none}
+@media (max-width:960px){
+  .hero-wrap{grid-template-columns:1fr}
+  .grid-3,.grid-2{grid-template-columns:1fr}
+}
+
+/* Video container styles for hero section */
+.video-container {
+  aspect-ratio: 4/3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(180deg, #0d1830, #091224);
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.3) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.video-container:hover .video-overlay {
+  opacity: 1;
+}
+
+.video-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.video-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.video-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Enhanced marquee styles for member section */
+.members-marquee {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 20px;
+}
+
+.marquee-row {
+  display: flex;
+  gap: 16px;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-row.reverse {
+  animation-direction: reverse;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.member-card-marquee {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: 16px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.member-card-marquee:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.4);
+}
+
+.member-avatar-marquee {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,#60a5fa,#22c55e,#f59e0b,#fb7185,#60a5fa);
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.member-name-marquee {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.member-role-marquee {
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="logo" href="#top"><img class="logo-img" src="logo.jpg" alt=""><h1>弹弹堂 · 今夕公会</h1></a>
+    <nav aria-label="主导航">
+      <ul>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#news">公告</a></li>
+        <li><a href="#events">活动</a></li>
+        <li><a href="#members">成员</a></li>
+        <li><a href="#recruit">招新</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </nav>
+    <a class="btn primary" href="#recruit"><i class="ri-rocket-line"></i>加入</a>
+  </div>
+</header>
+
+<main id="top" class="container">
+  <section class="hero">
+    <div class="hero-wrap">
+      <div class="card pad">
+        <span class="badge"><i class="ri-sparkling-2-line"></i> 今夕 · 欢迎回家</span>
+        <h2>今晚开黑，星光作陪</h2>
+        <p class="lead">组队、磨合、提升；每一局都有高光，每一次集合都有欢笑。</p>
+        <div class="hero-cta">
+          <a class="btn" href="#news"><i class="ri-megaphone-line"></i> 公告</a>
+          <a class="btn" href="#events"><i class="ri-calendar-event-line"></i> 活动</a>
+          <a class="btn primary" href="#members"><i class="ri-user-star-line"></i> 成员</a>
+        </div>
+      </div>
+      <!-- Replaced poster with video container -->
+      <div class="card video-container" aria-label="公会宣传视频">
+        <video id="hero-video" muted loop autoplay>
+          <source src="1.MP4" type="video/mp4">
+          您的浏览器不支持视频播放。
+        </video>
+        <div class="video-overlay">
+          <div class="video-controls">
+            <button class="video-btn" id="play-pause-btn">
+              <i class="ri-pause-line"></i>
+            </button>
+            <button class="video-btn" id="mute-btn">
+              <i class="ri-volume-mute-line"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about"><div class="grid-3">
+    <div class="card item"><h3><i class="ri-heart-2-line"></i> 公会宣言</h3><p class="muted">以战会友，彼此成就。强势在操作，温柔在态度。</p><div class="bling">愿你每次出场，都被掌声围绕。</div></div>
+    <div class="card item"><h3><i class="ri-time-line"></i> 活跃时段</h3><p class="muted">工作日 20:00–23:00；周末弹性开黑。</p><div class="bling">如果星光不问赶路人，我们就把星光点亮。</div></div>
+    <div class="card item"><h3><i class="ri-shield-star-line"></i> 入会要点</h3><p class="muted">文明游戏、支持指挥、接受分工。</p><div class="bling">把"配合"写进肌肉记忆。</div></div>
+  </div></section>
+
+  <section id="news"><div class="grid-2">
+    <div class="card item"><h3><i class="ri-megaphone-line"></i> 置顶公告</h3><p class="muted">夏季冲榜进行中，组队排位、周常挑战、擂台切磋均可累计今夕积分。</p><div class="bling">上分如风，稳住我们能赢。</div></div>
+    <div class="card item"><h3><i class="ri-trophy-line"></i> 战绩速览</h3><p class="muted">周冠军 ×2、跨区赛 Top10、公会任务连续满进度。</p><div class="bling">胜利不是终点，它只是下一局的开场曲。</div></div>
+  </div></section>
+
+  <section id="events"><div class="grid-3">
+    <div class="card item"><h3><i class="ri-team-line"></i> 周常团练</h3><p class="muted">周三/六晚 21:00，战术走位与默契磨合。</p><div class="bling">同频的人，会在下一次转角相遇。</div></div>
+    <div class="card item"><h3><i class="ri-gamepad-line"></i> 友谊赛</h3><p class="muted">跨会交流，礼貌第一；支持录屏剪辑高光。</p><div class="bling">友谊第一，输出也要第一。</div></div>
+    <div class="card item"><h3><i class="ri-movie-2-line"></i> 混剪征集</h3><p class="muted">征集精彩操作，季末发布「今夕混剪」。</p><div class="bling">你的镜头，正在等待上场。</div></div>
+  </div></section>
+
+  <section id="members">
+    <div class="card pad">
+      <h3 style="margin-top:0;font:700 26px/1.2 'ZCOOL KuaiLe','Noto Sans SC'"><i class="ri-user-star-line"></i> 管理团队</h3>
+      <!-- Replaced simple grid with marquee animation -->
+      <div class="members-marquee">
+        <div class="marquee-row" id="members-row-1">
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">执</div>
+            <div class="member-name-marquee">会长 · 今夕_执手</div>
+            <div class="member-role-marquee">统筹 · 战术指挥</div>
+          </div>
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">淡</div>
+            <div class="member-name-marquee">副会 · 今夕_淡意</div>
+            <div class="member-role-marquee">训练 · 新人引导</div>
+          </div>
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">恐</div>
+            <div class="member-name-marquee">战术官 · 今夕_恐龙</div>
+            <div class="member-role-marquee">阵容 · 地图位</div>
+          </div>
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">啵</div>
+            <div class="member-name-marquee">后勤 · 今夕_啵咕</div>
+            <div class="member-role-marquee">活动登记 · 积分</div>
+          </div>
+          <!-- Duplicate for seamless loop -->
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">执</div>
+            <div class="member-name-marquee">会长 · 今夕_执手</div>
+            <div class="member-role-marquee">统筹 · 战术指挥</div>
+          </div>
+          <div class="member-card-marquee">
+            <div class="member-avatar-marquee">淡</div>
+            <div class="member-name-marquee">副会 · 今夕_淡意</div>
+            <div class="member-role-marquee">训练 · 新人引导</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recruit">
+    <div class="card pad">
+      <h3 style="margin-top:0;font:700 26px/1.2 'ZCOOL KuaiLe','Noto Sans SC'"><i class="ri-emotion-laugh-line"></i> 加入今夕</h3>
+      <form id="join-form" novalidate>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <p><label for="nickname">游戏昵称</label><br/><input id="nickname" name="nickname" required placeholder="今夕_你的ID" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--text)" /></p>
+          <p><label for="contact">联系方式</label><br/><input id="contact" name="contact" required placeholder="QQ / 微信 / 邮箱" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--text)" /></p>
+        </div>
+        <p><label for="msg">想说的话（选填）</label><br/><textarea id="msg" name="msg" placeholder="你的操作风格、设备、以往经历…" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--text);min-height:110px;resize:vertical"></textarea></p>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn primary" type="submit"><i class="ri-send-plane-2-line"></i> 提交申请</button>
+          <span class="muted" id="form-tip">提交后将发送到管理员邮箱。</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="grid-2">
+      <div class="card item"><h3><i class="ri-links-line"></i> 联系方式</h3><p class="muted">QQ群：<b>713162467</b> ｜ 招新官：<b>今夕_执手问年华</b><br/>邮箱：<a href="mailto:leijia_13335319637@163.com">leijia_13335319637@163.com</a></p><div class="bling">来都来了，别客气。</div></div>
+      <div class="card item">
+        <h3><i class="ri-question-answer-line"></i> 常见问题</h3>
+        <details open><summary>新人多久能参加活动？</summary><p class="muted">通常 1–3 天熟悉期，视配合度可更快。</p></details>
+        <details><summary>要不要强制语音？</summary><p class="muted">战队赛建议语音，日常娱乐不强制。</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a class="btn backtop" id="backtop" href="#top"><i class="ri-arrow-up-line"></i></a>
+<footer><div class="container"><p>© <span id="y"></span> 今夕公会</p></div></footer>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+const bt = document.getElementById('backtop');
+new IntersectionObserver(([e])=>{ bt.style.display = e.isIntersecting ? 'none' : 'inline-flex'; }).observe(document.querySelector('header'));
+
+// Video controls
+const video = document.getElementById('hero-video');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const muteBtn = document.getElementById('mute-btn');
+
+if (video && playPauseBtn && muteBtn) {
+  playPauseBtn.addEventListener('click', () => {
+    if (video.paused) {
+      video.play();
+      playPauseBtn.innerHTML = '<i class="ri-pause-line"></i>';
+    } else {
+      video.pause();
+      playPauseBtn.innerHTML = '<i class="ri-play-line"></i>';
+    }
+  });
+
+  muteBtn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    muteBtn.innerHTML = video.muted ? 
+      '<i class="ri-volume-mute-line"></i>' : 
+      '<i class="ri-volume-up-line"></i>';
+  });
+}
+
+// Form submission
+const form = document.getElementById('join-form');
+const tip = document.getElementById('form-tip');
+
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const nickname = formData.get('nickname');
+    const contact = formData.get('contact');
+    
+    if (!nickname || !contact) {
+      tip.textContent = '请填写游戏昵称和联系方式';
+      tip.style.color = '#f59e0b';
+      return;
+    }
+    
+    tip.textContent = '✅ 申请已提交！管理员会尽快联系您。';
+    tip.style.color = '#22c55e';
+    form.reset();
+  });
+}
+</script>
+</body>
+</html>

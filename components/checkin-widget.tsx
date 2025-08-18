@@ -18,6 +18,9 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
   const [userName, setUserName] = useState('')
   const [showHistory, setShowHistory] = useState(false)
   const [checkinHistory, setCheckinHistory] = useState<any[]>([])
+  const [showNameInput, setShowNameInput] = useState(false)
+  const [tempUserName, setTempUserName] = useState('')
+  const [nameError, setNameError] = useState('')
 
   // 生成或获取用户ID
   useEffect(() => {
@@ -32,6 +35,12 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
       
       setUserId(id)
       setUserName(name)
+      setTempUserName(name)
+      
+      // 如果没有用户名，显示输入界面
+      if (!name.trim()) {
+        setShowNameInput(true)
+      }
     }
   }, [])
 
@@ -50,15 +59,69 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
     }
   }
 
+  // 验证用户名
+  const validateUserName = (name: string): boolean => {
+    setNameError('')
+    
+    if (!name.trim()) {
+      setNameError('请输入您的账号名称')
+      return false
+    }
+    
+    if (name.trim().length < 2) {
+      setNameError('账号名称至少需要2个字符')
+      return false
+    }
+    
+    if (name.trim().length > 20) {
+      setNameError('账号名称不能超过20个字符')
+      return false
+    }
+    
+    // 检查特殊字符
+    const validPattern = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+    if (!validPattern.test(name.trim())) {
+      setNameError('账号名称只能包含中文、英文、数字和下划线')
+      return false
+    }
+    
+    return true
+  }
+
+  // 保存用户名
+  const saveUserName = () => {
+    if (!validateUserName(tempUserName)) {
+      return
+    }
+    
+    const trimmedName = tempUserName.trim()
+    setUserName(trimmedName)
+    localStorage.setItem('jinxi-user-name', trimmedName)
+    setShowNameInput(false)
+    setNameError('')
+  }
+
+  // 编辑用户名
+  const editUserName = () => {
+    setTempUserName(userName)
+    setShowNameInput(true)
+    setNameError('')
+  }
+
   // 执行签到
   const handleCheckin = async () => {
     if (!userId || isChecking) return
     
-    const currentUserName = userName || '匿名用户'
+    // 检查是否有用户名
+    if (!userName.trim()) {
+      setShowNameInput(true)
+      alert('请先设置您的账号名称')
+      return
+    }
     
     try {
       setIsChecking(true)
-      const result: CheckinResult = await checkinAPI.performCheckin(userId, currentUserName)
+      const result: CheckinResult = await checkinAPI.performCheckin(userId, userName)
       
       if (result.success) {
         // 签到成功，重新加载状态
@@ -136,6 +199,28 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
               历史记录
             </button>
           )}
+        </div>
+
+        {/* 用户名管理区域 */}
+        <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <i className="ri-user-3-line text-blue-400 text-lg"></i>
+              <div>
+                <div className="text-sm text-white/60">当前账号</div>
+                <div className="text-white font-medium">
+                  {userName ? userName : '未设置'}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={editUserName}
+              className="text-sm px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all duration-200 flex items-center gap-1"
+            >
+              <i className="ri-edit-line"></i>
+              {userName ? '修改' : '设置'}
+            </button>
+          </div>
         </div>
 
         {/* 签到按钮区域 */}
@@ -273,6 +358,103 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
                     暂无签到记录
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 用户名输入弹窗 */}
+      <AnimatePresence>
+        {showNameInput && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+            onClick={() => {
+              if (userName.trim()) {
+                setShowNameInput(false)
+                setNameError('')
+              }
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-sm rounded-2xl p-6 max-w-md w-full border border-white/20"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i className="ri-user-3-line text-2xl text-white"></i>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">设置账号名称</h3>
+                <p className="text-white/70 text-sm">
+                  {userName ? '修改您的账号名称，这将在排行榜中显示' : '请设置您的账号名称，以便在排行榜中显示'}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-white/80 text-sm font-medium mb-2">
+                    账号名称
+                  </label>
+                  <input
+                    type="text"
+                    value={tempUserName}
+                    onChange={(e) => {
+                      setTempUserName(e.target.value)
+                      setNameError('')
+                    }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        saveUserName()
+                      }
+                    }}
+                    placeholder="请输入2-20个字符"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
+                    autoFocus
+                  />
+                  {nameError && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-400 text-sm mt-2 flex items-center gap-1"
+                    >
+                      <i className="ri-error-warning-line"></i>
+                      {nameError}
+                    </motion.p>
+                  )}
+                </div>
+
+                <div className="text-xs text-white/50 space-y-1">
+                  <div>• 支持中文、英文、数字和下划线</div>
+                  <div>• 长度为 2-20 个字符</div>
+                  <div>• 将在排行榜中公开显示</div>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  {userName && (
+                    <button
+                      onClick={() => {
+                        setShowNameInput(false)
+                        setNameError('')
+                        setTempUserName(userName)
+                      }}
+                      className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white rounded-lg transition-all duration-200 font-medium"
+                    >
+                      取消
+                    </button>
+                  )}
+                  <button
+                    onClick={saveUserName}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+                  >
+                    {userName ? '保存修改' : '开始签到'}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

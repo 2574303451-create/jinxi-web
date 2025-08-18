@@ -1,488 +1,365 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
+import { MessageWallPost, CreatePostData } from "@/types/message-wall"
+import { messageWallService } from "@/services/message-wall-service"
+import { ImageUpload } from "@/components/ui/image-upload"
+import { useToast } from "@/components/ui/toast"
 
-interface Reaction {
-  type: string
-  count: number
-  users: string[]
-}
+export function MessageWall({ className }: { className?: string }) {
+  const [posts, setPosts] = useState<MessageWallPost[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    author: '',
+    content: '',
+    images: [] as File[]
+  })
+  const toast = useToast()
 
-interface Reply {
-  id: string
-  name: string
-  content: string
-  timestamp: Date
-  color: string
-}
-
-interface Message {
-  id: string
-  name: string
-  content: string
-  timestamp: Date
-  color: string
-  reactions: Reaction[]
-  replies: Reply[]
-  category: string
-  isPinned: boolean
-}
-
-export function MessageWall() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState("")
-  const [userName, setUserName] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [replyingTo, setReplyingTo] = useState<string | null>(null)
-  const [replyContent, setReplyContent] = useState("")
-  const [messageCategory, setMessageCategory] = useState("general")
-
-  const colors = ["#60a5fa", "#22c55e", "#f59e0b", "#fb7185", "#a78bfa", "#34d399"]
-  const categories = ["general", "recruitment", "events", "feedback", "showcase"]
-  const reactions = ["👍", "❤️", "😄", "🎉", "🔥", "💯"]
-
-  useEffect(() => {
-    // Load messages from localStorage
-    const savedMessages = localStorage.getItem("guild-messages")
-    if (savedMessages) {
-      const parsed = JSON.parse(savedMessages)
-      // Convert timestamp strings back to Date objects
-      const messagesWithDates = parsed.map((msg: any) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp),
-        replies:
-          msg.replies?.map((reply: any) => ({
-            ...reply,
-            timestamp: new Date(reply.timestamp),
-          })) || [],
-      }))
-      setMessages(messagesWithDates)
-    }
-  }, [])
-
-  const saveMessages = (updatedMessages: Message[]) => {
-    setMessages(updatedMessages)
-    localStorage.setItem("guild-messages", JSON.stringify(updatedMessages))
-  }
-
-  const addMessage = () => {
-    if (!newMessage.trim() || !userName.trim()) return
-
-    const message: Message = {
-      id: Date.now().toString(),
-      name: userName.trim(),
-      content: newMessage.trim(),
-      timestamp: new Date(),
-      color: colors[Math.floor(Math.random() * colors.length)],
-      reactions: [],
-      replies: [],
-      category: messageCategory,
-      isPinned: false,
-    }
-
-    const updatedMessages = [message, ...messages].slice(0, 100) // Keep only latest 100 messages
-    saveMessages(updatedMessages)
-    setNewMessage("")
-  }
-
-  const addReply = (messageId: string) => {
-    if (!replyContent.trim() || !userName.trim()) return
-
-    const reply: Reply = {
-      id: Date.now().toString(),
-      name: userName.trim(),
-      content: replyContent.trim(),
-      timestamp: new Date(),
-      color: colors[Math.floor(Math.random() * colors.length)],
-    }
-
-    const updatedMessages = messages.map((msg) =>
-      msg.id === messageId ? { ...msg, replies: [...msg.replies, reply] } : msg,
-    )
-
-    saveMessages(updatedMessages)
-    setReplyContent("")
-    setReplyingTo(null)
-  }
-
-  const toggleReaction = (messageId: string, reactionType: string) => {
-    if (!userName.trim()) return
-
-    const updatedMessages = messages.map((msg) => {
-      if (msg.id !== messageId) return msg
-
-      const existingReaction = msg.reactions.find((r) => r.type === reactionType)
-
-      if (existingReaction) {
-        if (existingReaction.users.includes(userName)) {
-          // Remove user's reaction
-          const updatedReaction = {
-            ...existingReaction,
-            count: existingReaction.count - 1,
-            users: existingReaction.users.filter((u) => u !== userName),
-          }
-          return {
-            ...msg,
-            reactions:
-              updatedReaction.count > 0
-                ? msg.reactions.map((r) => (r.type === reactionType ? updatedReaction : r))
-                : msg.reactions.filter((r) => r.type !== reactionType),
-          }
-        } else {
-          // Add user's reaction
-          return {
-            ...msg,
-            reactions: msg.reactions.map((r) =>
-              r.type === reactionType ? { ...r, count: r.count + 1, users: [...r.users, userName] } : r,
-            ),
-          }
-        }
-      } else {
-        // Create new reaction
-        return {
-          ...msg,
-          reactions: [...msg.reactions, { type: reactionType, count: 1, users: [userName] }],
-        }
+  // 生成用户ID（用于点赞功能）
+  const [userId] = useState(() => {
+    if (typeof window !== 'undefined') {
+      let id = localStorage.getItem('jinxi-user-id')
+      if (!id) {
+        id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        localStorage.setItem('jinxi-user-id', id)
       }
+      return id
+    }
+    return 'anonymous'
+  })
+
+  // 加载留言数据
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const data = await messageWallService.getPosts()
+        setPosts(data)
+      } catch (error) {
+        console.error('加载留言失败:', error)
+        toast.addToast('加载留言失败', 'error')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadPosts()
+
+    // 订阅数据变化
+    const unsubscribe = messageWallService.subscribe((updatedPosts) => {
+      setPosts(updatedPosts)
     })
 
-    saveMessages(updatedMessages)
-  }
+    return unsubscribe
+  }, [toast])
 
-  const togglePin = (messageId: string) => {
-    const updatedMessages = messages.map((msg) => (msg.id === messageId ? { ...msg, isPinned: !msg.isPinned } : msg))
-    saveMessages(updatedMessages)
-  }
+  // 提交新留言
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!formData.author.trim() || !formData.content.trim()) {
+      toast.addToast('请填写昵称和留言内容', 'error')
+      return
+    }
 
-  const deleteMessage = (messageId: string) => {
-    const updatedMessages = messages.filter((msg) => msg.id !== messageId)
-    saveMessages(updatedMessages)
-  }
+    setIsSubmitting(true)
+    
+    try {
+      const postData: CreatePostData = {
+        author: formData.author,
+        content: formData.content,
+        images: formData.images.length > 0 ? formData.images : undefined,
+        avatar: `/placeholder-user.jpg` // 可以根据昵称生成不同头像
+      }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      addMessage()
+      await messageWallService.createPost(postData)
+      
+      // 清空表单
+      setFormData({
+        author: formData.author, // 保留昵称
+        content: '',
+        images: []
+      })
+      
+      toast.addToast('留言发布成功！', 'success')
+    } catch (error) {
+      console.error('发布失败:', error)
+      toast.addToast('发布失败，请重试', 'error')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const handleReplyKeyPress = (e: React.KeyboardEvent, messageId: string) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      addReply(messageId)
+  // 点赞/取消点赞
+  const handleLike = async (postId: string) => {
+    try {
+      await messageWallService.toggleLike(postId, userId)
+    } catch (error) {
+      console.error('点赞失败:', error)
+      toast.addToast('操作失败，请重试', 'error')
     }
   }
 
-  const filteredMessages =
-    selectedCategory === "all" ? messages : messages.filter((msg) => msg.category === selectedCategory)
+  // 格式化时间
+  const formatTime = (timestamp: number) => {
+    const now = Date.now()
+    const diff = now - timestamp
+    const minutes = Math.floor(diff / 60000)
+    const hours = Math.floor(diff / 3600000)
+    const days = Math.floor(diff / 86400000)
 
-  const pinnedMessages = filteredMessages.filter((msg) => msg.isPinned)
-  const regularMessages = filteredMessages.filter((msg) => !msg.isPinned)
-  const displayMessages = [...pinnedMessages, ...regularMessages]
+    if (days > 0) return `${days}天前`
+    if (hours > 0) return `${hours}小时前`
+    if (minutes > 0) return `${minutes}分钟前`
+    return "刚刚"
+  }
+
+  // 渲染图片
+  const renderImages = (images?: string[]) => {
+    if (!images || images.length === 0) return null
+
+    return (
+      <div className={cn(
+        "grid gap-2 mt-3 rounded-xl overflow-hidden",
+        images.length === 1 ? "grid-cols-1" : 
+        images.length === 2 ? "grid-cols-2" : 
+        "grid-cols-3"
+      )}>
+        {images.map((imageId, index) => {
+          const imageData = messageWallService.getImageData(imageId)
+          if (!imageData) return null
+
+          return (
+            <div key={imageId} className="relative group">
+              <img
+                src={imageData}
+                alt={`图片 ${index + 1}`}
+                className={cn(
+                  "w-full object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform border border-white/20",
+                  images.length === 1 ? "h-64" : "h-24"
+                )}
+                onClick={() => {
+                  // 图片预览功能
+                  const img = new Image()
+                  img.src = imageData
+                  const w = window.open("", "_blank")
+                  if (w) {
+                    w.document.write(`
+                      <html>
+                        <head><title>图片预览</title></head>
+                        <body style="margin:0;padding:20px;background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh;">
+                          <img src="${imageData}" style="max-width:100%;max-height:100%;object-fit:contain;" />
+                        </body>
+                      </html>
+                    `)
+                    w.document.close()
+                  }
+                }}
+              />
+              <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <i className="ri-eye-line text-white text-xl"></i>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <section id="message-wall" className="py-9">
+        <div className={cn("w-full max-w-4xl mx-auto", className)}>
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            <span className="ml-3 text-white/70">加载留言中...</span>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="message-wall" className="py-9">
-      <div
-        className="p-6 rounded-2xl border"
-        style={{
-          background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-          borderColor: "rgba(255,255,255,.1)",
-          boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-        }}
-      >
-        <h3
-          className="mt-0 mb-6 font-bold text-[26px] leading-tight flex items-center gap-2"
+      <div className={cn("w-full max-w-4xl mx-auto message-wall", className)}>
+        <div
+          className="p-6 rounded-2xl border"
           style={{
-            fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+            background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+            borderColor: "rgba(255,255,255,.1)",
+            boxShadow: "0 10px 30px rgba(0,0,0,.35)",
           }}
         >
-          <i className="ri-chat-3-line"></i> 留言墙
-        </h3>
+          <h3
+            className="mt-0 mb-6 font-bold text-[26px] leading-tight flex items-center gap-2"
+            style={{
+              fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+            }}
+          >
+            <i className="ri-chat-3-line"></i> 留言墙
+          </h3>
 
-        {/* Category Filter */}
-        <div className="mb-6">
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setSelectedCategory("all")}
-              className={`px-3 py-1 rounded-full text-sm transition-all ${
-                selectedCategory === "all" ? "bg-blue-500 text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
-              }`}
-            >
-              全部
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-3 py-1 rounded-full text-sm transition-all ${
-                  selectedCategory === category
-                    ? "bg-blue-500 text-white"
-                    : "bg-white/10 text-white/70 hover:bg-white/20"
-                }`}
-              >
-                {category === "general"
-                  ? "日常"
-                  : category === "recruitment"
-                    ? "招新"
-                    : category === "events"
-                      ? "活动"
-                      : category === "feedback"
-                        ? "反馈"
-                        : "展示"}
-              </button>
-            ))}
-          </div>
-        </div>
+          {/* 发布新留言 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-6 rounded-2xl border bg-white/5 backdrop-blur-sm"
+            style={{
+              borderColor: "rgba(255,255,255,.12)",
+              background: "rgba(255,255,255,.08)",
+            }}
+          >
+            <h4 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
+              <i className="ri-edit-line"></i>
+              发布留言
+            </h4>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                placeholder="你的昵称"
+                value={formData.author}
+                onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                style={{ borderColor: "rgba(255,255,255,.14)" }}
+              />
+              
+              <textarea
+                placeholder="分享你的想法...（支持上传图片）"
+                value={formData.content}
+                onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                rows={4}
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                style={{ borderColor: "rgba(255,255,255,.14)" }}
+              />
 
-        {/* Message Input */}
-        <div className="mb-6 space-y-4">
-          <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="你的昵称"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
-              style={{ borderColor: "rgba(255,255,255,.14)" }}
-            />
-            <select
-              value={messageCategory}
-              onChange={(e) => setMessageCategory(e.target.value)}
-              className="px-4 py-3 rounded-xl border bg-white/5 text-white"
-              style={{ borderColor: "rgba(255,255,255,.14)" }}
-            >
-              {categories.map((category) => (
-                <option key={category} value={category} className="bg-gray-800">
-                  {category === "general"
-                    ? "日常"
-                    : category === "recruitment"
-                      ? "招新"
-                      : category === "events"
-                        ? "活动"
-                        : category === "feedback"
-                          ? "反馈"
-                          : "展示"}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex gap-4">
-            <textarea
-              placeholder="留下你的足迹..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="flex-1 px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60 resize-none"
-              style={{ borderColor: "rgba(255,255,255,.14)" }}
-              rows={3}
-            />
-            <button
-              onClick={addMessage}
-              disabled={!newMessage.trim() || !userName.trim()}
-              className="px-6 py-3 rounded-xl border-none text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform"
-              style={{
-                background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
-              }}
-            >
-              <i className="ri-send-plane-2-line mr-2"></i>
-              发送
-            </button>
-          </div>
-        </div>
+              {/* 图片上传 */}
+              <ImageUpload
+                onImagesChange={(images) => setFormData(prev => ({ ...prev, images }))}
+                maxImages={3}
+                maxSize={5}
+              />
 
-        {/* Messages Display */}
-        <div className="space-y-4 max-h-[600px] overflow-y-auto">
-          <AnimatePresence>
-            {displayMessages.map((message) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className={`p-4 rounded-xl border relative ${message.isPinned ? "ring-2 ring-yellow-500/50" : ""}`}
-                style={{
-                  background: message.isPinned ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.04)",
-                  borderColor: "rgba(255,255,255,.08)",
-                }}
-              >
-                {message.isPinned && (
-                  <div className="absolute top-2 right-2">
-                    <i className="ri-pushpin-fill text-yellow-500 text-sm"></i>
-                  </div>
-                )}
-
-                <div className="flex items-start gap-3 mb-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                    style={{ background: message.color }}
-                  >
-                    {message.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="font-semibold text-white">{message.name}</div>
-                      <span
-                        className="px-2 py-0.5 rounded-full text-xs"
-                        style={{
-                          background:
-                            message.category === "recruitment"
-                              ? "#e53e3e"
-                              : message.category === "events"
-                                ? "#4299e1"
-                                : message.category === "feedback"
-                                  ? "#38a169"
-                                  : message.category === "showcase"
-                                    ? "#f59e0b"
-                                    : "#6b7280",
-                          color: "white",
-                        }}
-                      >
-                        {message.category === "general"
-                          ? "日常"
-                          : message.category === "recruitment"
-                            ? "招新"
-                            : message.category === "events"
-                              ? "活动"
-                              : message.category === "feedback"
-                                ? "反馈"
-                                : "展示"}
-                      </span>
-                      <div className="text-xs opacity-60">{message.timestamp.toLocaleString("zh-CN")}</div>
-                    </div>
-                    <div className="text-white/90 leading-relaxed break-words">{message.content}</div>
-                  </div>
+              <div className="flex justify-between items-center">
+                <div className="text-xs text-white/50">
+                  发布后所有访客都能看到你的留言
                 </div>
+                <button
+                  type="submit"
+                  disabled={!formData.author.trim() || !formData.content.trim() || isSubmitting}
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      发布中...
+                    </>
+                  ) : (
+                    <>
+                      <i className="ri-send-plane-line"></i>
+                      发布留言
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </motion.div>
 
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex gap-1">
-                    {reactions.map((reaction) => {
-                      const userReaction = message.reactions.find((r) => r.type === reaction)
-                      const hasReacted = userReaction?.users.includes(userName) || false
-                      return (
-                        <button
-                          key={reaction}
-                          onClick={() => toggleReaction(message.id, reaction)}
-                          className={`px-2 py-1 rounded-full text-sm transition-all hover:scale-110 ${
-                            hasReacted ? "bg-blue-500/30 ring-1 ring-blue-500" : "bg-white/10 hover:bg-white/20"
-                          }`}
-                          disabled={!userName.trim()}
-                        >
-                          {reaction} {userReaction?.count || ""}
-                        </button>
-                      )
-                    })}
-                  </div>
+          {/* 留言列表 */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-medium text-white flex items-center gap-2">
+                <i className="ri-message-2-line"></i>
+                留言列表 ({posts.length})
+              </h4>
+              {posts.length > 0 && (
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-sm text-white/60 hover:text-white flex items-center gap-1 transition-colors"
+                >
+                  <i className="ri-refresh-line"></i>
+                  刷新
+                </button>
+              )}
+            </div>
 
-                  <div className="flex gap-2 ml-auto">
-                    <button
-                      onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
-                      className="text-xs text-white/60 hover:text-white/90 transition-colors"
-                    >
-                      <i className="ri-reply-line mr-1"></i>回复
-                    </button>
-                    <button
-                      onClick={() => togglePin(message.id)}
-                      className="text-xs text-white/60 hover:text-white/90 transition-colors"
-                    >
-                      <i className={`${message.isPinned ? "ri-pushpin-fill" : "ri-pushpin-line"} mr-1`}></i>
-                      {message.isPinned ? "取消置顶" : "置顶"}
-                    </button>
-                    <button
-                      onClick={() => deleteMessage(message.id)}
-                      className="text-xs text-red-400 hover:text-red-300 transition-colors"
-                    >
-                      <i className="ri-delete-bin-line mr-1"></i>删除
-                    </button>
-                  </div>
-                </div>
-
-                {message.replies.length > 0 && (
-                  <div className="ml-6 space-y-2 border-l-2 border-white/10 pl-4">
-                    {message.replies.map((reply) => (
-                      <motion.div
-                        key={reply.id}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-start gap-2 p-2 rounded-lg bg-white/5"
-                      >
-                        <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
-                          style={{ background: reply.color }}
-                        >
-                          {reply.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="font-medium text-white text-sm">{reply.name}</div>
-                            <div className="text-xs opacity-60">{reply.timestamp.toLocaleString("zh-CN")}</div>
-                          </div>
-                          <div className="text-white/80 text-sm leading-relaxed break-words">{reply.content}</div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-
+            {posts.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">💬</div>
+                <div className="text-white/60">暂无留言，来发布第一条吧！</div>
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[600px] overflow-y-auto">
                 <AnimatePresence>
-                  {replyingTo === message.id && (
+                  {posts.map((post, index) => (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mt-3 ml-6"
+                      key={post.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-6 rounded-2xl border bg-white/5 backdrop-blur-sm hover:bg-white/8 transition-all duration-300"
+                      style={{
+                        borderColor: "rgba(255,255,255,.12)",
+                      }}
                     >
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          placeholder="回复内容..."
-                          value={replyContent}
-                          onChange={(e) => setReplyContent(e.target.value)}
-                          onKeyPress={(e) => handleReplyKeyPress(e, message.id)}
-                          className="flex-1 px-3 py-2 rounded-lg border bg-white/5 text-white placeholder-white/60 text-sm"
-                          style={{ borderColor: "rgba(255,255,255,.14)" }}
-                          autoFocus
-                        />
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                            {post.author.slice(-2)}
+                          </div>
+                          <div>
+                            <div className="font-medium text-white">{post.author}</div>
+                            <div className="text-xs text-white/60">{formatTime(post.timestamp)}</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="text-white/90 mb-4 leading-relaxed whitespace-pre-wrap">
+                        {post.content}
+                      </div>
+
+                      {/* 图片展示 */}
+                      {renderImages(post.images)}
+                      
+                      <div className="flex items-center gap-6 pt-3 border-t border-white/10">
                         <button
-                          onClick={() => addReply(message.id)}
-                          disabled={!replyContent.trim() || !userName.trim()}
-                          className="px-4 py-2 rounded-lg border-none text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform text-sm"
-                          style={{
-                            background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
-                          }}
+                          onClick={() => handleLike(post.id)}
+                          className={cn(
+                            "flex items-center gap-2 transition-colors hover:scale-105",
+                            post.likedBy.includes(userId)
+                              ? "text-red-400 hover:text-red-300"
+                              : "text-white/60 hover:text-red-400"
+                          )}
                         >
-                          回复
+                          <i className={cn(
+                            post.likedBy.includes(userId) ? "ri-heart-fill" : "ri-heart-line"
+                          )}></i>
+                          <span>{post.likes}</span>
                         </button>
+                        
+                        <div className="text-white/40 text-sm flex items-center gap-4">
+                          {post.images && post.images.length > 0 && (
+                            <span className="flex items-center gap-1">
+                              <i className="ri-image-line"></i>
+                              {post.images.length} 张图片
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1">
+                            <i className="ri-time-line"></i>
+                            {formatTime(post.timestamp)}
+                          </span>
+                        </div>
                       </div>
                     </motion.div>
-                  )}
+                  ))}
                 </AnimatePresence>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
-          {displayMessages.length === 0 && (
-            <div className="text-center py-8 opacity-60">
-              <i className="ri-chat-3-line text-4xl mb-4 block"></i>
-              <p>
-                {selectedCategory === "all"
-                  ? "还没有留言，快来抢沙发吧！"
-                  : `暂无${
-                      selectedCategory === "general"
-                        ? "日常"
-                        : selectedCategory === "recruitment"
-                          ? "招新"
-                          : selectedCategory === "events"
-                            ? "活动"
-                            : selectedCategory === "feedback"
-                              ? "反馈"
-                              : "展示"
-                    }类别的留言`}
-              </p>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

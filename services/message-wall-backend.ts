@@ -95,6 +95,8 @@ export const addReply = async (messageId: string, reply: {
   color: string;
 }): Promise<Reply> => {
   try {
+    console.log('Sending reply request:', { messageId, reply });
+    
     const response = await fetch(`${API_BASE}/message-actions`, {
       method: 'POST',
       headers: {
@@ -107,11 +109,28 @@ export const addReply = async (messageId: string, reply: {
       })
     });
     
+    console.log('Reply response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      let errorMessage = `HTTP error! status: ${response.status}`;
+      
+      try {
+        const errorData = await response.json();
+        console.log('Error response data:', errorData);
+        errorMessage = errorData.error || errorMessage;
+        
+        if (errorData.details) {
+          errorMessage += ` - ${errorData.details}`;
+        }
+      } catch (parseError) {
+        console.log('Could not parse error response');
+      }
+      
+      throw new Error(errorMessage);
     }
     
     const data = await response.json();
+    console.log('Reply response data:', data);
     
     return {
       ...data,

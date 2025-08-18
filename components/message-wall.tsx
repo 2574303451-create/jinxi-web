@@ -111,18 +111,38 @@ export function MessageWall({ className }: { className?: string }) {
     }
 
     try {
-      await backendAPI.addReply(messageId, {
+      console.log('Attempting to add reply to messageId:', messageId, 'with content:', replyContent)
+      
+      const result = await backendAPI.addReply(messageId, {
         name: formData.name || '匿名',
         content: replyContent,
         color: formData.color
       })
       
+      console.log('Reply added successfully:', result)
+      
       setReplyContent('')
       setReplyingTo(null)
       await loadMessages()
     } catch (error) {
-      console.error('回复失败:', error)
-      alert('回复失败，请重试')
+      console.error('回复失败 - 详细错误:', error)
+      
+      let errorMessage = '回复失败，请重试'
+      
+      if (error instanceof Error) {
+        console.error('Error message:', error.message)
+        
+        // 尝试解析具体的错误信息
+        if (error.message.includes('404')) {
+          errorMessage = '留言不存在，请刷新页面后重试'
+        } else if (error.message.includes('400')) {
+          errorMessage = '回复内容格式不正确'
+        } else if (error.message.includes('500')) {
+          errorMessage = '服务器错误，请稍后重试'
+        }
+      }
+      
+      alert(errorMessage)
     }
   }
 

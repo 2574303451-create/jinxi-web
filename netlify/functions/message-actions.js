@@ -36,28 +36,73 @@ exports.handler = async (event) => {
 
     if (action === 'reply') {
       const { name, content, color } = data;
+      
+      console.log('Reply action - messageId:', messageId, 'type:', typeof messageId);
+      console.log('Reply action - data:', data);
+      
       if (!content || !content.trim()) {
         return resp(400, { error: 'reply content is required' }, headers);
       }
 
-      // 获取当前回复
-      const [message] = await sql`SELECT replies FROM messages WHERE id = ${messageId}`;
-      if (!message) {
-        return resp(404, { error: 'message not found' }, headers);
+      // 确保 messageId 是数字类型
+      const numericMessageId = parseInt(messageId, 10);
+      if (isNaN(numericMessageId)) {
+        console.error('Invalid messageId:', messageId);
+        return resp(400, { error: 'invalid messageId format' }, headers);
       }
 
-      const replies = JSON.parse(message.replies || '[]');
-      const newReply = {
-        id: Date.now().toString(),
-        name: name || '匿名',
-        content,
-        color: color || '#3b82f6',
-        timestamp: new Date().toISOString()
-      };
-      replies.push(newReply);
+      try {
+        // 获取当前回复
+        const messages = await sql`SELECT id, replies FROM messages WHERE id = ${numericMessageId}`;
+        console.log('Query result for messageId', numericMessageId, ':', messages);
+        
+        if (!messages || messages.length === 0) {
+          return resp(404, { error: 'message not found', messageId: numericMessageId }, headers);
+        }
 
-      await sql`UPDATE messages SET replies = ${JSON.stringify(replies)} WHERE id = ${messageId}`;
-      return resp(200, newReply, headers);
+        const message = messages[0];
+        
+        // 安全地解析现有回复
+        let replies = [];
+        try {
+          replies = message.replies ? JSON.parse(message.replies) : [];
+        } catch (parseError) {
+          console.warn('Failed to parse existing replies, using empty array:', parseError);
+          replies = [];
+        }
+
+        const newReply = {
+          id: Date.now().toString(),
+          name: name || '匿名',
+          content: content.trim(),
+          color: color || '#3b82f6',
+          timestamp: new Date().toISOString()
+        };
+        
+        console.log('Creating new reply:', newReply);
+        
+        replies.push(newReply);
+
+        // 更新数据库
+        const updateResult = await sql`
+          UPDATE messages 
+          SET replies = ${JSON.stringify(replies)} 
+          WHERE id = ${numericMessageId}
+          RETURNING id
+        `;
+        
+        console.log('Update result:', updateResult);
+        
+        if (updateResult.length === 0) {
+          return resp(500, { error: 'failed to update message' }, headers);
+        }
+        
+        return resp(200, newReply, headers);
+        
+      } catch (dbError) {
+        console.error('Database error in reply action:', dbError);
+        return resp(500, { error: 'database error', details: dbError.message }, headers);
+      }
     }
 
     if (action === 'reaction') {

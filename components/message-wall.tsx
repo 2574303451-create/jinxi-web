@@ -601,4 +601,3 @@ export function MessageWall({ className }: { className?: string }) {
     </section>
   )
 }
-}

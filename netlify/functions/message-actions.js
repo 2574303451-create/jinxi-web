@@ -1,0 +1,147 @@
+// netlify/functions/message-actions.js
+const { neon } = require('@neondatabase/serverless');
+
+exports.handler = async (event) => {
+  const sql = neon(process.env.DATABASE_URL);
+  
+  // 设置 CORS 头
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, PUT, DELETE, OPTIONS'
+  };
+
+  // 处理预检请求
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
+  try {
+    const { messageId, action, data } = JSON.parse(event.body || '{}');
+
+    if (!messageId || !action) {
+      return resp(400, { error: 'messageId and action are required' }, headers);
+    }
+
+    if (action === 'reply') {
+      const { name, content, color } = data;
+      if (!content || !content.trim()) {
+        return resp(400, { error: 'reply content is required' }, headers);
+      }
+
+      // 获取当前回复
+      const [message] = await sql`SELECT replies FROM messages WHERE id = ${messageId}`;
+      if (!message) {
+        return resp(404, { error: 'message not found' }, headers);
+      }
+
+      const replies = JSON.parse(message.replies || '[]');
+      const newReply = {
+        id: Date.now().toString(),
+        name: name || '匿名',
+        content,
+        color: color || '#3b82f6',
+        timestamp: new Date().toISOString()
+      };
+      replies.push(newReply);
+
+      await sql`UPDATE messages SET replies = ${JSON.stringify(replies)} WHERE id = ${messageId}`;
+      return resp(200, newReply, headers);
+    }
+
+    if (action === 'reaction') {
+      const { type, userName } = data;
+      console.log('处理表情反应:', { messageId, type, userName });
+      
+      if (!type || !userName) {
+        return resp(400, { error: 'reaction type and userName are required' }, headers);
+      }
+
+      // 获取当前反应
+      const [message] = await sql`SELECT reactions FROM messages WHERE id = ${messageId}`;
+      if (!message) {
+        console.log('留言不存在:', messageId);
+        return resp(404, { error: 'message not found' }, headers);
+      }
+
+      console.log('数据库中的reactions字段:', message.reactions, typeof message.reactions);
+      
+      let reactions;
+      try {
+        // 处理不同的数据格式
+        if (typeof message.reactions === 'string') {
+          reactions = JSON.parse(message.reactions || '[]');
+        } else if (Array.isArray(message.reactions)) {
+          reactions = message.reactions;
+        } else {
+          reactions = [];
+        }
+      } catch (parseError) {
+        console.error('JSON解析错误:', parseError, 'reactions数据:', message.reactions);
+        reactions = [];
+      }
+      
+      console.log('解析后的reactions:', reactions);
+      
+      let reaction = reactions.find(r => r.type === type);
+
+      if (!reaction) {
+        reaction = { type, count: 0, users: [] };
+        reactions.push(reaction);
+      }
+
+      // 切换用户的反应状态
+      const userIndex = reaction.users.indexOf(userName);
+      if (userIndex > -1) {
+        reaction.users.splice(userIndex, 1);
+        reaction.count--;
+        if (reaction.count === 0) {
+          const reactionIndex = reactions.indexOf(reaction);
+          reactions.splice(reactionIndex, 1);
+        }
+      } else {
+        reaction.users.push(userName);
+        reaction.count++;
+      }
+
+      console.log('更新后的reactions:', reactions);
+      
+      await sql`UPDATE messages SET reactions = ${JSON.stringify(reactions)} WHERE id = ${messageId}`;
+      return resp(200, reactions, headers);
+    }
+
+    if (action === 'pin') {
+      const [message] = await sql`SELECT is_pinned FROM messages WHERE id = ${messageId}`;
+      if (!message) {
+        return resp(404, { error: 'message not found' }, headers);
+      }
+
+      const newPinnedState = !message.is_pinned;
+      await sql`UPDATE messages SET is_pinned = ${newPinnedState} WHERE id = ${messageId}`;
+      return resp(200, { pinned: newPinnedState }, headers);
+    }
+
+    if (action === 'delete') {
+      await sql`DELETE FROM messages WHERE id = ${messageId}`;
+      return resp(200, { deleted: true }, headers);
+    }
+
+    return resp(400, { error: 'invalid action' }, headers);
+  } catch (e) {
+    console.error('Database error:', e);
+    return resp(500, { error: e.message || String(e) }, headers);
+  }
+};
+
+function resp(status, data, headers) {
+  return {
+    statusCode: status,
+    headers,
+    body: JSON.stringify(data),
+  };
+}

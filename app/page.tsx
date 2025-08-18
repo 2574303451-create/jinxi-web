@@ -9,6 +9,7 @@ import { MessageWall } from "@/components/message-wall"
 import { Carousel3D } from "@/components/magicui/3d-carousel"
 import { MemberGrid } from "@/components/magicui/member-grid"
 import { ToastProvider, useToast } from "@/components/ui/toast"
+import { sendRecruitmentEmail, RecruitmentData } from "@/components/email-service"
 import { Modal } from "@/components/ui/modal"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { Tabs } from "@/components/ui/tabs"
@@ -23,248 +24,81 @@ function PageContent() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // 招新表单数据
+  const [formData, setFormData] = useState<RecruitmentData>({
+    nickname: '',
+    contact: '',
+    time: '',
+    role: '',
+    message: ''
+  })
   const toast = useToast()
 
-  const managementTeam = [
-    {
-      id: 1,
-      name: "会长 · 今夕_执手",
-      role: "统筹 · 战术指挥",
-      avatar: "/1.png",
-    },
-    {
-      id: 2,
-      name: "副会 · 今夕_淡意",
-      role: "训练 · 新人引导",
-      avatar: "/2.png",
-    },
-    {
-      id: 3,
-      name: "战术官 · 今夕_恐龙",
-      role: "阵容 · 地图位",
-      avatar: "/3.png",
-    },
-    {
-      id: 4,
-      name: "外交 · 今夕_啵咕",
-      role: "活动登记 · 积分",
-      avatar: "/13.png",
-    },
-  ]
+  // 处理表单输入
+  const handleInputChange = (field: keyof RecruitmentData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
 
-  const allMembers = [
-    {
-      id: 1,
-      name: "今夕_执手",
-      image: "/1.png",
-      role: "会长",
-      description: "热爱今夕",
-    },
-    {
-      id: 2,
-      name: "今夕_淡意",
-      image: "/2.png",
-      role: "技术",
-      description: "精通战术配合 技术宅",
-    },
-    {
-      id: 3,
-      name: "今夕_恐龙",
-      image: "/3.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 4,
-      name: "今夕_啵咕",
-      image: "/4.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 5,
-      name: "今夕_晨曦",
-      image: "/1.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 6,
-      name: "今夕_晚霞",
-      image: "/2.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 7,
-      name: "今夕_清风",
-      image: "/3.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 8,
-      name: "今夕_细雨",
-      image: "/4.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 9,
-      name: "今夕_暖阳",
-      image: "/1.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 10,
-      name: "今夕_寒星",
-      image: "/2.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 11,
-      name: "今夕_秋叶",
-      image: "/3.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 12,
-      name: "今夕_冬雪",
-      image: "/4.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 13,
-      name: "今夕_春华",
-      image: "/1.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 14,
-      name: "今夕_夏雨",
-      image: "/2.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 15,
-      name: "今夕_秋实",
-      image: "/3.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 16,
-      name: "今夕_冬梅",
-      image: "/4.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 17,
-      name: "今夕_春柳",
-      image: "/1.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 18,
-      name: "今夕_夏荷",
-      image: "/2.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 19,
-      name: "今夕_秋菊",
-      image: "/3.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 20,
-      name: "今夕_冬竹",
-      image: "/4.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 21,
-      name: "今夕_春兰",
-      image: "/1.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 22,
-      name: "今夕_夏莲",
-      image: "/2.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 23,
-      name: "今夕_秋桂",
-      image: "/3.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 24,
-      name: "今夕_冬松",
-      image: "/4.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 25,
-      name: "今夕_春桃",
-      image: "/1.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 26,
-      name: "今夕_夏葵",
-      image: "/2.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 27,
-      name: "今夕_秋枫",
-      image: "/3.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-    {
-      id: 28,
-      name: "今夕_冬柏",
-      image: "/4.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
-    },
-    {
-      id: 29,
-      name: "今夕_春杏",
-      image: "/1.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
-    },
-    {
-      id: 30,
-      name: "今夕_夏薇",
-      image: "/2.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
-    },
-  ]
+  // 处理表单提交
+  const handleSubmit = async () => {
+    if (!formData.nickname.trim() || !formData.contact.trim()) {
+      toast.addToast('请填写"游戏昵称"和"联系方式"', 'error')
+      return
+    }
 
+    setIsSubmitting(true)
+
+    try {
+      const result = await sendRecruitmentEmail(
+        formData,
+        undefined, // 使用默认配置
+        (message, type) => {
+          // 进度提示
+          if (type === 'success') {
+            toast.addToast(message, 'success')
+          } else if (type === 'error') {
+            toast.addToast(message, 'error')
+          } else {
+            toast.addToast(message, 'info')
+          }
+        }
+      )
+
+      if (result.success) {
+        // 清空表单
+        setFormData({
+          nickname: '',
+          contact: '',
+          time: '',
+          role: '',
+          message: ''
+        })
+        setIsModalOpen(false)
+      }
+    } catch (error) {
+      toast.addToast(error instanceof Error ? error.message : '发送失败，请重试', 'error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // 邮箱客户端备选方案
+  const handleMailtoFallback = () => {
+    const subject = encodeURIComponent(`【招新申请】${formData.nickname || ""}`)
+    const body = encodeURIComponent(
+      `游戏昵称：${formData.nickname}\n` +
+      `联系方式：${formData.contact}\n` +
+      `在线时段：${formData.time}\n` +
+      `偏好定位：${formData.role}\n` +
+      `留言：${formData.message}`
+    )
+    
+    window.location.href = `mailto:leijia_13335319637@163.com?subject=${subject}&body=${body}`
+  }
+
+  // 轮播展示成员 - 12人，ID 1-12
   const carouselMembers = [
     {
       id: 1,
@@ -275,80 +109,322 @@ function PageContent() {
     },
     {
       id: 2,
-      name: "今夕_淡意",
+      name: "今夕_淡意衬优柔",
       image: "/2.png",
       role: "技术",
-      description: "精通战术配合 技术宅",
+      description: "技术宅",
     },
     {
       id: 3,
       name: "今夕_恐龙",
       image: "/3.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
+      role: "组织团结",
+      description: "爱睡觉",
     },
     {
       id: 4,
-      name: "今夕_啵咕",
+      name: "今夕_朝云去",
       image: "/4.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
+      role: "摆烂",
+      description: "擅长嘴炮",
     },
     {
       id: 5,
-      name: "今夕_晨曦",
-      image: "/1.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
+      name: "今夕_时光",
+      image: "/5.png",
+      role: "摆烂",
+      description: "时常联系不到人",
     },
     {
       id: 6,
-      name: "今夕_晚霞",
-      image: "/2.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
+      name: "今夕_心安",
+      image: "/6.png",
+      role: "摆烂",
+      description: "今夕前期唯一女生",
     },
     {
       id: 7,
-      name: "今夕_清风",
-      image: "/3.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
+      name: "今夕_小夏",
+      image: "/7.png",
+      role: "摆烂",
+      description: "摆子！",
     },
     {
       id: 8,
-      name: "今夕_细雨",
-      image: "/4.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
+      name: "今夕_掺水的凉白开",
+      image: "/8.png",
+      role: "情绪调控",
+      description: "今夕小太阳",
     },
     {
       id: 9,
-      name: "今夕_暖阳",
-      image: "/1.png",
-      role: "后勤",
-      description: "负责团队支援和资源管理",
+      name: "今夕_臭脚妹妹",
+      image: "/9.png",
+      role: "东北老爷们",
+      description: "今夕现存唯一结婚者",
     },
     {
       id: 10,
-      name: "今夕_寒星",
-      image: "/2.png",
-      role: "火力",
-      description: "擅长远程输出和爆发伤害",
+      name: "今夕_舔狗",
+      image: "/10.png",
+      role: "嘴炮",
+      description: "今夕嘴炮替代者",
     },
     {
       id: 11,
-      name: "今夕_秋叶",
-      image: "/3.png",
-      role: "控位",
-      description: "精通位移控制和战术配合",
+      name: "今夕_灰常",
+      image: "/11.png",
+      role: "摆烂",
+      description: "前期肝帝当之无愧 后期销声匿迹查无此人",
     },
     {
       id: 12,
-      name: "今夕_冬雪",
-      image: "/4.png",
-      role: "后勤",
+      name: "今夕_小恒",
+      image: "/12.png",
+      role: "技术控",
+      description: "清晰思想 今夕早期技术担当",
+    },
+  ]
+
+  // 成员展示墙 - 30人，ID 13-42
+  const allMembers = [
+    {
+      id: 13,
+      name: "今夕_执手问年华",
+      image: "/13.png",
+      role: "会长",
+      description: "热爱今夕",
+    },
+    {
+      id: 14,
+      name: "今夕_淡意",
+      image: "/14.png",
+      role: "副会",
+      description: "技术宅",
+    },
+    {
+      id: 15,
+      name: "今夕_啵咕",
+      image: "/15.png",
+      role: "副会",
+      description: "有任何问题可以优先问我哦~",
+    },
+    {
+      id: 16,
+      name: "今夕_时光",
+      image: "/16.png",
+      role: "副会",
+      description: "浙大高材生 时常查无此人",
+    },
+    {
+      id: 17,
+      name: "今夕_洗菜",
+      image: "/17.png",
+      role: "副会",
+      description: "今夕现任团宠",
+    },
+    {
+      id: 18,
+      name: "今夕_一笑作春温",
+      image: "/18.png",
+      role: "副会",
       description: "负责团队支援和资源管理",
+    },
+    {
+      id: 19,
+      name: "今夕_阿姨",
+      image: "/19.png",
+      role: "副会",
+      description: "时常遁走 今夕首位宝妈",
+    },
+    {
+      id: 20,
+      name: "今夕_臭脚妹妹",
+      image: "/20.png",
+      role: "副会",
+      description: "东北老爷们 今夕现存唯一结婚者",
+    },
+    {
+      id: 21,
+      name: "今夕_心安",
+      image: "/21.png",
+      role: "副会",
+      description: "时代的眼泪",
+    },
+    {
+      id: 22,
+      name: "今夕_掺水的凉白开",
+      image: "/22.png",
+      role: "副会",
+      description: "可爱小太阳",
+    },
+    {
+      id: 23,
+      name: "今夕_我是如此相信",
+      image: "/23.png",
+      role: "副会",
+      description: "超超",
+    },
+    {
+      id: 24,
+      name: "今夕_道秋",
+      image: "/24.png",
+      role: "副会",
+      description: "未定 后续补充",
+    },
+    {
+      id: 25,
+      name: "今夕_郁金香",
+      image: "/25.png",
+      role: "副会",
+      description: "yyds",
+    },
+    {
+      id: 26,
+      name: "今夕_小熊超勇敢",
+      image: "/26.png",
+      role: "精英",
+      description: "壕气冲天",
+    },
+    {
+      id: 27,
+      name: "今夕_御词姐敲可爱",
+      image: "/27.png",
+      role: "精英",
+      description: "今夕第一黑虎",
+    },
+    {
+      id: 28,
+      name: "今夕_绾君",
+      image: "/28.png",
+      role: "精英",
+      description: "未定 后续补充",
+    },
+    {
+      id: 29,
+      name: "今夕_舔狗",
+      image: "/29.png",
+      role: "精英",
+      description: "嘴炮",
+    },
+    {
+      id: 30,
+      name: "今夕_白",
+      image: "/30.png",
+      role: "精英",
+      description: "黑白双煞 公会boss常见NPC",
+    },
+    {
+      id: 31,
+      name: "今夕_不氪金不改名",
+      image: "/31.png",
+      role: "精英",
+      description: "未定 后续补充",
+    },
+    {
+      id: 32,
+      name: "今夕_陈",
+      image: "/32.png",
+      role: "精英",
+      description: "未定 后续补充",
+    },
+    {
+      id: 33,
+      name: "今夕_鲤鱼跃油门",
+      image: "/33.png",
+      role: "精英",
+      description: "未定 后续补充",
+    },
+    {
+      id: 34,
+      name: "今夕_忆呀呀",
+      image: "/34.png",
+      role: "精英",
+      description: "未定 后续补充",
+    },
+    {
+      id: 35,
+      name: "今夕_执手吃啵咕",
+      image: "/35.png",
+      role: "萌新",
+      description: "未定 后续补充",
+    },
+    {
+      id: 36,
+      name: "今夕_琼枝意",
+      image: "/36.png",
+      role: "萌新",
+      description: "未定 后续补充",
+    },
+    {
+      id: 37,
+      name: "今夕_迷迷糊",
+      image: "/37.png",
+      role: "萌新",
+      description: "未定 后续补充",
+    },
+    {
+      id: 38,
+      name: "今夕_LoYuy",
+      image: "/38.png",
+      role: "萌新",
+      description: "未定 后续补充",
+    },
+    {
+      id: 39,
+      name: "今夕_朝云去",
+      image: "/39.png",
+      role: "萌新",
+      description: "古时代嘴炮",
+    },
+    {
+      id: 40,
+      name: "今夕_回忆1",
+      image: "/40.png",
+      role: "回忆",
+      description: "待定",
+    },
+    {
+      id: 41,
+      name: "今夕_回忆2",
+      image: "/41.png",
+      role: "回忆",
+      description: "待定",
+    },
+    {
+      id: 42,
+      name: "今夕_回忆3",
+      image: "/42.png",
+      role: "回忆",
+      description: "待定",
+    },
+  ]
+
+  // 管理团队 - 4人，ID 43-46
+  const managementTeam = [
+    {
+      id: 43,
+      name: "会长 · 今夕_执手",
+      role: "统筹 · 战术指挥",
+      avatar: "/43.png",
+    },
+    {
+      id: 44,
+      name: "副会 · 今夕_淡意",
+      role: "训练 · 新人引导",
+      avatar: "/44.png",
+    },
+    {
+      id: 45,
+      name: "战术官 · 今夕_恐龙",
+      role: "阵容 · 地图位",
+      avatar: "/45.png",
+    },
+    {
+      id: 46,
+      name: "外交 · 今夕_啵咕",
+      role: "活动登记 · 积分",
+      avatar: "/46.png",
     },
   ]
 
@@ -636,9 +712,6 @@ function PageContent() {
                 <TypingAnimation
                   text="今晚开黑，星光作陪"
                   className="my-2 font-bold text-[34px] leading-tight tracking-wide relative z-10"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
                 />
 
                 <p className="text-[#d5def0] mb-4 relative z-10">
@@ -770,7 +843,7 @@ function PageContent() {
                 <i className="ri-user-star-line"></i> 管理团队
               </h3>
 
-              <Marquee className="py-4 relative z-10" pauseOnHover speed={40}>
+              <Marquee className="py-4 relative z-10" pauseOnHover>
                 {managementTeam.map((member) => (
                   <div
                     key={member.id}
@@ -890,37 +963,67 @@ function PageContent() {
             <input
               type="text"
               placeholder="游戏昵称"
+              value={formData.nickname}
+              onChange={(e) => handleInputChange('nickname', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
             />
             <input
               type="text"
-              placeholder="联系方式 (QQ/微信)"
+              placeholder="联系方式 (QQ/微信/邮箱)"
+              value={formData.contact}
+              onChange={(e) => handleInputChange('contact', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
             />
             <select
+              value={formData.time}
+              onChange={(e) => handleInputChange('time', e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
+              style={{ borderColor: "rgba(255,255,255,.14)" }}
+            >
+              <option value="" className="bg-gray-800">
+                选择常在线时段
+              </option>
+              <option value="工作日晚 20:00–23:00" className="bg-gray-800">
+                工作日晚 20:00–23:00
+              </option>
+              <option value="周末白天" className="bg-gray-800">
+                周末白天
+              </option>
+              <option value="周末晚上" className="bg-gray-800">
+                周末晚上
+              </option>
+              <option value="不固定 / 看通知" className="bg-gray-800">
+                不固定 / 看通知
+              </option>
+            </select>
+            <select
+              value={formData.role}
+              onChange={(e) => handleInputChange('role', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
             >
               <option value="" className="bg-gray-800">
                 选择偏好定位
               </option>
-              <option value="fire" className="bg-gray-800">
+              <option value="远程输出" className="bg-gray-800">
                 远程输出
               </option>
-              <option value="control" className="bg-gray-800">
+              <option value="位移控制" className="bg-gray-800">
                 位移控制
               </option>
-              <option value="support" className="bg-gray-800">
+              <option value="辅助/功能" className="bg-gray-800">
                 辅助/功能
               </option>
-              <option value="any" className="bg-gray-800">
+              <option value="都行" className="bg-gray-800">
                 都行
               </option>
             </select>
             <textarea
               placeholder="想说的话（选填）"
+              value={formData.message}
+              onChange={(e) => handleInputChange('message', e.target.value)}
               rows={3}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60 resize-none"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
@@ -928,16 +1031,24 @@ function PageContent() {
           </div>
           <div className="flex gap-3 pt-4">
             <button
-              onClick={() => {
-                toast.addToast("申请已提交，我们会尽快联系您！", "success")
-                setIsModalOpen(false)
-              }}
-              className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
               }}
             >
-              提交申请
+              <i className="ri-send-plane-2-line mr-2"></i>
+              {isSubmitting ? '发送中...' : '提交申请'}
+            </button>
+            <button
+              onClick={handleMailtoFallback}
+              className="px-6 py-3 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
+              style={{ borderColor: "rgba(255,255,255,.2)" }}
+              title="使用本地邮箱客户端发送"
+            >
+              <i className="ri-mail-line mr-1"></i>
+              邮箱
             </button>
             <button
               onClick={() => setIsModalOpen(false)}

@@ -85,11 +85,24 @@ export function MemberGrid({ members, className }: MemberGridProps) {
                     className="px-2 py-1 rounded-full text-xs font-medium text-white"
                     style={{
                       background: 
+                        // 轮播成员角色
+                        member.role === "会长" || member.role === "创始" ? "#d69e2e" :
+                        member.role === "技术" || member.role === "技术控" ? "#805ad5" :
+                        member.role === "组织团结" ? "#22c55e" :
+                        member.role === "摆烂" || member.role === "元老级摆烂" ? "#6b7280" :
+                        member.role === "情绪调控" ? "#f59e0b" :
+                        member.role === "东北老爷们" ? "#8b5cf6" :
+                        member.role === "嘴炮" ? "#ef4444" :
+                        // 展示墙成员角色
+                        member.role === "副会" ? "#3b82f6" :
+                        member.role === "精英" ? "#dc2626" :
+                        member.role === "萌新" ? "#10b981" :
+                        member.role === "回忆" ? "#6366f1" :
+                        // 原有角色
                         member.role === "火力" ? "#e53e3e" : 
                         member.role === "控位" ? "#4299e1" : 
                         member.role === "后勤" ? "#38a169" :
-                        member.role === "会长" ? "#d69e2e" :
-                        member.role === "技术" ? "#805ad5" :
+                        member.role === "战术官" ? "#3182ce" :
                         member.role === "外交" ? "#e53e3e" :
                         "#38a169",
                     }}

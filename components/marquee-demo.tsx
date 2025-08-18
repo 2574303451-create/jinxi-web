@@ -5,13 +5,13 @@ const guildMembers = [
   {
     name: "今夕_执手",
     username: "会长",
-    body: "统筹全局，战术指挥。愿每次出场，都被掌声围绕。",
+    body: "统筹 · 战术指挥 · 热爱今夕",
     img: "https://avatar.vercel.sh/zhishou",
   },
   {
     name: "今夕_淡意",
-    username: "副会长",
-    body: "训练新人，引导成长。同频的人，会在下一次转角相遇。",
+    username: "副会",
+    body: "训练 · 新人引导 · 精通战术配合 技术宅",
     img: "https://avatar.vercel.sh/danyi",
   },
   {
@@ -25,18 +25,6 @@ const guildMembers = [
     username: "外交",
     body: "活动登记，积分管理。上分如风，稳住我们能赢。",
     img: "https://avatar.vercel.sh/bogu",
-  },
-  {
-    name: "今夕_星辰",
-    username: "火力手",
-    body: "远程输出，精准打击。胜利不是终点，是下一局的开场曲。",
-    img: "https://avatar.vercel.sh/xingchen",
-  },
-  {
-    name: "今夕_流光",
-    username: "控位",
-    body: "位移控制，节奏掌控。友谊第一，输出也要第一。",
-    img: "https://avatar.vercel.sh/liuguang",
   },
 ]
 

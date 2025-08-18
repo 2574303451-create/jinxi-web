@@ -6,6 +6,8 @@ import { AnimatedBeam } from "@/components/magicui/animated-beam"
 import { Sparkles } from "@/components/magicui/sparkles"
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { MessageWall } from "@/components/message-wall"
+import { CheckinWidget } from "@/components/checkin-widget"
+import { LeaderboardWidget } from "@/components/leaderboard-widget"
 import { Carousel3D } from "@/components/magicui/3d-carousel"
 import { MemberGrid } from "@/components/magicui/member-grid"
 import { ToastProvider, useToast } from "@/components/ui/toast"
@@ -637,11 +639,11 @@ function PageContent() {
             </AnimatedBeam>
 
             <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
-              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "留言墙", "招新", "联系"].map((item, index) => (
+              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "招新", "联系"].map((item, index) => (
                 <AnimatedBeam key={index} delay={0.3 + index * 0.1}>
                   <li>
                     <a
-                      href={`#${["about", "news", "events", "members", "roster", "members-page", "message-wall", "recruit", "contact"][index]}`}
+                      href={`#${["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "recruit", "contact"][index]}`}
                       className="opacity-90 hover:opacity-100 no-underline transition-opacity"
                     >
                       {item}
@@ -930,6 +932,16 @@ function PageContent() {
               }}
             >
               <MemberGrid members={allMembers} />
+            </div>
+          </section>
+        </AnimatedBeam>
+
+        {/* 签到功能区域 */}
+        <AnimatedBeam delay={1.0}>
+          <section id="checkin" className="py-9 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <CheckinWidget />
+              <LeaderboardWidget />
             </div>
           </section>
         </AnimatedBeam>

@@ -202,7 +202,7 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
         </div>
 
         {/* 用户名管理区域 */}
-        <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
+        <div className="mb-8 p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <i className="ri-user-3-line text-blue-400 text-lg"></i>
@@ -223,59 +223,179 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
           </div>
         </div>
 
-        {/* 签到按钮区域 */}
-        <div className="text-center mb-6">
-          <motion.button
-            onClick={handleCheckin}
-            disabled={hasCheckedToday || isChecking}
-            whileHover={!hasCheckedToday ? { scale: 1.05 } : {}}
-            whileTap={!hasCheckedToday ? { scale: 0.95 } : {}}
-            className={cn(
-              "w-32 h-32 rounded-full text-white font-bold text-lg transition-all duration-300 flex flex-col items-center justify-center gap-2",
-              hasCheckedToday
-                ? "bg-green-500/50 cursor-not-allowed"
-                : "bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl"
+        {/* 签到按钮区域 - 居中突出 */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          {/* 装饰性背景圆圈 */}
+          <div className="relative flex items-center justify-center">
+            {/* 外层装饰圆环 */}
+            <div className="absolute inset-0 w-48 h-48 rounded-full">
+              <div 
+                className="w-full h-full rounded-full opacity-20"
+                style={{
+                  background: hasCheckedToday 
+                    ? 'conic-gradient(from 0deg, #22c55e, #16a34a, #22c55e)' 
+                    : 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #3b82f6)',
+                  animation: !hasCheckedToday ? 'spin 8s linear infinite' : 'none'
+                }}
+              />
+            </div>
+            
+            {/* 中层背景 */}
+            <div className="absolute inset-0 w-44 h-44 m-2 rounded-full bg-white/5 backdrop-blur-sm" />
+            
+            {/* 签到按钮 */}
+            <motion.button
+              onClick={handleCheckin}
+              disabled={hasCheckedToday || isChecking}
+              whileHover={!hasCheckedToday ? { scale: 1.08 } : {}}
+              whileTap={!hasCheckedToday ? { scale: 0.95 } : {}}
+              className={cn(
+                "relative z-10 w-40 h-40 rounded-full text-white font-bold text-xl transition-all duration-500 flex flex-col items-center justify-center gap-3 border-4",
+                hasCheckedToday
+                  ? "bg-gradient-to-br from-green-500/80 to-emerald-600/80 border-green-400/50 cursor-not-allowed"
+                  : "bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 border-white/30 shadow-2xl hover:shadow-3xl"
+              )}
+              style={{
+                boxShadow: hasCheckedToday 
+                  ? '0 20px 60px rgba(34, 197, 94, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)' 
+                  : '0 20px 60px rgba(59, 130, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+              }}
+            >
+              {isChecking ? (
+                <>
+                  <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                  <span className="text-base">签到中...</span>
+                </>
+              ) : hasCheckedToday ? (
+                <>
+                  <motion.i 
+                    className="ri-checkbox-circle-fill text-5xl"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", delay: 0.1 }}
+                  />
+                  <span className="text-base">今日已签到</span>
+                  <div className="text-sm text-green-100 font-normal">
+                    🎉 已获得积分奖励
+                  </div>
+                </>
+              ) : (
+                <>
+                  <motion.i 
+                    className="ri-calendar-check-line text-5xl"
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 3
+                    }}
+                  />
+                  <span className="text-base">每日签到</span>
+                  <div className="text-sm text-blue-100 font-normal">
+                    点击获得积分 🎁
+                  </div>
+                </>
+              )}
+            </motion.button>
+            
+            {/* 粒子效果 */}
+            {!hasCheckedToday && (
+              <div className="absolute inset-0 pointer-events-none">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-2 h-2 bg-blue-400 rounded-full"
+                    style={{
+                      left: `${20 + (i * 12)}%`,
+                      top: `${25 + (i * 8)}%`,
+                    }}
+                    animate={{
+                      y: [-5, -15, -5],
+                      opacity: [0, 1, 0],
+                      scale: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
+              </div>
             )}
+          </div>
+          
+          {/* 签到提示文字 */}
+          <motion.div 
+            className="mt-6 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
-            {isChecking ? (
-              <>
-                <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span className="text-sm">签到中...</span>
-              </>
-            ) : hasCheckedToday ? (
-              <>
-                <i className="ri-checkbox-circle-fill text-3xl"></i>
-                <span className="text-sm">已签到</span>
-              </>
+            {hasCheckedToday ? (
+              <p className="text-green-300 text-sm font-medium">
+                ✨ 签到成功！明天再来领取奖励吧~
+              </p>
             ) : (
-              <>
-                <i className="ri-calendar-check-line text-3xl"></i>
-                <span className="text-sm">点击签到</span>
-              </>
+              <p className="text-white/70 text-sm">
+                💡 每日签到可获得积分，连续签到奖励更丰厚
+              </p>
             )}
-          </motion.button>
+          </motion.div>
         </div>
 
         {/* 统计信息 */}
         {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-blue-400">{stats.totalCheckins}</div>
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <motion.div 
+              className="text-center p-4 bg-gradient-to-br from-white/10 to-white/5 rounded-xl border border-white/10 hover:border-blue-400/30 transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
+            >
+              <div className="text-2xl font-bold text-blue-400 mb-1">{stats.totalCheckins}</div>
               <div className="text-xs text-white/60">总签到</div>
-            </div>
-            <div className="text-center p-3 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-green-400">{stats.continuousCheckins}</div>
+              <div className="mt-1">
+                <i className="ri-calendar-line text-blue-400/60"></i>
+              </div>
+            </motion.div>
+            <motion.div 
+              className="text-center p-4 bg-gradient-to-br from-white/10 to-white/5 rounded-xl border border-white/10 hover:border-green-400/30 transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
+            >
+              <div className="text-2xl font-bold text-green-400 mb-1">{stats.continuousCheckins}</div>
               <div className="text-xs text-white/60">连续签到</div>
-            </div>
-            <div className="text-center p-3 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-yellow-400">{stats.maxContinuous}</div>
+              <div className="mt-1">
+                <i className="ri-fire-line text-green-400/60"></i>
+              </div>
+            </motion.div>
+            <motion.div 
+              className="text-center p-4 bg-gradient-to-br from-white/10 to-white/5 rounded-xl border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
+            >
+              <div className="text-2xl font-bold text-yellow-400 mb-1">{stats.maxContinuous}</div>
               <div className="text-xs text-white/60">最长连续</div>
-            </div>
-            <div className="text-center p-3 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-purple-400">{stats.totalPoints}</div>
+              <div className="mt-1">
+                <i className="ri-trophy-line text-yellow-400/60"></i>
+              </div>
+            </motion.div>
+            <motion.div 
+              className="text-center p-4 bg-gradient-to-br from-white/10 to-white/5 rounded-xl border border-white/10 hover:border-purple-400/30 transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
+            >
+              <div className="text-2xl font-bold text-purple-400 mb-1">{stats.totalPoints}</div>
               <div className="text-xs text-white/60">总积分</div>
-            </div>
-          </div>
+              <div className="mt-1">
+                <i className="ri-coin-line text-purple-400/60"></i>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {/* 今日奖励信息 */}

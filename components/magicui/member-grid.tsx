@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { MemberDetailModal } from "@/components/member-detail-modal"
 
 interface Member {
   id: number
@@ -20,6 +21,18 @@ interface MemberGridProps {
 export function MemberGrid({ members, className }: MemberGridProps) {
   const [filter, setFilter] = useState("all")
   const [visibleCount, setVisibleCount] = useState(12)
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleMemberClick = (member: Member) => {
+    setSelectedMember(member)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setSelectedMember(null), 300) // 延迟清空以确保动画完成
+  }
 
   const roles = ["all", ...Array.from(new Set(members.map((m) => m.role)))]
   const filteredMembers = filter === "all" ? members : members.filter((m) => m.role === filter)
@@ -63,7 +76,7 @@ export function MemberGrid({ members, className }: MemberGridProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="group relative rounded-2xl overflow-hidden border bg-white/5 hover:bg-white/10 transition-all duration-300 hover:scale-105"
+              className="group relative rounded-2xl overflow-hidden border bg-white/5 hover:bg-white/10 transition-all duration-300 hover:scale-105 cursor-pointer"
               style={{
                 borderColor: "rgba(255,255,255,.1)",
                 boxShadow: "0 4px 12px rgba(0,0,0,.3)",
@@ -71,6 +84,7 @@ export function MemberGrid({ members, className }: MemberGridProps) {
               whileHover={{
                 boxShadow: "0 8px 25px rgba(0,0,0,.4), 0 0 20px rgba(96,165,250,.3)",
               }}
+              onClick={() => handleMemberClick(member)}
             >
               <div className="aspect-square relative overflow-hidden">
                 <img
@@ -158,6 +172,21 @@ export function MemberGrid({ members, className }: MemberGridProps) {
           </button>
         </div>
       )}
+
+      {/* 提示信息 */}
+      <div className="text-center mt-4">
+        <p className="text-white/60 text-sm">
+          <i className="ri-information-line mr-1"></i>
+          点击成员卡片查看详细信息
+        </p>
+      </div>
+
+      {/* 成员详情模态框 */}
+      <MemberDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        member={selectedMember}
+      />
     </div>
   )
 }

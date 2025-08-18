@@ -3,12 +3,14 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { MemberDetailModal } from "@/components/member-detail-modal"
 
 interface Member {
   id: number
   name: string
   image: string
   role?: string
+  description?: string
 }
 
 interface Carousel3DProps {
@@ -20,7 +22,19 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [radius, setRadius] = useState(600)
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  
+  const handleMemberDoubleClick = (member: Member) => {
+    setSelectedMember(member)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setSelectedMember(null), 300)
+  }
 
   const totalMembers = members.length
   const theta = 360 / totalMembers
@@ -104,6 +118,7 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
                 }}
                 whileHover={{ scale: isSelected ? 1.05 : 1.02 }}
                 onClick={() => setCurrentIndex(index)}
+                onDoubleClick={() => handleMemberDoubleClick(member)}
               >
                 <div className="relative w-full h-full">
                   <img
@@ -193,6 +208,21 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
           {currentIndex + 1} / {totalMembers}
         </span>
       </div>
+
+      {/* 提示信息 */}
+      <div className="text-center mt-4">
+        <p className="text-white/60 text-sm">
+          <i className="ri-information-line mr-1"></i>
+          单击选择成员，双击查看详细信息
+        </p>
+      </div>
+
+      {/* 成员详情模态框 */}
+      <MemberDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        member={selectedMember}
+      />
     </div>
   )
 }

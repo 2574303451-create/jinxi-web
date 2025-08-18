@@ -121,6 +121,15 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0%, 100% { 
+    transform: translateX(-100%) skewX(-15deg); 
+  }
+  50% { 
+    transform: translateX(100%) skewX(-15deg); 
+  }
+}
+
 .animate-marquee {
   animation: marquee var(--duration) linear infinite;
 }

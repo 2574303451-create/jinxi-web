@@ -575,7 +575,7 @@ function PageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 loading">
         <div className="text-center">
           <LoadingSpinner size="lg" />
           <p className="mt-4 text-white/80">正在加载今夕公会...</p>
@@ -586,16 +586,8 @@ function PageContent() {
 
   return (
     <div
-      className="min-h-screen relative"
+      className="min-h-screen relative bg-enhanced"
       style={{
-        background: `
-        linear-gradient(180deg, rgba(8,12,24,.72), rgba(8,12,24,.72)),
-        url('/bg.png') center / cover no-repeat fixed,
-        radial-gradient(1200px 800px at 90% -10%, #1b2a55 0%, transparent 60%),
-        radial-gradient(1100px 650px at -10% 10%, #0f2b3f 0%, transparent 60%),
-        linear-gradient(180deg, #0b1224, #0b1020)
-      `,
-        backgroundBlendMode: "normal, overlay, normal, normal, normal",
         color: "#e8edf6",
         fontFamily:
           '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
@@ -660,7 +652,7 @@ function PageContent() {
             <AnimatedBeam delay={1.2}>
               <button
                 onClick={handleJoinClick}
-                className="inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline hover:scale-105 transition-transform"
+                className="inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline hover:scale-105 transition-transform hover-effect"
                 style={{
                   background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
                 }}
@@ -770,7 +762,7 @@ function PageContent() {
                   />
                   <button
                     onClick={toggleVideo}
-                    className="absolute right-[10px] bottom-[10px] z-10 inline-flex items-center gap-[6px] px-3 py-2 rounded-xl border text-white cursor-pointer hover:scale-110 transition-transform"
+                    className="absolute right-[10px] bottom-[10px] z-10 inline-flex items-center gap-[6px] px-3 py-2 rounded-xl border text-white cursor-pointer hover:scale-110 transition-transform hover-effect"
                     style={{
                       borderColor: "rgba(255,255,255,.25)",
                       background: "rgba(0,0,0,.35)",

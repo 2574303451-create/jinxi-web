@@ -4,22 +4,33 @@ import { useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ImageUploadProps {
-  onImagesChange: (files: File[]) => void
+  onImageUpload?: (base64Image: string) => void
+  onImagesChange?: (files: File[]) => void
+  currentImage?: string | null
+  label?: string
   maxImages?: number
-  maxSize?: number // MB
+  maxSizeMB?: number
+  maxSize?: number // MB (for backward compatibility)
   className?: string
 }
 
 export function ImageUpload({ 
+  onImageUpload,
   onImagesChange, 
-  maxImages = 3, 
-  maxSize = 5,
+  currentImage,
+  label = "上传图片",
+  maxImages = 1, 
+  maxSizeMB = 2,
+  maxSize,
   className 
 }: ImageUploadProps) {
   const [selectedImages, setSelectedImages] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
   const [error, setError] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Use maxSizeMB if provided, otherwise fall back to maxSize
+  const actualMaxSize = maxSizeMB || maxSize || 2
 
   const handleFileSelect = (files: FileList | null) => {
     if (!files) return
@@ -33,8 +44,8 @@ export function ImageUpload({
         setError('只能上传图片文件')
         return
       }
-      if (file.size > maxSize * 1024 * 1024) {
-        setError(`图片大小不能超过 ${maxSize}MB`)
+      if (file.size > actualMaxSize * 1024 * 1024) {
+        setError(`图片大小不能超过 ${actualMaxSize}MB`)
         return
       }
     }
@@ -45,32 +56,59 @@ export function ImageUpload({
       return
     }
 
-    // 添加新图片
-    const newImages = [...selectedImages, ...fileArray]
-    setSelectedImages(newImages)
-    onImagesChange(newImages)
-
-    // 生成预览
-    const newPreviews = [...previews]
-    fileArray.forEach(file => {
+    // 如果是单图片上传模式（onImageUpload 存在）
+    if (onImageUpload && fileArray.length > 0) {
+      const file = fileArray[0] // 只取第一张图片
       const reader = new FileReader()
       reader.onload = (e) => {
         if (e.target?.result) {
-          newPreviews.push(e.target.result as string)
-          setPreviews([...newPreviews])
+          const base64Image = e.target.result as string
+          onImageUpload(base64Image)
+          setPreviews([base64Image])
         }
       }
       reader.readAsDataURL(file)
-    })
+      return
+    }
+
+    // 多图片上传模式
+    if (onImagesChange) {
+      const newImages = [...selectedImages, ...fileArray]
+      setSelectedImages(newImages)
+      onImagesChange(newImages)
+
+      // 生成预览
+      const newPreviews = [...previews]
+      fileArray.forEach(file => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            newPreviews.push(e.target.result as string)
+            setPreviews([...newPreviews])
+          }
+        }
+        reader.readAsDataURL(file)
+      })
+    }
   }
 
   const removeImage = (index: number) => {
+    if (onImageUpload) {
+      // 单图片模式，清除图片
+      onImageUpload('')
+      setPreviews([])
+      return
+    }
+    
+    // 多图片模式
     const newImages = selectedImages.filter((_, i) => i !== index)
     const newPreviews = previews.filter((_, i) => i !== index)
     
     setSelectedImages(newImages)
     setPreviews(newPreviews)
-    onImagesChange(newImages)
+    if (onImagesChange) {
+      onImagesChange(newImages)
+    }
     setError('')
   }
 
@@ -83,8 +121,19 @@ export function ImageUpload({
     e.preventDefault()
   }
 
+  // 显示当前图片或预览图片
+  const displayPreviews = currentImage ? [currentImage] : previews
+  const isMultipleMode = onImagesChange && !onImageUpload
+
   return (
     <div className={cn("space-y-3", className)}>
+      {/* 标签 */}
+      {label && (
+        <label className="block text-sm font-medium text-white/80">
+          {label}
+        </label>
+      )}
+
       {/* 上传区域 */}
       <div
         className="border-2 border-dashed border-white/20 rounded-xl p-6 text-center cursor-pointer hover:border-white/40 transition-colors"
@@ -95,7 +144,7 @@ export function ImageUpload({
         <input
           ref={fileInputRef}
           type="file"
-          multiple
+          multiple={isMultipleMode}
           accept="image/*"
           className="hidden"
           onChange={(e) => handleFileSelect(e.target.files)}
@@ -109,7 +158,7 @@ export function ImageUpload({
             点击或拖拽上传图片
           </div>
           <div className="text-xs text-white/50">
-            支持 JPG、PNG，最多 {maxImages} 张，单张不超过 {maxSize}MB
+            支持 JPG、PNG，{isMultipleMode ? `最多 ${maxImages} 张，` : ''}单张不超过 {actualMaxSize}MB
           </div>
         </div>
       </div>
@@ -122,14 +171,20 @@ export function ImageUpload({
       )}
 
       {/* 图片预览 */}
-      {previews.length > 0 && (
-        <div className="grid grid-cols-3 gap-2">
-          {previews.map((preview, index) => (
+      {displayPreviews.length > 0 && (
+        <div className={cn(
+          "grid gap-2",
+          isMultipleMode ? "grid-cols-3" : "grid-cols-1"
+        )}>
+          {displayPreviews.map((preview, index) => (
             <div key={index} className="relative group">
               <img
                 src={preview}
                 alt={`预览 ${index + 1}`}
-                className="w-full h-20 object-cover rounded-lg border border-white/20"
+                className={cn(
+                  "object-cover rounded-lg border border-white/20",
+                  isMultipleMode ? "w-full h-20" : "w-full h-32"
+                )}
               />
               <button
                 onClick={(e) => {

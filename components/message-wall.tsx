@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { Message, Reply, Reaction } from "@/types/message-wall"
 import * as backendAPI from "@/services/message-wall-backend"
 import { ImageUpload } from "@/components/ui/image-upload"
+import { AdminPasswordDialog } from "@/components/ui/admin-password-dialog"
 
 export function MessageWall({ className }: { className?: string }) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -23,19 +24,27 @@ export function MessageWall({ className }: { className?: string }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [activeFilter, setActiveFilter] = useState('all')
+  
+  // 密码验证相关状态
+  const [adminDialogOpen, setAdminDialogOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<{
+    type: 'pin' | 'delete'
+    messageId: string
+  } | null>(null)
 
   // 生成用户ID（用于反应功能）
-  const [userId] = useState(() => {
+  const [userId, setUserId] = useState('anonymous')
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       let id = localStorage.getItem('jinxi-user-id')
       if (!id) {
         id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
         localStorage.setItem('jinxi-user-id', id)
       }
-      return id
+      setUserId(id)
     }
-    return 'anonymous'
-  })
+  }, [])
 
   // 加载留言数据
   const loadMessages = async () => {
@@ -130,26 +139,46 @@ export function MessageWall({ className }: { className?: string }) {
     }
   }
 
-  // 切换置顶
-  const handlePin = async (messageId: string) => {
+  // 验证管理密码
+  const verifyAdminPassword = (password: string): boolean => {
+    return password === '今夕我爱你'
+  }
+
+  // 处理管理密码验证
+  const handleAdminAction = async (password: string) => {
+    if (!verifyAdminPassword(password)) {
+      throw new Error('密码错误，请重试')
+    }
+
+    if (!pendingAction) return
+
     try {
-      await backendAPI.togglePin(messageId)
+      if (pendingAction.type === 'pin') {
+        await backendAPI.togglePin(pendingAction.messageId, password)
+      } else if (pendingAction.type === 'delete') {
+        await backendAPI.deleteMessage(pendingAction.messageId, password)
+      }
       await loadMessages()
     } catch (error) {
-      console.error('置顶失败:', error)
+      console.error('操作失败:', error)
+      throw error
+    } finally {
+      setPendingAction(null)
     }
   }
 
-  // 删除留言
+  // 切换置顶（需要密码验证）
+  const handlePin = async (messageId: string) => {
+    setPendingAction({ type: 'pin', messageId })
+    setAdminDialogOpen(true)
+  }
+
+  // 删除留言（需要密码验证）
   const handleDelete = async (messageId: string) => {
     if (!confirm('确定要删除这条留言吗？')) return
-
-    try {
-      await backendAPI.deleteMessage(messageId)
-      await loadMessages()
-    } catch (error) {
-      console.error('删除失败:', error)
-    }
+    
+    setPendingAction({ type: 'delete', messageId })
+    setAdminDialogOpen(true)
   }
 
   // 格式化时间
@@ -205,24 +234,24 @@ export function MessageWall({ className }: { className?: string }) {
   return (
     <section id="message-wall" className="py-9">
       <div className={cn("w-full max-w-4xl mx-auto message-wall", className)}>
-        <div
-          className="p-6 rounded-2xl border"
+      <div
+        className="p-6 rounded-2xl border"
+        style={{
+          background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+          borderColor: "rgba(255,255,255,.1)",
+          boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+        }}
+      >
+          <div className="flex items-center justify-between mb-6">
+        <h3
+              className="mt-0 font-bold text-[26px] leading-tight flex items-center gap-2"
           style={{
-            background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-            borderColor: "rgba(255,255,255,.1)",
-            boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+            fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
           }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <h3
-              className="mt-0 font-bold text-[26px] leading-tight flex items-center gap-2"
-              style={{
-                fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-              }}
-            >
-              <i className="ri-chat-3-line"></i> 留言墙
-            </h3>
-            
+          <i className="ri-chat-3-line"></i> 留言墙
+        </h3>
+
             {/* 手动刷新按钮 */}
             <button
               onClick={loadMessages}
@@ -274,15 +303,15 @@ export function MessageWall({ className }: { className?: string }) {
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
+            <input
+              type="text"
                   placeholder="你的昵称（可选）"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 />
                 
-                <select
+            <select
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                   className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -291,10 +320,10 @@ export function MessageWall({ className }: { className?: string }) {
                   <option value="公告">公告</option>
                   <option value="提醒">提醒</option>
                   <option value="求助">求助</option>
-                </select>
-              </div>
+            </select>
+          </div>
               
-              <textarea
+            <textarea
                 placeholder="分享你的想法...（支持上传图片）"
                 value={formData.content}
                 onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
@@ -314,7 +343,7 @@ export function MessageWall({ className }: { className?: string }) {
                 <div className="text-xs text-white/50">
                   发布后所有访客都能看到你的留言
                 </div>
-                <button
+            <button
                   type="submit"
                   disabled={!formData.content.trim() || isSubmitting}
                   className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2 hover-effect"
@@ -330,8 +359,8 @@ export function MessageWall({ className }: { className?: string }) {
                       发布留言
                     </>
                   )}
-                </button>
-              </div>
+            </button>
+          </div>
             </form>
           </motion.div>
 
@@ -351,7 +380,7 @@ export function MessageWall({ className }: { className?: string }) {
                   刷新
                 </button>
               )}
-            </div>
+        </div>
 
             {filteredMessages.length === 0 ? (
               <div className="text-center py-12">
@@ -361,11 +390,11 @@ export function MessageWall({ className }: { className?: string }) {
                 </div>
               </div>
             ) : (
-              <div className="space-y-4 max-h-[600px] overflow-y-auto">
-                <AnimatePresence>
+        <div className="space-y-4 max-h-[600px] overflow-y-auto">
+          <AnimatePresence>
                   {filteredMessages.map((message, index) => (
-                    <motion.div
-                      key={message.id}
+              <motion.div
+                key={message.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
@@ -374,7 +403,7 @@ export function MessageWall({ className }: { className?: string }) {
                         "p-6 rounded-2xl border bg-white/5 backdrop-blur-sm hover:bg-white/8 transition-all duration-300",
                         message.isPinned && "ring-2 ring-yellow-500/50 bg-yellow-500/5"
                       )}
-                      style={{
+                style={{
                         borderColor: "rgba(255,255,255,.12)",
                       }}
                     >
@@ -385,23 +414,23 @@ export function MessageWall({ className }: { className?: string }) {
                             style={{ backgroundColor: message.color }}
                           >
                             {message.name.slice(-2)}
-                          </div>
+                  </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-medium text-white">{message.name}</span>
-                              <span 
+                      <span
                                 className="px-2 py-1 text-xs rounded-full text-white"
                                 style={{ backgroundColor: message.color + '40' }}
                               >
                                 {message.category}
-                              </span>
+                      </span>
                               {message.isPinned && (
                                 <i className="ri-pushpin-fill text-yellow-400 text-sm"></i>
                               )}
                             </div>
                             <div className="text-xs text-white/60">{formatTime(message.timestamp)}</div>
                           </div>
-                        </div>
+                    </div>
                         
                         <div className="flex items-center gap-2">
                           <button
@@ -418,9 +447,9 @@ export function MessageWall({ className }: { className?: string }) {
                           >
                             <i className="ri-delete-bin-line"></i>
                           </button>
-                        </div>
-                      </div>
-                      
+                  </div>
+                </div>
+
                       <div className="text-white/90 mb-4 leading-relaxed whitespace-pre-wrap">
                         {message.content}
                       </div>
@@ -438,14 +467,14 @@ export function MessageWall({ className }: { className?: string }) {
                       )}
 
                       {/* 反应按钮 */}
-                      <div className="flex items-center gap-2 mb-3">
-                        {reactions.map((reaction) => {
+                <div className="flex items-center gap-2 mb-3">
+                    {reactions.map((reaction) => {
                           const reactionData = message.reactions.find(r => r.type === reaction)
                           const isActive = reactionData?.users.includes(userId)
                           
-                          return (
-                            <button
-                              key={reaction}
+                      return (
+                        <button
+                          key={reaction}
                               onClick={() => handleReaction(message.id, reaction)}
                               className={cn(
                                 "flex items-center gap-1 px-2 py-1 rounded-full text-sm transition-all hover-effect",
@@ -458,21 +487,21 @@ export function MessageWall({ className }: { className?: string }) {
                               {reactionData && reactionData.count > 0 && (
                                 <span className="text-xs">{reactionData.count}</span>
                               )}
-                            </button>
-                          )
-                        })}
-                      </div>
+                        </button>
+                      )
+                    })}
+                  </div>
 
                       {/* 回复功能 */}
                       <div className="border-t border-white/10 pt-3">
                         <div className="flex items-center gap-4 mb-3">
-                          <button
-                            onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
+                    <button
+                      onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
                             className="text-white/60 hover:text-white flex items-center gap-1 text-sm transition-colors hover-effect"
-                          >
+                    >
                             <i className="ri-reply-line"></i>
                             回复
-                          </button>
+                    </button>
                           {message.replies.length > 0 && (
                             <span className="text-white/40 text-sm">
                               {message.replies.length} 条回复
@@ -490,44 +519,44 @@ export function MessageWall({ className }: { className?: string }) {
                               onChange={(e) => setReplyContent(e.target.value)}
                               className="flex-1 px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                            <button
+                    <button
                               onClick={() => handleReply(message.id)}
                               disabled={!replyContent.trim()}
                               className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white text-sm transition-all hover-effect"
                             >
                               发送
-                            </button>
-                          </div>
+                    </button>
+                  </div>
                         )}
 
                         {/* 回复列表 */}
-                        {message.replies.length > 0 && (
+                {message.replies.length > 0 && (
                           <div className="space-y-2">
-                            {message.replies.map((reply) => (
+                    {message.replies.map((reply) => (
                               <div key={reply.id} className="flex items-start gap-2 p-3 bg-white/5 rounded-lg">
                                 <div 
                                   className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs"
                                   style={{ backgroundColor: reply.color }}
                                 >
                                   {reply.name.slice(-1)}
-                                </div>
+                        </div>
                                 <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
+                          <div className="flex items-center gap-2 mb-1">
                                     <span className="text-white text-sm font-medium">{reply.name}</span>
                                     <span className="text-white/40 text-xs">{formatTime(reply.timestamp)}</span>
                                   </div>
                                   <div className="text-white/80 text-sm">{reply.content}</div>
-                                </div>
-                              </div>
-                            ))}
                           </div>
-                        )}
+                        </div>
+                    ))}
+                  </div>
+                )}
                       </div>
                     </motion.div>
                   ))}
                 </AnimatePresence>
-              </div>
-            )}
+            </div>
+          )}
           </div>
         </div>
       </div>
@@ -553,6 +582,23 @@ export function MessageWall({ className }: { className?: string }) {
           </div>
         </div>
       )}
+
+      {/* 管理密码验证对话框 */}
+      <AdminPasswordDialog
+        isOpen={adminDialogOpen}
+        onClose={() => {
+          setAdminDialogOpen(false)
+          setPendingAction(null)
+        }}
+        onConfirm={handleAdminAction}
+        title={pendingAction?.type === 'pin' ? '置顶留言' : '删除留言'}
+        description={
+          pendingAction?.type === 'pin' 
+            ? '此操作需要管理员权限，请输入管理密码来置顶或取消置顶此留言。' 
+            : '此操作需要管理员权限，请输入管理密码来删除此留言。'
+        }
+      />
     </section>
   )
+}
 }

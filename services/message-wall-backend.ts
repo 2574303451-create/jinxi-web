@@ -157,7 +157,7 @@ export const toggleReaction = async (messageId: string, reactionType: string, us
 };
 
 // 切换置顶
-export const togglePin = async (messageId: string): Promise<boolean> => {
+export const togglePin = async (messageId: string, password?: string): Promise<boolean> => {
   try {
     const response = await fetch(`${API_BASE}/message-actions`, {
       method: 'POST',
@@ -166,12 +166,14 @@ export const togglePin = async (messageId: string): Promise<boolean> => {
       },
       body: JSON.stringify({
         messageId,
-        action: 'pin'
+        action: 'pin',
+        password
       })
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
@@ -183,7 +185,7 @@ export const togglePin = async (messageId: string): Promise<boolean> => {
 };
 
 // 删除留言
-export const deleteMessage = async (messageId: string): Promise<boolean> => {
+export const deleteMessage = async (messageId: string, password?: string): Promise<boolean> => {
   try {
     const response = await fetch(`${API_BASE}/message-actions`, {
       method: 'POST',
@@ -192,12 +194,14 @@ export const deleteMessage = async (messageId: string): Promise<boolean> => {
       },
       body: JSON.stringify({
         messageId,
-        action: 'delete'
+        action: 'delete',
+        password
       })
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
     }
     
     return true;

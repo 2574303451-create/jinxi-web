@@ -19,7 +19,10 @@ interface ToastContextType {
 let toastContext: ToastContextType | null = null
 
 export function useToast() {
-  return toastContext!
+  if (!toastContext) {
+    throw new Error('useToast must be used within a ToastProvider')
+  }
+  return toastContext
 }
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {

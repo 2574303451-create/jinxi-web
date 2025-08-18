@@ -29,6 +29,11 @@ const DEFAULT_CONFIG: EmailServiceConfig = {
 // 动态加载EmailJS
 function loadEmailJS(): Promise<any> {
   return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      reject(new Error('EmailJS can only be loaded in browser environment'))
+      return
+    }
+
     if (window.emailjs) {
       resolve(window.emailjs)
       return
@@ -104,14 +109,19 @@ async function sendByFormSubmit(data: RecruitmentData, config: EmailServiceConfi
 
 // 本地邮箱客户端备选方案
 function fallbackMailto(data: RecruitmentData, config: EmailServiceConfig = DEFAULT_CONFIG): void {
+  if (typeof window === 'undefined') {
+    throw new Error('Mailto fallback can only be used in browser environment')
+  }
+
   const subject = encodeURIComponent(`【招新申请】${data.nickname || ""}`)
+  const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown'
   const body = encodeURIComponent(
     `游戏昵称：${data.nickname}\n` +
     `联系方式：${data.contact}\n` +
     `在线时段：${data.time}\n` +
     `偏好定位：${data.role}\n` +
     `留言：${data.message}\n` +
-    `UA：${navigator.userAgent}`
+    `UA：${userAgent}`
   )
   
   window.location.href = `mailto:${config.toEmail}?subject=${subject}&body=${body}`

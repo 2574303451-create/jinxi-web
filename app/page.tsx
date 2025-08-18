@@ -18,6 +18,7 @@ import { Accordion } from "@/components/ui/accordion"
 import { Particles } from "@/components/magicui/particles"
 import { FloatingElements } from "@/components/magicui/floating-elements"
 import { AuroraBackground } from "@/components/magicui/aurora-background"
+import { IntroPage } from "@/components/intro-page"
 
 import { MeteorShower } from "@/components/magicui/meteor-shower"
 
@@ -711,6 +712,27 @@ function PageContent() {
                   组队、磨合、提升；每一局都有高光，每一次集合都有欢笑。
                 </p>
 
+                {/* 入会联系方式 */}
+                <div className="mb-6 p-4 rounded-xl border relative z-10" style={{
+                  background: "linear-gradient(180deg,rgba(96,165,250,.15),rgba(96,165,250,.05))",
+                  borderColor: "rgba(96,165,250,.3)",
+                }}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <i className="ri-group-line text-blue-300"></i>
+                    <span className="text-blue-200 font-medium text-sm">入会联系方式</span>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-[#e1eafc]">
+                      <i className="ri-qq-line text-blue-400"></i>
+                      <span>QQ群：<strong className="text-blue-200">713162467</strong></span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[#e1eafc]">
+                      <i className="ri-user-line text-blue-400"></i>
+                      <span>联系人：<strong className="text-blue-200">执手</strong></span>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex gap-3 flex-wrap relative z-10">
                   {[
                     { href: "#info-tabs", icon: "ri-megaphone-line", text: "公告" },
@@ -1065,9 +1087,32 @@ function PageContent() {
 }
 
 export default function Page() {
-      return (
-      <ToastProvider>
-        <PageContent />
-      </ToastProvider>
-    )
+  const [showIntroPage, setShowIntroPage] = useState(true)
+
+  // 检查是否是首次访问
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hasVisited = localStorage.getItem('jinxi-has-visited')
+      if (hasVisited === 'true') {
+        setShowIntroPage(false)
+      }
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jinxi-has-visited', 'true')
+    }
+    setShowIntroPage(false)
+  }
+
+  if (showIntroPage) {
+    return <IntroPage onComplete={handleIntroComplete} />
+  }
+
+  return (
+    <ToastProvider>
+      <PageContent />
+    </ToastProvider>
+  )
 }

@@ -22,11 +22,17 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { messageId, action, data } = JSON.parse(event.body || '{}');
+    const { messageId, action, data, password } = JSON.parse(event.body || '{}');
 
     if (!messageId || !action) {
       return resp(400, { error: 'messageId and action are required' }, headers);
     }
+
+    // 验证管理密码（用于删除和置顶操作）
+    const ADMIN_PASSWORD = '今夕我爱你';
+    const verifyAdminPassword = (inputPassword) => {
+      return inputPassword === ADMIN_PASSWORD;
+    };
 
     if (action === 'reply') {
       const { name, content, color } = data;
@@ -116,6 +122,11 @@ exports.handler = async (event) => {
     }
 
     if (action === 'pin') {
+      // 验证管理密码
+      if (!password || !verifyAdminPassword(password)) {
+        return resp(401, { error: '需要管理员权限，密码错误' }, headers);
+      }
+
       const [message] = await sql`SELECT is_pinned FROM messages WHERE id = ${messageId}`;
       if (!message) {
         return resp(404, { error: 'message not found' }, headers);
@@ -127,6 +138,11 @@ exports.handler = async (event) => {
     }
 
     if (action === 'delete') {
+      // 验证管理密码
+      if (!password || !verifyAdminPassword(password)) {
+        return resp(401, { error: '需要管理员权限，密码错误' }, headers);
+      }
+
       await sql`DELETE FROM messages WHERE id = ${messageId}`;
       return resp(200, { deleted: true }, headers);
     }

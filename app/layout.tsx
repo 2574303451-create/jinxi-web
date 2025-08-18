@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   description: 'Created with v0',
   generator: '弹弹堂-今夕公会官网',
   charset: 'utf-8',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 }
 
 export const viewport: Viewport = {

@@ -40,8 +40,11 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
     }
 
     updateRadius()
-    window.addEventListener("resize", updateRadius)
-    return () => window.removeEventListener("resize", updateRadius)
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener("resize", updateRadius)
+      return () => window.removeEventListener("resize", updateRadius)
+    }
   }, [theta])
 
   useEffect(() => {

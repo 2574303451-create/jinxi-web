@@ -18,7 +18,7 @@ import { Accordion } from "@/components/ui/accordion"
 import { Particles } from "@/components/magicui/particles"
 import { FloatingElements } from "@/components/magicui/floating-elements"
 import { AuroraBackground } from "@/components/magicui/aurora-background"
-import MouseFollower from "@/components/mouse-follower"
+import TechCursor from "@/components/tech-cursor"
 import { MeteorShower } from "@/components/magicui/meteor-shower"
 
 function PageContent() {
@@ -1065,10 +1065,10 @@ function PageContent() {
 }
 
 export default function Page() {
-  return (
-    <ToastProvider>
-      <PageContent />
-      <MouseFollower />
-    </ToastProvider>
-  )
+      return (
+      <ToastProvider>
+        <PageContent />
+        <TechCursor />
+      </ToastProvider>
+    )
 }

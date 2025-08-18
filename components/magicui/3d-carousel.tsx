@@ -69,10 +69,10 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
   }
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative carousel-3d", className)}>
       <div
         ref={containerRef}
-        className="relative h-[600px] md:h-[800px] lg:h-[1000px] overflow-hidden rounded-2xl"
+        className="relative h-[600px] md:h-[800px] lg:h-[1000px] overflow-hidden rounded-2xl carousel-stage"
         style={{ perspective: "1800px" }}
       >
         <div

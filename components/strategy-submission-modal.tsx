@@ -118,8 +118,8 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="xl">
-      <div className="bg-gradient-to-br from-slate-900 to-blue-900 p-8 min-h-[600px]">
+    <Modal isOpen={isOpen} onClose={handleClose} size="2xl">
+      <div className="bg-gradient-to-br from-slate-900 to-blue-900 p-4 lg:p-8 min-h-[700px] max-h-[85vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-blue-500/20">
@@ -163,9 +163,9 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6 lg:gap-8">
           {/* 表单区域 */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {/* 基本信息 */}
             <div>
               <label className="block text-white font-bold mb-3 text-sm">
@@ -219,7 +219,7 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
             </div>
 
             {/* 分类和难度 */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
               <div>
                 <label className="block text-white font-bold mb-3 text-sm">
                   <i className="ri-folder-3-line mr-2 text-blue-400"></i>
@@ -289,20 +289,20 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
                 <i className="ri-price-tag-3-line mr-2 text-purple-400"></i>
                 攻略标签 ({formData.tags.length}/10)
               </label>
-              <div className="flex gap-3 mb-4">
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
                 <input
                   type="text"
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                   placeholder="输入标签并回车..."
                   maxLength={20}
-                  className="flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 hover:bg-white/25 transition-all duration-200"
+                  className="w-full sm:flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 hover:bg-white/25 transition-all duration-200"
                   onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
                 />
                 <button
                   onClick={handleAddTag}
                   disabled={!newTag.trim() || formData.tags.includes(newTag.trim()) || formData.tags.length >= 10}
-                  className="px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-500 disabled:to-gray-600 disabled:opacity-50 text-white rounded-xl transition-all duration-200 font-medium flex items-center gap-2"
+                  className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-500 disabled:to-gray-600 disabled:opacity-50 text-white rounded-xl transition-all duration-200 font-medium flex items-center justify-center gap-2"
                 >
                   <i className="ri-add-line"></i>
                   添加
@@ -378,7 +378,7 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
             </div>
 
             {previewMode ? (
-              <div className="h-[400px] p-6 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl overflow-y-auto">
+              <div className="h-[350px] lg:h-[400px] p-4 lg:p-6 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl overflow-y-auto">
                 <div 
                   className="text-white/90 prose prose-invert max-w-none leading-relaxed"
                   dangerouslySetInnerHTML={{ 
@@ -393,7 +393,7 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
                   onChange={(e) => handleInputChange('content', e.target.value)}
                   placeholder="请输入攻略内容...&#10;&#10;💡 支持Markdown格式：&#10;# 一级标题&#10;## 二级标题&#10;**粗体** *斜体*&#10;- 列表项&#10;1. 数字列表&#10;&#10;🎯 小贴士：&#10;- 结构化内容更易阅读&#10;- 添加具体操作步骤&#10;- 配图说明效果更佳"
                   maxLength={10000}
-                  className="w-full h-[400px] px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:bg-white/25 transition-all duration-200 resize-none leading-relaxed"
+                  className="w-full h-[350px] lg:h-[400px] px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:bg-white/25 transition-all duration-200 resize-none leading-relaxed text-sm lg:text-base"
                 />
                 <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
               </div>
@@ -414,11 +414,11 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
         </div>
 
         {/* 操作按钮 */}
-        <div className="flex items-center justify-end gap-4 mt-8 pt-6 border-t border-white/20">
+        <div className="flex flex-col sm:flex-row items-center justify-end gap-3 lg:gap-4 mt-6 lg:mt-8 pt-4 lg:pt-6 border-t border-white/20">
           <button
             onClick={handleClose}
             disabled={isSubmitting}
-            className="px-8 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/30 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 hover:scale-105 flex items-center gap-2"
+            className="w-full sm:w-auto px-6 lg:px-8 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/30 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 hover:scale-105 flex items-center justify-center gap-2"
           >
             <i className="ri-close-line"></i>
             取消
@@ -427,7 +427,7 @@ export function StrategySubmissionModal({ isOpen, onClose, onSubmit }: StrategyS
             onClick={handleSubmit}
             disabled={isSubmitting || !formData.author}
             className={cn(
-              "px-10 py-3 font-bold rounded-xl transition-all duration-200 disabled:opacity-50 flex items-center gap-2",
+              "w-full sm:w-auto px-8 lg:px-10 py-3 font-bold rounded-xl transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2",
               !formData.author 
                 ? "bg-gradient-to-r from-gray-500 to-gray-600 text-white cursor-not-allowed"
                 : isSubmitting

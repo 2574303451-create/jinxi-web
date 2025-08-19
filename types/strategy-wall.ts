@@ -93,7 +93,7 @@ export interface StrategySubmission {
 export interface StrategyAction {
   strategyId: string;
   userId: string;
-  type: 'like' | 'favorite' | 'comment' | 'pin' | 'delete';
+  action: 'like' | 'favorite' | 'comment' | 'pin' | 'delete' | 'view';
   data?: any;
   password?: string; // 仅用于pin和delete操作
 }

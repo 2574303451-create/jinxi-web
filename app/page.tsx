@@ -22,6 +22,7 @@ import { Particles } from "@/components/magicui/particles"
 import { FloatingElements } from "@/components/magicui/floating-elements"
 import { AuroraBackground } from "@/components/magicui/aurora-background"
 import { IntroPage } from "@/components/intro-page"
+import { EasterEggManager } from "@/components/easter-egg-manager"
 
 import { MeteorShower } from "@/components/magicui/meteor-shower"
 
@@ -579,6 +580,8 @@ function PageContent() {
     setTimeout(() => setIsLoading(false), 2000)
   }, [])
 
+
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 loading">
@@ -591,8 +594,9 @@ function PageContent() {
   }
 
   return (
-    <div
-      className="min-h-screen relative bg-enhanced"
+    <EasterEggManager>
+      <div
+        className="min-h-screen relative bg-enhanced"
       style={{
         color: "#e8edf6",
         fontFamily:
@@ -994,7 +998,7 @@ function PageContent() {
       <footer className="text-center py-4 relative z-10">
         <div className="max-w-[1180px] mx-auto px-4">
           <p>
-            © <span id="y">2024</span> 今夕公会
+            © <span id="y">2018</span> 今夕公会
           </p>
         </div>
       </footer>
@@ -1110,13 +1114,16 @@ function PageContent() {
         onClose={() => setIsStrategyWallOpen(false)}
       />
 
+
+
       {/* Required CSS for icons */}
       <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
       <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap"
         rel="stylesheet"
       />
-    </div>
+      </div>
+    </EasterEggManager>
   )
 }
 

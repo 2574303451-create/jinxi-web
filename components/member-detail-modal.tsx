@@ -43,8 +43,8 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
       "东北老爷们": "#8b5cf6",
       "嘴炮": "#ef4444",
       // 展示墙成员角色
-      "副会": "#3b82f6",
-      "精英": "#dc2626", 
+      "副会": "#dc2626",
+      "精英": "#3b82f6", 
       "萌新": "#10b981",
       "回忆": "#6366f1",
       // 原有角色
@@ -68,8 +68,8 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
       "#f59e0b": "from-amber-400 to-orange-500",
       "#8b5cf6": "from-violet-400 to-purple-500",
       "#ef4444": "from-red-400 to-red-600",
-      "#3b82f6": "from-blue-400 to-blue-600",
       "#dc2626": "from-red-500 to-red-700",
+      "#3b82f6": "from-blue-400 to-blue-600",
       "#10b981": "from-emerald-400 to-green-500", 
       "#6366f1": "from-indigo-400 to-purple-500",
       "#e53e3e": "from-red-400 to-pink-500",

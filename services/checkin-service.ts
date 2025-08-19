@@ -104,7 +104,7 @@ export const getCheckinHistory = async (userId: string, limit: number = 30): Pro
 // 获取排行榜
 export const getLeaderboard = async (
   type: 'total' | 'continuous' | 'monthly' | 'yearly' | 'points' | 'max_continuous' = 'total',
-  limit: number = 20
+  limit: number = 50
 ): Promise<Leaderboard> => {
   try {
     const response = await fetch(
@@ -132,7 +132,7 @@ export const getLeaderboard = async (
 };
 
 // 获取所有排行榜数据
-export const getAllLeaderboards = async (limit: number = 10) => {
+export const getAllLeaderboards = async (limit: number = 50) => {
   try {
     const [total, continuous, monthly, points, maxContinuous] = await Promise.all([
       getLeaderboard('total', limit),

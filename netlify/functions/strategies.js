@@ -52,69 +52,66 @@ async function handleGetStrategies(sql, params, headers) {
       status = 'published'
     } = params;
 
-    let whereConditions = ['status = $1'];
-    let queryParams = [status];
-    let paramCount = 1;
+    console.log('=== Strategy Query Params ===');
+    console.log('Params:', params);
+    console.log('============================');
 
-    // 分类过滤
-    if (category && category !== 'all') {
-      paramCount++;
-      whereConditions.push(`category = $${paramCount}`);
-      queryParams.push(category);
-    }
-
-    // 难度过滤
-    if (difficulty && difficulty !== 'all') {
-      paramCount++;
-      whereConditions.push(`difficulty = $${paramCount}`);
-      queryParams.push(parseInt(difficulty));
-    }
-
-    // 搜索过滤
-    if (search) {
-      paramCount++;
-      whereConditions.push(`(title ILIKE $${paramCount} OR content ILIKE $${paramCount})`);
-      queryParams.push(`%${search}%`);
-    }
-
-    const whereClause = whereConditions.length > 0 
-      ? `WHERE ${whereConditions.join(' AND ')}`
-      : '';
-
-    // 构建排序子句
-    const validSortFields = ['created_at', 'updated_at', 'view_count', 'title'];
-    const sortField = validSortFields.includes(sortBy) ? sortBy : 'created_at';
-    const sortDirection = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
-    
-    // 置顶优先排序
-    const orderClause = `ORDER BY is_pinned DESC, ${sortField} ${sortDirection}`;
-
-    // 主查询
-    const strategiesQuery = `
+    // 简化查询逻辑，先获取所有数据再在应用层过滤
+    const allStrategies = await sql`
       SELECT id, title, content, author, category, difficulty, tags,
              likes, favorites, comments, is_pinned, image_url, media_files,
              view_count, status, created_at, updated_at
       FROM strategies
-      ${whereClause}
-      ${orderClause}
-      LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}
+      ORDER BY is_pinned DESC, created_at DESC
     `;
 
-    queryParams.push(parseInt(limit), parseInt(offset));
+    console.log(`Found ${allStrategies.length} total strategies in database`);
 
-    const strategies = await sql.unsafe(strategiesQuery, queryParams);
+    // 在应用层进行过滤
+    let filteredStrategies = allStrategies;
 
-    // 获取总数
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM strategies
-      ${whereClause}
-    `;
-    
-    const [{ total }] = await sql.unsafe(countQuery, queryParams.slice(0, -2));
+    // 状态过滤
+    if (status && status.trim() && status !== 'all' && status !== '') {
+      filteredStrategies = filteredStrategies.filter(s => s.status === status.trim());
+      console.log(`After status filter (${status}): ${filteredStrategies.length}`);
+    }
+
+    // 分类过滤
+    if (category && category !== 'all' && category.trim()) {
+      filteredStrategies = filteredStrategies.filter(s => s.category === category.trim());
+      console.log(`After category filter (${category}): ${filteredStrategies.length}`);
+    }
+
+    // 难度过滤
+    if (difficulty && difficulty !== 'all' && difficulty.toString().trim()) {
+      const difficultyInt = parseInt(difficulty);
+      if (!isNaN(difficultyInt)) {
+        filteredStrategies = filteredStrategies.filter(s => s.difficulty === difficultyInt);
+        console.log(`After difficulty filter (${difficultyInt}): ${filteredStrategies.length}`);
+      }
+    }
+
+    // 搜索过滤
+    if (search && search.trim()) {
+      const searchTerm = search.trim().toLowerCase();
+      filteredStrategies = filteredStrategies.filter(s => 
+        s.title.toLowerCase().includes(searchTerm) || 
+        s.content.toLowerCase().includes(searchTerm)
+      );
+      console.log(`After search filter (${searchTerm}): ${filteredStrategies.length}`);
+    }
+
+    // 分页处理
+    const total = filteredStrategies.length;
+    const limitInt = parseInt(limit);
+    const offsetInt = parseInt(offset);
+    const paginatedStrategies = filteredStrategies.slice(offsetInt, offsetInt + limitInt);
+
+    console.log(`Pagination: offset=${offsetInt}, limit=${limitInt}, total=${total}`);
+    console.log(`Returning ${paginatedStrategies.length} strategies`);
 
     // 格式化数据
-    const formattedStrategies = strategies.map(strategy => ({
+    const formattedStrategies = paginatedStrategies.map(strategy => ({
       id: strategy.id.toString(),
       title: strategy.title,
       content: strategy.content,
@@ -137,10 +134,10 @@ async function handleGetStrategies(sql, params, headers) {
     return resp(200, {
       strategies: formattedStrategies,
       pagination: {
-        total: parseInt(total),
-        limit: parseInt(limit),
-        offset: parseInt(offset),
-        hasMore: parseInt(offset) + parseInt(limit) < parseInt(total)
+        total: total,
+        limit: limitInt,
+        offset: offsetInt,
+        hasMore: offsetInt + limitInt < total
       }
     }, headers);
   } catch (error) {
@@ -198,6 +195,10 @@ async function handleCreateStrategy(sql, body, headers) {
       rawTags: tags
     });
 
+    // 测试：先查询当前所有攻略
+    const beforeCount = await sql`SELECT COUNT(*) as total FROM strategies`;
+    console.log('Before insert - total strategies:', beforeCount[0].total);
+
     // 插入新攻略 - 直接使用数组，让数据库自动处理JSON格式
     const [newStrategy] = await sql`
       INSERT INTO strategies (
@@ -207,6 +208,16 @@ async function handleCreateStrategy(sql, body, headers) {
         ${safeTags}, ${imageUrl}, ${safeMediaFiles}
       ) RETURNING *
     `;
+
+    console.log('Inserted strategy:', newStrategy);
+    
+    // 测试：插入后立即查询
+    const afterCount = await sql`SELECT COUNT(*) as total FROM strategies`;
+    console.log('After insert - total strategies:', afterCount[0].total);
+    
+    // 测试：直接查询刚插入的攻略
+    const justInserted = await sql`SELECT * FROM strategies WHERE id = ${newStrategy.id}`;
+    console.log('Just inserted strategy query:', justInserted);
 
     const formattedStrategy = {
       id: newStrategy.id.toString(),

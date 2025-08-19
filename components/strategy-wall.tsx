@@ -356,7 +356,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -20 }}
-                          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl"
+                          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl"
                           onClick={() => handleViewDetail(strategy)}
                         >
                           {/* 置顶标识 */}
@@ -368,7 +368,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           )}
 
                           {/* 标题 */}
-                          <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-blue-200 transition-colors line-clamp-2">
+                          <h3 className="text-xl font-bold text-white mb-4 leading-relaxed group-hover:text-blue-200 transition-colors line-clamp-2">
                             {strategy.title}
                           </h3>
 

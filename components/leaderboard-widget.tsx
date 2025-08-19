@@ -29,7 +29,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
   const loadLeaderboards = async () => {
     try {
       setIsLoading(true)
-      const data = await checkinAPI.getAllLeaderboards(15)
+      const data = await checkinAPI.getAllLeaderboards(50)
       setLeaderboards({
         total: data.total,
         continuous: data.continuous,
@@ -50,7 +50,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
     
     try {
       setRefreshing(true)
-      const data = await checkinAPI.getLeaderboard(activeTab, 15)
+      const data = await checkinAPI.getLeaderboard(activeTab, 50)
       setLeaderboards(prev => ({
         ...prev,
         [activeTab]: data

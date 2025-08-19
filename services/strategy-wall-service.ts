@@ -136,7 +136,7 @@ export const likeStrategy = async (strategyId: string, userId: string): Promise<
   return await performStrategyAction({
     strategyId,
     userId,
-    type: 'like'
+    action: 'like'
   });
 };
 
@@ -149,7 +149,7 @@ export const favoriteStrategy = async (strategyId: string, userId: string): Prom
   return await performStrategyAction({
     strategyId,
     userId,
-    type: 'favorite'
+    action: 'favorite'
   });
 };
 
@@ -167,7 +167,7 @@ export const commentStrategy = async (
   return await performStrategyAction({
     strategyId,
     userId,
-    type: 'comment',
+    action: 'comment',
     data: { content, userName }
   });
 };
@@ -177,7 +177,7 @@ export const viewStrategy = async (strategyId: string): Promise<{ viewCount: num
   return await performStrategyAction({
     strategyId,
     userId: 'system',
-    type: 'view'
+    action: 'view'
   });
 };
 
@@ -189,7 +189,7 @@ export const pinStrategy = async (strategyId: string, password: string): Promise
   return await performStrategyAction({
     strategyId,
     userId: 'admin',
-    type: 'pin',
+    action: 'pin',
     password
   });
 };
@@ -201,7 +201,7 @@ export const deleteStrategy = async (strategyId: string, password: string): Prom
   return await performStrategyAction({
     strategyId,
     userId: 'admin',
-    type: 'delete',
+    action: 'delete',
     password
   });
 };

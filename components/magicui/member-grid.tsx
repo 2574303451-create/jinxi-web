@@ -108,8 +108,8 @@ export function MemberGrid({ members, className }: MemberGridProps) {
                         member.role === "东北老爷们" ? "#8b5cf6" :
                         member.role === "嘴炮" ? "#ef4444" :
                         // 展示墙成员角色
-                        member.role === "副会" ? "#3b82f6" :
-                        member.role === "精英" ? "#dc2626" :
+                        member.role === "副会" ? "#dc2626" :
+                        member.role === "精英" ? "#3b82f6" :
                         member.role === "萌新" ? "#10b981" :
                         member.role === "回忆" ? "#6366f1" :
                         // 原有角色

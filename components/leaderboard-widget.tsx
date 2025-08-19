@@ -222,7 +222,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
           <div>• 每日签到获得 1 积分</div>
           <div>• 连续签到 3 天及以上，每天获得 2 积分</div>
           <div>• 连续签到 7 天及以上，每天获得 3 积分</div>
-          <div>• 排行榜每小时更新一次</div>
+          <div>• 排行榜数据实时更新，点击刷新获取最新数据</div>
         </div>
       </div>
     </motion.div>

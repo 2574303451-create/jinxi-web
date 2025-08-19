@@ -8,6 +8,7 @@ import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { MessageWall } from "@/components/message-wall"
 import { CheckinWidget } from "@/components/checkin-widget"
 import { LeaderboardWidget } from "@/components/leaderboard-widget"
+import { StrategyWall } from "@/components/strategy-wall"
 import { Carousel3D } from "@/components/magicui/3d-carousel"
 import { MemberGrid } from "@/components/magicui/member-grid"
 import { ToastProvider, useToast } from "@/components/ui/toast"
@@ -29,6 +30,7 @@ function PageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isStrategyWallOpen, setIsStrategyWallOpen] = useState(false)
   
   // 招新表单数据
   const [formData, setFormData] = useState<RecruitmentData>({
@@ -639,18 +641,32 @@ function PageContent() {
             </AnimatedBeam>
 
             <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
-              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "招新", "联系"].map((item, index) => (
-                <AnimatedBeam key={index} delay={0.3 + index * 0.1}>
-                  <li>
-                    <a
-                      href={`#${["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "recruit", "contact"][index]}`}
-                      className="opacity-90 hover:opacity-100 no-underline transition-opacity"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                </AnimatedBeam>
-              ))}
+              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "攻略墙"].map((item, index) => {
+                const links = ["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "strategy-wall"]
+                const isStrategyWall = item === "攻略墙"
+                
+                return (
+                  <AnimatedBeam key={index} delay={0.3 + index * 0.1}>
+                    <li>
+                      {isStrategyWall ? (
+                        <button
+                          onClick={() => setIsStrategyWallOpen(true)}
+                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
+                        >
+                          {item}
+                        </button>
+                      ) : (
+                        <a
+                          href={`#${links[index]}`}
+                          className="opacity-90 hover:opacity-100 no-underline transition-opacity"
+                        >
+                          {item}
+                        </a>
+                      )}
+                    </li>
+                  </AnimatedBeam>
+                )
+              })}
             </ul>
 
             <AnimatedBeam delay={1.2}>
@@ -1087,6 +1103,12 @@ function PageContent() {
           </div>
         </div>
       </Modal>
+
+      {/* 攻略墙弹窗 */}
+      <StrategyWall
+        isOpen={isStrategyWallOpen}
+        onClose={() => setIsStrategyWallOpen(false)}
+      />
 
       {/* Required CSS for icons */}
       <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />

@@ -203,120 +203,136 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="full">
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
-          {/* 头部 */}
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600">
-                  <i className="ri-book-2-line text-white text-2xl"></i>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <div 
+          className="h-screen bg-cover bg-center bg-fixed relative overflow-hidden"
+          style={{ 
+            backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%234f46e5" stop-opacity="0.3"/><stop offset="100%" stop-color="%231e40af" stop-opacity="0.1"/></radialGradient></defs><rect width="1000" height="1000" fill="url(%23a)"/><circle cx="200" cy="200" r="100" fill="%236366f1" fill-opacity="0.1"/><circle cx="800" cy="300" r="150" fill="%238b5cf6" fill-opacity="0.08"/><circle cx="300" cy="800" r="120" fill="%2306b6d4" fill-opacity="0.12"/><circle cx="700" cy="700" r="80" fill="%2310b981" fill-opacity="0.1"/></svg>')` 
+          }}
+        >
+          {/* 关闭按钮 */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 p-3 bg-black/30 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-black/50 transition-all duration-200 hover:scale-110"
+            title="关闭攻略墙"
+          >
+            <i className="ri-close-line text-xl"></i>
+          </button>
+
+          {/* 内容区域 */}
+          <div className="h-full overflow-y-auto p-6">
+            <div className="max-w-7xl mx-auto">
+              {/* 头部 */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
+                    <i className="ri-book-2-line text-white text-2xl"></i>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold text-white drop-shadow-lg">📖 攻略墙</h1>
+                    <p className="text-white/80 text-lg">分享游戏心得，共同进步 ✨</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-white">攻略墙</h1>
-                  <p className="text-white/60">分享游戏心得，共同进步</p>
+                
+                <button
+                  onClick={() => setIsSubmissionOpen(true)}
+                  className="flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 shadow-lg font-medium"
+                >
+                  <i className="ri-add-line text-lg"></i>
+                  📝 投稿攻略
+                </button>
+              </div>
+
+              {/* 筛选栏 */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 mb-6 border border-white/20 shadow-lg">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {/* 搜索框 */}
+                  <div className="relative">
+                    <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-lg"></i>
+                    <input
+                      type="text"
+                      placeholder="搜索攻略标题和内容..."
+                      value={searchKeyword}
+                      onChange={(e) => setSearchKeyword(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/20 transition-all duration-200"
+                    />
+                  </div>
+
+                  {/* 分类筛选 */}
+                  <div className="relative">
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value as StrategyCategory | 'all')}
+                      className="w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/20 transition-all duration-200 cursor-pointer appearance-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: 'right 12px center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: '16px 16px'
+                    }}
+                  >
+                      <option value="all" className="bg-slate-800 text-white">📚 所有分类</option>
+                      {STRATEGY_CONFIG.CATEGORIES.map(category => (
+                        <option 
+                          key={category.key} 
+                          value={category.key}
+                          className="bg-slate-800 text-white"
+                        >
+                          {category.label}
+                        </option>
+                      ))}
+                  </select>
+                    <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                  </div>
+
+                  {/* 难度筛选 */}
+                  <div className="relative">
+                    <select
+                      value={selectedDifficulty}
+                      onChange={(e) => setSelectedDifficulty(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
+                      className="w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 hover:bg-white/20 transition-all duration-200 cursor-pointer appearance-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: 'right 12px center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: '16px 16px'
+                    }}
+                  >
+                      <option value="all" className="bg-slate-800 text-white">⭐ 所有难度</option>
+                      {STRATEGY_CONFIG.DIFFICULTIES.map(diff => (
+                        <option 
+                          key={diff.level} 
+                          value={diff.level}
+                          className="bg-slate-800 text-white"
+                        >
+                          {'★'.repeat(diff.level)} {diff.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                  </div>
+
+                  {/* 排序方式 */}
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as 'created_at' | 'view_count' | 'likes')}
+                      className="w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 hover:bg-white/20 transition-all duration-200 cursor-pointer appearance-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: 'right 12px center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: '16px 16px'
+                    }}
+                    >
+                      <option value="created_at" className="bg-slate-800 text-white">🕒 最新发布</option>
+                      <option value="view_count" className="bg-slate-800 text-white">👁️ 最多浏览</option>
+                      <option value="likes" className="bg-slate-800 text-white">❤️ 最多点赞</option>
+                    </select>
+                    <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                  </div>
                 </div>
               </div>
-              
-              <button
-                onClick={() => setIsSubmissionOpen(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105"
-              >
-                <i className="ri-add-line"></i>
-                投稿攻略
-              </button>
-            </div>
-
-            {/* 筛选栏 */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-8 border border-white/20 shadow-xl">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                {/* 搜索框 */}
-                <div className="relative">
-                  <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-white/80 text-lg"></i>
-                  <input
-                    type="text"
-                    placeholder="搜索攻略标题和内容..."
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/25 transition-all duration-200"
-                  />
-                </div>
-
-                {/* 分类筛选 */}
-                <div className="relative">
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value as StrategyCategory | 'all')}
-                    className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/25 transition-all duration-200 cursor-pointer appearance-none"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 12px center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '16px 16px'
-                    }}
-                  >
-                    <option value="all" className="bg-slate-800 text-white font-medium">📚 所有分类</option>
-                    {STRATEGY_CONFIG.CATEGORIES.map(category => (
-                      <option 
-                        key={category.key} 
-                        value={category.key}
-                        className="bg-slate-800 text-white font-medium"
-                      >
-                        {category.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-                </div>
-
-                {/* 难度筛选 */}
-                <div className="relative">
-                  <select
-                    value={selectedDifficulty}
-                    onChange={(e) => setSelectedDifficulty(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
-                    className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 hover:bg-white/25 transition-all duration-200 cursor-pointer appearance-none"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 12px center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '16px 16px'
-                    }}
-                  >
-                    <option value="all" className="bg-slate-800 text-white font-medium">⭐ 所有难度</option>
-                    {STRATEGY_CONFIG.DIFFICULTIES.map(diff => (
-                      <option 
-                        key={diff.level} 
-                        value={diff.level}
-                        className="bg-slate-800 text-white font-medium"
-                      >
-                        {'★'.repeat(diff.level)} {diff.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-                </div>
-
-                {/* 排序方式 */}
-                <div className="relative">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as 'created_at' | 'view_count' | 'likes')}
-                    className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-400/20 hover:bg-white/25 transition-all duration-200 cursor-pointer appearance-none"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 12px center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '16px 16px'
-                    }}
-                  >
-                    <option value="created_at" className="bg-slate-800 text-white font-medium">🕒 最新发布</option>
-                    <option value="view_count" className="bg-slate-800 text-white font-medium">👁️ 最多浏览</option>
-                    <option value="likes" className="bg-slate-800 text-white font-medium">❤️ 最多点赞</option>
-                  </select>
-                  <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-                </div>
-              </div>
-            </div>
 
             {/* 攻略列表 */}
             {isLoading && strategies.length === 0 ? (
@@ -340,7 +356,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -20 }}
-                          className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer group"
+                          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl"
                           onClick={() => handleViewDetail(strategy)}
                         >
                           {/* 置顶标识 */}
@@ -533,6 +549,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                 )}
               </>
             )}
+            </div>
           </div>
         </div>
       </Modal>
@@ -541,7 +558,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
       <StrategySubmissionModal
         isOpen={isSubmissionOpen}
         onClose={() => setIsSubmissionOpen(false)}
-        onSubmit={async (submission) => {
+        onSubmit={async (submission: any) => {
           await strategyAPI.submitStrategy(submission)
           loadStrategies(true)
           setIsSubmissionOpen(false)
@@ -567,7 +584,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
         }}
         onConfirm={handleAdminAction}
         title={pendingAction?.type === 'pin' ? '置顶攻略' : '删除攻略'}
-        message={
+        description={
           pendingAction?.type === 'pin' 
             ? '请输入管理员密码来置顶此攻略：'
             : '请输入管理员密码来删除此攻略：'

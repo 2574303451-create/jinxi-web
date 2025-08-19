@@ -186,23 +186,25 @@ async function handleCreateStrategy(sql, body, headers) {
       return resp(400, { error: '难度等级必须在1-5之间' }, headers);
     }
 
-    // 确保数组格式正确
-    const safeTags = Array.isArray(tags) ? tags : [];
+    // 确保数组格式正确并清理数据
+    const safeTags = Array.isArray(tags) ? tags.map(tag => String(tag).trim()).filter(tag => tag.length > 0) : [];
     const safeMediaFiles = Array.isArray(mediaFiles) ? mediaFiles : [];
     
     console.log('Creating strategy with data:', {
       title, author, category, difficulty, 
       tags: safeTags, 
-      mediaFiles: safeMediaFiles
+      mediaFiles: safeMediaFiles,
+      rawTagsType: typeof tags,
+      rawTags: tags
     });
 
-    // 插入新攻略
+    // 插入新攻略 - 直接使用数组，让数据库自动处理JSON格式
     const [newStrategy] = await sql`
       INSERT INTO strategies (
         title, content, author, category, difficulty, tags, image_url, media_files
       ) VALUES (
         ${title}, ${content}, ${author}, ${category}, ${difficulty}, 
-        ${JSON.stringify(safeTags)}, ${imageUrl}, ${JSON.stringify(safeMediaFiles)}
+        ${safeTags}, ${imageUrl}, ${safeMediaFiles}
       ) RETURNING *
     `;
 

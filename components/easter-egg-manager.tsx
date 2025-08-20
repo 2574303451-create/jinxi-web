@@ -1733,12 +1733,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`text-2xl ${egg.discovered ? '' : 'grayscale opacity-50'}`}>
-                    {egg.icon}
+                  <div className={`text-2xl ${egg.discovered ? '' : 'opacity-50'}`}>
+                    {egg.discovered ? egg.icon : '🔒'}
                   </div>
                   <div className="flex-1">
                     <div className={`font-medium ${egg.discovered ? 'text-white' : 'text-white/60'}`}>
-                      {egg.name}
+                      {egg.discovered ? egg.name : '***彩蛋'}
                     </div>
                     <div className={`text-sm ${egg.discovered ? 'text-white/80' : 'text-white/40'}`}>
                       {egg.discovered ? '已发现的神秘彩蛋' : '待发现的神秘彩蛋'}

@@ -41,9 +41,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [keySequence, setKeySequence] = useState('')
   
   // 创意彩蛋相关状态
-  const [fullscreenTimer, setFullscreenTimer] = useState<NodeJS.Timeout | null>(null)
   const [isVideoFullscreen, setIsVideoFullscreen] = useState(false)
   const [devToolsOpen, setDevToolsOpen] = useState(false)
+  const [forceProgressBarUpdate, setForceProgressBarUpdate] = useState(0)
   const [isPageVisible, setIsPageVisible] = useState(true)
   const [patienceTimer, setPatienceTimer] = useState<NodeJS.Timeout | null>(null)
   const [lastActivityTime, setLastActivityTime] = useState(Date.now())
@@ -251,49 +251,59 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
   // 📺 创意彩蛋2: 全屏视频彩蛋 - 全屏观看今夕宣传视频
   useEffect(() => {
+    let videoTimer: NodeJS.Timeout | null = null
+    
     const handleFullscreenChange = () => {
       const isFullscreen = document.fullscreenElement !== null || 
                           (document as any).webkitFullscreenElement !== null ||
                           (document as any).mozFullScreenElement !== null ||
                           (document as any).msFullscreenElement !== null
       
-      if (isFullscreen && !isVideoFullscreen) {
+      if (isFullscreen) {
         // 检测是否是视频元素进入全屏
         const fullscreenElement = document.fullscreenElement || 
                                  (document as any).webkitFullscreenElement ||
                                  (document as any).mozFullScreenElement ||
                                  (document as any).msFullscreenElement
         
-        if (fullscreenElement && fullscreenElement.tagName === 'VIDEO') {
+        if (fullscreenElement && fullscreenElement.tagName === 'VIDEO' && !isVideoFullscreen) {
           setIsVideoFullscreen(true)
           
-          // 延迟3秒触发彩蛋，确保用户真的在观看
-          const timer = setTimeout(() => {
-            // 再次检查是否还在全屏状态
-            const stillFullscreen = document.fullscreenElement !== null || 
-                                   (document as any).webkitFullscreenElement !== null ||
-                                   (document as any).mozFullScreenElement !== null ||
-                                   (document as any).msFullscreenElement !== null
-            
-            if (stillFullscreen) {
-              triggerCreativeEgg({
-                type: 'fullscreen',
-                title: '📺 视频专注者',
-                message: '你全屏观看今夕宣传视频，展现了对今夕的真正关注！',
-                icon: '📺'
-              }, 'fullscreen')
-            }
-          }, 3000)
-          
-          setFullscreenTimer(timer)
+          // 检查是否已经发现过这个彩蛋
+          const fullscreenEgg = easterEggRecords.find(egg => egg.id === 'fullscreen')
+          if (!fullscreenEgg?.discovered) {
+            // 延迟3秒触发彩蛋，确保用户真的在观看
+            videoTimer = setTimeout(() => {
+              // 再次检查是否还在全屏状态
+              const stillFullscreen = document.fullscreenElement !== null || 
+                                     (document as any).webkitFullscreenElement !== null ||
+                                     (document as any).mozFullScreenElement !== null ||
+                                     (document as any).msFullscreenElement !== null
+              
+              if (stillFullscreen) {
+                triggerCreativeEgg({
+                  type: 'fullscreen',
+                  title: '📺 视频专注者',
+                  message: '你全屏观看今夕宣传视频，展现了对今夕的真正关注！',
+                  icon: '📺'
+                }, 'fullscreen')
+              }
+            }, 3000)
+          }
         }
-      } else if (!isFullscreen && isVideoFullscreen) {
-        setIsVideoFullscreen(false)
-        if (fullscreenTimer) {
-          clearTimeout(fullscreenTimer)
-          setFullscreenTimer(null)
+      } else {
+        // 退出全屏状态
+        if (isVideoFullscreen) {
+          setIsVideoFullscreen(false)
+        }
+        if (videoTimer) {
+          clearTimeout(videoTimer)
+          videoTimer = null
         }
       }
+      
+      // 强制更新进度条显示
+      setForceProgressBarUpdate(prev => prev + 1)
     }
 
     document.addEventListener('fullscreenchange', handleFullscreenChange)
@@ -306,9 +316,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
       document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
       document.removeEventListener('msfullscreenchange', handleFullscreenChange)
-      if (fullscreenTimer) clearTimeout(fullscreenTimer)
+      if (videoTimer) clearTimeout(videoTimer)
     }
-  }, [isVideoFullscreen, fullscreenTimer])
+  }, []) // 移除依赖，避免不必要的重新执行
 
   // 💻 创意彩蛋3: 开发者彩蛋 - 检测开发者工具
   useEffect(() => {
@@ -1063,22 +1073,29 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const currentAchievement = getCurrentAchievement()
 
     // 调试信息
-    console.log('🎯 进度条数据:', { discoveredCount, totalCount, progress, easterEggRecords })
+    console.log('🎯 进度条数据:', { discoveredCount, totalCount, progress, easterEggRecords, forceProgressBarUpdate })
 
-    // 只要系统初始化完成就显示进度条（用于调试）
+    // 只要系统初始化完成就显示进度条
     if (easterEggRecords.length === 0) return null
+
+    // 检测是否在全屏状态
+    const isInFullscreen = document.fullscreenElement !== null || 
+                          (document as any).webkitFullscreenElement !== null ||
+                          (document as any).mozFullScreenElement !== null ||
+                          (document as any).msFullscreenElement !== null
 
     return (
       <div 
-        className="achievement-progress-bar fixed bottom-0 left-0 right-0 z-[9997] bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
+        className="achievement-progress-bar fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
         style={{ 
-          display: 'block', 
-          visibility: 'visible',
-          position: 'fixed',
-          zIndex: 9997,
+          display: 'block !important' as any,
+          visibility: 'visible !important' as any,
+          position: 'fixed !important' as any,
+          zIndex: isInFullscreen ? 999999 : 9997, // 全屏时使用更高的z-index
           bottom: 0,
           left: 0,
-          right: 0
+          right: 0,
+          opacity: 1
         }}
         onClick={(e) => {
           e.preventDefault()

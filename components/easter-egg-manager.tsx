@@ -287,6 +287,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                   message: '你全屏观看今夕宣传视频，展现了对今夕的真正关注！',
                   icon: '📺'
                 }, 'fullscreen')
+                
+                // 特别为全屏彩蛋强制更新进度条
+                setTimeout(() => {
+                  setForceProgressBarUpdate(prev => prev + 10) // 使用更大的增量确保触发更新
+                }, 2000)
               }
             }, 3000)
           }
@@ -1096,7 +1101,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     if (!showCreativeEgg) return null
 
     return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
+      <div className="fixed inset-0 flex items-center justify-center transition-opacity duration-1000" style={{ zIndex: 999998 }}>
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCreativeEgg(null)} />
         <div className="easter-egg-modal relative z-10 text-center bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-md mx-4">
           <div className="text-6xl mb-4 animate-bounce">{showCreativeEgg.icon}</div>
@@ -1130,7 +1135,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     if (!showLevelUpNotification) return null
 
     return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
+      <div className="fixed inset-0 flex items-center justify-center transition-opacity duration-1000" style={{ zIndex: 999998 }}>
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowLevelUpNotification(null)} />
         <div className="easter-egg-modal relative z-10 text-center bg-gradient-to-br from-yellow-600/30 to-orange-600/30 p-8 rounded-2xl border border-yellow-400/30 backdrop-blur-sm max-w-md mx-4">
           <div className="text-8xl mb-4 animate-pulse">{showLevelUpNotification.icon}</div>
@@ -1167,8 +1172,18 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const progress = (discoveredCount / totalCount) * 100
     const currentAchievement = getCurrentAchievement()
 
-    // 调试信息
-    console.log('🎯 进度条数据:', { discoveredCount, totalCount, progress, easterEggRecords, forceProgressBarUpdate })
+    // 调试信息 - 包含更多状态信息
+    console.log('🎯 进度条数据:', { 
+      discoveredCount, 
+      totalCount, 
+      progress, 
+      easterEggRecords: easterEggRecords.length,
+      forceProgressBarUpdate,
+      showCreativeEgg: !!showCreativeEgg,
+      showLevelUpNotification: !!showLevelUpNotification,
+      showAchievementPanel,
+      isVideoFullscreen
+    })
 
     // 只要系统初始化完成就显示进度条
     if (easterEggRecords.length === 0) return null
@@ -1186,7 +1201,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           display: 'block !important' as any,
           visibility: 'visible !important' as any,
           position: 'fixed !important' as any,
-          zIndex: 999999, // 始终使用最高的z-index
+          zIndex: 9999999, // 始终使用最高的z-index，确保在所有弹窗之上
           bottom: 0,
           left: 0,
           right: 0,
@@ -1238,7 +1253,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const currentAchievement = getCurrentAchievement()
 
     return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
+      <div className="fixed inset-0 flex items-center justify-center transition-opacity duration-1000" style={{ zIndex: 999998 }}>
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowAchievementPanel(false)} />
         <div className="easter-egg-modal relative z-10 bg-gradient-to-br from-gray-900/95 to-black/95 p-6 rounded-2xl border border-white/20 backdrop-blur-sm max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
           <div className="text-center mb-6">
@@ -1320,7 +1335,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           display: block !important;
           visibility: visible !important;
           position: fixed !important;
-          z-index: 999999 !important;
+          z-index: 9999999 !important;
           bottom: 0 !important;
           left: 0 !important;
           right: 0 !important;

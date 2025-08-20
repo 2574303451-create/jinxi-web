@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { AnimatedBeam } from '@/components/magicui/animated-beam'
-import { Sparkles } from '@/components/magicui/sparkles'
-import { TypingAnimation } from '@/components/magicui/typing-animation'
-import { Particles } from '@/components/magicui/particles'
+import { AnimatedBeam } from './magicui/animated-beam'
+import { Sparkles } from './magicui/sparkles'
+import { TypingAnimation } from './magicui/typing-animation'
+import { Particles } from './magicui/particles'
 
 interface AnniversaryEasterEggProps {
   isVisible: boolean

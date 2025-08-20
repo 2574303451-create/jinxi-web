@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { Strategy, StrategyCategory, STRATEGY_CONFIG } from "@/types/strategy-wall"
-import * as strategyAPI from "@/services/strategy-wall-service"
-import { Modal } from "@/components/ui/modal"
-import { AdminPasswordDialog } from "@/components/ui/admin-password-dialog"
-import { StrategySubmissionModal } from "@/components/strategy-submission-modal"
-import { StrategyDetailModal } from "@/components/strategy-detail-modal"
+import { cn } from "../lib/utils"
+import { Strategy, StrategyCategory, STRATEGY_CONFIG } from "../types/strategy-wall"
+import * as strategyAPI from "../services/strategy-wall-service"
+import { Modal } from "./ui/modal"
+import { AdminPasswordDialog } from "./ui/admin-password-dialog"
+import { StrategySubmissionModal } from "./strategy-submission-modal"
+import { StrategyDetailModal } from "./strategy-detail-modal"
 
 interface StrategyWallProps {
   isOpen: boolean

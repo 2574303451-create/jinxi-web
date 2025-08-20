@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { Message, Reply, Reaction } from "@/types/message-wall"
-import * as backendAPI from "@/services/message-wall-backend"
-import { ImageUpload } from "@/components/ui/image-upload"
-import { AdminPasswordDialog } from "@/components/ui/admin-password-dialog"
+import { cn } from "../lib/utils"
+import { Message, Reply, Reaction } from "../types/message-wall"
+import * as backendAPI from "../services/message-wall-backend"
+import { ImageUpload } from "./ui/image-upload"
+import { AdminPasswordDialog } from "./ui/admin-password-dialog"
 
 export function MessageWall({ className }: { className?: string }) {
   const [messages, setMessages] = useState<Message[]>([])

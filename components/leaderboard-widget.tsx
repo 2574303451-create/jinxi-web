@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { cn } from "../lib/utils"
 import { Leaderboard, LeaderboardEntry } from "@/types/checkin"
-import * as checkinAPI from "@/services/checkin-service"
+import * as checkinAPI from "../services/checkin-service"
 
 interface LeaderboardWidgetProps {
   className?: string

@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { StrategySubmission, StrategyCategory, STRATEGY_CONFIG, MediaFile } from "@/types/strategy-wall"
-import { Modal } from "@/components/ui/modal"
-import { MediaUpload } from "@/components/ui/media-upload"
-import * as strategyAPI from "@/services/strategy-wall-service"
+import { cn } from "../lib/utils"
+import { StrategySubmission, StrategyCategory, STRATEGY_CONFIG, MediaFile } from "../types/strategy-wall"
+import { Modal } from "./ui/modal"
+import { MediaUpload } from "./ui/media-upload"
+import * as strategyAPI from "../services/strategy-wall-service"
 
 interface StrategySubmissionModalProps {
   isOpen: boolean

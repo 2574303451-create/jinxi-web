@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { CheckinStatus, CheckinResult, UserCheckinStats } from "@/types/checkin"
-import * as checkinAPI from "@/services/checkin-service"
+import { cn } from "../lib/utils"
+import { CheckinStatus, CheckinResult, UserCheckinStats } from "../types/checkin"
+import * as checkinAPI from "../services/checkin-service"
 
 interface CheckinWidgetProps {
   className?: string

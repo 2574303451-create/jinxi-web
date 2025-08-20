@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { MemberDetailModal } from "@/components/member-detail-modal"
+import { cn } from "../../lib/utils"
+import { MemberDetailModal } from "../member-detail-modal"
 
 interface Member {
   id: number

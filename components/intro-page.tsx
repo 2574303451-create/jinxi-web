@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { Sparkles } from "@/components/magicui/sparkles"
-import { TypingAnimation } from "@/components/magicui/typing-animation"
-import { Particles } from "@/components/magicui/particles"
-import { FloatingElements } from "@/components/magicui/floating-elements"
+import { Sparkles } from "./magicui/sparkles"
+import { TypingAnimation } from "./magicui/typing-animation"
+import { Particles } from "./magicui/particles"
+import { FloatingElements } from "./magicui/floating-elements"
 
 interface IntroPageProps {
   onComplete: () => void

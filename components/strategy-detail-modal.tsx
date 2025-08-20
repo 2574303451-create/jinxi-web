@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { Strategy, STRATEGY_CONFIG, formatTimestamp } from "@/types/strategy-wall"
-import { Modal } from "@/components/ui/modal"
-import { MediaGallery } from "@/components/ui/media-gallery"
-import * as strategyAPI from "@/services/strategy-wall-service"
+import { cn } from "../lib/utils"
+import { Strategy, STRATEGY_CONFIG, formatTimestamp } from "../types/strategy-wall"
+import { Modal } from "./ui/modal"
+import { MediaGallery } from "./ui/media-gallery"
+import * as strategyAPI from "../services/strategy-wall-service"
 
 interface StrategyDetailModalProps {
   strategy: Strategy | null

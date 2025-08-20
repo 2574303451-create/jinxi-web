@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { MediaFile } from "@/types/strategy-wall"
-import { Modal } from "@/components/ui/modal"
+import { cn } from "../../lib/utils"
+import { MediaFile } from "../../types/strategy-wall"
+import { Modal } from "./modal"
 
 interface MediaGalleryProps {
   mediaFiles: MediaFile[]

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { 
   MediaFile, 
   MediaFileType,
@@ -13,7 +13,7 @@ import {
   generateMediaFileId,
   isImageFile,
   isVideoFile
-} from "@/types/strategy-wall"
+} from "../../types/strategy-wall"
 
 interface MediaUploadProps {
   mediaFiles: MediaFile[]

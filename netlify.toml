@@ -25,7 +25,7 @@
 [build.processing.images]
   compress = true
 
-# 安全头部
+# 增强安全头部
 [[headers]]
   for = "/*"
   [headers.values]
@@ -34,6 +34,16 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-DNS-Prefetch-Control = "on"
+    # 内容安全策略
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'"
+    # 严格传输安全
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # 权限策略
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    # 防止MIME类型嗅探
+    X-Download-Options = "noopen"
+    # 其他安全设置
+    X-Robots-Tag = "noindex, nofollow, noarchive, nosnippet"
     
 # 静态资源缓存优化
 [[headers]]
@@ -79,11 +89,21 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000"
 
-# HTML页面缓存
+# HTML页面安全策略
 [[headers]]
   for = "*.html"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+    Pragma = "no-cache"
+    X-Robots-Tag = "noindex, nofollow"
+
+# API路径保护
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+    Access-Control-Allow-Origin = "https://jinxi-web.netlify.app"
 
 [[redirects]]
   from = "/*"

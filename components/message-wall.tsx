@@ -455,19 +455,19 @@ export function MessageWall({ className }: { className?: string }) {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handlePin(message.id)}
-                            className="text-white/40 hover:text-yellow-400 transition-colors hover-effect"
+                            className="p-2 rounded-lg bg-white/10 hover:bg-yellow-500/20 text-white/80 hover:text-yellow-400 transition-all duration-200 hover-effect"
                             title={message.isPinned ? "取消置顶" : "置顶"}
                           >
                             <i className={message.isPinned ? "ri-pushpin-fill" : "ri-pushpin-line"}></i>
                           </button>
                           <button
                             onClick={() => handleDelete(message.id)}
-                            className="text-white/40 hover:text-red-400 transition-colors hover-effect"
+                            className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-white/80 hover:text-red-400 transition-all duration-200 hover-effect"
                             title="删除"
                           >
                             <i className="ri-delete-bin-line"></i>
                           </button>
-                  </div>
+                        </div>
                 </div>
 
                       <div className="text-white/90 mb-4 leading-relaxed whitespace-pre-wrap">

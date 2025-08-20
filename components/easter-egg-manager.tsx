@@ -1525,6 +1525,13 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const progress = totalCount > 0 ? (discoveredCount / totalCount) * 100 : 0
     const currentAchievement = getCurrentAchievement()
 
+    // 检测是否在全屏状态 - 加强检测
+    const isInFullscreen = document.fullscreenElement !== null || 
+                          (document as any).webkitFullscreenElement !== null ||
+                          (document as any).mozFullScreenElement !== null ||
+                          (document as any).msFullscreenElement !== null ||
+                          isVideoFullscreen
+
     // 调试信息 - 包含更多状态信息
     console.log('🎯 侧边栏数据:', { 
       discoveredCount, 
@@ -1536,18 +1543,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       showLevelUpNotification: !!showLevelUpNotification,
       showAchievementPanel,
       isVideoFullscreen,
+      isInFullscreen,
       sidebarExpanded,
-      sidebarForceVisible
+      sidebarForceVisible,
+      document_fullscreenElement: !!document.fullscreenElement
     })
 
     // 强制显示：除非明确设置为不可见，否则总是显示
     if (!sidebarForceVisible) return null
-
-    // 检测是否在全屏状态
-    const isInFullscreen = document.fullscreenElement !== null || 
-                          (document as any).webkitFullscreenElement !== null ||
-                          (document as any).mozFullScreenElement !== null ||
-                          (document as any).msFullscreenElement !== null
 
     return (
       <div 
@@ -1556,15 +1559,16 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           sidebarExpanded ? 'w-80' : 'w-16'
         } ${isInFullscreen ? 'fullscreen-mode' : ''}`}
         style={{ 
-          zIndex: isInFullscreen ? 999999999 : 9999999, // 全屏状态下使用更高的z-index
+          zIndex: isInFullscreen ? 2147483647 : 9999999, // 使用最高的z-index值
           pointerEvents: 'auto',
           position: 'fixed',
           right: '0',
           top: '50%',
           transform: 'translateY(-50%)',
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
+          display: 'block !important',
+          visibility: 'visible !important',
+          opacity: '1 !important',
+          maxZIndex: '2147483647'
         }}
         data-testid="achievement-sidebar"
         data-force-visible="true"
@@ -1794,7 +1798,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         body:-moz-full-screen .achievement-sidebar,
         body:-ms-fullscreen .achievement-sidebar,
         body:fullscreen .achievement-sidebar {
-          z-index: 999999999 !important;
+          z-index: 2147483647 !important;
           position: fixed !important;
           display: block !important;
           visibility: visible !important;
@@ -1802,6 +1806,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           right: 0 !important;
           top: 50% !important;
           transform: translateY(-50%) !important;
+          pointer-events: auto !important;
         }
         
         /* 防止被其他元素覆盖 */
@@ -1813,9 +1818,44 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         video:fullscreen ~ .achievement-sidebar,
         video:-webkit-full-screen ~ .achievement-sidebar,
         video:-moz-full-screen ~ .achievement-sidebar {
-          z-index: 999999999 !important;
+          z-index: 2147483647 !important;
           display: block !important;
           visibility: visible !important;
+          position: fixed !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+        
+        /* 全局强制显示 - 最高优先级 */
+        .achievement-sidebar[data-force-visible="true"] {
+          z-index: 2147483647 !important;
+          display: block !important;
+          visibility: visible !important;
+          position: fixed !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+        
+        /* 对所有全屏元素下的侧边栏强制显示 */
+        *:fullscreen .achievement-sidebar,
+        *:-webkit-full-screen .achievement-sidebar,
+        *:-moz-full-screen .achievement-sidebar,
+        *:-ms-fullscreen .achievement-sidebar {
+          z-index: 2147483647 !important;
+          display: block !important;
+          visibility: visible !important;
+          position: fixed !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
         }
       `
       document.head.appendChild(style)
@@ -1833,7 +1873,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
             visibility: visible !important;
             opacity: 1 !important;
             position: fixed !important;
-            z-index: 9999999 !important;
+            z-index: 2147483647 !important;
             right: 0 !important;
             top: 50% !important;
             transform: translateY(-50%) !important;

@@ -37,10 +37,10 @@ function cleanBuild() {
     
     try {
         if (fs.existsSync('out')) {
-            execSync('rm -rf out', { stdio: 'inherit' });
+            fs.rmSync('out', { recursive: true, force: true });
         }
         if (fs.existsSync('.next')) {
-            execSync('rm -rf .next', { stdio: 'inherit' });
+            fs.rmSync('.next', { recursive: true, force: true });
         }
         console.log('✅ 构建目录清理完成');
     } catch (error) {

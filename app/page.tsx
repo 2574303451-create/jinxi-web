@@ -1116,12 +1116,7 @@ function PageContent() {
 
 
 
-      {/* Required CSS for icons */}
-      <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap"
-        rel="stylesheet"
-      />
+
       </div>
     </EasterEggManager>
   )

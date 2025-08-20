@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "build:netlify": "next build",
-    "build:optimized": "node optimize-images.js && next build",
+    "build:secure": "NODE_ENV=production next build",
+    "build:netlify": "NODE_ENV=production next build",
+    "build:optimized": "node optimize-images.js && NODE_ENV=production next build",
     "dev": "next dev",
     "dev:netlify": "netlify dev",
     "lint": "next lint",
@@ -15,8 +16,10 @@
     "deploy": "node deploy.js",
     "deploy:preview": "netlify deploy --dir=out",
     "deploy:prod": "netlify deploy --prod --dir=out",
+    "deploy:secure": "NODE_ENV=production node deploy.js",
     "analyze": "node optimize-images.js",
-    "optimize": "node optimize-images.js && npm run build"
+    "optimize": "node optimize-images.js && NODE_ENV=production next build",
+    "security:test": "node scripts/test-security.js"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -78,8 +81,15 @@
     "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "javascript-obfuscator": "^4.1.1",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.9.2"
-  }
+    "typescript": "5.9.2",
+    "webpack-obfuscator": "^3.5.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@10.0.0"
 }

@@ -86,9 +86,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     },
     {
       id: 'title',
-      name: '页面标题彩蛋',
-      description: '切换标签页超过10秒后回归',
-      icon: '💕',
+      name: '双击魔法彩蛋',
+      description: '快速双击页面背景空白区域',
+      icon: '✨',
       discovered: false
     },
     {
@@ -371,46 +371,64 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return () => clearInterval(interval)
   }, [devToolsOpen])
 
-  // 📱 创意彩蛋4: 页面标题互动彩蛋
+  // ✨ 创意彩蛋4: 双击魔法彩蛋 - 快速双击页面背景
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && isPageVisible) {
-        setIsPageVisible(false)
-        document.title = '👋 别走呀~ 今夕想你了...'
+    let clickCount = 0
+    let clickTimer: NodeJS.Timeout | null = null
+    
+    const handleDoubleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      
+      // 只在点击背景或空白区域时触发，排除按钮、链接、输入框等交互元素
+      if (target.tagName === 'BUTTON' || 
+          target.tagName === 'A' || 
+          target.tagName === 'INPUT' || 
+          target.tagName === 'TEXTAREA' ||
+          target.closest('button') ||
+          target.closest('a') ||
+          target.closest('input') ||
+          target.closest('textarea') ||
+          target.closest('.easter-egg-modal') ||
+          target.closest('.achievement-progress-bar')) {
+        return
+      }
+      
+      clickCount++
+      
+      if (clickCount === 1) {
+        // 设置双击检测窗口（500ms内）
+        clickTimer = setTimeout(() => {
+          clickCount = 0
+        }, 500)
+      } else if (clickCount === 2) {
+        // 检测到双击
+        if (clickTimer) {
+          clearTimeout(clickTimer)
+          clickTimer = null
+        }
+        clickCount = 0
         
-        // 如果用户离开超过10秒再回来，触发彩蛋
-        setTimeout(() => {
-          if (!document.hidden) return
-          
-          const originalTitle = document.title
-          document.title = '🎁 有惊喜等你回来哦~'
-          
-          const handleReturn = () => {
-            if (!document.hidden) {
-              document.title = originalTitle
-              setTimeout(() => {
-                triggerCreativeEgg({
-                  type: 'title',
-                  title: '💕 忠实访客',
-                  message: '感谢你的回归！今夕永远为你保留一个位置~',
-                  icon: '💕'
-                }, 'title')
-              }, 1000)
-              document.removeEventListener('visibilitychange', handleReturn)
-            }
-          }
-          
-          document.addEventListener('visibilitychange', handleReturn)
-        }, 10000)
-      } else if (!document.hidden && !isPageVisible) {
-        setIsPageVisible(true)
-        document.title = '弹弹堂-今夕公会官网'
+        // 检查是否已经发现过这个彩蛋
+        const titleEgg = easterEggRecords.find(egg => egg.id === 'title')
+        if (!titleEgg?.discovered) {
+          triggerCreativeEgg({
+            type: 'title',
+            title: '✨ 双击魔法师',
+            message: '你掌握了双击的奥秘！魔法在指尖绽放！',
+            icon: '✨'
+          }, 'title')
+        }
       }
     }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [isPageVisible])
+    
+    document.addEventListener('click', handleDoubleClick)
+    return () => {
+      document.removeEventListener('click', handleDoubleClick)
+      if (clickTimer) {
+        clearTimeout(clickTimer)
+      }
+    }
+  }, [easterEggRecords])
 
   // Logo点击彩蛋 (连击7次)
   useEffect(() => {
@@ -545,6 +563,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     recordEasterEggDiscovery(eggId)
     showToast(`${egg.icon} ${egg.title}：${egg.message}`, 'success')
     
+    // 强制更新进度条，确保它在彩蛋触发后保持可见
+    setTimeout(() => {
+      setForceProgressBarUpdate(prev => prev + 1)
+    }, 100)
+    
     // 根据彩蛋类型触发不同特效
     switch(egg.type) {
       case 'fullscreen':
@@ -563,8 +586,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         break
       
       case 'title':
-        // 标题彩蛋：温暖粒子特效
-        createWarmParticleEffect()
+        // 双击彩蛋：魔法星光特效
+        createMagicSparkleEffect()
         break
         
       case 'patience':
@@ -753,6 +776,78 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           0% { transform: scale(0) rotate(0deg); opacity: 0; }
           50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
           100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createMagicSparkleEffect = () => {
+    // 魔法星光特效
+    const magicColors = ['✨', '🌟', '💫', '⭐', '🔸', '🔹', '💎', '🌠']
+    
+    // 中心爆炸效果
+    for (let i = 0; i < 15; i++) {
+      const sparkle = document.createElement('div')
+      sparkle.innerHTML = magicColors[Math.floor(Math.random() * magicColors.length)]
+      sparkle.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        font-size: ${Math.random() * 2 + 1.5}rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: magicSparkle 2s ease-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      
+      document.body.appendChild(sparkle)
+      setTimeout(() => sparkle.remove(), 2500)
+    }
+    
+    // 环形扩散效果
+    for (let i = 0; i < 8; i++) {
+      const ring = document.createElement('div')
+      ring.innerHTML = '✨'
+      const angle = (i / 8) * 2 * Math.PI
+      const radius = 150
+      ring.style.cssText = `
+        position: fixed;
+        top: calc(50% + ${Math.sin(angle) * radius}px);
+        left: calc(50% + ${Math.cos(angle) * radius}px);
+        font-size: 2rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: magicRing 1.5s ease-out forwards;
+        animation-delay: ${i * 150}ms;
+      `
+      
+      document.body.appendChild(ring)
+      setTimeout(() => ring.remove(), 2000)
+    }
+    
+    if (!document.getElementById('magicSparkleStyle')) {
+      const style = document.createElement('style')
+      style.id = 'magicSparkleStyle'
+      style.textContent = `
+        @keyframes magicSparkle {
+          0% { 
+            transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+            opacity: 0; 
+          }
+          30% { 
+            transform: translate(-50%, -50%) scale(1.5) rotate(180deg); 
+            opacity: 1; 
+          }
+          100% { 
+            transform: translate(${Math.random() * 600 - 300}px, ${Math.random() * 400 - 200}px) scale(0.3) rotate(720deg); 
+            opacity: 0; 
+          }
+        }
+        @keyframes magicRing {
+          0% { opacity: 0; transform: scale(0.5); }
+          50% { opacity: 1; transform: scale(1.2); }
+          100% { opacity: 0; transform: scale(2); }
         }
       `
       document.head.appendChild(style)
@@ -1091,11 +1186,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           display: 'block !important' as any,
           visibility: 'visible !important' as any,
           position: 'fixed !important' as any,
-          zIndex: isInFullscreen ? 999999 : 9997, // 全屏时使用更高的z-index
+          zIndex: 999999, // 始终使用最高的z-index
           bottom: 0,
           left: 0,
           right: 0,
-          opacity: 1
+          opacity: 1,
+          pointerEvents: 'auto' as any
         }}
         onClick={(e) => {
           e.preventDefault()
@@ -1214,6 +1310,28 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
+  // 确保进度条样式始终生效
+  useEffect(() => {
+    if (!document.getElementById('progressBarForceStyle')) {
+      const style = document.createElement('style')
+      style.id = 'progressBarForceStyle'
+      style.textContent = `
+        .achievement-progress-bar {
+          display: block !important;
+          visibility: visible !important;
+          position: fixed !important;
+          z-index: 999999 !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }, [])
+
   return (
     <div>
       {children}
@@ -1239,12 +1357,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       {/* 彩蛋说明（隐藏的开发者信息） */}
       <div style={{ display: 'none' }} data-easter-eggs="creative">
         {/* 
-        今夕公会创意彩蛋系统 v2.2 - 成就系统：
+        今夕公会创意彩蛋系统 v2.3 - 成就系统：
         1. 键盘彩蛋：输入 "JINXI7" 触发7周年庆典
         2. 点击彩蛋：快速点击Logo 7次
-        3. 凝视彩蛋：鼠标在Logo上静止3秒
+        3. 全屏视频彩蛋：全屏观看今夕宣传视频
         4. 开发者彩蛋：打开F12开发者工具
-        5. 页面标题彩蛋：切换标签页后回归
+        5. 双击魔法彩蛋：快速双击页面背景空白区域
         6. 商标点击彩蛋：点击页面底部的今夕商标
         7. 耐心彩蛋：在页面静静等待2分钟不做任何操作
         

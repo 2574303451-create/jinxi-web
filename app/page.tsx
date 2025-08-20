@@ -23,6 +23,7 @@ import { FloatingElements } from "../components/magicui/floating-elements"
 import { AuroraBackground } from "../components/magicui/aurora-background"
 import { IntroPage } from "../components/intro-page"
 import { EasterEggManager } from "../components/easter-egg-manager"
+import { RocketIcon, SendIcon, MailIcon, Icon } from "../components/ui/icons"
 
 import { MeteorShower } from "../components/magicui/meteor-shower"
 
@@ -444,21 +445,21 @@ function PageContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-heart-2-line text-red-400"></i> 公会宣言
+❤️ 公会宣言
             </h4>
             <p className="text-white/80 text-sm mb-2">以战会友，彼此成就。强势在操作，温柔在态度。</p>
             <div className="text-yellow-300 font-medium text-sm">愿你每次出场，都被掌声围绕。</div>
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-time-line text-blue-400"></i> 活跃时段
+⏰ 活跃时段
             </h4>
             <p className="text-white/80 text-sm mb-2">工作日 20:00–23:00；周末弹性开黑。</p>
             <div className="text-yellow-300 font-medium text-sm">如果星光不问赶路人，我们就把星光点亮。</div>
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-shield-star-line text-green-400"></i> 入会要点
+🛡️ 入会要点
             </h4>
             <p className="text-white/80 text-sm mb-2">文明游戏、支持指挥、接受分工。</p>
             <div className="text-yellow-300 font-medium text-sm">把"配合"写进肌肉记忆。</div>
@@ -474,7 +475,7 @@ function PageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-megaphone-line text-orange-400"></i> 置顶公告
+📢 置顶公告
             </h4>
             <p className="text-white/80 text-sm mb-2">夏季冲榜进行中，组队排位、周常挑战、擂台切磋均可累计今夕积分。</p>
             <div className="text-yellow-300 font-medium text-sm">上分如风，稳住我们能赢。</div>
@@ -482,7 +483,7 @@ function PageContent() {
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-trophy-line text-yellow-400"></i> 战绩速览
+🏆 战绩速览
             </h4>
             <p className="text-white/80 text-sm mb-2">周冠军 ×2、跨区赛 Top10、公会任务连续满进度。</p>
             <div className="text-yellow-300 font-medium text-sm">胜利不是终点，它只是下一局的开场曲。</div>
@@ -498,21 +499,21 @@ function PageContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-team-line text-purple-400"></i> 周常团练
+👥 周常团练
             </h4>
             <p className="text-white/80 text-sm mb-2">周三/六晚 21:00，战术走位与默契磨合。</p>
             <div className="text-yellow-300 font-medium text-sm">同频的人，会在下一次转角相遇。</div>
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-gamepad-line text-green-400"></i> 友谊赛
+🎮 友谊赛
             </h4>
             <p className="text-white/80 text-sm mb-2">跨会交流，礼貌第一；支持录屏剪辑高光。</p>
             <div className="text-yellow-300 font-medium text-sm">友谊第一，输出也要第一。</div>
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-bold mb-2 flex items-center gap-2">
-              <i className="ri-movie-2-line text-red-400"></i> 混剪征集
+🎬 混剪征集
             </h4>
             <p className="text-white/80 text-sm mb-2">征集精彩操作，季末发布「今夕混剪」。</p>
             <div className="text-yellow-300 font-medium text-sm">你的镜头，正在等待上场。</div>
@@ -681,7 +682,7 @@ function PageContent() {
                   background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
                 }}
               >
-                🚀 加入
+<RocketIcon className="mr-2" size={18} /> 加入
               </button>
             </AnimatedBeam>
           </nav>
@@ -721,7 +722,7 @@ function PageContent() {
                       borderColor: "rgba(96,165,250,.3)",
                     }}
                   >
-                    <i className="ri-sparkling-2-line"></i> 今夕 · 欢迎回家
+✨ 今夕 · 欢迎回家
                   </span>
                 </Sparkles>
 
@@ -740,16 +741,16 @@ function PageContent() {
                   borderColor: "rgba(96,165,250,.3)",
                 }}>
                   <div className="flex items-center gap-2 mb-3">
-                    <i className="ri-group-line text-blue-300"></i>
+👥
                     <span className="text-blue-200 font-medium text-sm">入会联系方式</span>
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2 text-[#e1eafc]">
-                      <i className="ri-qq-line text-blue-400"></i>
+🐧
                       <span>QQ群：<strong className="text-blue-200">713162467</strong></span>
                     </div>
                     <div className="flex items-center gap-2 text-[#e1eafc]">
-                      <i className="ri-user-line text-blue-400"></i>
+👤
                       <span>联系人：<strong className="text-blue-200">执手</strong></span>
                     </div>
                   </div>
@@ -776,7 +777,7 @@ function PageContent() {
                               }
                         }
                       >
-                        <i className={btn.icon}></i> {btn.text}
+{btn.icon === "ri-megaphone-line" ? "📢" : btn.icon === "ri-calendar-event-line" ? "📅" : btn.icon === "ri-gallery-view-2" ? "🖼️" : "📋"} {btn.text}
                       </a>
                     </AnimatedBeam>
                   ))}
@@ -814,7 +815,7 @@ function PageContent() {
                       backdropFilter: "blur(6px)",
                     }}
                   >
-                    <i className={isVideoPlaying ? "ri-pause-mini-line" : "ri-play-mini-line"}></i>
+{isVideoPlaying ? "⏸️" : "▶️"}
                     {isVideoPlaying ? "暂停" : "播放"}
                   </button>
 
@@ -877,7 +878,7 @@ function PageContent() {
                   fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                 }}
               >
-                <i className="ri-user-star-line"></i> 管理团队
+⭐ 管理团队
               </h3>
 
               <Marquee className="py-4 relative z-10" pauseOnHover>
@@ -918,7 +919,7 @@ function PageContent() {
                 fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
               }}
             >
-              <i className="ri-gallery-view-2"></i> 成员展示
+<Icon name="image" className="inline" size={16} /> 成员展示
             </h3>
             <div
               className="p-6 rounded-2xl border relative z-10"
@@ -941,7 +942,7 @@ function PageContent() {
                 fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
               }}
             >
-              <i className="ri-user-3-line"></i> 公会成员列表
+👥 公会成员列表
             </h3>
             <div
               className="p-6 rounded-2xl border relative z-10"
@@ -978,7 +979,7 @@ function PageContent() {
                 fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
               }}
             >
-              <i className="ri-question-answer-line"></i> 常见问题
+❓ 常见问题
             </h3>
             <div
               className="p-6 rounded-2xl border relative z-10"
@@ -1085,7 +1086,7 @@ function PageContent() {
                 background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
               }}
             >
-              <i className="ri-send-plane-2-line mr-2"></i>
+<SendIcon className="mr-2" size={16} />
               {isSubmitting ? '发送中...' : '提交申请'}
             </button>
             <button
@@ -1094,7 +1095,7 @@ function PageContent() {
               style={{ borderColor: "rgba(255,255,255,.2)" }}
               title="使用本地邮箱客户端发送"
             >
-              <i className="ri-mail-line mr-1"></i>
+<MailIcon className="mr-1" size={16} />
               邮箱
             </button>
             <button

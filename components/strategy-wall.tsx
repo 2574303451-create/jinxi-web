@@ -9,6 +9,20 @@ import { Modal } from "./ui/modal"
 import { AdminPasswordDialog } from "./ui/admin-password-dialog"
 import { StrategySubmissionModal } from "./strategy-submission-modal"
 import { StrategyDetailModal } from "./strategy-detail-modal"
+import { 
+  CloseIcon, 
+  BookIcon, 
+  AddIcon, 
+  SearchIcon, 
+  PinIcon, 
+  FileIcon, 
+  ImageIcon, 
+  VideoIcon, 
+  EyeIcon, 
+  HeartIcon, 
+  StarIcon, 
+  DeleteIcon 
+} from "./ui/icons"
 
 interface StrategyWallProps {
   isOpen: boolean
@@ -216,7 +230,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
             className="absolute top-4 right-4 z-50 p-3 bg-black/30 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-black/50 transition-all duration-200 hover:scale-110"
             title="关闭攻略墙"
           >
-            <i className="ri-close-line text-xl"></i>
+<CloseIcon className="text-xl" />
           </button>
 
           {/* 内容区域 */}
@@ -226,7 +240,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
-                    <i className="ri-book-2-line text-white text-2xl"></i>
+<BookIcon className="text-white text-2xl" />
                   </div>
                   <div>
                     <h1 className="text-3xl font-bold text-white drop-shadow-lg">📖 攻略墙</h1>
@@ -238,7 +252,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                   onClick={() => setIsSubmissionOpen(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 shadow-lg font-medium"
                 >
-                  <i className="ri-add-line text-lg"></i>
+<AddIcon className="text-lg" />
                   📝 投稿攻略
                 </button>
               </div>
@@ -248,7 +262,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {/* 搜索框 */}
                   <div className="relative">
-                    <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-lg"></i>
+<SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-lg" />
                     <input
                       type="text"
                       placeholder="搜索攻略标题和内容..."
@@ -362,7 +376,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           {/* 置顶标识 */}
                           {strategy.isPinned && (
                             <div className="flex items-center gap-1 mb-3">
-                              <i className="ri-pushpin-fill text-yellow-400"></i>
+<PinIcon className="text-yellow-400" filled={true} />
                               <span className="text-yellow-400 text-sm">置顶</span>
                             </div>
                           )}
@@ -381,7 +395,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           {strategy.mediaFiles && strategy.mediaFiles.length > 0 && (
                             <div className="mb-4">
                               <div className="flex items-center gap-2 text-white/60 text-sm mb-2">
-                                <i className="ri-attachment-line"></i>
+<FileIcon />
                                 <span>
                                   {strategy.mediaFiles.filter(f => f.type === 'image').length > 0 && 
                                     `${strategy.mediaFiles.filter(f => f.type === 'image').length}张图片`}
@@ -403,13 +417,13 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                                           const target = e.target as HTMLImageElement
                                           const parent = target.parentElement
                                           if (parent) {
-                                            parent.innerHTML = '<i class="ri-image-line text-white/40 text-sm flex items-center justify-center w-full h-full"></i>'
+                                            parent.innerHTML = '<div class="text-white/40 text-sm flex items-center justify-center w-full h-full">🖼️</div>'
                                           }
                                         }}
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center">
-                                        <i className="ri-video-line text-white/60"></i>
+<VideoIcon className="text-white/60" />
                                       </div>
                                     )}
                                   </div>
@@ -455,7 +469,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                           <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-3 text-white/60">
                               <span className="flex items-center gap-1">
-                                <i className="ri-eye-line"></i>
+<EyeIcon />
                                 {strategy.viewCount}
                               </span>
                               <button
@@ -468,7 +482,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                                   isLiked ? "text-red-400" : ""
                                 )}
                               >
-                                <i className={isLiked ? "ri-heart-fill" : "ri-heart-line"}></i>
+<HeartIcon filled={isLiked} />
                                 {strategy.likes.length}
                               </button>
                               <button
@@ -481,7 +495,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                                   isFavorited ? "text-yellow-400" : ""
                                 )}
                               >
-                                <i className={isFavorited ? "ri-star-fill" : "ri-star-line"}></i>
+<StarIcon filled={isFavorited} />
                                 {strategy.favorites.length}
                               </button>
                             </div>
@@ -497,7 +511,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                                   className="p-1 hover:bg-white/10 rounded text-white/60 hover:text-yellow-400 transition-colors"
                                   title={strategy.isPinned ? "取消置顶" : "置顶"}
                                 >
-                                  <i className="ri-pushpin-line text-sm"></i>
+<PinIcon className="text-sm" />
                                 </button>
                                 <button
                                   onClick={(e) => {
@@ -507,7 +521,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                                   className="p-1 hover:bg-white/10 rounded text-white/60 hover:text-red-400 transition-colors"
                                   title="删除"
                                 >
-                                  <i className="ri-delete-bin-line text-sm"></i>
+<DeleteIcon className="text-sm" />
                                 </button>
                               </div>
                             </div>

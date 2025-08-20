@@ -7,6 +7,7 @@ import { Message, Reply, Reaction } from "../types/message-wall"
 import * as backendAPI from "../services/message-wall-backend"
 import { ImageUpload } from "./ui/image-upload"
 import { AdminPasswordDialog } from "./ui/admin-password-dialog"
+import { Icon, RefreshIcon, SendIcon, CloseIcon } from "./ui/icons"
 
 export function MessageWall({ className }: { className?: string }) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -282,7 +283,7 @@ export function MessageWall({ className }: { className?: string }) {
               )}
               title="刷新留言"
             >
-              <i className={cn("ri-refresh-line", isLoading && "animate-spin")}></i>
+<RefreshIcon className={cn(isLoading && "animate-spin")} size={16} />
               {isLoading ? "刷新中..." : "刷新"}
             </button>
           </div>
@@ -300,7 +301,11 @@ export function MessageWall({ className }: { className?: string }) {
                     : "bg-white/10 text-white/80 hover:bg-white/20"
                 )}
               >
-                <i className={category.icon}></i>
+{category.value === 'all' ? '📋' : 
+                 category.value === '闲聊' ? '💬' :
+                 category.value === '公告' ? '📢' :
+                 category.value === '提醒' ? '⏰' :
+                 category.value === '求助' ? '❓' : '📋'}
                 {category.label}
               </button>
             ))}
@@ -317,7 +322,7 @@ export function MessageWall({ className }: { className?: string }) {
             }}
           >
             <h4 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-              <i className="ri-edit-line"></i>
+✏️
               发布留言
             </h4>
             
@@ -375,7 +380,7 @@ export function MessageWall({ className }: { className?: string }) {
                     </>
                   ) : (
                     <>
-                      <i className="ri-send-plane-line"></i>
+<SendIcon size={16} />
                       发布留言
                     </>
                   )}
@@ -388,7 +393,7 @@ export function MessageWall({ className }: { className?: string }) {
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-medium text-white flex items-center gap-2">
-                <i className="ri-message-2-line"></i>
+💬
                 留言列表 ({filteredMessages.length})
               </h4>
               {filteredMessages.length > 0 && (
@@ -396,7 +401,7 @@ export function MessageWall({ className }: { className?: string }) {
                   onClick={loadMessages}
                   className="text-sm text-white/60 hover:text-white flex items-center gap-1 transition-colors hover-effect"
                 >
-                  <i className="ri-refresh-line"></i>
+<RefreshIcon size={14} />
                   刷新
                 </button>
               )}
@@ -519,7 +524,7 @@ export function MessageWall({ className }: { className?: string }) {
                       onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
                             className="text-white/60 hover:text-white flex items-center gap-1 text-sm transition-colors hover-effect"
                     >
-                            <i className="ri-reply-line"></i>
+                            ↩️
                             回复
                     </button>
                           {message.replies.length > 0 && (
@@ -597,7 +602,7 @@ export function MessageWall({ className }: { className?: string }) {
               onClick={() => setImageModalOpen(false)}
               className="absolute top-4 right-4 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors hover-effect"
             >
-              <i className="ri-close-line"></i>
+<CloseIcon size={16} />
             </button>
           </div>
         </div>

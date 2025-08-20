@@ -33,16 +33,29 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" crossOrigin="anonymous" />
         <style>{`
-          /* 确保 RemixIcon 正确加载 */
+          /* 确保 RemixIcon 正确加载 - 更强制的样式 */
+          i[class^="ri-"], i[class*=" ri-"], 
+          span[class^="ri-"], span[class*=" ri-"],
           [class^="ri-"], [class*=" ri-"] {
             font-family: 'remixicon' !important;
-            font-style: normal;
-            font-weight: normal;
-            font-variant: normal;
-            text-transform: none;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1 !important;
+            speak: none !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+          }
+          
+          /* 确保字体能够正确下载 */
+          @font-face {
+            font-family: "remixicon";
+            src: url('https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff') format('woff');
+            font-display: swap;
           }
         `}</style>
         <link

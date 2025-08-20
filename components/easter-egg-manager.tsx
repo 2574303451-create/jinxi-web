@@ -9,7 +9,7 @@ interface EasterEggManagerProps {
 
 // 创意彩蛋类型定义
 interface CreativeEasterEgg {
-  type: 'developer' | 'invisible' | 'gaze' | 'title' | 'patience'
+  type: 'developer' | 'invisible' | 'fullscreen' | 'title' | 'patience'
   title: string
   message: string
   icon: string
@@ -41,8 +41,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [keySequence, setKeySequence] = useState('')
   
   // 创意彩蛋相关状态
-  const [gazeTimer, setGazeTimer] = useState<NodeJS.Timeout | null>(null)
-  const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0})
+  const [fullscreenTimer, setFullscreenTimer] = useState<NodeJS.Timeout | null>(null)
+  const [isVideoFullscreen, setIsVideoFullscreen] = useState(false)
   const [devToolsOpen, setDevToolsOpen] = useState(false)
   const [isPageVisible, setIsPageVisible] = useState(true)
   const [patienceTimer, setPatienceTimer] = useState<NodeJS.Timeout | null>(null)
@@ -71,10 +71,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       discovered: false
     },
     {
-      id: 'gaze',
-      name: '凝视彩蛋',
-      description: '鼠标在Logo上静止3秒',
-      icon: '👁️',
+      id: 'fullscreen',
+      name: '全屏视频彩蛋',
+      description: '全屏观看今夕宣传视频',
+      icon: '📺',
       discovered: false
     },
     {
@@ -93,8 +93,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     },
     {
       id: 'invisible',
-      name: '隐形按钮彩蛋',
-      description: '发现右下角的隐形区域',
+      name: '商标点击彩蛋',
+      description: '点击页面底部的今夕商标',
       icon: '🔍',
       discovered: false
     },
@@ -249,43 +249,66 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
 
 
-  // 🔍 创意彩蛋2: 凝视彩蛋 - 鼠标在Logo上静止3秒
+  // 📺 创意彩蛋2: 全屏视频彩蛋 - 全屏观看今夕宣传视频
   useEffect(() => {
-    const handleMouseStill = () => {
-      // 检测鼠标是否在Logo区域静止
-      const logoElement = document.querySelector('img[alt="Logo"]') as HTMLElement
-      if (logoElement) {
-        const rect = logoElement.getBoundingClientRect()
-        const { x, y } = lastMousePos
+    const handleFullscreenChange = () => {
+      const isFullscreen = document.fullscreenElement !== null || 
+                          (document as any).webkitFullscreenElement !== null ||
+                          (document as any).mozFullScreenElement !== null ||
+                          (document as any).msFullscreenElement !== null
+      
+      if (isFullscreen && !isVideoFullscreen) {
+        // 检测是否是视频元素进入全屏
+        const fullscreenElement = document.fullscreenElement || 
+                                 (document as any).webkitFullscreenElement ||
+                                 (document as any).mozFullScreenElement ||
+                                 (document as any).msFullscreenElement
         
-        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-          if (gazeTimer) clearTimeout(gazeTimer)
+        if (fullscreenElement && fullscreenElement.tagName === 'VIDEO') {
+          setIsVideoFullscreen(true)
           
+          // 延迟3秒触发彩蛋，确保用户真的在观看
           const timer = setTimeout(() => {
-            triggerCreativeEgg({
-              type: 'gaze',
-              title: '👁️ 深度凝视者',
-              message: '你凝视Logo超过3秒，发现了隐藏的秘密！',
-              icon: '👁️'
-            }, 'gaze')
+            // 再次检查是否还在全屏状态
+            const stillFullscreen = document.fullscreenElement !== null || 
+                                   (document as any).webkitFullscreenElement !== null ||
+                                   (document as any).mozFullScreenElement !== null ||
+                                   (document as any).msFullscreenElement !== null
+            
+            if (stillFullscreen) {
+              triggerCreativeEgg({
+                type: 'fullscreen',
+                title: '📺 视频专注者',
+                message: '你全屏观看今夕宣传视频，展现了对今夕的真正关注！',
+                icon: '📺'
+              }, 'fullscreen')
+            }
           }, 3000)
           
-          setGazeTimer(timer)
-        } else {
-          if (gazeTimer) {
-            clearTimeout(gazeTimer)
-            setGazeTimer(null)
-          }
+          setFullscreenTimer(timer)
+        }
+      } else if (!isFullscreen && isVideoFullscreen) {
+        setIsVideoFullscreen(false)
+        if (fullscreenTimer) {
+          clearTimeout(fullscreenTimer)
+          setFullscreenTimer(null)
         }
       }
     }
 
-    const interval = setInterval(handleMouseStill, 100)
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+    document.addEventListener('msfullscreenchange', handleFullscreenChange)
+    
     return () => {
-      clearInterval(interval)
-      if (gazeTimer) clearTimeout(gazeTimer)
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
+      if (fullscreenTimer) clearTimeout(fullscreenTimer)
     }
-  }, [lastMousePos, gazeTimer])
+  }, [isVideoFullscreen, fullscreenTimer])
 
   // 💻 创意彩蛋3: 开发者彩蛋 - 检测开发者工具
   useEffect(() => {
@@ -514,9 +537,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     
     // 根据彩蛋类型触发不同特效
     switch(egg.type) {
-      case 'gaze':
-        // 凝视彩蛋：眼睛闪烁特效，不触发庆典
-        createEyeFlashEffect()
+      case 'fullscreen':
+        // 全屏视频彩蛋：视频播放特效
+        createVideoWatchEffect()
         break
       
       case 'developer':
@@ -525,7 +548,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         break
       
       case 'invisible':
-        // 隐形彩蛋：发现光芒特效
+        // 商标点击彩蛋：发现光芒特效
         createDiscoveryGlowEffect()
         break
       
@@ -796,6 +819,99 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }
 
+  const createVideoWatchEffect = () => {
+    // 视频观看特效 - 影院风格的光影效果
+    const videoSymbols = ['📺', '🎬', '🍿', '🎭', '🎪', '📽️', '🎞️', '🌟']
+    
+    // 主舞台光束效果
+    const spotlight = document.createElement('div')
+    spotlight.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: 300px;
+      height: 100vh;
+      background: linear-gradient(180deg, 
+        rgba(255, 215, 0, 0.3) 0%, 
+        rgba(255, 215, 0, 0.1) 50%, 
+        rgba(255, 215, 0, 0) 100%);
+      transform: translateX(-50%);
+      z-index: 9999;
+      pointer-events: none;
+      animation: videoSpotlight 3s ease-in-out forwards;
+    `
+    
+    document.body.appendChild(spotlight)
+    setTimeout(() => spotlight.remove(), 3000)
+    
+    // 漂浮的视频符号
+    for (let i = 0; i < 10; i++) {
+      const symbol = document.createElement('div')
+      symbol.innerHTML = videoSymbols[Math.floor(Math.random() * videoSymbols.length)]
+      symbol.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 2 + 2}rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: videoFloat 4s ease-out forwards;
+        animation-delay: ${i * 200}ms;
+      `
+      
+      document.body.appendChild(symbol)
+      setTimeout(() => symbol.remove(), 4500)
+    }
+    
+    // 屏幕边缘光效
+    for (let i = 0; i < 4; i++) {
+      const glow = document.createElement('div')
+      const positions = ['top: 0; left: 0; width: 100%; height: 5px;', 
+                        'bottom: 0; left: 0; width: 100%; height: 5px;',
+                        'left: 0; top: 0; width: 5px; height: 100%;',
+                        'right: 0; top: 0; width: 5px; height: 100%;']
+      
+      glow.style.cssText = `
+        position: fixed;
+        ${positions[i]}
+        background: linear-gradient(${i % 2 === 0 ? '90deg' : '0deg'}, 
+          rgba(255, 215, 0, 0.8), 
+          rgba(255, 165, 0, 0.6), 
+          rgba(255, 215, 0, 0.8));
+        z-index: 9999;
+        pointer-events: none;
+        animation: videoGlow 2s ease-in-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      
+      document.body.appendChild(glow)
+      setTimeout(() => glow.remove(), 2500)
+    }
+    
+    if (!document.getElementById('videoWatchStyle')) {
+      const style = document.createElement('style')
+      style.id = 'videoWatchStyle'
+      style.textContent = `
+        @keyframes videoSpotlight {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        @keyframes videoFloat {
+          0% { opacity: 0; transform: scale(0) rotate(0deg); }
+          20% { opacity: 1; transform: scale(1) rotate(90deg); }
+          100% { opacity: 0; transform: scale(0.5) rotate(360deg) translateY(-200px); }
+        }
+        @keyframes videoGlow {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     // 创建简单的toast通知
     const toast = document.createElement('div')
@@ -821,58 +937,54 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }, 3000)
   }
 
-  // 🎨 创意彩蛋5: 隐形按钮彩蛋 - 在页面某处添加看不见的可点击区域
+  // 🎨 创意彩蛋5: 商标点击彩蛋 - 点击页面底部的今夕商标
   useEffect(() => {
-    // 在页面底部添加一个隐形的彩蛋区域
-    const createInvisibleEgg = () => {
-      const invisibleButton = document.createElement('div')
-      invisibleButton.id = 'invisible-easter-egg'
-      invisibleButton.style.cssText = `
-        position: fixed;
-        bottom: 50px;
-        right: 20px;
-        width: 30px;
-        height: 30px;
-        cursor: help;
-        opacity: 0;
-        z-index: 999;
-        transition: opacity 0.3s ease;
-      `
+    const handleLogoFooterClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
       
-      // 鼠标悬停时轻微显示
-      invisibleButton.addEventListener('mouseenter', () => {
-        invisibleButton.style.opacity = '0.1'
-        invisibleButton.style.backgroundColor = 'rgba(255, 255, 0, 0.3)'
-        invisibleButton.style.borderRadius = '50%'
-      })
+      // 检测是否点击的是底部商标相关元素
+      // 查找各种可能的底部商标选择器
+      const isFooterLogo = target.closest('footer') && (
+        target.closest('img[alt*="今夕"]') ||
+        target.closest('img[alt*="jinxi"]') ||
+        target.closest('img[alt*="logo"]') ||
+        target.closest('img[src*="logo"]') ||
+        target.closest('[href*="#"]') ||
+        target.closest('a') ||
+        (target.tagName === 'IMG' && (target.getAttribute('alt')?.includes('今夕') || target.getAttribute('src')?.includes('logo')))
+      )
       
-      invisibleButton.addEventListener('mouseleave', () => {
-        invisibleButton.style.opacity = '0'
-        invisibleButton.style.backgroundColor = 'transparent'
-      })
+      // 也检测页面底部区域的其他可能商标元素
+      const isBottomAreaLogo = window.innerHeight - event.clientY < 200 && (
+        target.tagName === 'IMG' ||
+        target.closest('img') ||
+        target.closest('a') ||
+        target.textContent?.includes('今夕') ||
+        target.closest('[class*="logo"]') ||
+        target.closest('[class*="footer"]')
+      )
       
-      invisibleButton.addEventListener('click', () => {
-        triggerCreativeEgg({
-          type: 'invisible',
-          title: '🔍 隐秘发现者',
-          message: '你发现了隐藏在角落的秘密按钮！观察力MAX！',
-          icon: '🔍'
-        }, 'invisible')
-        // 点击后移除按钮，避免重复触发
-        invisibleButton.remove()
-      })
-      
-      document.body.appendChild(invisibleButton)
+      if (isFooterLogo || isBottomAreaLogo) {
+        // 检查是否已经发现过这个彩蛋
+        const logoEgg = easterEggRecords.find(egg => egg.id === 'invisible')
+        if (!logoEgg?.discovered) {
+          triggerCreativeEgg({
+            type: 'invisible',
+            title: '🔍 商标探索者',
+            message: '你点击了页面底部的今夕商标！发现了隐藏的秘密！',
+            icon: '🔍'
+          }, 'invisible')
+        }
+      }
     }
 
-    // 延迟5秒创建，让用户先熟悉页面
-    const timer = setTimeout(createInvisibleEgg, 5000)
+    // 监听整个页面的点击事件
+    document.addEventListener('click', handleLogoFooterClick)
+    
     return () => {
-      clearTimeout(timer)
-      const existingButton = document.getElementById('invisible-easter-egg')
-      if (existingButton) existingButton.remove()
+      document.removeEventListener('click', handleLogoFooterClick)
     }
-  }, [])
+  }, [easterEggRecords])
 
   // 创意彩蛋展示组件
   const CreativeEasterEggDisplay = () => {
@@ -959,7 +1071,15 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return (
       <div 
         className="achievement-progress-bar fixed bottom-0 left-0 right-0 z-[9997] bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
-        style={{ display: 'block', visibility: 'visible' }}
+        style={{ 
+          display: 'block', 
+          visibility: 'visible',
+          position: 'fixed',
+          zIndex: 9997,
+          bottom: 0,
+          left: 0,
+          right: 0
+        }}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -1108,7 +1228,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         3. 凝视彩蛋：鼠标在Logo上静止3秒
         4. 开发者彩蛋：打开F12开发者工具
         5. 页面标题彩蛋：切换标签页后回归
-        6. 隐形按钮彩蛋：发现右下角的隐藏区域
+        6. 商标点击彩蛋：点击页面底部的今夕商标
         7. 耐心彩蛋：在页面静静等待2分钟不做任何操作
         
         成就系统：

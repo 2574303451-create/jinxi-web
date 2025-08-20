@@ -9,7 +9,7 @@ interface EasterEggManagerProps {
 
 // 创意彩蛋类型定义
 interface CreativeEasterEgg {
-  type: 'developer' | 'invisible' | 'gaze' | 'trace' | 'title'
+  type: 'developer' | 'invisible' | 'gaze' | 'title' | 'patience'
   title: string
   message: string
   icon: string
@@ -41,12 +41,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [keySequence, setKeySequence] = useState('')
   
   // 创意彩蛋相关状态
-  const [mouseTrail, setMouseTrail] = useState<{x: number, y: number}[]>([])
   const [gazeTimer, setGazeTimer] = useState<NodeJS.Timeout | null>(null)
   const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0})
   const [devToolsOpen, setDevToolsOpen] = useState(false)
   const [isPageVisible, setIsPageVisible] = useState(true)
-  const [traceEggCooldown, setTraceEggCooldown] = useState(false)
+  const [patienceTimer, setPatienceTimer] = useState<NodeJS.Timeout | null>(null)
+  const [lastActivityTime, setLastActivityTime] = useState(Date.now())
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
@@ -67,13 +67,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       name: '点击彩蛋',
       description: '快速点击Logo 7次',
       icon: '🎯',
-      discovered: false
-    },
-    {
-      id: 'trace',
-      name: '鼠标轨迹彩蛋',
-      description: '用鼠标画出数字"7"的形状',
-      icon: '🎨',
       discovered: false
     },
     {
@@ -105,10 +98,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       discovered: false
     },
     {
-      id: 'ultimate',
-      name: '终极彩蛋',
-      description: '在console中输入 jinxi.surprise()',
-      icon: '🎯',
+      id: 'patience',
+      name: '耐心彩蛋',
+      description: '在页面静静等待2分钟不做任何操作',
+      icon: '⏰',
       discovered: false
     }
   ]
@@ -118,25 +111,25 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     {
       id: 'beginner',
       name: '初级探索者',
-      description: '发现3个彩蛋',
+      description: '发现2个彩蛋',
       icon: '🥉',
-      requiredEggs: 3,
+      requiredEggs: 2,
       level: 1
     },
     {
       id: 'advanced',
       name: '资深发现者',
-      description: '发现6个彩蛋',
+      description: '发现4个彩蛋',
       icon: '🥈',
-      requiredEggs: 6,
+      requiredEggs: 4,
       level: 2
     },
     {
       id: 'master',
       name: '彩蛋大师',
-      description: '发现全部8个彩蛋',
+      description: '发现全部7个彩蛋',
       icon: '🥇',
-      requiredEggs: 8,
+      requiredEggs: 7,
       level: 3
     },
     {
@@ -144,7 +137,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       name: '今夕传奇',
       description: '在单次访问中发现所有彩蛋',
       icon: '🏆',
-      requiredEggs: 8,
+      requiredEggs: 7,
       level: 4
     }
   ]
@@ -155,12 +148,19 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     if (savedProgress) {
       try {
         const parsed = JSON.parse(savedProgress)
-        setEasterEggRecords(parsed)
+        // 确保所有最新的彩蛋定义都存在，清理旧的trace彩蛋
+        const cleanedRecords = easterEggDefinitions.map(def => {
+          const saved = parsed.find((p: EasterEggRecord) => p.id === def.id)
+          return saved ? { ...def, discovered: saved.discovered, discoveredAt: saved.discoveredAt } : def
+        })
+        setEasterEggRecords(cleanedRecords)
+        console.log('🎯 已加载彩蛋进度:', cleanedRecords)
       } catch (error) {
-        // 如果数据损坏，重新初始化
+        console.log('🔄 重新初始化彩蛋系统')
         setEasterEggRecords(easterEggDefinitions)
       }
     } else {
+      console.log('🆕 首次访问，初始化彩蛋系统')
       setEasterEggRecords(easterEggDefinitions)
     }
   }, [])
@@ -246,45 +246,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return () => document.removeEventListener('keydown', handleKeyPress)
   }, [keySequence])
 
-  // 🎨 创意彩蛋1: 鼠标轨迹彩蛋 - 用鼠标在页面画出数字"7"
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      // 如果在冷却期或者已经发现过这个彩蛋，不再检测
-      if (traceEggCooldown) return
-      
-      const newPos = { x: event.clientX, y: event.clientY }
-      setLastMousePos(newPos)
-      
-      // 记录鼠标轨迹，保留最近30个点以提高检测精度
-      setMouseTrail(prev => {
-        const newTrail = [...prev, newPos].slice(-30)
-        
-        // 检测是否画出了数字"7"的形状
-        if (newTrail.length >= 20 && !traceEggCooldown) {
-          const isSevenShape = detectSevenShape(newTrail)
-          if (isSevenShape) {
-            setTraceEggCooldown(true) // 设置冷却
-            triggerCreativeEgg({
-              type: 'trace',
-              title: '🎨 鼠标艺术家',
-              message: '你用鼠标画出了数字"7"！代表今夕7周年！',
-              icon: '🎨'
-            }, 'trace')
-            setMouseTrail([]) // 重置轨迹
-            
-            // 30秒冷却时间
-            setTimeout(() => {
-              setTraceEggCooldown(false)
-            }, 30000)
-          }
-        }
-        return newTrail
-      })
-    }
 
-    document.addEventListener('mousemove', handleMouseMove)
-    return () => document.removeEventListener('mousemove', handleMouseMove)
-  }, [traceEggCooldown])
 
   // 🔍 创意彩蛋2: 凝视彩蛋 - 鼠标在Logo上静止3秒
   useEffect(() => {
@@ -457,59 +419,57 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return () => document.removeEventListener('click', handleLogoClick)
   }, [logoClickCount])
 
-  // 🎯 辅助函数：检测鼠标轨迹是否形成数字"7"
-  const detectSevenShape = (trail: {x: number, y: number}[]): boolean => {
-    if (trail.length < 15) return false
-    
-    // 更严格的"7"形状检测
-    const totalDistance = trail.reduce((dist, point, index) => {
-      if (index === 0) return 0
-      const prev = trail[index - 1]
-      return dist + Math.sqrt(Math.pow(point.x - prev.x, 2) + Math.pow(point.y - prev.y, 2))
-    }, 0)
-    
-    // 轨迹长度必须足够（至少100像素）
-    if (totalDistance < 100) return false
-    
-    // 分析轨迹的三个部分：开始、中间、结尾
-    const oneThird = Math.floor(trail.length / 3)
-    const firstPart = trail.slice(0, oneThird)
-    const middlePart = trail.slice(oneThird, oneThird * 2)
-    const lastPart = trail.slice(oneThird * 2)
-    
-    // 检测水平线（开始部分应该主要向右移动）
-    const horizontalMovement = firstPart.reduce((movement, point, index) => {
-      if (index === 0) return { right: 0, down: 0 }
-      const prev = firstPart[index - 1]
-      return {
-        right: movement.right + Math.max(0, point.x - prev.x),
-        down: movement.down + Math.abs(point.y - prev.y)
+  // 🕰️ 耐心彩蛋：在页面静静等待2分钟不做任何操作
+  useEffect(() => {
+    const PATIENCE_TIME = 2 * 60 * 1000 // 2分钟
+
+    // 重置活动计时器
+    const resetActivityTimer = () => {
+      setLastActivityTime(Date.now())
+      
+      // 清除之前的计时器
+      if (patienceTimer) {
+        clearTimeout(patienceTimer)
       }
-    }, { right: 0, down: 0 })
+      
+      // 设置新的2分钟计时器
+      const timer = setTimeout(() => {
+        // 检查是否已经发现过这个彩蛋
+        const alreadyDiscovered = easterEggRecords.find(egg => egg.id === 'patience')?.discovered
+        if (!alreadyDiscovered) {
+          triggerCreativeEgg({
+            type: 'patience',
+            title: '⏰ 耐心大师',
+            message: '你静静等待了2分钟，展现了真正的耐心！时间见证了你的专注。',
+            icon: '⏰'
+          }, 'patience')
+        }
+      }, PATIENCE_TIME)
+      
+      setPatienceTimer(timer)
+    }
+
+    // 监听各种用户活动
+    const events = ['mousemove', 'click', 'keydown', 'scroll', 'touchstart']
     
-    // 水平线条件：向右移动距离 > 向下移动距离的2倍
-    const isHorizontalStart = horizontalMovement.right > horizontalMovement.down * 2 && horizontalMovement.right > 30
-    
-    // 检测向下的对角线（结尾部分应该向下向右移动）
-    const diagonalMovement = lastPart.reduce((movement, point, index) => {
-      if (index === 0) return { right: 0, down: 0 }
-      const prev = lastPart[index - 1]
-      return {
-        right: movement.right + Math.max(0, point.x - prev.x),
-        down: movement.down + Math.max(0, point.y - prev.y)
+    events.forEach(event => {
+      document.addEventListener(event, resetActivityTimer, { passive: true })
+    })
+
+    // 初始化计时器
+    resetActivityTimer()
+
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, resetActivityTimer)
+      })
+      if (patienceTimer) {
+        clearTimeout(patienceTimer)
       }
-    }, { right: 0, down: 0 })
-    
-    // 对角线条件：向下移动距离 > 30像素，且有一定的向右移动
-    const isDiagonalEnd = diagonalMovement.down > 30 && diagonalMovement.right > 10
-    
-    // 整体形状检查：起点应该在左上，终点应该在右下
-    const startPoint = trail[0]
-    const endPoint = trail[trail.length - 1]
-    const hasCorrectDirection = endPoint.x > startPoint.x && endPoint.y > startPoint.y
-    
-    return isHorizontalStart && isDiagonalEnd && hasCorrectDirection
-  }
+    }
+  }, [patienceTimer, easterEggRecords])
+
+
 
   // 🚀 创意彩蛋触发器 - 不同类型有不同特效
   const triggerCreativeEgg = (egg: CreativeEasterEgg, eggId: string) => {
@@ -519,13 +479,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     
     // 根据彩蛋类型触发不同特效
     switch(egg.type) {
-      case 'trace':
-        // 绘制彩蛋：显示绘制轨迹特效，然后触发7周年庆典
-        setTimeout(() => {
-          setShowAnniversary(true)
-        }, 2500)
-        break
-      
       case 'gaze':
         // 凝视彩蛋：眼睛闪烁特效，不触发庆典
         createEyeFlashEffect()
@@ -534,12 +487,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       case 'developer':
         // 开发者彩蛋：代码雨特效
         createCodeRainEffect()
-        if (eggId === 'ultimate') {
-          // 终极彩蛋触发7周年庆典
-          setTimeout(() => {
-            setShowAnniversary(true)
-          }, 3000)
-        }
         break
       
       case 'invisible':
@@ -550,6 +497,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       case 'title':
         // 标题彩蛋：温暖粒子特效
         createWarmParticleEffect()
+        break
+        
+      case 'patience':
+        // 耐心彩蛋：时间流逝特效 + 7周年庆典
+        createTimeFlowEffect()
+        setTimeout(() => {
+          setShowAnniversary(true)
+        }, 3000)
         break
       
       default:
@@ -736,6 +691,76 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }
 
+  const createTimeFlowEffect = () => {
+    // 时间流逝特效
+    const timeSymbols = ['⏰', '⏳', '⌛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕']
+    
+    for (let i = 0; i < 12; i++) {
+      const timeElement = document.createElement('div')
+      timeElement.innerHTML = timeSymbols[Math.floor(Math.random() * timeSymbols.length)]
+      timeElement.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        font-size: 3rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: timeFlow 4s ease-out forwards;
+        animation-delay: ${i * 300}ms;
+      `
+      
+      document.body.appendChild(timeElement)
+      setTimeout(() => timeElement.remove(), 4500)
+    }
+    
+    // 添加数字倒计时效果
+    for (let i = 0; i < 5; i++) {
+      const number = document.createElement('div')
+      number.innerHTML = `${120 - i * 30}s`
+      number.style.cssText = `
+        position: fixed;
+        top: ${30 + i * 15}%;
+        left: ${20 + i * 15}%;
+        font-size: 2rem;
+        color: rgba(255, 215, 0, 0.8);
+        z-index: 9999;
+        pointer-events: none;
+        animation: timeCountdown 3s ease-out forwards;
+        animation-delay: ${i * 600}ms;
+      `
+      
+      document.body.appendChild(number)
+      setTimeout(() => number.remove(), 4000)
+    }
+    
+    if (!document.getElementById('timeFlowStyle')) {
+      const style = document.createElement('style')
+      style.id = 'timeFlowStyle'
+      style.textContent = `
+        @keyframes timeFlow {
+          0% { 
+            transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+            opacity: 0; 
+          }
+          30% { 
+            transform: translate(-50%, -50%) scale(1.5) rotate(180deg); 
+            opacity: 1; 
+          }
+          100% { 
+            transform: translate(${Math.random() * 800 - 400}px, ${Math.random() * 600 - 300}px) scale(0.3) rotate(720deg); 
+            opacity: 0; 
+          }
+        }
+        @keyframes timeCountdown {
+          0% { opacity: 0; transform: scale(0); }
+          50% { opacity: 1; transform: scale(1.2); }
+          100% { opacity: 0; transform: scale(0.8); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     // 创建简单的toast通知
     const toast = document.createElement('div')
@@ -833,12 +858,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
             </div>
           )}
           
-          {showCreativeEgg.type === 'trace' && (
-            <div className="text-yellow-300 mb-4 text-sm">
-              ✏️ 艺术创作已保存到回忆录中
-            </div>
-          )}
-          
           <button
             onClick={() => setShowCreativeEgg(null)}
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl text-white transition-all duration-300 hover:scale-105"
@@ -888,7 +907,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const progress = (discoveredCount / totalCount) * 100
     const currentAchievement = getCurrentAchievement()
 
-    if (discoveredCount === 0) return null
+    // 调试信息
+    console.log('🎯 进度条数据:', { discoveredCount, totalCount, progress, easterEggRecords })
+
+    // 只要系统初始化完成就显示进度条（用于调试）
+    if (easterEggRecords.length === 0) return null
 
     return (
       <div 
@@ -1026,15 +1049,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       {/* 彩蛋说明（隐藏的开发者信息） */}
       <div style={{ display: 'none' }} data-easter-eggs="creative">
         {/* 
-        今夕公会创意彩蛋系统 v2.0 - 成就系统：
+        今夕公会创意彩蛋系统 v2.2 - 成就系统：
         1. 键盘彩蛋：输入 "JINXI7" 触发7周年庆典
         2. 点击彩蛋：快速点击Logo 7次
-        3. 鼠标轨迹彩蛋：用鼠标画出数字"7"的形状
-        4. 凝视彩蛋：鼠标在Logo上静止3秒
-        5. 开发者彩蛋：打开F12开发者工具
-        6. 页面标题彩蛋：切换标签页后回归
-        7. 隐形按钮彩蛋：发现右下角的隐藏区域
-        8. 终极彩蛋：在console中输入 jinxi.surprise()
+        3. 凝视彩蛋：鼠标在Logo上静止3秒
+        4. 开发者彩蛋：打开F12开发者工具
+        5. 页面标题彩蛋：切换标签页后回归
+        6. 隐形按钮彩蛋：发现右下角的隐藏区域
+        7. 耐心彩蛋：在页面静静等待2分钟不做任何操作
         
         成就系统：
         - 底部进度条显示发现进度

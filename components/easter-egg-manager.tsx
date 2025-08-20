@@ -47,6 +47,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [isPageVisible, setIsPageVisible] = useState(true)
   const [patienceTimer, setPatienceTimer] = useState<NodeJS.Timeout | null>(null)
   const [lastActivityTime, setLastActivityTime] = useState(Date.now())
+  const [patienceEggTriggered, setPatienceEggTriggered] = useState(false)
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
@@ -289,9 +290,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   // 💻 创意彩蛋3: 开发者彩蛋 - 检测开发者工具
   useEffect(() => {
     const checkDevTools = () => {
-      const threshold = 160
-      const isOpen = window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold
+      const threshold = 200 // 增加阈值，减少误判
+      const heightDiff = Math.abs(window.outerHeight - window.innerHeight)
+      const widthDiff = Math.abs(window.outerWidth - window.innerWidth)
+      const isOpen = heightDiff > threshold || widthDiff > threshold
       
       if (isOpen && !devToolsOpen) {
         setDevToolsOpen(true)
@@ -438,34 +440,40 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
   // 🕰️ 耐心彩蛋：在页面静静等待2分钟不做任何操作
   useEffect(() => {
-    // 如果已经发现过耐心彩蛋，不再设置计时器
+    // 如果已经发现过耐心彩蛋或已经触发过，不再设置计时器
     const patienceEgg = easterEggRecords.find(egg => egg.id === 'patience')
-    if (patienceEgg?.discovered) {
+    if (patienceEgg?.discovered || patienceEggTriggered) {
       return
     }
 
     const PATIENCE_TIME = 30 * 1000 // 30秒 (测试用，正式版改为2分钟)
+    let activityTimer: NodeJS.Timeout | null = null
 
     // 重置活动计时器
     const resetActivityTimer = () => {
+      // 如果已经触发过，立即返回
+      if (patienceEggTriggered) return
+      
       setLastActivityTime(Date.now())
       
       // 清除之前的计时器
-      if (patienceTimer) {
-        clearTimeout(patienceTimer)
+      if (activityTimer) {
+        clearTimeout(activityTimer)
+        activityTimer = null
       }
       
       // 再次检查是否已发现，避免竞态条件
       const currentPatienceEgg = easterEggRecords.find(egg => egg.id === 'patience')
-      if (currentPatienceEgg?.discovered) {
+      if (currentPatienceEgg?.discovered || patienceEggTriggered) {
         return
       }
       
-      // 设置新的2分钟计时器
-      const timer = setTimeout(() => {
-        // 最终检查是否已经发现过这个彩蛋
+      // 设置新的计时器
+      activityTimer = setTimeout(() => {
+        // 最终检查是否已经发现过这个彩蛋或已触发
         const finalCheck = easterEggRecords.find(egg => egg.id === 'patience')
-        if (!finalCheck?.discovered) {
+        if (!finalCheck?.discovered && !patienceEggTriggered) {
+          setPatienceEggTriggered(true) // 立即设置标记防止重复触发
           triggerCreativeEgg({
             type: 'patience',
             title: '⏰ 耐心大师',
@@ -474,8 +482,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           }, 'patience')
         }
       }, PATIENCE_TIME)
-      
-      setPatienceTimer(timer)
     }
 
     // 监听各种用户活动
@@ -492,11 +498,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       events.forEach(event => {
         document.removeEventListener(event, resetActivityTimer)
       })
-      if (patienceTimer) {
-        clearTimeout(patienceTimer)
+      if (activityTimer) {
+        clearTimeout(activityTimer)
       }
     }
-  }, [patienceTimer]) // 移除easterEggRecords依赖，避免无限循环
+  }, []) // 完全移除依赖，只在组件挂载时执行一次
 
 
 
@@ -875,7 +881,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return (
       <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCreativeEgg(null)} />
-        <div className="relative z-10 text-center bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-md mx-4">
+        <div className="easter-egg-modal relative z-10 text-center bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-md mx-4">
           <div className="text-6xl mb-4 animate-bounce">{showCreativeEgg.icon}</div>
           <h2 className="text-2xl font-bold text-white mb-4">{showCreativeEgg.title}</h2>
           <p className="text-white/80 mb-6">{showCreativeEgg.message}</p>
@@ -889,6 +895,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           
           <button
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               setShowCreativeEgg(null)
             }}
@@ -908,7 +915,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return (
       <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowLevelUpNotification(null)} />
-        <div className="relative z-10 text-center bg-gradient-to-br from-yellow-600/30 to-orange-600/30 p-8 rounded-2xl border border-yellow-400/30 backdrop-blur-sm max-w-md mx-4">
+        <div className="easter-egg-modal relative z-10 text-center bg-gradient-to-br from-yellow-600/30 to-orange-600/30 p-8 rounded-2xl border border-yellow-400/30 backdrop-blur-sm max-w-md mx-4">
           <div className="text-8xl mb-4 animate-pulse">{showLevelUpNotification.icon}</div>
           <div className="text-yellow-300 text-lg font-bold mb-2">🎉 等级提升！</div>
           <h2 className="text-3xl font-bold text-white mb-4">{showLevelUpNotification.name}</h2>
@@ -923,6 +930,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           
           <button
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               setShowLevelUpNotification(null)
             }}
@@ -950,7 +958,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
     return (
       <div 
-        className="achievement-progress-bar fixed bottom-0 left-0 right-0 z-[9998] bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
+        className="achievement-progress-bar fixed bottom-0 left-0 right-0 z-[9997] bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
+        style={{ display: 'block', visibility: 'visible' }}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -966,7 +975,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                 {currentAchievement?.name || '探索者'}
               </div>
               <div className="text-white/60 text-xs">
-                彩蛋进度：{discoveredCount}/{totalCount}
+                探索进度：{discoveredCount}/{totalCount}
               </div>
             </div>
           </div>
@@ -998,11 +1007,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return (
       <div className="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-1000">
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowAchievementPanel(false)} />
-        <div className="relative z-10 bg-gradient-to-br from-gray-900/95 to-black/95 p-6 rounded-2xl border border-white/20 backdrop-blur-sm max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
+        <div className="easter-egg-modal relative z-10 bg-gradient-to-br from-gray-900/95 to-black/95 p-6 rounded-2xl border border-white/20 backdrop-blur-sm max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">🏆 成就系统</h2>
             <div className="text-white/60">
-              已发现 {discoveredCount} / {easterEggDefinitions.length} 个彩蛋
+              已发现 {discoveredCount} / {easterEggDefinitions.length} 个隐藏彩蛋
             </div>
           </div>
 
@@ -1040,7 +1049,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                       {egg.name}
                     </div>
                     <div className={`text-sm ${egg.discovered ? 'text-white/80' : 'text-white/40'}`}>
-                      {egg.description}
+                      {egg.discovered ? '已发现的神秘彩蛋' : '待发现的神秘彩蛋'}
                     </div>
                     {egg.discovered && egg.discoveredAt && (
                       <div className="text-xs text-green-300 mt-1">
@@ -1055,6 +1064,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
           <button
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               setShowAchievementPanel(false)
             }}

@@ -9,7 +9,7 @@ interface EasterEggManagerProps {
 
 // 创意彩蛋类型定义
 interface CreativeEasterEgg {
-  type: 'developer' | 'invisible' | 'fullscreen' | 'title' | 'patience'
+  type: 'developer' | 'invisible' | 'fullscreen' | 'title' | 'scroll'
   title: string
   message: string
   icon: string
@@ -45,14 +45,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [devToolsOpen, setDevToolsOpen] = useState(false)
   const [forceProgressBarUpdate, setForceProgressBarUpdate] = useState(0)
   const [isPageVisible, setIsPageVisible] = useState(true)
-  const [patienceTimer, setPatienceTimer] = useState<NodeJS.Timeout | null>(null)
-  const [lastActivityTime, setLastActivityTime] = useState(Date.now())
-  const [patienceEggTriggered, setPatienceEggTriggered] = useState(false)
+  const [scrollCount, setScrollCount] = useState(0)
+  const [scrollTimer, setScrollTimer] = useState<NodeJS.Timeout | null>(null)
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
   const [showLevelUpNotification, setShowLevelUpNotification] = useState<Achievement | null>(null)
   const [easterEggRecords, setEasterEggRecords] = useState<EasterEggRecord[]>([])
+  const [sidebarExpanded, setSidebarExpanded] = useState(false)
   
   // 彩蛋定义
   const easterEggDefinitions: EasterEggRecord[] = [
@@ -99,10 +99,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       discovered: false
     },
     {
-      id: 'patience',
-      name: '耐心彩蛋',
-      description: '在页面静静等待2分钟不做任何操作',
-      icon: '⏰',
+      id: 'scroll',
+      name: '滚轮狂热彩蛋',
+      description: '在3秒内连续滚动鼠标滚轮15次',
+      icon: '🎡',
       discovered: false
     }
   ]
@@ -163,6 +163,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     } else {
       console.log('🆕 首次访问，初始化彩蛋系统')
       setEasterEggRecords(easterEggDefinitions)
+      
+      // 首次访问时，短暂展开侧边栏提示用户
+      setTimeout(() => {
+        setSidebarExpanded(true)
+        setTimeout(() => {
+          setSidebarExpanded(false)
+        }, 3000) // 3秒后自动折叠
+      }, 2000) // 页面加载2秒后展开
     }
   }, [])
 
@@ -307,7 +315,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         }
       }
       
-      // 强制更新进度条显示
+      // 强制更新侧边栏显示
       setForceProgressBarUpdate(prev => prev + 1)
     }
 
@@ -494,73 +502,94 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return () => document.removeEventListener('click', handleLogoClick)
   }, [logoClickCount, showCreativeEgg, showAnniversary])
 
-  // 🕰️ 耐心彩蛋：在页面静静等待2分钟不做任何操作
+  // 🎡 滚轮狂热彩蛋：在3秒内连续滚动鼠标滚轮15次
   useEffect(() => {
-    // 如果已经发现过耐心彩蛋或已经触发过，不再设置计时器
-    const patienceEgg = easterEggRecords.find(egg => egg.id === 'patience')
-    if (patienceEgg?.discovered || patienceEggTriggered) {
-      return
-    }
+    const handleWheel = (event: WheelEvent) => {
+      // 检查是否已经发现过这个彩蛋
+      const scrollEgg = easterEggRecords.find(egg => egg.id === 'scroll')
+      if (scrollEgg?.discovered) {
+        return
+      }
 
-    const PATIENCE_TIME = 30 * 1000 // 30秒 (测试用，正式版改为2分钟)
-    let activityTimer: NodeJS.Timeout | null = null
-
-    // 重置活动计时器
-    const resetActivityTimer = () => {
-      // 如果已经触发过，立即返回
-      if (patienceEggTriggered) return
+      const newCount = scrollCount + 1
+      setScrollCount(newCount)
       
-      setLastActivityTime(Date.now())
+      console.log(`滚轮计数: ${newCount}/15`) // 调试信息
       
-      // 清除之前的计时器
-      if (activityTimer) {
-        clearTimeout(activityTimer)
-        activityTimer = null
+      // 清除之前的定时器
+      if (scrollTimer) {
+        clearTimeout(scrollTimer)
       }
       
-      // 再次检查是否已发现，避免竞态条件
-      const currentPatienceEgg = easterEggRecords.find(egg => egg.id === 'patience')
-      if (currentPatienceEgg?.discovered || patienceEggTriggered) {
+      // 检查是否达到触发条件
+      if (newCount >= 15) {
+        triggerCreativeEgg({
+          type: 'scroll',
+          title: '🎡 滚轮疯狂者',
+          message: '你的滚轮转动如飞，掌握了页面穿梭的终极奥义！',
+          icon: '🎡'
+        }, 'scroll')
+        setScrollCount(0)
         return
       }
       
-      // 设置新的计时器
-      activityTimer = setTimeout(() => {
-        // 最终检查是否已经发现过这个彩蛋或已触发
-        const finalCheck = easterEggRecords.find(egg => egg.id === 'patience')
-        if (!finalCheck?.discovered && !patienceEggTriggered) {
-          setPatienceEggTriggered(true) // 立即设置标记防止重复触发
-          triggerCreativeEgg({
-            type: 'patience',
-            title: '⏰ 耐心大师',
-            message: '你静静等待了2分钟，展现了真正的耐心！时间见证了你的专注。',
-            icon: '⏰'
-          }, 'patience')
-        }
-      }, PATIENCE_TIME)
+      // 3秒后重置计数
+      const timer = setTimeout(() => {
+        setScrollCount(0)
+      }, 3000)
+      setScrollTimer(timer)
     }
 
-    // 监听各种用户活动
-    const events = ['mousemove', 'click', 'keydown', 'scroll', 'touchstart']
+    document.addEventListener('wheel', handleWheel, { passive: true })
     
-    events.forEach(event => {
-      document.addEventListener(event, resetActivityTimer, { passive: true })
-    })
-
-    // 初始化计时器
-    resetActivityTimer()
-
     return () => {
-      events.forEach(event => {
-        document.removeEventListener(event, resetActivityTimer)
-      })
-      if (activityTimer) {
-        clearTimeout(activityTimer)
+      document.removeEventListener('wheel', handleWheel)
+      if (scrollTimer) {
+        clearTimeout(scrollTimer)
       }
     }
-  }, []) // 完全移除依赖，只在组件挂载时执行一次
+  }, [scrollCount, scrollTimer, easterEggRecords])
 
+  // 🖥️ 全屏状态监听器 - 专门为侧边栏优化
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      // 强制更新侧边栏状态
+      setForceProgressBarUpdate(prev => prev + 1)
+      
+      // 检测全屏状态
+      const isNowFullscreen = document.fullscreenElement !== null || 
+                             (document as any).webkitFullscreenElement !== null ||
+                             (document as any).mozFullScreenElement !== null ||
+                             (document as any).msFullscreenElement !== null
+      
+      console.log('🖥️ 全屏状态变化:', isNowFullscreen)
+      
+      // 在全屏状态下，给侧边栏添加特殊处理
+      const sidebar = document.querySelector('.achievement-sidebar') as HTMLElement
+      if (sidebar) {
+        if (isNowFullscreen) {
+          sidebar.classList.add('fullscreen-mode')
+          sidebar.style.zIndex = '999999999'
+        } else {
+          sidebar.classList.remove('fullscreen-mode')
+          sidebar.style.zIndex = '9999999'
+        }
+      }
+    }
 
+    // 监听所有可能的全屏事件
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+    document.addEventListener('msfullscreenchange', handleFullscreenChange)
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
+    }
+  }, [])
 
   // 🚀 创意彩蛋触发器 - 不同类型有不同特效
   const triggerCreativeEgg = (egg: CreativeEasterEgg, eggId: string) => {
@@ -595,12 +624,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         createMagicSparkleEffect()
         break
         
-      case 'patience':
-        // 耐心彩蛋：时间流逝特效 + 7周年庆典
-        createTimeFlowEffect()
-        setTimeout(() => {
-          setShowAnniversary(true)
-        }, 3000)
+      case 'scroll':
+        // 滚轮彩蛋：旋转风暴特效
+        createScrollStormEffect()
         break
       
       default:
@@ -853,6 +879,95 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           0% { opacity: 0; transform: scale(0.5); }
           50% { opacity: 1; transform: scale(1.2); }
           100% { opacity: 0; transform: scale(2); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createScrollStormEffect = () => {
+    // 滚轮风暴特效 - 旋转和螺旋元素
+    const stormElements = ['🌪️', '💨', '🎡', '⚡', '🌀', '💫', '🎭', '🔥']
+    
+    // 中心旋转风暴
+    for (let i = 0; i < 20; i++) {
+      const element = document.createElement('div')
+      element.innerHTML = stormElements[Math.floor(Math.random() * stormElements.length)]
+      element.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        font-size: ${Math.random() * 2 + 1.5}rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: scrollStorm 3s ease-out forwards;
+        animation-delay: ${i * 50}ms;
+      `
+      
+      document.body.appendChild(element)
+      setTimeout(() => element.remove(), 3500)
+    }
+    
+    // 螺旋上升效果
+    for (let i = 0; i < 12; i++) {
+      const spiral = document.createElement('div')
+      spiral.innerHTML = '🎡'
+      spiral.style.cssText = `
+        position: fixed;
+        top: 80%;
+        left: 50%;
+        font-size: 1.5rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: scrollSpiral 4s ease-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      
+      document.body.appendChild(spiral)
+      setTimeout(() => spiral.remove(), 4500)
+    }
+    
+    // 页面震动效果
+    document.body.style.animation = 'scrollShake 0.5s ease-in-out'
+    setTimeout(() => {
+      document.body.style.animation = ''
+    }, 500)
+    
+    if (!document.getElementById('scrollStormStyle')) {
+      const style = document.createElement('style')
+      style.id = 'scrollStormStyle'
+      style.textContent = `
+        @keyframes scrollStorm {
+          0% { 
+            transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+            opacity: 0; 
+          }
+          20% { 
+            transform: translate(-50%, -50%) scale(1.5) rotate(180deg); 
+            opacity: 1; 
+          }
+          100% { 
+            transform: translate(${Math.random() * 800 - 400}px, ${Math.random() * 600 - 300}px) scale(0.2) rotate(1440deg); 
+            opacity: 0; 
+          }
+        }
+        @keyframes scrollSpiral {
+          0% { 
+            transform: translate(-50%, 0) rotate(0deg); 
+            opacity: 0; 
+          }
+          30% { 
+            opacity: 1; 
+          }
+          100% { 
+            transform: translate(${Math.random() * 600 - 300}px, -600px) rotate(720deg); 
+            opacity: 0; 
+          }
+        }
+        @keyframes scrollShake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+          20%, 40%, 60%, 80% { transform: translateX(2px); }
         }
       `
       document.head.appendChild(style)
@@ -1165,15 +1280,15 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
-  // 底部成就进度条
-  const AchievementProgressBar = () => {
+  // 右侧悬浮成就侧边栏
+  const AchievementSidebar = () => {
     const discoveredCount = easterEggRecords.filter(egg => egg.discovered).length
     const totalCount = easterEggDefinitions.length
     const progress = (discoveredCount / totalCount) * 100
     const currentAchievement = getCurrentAchievement()
 
     // 调试信息 - 包含更多状态信息
-    console.log('🎯 进度条数据:', { 
+    console.log('🎯 侧边栏数据:', { 
       discoveredCount, 
       totalCount, 
       progress, 
@@ -1182,10 +1297,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       showCreativeEgg: !!showCreativeEgg,
       showLevelUpNotification: !!showLevelUpNotification,
       showAchievementPanel,
-      isVideoFullscreen
+      isVideoFullscreen,
+      sidebarExpanded
     })
 
-    // 只要系统初始化完成就显示进度条
+    // 只要系统初始化完成就显示侧边栏
     if (easterEggRecords.length === 0) return null
 
     // 检测是否在全屏状态
@@ -1196,51 +1312,126 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
     return (
       <div 
-        className="achievement-progress-bar fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-900/80 to-blue-900/80 backdrop-blur-sm border-t border-white/10 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-purple-900/90 hover:to-blue-900/90 transition-all duration-300"
+        className={`achievement-sidebar fixed right-0 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+          sidebarExpanded ? 'w-80' : 'w-16'
+        } ${isInFullscreen ? 'fullscreen-mode' : ''}`}
         style={{ 
-          display: 'block !important' as any,
-          visibility: 'visible !important' as any,
-          position: 'fixed !important' as any,
-          zIndex: 9999999, // 始终使用最高的z-index，确保在所有弹窗之上
-          bottom: 0,
-          left: 0,
+          zIndex: isInFullscreen ? 999999999 : 9999999, // 全屏状态下使用更高的z-index
+          pointerEvents: 'auto',
+          position: 'fixed',
           right: 0,
-          opacity: 1,
-          pointerEvents: 'auto' as any
-        }}
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          console.log('🎯 进度条被点击!')
-          setShowAchievementPanel(true)
+          top: '50%',
+          transform: 'translateY(-50%)'
         }}
       >
-        <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="text-2xl">{currentAchievement?.icon || '🥉'}</div>
-            <div>
-              <div className="text-white font-medium text-sm">
-                {currentAchievement?.name || '探索者'}
+        {/* 折叠状态的小按钮 */}
+        {!sidebarExpanded && (
+          <div 
+            className="bg-gradient-to-b from-purple-900/90 to-blue-900/90 backdrop-blur-sm border-l border-t border-b border-white/20 rounded-l-xl p-3 cursor-pointer hover:from-purple-800/90 hover:to-blue-800/90 transition-all duration-300 shadow-lg"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setSidebarExpanded(true)
+            }}
+          >
+            <div className="flex flex-col items-center gap-2">
+              <div className="text-xl">{currentAchievement?.icon || '🥉'}</div>
+              <div className="text-white text-xs font-medium text-center">
+                <div>{discoveredCount}</div>
+                <div className="text-white/60">/</div>
+                <div>{totalCount}</div>
               </div>
-              <div className="text-white/60 text-xs">
-                探索进度：{discoveredCount}/{totalCount}
+              <div className="w-2 h-8 bg-white/20 rounded-full overflow-hidden">
+                <div 
+                  className="w-full bg-gradient-to-t from-yellow-400 to-orange-400 transition-all duration-1000"
+                  style={{ height: `${progress}%` }}
+                />
               </div>
             </div>
           </div>
-          
-          <div className="flex-1">
-            <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 transition-all duration-1000 ease-out"
-                style={{ width: `${progress}%` }}
-              />
+        )}
+
+        {/* 展开状态的详细面板 */}
+        {sidebarExpanded && (
+          <div className="bg-gradient-to-b from-purple-900/95 to-blue-900/95 backdrop-blur-md border-l border-t border-b border-white/20 rounded-l-xl p-4 shadow-xl">
+            {/* 顶部标题和折叠按钮 */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="text-2xl">{currentAchievement?.icon || '🥉'}</div>
+                <div>
+                  <div className="text-white font-medium text-sm">
+                    {currentAchievement?.name || '探索者'}
+                  </div>
+                  <div className="text-white/60 text-xs">
+                    探索进度
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSidebarExpanded(false)
+                }}
+                className="text-white/60 hover:text-white transition-colors p-1"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
+
+            {/* 进度条 */}
+            <div className="mb-4">
+              <div className="flex justify-between text-white/80 text-sm mb-2">
+                <span>彩蛋发现</span>
+                <span>{discoveredCount}/{totalCount}</span>
+              </div>
+              <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 transition-all duration-1000 ease-out rounded-full"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="text-white/60 text-xs mt-1">
+                {progress.toFixed(0)}% 完成
+              </div>
+            </div>
+
+            {/* 最近发现的彩蛋 */}
+            <div className="mb-4">
+              <div className="text-white/80 text-sm mb-2">最新发现</div>
+              <div className="space-y-1">
+                {easterEggRecords
+                  .filter(egg => egg.discovered)
+                  .slice(-3)
+                  .reverse()
+                  .map(egg => (
+                    <div key={egg.id} className="flex items-center gap-2 text-xs">
+                      <span className="text-lg">{egg.icon}</span>
+                      <span className="text-white/70 truncate">{egg.name}</span>
+                    </div>
+                  ))
+                }
+                {discoveredCount === 0 && (
+                  <div className="text-white/50 text-xs">还未发现任何彩蛋</div>
+                )}
+              </div>
+            </div>
+
+            {/* 查看详情按钮 */}
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setShowAchievementPanel(true)
+              }}
+              className="w-full py-2 px-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg text-white text-sm transition-all duration-300 hover:scale-105"
+            >
+              查看全部彩蛋
+            </button>
           </div>
-          
-          <div className="text-white/60 text-xs">
-            点击查看详情
-          </div>
-        </div>
+        )}
       </div>
     )
   }
@@ -1325,22 +1516,39 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
-  // 确保进度条样式始终生效
+  // 确保侧边栏样式始终生效
   useEffect(() => {
-    if (!document.getElementById('progressBarForceStyle')) {
+    if (!document.getElementById('sidebarForceStyle')) {
       const style = document.createElement('style')
-      style.id = 'progressBarForceStyle'
+      style.id = 'sidebarForceStyle'
       style.textContent = `
-        .achievement-progress-bar {
+        .achievement-sidebar {
           display: block !important;
           visibility: visible !important;
           position: fixed !important;
           z-index: 9999999 !important;
-          bottom: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
           opacity: 1 !important;
           pointer-events: auto !important;
+        }
+        
+        /* 全屏状态下的特殊处理 */
+        .achievement-sidebar.fullscreen-mode {
+          z-index: 99999999 !important;
+          position: fixed !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+        }
+        
+        /* 确保在任何情况下都可见 */
+        body:-webkit-full-screen .achievement-sidebar,
+        body:-moz-full-screen .achievement-sidebar,
+        body:-ms-fullscreen .achievement-sidebar,
+        body:fullscreen .achievement-sidebar {
+          z-index: 999999999 !important;
+          position: fixed !important;
+          display: block !important;
+          visibility: visible !important;
         }
       `
       document.head.appendChild(style)
@@ -1363,8 +1571,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       {/* 等级升级通知 */}
       <LevelUpNotification />
       
-      {/* 底部成就进度条 */}
-      <AchievementProgressBar />
+      {/* 右侧悬浮成就侧边栏 */}
+      <AchievementSidebar />
       
       {/* 成就详情面板 */}
       <AchievementPanel />
@@ -1372,14 +1580,14 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       {/* 彩蛋说明（隐藏的开发者信息） */}
       <div style={{ display: 'none' }} data-easter-eggs="creative">
         {/* 
-        今夕公会创意彩蛋系统 v2.3 - 成就系统：
+        今夕公会创意彩蛋系统 v2.4 - 成就系统：
         1. 键盘彩蛋：输入 "JINXI7" 触发7周年庆典
         2. 点击彩蛋：快速点击Logo 7次
         3. 全屏视频彩蛋：全屏观看今夕宣传视频
         4. 开发者彩蛋：打开F12开发者工具
         5. 双击魔法彩蛋：快速双击页面背景空白区域
         6. 商标点击彩蛋：点击页面底部的今夕商标
-        7. 耐心彩蛋：在页面静静等待2分钟不做任何操作
+        7. 滚轮狂热彩蛋：在3秒内连续滚动鼠标滚轮15次
         
         成就系统：
         - 底部进度条显示发现进度

@@ -681,7 +681,7 @@ function PageContent() {
                   background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
                 }}
               >
-                <i className="ri-rocket-line"></i>加入
+                🚀 加入
               </button>
             </AnimatedBeam>
           </nav>

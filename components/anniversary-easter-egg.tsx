@@ -195,7 +195,10 @@ export function AnniversaryEasterEgg({ isVisible, onClose }: AnniversaryEasterEg
 
         {/* 关闭按钮 */}
         <button
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation()
+            onClose()
+          }}
           className="mt-8 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 hover:scale-105 backdrop-blur-sm"
         >
           <i className="ri-close-line mr-2"></i>

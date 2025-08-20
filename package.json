@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "build:netlify": "next build",
+    "build:optimized": "node optimize-images.js && next build",
     "dev": "next dev",
     "dev:netlify": "netlify dev",
     "lint": "next lint",
@@ -13,7 +14,9 @@
     "test:api": "node test-api.js",
     "deploy": "node deploy.js",
     "deploy:preview": "netlify deploy --dir=out",
-    "deploy:prod": "netlify deploy --prod --dir=out"
+    "deploy:prod": "netlify deploy --prod --dir=out",
+    "analyze": "node optimize-images.js",
+    "optimize": "node optimize-images.js && npm run build"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

@@ -365,11 +365,17 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       if (restored) {
         console.log('🔧 彩蛋发现后数据已自动恢复')
       }
+      
+      // 强制同步等级牌显示
+      const newAchievement = getCurrentAchievement()
+      console.log('🏆 彩蛋发现后等级同步:', newAchievement?.name || '无等级')
     }, 500)
     
     // 额外的保险措施：延迟更长时间再次检查
     setTimeout(() => {
       validateAndRestoreData()
+      // 再次确保等级同步
+      setForceProgressBarUpdate(prev => prev + 50)
     }, 2000)
   }
 
@@ -411,10 +417,16 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return 0 // 未分级
   }
 
-  // 获取当前成就
+  // 获取当前成就 - 修复版，返回最高级别的成就
   const getCurrentAchievement = (): Achievement | null => {
     const discoveredCount = easterEggRecords.filter(egg => egg.discovered).length
-    return achievements.find(a => a.requiredEggs <= discoveredCount && a.level <= 3) || null
+    
+    // 找到所有符合条件的成就，然后返回等级最高的
+    const eligibleAchievements = achievements
+      .filter(a => a.requiredEggs <= discoveredCount && a.level <= 3)
+      .sort((a, b) => b.level - a.level) // 按等级降序排序
+    
+    return eligibleAchievements[0] || null
   }
 
   // 键盘彩蛋监听器 (JINXI7)
@@ -1561,6 +1573,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         {!sidebarExpanded && (
           <div 
             className="bg-gradient-to-b from-purple-900/90 to-blue-900/90 backdrop-blur-sm border-l border-t border-b border-white/20 rounded-l-xl p-3 cursor-pointer hover:from-purple-800/90 hover:to-blue-800/90 transition-all duration-300 shadow-lg"
+            title={`${currentAchievement?.name || '探索者'} - ${discoveredCount}/${totalCount} 彩蛋已发现 (${progress.toFixed(0)}%)`}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
@@ -1568,7 +1581,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
             }}
           >
             <div className="flex flex-col items-center gap-2">
-              <div className="text-xl">{currentAchievement?.icon || '🥉'}</div>
+              <div className="text-xl animate-pulse">{currentAchievement?.icon || '🥉'}</div>
               <div className="text-white text-xs font-medium text-center">
                 <div>{discoveredCount}</div>
                 <div className="text-white/60">/</div>
@@ -1579,6 +1592,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                   className="w-full bg-gradient-to-t from-yellow-400 to-orange-400 transition-all duration-1000"
                   style={{ height: `${progress}%` }}
                 />
+              </div>
+              {/* 等级名称提示 */}
+              <div className="text-white/60 text-[10px] font-medium truncate max-w-12 text-center">
+                {currentAchievement?.name?.slice(0, 3) || '探索'}
               </div>
             </div>
           </div>
@@ -1631,18 +1648,21 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
               </div>
             </div>
 
-            {/* 最近发现的彩蛋 */}
+            {/* 最近发现的彩蛋 - 只显示图标 */}
             <div className="mb-4">
               <div className="text-white/80 text-sm mb-2">最新发现</div>
-              <div className="space-y-1">
+              <div className="flex items-center gap-1 flex-wrap">
                 {easterEggRecords
                   .filter(egg => egg.discovered)
                   .slice(-3)
                   .reverse()
                   .map(egg => (
-                    <div key={egg.id} className="flex items-center gap-2 text-xs">
-                      <span className="text-lg">{egg.icon}</span>
-                      <span className="text-white/70 truncate">{egg.name}</span>
+                    <div 
+                      key={egg.id} 
+                      className="text-xl hover:scale-110 transition-transform cursor-pointer"
+                      title={`${egg.name} - ${egg.discoveredAt || '已发现'}`}
+                    >
+                      {egg.icon}
                     </div>
                   ))
                 }

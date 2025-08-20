@@ -46,6 +46,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0})
   const [devToolsOpen, setDevToolsOpen] = useState(false)
   const [isPageVisible, setIsPageVisible] = useState(true)
+  const [traceEggCooldown, setTraceEggCooldown] = useState(false)
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
@@ -248,17 +249,21 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   // 🎨 创意彩蛋1: 鼠标轨迹彩蛋 - 用鼠标在页面画出数字"7"
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      // 如果在冷却期或者已经发现过这个彩蛋，不再检测
+      if (traceEggCooldown) return
+      
       const newPos = { x: event.clientX, y: event.clientY }
       setLastMousePos(newPos)
       
-      // 记录鼠标轨迹，最多保留最近20个点
+      // 记录鼠标轨迹，保留最近30个点以提高检测精度
       setMouseTrail(prev => {
-        const newTrail = [...prev, newPos].slice(-20)
+        const newTrail = [...prev, newPos].slice(-30)
         
         // 检测是否画出了数字"7"的形状
-        if (newTrail.length >= 15) {
+        if (newTrail.length >= 20 && !traceEggCooldown) {
           const isSevenShape = detectSevenShape(newTrail)
           if (isSevenShape) {
+            setTraceEggCooldown(true) // 设置冷却
             triggerCreativeEgg({
               type: 'trace',
               title: '🎨 鼠标艺术家',
@@ -266,6 +271,11 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
               icon: '🎨'
             }, 'trace')
             setMouseTrail([]) // 重置轨迹
+            
+            // 30秒冷却时间
+            setTimeout(() => {
+              setTraceEggCooldown(false)
+            }, 30000)
           }
         }
         return newTrail
@@ -274,7 +284,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
     document.addEventListener('mousemove', handleMouseMove)
     return () => document.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+  }, [traceEggCooldown])
 
   // 🔍 创意彩蛋2: 凝视彩蛋 - 鼠标在Logo上静止3秒
   useEffect(() => {
@@ -409,21 +419,37 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   useEffect(() => {
     const handleLogoClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement
-      if (target.closest('a[href="#top"]') || target.closest('img[alt="Logo"]')) {
+      
+      // 更准确的Logo检测：检查多种可能的选择器
+      const isLogoClick = target.closest('a[href="#top"]') || 
+                         target.closest('img[alt="Logo"]') ||
+                         target.closest('img[src*="logo"]') ||
+                         target.tagName === 'IMG' && target.getAttribute('src')?.includes('logo') ||
+                         (target.tagName === 'A' && target.getAttribute('href') === '#top')
+      
+      if (isLogoClick) {
         const newCount = logoClickCount + 1
         setLogoClickCount(newCount)
         
+        console.log(`Logo clicked ${newCount} times`) // 调试日志
+        
         if (newCount === 7) {
-          setShowAnniversary(true)
-          setLogoClickCount(0)
           recordEasterEggDiscovery('click')
-          showToast('🎯 发现点击彩蛋！Logo连击7次解锁庆典！')
+          // 触发专门的点击彩蛋特效，而不是默认的7周年庆典
+          triggerCreativeEgg({
+            type: 'developer',
+            title: '🎯 点击大师',
+            message: '你精准连击Logo 7次！手速惊人！',
+            icon: '🎯'
+          }, 'click')
+          setLogoClickCount(0)
+          showToast('🎯 发现点击彩蛋！Logo连击7次解锁！')
         } else if (newCount >= 3) {
           showToast(`💫 继续点击Logo... (${newCount}/7)`, 'info')
         }
         
         // 重置计数器
-        setTimeout(() => setLogoClickCount(0), 5000)
+        setTimeout(() => setLogoClickCount(0), 8000) // 延长到8秒
       }
     }
 
@@ -433,37 +459,280 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
   // 🎯 辅助函数：检测鼠标轨迹是否形成数字"7"
   const detectSevenShape = (trail: {x: number, y: number}[]): boolean => {
-    if (trail.length < 10) return false
+    if (trail.length < 15) return false
     
-    // 简化的"7"形状检测：先水平，后向下倾斜
-    const firstQuarter = trail.slice(0, Math.floor(trail.length * 0.25))
-    const lastThreeQuarters = trail.slice(Math.floor(trail.length * 0.25))
+    // 更严格的"7"形状检测
+    const totalDistance = trail.reduce((dist, point, index) => {
+      if (index === 0) return 0
+      const prev = trail[index - 1]
+      return dist + Math.sqrt(Math.pow(point.x - prev.x, 2) + Math.pow(point.y - prev.y, 2))
+    }, 0)
     
-    // 检测开始是否相对水平（横线）
-    const startHorizontal = firstQuarter.every((point, index) => {
-      if (index === 0) return true
-      const prevPoint = firstQuarter[index - 1]
-      return Math.abs(point.y - prevPoint.y) < 30 // 容忍30px的垂直偏差
-    })
+    // 轨迹长度必须足够（至少100像素）
+    if (totalDistance < 100) return false
     
-    // 检测后续是否向下倾斜（竖线）
-    const endDiagonal = lastThreeQuarters.length > 5 && 
-      lastThreeQuarters[lastThreeQuarters.length - 1].y > lastThreeQuarters[0].y + 50
+    // 分析轨迹的三个部分：开始、中间、结尾
+    const oneThird = Math.floor(trail.length / 3)
+    const firstPart = trail.slice(0, oneThird)
+    const middlePart = trail.slice(oneThird, oneThird * 2)
+    const lastPart = trail.slice(oneThird * 2)
     
-    return startHorizontal && endDiagonal
+    // 检测水平线（开始部分应该主要向右移动）
+    const horizontalMovement = firstPart.reduce((movement, point, index) => {
+      if (index === 0) return { right: 0, down: 0 }
+      const prev = firstPart[index - 1]
+      return {
+        right: movement.right + Math.max(0, point.x - prev.x),
+        down: movement.down + Math.abs(point.y - prev.y)
+      }
+    }, { right: 0, down: 0 })
+    
+    // 水平线条件：向右移动距离 > 向下移动距离的2倍
+    const isHorizontalStart = horizontalMovement.right > horizontalMovement.down * 2 && horizontalMovement.right > 30
+    
+    // 检测向下的对角线（结尾部分应该向下向右移动）
+    const diagonalMovement = lastPart.reduce((movement, point, index) => {
+      if (index === 0) return { right: 0, down: 0 }
+      const prev = lastPart[index - 1]
+      return {
+        right: movement.right + Math.max(0, point.x - prev.x),
+        down: movement.down + Math.max(0, point.y - prev.y)
+      }
+    }, { right: 0, down: 0 })
+    
+    // 对角线条件：向下移动距离 > 30像素，且有一定的向右移动
+    const isDiagonalEnd = diagonalMovement.down > 30 && diagonalMovement.right > 10
+    
+    // 整体形状检查：起点应该在左上，终点应该在右下
+    const startPoint = trail[0]
+    const endPoint = trail[trail.length - 1]
+    const hasCorrectDirection = endPoint.x > startPoint.x && endPoint.y > startPoint.y
+    
+    return isHorizontalStart && isDiagonalEnd && hasCorrectDirection
   }
 
-  // 🚀 创意彩蛋触发器
+  // 🚀 创意彩蛋触发器 - 不同类型有不同特效
   const triggerCreativeEgg = (egg: CreativeEasterEgg, eggId: string) => {
     setShowCreativeEgg(egg)
     recordEasterEggDiscovery(eggId)
     showToast(`${egg.icon} ${egg.title}：${egg.message}`, 'success')
     
-    // 根据彩蛋类型，有时也触发7周年庆典
-    if (egg.type === 'trace' || egg.type === 'developer') {
-      setTimeout(() => {
-        setShowAnniversary(true)
-      }, 2000)
+    // 根据彩蛋类型触发不同特效
+    switch(egg.type) {
+      case 'trace':
+        // 绘制彩蛋：显示绘制轨迹特效，然后触发7周年庆典
+        setTimeout(() => {
+          setShowAnniversary(true)
+        }, 2500)
+        break
+      
+      case 'gaze':
+        // 凝视彩蛋：眼睛闪烁特效，不触发庆典
+        createEyeFlashEffect()
+        break
+      
+      case 'developer':
+        // 开发者彩蛋：代码雨特效
+        createCodeRainEffect()
+        if (eggId === 'ultimate') {
+          // 终极彩蛋触发7周年庆典
+          setTimeout(() => {
+            setShowAnniversary(true)
+          }, 3000)
+        }
+        break
+      
+      case 'invisible':
+        // 隐形彩蛋：发现光芒特效
+        createDiscoveryGlowEffect()
+        break
+      
+      case 'title':
+        // 标题彩蛋：温暖粒子特效
+        createWarmParticleEffect()
+        break
+      
+      default:
+        // 默认：小规模粒子特效
+        createSimpleParticleEffect()
+    }
+  }
+
+  // 🎨 特效函数集合
+  const createEyeFlashEffect = () => {
+    // 眼睛闪烁特效
+    for (let i = 0; i < 6; i++) {
+      const eye = document.createElement('div')
+      eye.innerHTML = '👁️'
+      eye.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * window.innerHeight}px;
+        left: ${Math.random() * window.innerWidth}px;
+        font-size: 3rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: eyeFlash 2s ease-out forwards;
+      `
+      
+      document.body.appendChild(eye)
+      setTimeout(() => eye.remove(), 2000)
+    }
+    
+    // 添加CSS动画
+    if (!document.getElementById('eyeFlashStyle')) {
+      const style = document.createElement('style')
+      style.id = 'eyeFlashStyle'
+      style.textContent = `
+        @keyframes eyeFlash {
+          0% { opacity: 0; transform: scale(0.5); }
+          50% { opacity: 1; transform: scale(1.2); }
+          100% { opacity: 0; transform: scale(0.8); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createCodeRainEffect = () => {
+    // 代码雨特效
+    const characters = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]()'.split('')
+    
+    for (let i = 0; i < 20; i++) {
+      const code = document.createElement('div')
+      code.innerHTML = characters[Math.floor(Math.random() * characters.length)]
+      code.style.cssText = `
+        position: fixed;
+        top: -20px;
+        left: ${Math.random() * window.innerWidth}px;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        font-size: ${Math.random() * 20 + 14}px;
+        z-index: 9999;
+        pointer-events: none;
+        animation: codeRain 3s linear forwards;
+      `
+      
+      document.body.appendChild(code)
+      setTimeout(() => code.remove(), 3000)
+    }
+    
+    if (!document.getElementById('codeRainStyle')) {
+      const style = document.createElement('style')
+      style.id = 'codeRainStyle'
+      style.textContent = `
+        @keyframes codeRain {
+          0% { transform: translateY(-20px); opacity: 1; }
+          100% { transform: translateY(${window.innerHeight + 20}px); opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createDiscoveryGlowEffect = () => {
+    // 发现光芒特效
+    const glow = document.createElement('div')
+    glow.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,215,0,0) 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9998;
+      pointer-events: none;
+      animation: discoveryGlow 2s ease-out forwards;
+    `
+    
+    document.body.appendChild(glow)
+    setTimeout(() => glow.remove(), 2000)
+    
+    if (!document.getElementById('discoveryGlowStyle')) {
+      const style = document.createElement('style')
+      style.id = 'discoveryGlowStyle'
+      style.textContent = `
+        @keyframes discoveryGlow {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+          50% { transform: translate(-50%, -50%) scale(2); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createWarmParticleEffect = () => {
+    // 温暖粒子特效
+    const colors = ['💕', '💖', '💝', '💗', '💓']
+    
+    for (let i = 0; i < 10; i++) {
+      const particle = document.createElement('div')
+      particle.innerHTML = colors[Math.floor(Math.random() * colors.length)]
+      particle.style.cssText = `
+        position: fixed;
+        top: ${window.innerHeight / 2}px;
+        left: ${window.innerWidth / 2}px;
+        font-size: 2rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: warmFloat 3s ease-out forwards;
+        animation-delay: ${i * 200}ms;
+      `
+      
+      document.body.appendChild(particle)
+      setTimeout(() => particle.remove(), 3500)
+    }
+    
+    if (!document.getElementById('warmFloatStyle')) {
+      const style = document.createElement('style')
+      style.id = 'warmFloatStyle'
+      style.textContent = `
+        @keyframes warmFloat {
+          0% { transform: translate(0, 0) scale(0); opacity: 0; }
+          20% { opacity: 1; transform: scale(1); }
+          100% { 
+            transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) scale(0.5); 
+            opacity: 0; 
+          }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createSimpleParticleEffect = () => {
+    // 简单粒子特效
+    for (let i = 0; i < 8; i++) {
+      const particle = document.createElement('div')
+      particle.innerHTML = '✨'
+      particle.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * window.innerHeight}px;
+        left: ${Math.random() * window.innerWidth}px;
+        font-size: 1.5rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: simpleSparkle 1.5s ease-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      
+      document.body.appendChild(particle)
+      setTimeout(() => particle.remove(), 2000)
+    }
+    
+    if (!document.getElementById('simpleSparkleStyle')) {
+      const style = document.createElement('style')
+      style.id = 'simpleSparkleStyle'
+      style.textContent = `
+        @keyframes simpleSparkle {
+          0% { transform: scale(0) rotate(0deg); opacity: 0; }
+          50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+          100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
     }
   }
 

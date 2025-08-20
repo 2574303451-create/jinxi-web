@@ -56,6 +56,58 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [easterEggRecords, setEasterEggRecords] = useState<EasterEggRecord[]>([])
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   
+  // 安全检查彩蛋是否已发现的辅助函数
+  const safeCheckEggDiscovered = (eggId: string): boolean => {
+    try {
+      const saved = localStorage.getItem('jinxi-easter-eggs')
+      if (saved) {
+        const parsedRecords = JSON.parse(saved)
+        const egg = parsedRecords.find((egg: EasterEggRecord) => egg.id === eggId)
+        if (egg?.discovered) {
+          return true
+        }
+      }
+    } catch (error) {
+      console.warn(`检查彩蛋 ${eggId} 状态时出错:`, error)
+    }
+    
+    // 备用检查：使用当前状态
+    const egg = easterEggRecords.find(egg => egg.id === eggId)
+    return egg?.discovered || false
+  }
+  
+  // 数据完整性验证和恢复函数
+  const validateAndRestoreData = () => {
+    try {
+      const saved = localStorage.getItem('jinxi-easter-eggs')
+      if (!saved) return
+      
+      const parsedRecords = JSON.parse(saved)
+      const discoveredEggs = parsedRecords.filter((r: EasterEggRecord) => r.discovered)
+      
+      console.log('🔍 数据完整性检查:', {
+        保存的记录数: parsedRecords.length,
+        已发现彩蛋数: discoveredEggs.length,
+        当前状态记录数: easterEggRecords.length,
+        当前已发现数: easterEggRecords.filter(e => e.discovered).length
+      })
+      
+      // 如果保存的数据中有更多已发现的彩蛋，恢复它们
+      if (discoveredEggs.length > easterEggRecords.filter(e => e.discovered).length) {
+        console.log('🔄 检测到数据不一致，恢复localStorage中的数据')
+        const restoredRecords = easterEggDefinitions.map(def => {
+          const savedRecord = parsedRecords.find((r: EasterEggRecord) => r.id === def.id)
+          return savedRecord && savedRecord.discovered ? savedRecord : def
+        })
+        setEasterEggRecords(restoredRecords)
+        return true
+      }
+    } catch (error) {
+      console.warn('数据验证时出错:', error)
+    }
+    return false
+  }
+  
   // 彩蛋定义
   const easterEggDefinitions: EasterEggRecord[] = [
     {
@@ -198,24 +250,100 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   
   // 组件更新监听器 - 确保在任何状态变化时侧边栏都保持可见
   useEffect(() => {
-    console.log('🔄 组件状态更新，确保侧边栏可见')
+    console.log('🔄 组件状态更新，确保侧边栏可见并验证数据完整性')
     setSidebarForceVisible(true)
+    
+    // 在状态变化时验证数据完整性
+    setTimeout(() => {
+      const restored = validateAndRestoreData()
+      if (restored) {
+        console.log('✅ 数据已恢复')
+        setForceProgressBarUpdate(prev => prev + 100)
+      }
+    }, 100)
   }, [showCreativeEgg, showLevelUpNotification, showAchievementPanel, isVideoFullscreen])
 
-  // 保存成就进度
+  // 保存成就进度 - 增强版，确保数据完整性
   const saveProgress = (newRecords: EasterEggRecord[]) => {
-    localStorage.setItem('jinxi-easter-eggs', JSON.stringify(newRecords))
-    setEasterEggRecords(newRecords)
+    // 验证新记录的完整性
+    const validRecords = newRecords.length >= easterEggDefinitions.length ? newRecords : 
+      // 如果数据不完整，从localStorage读取现有数据并合并
+      (() => {
+        try {
+          const saved = localStorage.getItem('jinxi-easter-eggs')
+          if (saved) {
+            const existingRecords = JSON.parse(saved)
+            // 合并现有数据和新数据
+            return easterEggDefinitions.map(def => {
+              const newRecord = newRecords.find(r => r.id === def.id)
+              const existingRecord = existingRecords.find((r: EasterEggRecord) => r.id === def.id)
+              
+              if (newRecord && newRecord.discovered) {
+                return newRecord // 使用新的已发现记录
+              } else if (existingRecord && existingRecord.discovered) {
+                return existingRecord // 保持现有的已发现记录
+              } else {
+                return def // 使用默认定义
+              }
+            })
+          }
+        } catch (error) {
+          console.warn('恢复数据时出错:', error)
+        }
+        return newRecords
+      })()
+    
+    console.log('💾 保存彩蛋数据:', validRecords.filter(r => r.discovered).map(r => r.name))
+    localStorage.setItem('jinxi-easter-eggs', JSON.stringify(validRecords))
+    setEasterEggRecords(validRecords)
   }
 
-  // 记录彩蛋发现
+  // 记录彩蛋发现 - 安全版本，防止数据丢失
   const recordEasterEggDiscovery = (eggId: string) => {
+    console.log(`🎯 开始记录彩蛋发现: ${eggId}`)
+    
     const currentTime = new Date().toLocaleString('zh-CN')
-    const updatedRecords = easterEggRecords.map(egg => 
+    
+    // 从localStorage获取最新数据，确保不会丢失之前的记录
+    let currentRecords: EasterEggRecord[] = []
+    try {
+      const saved = localStorage.getItem('jinxi-easter-eggs')
+      if (saved) {
+        const parsedRecords = JSON.parse(saved)
+        // 确保数据完整性，合并所有彩蛋定义
+        currentRecords = easterEggDefinitions.map(def => {
+          const existingRecord = parsedRecords.find((r: EasterEggRecord) => r.id === def.id)
+          return existingRecord || def
+        })
+      } else {
+        currentRecords = [...easterEggRecords]
+      }
+    } catch (error) {
+      console.warn('读取保存数据时出错，使用当前状态:', error)
+      currentRecords = [...easterEggRecords]
+    }
+    
+    // 如果当前状态数据更完整，使用当前状态
+    if (easterEggRecords.length >= easterEggDefinitions.length) {
+      const currentDiscoveredCount = easterEggRecords.filter(egg => egg.discovered).length
+      const savedDiscoveredCount = currentRecords.filter(egg => egg.discovered).length
+      
+      if (currentDiscoveredCount >= savedDiscoveredCount) {
+        currentRecords = [...easterEggRecords]
+        console.log('🔄 使用当前状态数据（更完整）')
+      } else {
+        console.log('📂 使用localStorage数据（包含更多已发现彩蛋）')
+      }
+    }
+    
+    // 更新指定彩蛋的状态
+    const updatedRecords = currentRecords.map(egg => 
       egg.id === eggId 
         ? { ...egg, discovered: true, discoveredAt: currentTime }
         : egg
     )
+    
+    console.log(`✅ 彩蛋 ${eggId} 已标记为发现。总进度: ${updatedRecords.filter(e => e.discovered).length}/${updatedRecords.length}`)
     
     saveProgress(updatedRecords)
     
@@ -227,11 +355,22 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const discoveredCount = updatedRecords.filter(egg => egg.discovered).length
     checkLevelUp(discoveredCount)
     
-    // 额外确保侧边栏显示更新
+    // 额外确保侧边栏显示更新，并验证数据完整性
     setTimeout(() => {
       setSidebarForceVisible(true)
       setForceProgressBarUpdate(prev => prev + 30)
+      
+      // 彩蛋发现后验证数据完整性
+      const restored = validateAndRestoreData()
+      if (restored) {
+        console.log('🔧 彩蛋发现后数据已自动恢复')
+      }
     }, 500)
+    
+    // 额外的保险措施：延迟更长时间再次检查
+    setTimeout(() => {
+      validateAndRestoreData()
+    }, 2000)
   }
 
   // 检查等级提升
@@ -328,9 +467,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         if (fullscreenElement && fullscreenElement.tagName === 'VIDEO' && !isVideoFullscreen) {
           setIsVideoFullscreen(true)
           
-          // 检查是否已经发现过这个彩蛋
-          const fullscreenEgg = easterEggRecords.find(egg => egg.id === 'fullscreen')
-          if (!fullscreenEgg?.discovered) {
+          // 安全检查是否已经发现过这个彩蛋
+          const isAlreadyDiscovered = safeCheckEggDiscovered('fullscreen')
+          
+          console.log('🔍 全屏彩蛋检查:', { isAlreadyDiscovered, isVideoFullscreen })
+          
+          if (!isAlreadyDiscovered) {
             // 延迟3秒触发彩蛋，确保用户真的在观看
             videoTimer = setTimeout(() => {
               // 再次检查是否还在全屏状态
@@ -480,9 +622,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         }
         clickCount = 0
         
-        // 检查是否已经发现过这个彩蛋
-        const titleEgg = easterEggRecords.find(egg => egg.id === 'title')
-        if (!titleEgg?.discovered) {
+        // 安全检查是否已经发现过这个彩蛋
+        if (!safeCheckEggDiscovered('title')) {
           triggerCreativeEgg({
             type: 'title',
             title: '✨ 双击魔法师',
@@ -564,9 +705,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   // 🎡 滚轮狂热彩蛋：在2秒内连续滚动鼠标滚轮20次
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      // 检查是否已经发现过这个彩蛋
-      const scrollEgg = easterEggRecords.find(egg => egg.id === 'scroll')
-      if (scrollEgg?.discovered) {
+      // 安全检查是否已经发现过这个彩蛋
+      if (safeCheckEggDiscovered('scroll')) {
         return
       }
 
@@ -1276,9 +1416,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       )
       
       if (isFooterLogo || isBottomAreaLogo) {
-        // 检查是否已经发现过这个彩蛋
-        const logoEgg = easterEggRecords.find(egg => egg.id === 'invisible')
-        if (!logoEgg?.discovered) {
+        // 安全检查是否已经发现过这个彩蛋
+        if (!safeCheckEggDiscovered('invisible')) {
           triggerCreativeEgg({
             type: 'invisible',
             title: '🔍 商标探索者',

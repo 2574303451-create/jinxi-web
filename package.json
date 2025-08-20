@@ -10,7 +10,10 @@
     "lint": "next lint",
     "start": "next start",
     "export": "next export",
-    "test:api": "node test-api.js"
+    "test:api": "node test-api.js",
+    "deploy": "node deploy.js",
+    "deploy:preview": "netlify deploy --dir=out",
+    "deploy:prod": "netlify deploy --prod --dir=out"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnniversaryEasterEgg } from './anniversary-easter-egg'
 
 interface EasterEggManagerProps {
@@ -47,6 +47,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [isPageVisible, setIsPageVisible] = useState(true)
   const [scrollCount, setScrollCount] = useState(0)
   const [scrollTimer, setScrollTimer] = useState<NodeJS.Timeout | null>(null)
+  const [sidebarForceVisible, setSidebarForceVisible] = useState(true)
+  const sidebarRef = useRef<HTMLDivElement>(null)
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
@@ -101,7 +103,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     {
       id: 'scroll',
       name: '滚轮狂热彩蛋',
-      description: '在3秒内连续滚动鼠标滚轮15次',
+      description: '在2秒内连续滚动鼠标滚轮20次',
       icon: '🎡',
       discovered: false
     }
@@ -145,6 +147,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
   // 初始化成就系统
   useEffect(() => {
+    // 确保侧边栏始终可见
+    setSidebarForceVisible(true)
+    
     const savedProgress = localStorage.getItem('jinxi-easter-eggs')
     if (savedProgress) {
       try {
@@ -156,23 +161,46 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         })
         setEasterEggRecords(cleanedRecords)
         console.log('🎯 已加载彩蛋进度:', cleanedRecords)
+        
+        // 数据加载后再次确保侧边栏可见
+        setTimeout(() => {
+          setSidebarForceVisible(true)
+          setForceProgressBarUpdate(prev => prev + 50)
+        }, 100)
       } catch (error) {
         console.log('🔄 重新初始化彩蛋系统')
         setEasterEggRecords(easterEggDefinitions)
+        setSidebarForceVisible(true)
       }
     } else {
       console.log('🆕 首次访问，初始化彩蛋系统')
       setEasterEggRecords(easterEggDefinitions)
+      setSidebarForceVisible(true)
       
       // 首次访问时，短暂展开侧边栏提示用户
       setTimeout(() => {
         setSidebarExpanded(true)
+        setSidebarForceVisible(true)
         setTimeout(() => {
           setSidebarExpanded(false)
+          setSidebarForceVisible(true) // 即使折叠也要保持可见
         }, 3000) // 3秒后自动折叠
       }, 2000) // 页面加载2秒后展开
     }
+    
+    // 额外保险：定时强制确保侧边栏可见
+    const ensureVisibility = setInterval(() => {
+      setSidebarForceVisible(true)
+    }, 5000)
+    
+    return () => clearInterval(ensureVisibility)
   }, [])
+  
+  // 组件更新监听器 - 确保在任何状态变化时侧边栏都保持可见
+  useEffect(() => {
+    console.log('🔄 组件状态更新，确保侧边栏可见')
+    setSidebarForceVisible(true)
+  }, [showCreativeEgg, showLevelUpNotification, showAchievementPanel, isVideoFullscreen])
 
   // 保存成就进度
   const saveProgress = (newRecords: EasterEggRecord[]) => {
@@ -191,9 +219,19 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     
     saveProgress(updatedRecords)
     
+    // 强制确保侧边栏在彩蛋发现后保持可见
+    setSidebarForceVisible(true)
+    setForceProgressBarUpdate(prev => prev + 25)
+    
     // 检查是否达到新等级
     const discoveredCount = updatedRecords.filter(egg => egg.discovered).length
     checkLevelUp(discoveredCount)
+    
+    // 额外确保侧边栏显示更新
+    setTimeout(() => {
+      setSidebarForceVisible(true)
+      setForceProgressBarUpdate(prev => prev + 30)
+    }, 500)
   }
 
   // 检查等级提升
@@ -206,9 +244,22 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     if (currentLevel > previousLevel) {
       const newAchievement = achievements.find(a => a.requiredEggs === discoveredCount)
       if (newAchievement) {
+        // 强制确保侧边栏在等级提升时可见
+        setSidebarForceVisible(true)
+        setForceProgressBarUpdate(prev => prev + 50)
+        
         setTimeout(() => {
           setShowLevelUpNotification(newAchievement)
+          // 等级提升时再次确保侧边栏可见
+          setSidebarForceVisible(true)
+          setForceProgressBarUpdate(prev => prev + 75)
         }, 1500) // 延迟显示，让彩蛋动画先播放
+        
+        // 等级提升后继续确保侧边栏可见
+        setTimeout(() => {
+          setSidebarForceVisible(true)
+          setForceProgressBarUpdate(prev => prev + 100)
+        }, 3000)
       }
     }
   }
@@ -296,10 +347,18 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                   icon: '📺'
                 }, 'fullscreen')
                 
-                // 特别为全屏彩蛋强制更新进度条
+                // 特别为全屏彩蛋强制更新进度条，多次更新确保显示
                 setTimeout(() => {
-                  setForceProgressBarUpdate(prev => prev + 10) // 使用更大的增量确保触发更新
-                }, 2000)
+                  setForceProgressBarUpdate(prev => prev + 10) // 立即更新
+                  // 再次确认更新
+                  setTimeout(() => {
+                    setForceProgressBarUpdate(prev => prev + 15) // 再次强制更新
+                  }, 1000)
+                  // 第三次确保显示
+                  setTimeout(() => {
+                    setForceProgressBarUpdate(prev => prev + 20) // 最终确保更新
+                  }, 3000)
+                }, 500)
               }
             }, 3000)
           }
@@ -502,7 +561,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return () => document.removeEventListener('click', handleLogoClick)
   }, [logoClickCount, showCreativeEgg, showAnniversary])
 
-  // 🎡 滚轮狂热彩蛋：在3秒内连续滚动鼠标滚轮15次
+  // 🎡 滚轮狂热彩蛋：在2秒内连续滚动鼠标滚轮20次
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
       // 检查是否已经发现过这个彩蛋
@@ -514,7 +573,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       const newCount = scrollCount + 1
       setScrollCount(newCount)
       
-      console.log(`滚轮计数: ${newCount}/15`) // 调试信息
+      console.log(`滚轮计数: ${newCount}/20`) // 调试信息
       
       // 清除之前的定时器
       if (scrollTimer) {
@@ -522,21 +581,21 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       }
       
       // 检查是否达到触发条件
-      if (newCount >= 15) {
+      if (newCount >= 20) {
         triggerCreativeEgg({
           type: 'scroll',
           title: '🎡 滚轮疯狂者',
-          message: '你的滚轮转动如飞，掌握了页面穿梭的终极奥义！',
+          message: '你的滚轮转动如闪电，掌握了页面穿梭的终极奥义！',
           icon: '🎡'
         }, 'scroll')
         setScrollCount(0)
         return
       }
       
-      // 3秒后重置计数
+      // 2秒后重置计数
       const timer = setTimeout(() => {
         setScrollCount(0)
-      }, 3000)
+      }, 2000)
       setScrollTimer(timer)
     }
 
@@ -601,6 +660,33 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     setTimeout(() => {
       setForceProgressBarUpdate(prev => prev + 1)
     }, 100)
+    
+    // 特别处理全屏彩蛋的进度条保持
+    if (eggId === 'fullscreen') {
+      // 强制侧边栏始终可见
+      setSidebarForceVisible(true)
+      
+      // 多次强制更新确保进度条不会消失
+      const intervals = [500, 1500, 3000, 5000, 7000, 10000]
+      intervals.forEach((delay, index) => {
+        setTimeout(() => {
+          console.log(`🔄 全屏彩蛋强制更新 ${index + 1}/${intervals.length}`)
+          setForceProgressBarUpdate(prev => prev + (index + 1) * 20)
+          setSidebarForceVisible(true)
+          
+          // 确保DOM元素可见
+          const sidebar = document.querySelector('.achievement-sidebar')
+          if (sidebar) {
+            ;(sidebar as HTMLElement).style.cssText += `
+              display: block !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+              z-index: 999999999 !important;
+            `
+          }
+        }, delay)
+      })
+    }
     
     // 根据彩蛋类型触发不同特效
     switch(egg.type) {
@@ -1280,11 +1366,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
-  // 右侧悬浮成就侧边栏
+  // 右侧悬浮成就侧边栏 - 强制永久显示版本
   const AchievementSidebar = () => {
-    const discoveredCount = easterEggRecords.filter(egg => egg.discovered).length
+    // 使用默认值确保即使数据未加载也能显示
+    const discoveredCount = easterEggRecords.length > 0 ? easterEggRecords.filter(egg => egg.discovered).length : 0
     const totalCount = easterEggDefinitions.length
-    const progress = (discoveredCount / totalCount) * 100
+    const progress = totalCount > 0 ? (discoveredCount / totalCount) * 100 : 0
     const currentAchievement = getCurrentAchievement()
 
     // 调试信息 - 包含更多状态信息
@@ -1298,11 +1385,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       showLevelUpNotification: !!showLevelUpNotification,
       showAchievementPanel,
       isVideoFullscreen,
-      sidebarExpanded
+      sidebarExpanded,
+      sidebarForceVisible
     })
 
-    // 只要系统初始化完成就显示侧边栏
-    if (easterEggRecords.length === 0) return null
+    // 强制显示：除非明确设置为不可见，否则总是显示
+    if (!sidebarForceVisible) return null
 
     // 检测是否在全屏状态
     const isInFullscreen = document.fullscreenElement !== null || 
@@ -1312,17 +1400,23 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
     return (
       <div 
-        className={`achievement-sidebar fixed right-0 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+        ref={sidebarRef}
+        className={`achievement-sidebar force-visible fixed right-0 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
           sidebarExpanded ? 'w-80' : 'w-16'
         } ${isInFullscreen ? 'fullscreen-mode' : ''}`}
         style={{ 
           zIndex: isInFullscreen ? 999999999 : 9999999, // 全屏状态下使用更高的z-index
           pointerEvents: 'auto',
           position: 'fixed',
-          right: 0,
+          right: '0',
           top: '50%',
-          transform: 'translateY(-50%)'
+          transform: 'translateY(-50%)',
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
         }}
+        data-testid="achievement-sidebar"
+        data-force-visible="true"
       >
         {/* 折叠状态的小按钮 */}
         {!sidebarExpanded && (
@@ -1516,31 +1610,27 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
-  // 确保侧边栏样式始终生效
+  // 强制侧边栏永久显示机制
   useEffect(() => {
     if (!document.getElementById('sidebarForceStyle')) {
       const style = document.createElement('style')
       style.id = 'sidebarForceStyle'
       style.textContent = `
-        .achievement-sidebar {
+        /* 基础强制显示样式 */
+        .achievement-sidebar.force-visible {
           display: block !important;
           visibility: visible !important;
           position: fixed !important;
           z-index: 9999999 !important;
           opacity: 1 !important;
           pointer-events: auto !important;
-        }
-        
-        /* 全屏状态下的特殊处理 */
-        .achievement-sidebar.fullscreen-mode {
-          z-index: 99999999 !important;
-          position: fixed !important;
           right: 0 !important;
           top: 50% !important;
           transform: translateY(-50%) !important;
         }
         
-        /* 确保在任何情况下都可见 */
+        /* 全屏状态下的超级强制显示 */
+        .achievement-sidebar.fullscreen-mode,
         body:-webkit-full-screen .achievement-sidebar,
         body:-moz-full-screen .achievement-sidebar,
         body:-ms-fullscreen .achievement-sidebar,
@@ -1549,9 +1639,131 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           position: fixed !important;
           display: block !important;
           visibility: visible !important;
+          opacity: 1 !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+        }
+        
+        /* 防止被其他元素覆盖 */
+        .achievement-sidebar * {
+          pointer-events: auto !important;
+        }
+        
+        /* 确保在视频全屏时也可见 */
+        video:fullscreen ~ .achievement-sidebar,
+        video:-webkit-full-screen ~ .achievement-sidebar,
+        video:-moz-full-screen ~ .achievement-sidebar {
+          z-index: 999999999 !important;
+          display: block !important;
+          visibility: visible !important;
         }
       `
       document.head.appendChild(style)
+    }
+    
+    // 定期检查侧边栏是否可见，如果不可见就强制显示
+    const forceVisibilityInterval = setInterval(() => {
+      const sidebar = document.querySelector('.achievement-sidebar')
+      if (sidebar) {
+        const computedStyle = window.getComputedStyle(sidebar)
+        if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden' || computedStyle.opacity === '0') {
+          console.log('🔧 检测到侧边栏被隐藏，强制显示')
+          ;(sidebar as HTMLElement).style.cssText += `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            z-index: 9999999 !important;
+            right: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+          `
+        }
+      }
+    }, 1000)
+    
+    return () => clearInterval(forceVisibilityInterval)
+  }, [])
+  
+  // 侧边栏DOM自我保护机制
+  useEffect(() => {
+    const checkSidebarVisibility = () => {
+      const sidebarElement = document.querySelector('.achievement-sidebar') as HTMLElement
+      if (!sidebarElement) return
+      
+      const computedStyle = window.getComputedStyle(sidebarElement)
+      
+      if (computedStyle.display === 'none' || 
+          computedStyle.visibility === 'hidden' || 
+          parseFloat(computedStyle.opacity) < 0.1) {
+        
+        console.log('🚨 侧边栏被检测到隐藏，立即强制恢复显示！')
+        
+        // 立即强制显示
+        sidebarElement.style.cssText = `
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          position: fixed !important;
+          z-index: 999999999 !important;
+          right: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          pointer-events: auto !important;
+        `
+        
+        // 更新React状态
+        setSidebarForceVisible(true)
+        setForceProgressBarUpdate(prev => prev + 200)
+      }
+    }
+    
+    // 立即检查一次
+    setTimeout(checkSidebarVisibility, 100)
+    
+    // 定期检查侧边栏可见性
+    const visibilityChecker = setInterval(checkSidebarVisibility, 1000)
+    
+    return () => clearInterval(visibilityChecker)
+  }, [sidebarForceVisible, easterEggRecords])
+  
+  // 监听全屏变化并强制更新侧边栏显示
+  useEffect(() => {
+    const handleVisibilityForce = () => {
+      console.log('🔄 全屏状态变化，强制更新侧边栏显示')
+      setForceProgressBarUpdate(prev => prev + 100) // 大幅增加更新值
+      setSidebarForceVisible(false)
+      
+      // 立即重新显示
+      setTimeout(() => {
+        setSidebarForceVisible(true)
+      }, 50)
+      
+      // 再次确保显示
+      setTimeout(() => {
+        const sidebar = document.querySelector('.achievement-sidebar')
+        if (sidebar) {
+          ;(sidebar as HTMLElement).style.cssText += `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 999999999 !important;
+          `
+        }
+      }, 500)
+    }
+    
+    document.addEventListener('fullscreenchange', handleVisibilityForce)
+    document.addEventListener('webkitfullscreenchange', handleVisibilityForce)
+    document.addEventListener('mozfullscreenchange', handleVisibilityForce)
+    document.addEventListener('msfullscreenchange', handleVisibilityForce)
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleVisibilityForce)
+      document.removeEventListener('webkitfullscreenchange', handleVisibilityForce)
+      document.removeEventListener('mozfullscreenchange', handleVisibilityForce)
+      document.removeEventListener('msfullscreenchange', handleVisibilityForce)
     }
   }, [])
 
@@ -1571,11 +1783,30 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       {/* 等级升级通知 */}
       <LevelUpNotification />
       
-      {/* 右侧悬浮成就侧边栏 */}
+      {/* 右侧悬浮成就侧边栏 - 强制显示版本 */}
       <AchievementSidebar />
       
       {/* 成就详情面板 */}
       <AchievementPanel />
+      
+      {/* 调试信息面板（开发环境） */}
+      {process.env.NODE_ENV === 'development' && (
+        <div style={{ 
+          position: 'fixed', 
+          bottom: '10px', 
+          left: '10px', 
+          background: 'rgba(0,0,0,0.8)', 
+          color: 'white', 
+          padding: '8px', 
+          fontSize: '12px',
+          borderRadius: '4px',
+          zIndex: 999999999
+        }}>
+          侧边栏状态: {sidebarForceVisible ? '✅ 可见' : '❌ 隐藏'} | 
+          更新计数: {forceProgressBarUpdate} | 
+          记录数: {easterEggRecords.length}
+        </div>
+      )}
       
       {/* 彩蛋说明（隐藏的开发者信息） */}
       <div style={{ display: 'none' }} data-easter-eggs="creative">
@@ -1587,7 +1818,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         4. 开发者彩蛋：打开F12开发者工具
         5. 双击魔法彩蛋：快速双击页面背景空白区域
         6. 商标点击彩蛋：点击页面底部的今夕商标
-        7. 滚轮狂热彩蛋：在3秒内连续滚动鼠标滚轮15次
+        7. 滚轮狂热彩蛋：在2秒内连续滚动鼠标滚轮20次（更严格的挑战！）
         
         成就系统：
         - 底部进度条显示发现进度

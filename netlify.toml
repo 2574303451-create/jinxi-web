@@ -35,7 +35,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-DNS-Prefetch-Control = "on"
     # 内容安全策略
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' https:; frame-ancestors 'none'"
     # 严格传输安全
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     # 权限策略

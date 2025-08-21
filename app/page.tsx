@@ -6,7 +6,7 @@ import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
-import { RocketIcon, SendIcon, MailIcon, Icon } from "../components/ui/icons"
+import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
 
 // 动态导入重型组件以减少初始内存占用
@@ -991,7 +991,7 @@ function PageContent() {
                   fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                 }}
               >
-<Icon name="image" className="inline" size={16} /> 成员展示
+<ImageIcon className="inline" size={16} /> 成员展示
               </h3>
               <div
                 className="p-6 rounded-2xl border relative z-10"

@@ -1,31 +1,46 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Marquee } from "../components/magicui/marquee"
-import { AnimatedBeam } from "../components/magicui/animated-beam"
-import { Sparkles } from "../components/magicui/sparkles"
-import { TypingAnimation } from "../components/magicui/typing-animation"
-import { MessageWall } from "../components/message-wall"
-import { CheckinWidget } from "../components/checkin-widget"
-import { LeaderboardWidget } from "../components/leaderboard-widget"
-import { StrategyWall } from "../components/strategy-wall"
-import { Carousel3D } from "../components/magicui/3d-carousel"
-import { MemberGrid } from "../components/magicui/member-grid"
+import { useState, useEffect, lazy, Suspense } from "react"
+import { OptimizedImage, AvatarImage } from "../components/ui/optimized-image"
+import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
-import { LoadingSpinner } from "../components/ui/loading-spinner"
-import { Tabs } from "../components/ui/tabs"
-import { Progress } from "../components/ui/progress"
-import { Accordion } from "../components/ui/accordion"
-import { Particles } from "../components/magicui/particles"
-import { FloatingElements } from "../components/magicui/floating-elements"
-import { AuroraBackground } from "../components/magicui/aurora-background"
-import { IntroPage } from "../components/intro-page"
-import { EasterEggManager } from "../components/easter-egg-manager"
 import { RocketIcon, SendIcon, MailIcon, Icon } from "../components/ui/icons"
+import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
 
-import { MeteorShower } from "../components/magicui/meteor-shower"
+// 动态导入重型组件以减少初始内存占用
+const Marquee = lazy(() => import("../components/magicui/marquee").then(module => ({ default: module.Marquee })))
+const AnimatedBeam = lazy(() => import("../components/magicui/animated-beam").then(module => ({ default: module.AnimatedBeam })))
+const Sparkles = lazy(() => import("../components/magicui/sparkles").then(module => ({ default: module.Sparkles })))
+const TypingAnimation = lazy(() => import("../components/magicui/typing-animation").then(module => ({ default: module.TypingAnimation })))
+const MessageWall = lazy(() => import("../components/message-wall").then(module => ({ default: module.MessageWall })))
+const CheckinWidget = lazy(() => import("../components/checkin-widget").then(module => ({ default: module.CheckinWidget })))
+const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(module => ({ default: module.LeaderboardWidget })))
+const StrategyWall = lazy(() => import("../components/strategy-wall").then(module => ({ default: module.StrategyWall })))
+const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(module => ({ default: module.Carousel3D })))
+const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(module => ({ default: module.MemberGrid })))
+const Tabs = lazy(() => import("../components/ui/tabs").then(module => ({ default: module.Tabs })))
+const Progress = lazy(() => import("../components/ui/progress").then(module => ({ default: module.Progress })))
+const Accordion = lazy(() => import("../components/ui/accordion").then(module => ({ default: module.Accordion })))
+const Particles = lazy(() => import("../components/magicui/particles").then(module => ({ default: module.Particles })))
+const FloatingElements = lazy(() => import("../components/magicui/floating-elements").then(module => ({ default: module.FloatingElements })))
+const AuroraBackground = lazy(() => import("../components/magicui/aurora-background").then(module => ({ default: module.AuroraBackground })))
+const IntroPage = lazy(() => import("../components/intro-page").then(module => ({ default: module.IntroPage })))
+const EasterEggManager = lazy(() => import("../components/easter-egg-manager").then(module => ({ default: module.EasterEggManager })))
+const MeteorShower = lazy(() => import("../components/magicui/meteor-shower").then(module => ({ default: module.MeteorShower })))
+
+// 组件加载占位符
+const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={
+    <div className="flex items-center justify-center py-8">
+      <LoadingSpinner size="sm" />
+      <span className="ml-2 text-white/60">加载中...</span>
+    </div>
+  }>
+    {children}
+  </Suspense>
+)
 
 function PageContent() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true)
@@ -33,6 +48,10 @@ function PageContent() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isStrategyWallOpen, setIsStrategyWallOpen] = useState(false)
+  
+  // 使用内存优化钩子
+  const { registerCleanup, getMemoryUsage } = useMemoryOptimization()
+  const { addCleanup } = useComponentCleanup()
   
   // 招新表单数据
   const [formData, setFormData] = useState<RecruitmentData>({
@@ -577,9 +596,26 @@ function PageContent() {
       yearElement.textContent = new Date().getFullYear().toString()
     }
 
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 2000)
-  }, [])
+    // Simulate loading with memory monitoring
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false)
+      // 显示内存使用情况（仅在开发模式）
+      if (process.env.NODE_ENV === 'development') {
+        const memoryUsage = getMemoryUsage()
+        if (memoryUsage) {
+          console.log('页面加载完成，内存使用:', {
+            used: `${Math.round(memoryUsage.usedJSHeapSize! / 1024 / 1024)}MB`,
+            total: `${Math.round(memoryUsage.totalJSHeapSize! / 1024 / 1024)}MB`
+          })
+        }
+      }
+    }, 2000)
+
+    // 注册清理函数
+    addCleanup(() => {
+      clearTimeout(loadingTimeout)
+    })
+  }, [getMemoryUsage, addCleanup])
 
 
 
@@ -595,24 +631,33 @@ function PageContent() {
   }
 
   return (
-    <EasterEggManager>
-      <div
-        className="min-h-screen relative bg-enhanced"
-      style={{
-        color: "#e8edf6",
-        fontFamily:
-          '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
-      }}
-    >
-      <AuroraBackground className="fixed inset-0 z-0" />
-      <Particles
-        count={80}
-        className="fixed inset-0 z-0"
-        interactive={true}
-        colors={["#60a5fa", "#22c55e", "#f59e0b", "#fb7185", "#a78bfa"]}
-      />
-      <FloatingElements count={15} className="fixed inset-0 z-0" />
-      <MeteorShower count={8} className="fixed inset-0 z-0" />
+    <ComponentLoader>
+      <EasterEggManager>
+        <div
+          className="min-h-screen relative bg-enhanced"
+        style={{
+          color: "#e8edf6",
+          fontFamily:
+            '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
+        }}
+      >
+      <ComponentLoader>
+        <AuroraBackground className="fixed inset-0 z-0" />
+      </ComponentLoader>
+      <ComponentLoader>
+        <Particles
+          count={60} // 减少粒子数量以降低内存占用
+          className="fixed inset-0 z-0"
+          interactive={true}
+          colors={["#60a5fa", "#22c55e", "#f59e0b", "#fb7185", "#a78bfa"]}
+        />
+      </ComponentLoader>
+      <ComponentLoader>
+        <FloatingElements count={10} className="fixed inset-0 z-0" />
+      </ComponentLoader>
+      <ComponentLoader>
+        <MeteorShower count={5} className="fixed inset-0 z-0" />
+      </ComponentLoader>
       {/* </CHANGE> */}
 
       {/* Header */}
@@ -626,13 +671,18 @@ function PageContent() {
       >
         <div className="max-w-[1180px] mx-auto px-4">
           <nav className="flex items-center justify-between h-[68px]">
-            <AnimatedBeam delay={0.2}>
-              <a href="#top" className="flex items-center gap-3 text-white no-underline">
-                <img
+            <ComponentLoader>
+              <AnimatedBeam delay={0.2}>
+                <a href="#top" className="flex items-center gap-3 text-white no-underline">
+                <OptimizedImage
                   src="/logo.png"
                   alt="Logo"
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-xl object-cover"
-                  style={{ boxShadow: "0 0 0 3px rgba(255,255,255,.08) inset" }}
+                  priority={true}
+                  quality={80}
+                  unoptimized={true}
                 />
                 <h1
                   className="m-0 font-semibold text-lg tracking-wide"
@@ -642,8 +692,9 @@ function PageContent() {
                 >
                   弹弹堂 · 今夕公会
                 </h1>
-              </a>
-            </AnimatedBeam>
+                </a>
+              </AnimatedBeam>
+            </ComponentLoader>
 
             <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
               {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "攻略墙"].map((item, index) => {
@@ -696,8 +747,9 @@ function PageContent() {
           <FloatingElements count={8} className="absolute inset-0 z-0" />
 
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-7 items-center relative z-10">
-            <AnimatedBeam delay={0.5}>
-              <div
+            <ComponentLoader>
+              <AnimatedBeam delay={0.5}>
+                <div
                 className="p-6 rounded-2xl border relative"
                 style={{
                   background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
@@ -782,11 +834,13 @@ function PageContent() {
                     </AnimatedBeam>
                   ))}
                 </div>
-              </div>
-            </AnimatedBeam>
+                </div>
+              </AnimatedBeam>
+            </ComponentLoader>
 
-            <AnimatedBeam delay={0.8}>
-              <Sparkles density={12}>
+            <ComponentLoader>
+              <AnimatedBeam delay={0.8}>
+                <Sparkles density={8}>
                 <div
                   className="relative rounded-2xl overflow-hidden border aspect-[4/3]"
                   style={{
@@ -832,57 +886,68 @@ function PageContent() {
                     }}
                   />
                 </div>
-              </Sparkles>
-            </AnimatedBeam>
+                </Sparkles>
+              </AnimatedBeam>
+            </ComponentLoader>
           </div>
         </section>
 
-        <AnimatedBeam delay={1.0}>
-          <section id="info-tabs" className="py-9 relative">
-            <MeteorShower count={3} className="absolute inset-0 z-0" />
+        <ComponentLoader>
+          <AnimatedBeam delay={1.0}>
+            <section id="info-tabs" className="py-9 relative">
+              <ComponentLoader>
+                <MeteorShower count={3} className="absolute inset-0 z-0" />
+              </ComponentLoader>
 
-            <div
-              className="p-6 rounded-2xl border relative z-10"
-              style={{
-                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                borderColor: "rgba(255,255,255,.1)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-              }}
-            >
-              <Tabs tabs={infoTabs} defaultTab="about" />
-            </div>
-          </section>
-        </AnimatedBeam>
-
-        {/* Management Team Section with Enhanced Marquee */}
-        <AnimatedBeam delay={1.0}>
-          <section id="members" className="py-9 relative">
-            <div
-              className="p-6 rounded-2xl border relative"
-              style={{
-                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                borderColor: "rgba(255,255,255,.1)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-              }}
-            >
-              <Particles
-                count={15}
-                className="absolute inset-0 rounded-2xl"
-                size={[1, 2]}
-                colors={["#60a5fa60", "#22c55e60", "#f59e0b60"]}
-              />
-
-              <h3
-                className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+              <div
+                className="p-6 rounded-2xl border relative z-10"
                 style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+                  borderColor: "rgba(255,255,255,.1)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
                 }}
               >
-⭐ 管理团队
-              </h3>
+                <ComponentLoader>
+                  <Tabs tabs={infoTabs} defaultTab="about" />
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
 
-              <Marquee className="py-4 relative z-10" pauseOnHover>
-                {managementTeam.map((member) => (
+        {/* Management Team Section with Enhanced Marquee */}
+        <ComponentLoader>
+          <AnimatedBeam delay={1.0}>
+            <section id="members" className="py-9 relative">
+              <div
+                className="p-6 rounded-2xl border relative"
+                style={{
+                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+                  borderColor: "rgba(255,255,255,.1)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+                }}
+              >
+                <ComponentLoader>
+                  <Particles
+                    count={10}
+                    className="absolute inset-0 rounded-2xl"
+                    size={[1, 2]}
+                    colors={["#60a5fa60", "#22c55e60", "#f59e0b60"]}
+                  />
+                </ComponentLoader>
+
+                <h3
+                  className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                  style={{
+                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                  }}
+                >
+⭐ 管理团队
+                </h3>
+
+                <ComponentLoader>
+                  <Marquee className="py-4 relative z-10" pauseOnHover>
+                    {managementTeam.map((member) => (
                   <div
                     key={member.id}
                     className="flex items-center gap-[10px] p-3 rounded-xl mx-4 min-w-[280px] hover:scale-105 transition-transform"
@@ -891,10 +956,12 @@ function PageContent() {
                       border: "1px solid rgba(255,255,255,.08)",
                     }}
                   >
-                    <img
+                    <AvatarImage
                       src={member.avatar || "/placeholder.svg"}
                       alt={member.name}
-                      className="w-9 h-9 rounded-full object-cover"
+                      size={36}
+                      fallbackText={member.name}
+                      loading="lazy"
                     />
                     <div>
                       <div className="font-semibold">{member.name}</div>
@@ -903,96 +970,120 @@ function PageContent() {
                       </div>
                     </div>
                   </div>
-                ))}
-              </Marquee>
-            </div>
-          </section>
-        </AnimatedBeam>
+                    ))}
+                  </Marquee>
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
 
-        <AnimatedBeam delay={1.4}>
-          <section id="roster" className="py-9 relative">
-            <AuroraBackground className="absolute inset-0 z-0 opacity-30" />
+        <ComponentLoader>
+          <AnimatedBeam delay={1.4}>
+            <section id="roster" className="py-9 relative">
+              <ComponentLoader>
+                <AuroraBackground className="absolute inset-0 z-0 opacity-30" />
+              </ComponentLoader>
 
-            <h3
-              className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
-              style={{
-                fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-              }}
-            >
+              <h3
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                style={{
+                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                }}
+              >
 <Icon name="image" className="inline" size={16} /> 成员展示
-            </h3>
-            <div
-              className="p-6 rounded-2xl border relative z-10"
-              style={{
-                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                borderColor: "rgba(255,255,255,.1)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-              }}
-            >
-              <Carousel3D members={carouselMembers} />
-            </div>
-          </section>
-        </AnimatedBeam>
+              </h3>
+              <div
+                className="p-6 rounded-2xl border relative z-10"
+                style={{
+                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+                  borderColor: "rgba(255,255,255,.1)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+                }}
+              >
+                <ComponentLoader>
+                  <Carousel3D members={carouselMembers} />
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
 
-        <AnimatedBeam delay={1.6}>
-          <section id="members-page" className="py-9 relative">
-            <h3
-              className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10"
-              style={{
-                fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-              }}
-            >
+        <ComponentLoader>
+          <AnimatedBeam delay={1.6}>
+            <section id="members-page" className="py-9 relative">
+              <h3
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10"
+                style={{
+                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                }}
+              >
 👥 公会成员列表
-            </h3>
-            <div
-              className="p-6 rounded-2xl border relative z-10"
-              style={{
-                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                borderColor: "rgba(255,255,255,.1)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-              }}
-            >
-              <MemberGrid members={allMembers} />
-            </div>
-          </section>
-        </AnimatedBeam>
+              </h3>
+              <div
+                className="p-6 rounded-2xl border relative z-10"
+                style={{
+                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+                  borderColor: "rgba(255,255,255,.1)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+                }}
+              >
+                <ComponentLoader>
+                  <MemberGrid members={allMembers} />
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
 
         {/* 签到功能区域 */}
-        <AnimatedBeam delay={1.0}>
-          <section id="checkin" className="py-9 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <CheckinWidget />
-              <LeaderboardWidget />
-            </div>
-          </section>
-        </AnimatedBeam>
+        <ComponentLoader>
+          <AnimatedBeam delay={1.0}>
+            <section id="checkin" className="py-9 relative">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <ComponentLoader>
+                  <CheckinWidget />
+                </ComponentLoader>
+                <ComponentLoader>
+                  <LeaderboardWidget />
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
 
-        <AnimatedBeam delay={1.2}>
-          <MessageWall />
-        </AnimatedBeam>
+        <ComponentLoader>
+          <AnimatedBeam delay={1.2}>
+            <MessageWall />
+          </AnimatedBeam>
+        </ComponentLoader>
 
-        <AnimatedBeam delay={1.8}>
-          <section id="faq" className="py-9 relative">
-            <h3
-              className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
-              style={{
-                fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-              }}
-            >
+        <ComponentLoader>
+          <AnimatedBeam delay={1.8}>
+            <section id="faq" className="py-9 relative">
+              <h3
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                style={{
+                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                }}
+              >
 ❓ 常见问题
-            </h3>
-            <div
-              className="p-6 rounded-2xl border relative z-10"
-              style={{
-                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                borderColor: "rgba(255,255,255,.1)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-              }}
-            >
-              <Accordion items={faqItems} />
-            </div>
-          </section>
-        </AnimatedBeam>
+              </h3>
+              <div
+                className="p-6 rounded-2xl border relative z-10"
+                style={{
+                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
+                  borderColor: "rgba(255,255,255,.1)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
+                }}
+              >
+                <ComponentLoader>
+                  <Accordion items={faqItems} />
+                </ComponentLoader>
+              </div>
+            </section>
+          </AnimatedBeam>
+        </ComponentLoader>
       </main>
 
       {/* Footer */}
@@ -1110,16 +1201,19 @@ function PageContent() {
       </Modal>
 
       {/* 攻略墙弹窗 */}
-      <StrategyWall
-        isOpen={isStrategyWallOpen}
-        onClose={() => setIsStrategyWallOpen(false)}
-      />
+      <ComponentLoader>
+        <StrategyWall
+          isOpen={isStrategyWallOpen}
+          onClose={() => setIsStrategyWallOpen(false)}
+        />
+      </ComponentLoader>
 
 
 
 
-      </div>
-    </EasterEggManager>
+        </div>
+      </EasterEggManager>
+    </ComponentLoader>
   )
 }
 
@@ -1144,7 +1238,11 @@ export default function Page() {
   }
 
   if (showIntroPage) {
-    return <IntroPage onComplete={handleIntroComplete} />
+    return (
+      <ComponentLoader>
+        <IntroPage onComplete={handleIntroComplete} />
+      </ComponentLoader>
+    )
   }
 
   return (

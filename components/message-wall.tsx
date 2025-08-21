@@ -1,15 +1,17 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo, memo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "../lib/utils"
 import { Message, Reply, Reaction } from "../types/message-wall"
 import * as backendAPI from "../services/message-wall-backend"
 import { ImageUpload } from "./ui/image-upload"
 import { AdminPasswordDialog } from "./ui/admin-password-dialog"
+import { OptimizedImage } from "./ui/optimized-image"
 import { Icon, RefreshIcon, SendIcon, CloseIcon } from "./ui/icons"
 
-export function MessageWall({ className }: { className?: string }) {
+// 使用memo优化组件渲染性能
+export const MessageWall = memo(function MessageWall({ className }: { className?: string }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -47,8 +49,8 @@ export function MessageWall({ className }: { className?: string }) {
     }
   }, [])
 
-  // 加载留言数据
-  const loadMessages = async () => {
+  // 加载留言数据 - 使用useCallback优化
+  const loadMessages = useCallback(async () => {
     try {
       setIsLoading(true)
       const data = await backendAPI.getMessages()
@@ -59,7 +61,7 @@ export function MessageWall({ className }: { className?: string }) {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     loadMessages()
@@ -222,22 +224,25 @@ export function MessageWall({ className }: { className?: string }) {
     setImageModalOpen(true)
   }
 
-  // 过滤消息
-  const filteredMessages = messages.filter(message => {
-    if (activeFilter === 'all') return true
-    return message.category === activeFilter
-  })
+  // 过滤消息 - 使用useMemo优化
+  const filteredMessages = useMemo(() => {
+    return messages.filter(message => {
+      if (activeFilter === 'all') return true
+      return message.category === activeFilter
+    })
+  }, [messages, activeFilter])
 
-  // 分类选项
-  const categories = [
+  // 使用useMemo优化常量数组
+  const reactions = useMemo(() => ['👍', '❤️', '😂', '😮', '😢', '😡'], [])
+  
+  // 使用useMemo优化分类数组
+  const categories = useMemo(() => [
     { value: 'all', label: '全部', icon: 'ri-list-check' },
     { value: '闲聊', label: '闲聊', icon: 'ri-chat-3-line' },
     { value: '公告', label: '公告', icon: 'ri-megaphone-line' },
     { value: '提醒', label: '提醒', icon: 'ri-alarm-line' },
     { value: '求助', label: '求助', icon: 'ri-question-line' }
-  ]
-
-  const reactions = ['👍', '❤️', '😂', '😮', '😢', '😡']
+  ], [])
 
   if (isLoading) {
     return (
@@ -479,14 +484,19 @@ export function MessageWall({ className }: { className?: string }) {
                         {message.content}
                       </div>
 
-                      {/* 图片展示 */}
+                      {/* 图片展示 - 使用优化的图片组件 */}
                       {message.imageUrl && (
                         <div className="mb-4">
-                          <img
+                          <OptimizedImage
                             src={message.imageUrl}
                             alt="Attached image"
+                            width={400}
+                            height={300}
                             className="max-w-full h-auto rounded-lg cursor-pointer hover:scale-105 transition-transform border border-white/20 hover-effect"
                             onClick={() => openImageModal(message.imageUrl!)}
+                            loading="lazy"
+                            quality={75}
+                            sizes="(max-width: 768px) 100vw, 400px"
                           />
                         </div>
                       )}
@@ -593,10 +603,15 @@ export function MessageWall({ className }: { className?: string }) {
           onClick={() => setImageModalOpen(false)}
         >
           <div className="relative max-w-4xl max-h-full">
-            <img
+            <OptimizedImage
               src={selectedImage}
               alt="预览"
+              width={800}
+              height={600}
               className="max-w-full max-h-full object-contain rounded-lg"
+              quality={85}
+              sizes="(max-width: 768px) 100vw, 800px"
+              priority={true}
             />
             <button
               onClick={() => setImageModalOpen(false)}
@@ -625,4 +640,7 @@ export function MessageWall({ className }: { className?: string }) {
       />
     </section>
   )
-}
+})
+
+// 设置组件显示名称
+MessageWall.displayName = 'MessageWall'

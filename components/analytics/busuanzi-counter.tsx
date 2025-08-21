@@ -18,16 +18,23 @@ const BusuanziCounter: React.FC<BusuanziCounterProps> = ({
   const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
-    // 检查是否为开发环境
+    // 检查是否为开发环境 - 更精确的检测逻辑
     const isDev = typeof window !== 'undefined' && 
       (window.location.hostname === 'localhost' || 
        window.location.hostname === '127.0.0.1' ||
-       window.location.port !== '')
+       window.location.hostname.includes('127.0.0.1') ||
+       (window.location.port && ['3000', '3001', '8080', '8000', '5000'].includes(window.location.port)))
 
-    if (typeof window === 'undefined' || isDev) {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    if (isDev) {
       console.log('🔧 开发环境，跳过不蒜子加载')
       return
     }
+
+    console.log('🚀 生产环境，开始加载不蒜子统计...')
 
     // 加载不蒜子统计脚本
     const loadBusuanzi = () => {
@@ -40,7 +47,7 @@ const BusuanziCounter: React.FC<BusuanziCounterProps> = ({
 
       const script = document.createElement('script')
       script.id = 'busuanzi-script'
-      script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
+      script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
       script.async = true
       
       script.onload = () => {
@@ -74,8 +81,8 @@ const BusuanziCounter: React.FC<BusuanziCounterProps> = ({
         checkCount++
         
         if (siteUvElement && sitePvElement && 
-            siteUvElement.textContent && siteUvElement.textContent !== '' &&
-            sitePvElement.textContent && sitePvElement.textContent !== '') {
+            siteUvElement.textContent && siteUvElement.textContent !== '' && siteUvElement.textContent !== '0' &&
+            sitePvElement.textContent && sitePvElement.textContent !== '' && sitePvElement.textContent !== '0') {
           
           // 同步数据到显示元素
           syncDataToDisplay(siteUvElement.textContent, sitePvElement.textContent)
@@ -87,7 +94,12 @@ const BusuanziCounter: React.FC<BusuanziCounterProps> = ({
           setDataReady(true)
           clearInterval(dataChecker)
         } else if (checkCount >= maxChecks) {
-          console.warn('⚠️ 不蒜子数据检查超时')
+          console.warn('⚠️ 不蒜子数据检查超时', {
+            uv: siteUvElement?.textContent || 'null',
+            pv: sitePvElement?.textContent || 'null',
+            uvElement: !!siteUvElement,
+            pvElement: !!sitePvElement
+          })
           setDataReady(true) // 即使数据未准备好，也停止加载状态
           clearInterval(dataChecker)
         }
@@ -116,11 +128,12 @@ const BusuanziCounter: React.FC<BusuanziCounterProps> = ({
     }
   }, [retryCount])
 
-  // 开发环境显示占位符
+  // 开发环境显示占位符 - 更精确的检测逻辑
   const isDev = typeof window !== 'undefined' && 
     (window.location.hostname === 'localhost' || 
      window.location.hostname === '127.0.0.1' ||
-     window.location.port !== '')
+     window.location.hostname.includes('127.0.0.1') ||
+     (window.location.port && ['3000', '3001', '8080', '8000', '5000'].includes(window.location.port)))
 
   if (isDev) {
     return (

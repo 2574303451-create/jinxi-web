@@ -8,6 +8,8 @@ import { sendRecruitmentEmail, RecruitmentData } from "../components/email-servi
 import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
+import VisitCounter from "../components/analytics/visit-counter"
+import { trackEvent } from "../components/analytics/baidu-analytics"
 
 // 动态导入重型组件以减少初始内存占用
 const Marquee = lazy(() => import("../components/magicui/marquee").then(module => ({ default: module.Marquee })))
@@ -94,6 +96,8 @@ function PageContent() {
       )
 
       if (result.success) {
+        // 追踪表单提交成功事件
+        trackEvent('form', 'submit_success', 'guild_application')
         // 清空表单
         setFormData({
           nickname: '',
@@ -587,6 +591,8 @@ function PageContent() {
   const handleJoinClick = () => {
     setIsModalOpen(true)
     toast.addToast("欢迎加入今夕公会！", "success")
+    // 追踪加入按钮点击事件
+    trackEvent('button', 'click', 'join_guild')
   }
 
   useEffect(() => {
@@ -1089,9 +1095,12 @@ function PageContent() {
       {/* Footer */}
       <footer className="text-center py-4 relative z-10">
         <div className="max-w-[1180px] mx-auto px-4">
-          <p>
-            © <span id="y">2018</span> 今夕公会
-          </p>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-white/80">
+              © <span id="y">2018</span> 今夕公会
+            </p>
+            <VisitCounter showDetail={false} />
+          </div>
         </div>
       </footer>
 

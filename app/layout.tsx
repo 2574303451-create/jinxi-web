@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import SecurityProvider from '../components/security/security-provider'
+import BaiduAnalytics from '../components/analytics/baidu-analytics'
 
 export const metadata: Metadata = {
   title: '弹弹堂-今夕公会官网',
@@ -72,6 +73,7 @@ html {
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <SecurityProvider>
+          <BaiduAnalytics />
           {children}
         </SecurityProvider>
       </body>

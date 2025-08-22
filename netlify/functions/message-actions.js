@@ -29,9 +29,13 @@ exports.handler = async (event) => {
     }
 
     // 验证管理密码（用于删除和置顶操作）
-    const ADMIN_PASSWORD = '今夕我爱你';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'defaultTempPassword123!';
     const verifyAdminPassword = (inputPassword) => {
-      return inputPassword === ADMIN_PASSWORD;
+      // 添加密码哈希验证（简化版本）
+      const crypto = require('crypto');
+      const hashedInput = crypto.createHash('sha256').update(inputPassword).digest('hex');
+      const hashedAdmin = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
+      return hashedInput === hashedAdmin;
     };
 
     if (action === 'reply') {

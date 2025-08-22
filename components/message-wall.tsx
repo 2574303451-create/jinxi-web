@@ -162,15 +162,16 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
     }
   }
 
-  // 验证管理密码
+  // 验证管理密码 - 现在在后端验证
   const verifyAdminPassword = (password: string): boolean => {
-    return password === '今夕我爱你'
+    // 前端不再验证密码，所有验证都在后端进行
+    return password && password.trim().length > 0
   }
 
   // 处理管理密码验证
   const handleAdminAction = async (password: string) => {
     if (!verifyAdminPassword(password)) {
-      throw new Error('密码错误，请重试')
+      throw new Error('请输入有效密码')
     }
 
     if (!pendingAction) return

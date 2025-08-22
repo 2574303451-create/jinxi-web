@@ -1,12 +1,17 @@
 // netlify/functions/strategy-actions.js - 攻略操作API
 const { neon } = require('@neondatabase/serverless');
 
-// 管理密码（与留言墙相同）
-const ADMIN_PASSWORD = "今夕我爱你";
+// 管理密码（从环境变量获取）
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'defaultTempPassword123!';
 
 // 验证管理员密码
 function verifyAdminPassword(password) {
-  return password === ADMIN_PASSWORD;
+  if (!password) return false;
+  // 添加密码哈希验证
+  const crypto = require('crypto');
+  const hashedInput = crypto.createHash('sha256').update(password).digest('hex');
+  const hashedAdmin = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
+  return hashedInput === hashedAdmin;
 }
 
 exports.handler = async (event) => {

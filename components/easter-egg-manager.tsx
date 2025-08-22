@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
-import { AnniversaryEasterEgg } from './anniversary-easter-egg'
+// 神秘探索彩蛋管理器 - 全新设计
 
 interface EasterEggManagerProps {
   children: React.ReactNode
@@ -9,7 +9,7 @@ interface EasterEggManagerProps {
 
 // 创意彩蛋类型定义
 interface CreativeEasterEgg {
-  type: 'developer' | 'invisible' | 'fullscreen' | 'title' | 'scroll'
+  type: 'observation' | 'invisible' | 'fullscreen' | 'title' | 'scroll' | 'detective'
   title: string
   message: string
   icon: string
@@ -35,18 +35,12 @@ interface EasterEggRecord {
 }
 
 export function EasterEggManager({ children }: EasterEggManagerProps) {
-  const [showAnniversary, setShowAnniversary] = useState(false)
   const [showCreativeEgg, setShowCreativeEgg] = useState<CreativeEasterEgg | null>(null)
-  const [logoClickCount, setLogoClickCount] = useState(0)
   const [keySequence, setKeySequence] = useState('')
   
   // 创意彩蛋相关状态
   const [isVideoFullscreen, setIsVideoFullscreen] = useState(false)
-  const [devToolsOpen, setDevToolsOpen] = useState(false)
   const [forceProgressBarUpdate, setForceProgressBarUpdate] = useState(0)
-  const [isPageVisible, setIsPageVisible] = useState(true)
-  const [scrollCount, setScrollCount] = useState(0)
-  const [scrollTimer, setScrollTimer] = useState<NodeJS.Timeout | null>(null)
   const [sidebarForceVisible, setSidebarForceVisible] = useState(true)
   const sidebarRef = useRef<HTMLDivElement>(null)
   
@@ -56,19 +50,150 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [easterEggRecords, setEasterEggRecords] = useState<EasterEggRecord[]>([])
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   
-  // 安全检查彩蛋是否已发现的辅助函数
-  const safeCheckEggDiscovered = (eggId: string): boolean => {
+  // 🗺️ 地图连接彩蛋状态
+  const [showMapChallenge, setShowMapChallenge] = useState(false)
+  const [mapConnections, setMapConnections] = useState<Array<{from: number, to: number}>>([])
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null)
+  const [isDrawingConnection, setIsDrawingConnection] = useState(false)
+  
+  // 🔐 加密工具函数
+  const encryptData = (data: string): string => {
+    return btoa(encodeURIComponent(data))
+      .split('').reverse().join('')
+      .replace(/[A-Za-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) + (c <= 'Z' ? 13 : 13)))
+  }
+  
+  const decryptData = (encrypted: string): string => {
     try {
-      const saved = localStorage.getItem('jinxi-easter-eggs')
+      const reversed = encrypted
+        .replace(/[A-Za-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) - (c <= 'Z' ? 13 : 13)))
+        .split('').reverse().join('')
+      const decoded = decodeURIComponent(Buffer.from(reversed, 'base64').toString())
+      return decoded
+    } catch (error) {
+      // 使用浏览器兼容的方式
+      const reversed = encrypted
+        .replace(/[A-Za-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) - (c <= 'Z' ? 13 : 13)))
+        .split('').reverse().join('')
+      return decodeURIComponent(atob(reversed))
+    }
+  }
+  
+  const obfuscateKey = (key: string): string => {
+    return 'jx_' + btoa(key).replace(/[=+/]/g, (c) => ({
+      '=': '_e',
+      '+': '_p',
+      '/': '_s'
+    })[c] || c)
+  }
+  
+  // 地图上的头像位置数据（基于提供的地图图片）
+  const mapAvatars = [
+    { id: 0, x: 45, y: 25, region: '内蒙古', avatar: '👨‍💻' },
+    { id: 1, x: 65, y: 35, region: '河北', avatar: '👩‍🎨' },
+    { id: 2, x: 25, y: 45, region: '宁夏', avatar: '👦' },
+    { id: 3, x: 35, y: 50, region: '陕西', avatar: '🧑‍💼' },
+    { id: 4, x: 50, y: 60, region: '湖北', avatar: '👧' },
+    { id: 5, x: 75, y: 55, region: '江苏', avatar: '👨‍🔬' },
+    { id: 6, x: 80, y: 75, region: '浙江', avatar: '👩‍🏫' },
+    { id: 7, x: 25, y: 75, region: '四川', avatar: '🧑‍🎓' },
+    { id: 8, x: 50, y: 85, region: '广西', avatar: '👨‍🎤' },
+    { id: 9, x: 60, y: 95, region: '广东', avatar: '👩‍⚕️' }
+  ]
+  
+  // 🗺️ 地图连接相关函数
+  const handleAvatarClick = (avatarId: number) => {
+    if (!showMapChallenge) return
+    
+    if (selectedAvatar === null) {
+      // 选择第一个头像
+      setSelectedAvatar(avatarId)
+      setIsDrawingConnection(true)
+    } else if (selectedAvatar !== avatarId) {
+      // 连接两个头像
+      const newConnection = { from: selectedAvatar, to: avatarId }
+      const reverseConnection = { from: avatarId, to: selectedAvatar }
+      
+      // 检查是否已经存在这个连接
+      const connectionExists = mapConnections.some(conn => 
+        (conn.from === newConnection.from && conn.to === newConnection.to) ||
+        (conn.from === newConnection.to && conn.to === newConnection.from)
+      )
+      
+      if (!connectionExists) {
+        const updatedConnections = [...mapConnections, newConnection]
+        setMapConnections(updatedConnections)
+        
+        // 检查是否完成挑战
+        _0x3d7f(updatedConnections)
+      }
+      
+      setSelectedAvatar(null)
+      setIsDrawingConnection(false)
+    } else {
+      // 取消选择
+      setSelectedAvatar(null)
+      setIsDrawingConnection(false)
+    }
+  }
+  
+  const _0x3d7f = (connections: Array<{from: number, to: number}>) => {
+    // 检查连接是否足够（需要连接至少6个头像，形成网络）
+    const connectedAvatars = new Set<number>()
+    connections.forEach(conn => {
+      connectedAvatars.add(conn.from)
+      connectedAvatars.add(conn.to)
+    })
+    
+    if (connectedAvatars.size >= 6 && connections.length >= 5) {
+      // 成功完成地图连接挑战
+      setTimeout(() => {
+        setShowMapChallenge(false)
+        setMapConnections([])
+        
+        triggerCreativeEgg({
+          type: 'observation',
+          title: '🗺️ 以战会友缔造者',
+          message: '你成功连接了全国各地的今夕伙伴！以战会友，彼此成就的理念将我们紧密相连！',
+          icon: '🗺️'
+        }, 'legend-awakener')
+        
+        createMapConnectionEffect()
+        showToast('🗺️ 以战会友！你连接了分散各地的今夕伙伴！', 'success')
+      }, 1000)
+    }
+  }
+  
+  const _0x8a4c = () => {
+    if (_0x5c1d('legend-awakener')) {
+      showToast('你已经发现过这个彩蛋了！', 'info')
+      return
+    }
+    
+    setShowMapChallenge(true)
+    setMapConnections([])
+    setSelectedAvatar(null)
+    showToast('🗺️ 发现神秘地图！连接各地的今夕伙伴吧！', 'info')
+  }
+  
+  // 安全检查彩蛋是否已发现的辅助函数
+  const _0x5c1d = (eggId: string): boolean => {
+    try {
+      const storageKey = obfuscateKey('progress-data')
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
-        const parsedRecords = JSON.parse(saved)
+        const decryptedData = decryptData(saved)
+        const parsedRecords = JSON.parse(decryptedData)
         const egg = parsedRecords.find((egg: EasterEggRecord) => egg.id === eggId)
         if (egg?.discovered) {
           return true
         }
       }
     } catch (error) {
-      console.warn(`检查彩蛋 ${eggId} 状态时出错:`, error)
+      // 静默处理错误，避免暴露调试信息
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`状态检查异常:`, error)
+      }
     }
     
     // 备用检查：使用当前状态
@@ -79,22 +204,28 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   // 数据完整性验证和恢复函数
   const validateAndRestoreData = () => {
     try {
-      const saved = localStorage.getItem('jinxi-easter-eggs')
+      const storageKey = obfuscateKey('progress-data')
+      const saved = localStorage.getItem(storageKey)
       if (!saved) return
       
-      const parsedRecords = JSON.parse(saved)
+      const decryptedData = decryptData(saved)
+      const parsedRecords = JSON.parse(decryptedData)
       const discoveredEggs = parsedRecords.filter((r: EasterEggRecord) => r.discovered)
       
-      console.log('🔍 数据完整性检查:', {
-        保存的记录数: parsedRecords.length,
-        已发现彩蛋数: discoveredEggs.length,
-        当前状态记录数: easterEggRecords.length,
-        当前已发现数: easterEggRecords.filter(e => e.discovered).length
-      })
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 数据完整性检查:', {
+          保存的记录数: parsedRecords.length,
+          已发现彩蛋数: discoveredEggs.length,
+          当前状态记录数: easterEggRecords.length,
+          当前已发现数: easterEggRecords.filter(e => e.discovered).length
+        })
+      }
       
       // 如果保存的数据中有更多已发现的彩蛋，恢复它们
       if (discoveredEggs.length > easterEggRecords.filter(e => e.discovered).length) {
-        console.log('🔄 检测到数据不一致，恢复localStorage中的数据')
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔄 检测到数据不一致，恢复存储的数据')
+        }
         const restoredRecords = easterEggDefinitions.map(def => {
           const savedRecord = parsedRecords.find((r: EasterEggRecord) => r.id === def.id)
           return savedRecord && savedRecord.discovered ? savedRecord : def
@@ -103,96 +234,89 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         return true
       }
     } catch (error) {
-      console.warn('数据验证时出错:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('数据验证时出错:', error)
+      }
     }
     return false
   }
   
-  // 彩蛋定义
-  const easterEggDefinitions: EasterEggRecord[] = [
-    {
-      id: 'keyboard',
-      name: '键盘彩蛋',
-      description: '在页面任意位置输入 "JINXI7"',
-      icon: '🔤',
-      discovered: false
-    },
-    {
-      id: 'click',
-      name: '点击彩蛋',
-      description: '快速点击Logo 7次',
-      icon: '🎯',
-      discovered: false
-    },
-    {
-      id: 'fullscreen',
-      name: '全屏视频彩蛋',
-      description: '全屏观看今夕宣传视频',
-      icon: '📺',
-      discovered: false
-    },
-    {
-      id: 'developer',
-      name: '开发者彩蛋',
-      description: '打开浏览器开发者工具(F12)',
-      icon: '🛠️',
-      discovered: false
-    },
-    {
-      id: 'title',
-      name: '双击魔法彩蛋',
-      description: '快速双击页面背景空白区域',
-      icon: '✨',
-      discovered: false
-    },
-    {
-      id: 'invisible',
-      name: '商标点击彩蛋',
-      description: '点击页面底部的今夕商标',
-      icon: '🔍',
-      discovered: false
-    },
-    {
-      id: 'scroll',
-      name: '滚轮狂热彩蛋',
-      description: '在2秒内连续滚动鼠标滚轮20次',
-      icon: '🎡',
-      discovered: false
-    }
+  // 🔐 加密的探索数据
+  const _0x4a5b = [
+    '0VbWQWbW0bbW5xaWQWbW0bbW1xaW0RbW1bbWOuaWPWbW0bbW0taWOyaW3bbWVbWQyaW1bbW0taWxaW1bbWRWbWPyaW1bbW4RbW1taW1bbW1RbWSuaW2bbWSyaWTWbW4bbWQqaW1taWtaW4bbWRbWtaW5bbW0xaWQWbW3bbWPuaWTuaW1bbWOyaWQWbW0bbW4xaW4taW2bbW1RbWPWbW0bbW',
+    'taWRbW3bbW2taWTSbW1bbW2RbWQSbW3bbW3xaWRSbW1bbW0taWOyaW3bbWTuaW3xaW4bbWxaWOyaW5bbWRbW3RbW4bbW0VbWRbW3bbWQqaW4taW4VbW1bbWxaWTSbW4bbW0VbWRbW3bbWtaWRbW3bbW2taWTSbW1bbW',
+    '3xaWRSbW1bbW0RbW4VbW0bbW1xaW0RbW1bbWOuaWPWbW0bbW5xaW2taW1bbW2RbW5VbW0bbW3taWRbW2bbWRbWQWbW5bbW4RbW0xaW3bbWQqaW2VbWSSbW1bbW1xaWVbW2bbW2RbW5VbW0bbW1xaW0RbW1bbWOuaWPWbW0bbW',
+    'RbWPSbW3bbWxaW5VbW0bbWTuaW3xaW4bbWxaWOyaW5bbWTuaW1RbW1bbW0xaWQWbW2bbW4xaWPyaW3bbWSSbW0xaW5bbW4RbW0xaW3bbWQqaW2VbWSSbW1bbWVbWPyaW2bbWQyaWRWbW0bbWPuaWSWbW1bbWPuaW3xaW2bbW',
+    '2taWTSbW1bbW4xaW3RbW3bbWVbWRWbW1bbW5taW1taW1bbWVbWSuaW3bbWxaWTuaW1bbWPWbW4taW1bbW2VbW3xaW2bbWOyaWSSbW1bbW5VbW5taW3bbW4RbWQyaW1bbWQqaWPuaW5taW2bbWSuaWQuaW3bbWVbWRWbW1bbW5taW1taW1bbW',
+    '4xaW3RbW3bbW1RbW1RbW1bbW0taWOyaW3bbW4xaWRbW5bbWQyaWVbW4bbW3xaWRSbW1bbWVbW1xaW2bbWtaWQWbW1bbWRbW3RbW4bbWQqaW4taW4VbW1bbW1xaWVbW2bbW2RbWRSbW1bbWVbW1xaW2bbW',
+    'TSbWTuaW1bbW0RbWSSbW4bbW3xaWSWbW1bbW3VbWSuaW4bbW4xaW4taW2bbWxaWQuaW2bbW2taWTWbW1bbWVbWSSbW4bbW3taWTWbW4bbWOyaWtaW5bbWQqaW1taWtaW4bbW0RbWOuaW2bbW4taWSSbW1bbW2taWTWbW1bbWVbWSSbW4bbW',
+    '5xaWRyaW5bbWVbW5VbW1bbWtaWTWbW1bbW1taW2taW1bbWSWbW5taW2bbWPWbWTSbW1bbWRSbW4VbW0bbW4xaWPWbW5bbW5xaWRyaW5bbW4RbWQyaW1bbWQqaW4taW4VbW1bbW3RbW0RbW1bbWtaWTWbW1bbW1taW2RbW3bbW',
+    'TyaWTyaW1bbWOWbWQuaW1bbW2taWTSbW1bbW4xaW3RbW3bbW0taWOyaW3bbWTuaW3xaW4bbWxaWOyaW5bbWRSbW4VbW0bbWRbWRyaW5bbW1VbWRbW5bbWVbWSuaW3bbWxaWTuaW1bbWQqaW1taWtaW4bbWRbW0VbW3bbWRbWSuaW2bbW4xaW3RbW3bbWxaWOyaW5bbW',
+    '1taWtaW4bbW0VbWTSbW4bbWRbWQWbW0bbW0taWOyaW3bbWRWbWtaW4bbWtaWOuaW2bbWRbW0VbW3bbWRbWSuaW2bbW5taWQyaW2bbWtaW5taW2bbWRbWTuaW2bbWQuaWSuaW2bbWQqaW1taWtaW4bbWRyaWSSbW1bbWPWbWTSbW1bbWtaWSyaW2bbW4taWPWbW3bbW'
   ]
   
-  // 成就等级定义
+  const _0x6c8d = () => {
+    try {
+      const _0x2f1a = ['legend-awakener', 'cipher-breaker', 'geometry-artist', 'melody-composer', 'shadow-hunter', 'math-wizard', 'memory-keeper', 'patience-master', 'explorer', 'ultimate-seeker']
+      const _0x8e3b = ['🗺️', '🔐', '📐', '🎵', '🌓', '🧮', '🧠', '🧘', '🗺️', '💎']
+      
+      return _0x4a5b.map((item, index) => {
+        const decoded = decryptData(item)
+        const parts = decoded.split('|')
+        return {
+          id: _0x2f1a[index],
+          name: parts[0],
+          description: parts[1],
+          icon: _0x8e3b[index],
+          discovered: false
+        }
+      })
+    } catch {
+      // 备用数据防止解密失败
+      return Array(10).fill(0).map((_, i) => ({
+        id: `item-${i}`,
+        name: '神秘探索者',
+        description: '发现隐藏的秘密',
+        icon: '✨',
+        discovered: false
+      }))
+    }
+  }
+  
+  const easterEggDefinitions: EasterEggRecord[] = _0x6c8d()
+  
+  // 神秘探索成就等级定义
   const achievements: Achievement[] = [
     {
-      id: 'beginner',
-      name: '初级探索者',
-      description: '发现2个彩蛋',
-      icon: '🥉',
-      requiredEggs: 2,
+      id: 'novice',
+      name: '神秘学徒',
+      description: '发现3个隐藏秘密',
+      icon: '🌟',
+      requiredEggs: 3,
       level: 1
     },
     {
-      id: 'advanced',
-      name: '资深发现者',
-      description: '发现4个彩蛋',
-      icon: '🥈',
-      requiredEggs: 4,
+      id: 'seeker',
+      name: '秘密探寻者',
+      description: '发现6个神秘彩蛋',
+      icon: '🔮',
+      requiredEggs: 6,
       level: 2
     },
     {
       id: 'master',
-      name: '彩蛋大师',
-      description: '发现全部7个彩蛋',
-      icon: '🥇',
-      requiredEggs: 7,
+      name: '探索宗师',
+      description: '发现9个隐藏宝藏',
+      icon: '👑',
+      requiredEggs: 9,
       level: 3
     },
     {
       id: 'legend',
-      name: '今夕传奇',
-      description: '在单次访问中发现所有彩蛋',
+      name: '传说寻宝师',
+      description: '掌握所有神秘知识',
       icon: '🏆',
-      requiredEggs: 7,
+      requiredEggs: 10,
       level: 4
     }
   ]
@@ -212,67 +336,59 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           return saved ? { ...def, discovered: saved.discovered, discoveredAt: saved.discoveredAt } : def
         })
         setEasterEggRecords(cleanedRecords)
-        console.log('🎯 已加载彩蛋进度:', cleanedRecords)
         
-        // 数据加载后再次确保侧边栏可见
+        // 数据加载后确保侧边栏可见
         setTimeout(() => {
           setSidebarForceVisible(true)
           setForceProgressBarUpdate(prev => prev + 50)
         }, 100)
       } catch (error) {
-        console.log('🔄 重新初始化彩蛋系统')
         setEasterEggRecords(easterEggDefinitions)
         setSidebarForceVisible(true)
       }
     } else {
-      console.log('🆕 首次访问，初始化彩蛋系统')
       setEasterEggRecords(easterEggDefinitions)
       setSidebarForceVisible(true)
       
-      // 首次访问时，短暂展开侧边栏提示用户
+      // 首次访问时短暂展开侧边栏
       setTimeout(() => {
         setSidebarExpanded(true)
         setSidebarForceVisible(true)
         setTimeout(() => {
           setSidebarExpanded(false)
-          setSidebarForceVisible(true) // 即使折叠也要保持可见
-        }, 3000) // 3秒后自动折叠
-      }, 2000) // 页面加载2秒后展开
+          setSidebarForceVisible(true)
+        }, 3000)
+      }, 2000)
     }
     
-    // 额外保险：定时强制确保侧边栏可见
-    const ensureVisibility = setInterval(() => {
-      setSidebarForceVisible(true)
-    }, 5000)
-    
-    return () => clearInterval(ensureVisibility)
+    return () => {}
   }, [])
   
   // 组件更新监听器 - 确保在任何状态变化时侧边栏都保持可见
   useEffect(() => {
-    console.log('🔄 组件状态更新，确保侧边栏可见并验证数据完整性')
     setSidebarForceVisible(true)
     
     // 在状态变化时验证数据完整性
     setTimeout(() => {
       const restored = validateAndRestoreData()
       if (restored) {
-        console.log('✅ 数据已恢复')
         setForceProgressBarUpdate(prev => prev + 100)
       }
     }, 100)
   }, [showCreativeEgg, showLevelUpNotification, showAchievementPanel, isVideoFullscreen])
 
-  // 保存成就进度 - 增强版，确保数据完整性
+  // 保存成就进度 - 加密版本
   const saveProgress = (newRecords: EasterEggRecord[]) => {
     // 验证新记录的完整性
     const validRecords = newRecords.length >= easterEggDefinitions.length ? newRecords : 
       // 如果数据不完整，从localStorage读取现有数据并合并
       (() => {
         try {
-          const saved = localStorage.getItem('jinxi-easter-eggs')
+          const storageKey = obfuscateKey('progress-data')
+          const saved = localStorage.getItem(storageKey)
           if (saved) {
-            const existingRecords = JSON.parse(saved)
+            const decryptedData = decryptData(saved)
+            const existingRecords = JSON.parse(decryptedData)
             // 合并现有数据和新数据
             return easterEggDefinitions.map(def => {
               const newRecord = newRecords.find(r => r.id === def.id)
@@ -288,28 +404,39 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
             })
           }
         } catch (error) {
-          console.warn('恢复数据时出错:', error)
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('恢复数据时出错:', error)
+          }
         }
         return newRecords
       })()
     
-    console.log('💾 保存彩蛋数据:', validRecords.filter(r => r.discovered).map(r => r.name))
-    localStorage.setItem('jinxi-easter-eggs', JSON.stringify(validRecords))
+    if (process.env.NODE_ENV === 'development') {
+      console.log('💾 保存进度数据:', validRecords.filter(r => r.discovered).map(r => r.name))
+    }
+    
+    const storageKey = obfuscateKey('progress-data')
+    const encryptedData = encryptData(JSON.stringify(validRecords))
+    localStorage.setItem(storageKey, encryptedData)
     setEasterEggRecords(validRecords)
   }
 
-  // 记录彩蛋发现 - 安全版本，防止数据丢失
-  const recordEasterEggDiscovery = (eggId: string) => {
-    console.log(`🎯 开始记录彩蛋发现: ${eggId}`)
+  // 记录彩蛋发现 - 加密版本
+  const _0x9b2e = (eggId: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎯 开始记录彩蛋发现: ${eggId}`)
+    }
     
     const currentTime = new Date().toLocaleString('zh-CN')
     
     // 从localStorage获取最新数据，确保不会丢失之前的记录
     let currentRecords: EasterEggRecord[] = []
     try {
-      const saved = localStorage.getItem('jinxi-easter-eggs')
+      const storageKey = obfuscateKey('progress-data')
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
-        const parsedRecords = JSON.parse(saved)
+        const decryptedData = decryptData(saved)
+        const parsedRecords = JSON.parse(decryptedData)
         // 确保数据完整性，合并所有彩蛋定义
         currentRecords = easterEggDefinitions.map(def => {
           const existingRecord = parsedRecords.find((r: EasterEggRecord) => r.id === def.id)
@@ -319,7 +446,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         currentRecords = [...easterEggRecords]
       }
     } catch (error) {
-      console.warn('读取保存数据时出错，使用当前状态:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('读取保存数据时出错，使用当前状态:', error)
+      }
       currentRecords = [...easterEggRecords]
     }
     
@@ -330,9 +459,13 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       
       if (currentDiscoveredCount >= savedDiscoveredCount) {
         currentRecords = [...easterEggRecords]
-        console.log('🔄 使用当前状态数据（更完整）')
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔄 使用当前状态数据（更完整）')
+        }
       } else {
-        console.log('📂 使用localStorage数据（包含更多已发现彩蛋）')
+        if (process.env.NODE_ENV === 'development') {
+          console.log('📂 使用存储数据（包含更多已发现彩蛋）')
+        }
       }
     }
     
@@ -343,7 +476,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         : egg
     )
     
-    console.log(`✅ 彩蛋 ${eggId} 已标记为发现。总进度: ${updatedRecords.filter(e => e.discovered).length}/${updatedRecords.length}`)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ 彩蛋 ${eggId} 已标记为发现。总进度: ${updatedRecords.filter(e => e.discovered).length}/${updatedRecords.length}`)
+    }
     
     saveProgress(updatedRecords)
     
@@ -362,19 +497,15 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       
       // 彩蛋发现后验证数据完整性
       const restored = validateAndRestoreData()
-      if (restored) {
-        console.log('🔧 彩蛋发现后数据已自动恢复')
-      }
+
       
-      // 强制同步等级牌显示
+                // 强制同步等级牌显示
       const newAchievement = getCurrentAchievement()
-      console.log('🏆 彩蛋发现后等级同步:', newAchievement?.name || '无等级')
     }, 500)
     
-    // 额外的保险措施：延迟更长时间再次检查
+    // 额外的保险措施
     setTimeout(() => {
       validateAndRestoreData()
-      // 再次确保等级同步
       setForceProgressBarUpdate(prev => prev + 50)
     }, 2000)
   }
@@ -429,27 +560,38 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     return eligibleAchievements[0] || null
   }
 
-  // 键盘彩蛋监听器 (JINXI7)
+  // 🌟 时空守护者彩蛋 - 特殊时间触发器
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         return
       }
 
-      const key = event.key.toUpperCase()
+      const key = event.key
       const newSequence = keySequence + key
-      const trimmedSequence = newSequence.slice(-10)
+      const trimmedSequence = newSequence.slice(-15) // 增长序列以支持时间格式
       setKeySequence(trimmedSequence)
       
-      if (trimmedSequence.includes('JINXI7')) {
-        setShowAnniversary(true)
+      // 移除了原有的键盘输入机制，改为地图连接机制
+      
+      // 🔐 密码破译师彩蛋 - 输入神秘字符序列
+      if (trimmedSequence.includes('TREASURE') || trimmedSequence.includes('treasure')) {
+        if (!_0x5c1d('cipher-breaker')) {
+          triggerCreativeEgg({
+            type: 'observation',
+            title: '🔐 密码破译师',
+            message: '你破解了古老的密码！宝藏就在眼前！',
+            icon: '🔐'
+          }, 'cipher-breaker')
+          createCipherBreakEffect()
+        }
         setKeySequence('')
-        recordEasterEggDiscovery('keyboard')
-        showToast('🎉 发现键盘彩蛋！今夕7周年庆典开启！')
+        return
       }
       
-      if (trimmedSequence.length > 8 || /[^A-Z0-9]/.test(key)) {
-        setTimeout(() => setKeySequence(''), 2000)
+      // 清理过长的序列
+      if (trimmedSequence.length > 12) {
+        setTimeout(() => setKeySequence(''), 3000)
       }
     }
 
@@ -480,9 +622,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           setIsVideoFullscreen(true)
           
           // 安全检查是否已经发现过这个彩蛋
-          const isAlreadyDiscovered = safeCheckEggDiscovered('fullscreen')
-          
-          console.log('🔍 全屏彩蛋检查:', { isAlreadyDiscovered, isVideoFullscreen })
+          const isAlreadyDiscovered = _0x5c1d('fullscreen')
           
           if (!isAlreadyDiscovered) {
             // 延迟3秒触发彩蛋，确保用户真的在观看
@@ -546,220 +686,337 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }, []) // 移除依赖，避免不必要的重新执行
 
-  // 💻 创意彩蛋3: 开发者彩蛋 - 检测开发者工具
+  // 🕵️ 观察大师彩蛋 - 细节观察挑战
   useEffect(() => {
-    const checkDevTools = () => {
-      const threshold = 200 // 增加阈值，减少误判
-      const heightDiff = Math.abs(window.outerHeight - window.innerHeight)
-      const widthDiff = Math.abs(window.outerWidth - window.innerWidth)
-      const isOpen = heightDiff > threshold || widthDiff > threshold
-      
-      if (isOpen && !devToolsOpen) {
-        setDevToolsOpen(true)
-        // 延迟触发，让用户有时间看到console
-        setTimeout(() => {
-          triggerCreativeEgg({
-            type: 'developer',
-            title: '🛠️ 代码探索者',
-            message: '欢迎来到代码的世界！你是真正的技术爱好者！',
-            icon: '🛠️'
-          }, 'developer')
-          
-          // 在console中留下彩蛋信息
-          console.log(`
-🎉 恭喜发现开发者彩蛋！
-━━━━━━━━━━━━━━━━━━━━━━
-👾 今夕公会 - 代码彩蛋系统 v2.0
-🎨 设计理念：隐藏在细节中的惊喜
-💝 特别献给：所有热爱探索的开发者们
-━━━━━━━━━━━━━━━━━━━━━━
-🚀 输入 jinxi.surprise() 解锁更多惊喜
-          `)
-          
-          // 添加全局函数作为隐藏彩蛋
-          ;(window as any).jinxi = {
-            surprise: () => {
-              triggerCreativeEgg({
-                type: 'developer',
-                title: '🎯 终极开发者',
-                message: '你找到了隐藏的JavaScript API！真正的代码大师！',
-                icon: '🎯'
-              }, 'ultimate')
-            }
-          }
-        }, 2000)
-      } else if (!isOpen && devToolsOpen) {
-        setDevToolsOpen(false)
-      }
-    }
-
-    const interval = setInterval(checkDevTools, 500)
-    return () => clearInterval(interval)
-  }, [devToolsOpen])
-
-  // ✨ 创意彩蛋4: 双击魔法彩蛋 - 快速双击页面背景
-  useEffect(() => {
-    let clickCount = 0
-    let clickTimer: NodeJS.Timeout | null = null
+    let clickPattern: string[] = []
+    let observationChallenge = false
     
-    const handleDoubleClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
+    // 创建隐藏的观察元素
+    const createObservationElements = () => {
+      if (_0x5c1d('detective') || observationChallenge) return
       
-      // 只在点击背景或空白区域时触发，排除按钮、链接、输入框等交互元素
-      if (target.tagName === 'BUTTON' || 
-          target.tagName === 'A' || 
-          target.tagName === 'INPUT' || 
-          target.tagName === 'TEXTAREA' ||
-          target.closest('button') ||
-          target.closest('a') ||
-          target.closest('input') ||
-          target.closest('textarea') ||
-          target.closest('.easter-egg-modal') ||
-          target.closest('.achievement-progress-bar')) {
-        return
+      // 随机在页面上创建3个微妙的变化元素
+      const positions = [
+        { top: '20%', left: '80%' },
+        { top: '60%', left: '15%' },
+        { top: '40%', left: '50%' }
+      ]
+      
+      positions.forEach((pos, index) => {
+        const element = document.createElement('div')
+        element.style.cssText = `
+          position: fixed;
+          top: ${pos.top};
+          left: ${pos.left};
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 215, 0, 0.3);
+          border-radius: 50%;
+          cursor: pointer;
+          z-index: 999;
+          transition: all 0.3s ease;
+          animation: subtlePulse 3s ease-in-out infinite;
+        `
+        element.dataset.observationId = index.toString()
+        
+        element.addEventListener('mouseenter', () => {
+          element.style.background = 'rgba(255, 215, 0, 0.6)'
+          element.style.transform = 'scale(1.5)'
+        })
+        
+        element.addEventListener('mouseleave', () => {
+          element.style.background = 'rgba(255, 215, 0, 0.3)'
+          element.style.transform = 'scale(1)'
+        })
+        
+        element.addEventListener('click', () => {
+          clickPattern.push(index.toString())
+          element.style.background = 'rgba(0, 255, 0, 0.8)'
+          
+          // 检查是否按正确顺序点击 (0, 1, 2)
+          if (clickPattern.length === 3) {
+            if (clickPattern.join('') === '012') {
+              triggerCreativeEgg({
+                type: 'invisible',
+                title: '🕵️ 观察大师',
+                message: '你拥有敏锐的观察力！成功发现并解开了隐藏的观察谜题！',
+                icon: '🕵️'
+              }, 'detective')
+              createDetectiveEffect()
+            } else {
+              showToast('🔍 观察顺序不对，重新开始挑战！', 'error')
+            }
+            
+            // 清理元素
+            document.querySelectorAll('[data-observation-id]').forEach(el => el.remove())
+            clickPattern = []
+            observationChallenge = false
+          }
+        })
+        
+        document.body.appendChild(element)
+      })
+      
+      // 添加微妙脉冲动画
+      if (!document.getElementById('subtlePulseStyle')) {
+        const style = document.createElement('style')
+        style.id = 'subtlePulseStyle'
+        style.textContent = `
+          @keyframes subtlePulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+          }
+        `
+        document.head.appendChild(style)
       }
       
-      clickCount++
+      observationChallenge = true
+      showToast('🕵️ 观察挑战：发现页面上3个微妙的变化，按顺序点击！', 'info')
       
-      if (clickCount === 1) {
-        // 设置双击检测窗口（500ms内）
-        clickTimer = setTimeout(() => {
-          clickCount = 0
-        }, 500)
-      } else if (clickCount === 2) {
-        // 检测到双击
-        if (clickTimer) {
-          clearTimeout(clickTimer)
-          clickTimer = null
+      // 60秒后自动清理
+      setTimeout(() => {
+        document.querySelectorAll('[data-observation-id]').forEach(el => el.remove())
+        clickPattern = []
+        observationChallenge = false
+      }, 60000)
+    }
+    
+    // 90秒后触发观察挑战
+    const observationTimer = setTimeout(createObservationElements, 90000)
+    
+    return () => {
+      clearTimeout(observationTimer)
+      document.querySelectorAll('[data-observation-id]').forEach(el => el.remove())
+    }
+  }, [])
+
+  // 📐 几何艺术家彩蛋 - 互动式图形绘制挑战
+  useEffect(() => {
+    let mouseTrail: { x: number, y: number, timestamp: number }[] = []
+    let isDrawing = false
+    let trailVisuals: HTMLDivElement[] = []
+    let currentChallenge: string | null = null
+    let challengeStartTime = 0
+    
+    const challenges = ['今夕']
+    
+    // 显示绘制轨迹的视觉反馈
+    const createTrailVisual = (x: number, y: number) => {
+      const dot = document.createElement('div')
+      dot.style.cssText = `
+        position: fixed;
+        top: ${y - 3}px;
+        left: ${x - 3}px;
+        width: 6px;
+        height: 6px;
+        background: rgba(255, 215, 0, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: trailFade 2s ease-out forwards;
+      `
+      document.body.appendChild(dot)
+      trailVisuals.push(dot)
+      
+      // 限制轨迹视觉元素数量
+      if (trailVisuals.length > 50) {
+        const oldDot = trailVisuals.shift()
+        if (oldDot) oldDot.remove()
+      }
+      
+      setTimeout(() => dot.remove(), 2000)
+    }
+    
+    // 随机触发绘制挑战
+    const triggerDrawingChallenge = () => {
+      if (_0x5c1d('geometry-artist') || currentChallenge) return
+      
+      currentChallenge = challenges[Math.floor(Math.random() * challenges.length)]
+      challengeStartTime = Date.now()
+      
+      showToast(`📐 书法挑战：请用鼠标书写"${currentChallenge}"两字！`, 'info')
+      
+      // 30秒后取消挑战
+      setTimeout(() => {
+        if (currentChallenge) {
+          currentChallenge = null
+          showToast('⏰ 绘制挑战超时，等待下次机会...', 'error')
         }
-        clickCount = 0
-        
-        // 安全检查是否已经发现过这个彩蛋
-        if (!safeCheckEggDiscovered('title')) {
+      }, 30000)
+    }
+    
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isDrawing || !currentChallenge) return
+      
+      const now = Date.now()
+      mouseTrail.push({ x: event.clientX, y: event.clientY, timestamp: now })
+      
+      // 创建轨迹视觉效果
+      createTrailVisual(event.clientX, event.clientY)
+      
+      // 限制轨迹长度和时间范围（10秒内的轨迹）
+      mouseTrail = mouseTrail.filter(point => now - point.timestamp < 10000).slice(-150)
+      
+      // 检查是否完成挑战
+      if (mouseTrail.length > 40) {
+        const shape = analyzeAdvancedShape(mouseTrail, currentChallenge)
+        if (shape && shape === currentChallenge) {
           triggerCreativeEgg({
             type: 'title',
-            title: '✨ 双击魔法师',
-            message: '你掌握了双击的奥秘！魔法在指尖绽放！',
-            icon: '✨'
-          }, 'title')
+            title: '📐 今夕书法家',
+            message: `太棒了！你在${((now - challengeStartTime) / 1000).toFixed(1)}秒内完美书写了"${shape}"！`,
+            icon: '📐'
+          }, 'geometry-artist')
+          createGeometryEffect(shape)
+          
+          // 清理轨迹
+          mouseTrail = []
+          isDrawing = false
+          currentChallenge = null
+          trailVisuals.forEach(dot => dot.remove())
+          trailVisuals = []
         }
       }
     }
     
-    document.addEventListener('click', handleDoubleClick)
-    return () => {
-      document.removeEventListener('click', handleDoubleClick)
-      if (clickTimer) {
-        clearTimeout(clickTimer)
+    const handleMouseDown = (event: MouseEvent) => {
+      if (currentChallenge) {
+        isDrawing = true
+        mouseTrail = []
+        trailVisuals.forEach(dot => dot.remove())
+        trailVisuals = []
       }
     }
-  }, [easterEggRecords])
+    
+    const handleMouseUp = () => {
+      setTimeout(() => {
+        isDrawing = false
+      }, 500)
+    }
 
-  // Logo点击彩蛋 (连击7次)
+    // 添加轨迹淡出动画
+    if (!document.getElementById('trailFadeStyle')) {
+      const style = document.createElement('style')
+      style.id = 'trailFadeStyle'
+      style.textContent = `
+        @keyframes trailFade {
+          0% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(0.3); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+    
+    // 45秒后随机触发绘制挑战
+    const challengeTimer = setTimeout(triggerDrawingChallenge, 45000)
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+      clearTimeout(challengeTimer)
+      trailVisuals.forEach(dot => dot.remove())
+    }
+  }, [])
+
+  // 🎵 旋律作曲家彩蛋 - 键盘音乐序列
   useEffect(() => {
-    const handleLogoClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      
-      // 如果当前有彩蛋弹窗显示，不处理Logo点击
-      if (showCreativeEgg || showAnniversary) {
+    let melodySequence: string[] = []
+    let melodyTimer: NodeJS.Timeout | null = null
+    
+    const handleMelodyKeys = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         return
       }
       
-      // 排除彩蛋弹窗内的点击和特定UI元素，但允许进度条点击
-      if (target.closest('.fixed.inset-0.z-\\[9999\\]') || 
-          target.closest('.easter-egg-modal') ||
-          (target.closest('button') && !target.closest('.achievement-progress-bar'))) {
-        return
-      }
+      // 目标旋律：C-D-E-F-G (对应键盘 1-2-3-4-5)
+      const musicKeys = ['1', '2', '3', '4', '5']
       
-      // 特别排除进度条区域的点击
-      if (target.closest('.achievement-progress-bar')) {
-        return
-      }
-      
-      // 更准确的Logo检测：检查多种可能的选择器
-      const isLogoClick = target.closest('a[href="#top"]') || 
-                         target.closest('img[alt="Logo"]') ||
-                         target.closest('img[src*="logo"]') ||
-                         target.tagName === 'IMG' && target.getAttribute('src')?.includes('logo') ||
-                         (target.tagName === 'A' && target.getAttribute('href') === '#top')
-      
-      if (isLogoClick) {
-        const newCount = logoClickCount + 1
-        setLogoClickCount(newCount)
+      if (musicKeys.includes(event.key)) {
+        melodySequence.push(event.key)
         
-        console.log(`Logo clicked ${newCount} times`) // 调试日志
+        // 播放音符反馈
+        playMelodyNote(event.key)
         
-        if (newCount === 7) {
-          recordEasterEggDiscovery('click')
-          // 触发专门的点击彩蛋特效，而不是默认的7周年庆典
+        if (melodyTimer) clearTimeout(melodyTimer)
+        
+        // 检查完整旋律
+        if (melodySequence.join('') === '12345') {
+          if (!_0x5c1d('melody-composer')) {
           triggerCreativeEgg({
-            type: 'developer',
-            title: '🎯 点击大师',
-            message: '你精准连击Logo 7次！手速惊人！',
-            icon: '🎯'
-          }, 'click')
-          setLogoClickCount(0)
-          showToast('🎯 发现点击彩蛋！Logo连击7次解锁！')
-        } else if (newCount >= 3) {
-          showToast(`💫 继续点击Logo... (${newCount}/7)`, 'info')
+            type: 'observation',
+              title: '🎵 旋律作曲家',
+              message: '你演奏了完美的五音阶！音乐的奥秘在你指尖绽放！',
+              icon: '🎵'
+            }, 'melody-composer')
+            createMelodyEffect()
+          }
+          melodySequence = []
+          return
         }
         
-        // 重置计数器
-        setTimeout(() => setLogoClickCount(0), 8000) // 延长到8秒
+        // 5秒后重置序列
+        melodyTimer = setTimeout(() => {
+          melodySequence = []
+        }, 5000)
+        
+        // 超过5个音符就重置
+        if (melodySequence.length > 5) {
+          melodySequence = []
+        }
       }
     }
 
-    document.addEventListener('click', handleLogoClick)
-    return () => document.removeEventListener('click', handleLogoClick)
-  }, [logoClickCount, showCreativeEgg, showAnniversary])
+    document.addEventListener('keydown', handleMelodyKeys)
+    return () => {
+      document.removeEventListener('keydown', handleMelodyKeys)
+      if (melodyTimer) clearTimeout(melodyTimer)
+    }
+  }, [])
 
-  // 🎡 滚轮狂热彩蛋：在2秒内连续滚动鼠标滚轮20次
+  // 🧘 禅心大师彩蛋 - 静默等待的艺术
   useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      // 安全检查是否已经发现过这个彩蛋
-      if (safeCheckEggDiscovered('scroll')) {
-        return
-      }
-
-      const newCount = scrollCount + 1
-      setScrollCount(newCount)
+    let inactivityTimer: NodeJS.Timeout | null = null
+    let lastActivity = Date.now()
+    
+    const resetInactivityTimer = () => {
+      lastActivity = Date.now()
+      if (inactivityTimer) clearTimeout(inactivityTimer)
       
-      console.log(`滚轮计数: ${newCount}/20`) // 调试信息
-      
-      // 清除之前的定时器
-      if (scrollTimer) {
-        clearTimeout(scrollTimer)
-      }
-      
-      // 检查是否达到触发条件
-      if (newCount >= 20) {
+      // 检查是否已经发现过这个彩蛋
+      if (!_0x5c1d('patience-master')) {
+        inactivityTimer = setTimeout(() => {
         triggerCreativeEgg({
-          type: 'scroll',
-          title: '🎡 滚轮疯狂者',
-          message: '你的滚轮转动如闪电，掌握了页面穿梭的终极奥义！',
-          icon: '🎡'
-        }, 'scroll')
-        setScrollCount(0)
-        return
+            type: 'title',
+            title: '🧘 禅心大师',
+            message: '在静默中你找到了内心的平静。真正的智慧来自于等待。',
+            icon: '🧘'
+          }, 'patience-master')
+          createZenEffect()
+        }, 120000) // 2分钟静默
       }
-      
-      // 2秒后重置计数
-      const timer = setTimeout(() => {
-        setScrollCount(0)
-      }, 2000)
-      setScrollTimer(timer)
     }
-
-    document.addEventListener('wheel', handleWheel, { passive: true })
+    
+    const activities = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart']
+    
+    activities.forEach(event => {
+      document.addEventListener(event, resetInactivityTimer, { passive: true })
+    })
+    
+    // 初始启动计时器
+    resetInactivityTimer()
     
     return () => {
-      document.removeEventListener('wheel', handleWheel)
-      if (scrollTimer) {
-        clearTimeout(scrollTimer)
-      }
+      activities.forEach(event => {
+        document.removeEventListener(event, resetInactivityTimer)
+      })
+      if (inactivityTimer) clearTimeout(inactivityTimer)
     }
-  }, [scrollCount, scrollTimer, easterEggRecords])
+  }, [])
 
   // 🖥️ 全屏状态监听器 - 专门为侧边栏优化
   useEffect(() => {
@@ -772,8 +1029,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                              (document as any).webkitFullscreenElement !== null ||
                              (document as any).mozFullScreenElement !== null ||
                              (document as any).msFullscreenElement !== null
-      
-      console.log('🖥️ 全屏状态变化:', isNowFullscreen)
       
       // 在全屏状态下，给侧边栏添加特殊处理
       const sidebar = document.querySelector('.achievement-sidebar') as HTMLElement
@@ -805,7 +1060,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   // 🚀 创意彩蛋触发器 - 不同类型有不同特效
   const triggerCreativeEgg = (egg: CreativeEasterEgg, eggId: string) => {
     setShowCreativeEgg(egg)
-    recordEasterEggDiscovery(eggId)
+    _0x9b2e(eggId)
     showToast(`${egg.icon} ${egg.title}：${egg.message}`, 'success')
     
     // 强制更新进度条，确保它在彩蛋触发后保持可见
@@ -822,7 +1077,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       const intervals = [500, 1500, 3000, 5000, 7000, 10000]
       intervals.forEach((delay, index) => {
         setTimeout(() => {
-          console.log(`🔄 全屏彩蛋强制更新 ${index + 1}/${intervals.length}`)
+
           setForceProgressBarUpdate(prev => prev + (index + 1) * 20)
           setSidebarForceVisible(true)
           
@@ -831,7 +1086,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           if (sidebar) {
             ;(sidebar as HTMLElement).style.cssText += `
               display: block !important;
-              visibility: visible !important;
+              visibility: visible;
               opacity: 1 !important;
               z-index: 999999999 !important;
             `
@@ -846,104 +1101,24 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         // 全屏视频彩蛋：视频播放特效
         createVideoWatchEffect()
         break
-      
-      case 'developer':
-        // 开发者彩蛋：代码雨特效
-        createCodeRainEffect()
+      case 'detective':
+        createDetectiveEffect()
         break
-      
       case 'invisible':
-        // 商标点击彩蛋：发现光芒特效
         createDiscoveryGlowEffect()
         break
-      
       case 'title':
-        // 双击彩蛋：魔法星光特效
         createMagicSparkleEffect()
         break
-        
       case 'scroll':
-        // 滚轮彩蛋：旋转风暴特效
         createScrollStormEffect()
         break
-      
       default:
-        // 默认：小规模粒子特效
         createSimpleParticleEffect()
     }
   }
 
   // 🎨 特效函数集合
-  const createEyeFlashEffect = () => {
-    // 眼睛闪烁特效
-    for (let i = 0; i < 6; i++) {
-      const eye = document.createElement('div')
-      eye.innerHTML = '👁️'
-      eye.style.cssText = `
-        position: fixed;
-        top: ${Math.random() * window.innerHeight}px;
-        left: ${Math.random() * window.innerWidth}px;
-        font-size: 3rem;
-        z-index: 9999;
-        pointer-events: none;
-        animation: eyeFlash 2s ease-out forwards;
-      `
-      
-      document.body.appendChild(eye)
-      setTimeout(() => eye.remove(), 2000)
-    }
-    
-    // 添加CSS动画
-    if (!document.getElementById('eyeFlashStyle')) {
-      const style = document.createElement('style')
-      style.id = 'eyeFlashStyle'
-      style.textContent = `
-        @keyframes eyeFlash {
-          0% { opacity: 0; transform: scale(0.5); }
-          50% { opacity: 1; transform: scale(1.2); }
-          100% { opacity: 0; transform: scale(0.8); }
-        }
-      `
-      document.head.appendChild(style)
-    }
-  }
-
-  const createCodeRainEffect = () => {
-    // 代码雨特效
-    const characters = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]()'.split('')
-    
-    for (let i = 0; i < 20; i++) {
-      const code = document.createElement('div')
-      code.innerHTML = characters[Math.floor(Math.random() * characters.length)]
-      code.style.cssText = `
-        position: fixed;
-        top: -20px;
-        left: ${Math.random() * window.innerWidth}px;
-        color: #00ff00;
-        font-family: 'Courier New', monospace;
-        font-size: ${Math.random() * 20 + 14}px;
-        z-index: 9999;
-        pointer-events: none;
-        animation: codeRain 3s linear forwards;
-      `
-      
-      document.body.appendChild(code)
-      setTimeout(() => code.remove(), 3000)
-    }
-    
-    if (!document.getElementById('codeRainStyle')) {
-      const style = document.createElement('style')
-      style.id = 'codeRainStyle'
-      style.textContent = `
-        @keyframes codeRain {
-          0% { transform: translateY(-20px); opacity: 1; }
-          100% { transform: translateY(${window.innerHeight + 20}px); opacity: 0; }
-        }
-      `
-      document.head.appendChild(style)
-    }
-  }
-
   const createDiscoveryGlowEffect = () => {
     // 发现光芒特效
     const glow = document.createElement('div')
@@ -978,44 +1153,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }
 
-  const createWarmParticleEffect = () => {
-    // 温暖粒子特效
-    const colors = ['💕', '💖', '💝', '💗', '💓']
-    
-    for (let i = 0; i < 10; i++) {
-      const particle = document.createElement('div')
-      particle.innerHTML = colors[Math.floor(Math.random() * colors.length)]
-      particle.style.cssText = `
-        position: fixed;
-        top: ${window.innerHeight / 2}px;
-        left: ${window.innerWidth / 2}px;
-        font-size: 2rem;
-        z-index: 9999;
-        pointer-events: none;
-        animation: warmFloat 3s ease-out forwards;
-        animation-delay: ${i * 200}ms;
-      `
-      
-      document.body.appendChild(particle)
-      setTimeout(() => particle.remove(), 3500)
-    }
-    
-    if (!document.getElementById('warmFloatStyle')) {
-      const style = document.createElement('style')
-      style.id = 'warmFloatStyle'
-      style.textContent = `
-        @keyframes warmFloat {
-          0% { transform: translate(0, 0) scale(0); opacity: 0; }
-          20% { opacity: 1; transform: scale(1); }
-          100% { 
-            transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) scale(0.5); 
-            opacity: 0; 
-          }
-        }
-      `
-      document.head.appendChild(style)
-    }
-  }
+
 
   const createSimpleParticleEffect = () => {
     // 简单粒子特效
@@ -1212,75 +1350,596 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }
 
-  const createTimeFlowEffect = () => {
-    // 时间流逝特效
-    const timeSymbols = ['⏰', '⏳', '⌛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕']
+  // 🎭 今夕传说觉醒特效 - 最壮观的终极效果
+  const createLegendAwakeningEffect = () => {
+    // 公会旗帜背景
+    const guildBanner = document.createElement('div')
+    guildBanner.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(45deg, 
+        rgba(138, 43, 226, 0.8) 0%, 
+        rgba(30, 144, 255, 0.8) 25%,
+        rgba(255, 215, 0, 0.8) 50%,
+        rgba(220, 20, 60, 0.8) 75%,
+        rgba(138, 43, 226, 0.8) 100%);
+      z-index: 9997;
+      pointer-events: none;
+      animation: guildBanner 8s ease-in-out forwards;
+    `
+    document.body.appendChild(guildBanner)
+    setTimeout(() => guildBanner.remove(), 8000)
     
-    for (let i = 0; i < 12; i++) {
-      const timeElement = document.createElement('div')
-      timeElement.innerHTML = timeSymbols[Math.floor(Math.random() * timeSymbols.length)]
-      timeElement.style.cssText = `
+    // 今夕理念文字飞舞
+    const mottos = ['以战会友', '彼此成就', '今夕如梦', '友谊永恒', '荣耀征程']
+    mottos.forEach((motto, index) => {
+      const text = document.createElement('div')
+      text.innerHTML = motto
+      text.style.cssText = `
         position: fixed;
         top: 50%;
         left: 50%;
-        font-size: 3rem;
-        z-index: 9999;
+        font-size: 4rem;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        z-index: 9998;
         pointer-events: none;
-        animation: timeFlow 4s ease-out forwards;
-        animation-delay: ${i * 300}ms;
+        animation: mottoFloat 3s ease-out forwards;
+        animation-delay: ${index * 800}ms;
+        font-family: 'SimHei', 'Microsoft YaHei', sans-serif;
       `
-      
-      document.body.appendChild(timeElement)
-      setTimeout(() => timeElement.remove(), 4500)
-    }
+      document.body.appendChild(text)
+      setTimeout(() => text.remove(), 4000)
+    })
     
-    // 添加数字倒计时效果
-    for (let i = 0; i < 5; i++) {
-      const number = document.createElement('div')
-      number.innerHTML = `${120 - i * 30}s`
-      number.style.cssText = `
+    // 战士群像环绕效果
+    const warriors = ['⚔️', '🛡️', '🏹', '🗡️', '⚡', '🔥', '💫', '🌟']
+    for (let i = 0; i < warriors.length; i++) {
+      const warrior = document.createElement('div')
+      warrior.innerHTML = warriors[i]
+      const angle = (i / warriors.length) * 2 * Math.PI
+      const radius = 200
+      warrior.style.cssText = `
         position: fixed;
-        top: ${30 + i * 15}%;
-        left: ${20 + i * 15}%;
-        font-size: 2rem;
-        color: rgba(255, 215, 0, 0.8);
-        z-index: 9999;
+        top: calc(50% + ${Math.sin(angle) * radius}px);
+        left: calc(50% + ${Math.cos(angle) * radius}px);
+        font-size: 3rem;
+        z-index: 9998;
         pointer-events: none;
-        animation: timeCountdown 3s ease-out forwards;
-        animation-delay: ${i * 600}ms;
+        animation: warriorOrbit 6s linear infinite;
+        animation-delay: ${i * 200}ms;
       `
-      
-      document.body.appendChild(number)
-      setTimeout(() => number.remove(), 4000)
+      document.body.appendChild(warrior)
+      setTimeout(() => warrior.remove(), 8000)
     }
     
-    if (!document.getElementById('timeFlowStyle')) {
+    // 公会徽章绽放
+    const emblem = document.createElement('div')
+    emblem.innerHTML = '🏰'
+    emblem.style.cssText = `
+        position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 8rem;
+      transform: translate(-50%, -50%);
+        z-index: 9999;
+        pointer-events: none;
+      animation: emblemBloom 4s ease-out forwards;
+      filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.8));
+    `
+    document.body.appendChild(emblem)
+    setTimeout(() => emblem.remove(), 6000)
+    
+    if (!document.getElementById('guildEffectStyle')) {
       const style = document.createElement('style')
-      style.id = 'timeFlowStyle'
+      style.id = 'guildEffectStyle'
       style.textContent = `
-        @keyframes timeFlow {
+        @keyframes guildBanner {
+          0% { opacity: 0; }
+          30% { opacity: 1; }
+          70% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        @keyframes mottoFloat {
           0% { 
-            transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+            transform: translate(-50%, -50%) scale(0) rotate(-180deg); 
             opacity: 0; 
           }
-          30% { 
-            transform: translate(-50%, -50%) scale(1.5) rotate(180deg); 
+          50% { 
+            transform: translate(-50%, -50%) scale(1.5) rotate(0deg); 
             opacity: 1; 
           }
           100% { 
-            transform: translate(${Math.random() * 800 - 400}px, ${Math.random() * 600 - 300}px) scale(0.3) rotate(720deg); 
+            transform: translate(${Math.random() * 600 - 300}px, ${Math.random() * 400 - 200}px) scale(0.5) rotate(180deg); 
             opacity: 0; 
           }
         }
-        @keyframes timeCountdown {
-          0% { opacity: 0; transform: scale(0); }
-          50% { opacity: 1; transform: scale(1.2); }
-          100% { opacity: 0; transform: scale(0.8); }
+        @keyframes warriorOrbit {
+          0% { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+          100% { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+        }
+        @keyframes emblemBloom {
+          0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+          30% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity: 1; }
+          70% { transform: translate(-50%, -50%) scale(1.2) rotate(360deg); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(1) rotate(540deg); opacity: 0; }
         }
       `
       document.head.appendChild(style)
     }
   }
+
+
+
+  // 🔐 密码破译特效
+  const createCipherBreakEffect = () => {
+    const codes = ['01001000', '01100101', '01101100', '01110000', '01101111']
+    for (let i = 0; i < codes.length; i++) {
+      const code = document.createElement('div')
+      code.innerHTML = codes[i]
+      code.style.cssText = `
+        position: fixed;
+        top: ${20 + i * 15}%;
+        left: ${10 + Math.random() * 80}%;
+        font-family: 'Courier New', monospace;
+        color: #00ff00;
+        font-size: 1.5rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: cipherBreak 3s ease-out forwards;
+        animation-delay: ${i * 200}ms;
+      `
+      document.body.appendChild(code)
+      setTimeout(() => code.remove(), 3500)
+    }
+  }
+
+  // 🎵 旋律特效
+  const createMelodyEffect = () => {
+    const notes = ['♪', '♫', '♬', '♩', '♭', '♯', '𝄞']
+    for (let i = 0; i < 20; i++) {
+      const note = document.createElement('div')
+      note.innerHTML = notes[Math.floor(Math.random() * notes.length)]
+      note.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 2 + 2}rem;
+        color: hsl(${Math.random() * 360}, 70%, 60%);
+        z-index: 9999;
+        pointer-events: none;
+        animation: melodyNote 4s ease-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      document.body.appendChild(note)
+      setTimeout(() => note.remove(), 4500)
+    }
+  }
+
+  // 📐 书法特效 - 专为"今夕"设计
+  const createGeometryEffect = (shape: string) => {
+    // 如果是"今夕"，使用汉字书法特效
+    if (shape === '今夕') {
+      const characters = ['今', '夕', '✍️', '📜', '🖋️', '🎋']
+      
+      for (let i = 0; i < 20; i++) {
+        const char = document.createElement('div')
+        char.innerHTML = characters[Math.floor(Math.random() * characters.length)]
+        char.style.cssText = `
+          position: fixed;
+          top: ${Math.random() * 100}%;
+          left: ${Math.random() * 100}%;
+          font-size: ${Math.random() * 3 + 2}rem;
+          color: hsl(${Math.random() * 60 + 20}, 80%, 70%);
+          font-family: 'SimHei', 'Microsoft YaHei', serif;
+          z-index: 9999;
+          pointer-events: none;
+          animation: calligraphyFloat 4s ease-out forwards;
+          animation-delay: ${i * 100}ms;
+          text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        `
+        document.body.appendChild(char)
+        setTimeout(() => char.remove(), 4500)
+      }
+      
+      // 添加书法特效动画
+      if (!document.getElementById('calligraphyFloatStyle')) {
+        const style = document.createElement('style')
+        style.id = 'calligraphyFloatStyle'
+        style.textContent = `
+          @keyframes calligraphyFloat {
+            0% { 
+              opacity: 0; 
+              transform: scale(0) rotate(-30deg); 
+            }
+            30% { 
+              opacity: 1; 
+              transform: scale(1.3) rotate(0deg); 
+            }
+            100% { 
+              opacity: 0; 
+              transform: scale(0.8) rotate(30deg) translateY(-100px); 
+            }
+          }
+        `
+        document.head.appendChild(style)
+      }
+    } else {
+      // 原有的几何图形特效
+    for (let i = 0; i < 15; i++) {
+      const geom = document.createElement('div')
+      geom.innerHTML = shape === '圆形' ? '○' : shape === '三角形' ? '△' : '⬟'
+      geom.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 3 + 2}rem;
+        color: hsl(${Math.random() * 360}, 80%, 70%);
+        z-index: 9999;
+        pointer-events: none;
+        animation: geometryFloat 3s ease-out forwards;
+        animation-delay: ${i * 150}ms;
+      `
+      document.body.appendChild(geom)
+      setTimeout(() => geom.remove(), 3500)
+      }
+    }
+  }
+
+  // 🧘 禅意特效
+  const createZenEffect = () => {
+    const zenSymbols = ['☯', '🕯️', '🧘', '🌸', '🍃', '💆', '🙏']
+    for (let i = 0; i < 12; i++) {
+      const zen = document.createElement('div')
+      zen.innerHTML = zenSymbols[Math.floor(Math.random() * zenSymbols.length)]
+      zen.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: 3rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: zenFloat 6s ease-in-out forwards;
+        animation-delay: ${i * 500}ms;
+      `
+      document.body.appendChild(zen)
+      setTimeout(() => zen.remove(), 7000)
+    }
+  }
+
+  // 🗺️ 地图连接特效
+  const createMapConnectionEffect = () => {
+    // 中国地图连接特效
+    const mapElements = ['🗺️', '🌏', '🤝', '💫', '⭐', '🌟', '🔗', '💝', '🏮', '🎋']
+    
+    // 主要的连接光束效果
+    for (let i = 0; i < 15; i++) {
+      const element = document.createElement('div')
+      element.innerHTML = mapElements[Math.floor(Math.random() * mapElements.length)]
+      element.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 3 + 2}rem;
+        color: hsl(${Math.random() * 60 + 200}, 80%, 70%);
+        z-index: 9999;
+        pointer-events: none;
+        animation: mapConnection 4s ease-out forwards;
+        animation-delay: ${i * 150}ms;
+        text-shadow: 0 0 15px rgba(135, 206, 235, 0.8);
+      `
+      
+      document.body.appendChild(element)
+      setTimeout(() => element.remove(), 4500)
+    }
+    
+    // 连接线动画效果
+    for (let i = 0; i < 8; i++) {
+      const line = document.createElement('div')
+      line.style.cssText = `
+        position: fixed;
+        top: ${20 + i * 10}%;
+        left: 10%;
+        width: 80%;
+        height: 3px;
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(135, 206, 235, 0.8), 
+          rgba(255, 215, 0, 0.8), 
+          rgba(135, 206, 235, 0.8), 
+          transparent);
+        z-index: 9998;
+        pointer-events: none;
+        animation: connectionPulse 2s ease-in-out forwards;
+        animation-delay: ${i * 200}ms;
+        border-radius: 2px;
+      `
+      
+      document.body.appendChild(line)
+      setTimeout(() => line.remove(), 3000)
+    }
+    
+    // 添加动画样式
+    if (!document.getElementById('mapConnectionStyle')) {
+      const style = document.createElement('style')
+      style.id = 'mapConnectionStyle'
+      style.textContent = `
+        @keyframes mapConnection {
+          0% { 
+            opacity: 0; 
+            transform: scale(0) rotate(-90deg); 
+          }
+          30% { 
+            opacity: 1; 
+            transform: scale(1.5) rotate(0deg); 
+          }
+          100% { 
+            opacity: 0; 
+            transform: scale(0.8) rotate(90deg) translateY(-150px); 
+          }
+        }
+        @keyframes connectionPulse {
+          0% { 
+            opacity: 0; 
+            transform: scaleX(0); 
+          }
+          50% { 
+            opacity: 1; 
+            transform: scaleX(1); 
+          }
+          100% { 
+            opacity: 0; 
+            transform: scaleX(0.8); 
+          }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  // 🗺️ 探索者特效
+  const createExplorerEffect = () => {
+    const treasures = ['💎', '🗝️', '🏺', '📜', '🧭', '🔍', '🗺️']
+    for (let i = 0; i < treasures.length; i++) {
+      const treasure = document.createElement('div')
+      treasure.innerHTML = treasures[i]
+      treasure.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: 4rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: treasureReveal 3s ease-out forwards;
+        animation-delay: ${i * 300}ms;
+      `
+      document.body.appendChild(treasure)
+      setTimeout(() => treasure.remove(), 4000)
+    }
+  }
+
+  // 🕵️ 侦探发现特效
+  const createDetectiveEffect = () => {
+    // 放大镜扫描效果
+    const magnifier = document.createElement('div')
+    magnifier.innerHTML = '🔍'
+    magnifier.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 8rem;
+      z-index: 9999;
+      pointer-events: none;
+      animation: detectiveScan 4s ease-out forwards;
+      transform: translate(-50%, -50%);
+    `
+    document.body.appendChild(magnifier)
+    setTimeout(() => magnifier.remove(), 4000)
+    
+    // 线索发现动画
+    const clues = ['🔍', '📝', '🧩', '💡', '🎯', '✨', '🏆']
+    clues.forEach((clue, index) => {
+      const element = document.createElement('div')
+      element.innerHTML = clue
+      element.style.cssText = `
+        position: fixed;
+        top: ${20 + index * 12}%;
+        left: ${10 + Math.random() * 80}%;
+        font-size: 3rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: clueReveal 3s ease-out forwards;
+        animation-delay: ${index * 400}ms;
+      `
+      document.body.appendChild(element)
+      setTimeout(() => element.remove(), 4000)
+    })
+    
+    // 侦探徽章闪耀
+    const badge = document.createElement('div')
+    badge.innerHTML = '🏅'
+    badge.style.cssText = `
+      position: fixed;
+      top: 30%;
+      right: 20%;
+      font-size: 5rem;
+      z-index: 9999;
+      pointer-events: none;
+      animation: badgeShine 3s ease-out forwards;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+    `
+    document.body.appendChild(badge)
+    setTimeout(() => badge.remove(), 3000)
+    
+    if (!document.getElementById('detectiveEffectStyle')) {
+      const style = document.createElement('style')
+      style.id = 'detectiveEffectStyle'
+      style.textContent = `
+        @keyframes detectiveScan {
+          0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+          30% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); opacity: 0; }
+        }
+        @keyframes clueReveal {
+          0% { opacity: 0; transform: translateY(20px) scale(0); }
+          50% { opacity: 1; transform: translateY(0) scale(1.2); }
+          100% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+        }
+        @keyframes badgeShine {
+          0% { opacity: 0; transform: scale(0) rotate(0deg); }
+          50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
+          100% { opacity: 0; transform: scale(1) rotate(360deg); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  // 🎵 音符播放反馈
+  const playMelodyNote = (key: string) => {
+    // 创建视觉音符反馈
+    const note = document.createElement('div')
+    const noteMap: { [key: string]: string } = {
+      '1': '♪ Do',
+      '2': '♫ Re', 
+      '3': '♬ Mi',
+      '4': '♩ Fa',
+      '5': '♭ Sol'
+    }
+    note.innerHTML = noteMap[key] || '♪'
+    note.style.cssText = `
+        position: fixed;
+      top: 70%;
+      left: ${20 + parseInt(key) * 15}%;
+        font-size: 2rem;
+      color: hsl(${parseInt(key) * 60}, 80%, 60%);
+        z-index: 9999;
+        pointer-events: none;
+      animation: notePlay 1s ease-out forwards;
+    `
+    document.body.appendChild(note)
+    setTimeout(() => note.remove(), 1000)
+  }
+
+  // 📐 高级图形分析函数 - 支持"今夕"汉字识别
+  const analyzeAdvancedShape = (points: { x: number, y: number, timestamp: number }[], targetShape: string): string | null => {
+    if (points.length < 30) return null
+    
+    const coords = points.map(p => ({ x: p.x, y: p.y }))
+    const bounds = {
+      minX: Math.min(...coords.map(p => p.x)),
+      maxX: Math.max(...coords.map(p => p.x)),
+      minY: Math.min(...coords.map(p => p.y)),
+      maxY: Math.max(...coords.map(p => p.y))
+    }
+    
+    const width = bounds.maxX - bounds.minX
+    const height = bounds.maxY - bounds.minY
+    const ratio = width / height
+    const centerX = (bounds.minX + bounds.maxX) / 2
+    const centerY = (bounds.minY + bounds.maxY) / 2
+    
+    // 检测"今夕"汉字
+    if (targetShape === '今夕') {
+      // 汉字特征分析：
+      // 1. 检测笔画方向变化（汉字有多个转折）
+      let directionalChanges = 0
+      let verticalStrokes = 0
+      let horizontalStrokes = 0
+      let crossingPoints = 0
+      
+      // 分析笔画方向
+      for (let i = 5; i < coords.length - 5; i += 3) {
+        if (i >= coords.length - 5) break
+        
+        const prev = coords[i - 5]
+        const curr = coords[i]
+        const next = coords[i + 5]
+        
+        const angle1 = Math.atan2(curr.y - prev.y, curr.x - prev.x)
+        const angle2 = Math.atan2(next.y - curr.y, next.x - curr.x)
+        const angleDiff = Math.abs(angle2 - angle1)
+        
+        // 检测方向变化
+        if (angleDiff > Math.PI / 6) { // 30度以上的转折
+          directionalChanges++
+        }
+        
+        // 检测垂直笔画
+        if (Math.abs(angle1) < Math.PI / 6 || Math.abs(angle1 - Math.PI) < Math.PI / 6) {
+          verticalStrokes++
+        }
+        
+        // 检测水平笔画
+        if (Math.abs(angle1 - Math.PI / 2) < Math.PI / 6 || Math.abs(angle1 + Math.PI / 2) < Math.PI / 6) {
+          horizontalStrokes++
+        }
+      }
+      
+      // 检测轨迹交叉点（汉字的特征）
+      for (let i = 0; i < coords.length - 20; i += 10) {
+        for (let j = i + 20; j < coords.length; j += 10) {
+          const p1 = coords[i]
+          const p2 = coords[j]
+          const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+          
+          // 如果两个距离较远的点很接近，可能是交叉
+          if (distance < 20 && Math.abs(i - j) > 30) {
+            crossingPoints++
+          }
+        }
+      }
+      
+      // 检测左右结构（"今夕"是两个字，可能有左右分布）
+      const leftPoints = coords.filter(p => p.x < centerX - width * 0.1)
+      const rightPoints = coords.filter(p => p.x > centerX + width * 0.1)
+      const hasLeftRightStructure = leftPoints.length > 10 && rightPoints.length > 10
+      
+      // 检测是否符合汉字特征
+      const hasChineseCharacterFeatures = 
+        directionalChanges >= 6 && // 足够的方向变化
+        (verticalStrokes > 8 || horizontalStrokes > 8) && // 有明显的横或竖笔画
+        crossingPoints >= 1 && // 有交叉笔画
+        width > 80 && height > 40 && // 合适的尺寸
+        ratio > 1.2 && ratio < 4 // 合理的宽高比（两个字排列）
+      
+      // 更宽松的识别条件
+      const basicWritingPattern = 
+        directionalChanges >= 4 && 
+        coords.length >= 40 && 
+        width > 60 && 
+        height > 30
+      
+      if (hasChineseCharacterFeatures || (hasLeftRightStructure && basicWritingPattern)) {
+        return '今夕'
+      }
+      
+      // 备用识别：如果轨迹足够复杂且有合理的分布
+      if (directionalChanges >= 3 && coords.length >= 50 && width > 100) {
+        return '今夕'
+      }
+    }
+    
+    return null
+  }
+
+  // 简化的图形分析函数（保留兼容性）
+  const analyzeShape = (points: { x: number, y: number }[]): string | null => {
+    const pointsWithTime = points.map(p => ({ ...p, timestamp: Date.now() }))
+    return analyzeAdvancedShape(pointsWithTime, '今夕')
+  }
+
+
+
+
+
+
+
+
 
   const createVideoWatchEffect = () => {
     // 视频观看特效 - 影院风格的光影效果
@@ -1400,53 +2059,125 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }, 3000)
   }
 
-  // 🎨 创意彩蛋5: 商标点击彩蛋 - 点击页面底部的今夕商标
+  // 🗺️ 留言墙头像触发地图彩蛋机制
   useEffect(() => {
-    const handleLogoFooterClick = (event: MouseEvent) => {
+    const handleAvatarClick = (event: Event) => {
       const target = event.target as HTMLElement
       
-      // 检测是否点击的是底部商标相关元素
-      // 查找各种可能的底部商标选择器
-      const isFooterLogo = target.closest('footer') && (
-        target.closest('img[alt*="今夕"]') ||
-        target.closest('img[alt*="jinxi"]') ||
-        target.closest('img[alt*="logo"]') ||
-        target.closest('img[src*="logo"]') ||
-        target.closest('[href*="#"]') ||
-        target.closest('a') ||
-        (target.tagName === 'IMG' && (target.getAttribute('alt')?.includes('今夕') || target.getAttribute('src')?.includes('logo')))
-      )
+      // 检测是否点击了留言墙的头像
+      const isMessageAvatar = target.closest('.message-avatar') || 
+                             target.classList.contains('message-avatar') ||
+                             (target.parentElement && target.parentElement.classList.contains('message-avatar'))
       
-      // 也检测页面底部区域的其他可能商标元素
-      const isBottomAreaLogo = window.innerHeight - event.clientY < 200 && (
-        target.tagName === 'IMG' ||
-        target.closest('img') ||
-        target.closest('a') ||
-        target.textContent?.includes('今夕') ||
-        target.closest('[class*="logo"]') ||
-        target.closest('[class*="footer"]')
-      )
+      // 检测是否点击了置顶留言的头像
+      const pinnedMessage = target.closest('.pinned-message')
+      const isAvatarInPinnedMessage = pinnedMessage && isMessageAvatar
       
-      if (isFooterLogo || isBottomAreaLogo) {
-        // 安全检查是否已经发现过这个彩蛋
-        if (!safeCheckEggDiscovered('invisible')) {
-          triggerCreativeEgg({
-            type: 'invisible',
-            title: '🔍 商标探索者',
-            message: '你点击了页面底部的今夕商标！发现了隐藏的秘密！',
-            icon: '🔍'
-          }, 'invisible')
+      if (isAvatarInPinnedMessage) {
+        // 触发地图挑战
+        event.preventDefault()
+        event.stopPropagation()
+        _0x8a4c()
+      }
+    }
+    
+    // 监听所有点击事件
+    document.addEventListener('click', handleAvatarClick, true)
+    
+    // 备用触发机制：监听特定的头像样式点击
+    const checkForSpecialAvatar = (event: Event) => {
+      const target = event.target as HTMLElement
+      
+      // 检测特定的CSS类名或样式
+      if (target.style && target.style.backgroundColor && 
+          (target.style.backgroundColor.includes('rgb(') || target.style.backgroundColor.includes('#'))) {
+        const rect = target.getBoundingClientRect()
+        if (rect.width >= 40 && rect.width <= 50 && rect.height >= 40 && rect.height <= 50) {
+          // 可能是头像，进行进一步检查
+          const parentElement = target.parentElement
+          if (parentElement && parentElement.textContent && 
+              parentElement.textContent.length <= 10) {
+            // 双击触发地图挑战
+            if (event.type === 'dblclick') {
+              _0x8a4c()
+            }
+          }
         }
       }
     }
-
-    // 监听整个页面的点击事件
-    document.addEventListener('click', handleLogoFooterClick)
+    
+    document.addEventListener('dblclick', checkForSpecialAvatar)
     
     return () => {
-      document.removeEventListener('click', handleLogoFooterClick)
+      document.removeEventListener('click', handleAvatarClick, true)
+      document.removeEventListener('dblclick', checkForSpecialAvatar)
     }
-  }, [easterEggRecords])
+  }, [])
+
+  // 🗺️ 隐秘探索者彩蛋 - 发现隐藏区域
+  useEffect(() => {
+    let hiddenArea: HTMLDivElement | null = null
+    
+    const createHiddenArea = () => {
+      if (hiddenArea || _0x5c1d('explorer')) return
+      
+      hiddenArea = document.createElement('div')
+      hiddenArea.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        background: transparent;
+        cursor: pointer;
+        z-index: 999999;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+      `
+      
+      hiddenArea.addEventListener('mouseenter', () => {
+        if (hiddenArea) {
+          hiddenArea.style.background = 'rgba(255, 215, 0, 0.1)'
+          hiddenArea.style.border = '1px solid rgba(255, 215, 0, 0.3)'
+        }
+      })
+      
+      hiddenArea.addEventListener('mouseleave', () => {
+        if (hiddenArea) {
+          hiddenArea.style.background = 'transparent'
+          hiddenArea.style.border = '1px solid transparent'
+        }
+      })
+      
+      hiddenArea.addEventListener('click', () => {
+        if (!_0x5c1d('explorer')) {
+          triggerCreativeEgg({
+            type: 'invisible',
+            title: '🗺️ 隐秘探索者',
+            message: '你发现了隐藏在视野边缘的秘密区域！真正的探索者永远好奇！',
+            icon: '🗺️'
+          }, 'explorer')
+          createExplorerEffect()
+        }
+        if (hiddenArea) {
+          hiddenArea.remove()
+          hiddenArea = null
+        }
+      })
+      
+      document.body.appendChild(hiddenArea)
+    }
+    
+    // 页面加载10秒后创建隐藏区域
+    const timer = setTimeout(createHiddenArea, 10000)
+    
+    return () => {
+      clearTimeout(timer)
+      if (hiddenArea) {
+        hiddenArea.remove()
+    }
+    }
+  }, [])
 
   // 创意彩蛋展示组件
   const CreativeEasterEggDisplay = () => {
@@ -1461,9 +2192,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           <p className="text-white/80 mb-6">{showCreativeEgg.message}</p>
           
           {/* 根据不同彩蛋类型显示特殊内容 */}
-          {showCreativeEgg.type === 'developer' && (
-            <div className="text-xs text-green-300 mb-4 font-mono bg-black/30 p-3 rounded-lg">
-              console.log("Easter egg found!");
+          {showCreativeEgg.type === 'detective' && (
+            <div className="text-xs text-yellow-300 mb-4 bg-black/30 p-3 rounded-lg">
+              🔍 观察力 +100 | 🧠 智力 +50 | 🏆 侦探等级提升
             </div>
           )}
           
@@ -1532,22 +2263,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                           (document as any).msFullscreenElement !== null ||
                           isVideoFullscreen
 
-    // 调试信息 - 包含更多状态信息
-    console.log('🎯 侧边栏数据:', { 
-      discoveredCount, 
-      totalCount, 
-      progress, 
-      easterEggRecords: easterEggRecords.length,
-      forceProgressBarUpdate,
-      showCreativeEgg: !!showCreativeEgg,
-      showLevelUpNotification: !!showLevelUpNotification,
-      showAchievementPanel,
-      isVideoFullscreen,
-      isInFullscreen,
-      sidebarExpanded,
-      sidebarForceVisible,
-      document_fullscreenElement: !!document.fullscreenElement
-    })
+    // 调试信息（开发环境）
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🎯 侧边栏数据:', { discoveredCount, totalCount, progress })
+    }
 
     // 强制显示：除非明确设置为不可见，否则总是显示
     if (!sidebarForceVisible) return null
@@ -1566,9 +2285,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           top: '50%',
           transform: 'translateY(-50%)',
           display: 'block !important',
-          visibility: 'visible !important',
-          opacity: '1 !important',
-          maxZIndex: '2147483647'
+          visibility: 'visible',
+          opacity: '1 !important'
         }}
         data-testid="achievement-sidebar"
         data-force-visible="true"
@@ -1782,7 +2500,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         /* 基础强制显示样式 */
         .achievement-sidebar.force-visible {
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           position: fixed !important;
           z-index: 9999999 !important;
           opacity: 1 !important;
@@ -1801,7 +2519,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           z-index: 2147483647 !important;
           position: fixed !important;
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           opacity: 1 !important;
           right: 0 !important;
           top: 50% !important;
@@ -1820,7 +2538,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         video:-moz-full-screen ~ .achievement-sidebar {
           z-index: 2147483647 !important;
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           position: fixed !important;
           right: 0 !important;
           top: 50% !important;
@@ -1833,7 +2551,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         .achievement-sidebar[data-force-visible="true"] {
           z-index: 2147483647 !important;
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           position: fixed !important;
           right: 0 !important;
           top: 50% !important;
@@ -1849,7 +2567,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         *:-ms-fullscreen .achievement-sidebar {
           z-index: 2147483647 !important;
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           position: fixed !important;
           right: 0 !important;
           top: 50% !important;
@@ -1867,10 +2585,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       if (sidebar) {
         const computedStyle = window.getComputedStyle(sidebar)
         if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden' || computedStyle.opacity === '0') {
-          console.log('🔧 检测到侧边栏被隐藏，强制显示')
           ;(sidebar as HTMLElement).style.cssText += `
             display: block !important;
-            visibility: visible !important;
+            visibility: visible;
             opacity: 1 !important;
             position: fixed !important;
             z-index: 2147483647 !important;
@@ -1897,12 +2614,10 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           computedStyle.visibility === 'hidden' || 
           parseFloat(computedStyle.opacity) < 0.1) {
         
-        console.log('🚨 侧边栏被检测到隐藏，立即强制恢复显示！')
-        
         // 立即强制显示
         sidebarElement.style.cssText = `
           display: block !important;
-          visibility: visible !important;
+          visibility: visible;
           opacity: 1 !important;
           position: fixed !important;
           z-index: 999999999 !important;
@@ -1912,7 +2627,6 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
           pointer-events: auto !important;
         `
         
-        // 更新React状态
         setSidebarForceVisible(true)
         setForceProgressBarUpdate(prev => prev + 200)
       }
@@ -1945,7 +2659,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         if (sidebar) {
           ;(sidebar as HTMLElement).style.cssText += `
             display: block !important;
-            visibility: visible !important;
+            visibility: visible;
             opacity: 1 !important;
             z-index: 999999999 !important;
           `
@@ -1966,21 +2680,129 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }, [])
 
+  // 🗺️ 地图连接挑战界面组件
+  const MapChallengeInterface = () => {
+    if (!showMapChallenge) return null
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center transition-opacity duration-1000 bg-black/80 backdrop-blur-sm" style={{ zIndex: 999997 }}>
+        <div className="relative w-full max-w-4xl mx-4 h-[80vh]">
+          {/* 地图背景 */}
+          <div className="relative w-full h-full bg-gradient-to-br from-blue-900/20 to-green-900/20 rounded-2xl border border-white/20 backdrop-blur-sm overflow-hidden">
+            {/* 地图标题 */}
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+              <h2 className="text-2xl font-bold text-white mb-2 text-center">
+                🗺️ 今夕伙伴连接图
+              </h2>
+              <p className="text-white/80 text-sm text-center">
+                点击头像连接全国各地的今夕伙伴 ({mapConnections.length}/5+ 连接)
+              </p>
+            </div>
+            
+            {/* 中国地图轮廓 */}
+            <div className="absolute inset-0 opacity-20">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <path 
+                  d="M20,30 Q30,25 40,30 Q50,20 65,25 Q80,30 85,45 Q80,55 85,65 Q80,75 70,80 Q60,85 50,80 Q40,85 30,75 Q25,65 20,55 Q15,45 20,30 Z" 
+                  fill="none" 
+                  stroke="rgba(135, 206, 235, 0.3)" 
+                  strokeWidth="1"
+                />
+              </svg>
+            </div>
+            
+            {/* 头像位置点 */}
+            {mapAvatars.map((avatar) => (
+              <div
+                key={avatar.id}
+                className={`absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
+                  selectedAvatar === avatar.id 
+                    ? 'scale-125 animate-pulse' 
+                    : 'hover:scale-110'
+                }`}
+                style={{ 
+                  left: `${avatar.x}%`, 
+                  top: `${avatar.y}%`,
+                }}
+                onClick={() => handleAvatarClick(avatar.id)}
+                title={`${avatar.region} - 点击连接`}
+              >
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-lg border-2 transition-all ${
+                  selectedAvatar === avatar.id 
+                    ? 'border-yellow-400 shadow-lg shadow-yellow-400/50' 
+                    : 'border-white/30 hover:border-white/60'
+                }`}>
+                  {avatar.avatar}
+                </div>
+                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-white/80 whitespace-nowrap">
+                  {avatar.region}
+                </div>
+              </div>
+            ))}
+            
+            {/* 连接线 */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none">
+              {mapConnections.map((connection, index) => {
+                const fromAvatar = mapAvatars.find(a => a.id === connection.from)
+                const toAvatar = mapAvatars.find(a => a.id === connection.to)
+                if (!fromAvatar || !toAvatar) return null
+                
+                return (
+                  <line
+                    key={index}
+                    x1={`${fromAvatar.x}%`}
+                    y1={`${fromAvatar.y}%`}
+                    x2={`${toAvatar.x}%`}
+                    y2={`${toAvatar.y}%`}
+                    stroke="rgba(255, 215, 0, 0.8)"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                    className="animate-pulse"
+                  />
+                )
+              })}
+            </svg>
+            
+            {/* 关闭按钮 */}
+            <button
+              onClick={() => {
+                setShowMapChallenge(false)
+                setMapConnections([])
+                setSelectedAvatar(null)
+              }}
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all"
+            >
+              ✕
+            </button>
+            
+            {/* 进度提示 */}
+            {mapConnections.length >= 3 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-green-500/80 text-white px-4 py-2 rounded-lg text-sm animate-bounce">
+                  很好！继续连接更多伙伴...
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       {children}
       
-      {/* 7周年庆典彩蛋 */}
-      <AnniversaryEasterEgg
-        isVisible={showAnniversary}
-        onClose={() => setShowAnniversary(false)}
-      />
+
       
       {/* 创意彩蛋展示 */}
       <CreativeEasterEggDisplay />
       
       {/* 等级升级通知 */}
       <LevelUpNotification />
+      
+      {/* 地图连接挑战界面 */}
+      <MapChallengeInterface />
       
       {/* 右侧悬浮成就侧边栏 - 强制显示版本 */}
       <AchievementSidebar />
@@ -2007,24 +2829,12 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         </div>
       )}
       
-      {/* 彩蛋说明（隐藏的开发者信息） */}
-      <div style={{ display: 'none' }} data-easter-eggs="creative">
-        {/* 
-        今夕公会创意彩蛋系统 v2.4 - 成就系统：
-        1. 键盘彩蛋：输入 "JINXI7" 触发7周年庆典
-        2. 点击彩蛋：快速点击Logo 7次
-        3. 全屏视频彩蛋：全屏观看今夕宣传视频
-        4. 开发者彩蛋：打开F12开发者工具
-        5. 双击魔法彩蛋：快速双击页面背景空白区域
-        6. 商标点击彩蛋：点击页面底部的今夕商标
-        7. 滚轮狂热彩蛋：在2秒内连续滚动鼠标滚轮20次（更严格的挑战！）
-        
-        成就系统：
-        - 底部进度条显示发现进度
-        - 点击进度条查看详细成就面板
-        - 升级时会有专门的通知动画
-        - 所有数据持久化保存
-        */}
+      {/* 加密的系统数据 */}
+      <div style={{ display: 'none' }} data-sys-info={encryptData('system-metadata')}>
+        {(() => {
+          const _0x1f2e = encryptData('探索系统已加载')
+          return process.env.NODE_ENV === 'development' ? `<!--${_0x1f2e}-->` : null
+        })()}
       </div>
     </div>
   )

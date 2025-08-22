@@ -8,7 +8,7 @@ import { sendRecruitmentEmail, RecruitmentData } from "../components/email-servi
 import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
-import BusuanziCounter from "../components/analytics/busuanzi-counter"
+
 
 // 动态导入重型组件以减少初始内存占用
 const Marquee = lazy(() => import("../components/magicui/marquee").then(module => ({ default: module.Marquee })))
@@ -1090,15 +1090,39 @@ function PageContent() {
       {/* Footer */}
       <footer className="text-center py-4 relative z-10">
         <div className="max-w-[1180px] mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center justify-center">
             <p className="text-white/80">
               © <span id="y">2018</span> 今夕公会
             </p>
-            {/* 真实访问统计 - 不蒜子 */}
-            <BusuanziCounter showDetail={false} />
           </div>
         </div>
       </footer>
+
+      {/* 安全保护脚本 */}
+      <script 
+        dangerouslySetInnerHTML={{
+          __html: `
+            // 基础反调试保护
+            (function() {
+              // 禁用右键
+              document.addEventListener('contextmenu', e => e.preventDefault());
+              
+              // 禁用开发者工具快捷键
+              document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'U')) {
+                  e.preventDefault();
+                }
+              });
+              
+              // 控制台警告
+              console.log('%c🔒 网站受到保护', 'color: red; font-size: 16px; font-weight: bold;');
+              console.log('%c未经授权访问源代码是违法行为', 'color: orange; font-size: 12px;');
+            })();
+          `
+        }}
+      />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="加入今夕公会" size="md">
         <div className="space-y-4">

@@ -39,10 +39,15 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   const [keySequence, setKeySequence] = useState('')
   
   // 创意彩蛋相关状态
-  const [isVideoFullscreen, setIsVideoFullscreen] = useState(false)
   const [forceProgressBarUpdate, setForceProgressBarUpdate] = useState(0)
   const [sidebarForceVisible, setSidebarForceVisible] = useState(true)
   const sidebarRef = useRef<HTMLDivElement>(null)
+  
+  // 🕰️ 层层递进探索彩蛋状态
+  const [explorationStage, setExplorationStage] = useState(0) // 0-4，分别对应未开始和四个阶段
+  const [explorationClues, setExplorationClues] = useState<string[]>([])
+  const [showExplorationInterface, setShowExplorationInterface] = useState(false)
+  const [explorationStartTime, setExplorationStartTime] = useState<number>(0)
   
   // 成就系统状态
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
@@ -247,7 +252,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     'taWRbW3bbW2taWTSbW1bbW2RbWQSbW3bbW3xaWRSbW1bbW0taWOyaW3bbWTuaW3xaW4bbWxaWOyaW5bbWRbW3RbW4bbW0VbWRbW3bbWQqaW4taW4VbW1bbWxaWTSbW4bbW0VbWRbW3bbWtaWRbW3bbW2taWTSbW1bbW',
     '3xaWRSbW1bbW0RbW4VbW0bbW1xaW0RbW1bbWOuaWPWbW0bbW5xaW2taW1bbW2RbW5VbW0bbW3taWRbW2bbWRbWQWbW5bbW4RbW0xaW3bbWQqaW2VbWSSbW1bbW1xaWVbW2bbW2RbW5VbW0bbW1xaW0RbW1bbWOuaWPWbW0bbW',
     'RbWPSbW3bbWxaW5VbW0bbWTuaW3xaW4bbWxaWOyaW5bbWTuaW1RbW1bbW0xaWQWbW2bbW4xaWPyaW3bbWSSbW0xaW5bbW4RbW0xaW3bbWQqaW2VbWSSbW1bbWVbWPyaW2bbWQyaWRWbW0bbWPuaWSWbW1bbWPuaW3xaW2bbW',
-    '2taWTSbW1bbW4xaW3RbW3bbWVbWRWbW1bbW5taW1taW1bbWVbWSuaW3bbWxaWTuaW1bbWPWbW4taW1bbW2VbW3xaW2bbWOyaWSSbW1bbW5VbW5taW3bbW4RbWQyaW1bbWQqaWPuaW5taW2bbWSuaWQuaW3bbWVbWRWbW1bbW5taW1taW1bbW',
+    '==t^PcP\\4b`[Scv[Pc[5bv[Scv_5bP[5b[Sc`_5bv_OcP\\ScP[4b`^5b[ScP_OcP\\PcP[Sc`Z5b`^5bv[Sc[Pc`[4b`\\ScP[Pc`\\Pc`[ScP\\NwZ4RbWQyaW1bbW1xaW0RbW1bbWOuaWPWbW0bbWtaWTSbW4bbWtaW3RbW4bbWQuaWQWbWTcbW5taW1taW1bbW2VbW3xaW2bbWOuaW2VbW4bbWTWbW5RbW3bbWQqaW1taWtaW4bbWRbW0VbW3bbWRbWSuaW2bbW5taW1taW1bbW2VbW3xaW2bbWVaWTuaW4VbWTcbWVbW1xaWTyaWfbW',
     '4xaW3RbW3bbW1RbW1RbW1bbW0taWOyaW3bbW4xaWRbW5bbWQyaWVbW4bbW3xaWRSbW1bbWVbW1xaW2bbWtaWQWbW1bbWRbW3RbW4bbWQqaW4taW4VbW1bbW1xaWVbW2bbW2RbWRSbW1bbWVbW1xaW2bbW',
     'TSbWTuaW1bbW0RbWSSbW4bbW3xaWSWbW1bbW3VbWSuaW4bbW4xaW4taW2bbWxaWQuaW2bbW2taWTWbW1bbWVbWSSbW4bbW3taWTWbW4bbWOyaWtaW5bbWQqaW1taWtaW4bbW0RbWOuaW2bbW4taWSSbW1bbW2taWTWbW1bbWVbWSSbW4bbW',
     '5xaWRyaW5bbWVbW5VbW1bbWtaWTWbW1bbW1taW2taW1bbWSWbW5taW2bbWPWbWTSbW1bbWRSbW4VbW0bbW4xaWPWbW5bbW5xaWRyaW5bbW4RbWQyaW1bbWQqaW4taW4VbW1bbW3RbW0RbW1bbWtaWTWbW1bbW1taW2RbW3bbW',
@@ -257,8 +262,8 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
   
   const _0x6c8d = () => {
     try {
-      const _0x2f1a = ['legend-awakener', 'cipher-breaker', 'geometry-artist', 'melody-composer', 'shadow-hunter', 'math-wizard', 'memory-keeper', 'patience-master', 'explorer', 'ultimate-seeker']
-      const _0x8e3b = ['🗺️', '🔐', '📐', '🎵', '🌓', '🧮', '🧠', '🧘', '🗺️', '💎']
+      const _0x2f1a = ['legend-awakener', 'cipher-breaker', 'geometry-artist', 'melody-composer', 'time-explorer', 'math-wizard', 'memory-keeper', 'patience-master', 'explorer', 'ultimate-seeker']
+      const _0x8e3b = ['🗺️', '🔐', '📐', '🎵', '🕰️', '🧮', '🧠', '🧘', '🗺️', '💎']
       
       return _0x4a5b.map((item, index) => {
         const decoded = decryptData(item)
@@ -375,7 +380,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
         setForceProgressBarUpdate(prev => prev + 100)
       }
     }, 100)
-  }, [showCreativeEgg, showLevelUpNotification, showAchievementPanel, isVideoFullscreen])
+  }, [showCreativeEgg, showLevelUpNotification, showAchievementPanel])
 
   // 保存成就进度 - 加密版本
   const saveProgress = (newRecords: EasterEggRecord[]) => {
@@ -480,27 +485,44 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       console.log(`✅ 彩蛋 ${eggId} 已标记为发现。总进度: ${updatedRecords.filter(e => e.discovered).length}/${updatedRecords.length}`)
     }
     
+    // 立即更新React状态，确保成就栏实时更新
+    setEasterEggRecords(updatedRecords)
+    
+    // 保存到localStorage
     saveProgress(updatedRecords)
     
-    // 强制确保侧边栏在彩蛋发现后保持可见
+    // 强制确保侧边栏在彩蛋发现后保持可见和更新
     setSidebarForceVisible(true)
-    setForceProgressBarUpdate(prev => prev + 25)
+    setForceProgressBarUpdate(prev => prev + 100) // 增加更新幅度
     
     // 检查是否达到新等级
     const discoveredCount = updatedRecords.filter(egg => egg.discovered).length
     checkLevelUp(discoveredCount)
     
-    // 额外确保侧边栏显示更新，并验证数据完整性
+    // 立即再次强制更新，确保UI响应
+    setTimeout(() => {
+      setForceProgressBarUpdate(prev => prev + 50)
+      setSidebarForceVisible(true)
+    }, 100)
+    
+    // 额外确保数据持久化和UI同步
     setTimeout(() => {
       setSidebarForceVisible(true)
       setForceProgressBarUpdate(prev => prev + 30)
       
       // 彩蛋发现后验证数据完整性
       const restored = validateAndRestoreData()
-
       
-                // 强制同步等级牌显示
+      // 强制同步等级牌显示
       const newAchievement = getCurrentAchievement()
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔄 彩蛋发现后状态同步完成', {
+          discoveredCount,
+          totalCount: updatedRecords.length,
+          achievement: newAchievement?.name
+        })
+      }
     }, 500)
     
     // 额外的保险措施
@@ -569,13 +591,27 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
       const key = event.key
       const newSequence = keySequence + key
-      const trimmedSequence = newSequence.slice(-15) // 增长序列以支持时间格式
+      const trimmedSequence = newSequence.slice(-20) // 增长序列以支持更复杂的密码
       setKeySequence(trimmedSequence)
       
       // 移除了原有的键盘输入机制，改为地图连接机制
       
-      // 🔐 密码破译师彩蛋 - 输入神秘字符序列
-      if (trimmedSequence.includes('TREASURE') || trimmedSequence.includes('treasure')) {
+      // 🔐 密码破译师彩蛋 - 输入神秘字符序列（更严格的条件）
+      const treasurePattern = /TREASURE|treasure/
+      const cipherSequences = [
+        'JXTREASURE', 'jxtreasure', 'TREASURE2024', 'treasure2024',
+        'JINXI+TREASURE', 'jinxi+treasure', 'cipher:TREASURE', 'cipher:treasure'
+      ]
+      
+      const hasCipherPattern = cipherSequences.some(pattern => trimmedSequence.includes(pattern)) ||
+                              (treasurePattern.test(trimmedSequence) && 
+                               (trimmedSequence.includes('cipher') || 
+                                trimmedSequence.includes('CIPHER') ||
+                                trimmedSequence.includes('jinxi') ||
+                                trimmedSequence.includes('JINXI') ||
+                                trimmedSequence.includes('2024')))
+      
+      if (hasCipherPattern) {
         if (!_0x5c1d('cipher-breaker')) {
           triggerCreativeEgg({
             type: 'observation',
@@ -590,7 +626,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       }
       
       // 清理过长的序列
-      if (trimmedSequence.length > 12) {
+      if (trimmedSequence.length > 18) {
         setTimeout(() => setKeySequence(''), 3000)
       }
     }
@@ -601,90 +637,90 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
 
 
 
-  // 📺 创意彩蛋2: 全屏视频彩蛋 - 全屏观看今夕宣传视频
+  // 🕰️ 层层递进探索彩蛋 - 今夕2018年酷暑创建之旅
   useEffect(() => {
-    let videoTimer: NodeJS.Timeout | null = null
+    let timeExplorationTimer: NodeJS.Timeout | null = null
+    let stageCheckTimer: NodeJS.Timeout | null = null
     
-    const handleFullscreenChange = () => {
-      const isFullscreen = document.fullscreenElement !== null || 
-                          (document as any).webkitFullscreenElement !== null ||
-                          (document as any).mozFullScreenElement !== null ||
-                          (document as any).msFullscreenElement !== null
-      
-      if (isFullscreen) {
-        // 检测是否是视频元素进入全屏
-        const fullscreenElement = document.fullscreenElement || 
-                                 (document as any).webkitFullscreenElement ||
-                                 (document as any).mozFullScreenElement ||
-                                 (document as any).msFullscreenElement
-        
-        if (fullscreenElement && fullscreenElement.tagName === 'VIDEO' && !isVideoFullscreen) {
-          setIsVideoFullscreen(true)
-          
-          // 安全检查是否已经发现过这个彩蛋
-          const isAlreadyDiscovered = _0x5c1d('fullscreen')
-          
-          if (!isAlreadyDiscovered) {
-            // 延迟3秒触发彩蛋，确保用户真的在观看
-            videoTimer = setTimeout(() => {
-              // 再次检查是否还在全屏状态
-              const stillFullscreen = document.fullscreenElement !== null || 
-                                     (document as any).webkitFullscreenElement !== null ||
-                                     (document as any).mozFullScreenElement !== null ||
-                                     (document as any).msFullscreenElement !== null
-              
-              if (stillFullscreen) {
-                triggerCreativeEgg({
-                  type: 'fullscreen',
-                  title: '📺 视频专注者',
-                  message: '你全屏观看今夕宣传视频，展现了对今夕的真正关注！',
-                  icon: '📺'
-                }, 'fullscreen')
-                
-                // 特别为全屏彩蛋强制更新进度条，多次更新确保显示
-                setTimeout(() => {
-                  setForceProgressBarUpdate(prev => prev + 10) // 立即更新
-                  // 再次确认更新
-                  setTimeout(() => {
-                    setForceProgressBarUpdate(prev => prev + 15) // 再次强制更新
-                  }, 1000)
-                  // 第三次确保显示
-                  setTimeout(() => {
-                    setForceProgressBarUpdate(prev => prev + 20) // 最终确保更新
-                  }, 3000)
-                }, 500)
-              }
-            }, 3000)
-          }
-        }
-      } else {
-        // 退出全屏状态
-        if (isVideoFullscreen) {
-          setIsVideoFullscreen(false)
-        }
-        if (videoTimer) {
-          clearTimeout(videoTimer)
-          videoTimer = null
-        }
-      }
-      
-      // 强制更新侧边栏显示
-      setForceProgressBarUpdate(prev => prev + 1)
+    // 检查是否已经发现过这个彩蛋
+    if (_0x5c1d('time-explorer')) {
+      return
     }
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-    document.addEventListener('msfullscreenchange', handleFullscreenChange)
+    
+    // 初始化探索开始时间
+    if (explorationStartTime === 0) {
+      setExplorationStartTime(Date.now())
+    }
+    
+    // 第一阶段：时间线索 - 页面停留时间检测
+    const startTimeExploration = () => {
+      // 2分钟后触发第一阶段
+      timeExplorationTimer = setTimeout(() => {
+        if (explorationStage === 0) {
+          setExplorationStage(1)
+          setExplorationClues(['⏰ 时间的痕迹'])
+          showToast('🕰️ 时间探索者，你感受到了历史的足迹...', 'info')
+          createTimeExplorationEffect(1)
+        }
+      }, 120000) // 2分钟
+    }
+    
+    // 阶段检查和推进
+    const checkStageProgression = () => {
+      stageCheckTimer = setInterval(() => {
+        if (explorationStartTime === 0) return
+        
+        const currentTime = Date.now()
+        const timeSpent = currentTime - explorationStartTime
+        
+        // 第二阶段：酷暑元素探索
+        if (explorationStage === 1 && timeSpent > 180000) { // 3分钟后
+          setExplorationStage(2)
+          setExplorationClues(prev => [...prev, '🌞 酷暑的记忆'])
+          showToast('☀️ 炎热的夏日，似乎有故事在召唤...', 'info')
+          createTimeExplorationEffect(2)
+          createHeatWaveElements()
+        }
+        
+        // 第三阶段：2018年线索
+        if (explorationStage === 2 && timeSpent > 240000) { // 4分钟后
+          setExplorationStage(3)
+          setExplorationClues(prev => [...prev, '📅 2018年的印记'])
+          showToast('📆 2018年，那个特殊的年份...', 'info')
+          createTimeExplorationEffect(3)
+          create2018Elements()
+        }
+        
+        // 第四阶段：今夕创建故事
+        if (explorationStage === 3 && timeSpent > 300000) { // 5分钟后
+          setExplorationStage(4)
+          setExplorationClues(prev => [...prev, '🌅 今夕的诞生'])
+          setShowExplorationInterface(true)
+          triggerCreativeEgg({
+            type: 'observation',
+            title: '🕰️ 时光探索者',
+            message: '你穿越时光，见证了今夕在2018年酷暑中的诞生时刻！',
+            icon: '🕰️'
+          }, 'time-explorer')
+          createTimeExplorationEffect(4)
+          createJinXiBirthEffect()
+          
+          // 清理定时器
+          if (stageCheckTimer) clearInterval(stageCheckTimer)
+        }
+      }, 30000) // 每30秒检查一次
+    }
+    
+    if (explorationStage === 0) {
+      startTimeExploration()
+    }
+    checkStageProgression()
     
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange)
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
-      if (videoTimer) clearTimeout(videoTimer)
+      if (timeExplorationTimer) clearTimeout(timeExplorationTimer)
+      if (stageCheckTimer) clearInterval(stageCheckTimer)
     }
-  }, []) // 移除依赖，避免不必要的重新执行
+  }, [explorationStage, explorationStartTime])
 
   // 🕵️ 观察大师彩蛋 - 细节观察挑战
   useEffect(() => {
@@ -1063,43 +1099,30 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     _0x9b2e(eggId)
     showToast(`${egg.icon} ${egg.title}：${egg.message}`, 'success')
     
-    // 强制更新进度条，确保它在彩蛋触发后保持可见
-    setTimeout(() => {
-      setForceProgressBarUpdate(prev => prev + 1)
-    }, 100)
+    // 立即强制更新成就栏
+    setForceProgressBarUpdate(prev => prev + 100)
+    setSidebarForceVisible(true)
     
-    // 特别处理全屏彩蛋的进度条保持
-    if (eggId === 'fullscreen') {
-      // 强制侧边栏始终可见
+    // 额外的强制更新确保实时响应
+    setTimeout(() => {
+      setForceProgressBarUpdate(prev => prev + 50)
       setSidebarForceVisible(true)
-      
-      // 多次强制更新确保进度条不会消失
-      const intervals = [500, 1500, 3000, 5000, 7000, 10000]
-      intervals.forEach((delay, index) => {
-        setTimeout(() => {
-
-          setForceProgressBarUpdate(prev => prev + (index + 1) * 20)
-          setSidebarForceVisible(true)
-          
-          // 确保DOM元素可见
-          const sidebar = document.querySelector('.achievement-sidebar')
-          if (sidebar) {
-            ;(sidebar as HTMLElement).style.cssText += `
-              display: block !important;
-              visibility: visible;
-              opacity: 1 !important;
-              z-index: 999999999 !important;
-            `
-          }
-        }, delay)
-      })
-    }
+    }, 50)
+    
+    // 再次确保更新
+    setTimeout(() => {
+      setForceProgressBarUpdate(prev => prev + 25)
+    }, 200)
     
     // 根据彩蛋类型触发不同特效
     switch(egg.type) {
-      case 'fullscreen':
-        // 全屏视频彩蛋：视频播放特效
-        createVideoWatchEffect()
+      case 'observation':
+        // 根据具体的彩蛋ID决定特效
+        if (eggId === 'time-explorer') {
+          createJinXiBirthEffect()
+        } else {
+          createDetectiveEffect()
+        }
         break
       case 'detective':
         createDetectiveEffect()
@@ -1825,9 +1848,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     setTimeout(() => note.remove(), 1000)
   }
 
-  // 📐 高级图形分析函数 - 支持"今夕"汉字识别
+  // 📐 高级图形分析函数 - 支持"今夕"汉字识别（严格版本）
   const analyzeAdvancedShape = (points: { x: number, y: number, timestamp: number }[], targetShape: string): string | null => {
-    if (points.length < 30) return null
+    if (points.length < 80) return null // 提高最低点数要求
     
     const coords = points.map(p => ({ x: p.x, y: p.y }))
     const bounds = {
@@ -1846,80 +1869,117 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     // 检测"今夕"汉字
     if (targetShape === '今夕') {
       // 汉字特征分析：
-      // 1. 检测笔画方向变化（汉字有多个转折）
       let directionalChanges = 0
       let verticalStrokes = 0
       let horizontalStrokes = 0
       let crossingPoints = 0
+      let sharpTurns = 0
       
-      // 分析笔画方向
-      for (let i = 5; i < coords.length - 5; i += 3) {
-        if (i >= coords.length - 5) break
+      // 分析笔画方向（更严格的检测）
+      for (let i = 8; i < coords.length - 8; i += 4) {
+        if (i >= coords.length - 8) break
         
-        const prev = coords[i - 5]
+        const prev = coords[i - 8]
         const curr = coords[i]
-        const next = coords[i + 5]
+        const next = coords[i + 8]
         
         const angle1 = Math.atan2(curr.y - prev.y, curr.x - prev.x)
         const angle2 = Math.atan2(next.y - curr.y, next.x - curr.x)
         const angleDiff = Math.abs(angle2 - angle1)
         
-        // 检测方向变化
-        if (angleDiff > Math.PI / 6) { // 30度以上的转折
+        // 检测方向变化（提高阈值）
+        if (angleDiff > Math.PI / 4) { // 45度以上的转折
           directionalChanges++
         }
         
-        // 检测垂直笔画
-        if (Math.abs(angle1) < Math.PI / 6 || Math.abs(angle1 - Math.PI) < Math.PI / 6) {
+        // 检测尖锐转折（汉字的特征）
+        if (angleDiff > Math.PI / 2) { // 90度以上的急转
+          sharpTurns++
+        }
+        
+        // 检测垂直笔画（更严格）
+        if (Math.abs(Math.abs(angle1) - Math.PI / 2) < Math.PI / 8) {
           verticalStrokes++
         }
         
-        // 检测水平笔画
-        if (Math.abs(angle1 - Math.PI / 2) < Math.PI / 6 || Math.abs(angle1 + Math.PI / 2) < Math.PI / 6) {
+        // 检测水平笔画（更严格）
+        if (Math.abs(angle1) < Math.PI / 8 || Math.abs(Math.abs(angle1) - Math.PI) < Math.PI / 8) {
           horizontalStrokes++
         }
       }
       
-      // 检测轨迹交叉点（汉字的特征）
-      for (let i = 0; i < coords.length - 20; i += 10) {
-        for (let j = i + 20; j < coords.length; j += 10) {
+      // 检测轨迹交叉点（更严格的汉字特征）
+      for (let i = 0; i < coords.length - 30; i += 15) {
+        for (let j = i + 30; j < coords.length; j += 15) {
           const p1 = coords[i]
           const p2 = coords[j]
           const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
           
           // 如果两个距离较远的点很接近，可能是交叉
-          if (distance < 20 && Math.abs(i - j) > 30) {
+          if (distance < 15 && Math.abs(i - j) > 50) {
             crossingPoints++
           }
         }
       }
       
-      // 检测左右结构（"今夕"是两个字，可能有左右分布）
-      const leftPoints = coords.filter(p => p.x < centerX - width * 0.1)
-      const rightPoints = coords.filter(p => p.x > centerX + width * 0.1)
-      const hasLeftRightStructure = leftPoints.length > 10 && rightPoints.length > 10
+      // 检测左右结构（"今夕"是两个字的特征）
+      const leftThird = bounds.minX + width * 0.33
+      const rightThird = bounds.maxX - width * 0.33
+      const leftPoints = coords.filter(p => p.x < leftThird)
+      const rightPoints = coords.filter(p => p.x > rightThird)
+      const middlePoints = coords.filter(p => p.x >= leftThird && p.x <= rightThird)
       
-      // 检测是否符合汉字特征
-      const hasChineseCharacterFeatures = 
-        directionalChanges >= 6 && // 足够的方向变化
-        (verticalStrokes > 8 || horizontalStrokes > 8) && // 有明显的横或竖笔画
-        crossingPoints >= 1 && // 有交叉笔画
-        width > 80 && height > 40 && // 合适的尺寸
-        ratio > 1.2 && ratio < 4 // 合理的宽高比（两个字排列）
+      const hasDefiniteTwoCharStructure = 
+        leftPoints.length >= 20 && 
+        rightPoints.length >= 20 && 
+        middlePoints.length >= 10 && // 中间有连接部分
+        ratio > 1.8 && ratio < 3.5 // 适合两个字的宽高比
       
-      // 更宽松的识别条件
-      const basicWritingPattern = 
-        directionalChanges >= 4 && 
-        coords.length >= 40 && 
-        width > 60 && 
-        height > 30
-      
-      if (hasChineseCharacterFeatures || (hasLeftRightStructure && basicWritingPattern)) {
-        return '今夕'
+      // 检测"今"字特征（左半部分）
+      const leftBounds = {
+        minX: Math.min(...leftPoints.map(p => p.x)),
+        maxX: Math.max(...leftPoints.map(p => p.x)),
+        minY: Math.min(...leftPoints.map(p => p.y)),
+        maxY: Math.max(...leftPoints.map(p => p.y))
       }
+      const leftWidth = leftBounds.maxX - leftBounds.minX
+      const leftHeight = leftBounds.maxY - leftBounds.minY
+      const leftRatio = leftWidth / leftHeight
       
-      // 备用识别：如果轨迹足够复杂且有合理的分布
-      if (directionalChanges >= 3 && coords.length >= 50 && width > 100) {
+      // 检测"夕"字特征（右半部分）
+      const rightBounds = {
+        minX: Math.min(...rightPoints.map(p => p.x)),
+        maxX: Math.max(...rightPoints.map(p => p.x)),
+        minY: Math.min(...rightPoints.map(p => p.y)),
+        maxY: Math.max(...rightPoints.map(p => p.y))
+      }
+      const rightWidth = rightBounds.maxX - rightBounds.minX
+      const rightHeight = rightBounds.maxY - rightBounds.minY
+      const rightRatio = rightWidth / rightHeight
+      
+      const hasBothCharacterFeatures = 
+        leftRatio > 0.4 && leftRatio < 1.5 && // "今"字比例
+        rightRatio > 0.4 && rightRatio < 1.5 && // "夕"字比例
+        leftWidth > 30 && leftHeight > 30 && // 最小尺寸
+        rightWidth > 30 && rightHeight > 30
+      
+      // 严格的识别条件
+      const strictChineseCharacterFeatures = 
+        directionalChanges >= 12 && // 需要足够多的方向变化
+        sharpTurns >= 4 && // 需要尖锐转折
+        (verticalStrokes >= 8 && horizontalStrokes >= 8) && // 需要明显的横竖笔画
+        crossingPoints >= 2 && // 需要多个交叉点
+        width > 120 && height > 50 && // 更大的最小尺寸
+        ratio > 1.8 && ratio < 3.2 && // 适合两字的比例
+        coords.length >= 120 // 足够的复杂度
+      
+      // 最终验证：必须同时满足多个严格条件
+      const isValidJinXi = 
+        strictChineseCharacterFeatures &&
+        hasDefiniteTwoCharStructure &&
+        hasBothCharacterFeatures
+      
+      if (isValidJinXi) {
         return '今夕'
       }
     }
@@ -2034,6 +2094,352 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }
   }
 
+  // 🕰️ 时光探索特效函数集合
+  const createTimeExplorationEffect = (stage: number) => {
+    switch(stage) {
+      case 1:
+        createTimeTracesEffect()
+        break
+      case 2:
+        createSummerHeatEffect()
+        break
+      case 3:
+        createYear2018Effect()
+        break
+      case 4:
+        createJinXiOriginEffect()
+        break
+    }
+  }
+
+  const createTimeTracesEffect = () => {
+    // 第一阶段：时间痕迹特效
+    const timeSymbols = ['⏰', '🕰️', '⌛', '⏳', '🌅', '🌇', '📅', '📆']
+    
+    for (let i = 0; i < 12; i++) {
+      const trace = document.createElement('div')
+      trace.innerHTML = timeSymbols[Math.floor(Math.random() * timeSymbols.length)]
+      trace.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 2 + 1.5}rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: timeTrace 4s ease-out forwards;
+        animation-delay: ${i * 200}ms;
+        color: rgba(255, 215, 0, 0.8);
+      `
+      document.body.appendChild(trace)
+      setTimeout(() => trace.remove(), 5000)
+    }
+    
+    if (!document.getElementById('timeTraceStyle')) {
+      const style = document.createElement('style')
+      style.id = 'timeTraceStyle'
+      style.textContent = `
+        @keyframes timeTrace {
+          0% { opacity: 0; transform: scale(0) rotate(0deg); }
+          20% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+          100% { opacity: 0; transform: scale(0.5) rotate(360deg) translateY(-100px); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createHeatWaveElements = () => {
+    // 创建酷暑元素，用户需要找到并点击
+    const heatElements = [
+      { emoji: '☀️', text: '烈日' },
+      { emoji: '🌡️', text: '高温' },
+      { emoji: '🔥', text: '炎热' }
+    ]
+    
+    heatElements.forEach((element, index) => {
+      const heatDiv = document.createElement('div')
+      heatDiv.innerHTML = `${element.emoji}`
+      heatDiv.title = element.text
+      heatDiv.style.cssText = `
+        position: fixed;
+        top: ${20 + index * 30}%;
+        right: ${10 + index * 5}%;
+        font-size: 2rem;
+        z-index: 9998;
+        cursor: pointer;
+        animation: heatPulse 2s infinite;
+        filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
+      `
+      heatDiv.setAttribute('data-heat-element', 'true')
+      
+      heatDiv.addEventListener('click', () => {
+        if (explorationStage === 2) {
+          heatDiv.style.animation = 'none'
+          heatDiv.style.transform = 'scale(1.5)'
+          setTimeout(() => heatDiv.remove(), 1000)
+          
+          const foundHeatElements = document.querySelectorAll('[data-heat-element]').length
+          if (foundHeatElements <= 1) { // 最后一个元素
+            showToast('🌞 酷暑的记忆已被唤醒...', 'info')
+          }
+        }
+      })
+      
+      document.body.appendChild(heatDiv)
+      
+      // 30秒后自动消失
+      setTimeout(() => {
+        if (heatDiv.parentNode) heatDiv.remove()
+      }, 30000)
+    })
+    
+    if (!document.getElementById('heatPulseStyle')) {
+      const style = document.createElement('style')
+      style.id = 'heatPulseStyle'
+      style.textContent = `
+        @keyframes heatPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const create2018Elements = () => {
+    // 创建2018年相关元素
+    const yearNumbers = ['2', '0', '1', '8']
+    
+    yearNumbers.forEach((number, index) => {
+      const numberDiv = document.createElement('div')
+      numberDiv.innerHTML = number
+      numberDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: ${20 + index * 15}%;
+        font-size: 4rem;
+        font-weight: bold;
+        color: rgba(59, 130, 246, 0.8);
+        z-index: 9998;
+        cursor: pointer;
+        animation: yearFloat 3s ease-in-out infinite;
+        animation-delay: ${index * 0.5}s;
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      `
+      numberDiv.setAttribute('data-year-element', number)
+      
+      numberDiv.addEventListener('click', () => {
+        if (explorationStage === 3) {
+          numberDiv.style.color = 'rgba(34, 197, 94, 1)'
+          numberDiv.style.transform = 'scale(1.5) rotate(360deg)'
+          
+          const clickedNumbers = document.querySelectorAll('[data-year-element][style*="34, 197, 94"]').length
+          if (clickedNumbers >= 4) {
+            showToast('📅 2018年的秘密正在显现...', 'info')
+          }
+        }
+      })
+      
+      document.body.appendChild(numberDiv)
+      
+      // 60秒后自动消失
+      setTimeout(() => {
+        if (numberDiv.parentNode) numberDiv.remove()
+      }, 60000)
+    })
+    
+    if (!document.getElementById('yearFloatStyle')) {
+      const style = document.createElement('style')
+      style.id = 'yearFloatStyle'
+      style.textContent = `
+        @keyframes yearFloat {
+          0% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(180deg); }
+          100% { transform: translateY(0px) rotate(360deg); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createJinXiBirthEffect = () => {
+    // 今夕诞生最终特效
+    const birthSymbols = ['🌅', '✨', '🎊', '🎉', '💫', '⭐']
+    
+    for (let i = 0; i < 20; i++) {
+      const birth = document.createElement('div')
+      birth.innerHTML = birthSymbols[Math.floor(Math.random() * birthSymbols.length)]
+      birth.style.cssText = `
+        position: fixed;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        font-size: ${Math.random() * 3 + 2}rem;
+        z-index: 9999;
+        pointer-events: none;
+        animation: birthCelebration 6s ease-out forwards;
+        animation-delay: ${i * 100}ms;
+      `
+      document.body.appendChild(birth)
+      setTimeout(() => birth.remove(), 7000)
+    }
+    
+    // 创建今夕文字特效
+    const jinxiText = document.createElement('div')
+    jinxiText.innerHTML = '今夕'
+    jinxiText.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 6rem;
+      font-weight: bold;
+      color: rgba(255, 215, 0, 1);
+      z-index: 10000;
+      pointer-events: none;
+      animation: jinxiBirth 8s ease-in-out forwards;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    `
+    document.body.appendChild(jinxiText)
+    setTimeout(() => jinxiText.remove(), 8000)
+    
+    if (!document.getElementById('birthEffectStyle')) {
+      const style = document.createElement('style')
+      style.id = 'birthEffectStyle'
+      style.textContent = `
+        @keyframes birthCelebration {
+          0% { opacity: 0; transform: scale(0) rotate(0deg); }
+          20% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+          100% { opacity: 0; transform: scale(0.3) rotate(720deg) translateY(-300px); }
+        }
+        @keyframes jinxiBirth {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+          20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+          80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createSummerHeatEffect = () => {
+    // 夏日炎热背景特效
+    const heatBackground = document.createElement('div')
+    heatBackground.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, 
+        rgba(255, 140, 0, 0.1) 0%, 
+        rgba(255, 69, 0, 0.05) 50%, 
+        transparent 100%);
+      z-index: 9997;
+      pointer-events: none;
+      animation: heatWave 4s ease-in-out forwards;
+    `
+    document.body.appendChild(heatBackground)
+    setTimeout(() => heatBackground.remove(), 4000)
+    
+    if (!document.getElementById('heatWaveStyle')) {
+      const style = document.createElement('style')
+      style.id = 'heatWaveStyle'
+      style.textContent = `
+        @keyframes heatWave {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createYear2018Effect = () => {
+    // 2018年时代背景特效
+    const year2018 = document.createElement('div')
+    year2018.innerHTML = '2018'
+    year2018.style.cssText = `
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8rem;
+      font-weight: bold;
+      color: rgba(59, 130, 246, 0.3);
+      z-index: 9997;
+      pointer-events: none;
+      animation: year2018Appear 5s ease-in-out forwards;
+      text-shadow: 0 0 50px rgba(59, 130, 246, 0.5);
+    `
+    document.body.appendChild(year2018)
+    setTimeout(() => year2018.remove(), 5000)
+    
+    if (!document.getElementById('year2018Style')) {
+      const style = document.createElement('style')
+      style.id = 'year2018Style'
+      style.textContent = `
+        @keyframes year2018Appear {
+          0% { opacity: 0; transform: translateX(-50%) scale(0); }
+          50% { opacity: 0.8; transform: translateX(-50%) scale(1.2); }
+          100% { opacity: 0; transform: translateX(-50%) scale(1); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
+  const createJinXiOriginEffect = () => {
+    // 今夕起源故事特效
+    const storyElements = [
+      '🌅 那个酷暑难耐的夏天',
+      '💡 一个想法悄然诞生',
+      '🤝 志同道合的伙伴相聚',
+      '🌟 今夕公会正式成立'
+    ]
+    
+    storyElements.forEach((story, index) => {
+      setTimeout(() => {
+        const storyDiv = document.createElement('div')
+        storyDiv.innerHTML = story
+        storyDiv.style.cssText = `
+          position: fixed;
+          top: ${30 + index * 10}%;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 1.5rem;
+          color: rgba(255, 255, 255, 0.9);
+          z-index: 10000;
+          pointer-events: none;
+          animation: storyUnfold 3s ease-in-out forwards;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 10px 20px;
+          border-radius: 10px;
+          backdrop-filter: blur(10px);
+        `
+        document.body.appendChild(storyDiv)
+        setTimeout(() => storyDiv.remove(), 4000)
+      }, index * 1000)
+    })
+    
+    if (!document.getElementById('storyUnfoldStyle')) {
+      const style = document.createElement('style')
+      style.id = 'storyUnfoldStyle'
+      style.textContent = `
+        @keyframes storyUnfold {
+          0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+          20% { opacity: 1; transform: translateX(-50%) translateY(0px); }
+          80% { opacity: 1; transform: translateX(-50%) translateY(0px); }
+          100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }
+
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     // 创建简单的toast通知
     const toast = document.createElement('div')
@@ -2059,58 +2465,127 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     }, 3000)
   }
 
-  // 🗺️ 留言墙头像触发地图彩蛋机制
+  // 🗺️ 留言墙头像触发地图彩蛋机制（严格版本）
   useEffect(() => {
+    let lastClickTime = 0
+    let clickCount = 0
+    const DEBOUNCE_TIME = 1000 // 1秒防抖
+    const REQUIRED_CLICKS = 3 // 需要连续点击3次
+    
     const handleAvatarClick = (event: Event) => {
       const target = event.target as HTMLElement
+      const currentTime = Date.now()
       
-      // 检测是否点击了留言墙的头像
-      const isMessageAvatar = target.closest('.message-avatar') || 
-                             target.classList.contains('message-avatar') ||
-                             (target.parentElement && target.parentElement.classList.contains('message-avatar'))
+      // 防抖检查
+      if (currentTime - lastClickTime > DEBOUNCE_TIME) {
+        clickCount = 0
+      }
+      lastClickTime = currentTime
       
-      // 检测是否点击了置顶留言的头像
-      const pinnedMessage = target.closest('.pinned-message')
-      const isAvatarInPinnedMessage = pinnedMessage && isMessageAvatar
+      // 检测是否已经发现过这个彩蛋
+      if (_0x5c1d('legend-awakener')) {
+        return
+      }
       
-      if (isAvatarInPinnedMessage) {
-        // 触发地图挑战
-        event.preventDefault()
-        event.stopPropagation()
-        _0x8a4c()
+      // 更严格的头像检测
+      const isValidAvatar = (
+        // 方式1：具有avatar相关的CSS类
+        (target.classList.contains('avatar') || 
+         target.classList.contains('user-avatar') ||
+         target.classList.contains('message-avatar') ||
+         target.classList.contains('profile-image')) ||
+        
+        // 方式2：img标签且src包含avatar相关关键词
+        (target.tagName === 'IMG' && target.getAttribute('src') && 
+         (target.getAttribute('src')!.includes('avatar') || 
+          target.getAttribute('src')!.includes('profile') ||
+          target.getAttribute('src')!.includes('user'))) ||
+        
+        // 方式3：具有特定的圆形样式且尺寸合适
+        (target.style.borderRadius && 
+         (target.style.borderRadius.includes('50%') || target.style.borderRadius.includes('circle')) &&
+         target.getBoundingClientRect().width >= 32 && 
+         target.getBoundingClientRect().width <= 64)
+      )
+      
+      // 检测是否在置顶消息区域
+      const pinnedMessage = target.closest('.pinned-message') || 
+                           target.closest('.pinned') ||
+                           target.closest('[data-pinned="true"]') ||
+                           target.closest('.highlight-message')
+      
+      // 检测是否有管理员或特殊标识
+      const hasSpecialIdentifier = (
+        pinnedMessage && (
+          pinnedMessage.textContent?.includes('管理员') ||
+          pinnedMessage.textContent?.includes('置顶') ||
+          pinnedMessage.querySelector('.admin-badge') ||
+          pinnedMessage.querySelector('.pinned-badge') ||
+          pinnedMessage.classList.contains('admin-message')
+        )
+      )
+      
+      const isValidTrigger = isValidAvatar && pinnedMessage && hasSpecialIdentifier
+      
+      if (isValidTrigger) {
+        clickCount++
+        
+        if (clickCount === 1) {
+          // 第一次点击，显示提示
+          const hint = document.createElement('div')
+          hint.textContent = '🗺️ 再点击2次以发现隐藏地图...'
+          hint.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10000;
+            pointer-events: none;
+          `
+          document.body.appendChild(hint)
+          setTimeout(() => hint.remove(), 2000)
+        } else if (clickCount === 2) {
+          // 第二次点击，继续提示
+          const hint = document.createElement('div')
+          hint.textContent = '🗺️ 最后一次点击...'
+          hint.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 165, 0, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10000;
+            pointer-events: none;
+          `
+          document.body.appendChild(hint)
+          setTimeout(() => hint.remove(), 1500)
+        } else if (clickCount >= REQUIRED_CLICKS) {
+          // 第三次点击，触发彩蛋
+          event.preventDefault()
+          event.stopPropagation()
+          clickCount = 0 // 重置计数
+          _0x8a4c()
+        }
+      } else {
+        // 无效点击，重置计数
+        clickCount = 0
       }
     }
     
     // 监听所有点击事件
     document.addEventListener('click', handleAvatarClick, true)
     
-    // 备用触发机制：监听特定的头像样式点击
-    const checkForSpecialAvatar = (event: Event) => {
-      const target = event.target as HTMLElement
-      
-      // 检测特定的CSS类名或样式
-      if (target.style && target.style.backgroundColor && 
-          (target.style.backgroundColor.includes('rgb(') || target.style.backgroundColor.includes('#'))) {
-        const rect = target.getBoundingClientRect()
-        if (rect.width >= 40 && rect.width <= 50 && rect.height >= 40 && rect.height <= 50) {
-          // 可能是头像，进行进一步检查
-          const parentElement = target.parentElement
-          if (parentElement && parentElement.textContent && 
-              parentElement.textContent.length <= 10) {
-            // 双击触发地图挑战
-            if (event.type === 'dblclick') {
-              _0x8a4c()
-            }
-          }
-        }
-      }
-    }
-    
-    document.addEventListener('dblclick', checkForSpecialAvatar)
-    
     return () => {
       document.removeEventListener('click', handleAvatarClick, true)
-      document.removeEventListener('dblclick', checkForSpecialAvatar)
     }
   }, [])
 
@@ -2256,16 +2731,48 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     const progress = totalCount > 0 ? (discoveredCount / totalCount) * 100 : 0
     const currentAchievement = getCurrentAchievement()
 
+    // 强制重新渲染的state
+    const [localForceUpdate, setLocalForceUpdate] = useState(0)
+
+    // 响应forceProgressBarUpdate的变化
+    useEffect(() => {
+      setLocalForceUpdate(prev => prev + 1)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔄 成就栏强制更新触发:', { forceProgressBarUpdate, discoveredCount, totalCount })
+      }
+    }, [forceProgressBarUpdate, easterEggRecords, discoveredCount])
+
+    // 定期检查和强制更新成就栏（确保实时性）
+    useEffect(() => {
+      const interval = setInterval(() => {
+        // 检查是否有新的已发现彩蛋
+        const currentDiscoveredCount = easterEggRecords.filter(egg => egg.discovered).length
+        if (currentDiscoveredCount !== discoveredCount) {
+          setLocalForceUpdate(prev => prev + 1)
+          if (process.env.NODE_ENV === 'development') {
+            console.log('⏰ 定期检查发现成就变化，强制更新成就栏')
+          }
+        }
+      }, 2000) // 每2秒检查一次
+
+      return () => clearInterval(interval)
+    }, [discoveredCount, easterEggRecords])
+
     // 检测是否在全屏状态 - 加强检测
     const isInFullscreen = document.fullscreenElement !== null || 
                           (document as any).webkitFullscreenElement !== null ||
                           (document as any).mozFullScreenElement !== null ||
-                          (document as any).msFullscreenElement !== null ||
-                          isVideoFullscreen
+                          (document as any).msFullscreenElement !== null
 
     // 调试信息（开发环境）
     if (process.env.NODE_ENV === 'development') {
-      console.log('🎯 侧边栏数据:', { discoveredCount, totalCount, progress })
+      console.log('🎯 侧边栏数据:', { 
+        discoveredCount, 
+        totalCount, 
+        progress: progress.toFixed(1),
+        forceUpdate: localForceUpdate,
+        recordsLength: easterEggRecords.length
+      })
     }
 
     // 强制显示：除非明确设置为不可见，否则总是显示
@@ -2313,6 +2820,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                 <div 
                   className="w-full bg-gradient-to-t from-yellow-400 to-orange-400 transition-all duration-1000"
                   style={{ height: `${progress}%` }}
+                  key={`progress-mini-${localForceUpdate}-${discoveredCount}`}
                 />
               </div>
               {/* 等级名称提示 */}
@@ -2363,6 +2871,7 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
                 <div 
                   className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 transition-all duration-1000 ease-out rounded-full"
                   style={{ width: `${progress}%` }}
+                  key={`progress-full-${localForceUpdate}-${discoveredCount}`}
                 />
               </div>
               <div className="text-white/60 text-xs mt-1">
@@ -2789,6 +3298,101 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
     )
   }
 
+  // 🕰️ 时光探索界面组件
+  const TimeExplorationInterface = () => {
+    if (!showExplorationInterface || explorationStage < 4) return null
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center transition-opacity duration-1000 bg-gradient-to-br from-orange-900/80 via-yellow-900/80 to-red-900/80 backdrop-blur-sm" style={{ zIndex: 999998 }}>
+        <div className="relative w-full max-w-5xl mx-4 h-[90vh] overflow-hidden">
+          {/* 时光探索背景 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-800/30 via-orange-800/30 to-red-800/30 rounded-3xl backdrop-blur-md border border-yellow-400/30"></div>
+          
+          {/* 关闭按钮 */}
+          <button
+            onClick={() => setShowExplorationInterface(false)}
+            className="absolute top-6 right-6 z-50 w-10 h-10 bg-red-600/80 hover:bg-red-500 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-sm"
+          >
+            ✕
+          </button>
+          
+          {/* 主要内容 */}
+          <div className="relative z-10 h-full p-8 overflow-y-auto">
+            {/* 标题 */}
+            <div className="text-center mb-8">
+              <h2 className="text-4xl font-bold text-yellow-300 mb-2">🕰️ 时光探索之旅</h2>
+              <p className="text-xl text-yellow-100">今夕公会·2018年酷暑创建史</p>
+            </div>
+            
+            {/* 线索进度 */}
+            <div className="bg-black/40 rounded-2xl p-6 mb-8">
+              <h3 className="text-2xl font-bold text-yellow-300 mb-4">🔍 发现的线索</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {explorationClues.map((clue, index) => (
+                  <div key={index} className="bg-gradient-to-br from-yellow-600/30 to-orange-600/30 rounded-xl p-4 border border-yellow-400/30">
+                    <div className="text-lg">{clue}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* 今夕创建故事 */}
+            <div className="bg-black/40 rounded-2xl p-6">
+              <h3 className="text-2xl font-bold text-yellow-300 mb-6">📖 今夕创建传说</h3>
+              
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-orange-600/20 to-yellow-600/20 rounded-xl p-6 border-l-4 border-yellow-400">
+                  <h4 className="text-xl font-bold text-yellow-300 mb-3">🌅 2018年·酷暑初现</h4>
+                  <p className="text-yellow-100 leading-relaxed">
+                    那是一个异常炎热的夏天，酷暑难耐。在这样的环境中，一群怀着共同理想的朋友开始思考：
+                    如何在这个快节奏的世界中，创造一个属于我们的精神家园？
+                  </p>
+                </div>
+                
+                <div className="bg-gradient-to-r from-yellow-600/20 to-red-600/20 rounded-xl p-6 border-l-4 border-yellow-400">
+                  <h4 className="text-xl font-bold text-yellow-300 mb-3">💡 灵感火花</h4>
+                  <p className="text-yellow-100 leading-relaxed">
+                    "今夕何夕，见此良人"——这句古诗成为了灵感的源泉。今夕，不仅代表着当下这个美好的时刻，
+                    更象征着我们相遇相知的珍贵缘分。就在那个酷暑难耐的午后，今夕公会的雏形悄然诞生。
+                  </p>
+                </div>
+                
+                <div className="bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-xl p-6 border-l-4 border-yellow-400">
+                  <h4 className="text-xl font-bold text-yellow-300 mb-3">🤝 伙伴相聚</h4>
+                  <p className="text-yellow-100 leading-relaxed">
+                    志同道合的朋友们开始聚集，大家带着对未来的憧憬和对友谊的珍视，
+                    决定共同打造一个温暖的公会家园。每个人都贡献着自己的想法和力量。
+                  </p>
+                </div>
+                
+                <div className="bg-gradient-to-r from-orange-600/20 to-yellow-600/20 rounded-xl p-6 border-l-4 border-yellow-400">
+                  <h4 className="text-xl font-bold text-yellow-300 mb-3">🌟 今夕诞生</h4>
+                  <p className="text-yellow-100 leading-relaxed">
+                    2018年的那个酷暑，今夕公会正式成立了。从此，这里成为了朋友们的精神港湾，
+                    承载着"以战会友，彼此成就"的美好理念，见证着每一个温暖的今夕时刻。
+                  </p>
+                </div>
+              </div>
+              
+              {/* 庆祝按钮 */}
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => {
+                    createJinXiBirthEffect()
+                    setTimeout(() => setShowExplorationInterface(false), 3000)
+                  }}
+                  className="px-8 py-4 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
+                >
+                  🎉 庆祝今夕诞生
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       {children}
@@ -2803,6 +3407,9 @@ export function EasterEggManager({ children }: EasterEggManagerProps) {
       
       {/* 地图连接挑战界面 */}
       <MapChallengeInterface />
+      
+      {/* 时光探索界面 */}
+      <TimeExplorationInterface />
       
       {/* 右侧悬浮成就侧边栏 - 强制显示版本 */}
       <AchievementSidebar />

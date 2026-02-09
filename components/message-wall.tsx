@@ -10,6 +10,7 @@ import { ImageUpload } from "./ui/image-upload"
 import { AdminPasswordDialog } from "./ui/admin-password-dialog"
 import { OptimizedImage } from "./ui/optimized-image"
 import { Icon, RefreshIcon, SendIcon, CloseIcon } from "./ui/icons"
+import { updateTaskProgress } from "../services/daily-task-service"
 
 // 使用memo优化组件渲染性能
 export const MessageWall = memo(function MessageWall({ className }: { className?: string }) {
@@ -66,14 +67,14 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
   // 提交新留言
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!formData.content.trim()) {
       alert('请填写留言内容')
       return
     }
 
     setIsSubmitting(true)
-    
+
     try {
       await backendAPI.addMessage({
         name: formData.name || '匿名',
@@ -82,7 +83,10 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
         color: formData.color,
         imageUrl: formData.imageUrl || undefined
       })
-      
+
+      // 更新每日任务进度
+      updateTaskProgress('daily-message', 1)
+
       // 清空表单
       setFormData({
         name: formData.name, // 保留昵称
@@ -91,7 +95,7 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
         color: '#3b82f6',
         imageUrl: null
       })
-      
+
       // 立即刷新数据
       await loadMessages()
     } catch (error) {

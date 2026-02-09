@@ -6,6 +6,7 @@ import { cn } from "../lib/utils"
 import { getUserId, getUserName, setUserName as saveUserName } from "../lib/user-utils"
 import { CheckinStatus, CheckinResult, UserCheckinStats } from "../types/checkin"
 import * as checkinAPI from "../services/checkin-service"
+import { updateTaskProgress, updateCheckinStreak } from "../services/daily-task-service"
 
 interface CheckinWidgetProps {
   className?: string
@@ -107,22 +108,28 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
   // 执行签到
   const handleCheckin = async () => {
     if (!userId || isChecking) return
-    
+
     // 检查是否有用户名
     if (!userName.trim()) {
       setShowNameInput(true)
       alert('请先设置您的账号名称')
       return
     }
-    
+
     try {
       setIsChecking(true)
       const result: CheckinResult = await checkinAPI.performCheckin(userId, userName)
-      
+
       if (result.success) {
         // 签到成功，重新加载状态
         await loadCheckinStatus()
-        
+
+        // 更新每日任务进度
+        updateTaskProgress('daily-checkin', 1)
+
+        // 更新签到连续天数
+        updateCheckinStreak()
+
         // 显示成功提示
         const message = checkinAPI.getCheckinMessage(result.continuousDays || 1)
         alert(`🎉 ${message}\n获得积分：${result.rewardPoints}`)

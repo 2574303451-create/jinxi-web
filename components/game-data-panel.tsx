@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { GameData, Equipment, Pet, Achievement } from '../types/game-data'
 import { getGameData, setActivePet } from '../services/game-data-service'
 
-export function GameDataPanel() {
+function GameDataPanel() {
   const [gameData, setGameData] = useState<GameData | null>(null)
   const [activeTab, setActiveTab] = useState<'equipment' | 'pets' | 'character' | 'achievements'>('equipment')
 
@@ -454,3 +454,5 @@ function EquipmentCard({
     </div>
   )
 }
+
+export default GameDataPanel

@@ -18,7 +18,7 @@ interface DailyTasksProps {
   onTaskComplete?: (taskId: string) => void
 }
 
-export function DailyTasks({ onTaskComplete }: DailyTasksProps) {
+function DailyTasks({ onTaskComplete }: DailyTasksProps) {
   const [tasks, setTasks] = useState<DailyTask[]>([])
   const [stats, setStats] = useState<TaskStats | null>(null)
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'achievement'>('daily')
@@ -244,3 +244,5 @@ export function DailyTasks({ onTaskComplete }: DailyTasksProps) {
     </div>
   )
 }
+
+export default DailyTasks

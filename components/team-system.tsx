@@ -15,7 +15,7 @@ import {
   leaveTeam,
 } from '../services/team-service'
 
-export function TeamSystem() {
+function TeamSystem() {
   const [teams, setTeams] = useState<Team[]>([])
   const [rankings, setRankings] = useState<TeamRanking[]>([])
   const [userTeam, setUserTeam] = useState<Team | null>(null)
@@ -346,3 +346,5 @@ export function TeamSystem() {
     </div>
   )
 }
+
+export default TeamSystem

@@ -23,9 +23,9 @@ const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m
 const Tabs = lazy(() => import("../components/ui/tabs").then(module => ({ default: module.Tabs })))
 const Progress = lazy(() => import("../components/ui/progress").then(module => ({ default: module.Progress })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(module => ({ default: module.Accordion })))
-const DailyTasks = lazy(() => import("../components/daily-tasks").then(module => ({ default: module.DailyTasks })))
-const TeamSystem = lazy(() => import("../components/team-system").then(module => ({ default: module.TeamSystem })))
-const GameDataPanel = lazy(() => import("../components/game-data-panel").then(module => ({ default: module.GameDataPanel })))
+const DailyTasks = lazy(() => import("../components/daily-tasks"))
+const TeamSystem = lazy(() => import("../components/team-system"))
+const GameDataPanel = lazy(() => import("../components/game-data-panel"))
 
 // 组件加载占位符
 const ComponentLoader = ({ children }: { children: React.ReactNode }) => (

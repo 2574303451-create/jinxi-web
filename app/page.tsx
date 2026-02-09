@@ -23,6 +23,7 @@ const Tabs = lazy(() => import("../components/ui/tabs").then(module => ({ defaul
 const Progress = lazy(() => import("../components/ui/progress").then(module => ({ default: module.Progress })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(module => ({ default: module.Accordion })))
 const DailyTasks = lazy(() => import("../components/daily-tasks").then(module => ({ default: module.DailyTasks })))
+const TeamSystem = lazy(() => import("../components/team-system").then(module => ({ default: module.TeamSystem })))
 
 // 组件加载占位符
 const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
@@ -975,6 +976,13 @@ function PageContent() {
         <ComponentLoader>
             <section id="daily-tasks" className="py-9 relative">
               <DailyTasks />
+            </section>
+        </ComponentLoader>
+
+        {/* 战队系统 */}
+        <ComponentLoader>
+            <section id="team-system" className="py-9 relative">
+              <TeamSystem />
             </section>
         </ComponentLoader>
 

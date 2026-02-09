@@ -24,6 +24,7 @@ const Progress = lazy(() => import("../components/ui/progress").then(module => (
 const Accordion = lazy(() => import("../components/ui/accordion").then(module => ({ default: module.Accordion })))
 const DailyTasks = lazy(() => import("../components/daily-tasks").then(module => ({ default: module.DailyTasks })))
 const TeamSystem = lazy(() => import("../components/team-system").then(module => ({ default: module.TeamSystem })))
+const GameDataPanel = lazy(() => import("../components/game-data-panel").then(module => ({ default: module.GameDataPanel })))
 
 // 组件加载占位符
 const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
@@ -983,6 +984,13 @@ function PageContent() {
         <ComponentLoader>
             <section id="team-system" className="py-9 relative">
               <TeamSystem />
+            </section>
+        </ComponentLoader>
+
+        {/* 游戏数据展示 */}
+        <ComponentLoader>
+            <section id="game-data" className="py-9 relative">
+              <GameDataPanel />
             </section>
         </ComponentLoader>
 

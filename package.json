@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "build:secure": "NODE_ENV=production next build",
     "build:netlify": "NODE_ENV=production next build",
     "build:optimized": "node optimize-images.js && NODE_ENV=production next build",
     "dev": "next dev",
@@ -16,13 +15,9 @@
     "deploy": "node deploy.js",
     "deploy:preview": "netlify deploy --dir=out",
     "deploy:prod": "netlify deploy --prod --dir=out",
-    "deploy:secure": "NODE_ENV=production node deploy.js",
-    "analyze": "node optimize-images.js",
-    "optimize": "node optimize-images.js && NODE_ENV=production next build",
-    "security:test": "node scripts/test-security.js"
+    "analyze": "node optimize-images.js"
   },
   "dependencies": {
-    "@emotion/is-prop-valid": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@neondatabase/serverless": "^1.0.1",
     "@radix-ui/react-accordion": "1.2.2",
@@ -82,11 +77,9 @@
     "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "javascript-obfuscator": "^4.1.1",
     "netlify-cli": "^23.2.1",
     "postcss": "^8.5",
-    "tailwindcss": "^3.4.17",
-    "webpack-obfuscator": "^3.5.1"
+    "tailwindcss": "^3.4.17"
   },
   "engines": {
     "node": ">=18.0.0",

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, memo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "../lib/utils"
+import { getUserId } from "../lib/user-utils"
 import { Message, Reply, Reaction } from "../types/message-wall"
 import * as backendAPI from "../services/message-wall-backend"
 import { ImageUpload } from "./ui/image-upload"
@@ -27,7 +28,7 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [activeFilter, setActiveFilter] = useState('all')
-  
+
   // 密码验证相关状态
   const [adminDialogOpen, setAdminDialogOpen] = useState(false)
   const [pendingAction, setPendingAction] = useState<{
@@ -35,17 +36,12 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
     messageId: string
   } | null>(null)
 
-  // 生成用户ID（用于反应功能）
+  // 使用共享的用户ID工具
   const [userId, setUserId] = useState('anonymous')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      let id = localStorage.getItem('jinxi-user-id')
-      if (!id) {
-        id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        localStorage.setItem('jinxi-user-id', id)
-      }
-      setUserId(id)
+      setUserId(getUserId())
     }
   }, [])
 

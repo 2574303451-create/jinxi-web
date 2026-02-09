@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "../lib/utils"
+import { getUserId, getUserName, setUserName as saveUserName } from "../lib/user-utils"
 import { CheckinStatus, CheckinResult, UserCheckinStats } from "../types/checkin"
 import * as checkinAPI from "../services/checkin-service"
 
@@ -22,21 +23,16 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
   const [tempUserName, setTempUserName] = useState('')
   const [nameError, setNameError] = useState('')
 
-  // 生成或获取用户ID
+  // 使用共享的用户ID和用户名工具
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      let id = localStorage.getItem('jinxi-user-id')
-      let name = localStorage.getItem('jinxi-user-name') || ''
-      
-      if (!id) {
-        id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        localStorage.setItem('jinxi-user-id', id)
-      }
-      
+      const id = getUserId()
+      const name = getUserName()
+
       setUserId(id)
       setUserName(name)
       setTempUserName(name)
-      
+
       // 如果没有用户名，显示输入界面
       if (!name.trim()) {
         setShowNameInput(true)
@@ -93,10 +89,10 @@ export function CheckinWidget({ className }: CheckinWidgetProps) {
     if (!validateUserName(tempUserName)) {
       return
     }
-    
+
     const trimmedName = tempUserName.trim()
     setUserName(trimmedName)
-    localStorage.setItem('jinxi-user-name', trimmedName)
+    saveUserName(trimmedName)
     setShowNameInput(false)
     setNameError('')
   }

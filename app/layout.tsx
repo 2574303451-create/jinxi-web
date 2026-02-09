@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
-import SecurityProvider from '../components/security/security-provider'
 
 export const metadata: Metadata = {
   title: '弹弹堂-今夕公会官网',
@@ -71,9 +70,7 @@ html {
         `}</style>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        <SecurityProvider>
-          {children}
-        </SecurityProvider>
+        {children}
       </body>
     </html>
   )

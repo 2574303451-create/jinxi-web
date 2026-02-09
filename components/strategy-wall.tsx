@@ -3,25 +3,26 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "../lib/utils"
+import { getUserId } from "../lib/user-utils"
 import { Strategy, StrategyCategory, STRATEGY_CONFIG } from "../types/strategy-wall"
 import * as strategyAPI from "../services/strategy-wall-service"
 import { Modal } from "./ui/modal"
 import { AdminPasswordDialog } from "./ui/admin-password-dialog"
 import { StrategySubmissionModal } from "./strategy-submission-modal"
 import { StrategyDetailModal } from "./strategy-detail-modal"
-import { 
-  CloseIcon, 
-  BookIcon, 
-  AddIcon, 
-  SearchIcon, 
-  PinIcon, 
-  FileIcon, 
-  ImageIcon, 
-  VideoIcon, 
-  EyeIcon, 
-  HeartIcon, 
-  StarIcon, 
-  DeleteIcon 
+import {
+  CloseIcon,
+  BookIcon,
+  AddIcon,
+  SearchIcon,
+  PinIcon,
+  FileIcon,
+  ImageIcon,
+  VideoIcon,
+  EyeIcon,
+  HeartIcon,
+  StarIcon,
+  DeleteIcon
 } from "./ui/icons"
 
 interface StrategyWallProps {
@@ -53,15 +54,10 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
   const [currentPage, setCurrentPage] = useState(0)
   const PAGE_SIZE = 12
 
-  // 初始化用户ID
+  // 使用共享的用户ID工具
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      let id = localStorage.getItem('jinxi-user-id')
-      if (!id) {
-        id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        localStorage.setItem('jinxi-user-id', id)
-      }
-      setUserId(id)
+      setUserId(getUserId())
     }
   }, [])
 

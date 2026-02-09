@@ -1,0 +1,204 @@
+/**
+ * 弹弹堂卡通主题样式
+ * 明亮卡通风格 + 深色背景
+ */
+
+:root {
+  /* 保留深色背景 */
+  --bg-primary: #0B1020;
+  --bg-secondary: #151B2E;
+  --bg-glass: rgba(255, 255, 255, 0.06);
+
+  /* 卡通色系 - 明亮活泼 */
+  --cartoon-pink: #FF6B9D;      /* 粉红 - 可爱 */
+  --cartoon-yellow: #FFD93D;    /* 明黄 - 活力 */
+  --cartoon-cyan: #6BCFFF;      /* 青蓝 - 清新 */
+  --cartoon-purple: #C77DFF;    /* 紫色 - 梦幻 */
+  --cartoon-green: #4ADE80;     /* 绿色 - 成功 */
+  --cartoon-orange: #FF9F43;    /* 橙色 - 热情 */
+  --cartoon-blue: #5B8DEF;      /* 蓝色 - 科技 */
+  --cartoon-red: #FF5757;       /* 红色 - 激情 */
+
+  /* 彩色渐变 */
+  --gradient-candy: linear-gradient(135deg, #FF6B9D 0%, #FFD93D 100%);
+  --gradient-sky: linear-gradient(135deg, #6BCFFF 0%, #C77DFF 100%);
+  --gradient-fresh: linear-gradient(135deg, #4ADE80 0%, #6BCFFF 100%);
+  --gradient-sunset: linear-gradient(135deg, #FF9F43 0%, #FF6B9D 100%);
+  --gradient-ocean: linear-gradient(135deg, #5B8DEF 0%, #6BCFFF 100%);
+  --gradient-fire: linear-gradient(135deg, #FF5757 0%, #FF9F43 100%);
+  --gradient-rainbow: linear-gradient(135deg, #FF6B9D 0%, #FFD93D 25%, #4ADE80 50%, #6BCFFF 75%, #C77DFF 100%);
+}
+
+/* 卡通按钮样式 */
+.cartoon-btn {
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.cartoon-btn-pink {
+  background: var(--gradient-candy);
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+}
+
+.cartoon-btn-sky {
+  background: var(--gradient-sky);
+  box-shadow: 0 4px 15px rgba(107, 207, 255, 0.4);
+}
+
+.cartoon-btn-fresh {
+  background: var(--gradient-fresh);
+  box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+}
+
+.cartoon-btn-sunset {
+  background: var(--gradient-sunset);
+  box-shadow: 0 4px 15px rgba(255, 159, 67, 0.4);
+}
+
+.cartoon-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
+}
+
+.cartoon-btn:active {
+  transform: scale(0.95);
+}
+
+/* 卡通卡片样式 */
+.cartoon-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.cartoon-card-pink {
+  border-color: var(--cartoon-pink);
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+}
+
+.cartoon-card-cyan {
+  border-color: var(--cartoon-cyan);
+  box-shadow: 0 0 20px rgba(107, 207, 255, 0.3);
+}
+
+.cartoon-card-purple {
+  border-color: var(--cartoon-purple);
+  box-shadow: 0 0 20px rgba(199, 125, 255, 0.3);
+}
+
+.cartoon-card-green {
+  border-color: var(--cartoon-green);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+}
+
+.cartoon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(255, 107, 157, 0.5);
+}
+
+/* 渐变文字 */
+.gradient-text-candy {
+  background: var(--gradient-candy);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-sky {
+  background: var(--gradient-sky);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-fresh {
+  background: var(--gradient-fresh);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-rainbow {
+  background: var(--gradient-rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 彩色光晕效果 */
+.glow-pink {
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.5),
+              0 0 40px rgba(255, 107, 157, 0.3);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(107, 207, 255, 0.5),
+              0 0 40px rgba(107, 207, 255, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(199, 125, 255, 0.5),
+              0 0 40px rgba(199, 125, 255, 0.3);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.5),
+              0 0 40px rgba(74, 222, 128, 0.3);
+}
+
+/* 彩色边框 */
+.border-cartoon-pink {
+  border-color: var(--cartoon-pink);
+}
+
+.border-cartoon-cyan {
+  border-color: var(--cartoon-cyan);
+}
+
+.border-cartoon-purple {
+  border-color: var(--cartoon-purple);
+}
+
+.border-cartoon-green {
+  border-color: var(--cartoon-green);
+}
+
+/* 彩色背景 */
+.bg-cartoon-pink {
+  background-color: var(--cartoon-pink);
+}
+
+.bg-cartoon-cyan {
+  background-color: var(--cartoon-cyan);
+}
+
+.bg-cartoon-purple {
+  background-color: var(--cartoon-purple);
+}
+
+.bg-cartoon-green {
+  background-color: var(--cartoon-green);
+}
+
+/* 渐变背景 */
+.bg-gradient-candy {
+  background: var(--gradient-candy);
+}
+
+.bg-gradient-sky {
+  background: var(--gradient-sky);
+}
+
+.bg-gradient-fresh {
+  background: var(--gradient-fresh);
+}
+
+.bg-gradient-sunset {
+  background: var(--gradient-sunset);
+}

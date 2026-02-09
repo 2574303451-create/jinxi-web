@@ -8,6 +8,7 @@ import { sendRecruitmentEmail, RecruitmentData } from "../components/email-servi
 import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
+import { FloatingBubbles } from "../components/ui/floating-bubbles"
 
 
 // 动态导入重型组件以减少初始内存占用
@@ -631,6 +632,9 @@ function PageContent() {
           '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
       }}
     >
+      {/* 浮动气泡装饰 */}
+      <FloatingBubbles />
+
       {/* </CHANGE> */}
 
       {/* Header */}
@@ -696,12 +700,9 @@ function PageContent() {
 
               <button
                 onClick={handleJoinClick}
-                className="inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline hover:scale-105 transition-transform hover-effect"
-                style={{
-                  background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)",
-                }}
+                className="cartoon-btn cartoon-btn-pink inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline transition-transform hover-effect"
               >
-<RocketIcon className="mr-2" size={18} /> 加入
+                <RocketIcon className="mr-2" size={18} /> 加入
               </button>
           </nav>
         </div>
@@ -733,7 +734,10 @@ function PageContent() {
                   </span>
 
                 <h2
-                  className="my-2 font-bold text-[34px] leading-tight tracking-wide relative z-10"
+                  className="my-2 font-bold text-[34px] leading-tight tracking-wide relative z-10 gradient-text-candy animate-bounce-in"
+                  style={{
+                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                  }}
                 >
                   今晚开黑，星光作陪
                 </h2>
@@ -765,26 +769,18 @@ function PageContent() {
 
                 <div className="flex gap-3 flex-wrap relative z-10">
                   {[
-                    { href: "#info-tabs", icon: "ri-megaphone-line", text: "公告" },
-                    { href: "#info-tabs", icon: "ri-calendar-event-line", text: "活动" },
-                    { href: "#roster", icon: "ri-gallery-view-2", text: "展示墙", primary: true },
+                    { href: "#info-tabs", icon: "ri-megaphone-line", text: "公告", color: "sky" },
+                    { href: "#info-tabs", icon: "ri-calendar-event-line", text: "活动", color: "fresh" },
+                    { href: "#roster", icon: "ri-gallery-view-2", text: "展示墙", color: "sunset", primary: true },
                   ].map((btn, index) => (
                       <a
                         key={index}
                         href={btn.href}
-                        className={`inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border no-underline hover:scale-105 transition-transform ${
-                          btn.primary ? "border-none text-white" : ""
+                        className={`inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none no-underline transition-transform ${
+                          btn.primary ? `cartoon-btn cartoon-btn-${btn.color}` : "bg-white/5 hover:bg-white/10 border border-white/10"
                         }`}
-                        style={
-                          btn.primary
-                            ? { background: "linear-gradient(180deg,#2a5bd7,#1a3b8f)" }
-                            : {
-                                background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                                borderColor: "rgba(255,255,255,.1)",
-                              }
-                        }
                       >
-{btn.icon === "ri-megaphone-line" ? "📢" : btn.icon === "ri-calendar-event-line" ? "📅" : btn.icon === "ri-gallery-view-2" ? "🖼️" : "📋"} {btn.text}
+                        {btn.icon === "ri-megaphone-line" ? "📢" : btn.icon === "ri-calendar-event-line" ? "📅" : btn.icon === "ri-gallery-view-2" ? "🖼️" : "📋"} {btn.text}
                       </a>
                   ))}
                 </div>
@@ -870,7 +866,7 @@ function PageContent() {
                 }}
               >
                 <h3
-                  className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                  className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
                   style={{
                     fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                   }}
@@ -913,7 +909,7 @@ function PageContent() {
         <ComponentLoader>
             <section id="roster" className="py-9 relative">
               <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
                 style={{
                   fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                 }}
@@ -938,7 +934,7 @@ function PageContent() {
         <ComponentLoader>
             <section id="members-page" className="py-9 relative">
               <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10"
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10 gradient-text-rainbow"
                 style={{
                   fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                 }}
@@ -981,7 +977,7 @@ function PageContent() {
         <ComponentLoader>
             <section id="faq" className="py-9 relative">
               <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10"
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
                 style={{
                   fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
                 }}

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 卡通主题样式 */
+@import '../styles/cartoon-theme.css';
+@import '../styles/animations.css';
+
 /* 确保正确的字体回退 */
 @layer base {
   html {

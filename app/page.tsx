@@ -9,6 +9,7 @@ import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
 import { FloatingBubbles } from "../components/ui/floating-bubbles"
+import { HiddenEasterEggs } from "../components/hidden-easter-eggs"
 
 
 // 动态导入重型组件以减少初始内存占用
@@ -637,6 +638,9 @@ function PageContent() {
     >
       {/* 浮动气泡装饰 */}
       <FloatingBubbles />
+
+      {/* 隐藏彩蛋系统 */}
+      <HiddenEasterEggs />
 
       {/* </CHANGE> */}
 

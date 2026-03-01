@@ -1,0 +1,28 @@
+{
+  "guildFoundedDate": "2018-02-10",
+  "founderMemberId": "0",
+  "milestones": [
+    { "date": "2019-12-31", "event": "星轨防御战 / 跨年战役" },
+    { "date": "2021-07-01", "event": "协议扩容 / 千人建制达成" }
+  ],
+  "members": {
+    "0": {
+      "name": "执手问年华",
+      "joinDate": "2018-02-10",
+      "role": "founder",
+      "badges": ["O-01 初代机", "核心缔造者"]
+    }
+  },
+  "securityClearanceRules": [
+    { "code": "LEVEL 1", "title": "过去的过去", "minYears": 0, "maxYearsExclusive": 1, "tone": "normal" },
+    { "code": "LEVEL 3", "title": "过去", "minYears": 1, "maxYearsExclusive": 3, "tone": "normal" },
+    { "code": "LEVEL 5", "title": "现在", "minYears": 3, "maxYearsExclusive": 5, "tone": "normal" },
+    { "code": "LEVEL 7", "title": "未来", "minYears": 5, "tone": "normal" }
+  ],
+  "founderClearance": {
+    "code": "OMEGA LEVEL",
+    "title": "今夕",
+    "tone": "warning"
+  }
+}
+

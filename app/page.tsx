@@ -10,6 +10,7 @@ import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/u
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
 import { FloatingBubbles } from "../components/ui/floating-bubbles"
 import { CyberAnnouncement } from "../components/cyber-announcement"
+import { GuildUptimeTerminal } from "../components/guild-uptime-terminal"
 
 
 // 动态导入重型组件以减少初始内存占用
@@ -1025,6 +1026,7 @@ function PageContent() {
       </main>
 
       <CyberAnnouncement />
+      <GuildUptimeTerminal />
 
       {/* Footer */}
       <footer className="text-center py-4 relative z-10">

@@ -9,14 +9,12 @@ import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
 import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
 import { FloatingBubbles } from "../components/ui/floating-bubbles"
-import { HiddenEasterEggs } from "../components/hidden-easter-eggs"
+import { CyberAnnouncement } from "../components/cyber-announcement"
 
 
 // 动态导入重型组件以减少初始内存占用
 const Marquee = lazy(() => import("../components/magicui/marquee").then(m => ({ default: m.Marquee })))
 const MessageWall = lazy(() => import("../components/message-wall").then(m => ({ default: m.MessageWall })))
-const CheckinWidget = lazy(() => import("../components/checkin-widget").then(m => ({ default: m.CheckinWidget })))
-const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(m => ({ default: m.LeaderboardWidget })))
 const StrategyWall = lazy(() => import("../components/strategy-wall").then(m => ({ default: m.StrategyWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
@@ -639,9 +637,6 @@ function PageContent() {
       {/* 浮动气泡装饰 */}
       <FloatingBubbles />
 
-      {/* 隐藏彩蛋系统 */}
-      <HiddenEasterEggs />
-
       {/* </CHANGE> */}
 
       {/* Header */}
@@ -681,7 +676,9 @@ function PageContent() {
             <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
               {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "攻略墙"].map((item, index) => {
                 const links = ["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "strategy-wall"]
-                const isStrategyWall = item === "攻略墙"
+                const section = links[index]
+                const isStrategyWall = section === "strategy-wall"
+                const isAnnouncement = section === "news"
 
                 return (
                     <li key={index}>
@@ -692,9 +689,20 @@ function PageContent() {
                         >
                           {item}
                         </button>
+                      ) : isAnnouncement ? (
+                        <button
+                          onClick={() => {
+                            if (typeof window !== "undefined") {
+                              window.dispatchEvent(new Event("cyber-announcement:open"))
+                            }
+                          }}
+                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
+                        >
+                          {item}
+                        </button>
                       ) : (
                         <a
-                          href={`#${links[index]}`}
+                          href={`#${section}`}
                           className="opacity-90 hover:opacity-100 no-underline transition-opacity"
                         >
                           {item}
@@ -964,18 +972,6 @@ function PageContent() {
         </ComponentLoader>
 
         {/* 签到功能区域 */}
-        <ComponentLoader>
-            <section id="checkin" className="py-9 relative">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <ComponentLoader>
-                  <CheckinWidget />
-                </ComponentLoader>
-                <ComponentLoader>
-                  <LeaderboardWidget />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
 
         {/* 每日任务系统 */}
         <ComponentLoader>
@@ -1027,6 +1023,8 @@ function PageContent() {
             </section>
         </ComponentLoader>
       </main>
+
+      <CyberAnnouncement />
 
       {/* Footer */}
       <footer className="text-center py-4 relative z-10">

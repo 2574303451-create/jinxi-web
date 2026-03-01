@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
@@ -656,8 +656,8 @@ const SidebarMenuSkeleton = React.forwardRef<
 >(({ className, showIcon = false, ...props }, ref) => {
   // Random width between 50 to 90%.
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+    return showIcon ? "64%" : "78%"
+  }, [showIcon])
 
   return (
     <div
@@ -765,3 +765,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+

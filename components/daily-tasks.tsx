@@ -9,7 +9,6 @@ import { useState, useEffect } from 'react'
 import { DailyTask, TaskStats } from '../types/daily-task'
 import {
   getAllTasks,
-  getTasksByType,
   claimReward,
   getTaskStats,
 } from '../services/daily-task-service'
@@ -49,7 +48,7 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
     }
   }
 
-  const filteredTasks = getTasksByType(activeTab)
+  const filteredTasks = tasks.filter(task => task.type === activeTab)
 
   const getProgressPercentage = (task: DailyTask) => {
     return Math.min((task.progress / task.target) * 100, 100)

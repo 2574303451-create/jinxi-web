@@ -10,12 +10,17 @@
 export function getUserId(): string {
   if (typeof window === 'undefined') return 'anonymous'
 
-  let id = localStorage.getItem('jinxi-user-id')
-  if (!id) {
-    id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    localStorage.setItem('jinxi-user-id', id)
+  try {
+    let id = localStorage.getItem('jinxi-user-id')
+    if (!id) {
+      id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      localStorage.setItem('jinxi-user-id', id)
+    }
+    return id
+  } catch {
+    // Fall back when browser blocks storage (privacy mode / strict settings).
+    return `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
-  return id
 }
 
 /**
@@ -23,7 +28,11 @@ export function getUserId(): string {
  */
 export function getUserName(): string {
   if (typeof window === 'undefined') return ''
-  return localStorage.getItem('jinxi-user-name') || ''
+  try {
+    return localStorage.getItem('jinxi-user-name') || ''
+  } catch {
+    return ''
+  }
 }
 
 /**
@@ -31,6 +40,10 @@ export function getUserName(): string {
  */
 export function setUserName(name: string): void {
   if (typeof window !== 'undefined') {
-    localStorage.setItem('jinxi-user-name', name)
+    try {
+      localStorage.setItem('jinxi-user-name', name)
+    } catch {
+      // Ignore storage write failures in restricted browser environments.
+    }
   }
 }

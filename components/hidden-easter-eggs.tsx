@@ -5,7 +5,7 @@
  * 使用混淆和加密技术隐藏彩蛋逻辑
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // Base64编码的彩蛋配置（混淆）
 const _0x4e2a = 'ZWFzdGVyRWdn'
@@ -66,6 +66,7 @@ const _cfg = {
 
 export function HiddenEasterEggs() {
   const [_s, _ss] = useState<Set<string>>(new Set())
+  const _srf = useRef<Set<string>>(new Set())
   const [_a, _sa] = useState(false)
   const [_m, _sm] = useState('')
   const [_r, _sr] = useState('')
@@ -179,19 +180,21 @@ export function HiddenEasterEggs() {
 
     // 触发彩蛋
     const _trg = (id: string) => {
-      if (_s.has(id)) return
+      if (_srf.current.has(id)) return
 
       const _e = _cfg[id as keyof typeof _cfg]
       if (!_e) return
 
-      _ss(prev => new Set([...prev, id]))
+      const _next = new Set(_srf.current)
+      _next.add(id)
+      _srf.current = _next
+      _ss(_next)
       _sm(_e.m)
       _sr(_e.r)
       _sa(true)
 
       // 保存到localStorage（加密）
-      const _sv = Array.from(_s)
-      _sv.push(id)
+      const _sv = Array.from(_next)
       try {
         localStorage.setItem(_x(_d(_0x4e2a), 42), _x(JSON.stringify(_sv), 42))
       } catch {}
@@ -226,7 +229,11 @@ export function HiddenEasterEggs() {
       const _ld = localStorage.getItem(_x(_d(_0x4e2a), 42))
       if (_ld) {
         const _arr = JSON.parse(_x(_ld, 42))
-        _ss(new Set(_arr))
+        if (Array.isArray(_arr)) {
+          const _loaded = new Set(_arr)
+          _srf.current = _loaded
+          _ss(_loaded)
+        }
       }
     } catch {}
 
@@ -244,7 +251,7 @@ export function HiddenEasterEggs() {
       _c4?.()
       _c5?.()
     }
-  }, [_s])
+  }, [])
 
   if (!_a) return null
 

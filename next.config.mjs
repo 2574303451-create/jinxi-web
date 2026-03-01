@@ -24,47 +24,14 @@ const nextConfig = {
   output: 'export',
   distDir: 'out',
   assetPrefix: '',
-  
-  // 配置webpack（简化版）
-  webpack: (config, { isServer, webpack }) => {
-    // 仅在生产环境启用基础代码保护
+
+  // Keep webpack customization minimal to avoid breaking Next.js default chunk strategy.
+  webpack: (config, { isServer }) => {
     if (!isServer && process.env.NODE_ENV === 'production') {
-      // 移除source maps以增加逆向难度
-      config.devtool = false;
-      
-      // 启用更严格的代码压缩和内存优化
-      config.optimization = {
-        ...config.optimization,
-        minimize: true,
-        usedExports: true,
-        sideEffects: false,
-        // 分割代码以减少内存占用
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-            images: {
-              test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,
-              name: 'images',
-              chunks: 'all',
-            },
-          },
-        },
-      };
+      config.devtool = false
     }
-    
-    // 内存优化配置
-    config.performance = {
-      maxAssetSize: 512000, // 512KB
-      maxEntrypointSize: 512000,
-      hints: 'warning',
-    };
-    
-    return config;
+
+    return config
   },
 }
 

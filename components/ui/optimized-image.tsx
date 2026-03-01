@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import Image from 'next/image'
 import { useState, memo, forwardRef } from 'react'
@@ -20,7 +20,7 @@ interface OptimizedImageProps {
   unoptimized?: boolean
 }
 
-// 创建优化的图片组件，使用memo减少不必要的重新渲染
+// 鍒涘缓浼樺寲鐨勫浘鐗囩粍浠讹紝浣跨敤memo鍑忓皯涓嶅繀瑕佺殑閲嶆柊娓叉煋
 export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImageProps>(
   ({
     src,
@@ -32,7 +32,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
     placeholder = 'empty',
     blurDataURL,
     sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-    quality = 75, // 降低默认质量以减少内存占用
+    quality = 75, // 闄嶄綆榛樿璐ㄩ噺浠ュ噺灏戝唴瀛樺崰鐢?
     loading = 'lazy',
     onClick,
     unoptimized = false,
@@ -41,17 +41,16 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
 
-    // 生成简单的模糊占位符
+    // 鐢熸垚绠€鍗曠殑妯＄硦鍗犱綅绗?
     const generateBlurDataURL = () => {
       if (blurDataURL) return blurDataURL
-      return `data:image/svg+xml;base64,${Buffer.from(
-        `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
           <rect width="100%" height="100%" fill="#f3f4f6"/>
           <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="14">
-            加载中...
+            鍔犺浇涓?.. 
           </text>
         </svg>`
-      ).toString('base64')}`
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
     }
 
     if (hasError) {
@@ -63,7 +62,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
           )}
           style={{ width, height }}
         >
-          图片加载失败
+          鍥剧墖鍔犺浇澶辫触
         </div>
       )
     }
@@ -81,7 +80,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
           blurDataURL={generateBlurDataURL()}
           sizes={sizes}
           quality={quality}
-          loading={loading}
+          loading={priority ? undefined : loading}
           unoptimized={unoptimized}
           className={cn(
             "transition-all duration-300",
@@ -98,7 +97,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
           {...props}
         />
         
-        {/* 加载指示器 */}
+        {/* 鍔犺浇鎸囩ず鍣?*/}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm">
             <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
@@ -111,7 +110,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
 
 OptimizedImage.displayName = 'OptimizedImage'
 
-// 专门用于头像的组件，进一步优化
+// 涓撻棬鐢ㄤ簬澶村儚鐨勭粍浠讹紝杩涗竴姝ヤ紭鍖?
 export const AvatarImage = memo(({ 
   src, 
   alt, 
@@ -148,7 +147,7 @@ export const AvatarImage = memo(({
       alt={alt}
       width={size}
       height={size}
-      quality={60} // 头像使用更低质量
+      quality={60} // 澶村儚浣跨敤鏇翠綆璐ㄩ噺
       className={cn("rounded-full object-cover", className)}
       sizes={`${size}px`}
       onError={() => setHasError(true)}
@@ -158,3 +157,4 @@ export const AvatarImage = memo(({
 })
 
 AvatarImage.displayName = 'AvatarImage'
+

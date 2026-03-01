@@ -125,9 +125,8 @@ function resetDailyTasks(): void {
   if (typeof window === 'undefined') return
 
   const userId = getUserId()
-  const tasks = getAllTasks()
-
-  tasks.forEach(task => {
+  // Use static task definitions here to avoid recursive calls into getAllTasks().
+  DEFAULT_TASKS.forEach(task => {
     if (task.type === 'daily') {
       const progressKey = `${STORAGE_KEY_PREFIX}${userId}-${task.id}`
       const progress: UserTaskProgress = {

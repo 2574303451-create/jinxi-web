@@ -28,7 +28,7 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
     }
   }, [isOpen])
   const widths = { sm: "max-w-md", md: "max-w-lg", lg: "max-w-2xl", xl: "max-w-4xl", "2xl": "max-w-7xl", full: "max-w-[95vw]" }
-  return <dialog ref={dialogRef} className={`night-dialog ${widths[size]}`} aria-labelledby={title ? titleId : undefined} aria-label={title ? undefined : "详情"}
+  return <dialog ref={dialogRef} className={`jinxi-dialog ${widths[size]}`} aria-labelledby={title ? titleId : undefined} aria-label={title ? undefined : "详情"}
     onKeyDown={(event) => {
       if (event.key !== "Tab") return
       const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]')).filter(element => element.getClientRects().length > 0)

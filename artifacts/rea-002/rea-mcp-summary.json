@@ -1,0 +1,224 @@
+{
+  "evidence_id": "ev_5da27451ae4548b4bd277fc0b84a4b26a8e6d83810574d55f967e74befe104b4",
+  "provider": {
+    "id": "rea-playwright-browser-scenario",
+    "name": "REA Playwright browser scenario capture provider",
+    "version": "1"
+  },
+  "parameters": {
+    "browser": {
+      "mode": "launch",
+      "executable_path": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+      "headless": true
+    },
+    "start_url": {
+      "url": "https://www.mdldm.club/",
+      "query": []
+    },
+    "environment": {
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "locale": "zh-CN",
+      "timezone": "Asia/Shanghai",
+      "color_scheme": "light",
+      "reduced_motion": "no-preference",
+      "service_workers": "block"
+    },
+    "actions": [
+      {
+        "step_id": "settled-home",
+        "action": "wait_for_timeout",
+        "duration_ms": 2000
+      }
+    ],
+    "storage": {
+      "cookies": [],
+      "local_storage": [],
+      "session_storage": []
+    },
+    "secrets": [],
+    "capture": {
+      "after_each_step": [],
+      "at_end": [
+        "dom",
+        "accessibility",
+        "url",
+        "screenshot"
+      ],
+      "events": [
+        "console",
+        "page-errors",
+        "network"
+      ],
+      "network": {
+        "request_body": false,
+        "response_body": false,
+        "header_values": false
+      },
+      "limits": {
+        "max_events": 10000,
+        "max_event_allocation_bytes": 4194304,
+        "max_total_event_allocation_bytes": 16777216,
+        "max_network_transactions": 1024,
+        "max_network_body_bytes": 65536,
+        "max_network_body_allocation_bytes": 1048576,
+        "max_network_header_allocation_bytes": 1048576,
+        "max_network_metadata_allocation_bytes": 1048576
+      }
+    },
+    "scenario_sha256": "2039cc63cea803dad48061a7a30e445dd612fe85b6817f4e908b69abca9d4c3e"
+  },
+  "confidence": "observed",
+  "authority": "controlled-replay",
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Event sequence records provider receipt order; simultaneous browser causality is not inferred.",
+    "Network content is retained only when selected; Playwright response-body bytes are API results and are not guaranteed to match wire bytes.",
+    "Request bytes are limited to what Playwright exposes; not_exposed does not establish body absence or multipart file coverage.",
+    "Network content reads settle within 5 seconds each and the observer does not request bodies from unfinished responses.",
+    "Playwright scenario events do not expose request initiator stacks; receipt order does not prove causality.",
+    "Storage values are hashed only after declared-secret redaction.",
+    "Some network requests had not completed when capture ended; later activity is unknown.",
+    "Browser host platform and architecture were not observed."
+  ],
+  "completeness": {
+    "status": "incomplete",
+    "equality_eligible": false,
+    "missing_sections": [
+      "events"
+    ],
+    "truncated_sections": []
+  },
+  "events": {
+    "total": 208,
+    "failures": [
+      {
+        "sequence": 23,
+        "step_index": 0,
+        "kind": "console",
+        "level": "info",
+        "text": "Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113",
+        "url": {
+          "url": "https://www.mdldm.club/",
+          "origin": "https://www.mdldm.club",
+          "query_parameter_names": [],
+          "redacted": false
+        }
+      },
+      {
+        "sequence": 101,
+        "step_index": 1,
+        "transaction_id": "request-26",
+        "redirected_from_transaction_id": null,
+        "redirected_from_transaction_state": "root",
+        "method": "GET",
+        "url": {
+          "url": "https://www.mdldm.club/api/auth/me",
+          "origin": "https://www.mdldm.club",
+          "query_parameter_names": [],
+          "redacted": false
+        },
+        "resource_type": "fetch",
+        "header_names": [
+          "age",
+          "cache-control",
+          "content-type",
+          "date",
+          "server",
+          "strict-transport-security",
+          "vary",
+          "x-matched-path",
+          "x-vercel-cache",
+          "x-vercel-id"
+        ],
+        "kind": "response",
+        "status": 401,
+        "failure": null
+      },
+      {
+        "sequence": 102,
+        "step_index": 1,
+        "kind": "console",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 401 ()",
+        "url": {
+          "url": "https://www.mdldm.club/api/auth/me",
+          "origin": "https://www.mdldm.club",
+          "query_parameter_names": [],
+          "redacted": false
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_id": "scenario_start",
+      "status": "completed",
+      "after_url": {
+        "url": "https://www.mdldm.club/",
+        "origin": "https://www.mdldm.club",
+        "query_parameter_names": [],
+        "redacted": false
+      },
+      "artifacts": {
+        "screenshot": {
+          "state": "not_requested"
+        },
+        "dom": {
+          "state": "not_requested"
+        },
+        "accessibility": {
+          "state": "not_requested"
+        },
+        "url": {
+          "state": "not_requested"
+        },
+        "history": {
+          "state": "not_requested"
+        },
+        "storage": {
+          "state": "not_requested"
+        }
+      }
+    },
+    {
+      "step_id": "settled-home",
+      "status": "completed",
+      "after_url": {
+        "url": "https://www.mdldm.club/",
+        "origin": "https://www.mdldm.club",
+        "query_parameter_names": [],
+        "redacted": false
+      },
+      "artifacts": {
+        "screenshot": {
+          "state": "captured",
+          "sha256": "19790cdab2a769c5b758799b7b035911c822e1043684c4049503f97cfab31950",
+          "bytes": 103239
+        },
+        "dom": {
+          "state": "captured",
+          "sha256": "755d2c65f092a1e343cc159f34dac94c043d29eea3224bd2da3d3f807892b5ec",
+          "bytes": 103411
+        },
+        "accessibility": {
+          "state": "captured",
+          "sha256": "b406f60baef9bef9660ddf5a53174aba801053c91cd0ebc03ac9ca986151ebed",
+          "bytes": 21491
+        },
+        "url": {
+          "state": "captured"
+        },
+        "history": {
+          "state": "not_requested"
+        },
+        "storage": {
+          "state": "not_requested"
+        }
+      }
+    }
+  ]
+}

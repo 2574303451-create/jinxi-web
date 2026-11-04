@@ -316,7 +316,7 @@ export const MessageWall = memo(function MessageWall({
             </button>
           </div>
 
-{loadError && <div role="alert" className="night-error">{loadError}<button onClick={() => loadMessages()}>重试</button></div>}
+{loadError && <div role="alert" className="module-error">{loadError}<button onClick={() => loadMessages()}>重试</button></div>}
           {/* 分类筛选 */}
           <div className="mb-6 flex flex-wrap gap-2">
             {categories.map((category) => (

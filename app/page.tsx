@@ -1,13 +1,16 @@
 "use client"
 
 import { useState, useEffect, lazy, Suspense } from "react"
-import { OptimizedImage, AvatarImage } from "../components/ui/optimized-image"
 import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
-import { RocketIcon, SendIcon, MailIcon, ImageIcon } from "../components/ui/icons"
-import { GuildNavigation, StarNightHero, SectionHeading, ActionLinks } from "../components/home/star-night"
+import { SendIcon, MailIcon } from "../components/ui/icons"
+import { GuildNavigation } from "../components/home/guild-navigation"
+import { GuildHero } from "../components/home/guild-hero"
+import { GuildIntroduction, MemberActions, JoinBanner, SectionHeading, type MemberAction } from "../components/home/guild-sections"
+import { GuildManagement, GuildMembers } from "../components/home/guild-members"
+import { CommunityUpdates } from "../components/home/community-updates"
 import { CyberAnnouncement } from "../components/cyber-announcement"
 import { MotionConfig } from "framer-motion"
 import dynamic from "next/dynamic"
@@ -16,7 +19,6 @@ import { GuildSponsorship } from "../components/guild-sponsorship"
 
 
 // 动态导入重型组件以减少初始内存占用
-const Marquee = lazy(() => import("../components/magicui/marquee").then(m => ({ default: m.Marquee })))
 const MessageWall = lazy(() => import("../components/message-wall").then(m => ({ default: m.MessageWall })))
 const StrategyWall = lazy(() => import("../components/strategy-wall").then(m => ({ default: m.StrategyWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
@@ -32,9 +34,9 @@ const GameDataPanel = lazy(() => import("../components/game-data-panel"))
 // 组件加载占位符
 const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
-    <div className="flex items-center justify-center py-8">
+    <div role="status" className="module-loading flex items-center justify-center py-8">
       <LoadingSpinner size="sm" />
-      <span className="ml-2 text-white/60">加载中...</span>
+      <span className="ml-2">正在加载，请稍候…</span>
     </div>
   }>
     {children}
@@ -42,6 +44,7 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 )
 
 function PageContent() {
+  const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -793,223 +796,47 @@ function PageContent() {
   }, [])
   return (
     <div
-      className="star-night min-h-screen relative"
-      style={{
-        color: "#e8edf6",
-        fontFamily:
-          '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
-      }}
+      className="jinxi-site min-h-screen relative"
     >
       <a className="skip-link" href="#main-content">跳到主要内容</a>
       <GuildNavigation account={loginAccount} nickname={loginNickname} onLogin={openLoginModal}
         onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
+        onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))}
         onStrategy={() => setIsStrategyWallOpen(true)} />
-      <main id="main-content" className="night-main">
-        <StarNightHero onJoin={handleJoinClick} />
-        <ActionLinks />
-        <section id="info-tabs" className="night-section">
-          <SectionHeading eyebrow="OUR GUILD / 公会档案" title="在这里，认识今夕"
-            description="以战会友，彼此成就。我们期待认真配合的队友，也珍惜每一次并肩作战的相遇。" />
-          <div className="guild-profile">
-            <article><span className="profile-symbol" aria-hidden="true">✦</span><h3>认真配合，温柔相待</h3><p>强势在操作，温柔在态度。文明游戏、支持指挥、接受分工，让每一次集结都有默契。</p></article>
-            <article><span className="profile-symbol" aria-hidden="true">☾</span><h3>留一段时间，一起开黑</h3><p>历史活跃时段为工作日 20:00–23:00，周末弹性安排。当前活动时间待确认，请以公会公告为准。</p><a href="#faq">了解入会与活动常见问题 ↗</a></article>
-            <article><span className="profile-symbol" aria-hidden="true">↗</span><h3>公会动态</h3><p>查看公会发布的公告，了解经过确认的通知与活动安排。</p><button onClick={() => window.dispatchEvent(new Event("cyber-announcement:open"))}>打开公会公告 ↗</button></article>
-          </div>
+      <main id="main-content">
+        <GuildHero onJoin={handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
+        <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
+        <GuildManagement members={managementTeam} onJoin={handleJoinClick} />
+        <GuildMembers members={allMembers} onAll={() => setActivePanel("members")} onShowcase={() => setActivePanel("showcase")} />
+        <MemberActions account={loginAccount} onOpen={setActivePanel} />
+        <section id="community" className="guild-shell guild-section">
+          <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
+          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => setActivePanel("messages")} onStrategy={() => setIsStrategyWallOpen(true)} />
         </section>
-        {/* Management Team Section with Enhanced Marquee */}
-        <ComponentLoader>
-            <section id="members" className="night-section">
-              <SectionHeading eyebrow="THE PEOPLE / 成员群像" title="并肩作战的人" description="每一个名字，都是今夕故事的一部分。" />
-              <div
-                className="p-6 rounded-2xl border relative"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <h3
-                  className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-⭐ 管理团队
-                </h3>
-
-                <ComponentLoader>
-                  <Marquee className="py-4 relative z-10" pauseOnHover>
-                    {managementTeam.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center gap-[10px] p-3 rounded-xl mx-4 min-w-[280px] hover:scale-105 transition-transform"
-                    style={{
-                      background: "rgba(255,255,255,.04)",
-                      border: "1px solid rgba(255,255,255,.08)",
-                    }}
-                  >
-                    <AvatarImage
-                      src={member.avatar || "/placeholder.svg"}
-                      alt={member.name}
-                      size={36}
-                      fallbackText={member.name}
-                      loading="lazy"
-                    />
-                    <div>
-                      <div className="font-semibold">{member.name}</div>
-                      <div className="text-sm" style={{ color: "#a5b2cc" }}>
-                        {member.role}
-                      </div>
-                    </div>
-                  </div>
-                    ))}
-                  </Marquee>
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="roster" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-<ImageIcon className="inline" size={16} /> 成员展示
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Carousel3D members={carouselMembers} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="members-page" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10 gradient-text-rainbow"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-👥 公会成员列表
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <MemberGrid members={allMembers} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 签到功能区域 */}
-        <ComponentLoader>
-            <section id="checkin" className="night-section">
-              <SectionHeading eyebrow="YOUR NEXT MOVE / 今日行动" title="下一场集结，从这里开始" description="签到、完成任务，或找到下一局的伙伴。" />
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-                <i className="ri-calendar-check-line"></i> 每日签到
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <CheckinWidget loggedInAccount={loginAccount} />
-                <LeaderboardWidget />
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 每日任务系统 */}
-        <ComponentLoader>
-            <section id="daily-tasks" className="py-9 relative">
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                {loginAccount ? <DailyTasks loggedInAccount={loginAccount} /> : <div className="night-empty"><h3>每日任务与积分</h3><p>登录后查看你的个人任务与积分。</p><button className="night-button primary" onClick={openLoginModal}>登录账号</button></div>}
-                <PointsRankingWidget loggedInAccount={loginAccount} />
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 战队系统 */}
-        <ComponentLoader>
-            <section id="team-system" className="py-9 relative">
-              <p className="night-notice">组队信息来自当前浏览器的本地记录与默认示例，不代表实时战绩。</p>
-              {loginAccount ? <TeamSystem /> : <div className="night-empty"><h3>寻找队伍</h3><p>登录后打开本地组队面板，查看队伍与申请入口。</p><button className="night-button" onClick={openLoginModal}>登录后组队</button></div>}
-            </section>
-        </ComponentLoader>
-
-        {/* 游戏数据展示 */}
-        <ComponentLoader>
-            <section id="game-data" className="py-9 relative">
-              <p className="night-notice">此处展示浏览器本地游戏记录与默认示例，供个人参考。</p>
-              {loginAccount ? <GameDataPanel /> : <div className="night-empty"><h3>游戏数据</h3><p>登录后打开你的本地游戏数据面板。</p><button className="night-button" onClick={openLoginModal}>登录后查看</button></div>}
-            </section>
-        </ComponentLoader>
-
-        <section className="night-section"><SectionHeading eyebrow="COMMUNITY / 公会交流" title="留下你的声音" description="聊聊这一局的故事，也为下一位伙伴留一点经验。" /><div className="strategy-entry"><div><h3>分享经验，一起变强</h3><p>打法、配合与心得，都值得分享。</p></div><button className="night-button" onClick={() => setIsStrategyWallOpen(true)}>打开攻略墙 ↗</button></div></section>
-        <ComponentLoader>
-            <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="faq" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-❓ 常见问题
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Accordion items={faqItems} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
+        <section id="faq" className="guild-shell guild-section">
+          <SectionHeading label="想了解更多" title="入会前，你可能想问" description="活动时间、奖励和具体安排，请以公会实际通知为准。" />
+          <div className="guild-panel faq-panel legacy-module"><ComponentLoader><Accordion items={faqItems} /></ComponentLoader></div>
+        </section>
+        <JoinBanner onJoin={handleJoinClick} />
       </main>
-
       <CyberAnnouncement />
       <GuildUptimeTerminal />
       <GuildSponsorship />
-
-      {/* Footer */}
-      <footer className="text-center py-4 relative z-10">
-        <div className="max-w-[1180px] mx-auto px-4">
-          <div className="flex items-center justify-center">
-            <p className="text-white/80">
-              © <span id="y">2018</span> 今夕公会
-            </p>
-          </div>
+      <footer className="guild-footer"><div className="guild-shell"><a className="guild-brand" href="#top"><img src="/logo.png" alt="" width={32} height={32} /><span>今夕公会</span></a><p>以战会友，彼此成就。一起记录属于我们的高光。</p><div><span>© <span id="y">2026</span> 今夕公会</span><a href="#top">回到顶部 ↑</a></div></div></footer>
+      <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl">
+        <div className="legacy-module">
+          <ComponentLoader>
+            {activePanel === "checkin" && <CheckinWidget loggedInAccount={loginAccount} />}
+            {activePanel === "points" && <div className="business-grid"><LeaderboardWidget /><PointsRankingWidget loggedInAccount={loginAccount} /></div>}
+            {activePanel === "tasks" && (loginAccount ? <DailyTasks loggedInAccount={loginAccount} /> : <div className="guild-empty"><h3>你的任务，从登录开始</h3><p>登录后查看你的个人任务与积分。</p><button className="guild-button yellow" onClick={openLoginModal}>登录账号</button></div>)}
+            {activePanel === "teams" && (loginAccount ? <><p className="module-notice">当前浏览器的本地记录与默认示例，供个人管理参考。</p><TeamSystem /></> : <div className="guild-empty"><h3>寻找下一局的伙伴</h3><p>登录后打开浏览器本地组队面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后组队</button></div>)}
+            {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
+            {activePanel === "members" && <MemberGrid members={allMembers} />}
+            {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
+            {activePanel === "messages" && <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />}
+          </ComponentLoader>
         </div>
-      </footer>
-
+      </Modal>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="加入今夕公会" size="md">
         <div className="space-y-4">
           <p className="text-white/80">欢迎加入今夕公会！请填写以下信息，我们会尽快与您联系。</p>
@@ -1168,7 +995,7 @@ function PageContent() {
               <div className="space-y-3">
                 <input
                   type="text"
-                  placeholder="账号"
+                  aria-label="账号" placeholder="账号"
                   value={loginForm.account}
                   onChange={(e) => handleLoginInputChange("account", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1178,7 +1005,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showLoginPassword ? "text" : "password"}
-                    placeholder="密码"
+                    aria-label="密码" placeholder="密码"
                     value={loginForm.password}
                     onChange={(e) => handleLoginInputChange("password", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1247,7 +1074,7 @@ function PageContent() {
               <div className="space-y-3">
                 <input
                   type="text"
-                  placeholder="账号"
+                  aria-label="账号" placeholder="账号"
                   value={loginAccount || changePasswordForm.account}
                   onChange={(e) => setChangePasswordForm((prev) => ({ ...prev, account: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1258,7 +1085,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showCurrentPassword ? "text" : "password"}
-                    placeholder="当前密码"
+                    aria-label="当前密码" placeholder="当前密码"
                     value={changePasswordForm.currentPassword}
                     onChange={(e) => handleChangePasswordInputChange("currentPassword", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1296,7 +1123,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="确认新密码"
+                    aria-label="确认新密码" placeholder="确认新密码"
                     value={changePasswordForm.confirmPassword}
                     onChange={(e) => handleChangePasswordInputChange("confirmPassword", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"

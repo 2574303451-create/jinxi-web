@@ -91,7 +91,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
 
   const currentLeaderboard = leaderboards[activeTab]
 
-  if (loadError) return <div className="night-empty" role="alert"><h3>签到排行榜</h3><p>{loadError}</p><button className="night-button" onClick={loadLeaderboards}>重试</button></div>
+  if (loadError) return <div className="guild-empty" role="alert"><h3>签到排行榜</h3><p>{loadError}</p><button className="guild-button" onClick={loadLeaderboards}>重试</button></div>
 
   if (isLoading) {
     return (

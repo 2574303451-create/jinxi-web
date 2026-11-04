@@ -62,7 +62,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      <div className="fixed top-4 right-4 z-[100] space-y-2">
+      <div className="guild-toasts fixed top-4 right-4 z-[100] space-y-2">
         <AnimatePresence>
           {toasts.map((toast) => {
             const styles = getToastStyles(toast.type)
@@ -72,13 +72,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 initial={{ opacity: 0, x: 100, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 100, scale: 0.8 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-white shadow-lg backdrop-blur-sm max-w-sm"
+                role="status" className="guild-toast flex items-center gap-3 px-4 py-3 rounded-xl max-w-sm"
                 style={{ background: `${styles.bg}dd` }}
               >
                 <i className={`${styles.icon} text-lg`}></i>
                 <span className="flex-1 text-sm font-medium">{toast.message}</span>
                 <button
-                  onClick={() => removeToast(toast.id)}
+                  aria-label="关闭提示" onClick={() => removeToast(toast.id)}
                   className="text-white/80 hover:text-white transition-colors"
                 >
                   <i className="ri-close-line"></i>

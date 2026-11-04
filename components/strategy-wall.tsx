@@ -218,7 +218,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} title="分享经验，一起变强" size="xl">
         <div 
-          className="strategy-content relative"
+          className="strategy-content legacy-module relative"
           style={{ 
             backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%234f46e5" stop-opacity="0.3"/><stop offset="100%" stop-color="%231e40af" stop-opacity="0.1"/></radialGradient></defs><rect width="1000" height="1000" fill="url(%23a)"/><circle cx="200" cy="200" r="100" fill="%236366f1" fill-opacity="0.1"/><circle cx="800" cy="300" r="150" fill="%238b5cf6" fill-opacity="0.08"/><circle cx="300" cy="800" r="120" fill="%2306b6d4" fill-opacity="0.12"/><circle cx="700" cy="700" r="80" fill="%2310b981" fill-opacity="0.1"/></svg>')` 
           }}
@@ -347,7 +347,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                 </div>
               </div>
 
-{loadError && <div role="alert" className="night-error">{loadError}<button onClick={() => loadStrategies(true)}>重试</button></div>}
+{loadError && <div role="alert" className="module-error">{loadError}<button onClick={() => loadStrategies(true)}>重试</button></div>}
             {/* 攻略列表 */}
             {isLoading && strategies.length === 0 ? (
               <div className="flex items-center justify-center py-20">

@@ -1,0 +1,107 @@
+{
+  "navBefore": {
+    "text": "课程",
+    "rect": {
+      "x": 532.234375,
+      "y": 22,
+      "width": 32,
+      "height": 24,
+      "top": 22,
+      "right": 564.234375,
+      "bottom": 46,
+      "left": 532.234375
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "oklch(0.5 0 0)",
+    "border": "0px solid oklch(0.92 0 0)",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "transform": "none",
+    "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  },
+  "navHover": {
+    "text": "课程",
+    "rect": {
+      "x": 532.234375,
+      "y": 22,
+      "width": 32,
+      "height": 24,
+      "top": 22,
+      "right": 564.234375,
+      "bottom": 46,
+      "left": 532.234375
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "oklch(0.1 0 0)",
+    "border": "0px solid oklch(0.92 0 0)",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "transform": "none",
+    "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  },
+  "buttonBefore": {
+    "text": "👤我是人类",
+    "rect": {
+      "x": 545.046875,
+      "y": 437,
+      "width": 161.46875,
+      "height": 60,
+      "top": 437,
+      "right": 706.515625,
+      "bottom": 497,
+      "left": 545.046875
+    },
+    "background": "oklch(0.905 0.182 98.111)",
+    "color": "oklch(0.208 0.042 265.755)",
+    "border": "2px solid rgb(0, 0, 0)",
+    "borderRadius": "14px",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+    "transform": "none",
+    "transition": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  },
+  "buttonHover": {
+    "text": "👤我是人类",
+    "rect": {
+      "x": 545.046875,
+      "y": 437,
+      "width": 161.46875,
+      "height": 60,
+      "top": 437,
+      "right": 706.515625,
+      "bottom": 497,
+      "left": 545.046875
+    },
+    "background": "oklch(0.905 0.182 98.111)",
+    "color": "oklch(0.208 0.042 265.755)",
+    "border": "2px solid rgb(0, 0, 0)",
+    "borderRadius": "14px",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+    "transform": "none",
+    "transition": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  },
+  "buttonDown": {
+    "text": "👤我是人类",
+    "rect": {
+      "x": 545.046875,
+      "y": 437,
+      "width": 161.46875,
+      "height": 60,
+      "top": 437,
+      "right": 706.515625,
+      "bottom": 497,
+      "left": 545.046875
+    },
+    "background": "oklch(0.905 0.182 98.111)",
+    "color": "oklch(0.208 0.042 265.755)",
+    "border": "2px solid rgb(0, 0, 0)",
+    "borderRadius": "14px",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+    "transform": "none",
+    "transition": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  }
+}

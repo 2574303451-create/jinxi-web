@@ -27,3 +27,10 @@ yarn-error.log*
 next-env.d.ts
 # Local Netlify folder
 .netlify
+
+# Private account exports and member import data
+/scripts/output/
+/scripts/employee_ids_from_archive.csv
+/scripts/member_profile_map.csv
+**/accounts_for_import.csv
+**/password_dispatch.csv

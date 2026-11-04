@@ -1,10 +1,8 @@
-// 签到系统类型定义
-
 export interface CheckinRecord {
   id: string
   userId: string
   userName: string
-  checkinDate: string // YYYY-MM-DD 格式
+  checkinDate: string
   checkinTime: Date
   rewardPoints: number
   isContinuous: boolean
@@ -16,14 +14,14 @@ export interface UserCheckinStats {
   id: string
   userId: string
   userName: string
-  totalCheckins: number      // 总签到天数
-  continuousCheckins: number // 当前连续签到天数
-  maxContinuous: number      // 最长连续签到记录
-  totalPoints: number        // 总积分
-  lastCheckinDate: string | null // 最后签到日期
-  firstCheckinDate: string | null // 首次签到日期
-  thisMonthCheckins: number  // 本月签到次数
-  thisYearCheckins: number   // 今年签到次数
+  totalCheckins: number
+  continuousCheckins: number
+  maxContinuous: number
+  totalPoints: number
+  lastCheckinDate: string | null
+  firstCheckinDate: string | null
+  thisMonthCheckins: number
+  thisYearCheckins: number
   updatedAt: Date
 }
 
@@ -33,12 +31,24 @@ export interface CheckinResult {
   rewardPoints?: number
   continuousDays?: number
   alreadyChecked: boolean
+  bizId?: string
+  currentBalance?: number
+  riskDecision?: string
+}
+
+export interface PointAccountSummary {
+  userId: string
+  balance: number
+  totalEarned: number
+  totalSpent: number
+  updatedAt: Date
 }
 
 export interface CheckinStatus {
   hasCheckedToday: boolean
   userStats: UserCheckinStats | null
   todayRecord: CheckinRecord | null
+  pointAccount: PointAccountSummary | null
 }
 
 export interface LeaderboardEntry {
@@ -46,27 +56,16 @@ export interface LeaderboardEntry {
   userId: string
   userName: string
   value: number
-  label: string // 如："15天" 或 "连续7天"
+  label: string
+  totalCheckins: number
+  continuousCheckins: number
+  maxContinuous: number
+  totalPoints: number
 }
 
 export interface Leaderboard {
-  type: 'total' | 'continuous' | 'monthly' | 'yearly'
+  type: "total" | "continuous" | "monthly" | "yearly" | "points" | "max_continuous"
   title: string
   entries: LeaderboardEntry[]
   updatedAt: Date
-}
-
-// API请求/响应类型
-export interface CheckinRequest {
-  userId: string
-  userName: string
-}
-
-export interface CheckinStatusRequest {
-  userId: string
-}
-
-export interface LeaderboardRequest {
-  type: 'total' | 'continuous' | 'monthly' | 'yearly'
-  limit?: number // 默认20
 }

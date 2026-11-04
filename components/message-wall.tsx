@@ -13,7 +13,15 @@ import { Icon, RefreshIcon, SendIcon, CloseIcon } from "./ui/icons"
 import { updateTaskProgress } from "../services/daily-task-service"
 
 // 使用memo优化组件渲染性能
-export const MessageWall = memo(function MessageWall({ className }: { className?: string }) {
+export const MessageWall = memo(function MessageWall({
+  className,
+  loggedInAccount = "",
+  loggedInNickname = "",
+}: {
+  className?: string
+  loggedInAccount?: string
+  loggedInNickname?: string
+}) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,6 +53,17 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
       setUserId(getUserId())
     }
   }, [])
+
+  const effectiveLoggedInName = useMemo(() => {
+    if (!loggedInAccount) return ""
+    const nickname = String(loggedInNickname || "").trim()
+    return nickname || loggedInAccount
+  }, [loggedInAccount, loggedInNickname])
+
+  useEffect(() => {
+    if (!loggedInAccount) return
+    setFormData((prev) => ({ ...prev, name: effectiveLoggedInName }))
+  }, [loggedInAccount, effectiveLoggedInName])
 
   // 加载留言数据 - 使用useCallback优化
   const loadMessages = useCallback(async () => {
@@ -333,13 +352,19 @@ export const MessageWall = memo(function MessageWall({ className }: { className?
             </h4>
             
             <form onSubmit={handleSubmit} className="space-y-4">
+              {loggedInAccount && (
+                <div className="text-sm text-emerald-200/90 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-2">
+                  当前已登录身份：{effectiveLoggedInName}（账号：{loggedInAccount}）
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
-                  placeholder="你的昵称（可选）"
+                  placeholder={loggedInAccount ? "已绑定登录昵称（不可编辑）" : "你的昵称（可选）"}
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  readOnly={!!loggedInAccount}
                 />
                 
             <select

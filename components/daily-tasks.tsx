@@ -1,33 +1,58 @@
 'use client'
 
-/**
- * 每日任务面板组件
- * 展示每日、每周和成就任务
- */
-
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DailyTask, TaskStats } from '../types/daily-task'
-import {
-  getAllTasks,
-  claimReward,
-  getTaskStats,
-} from '../services/daily-task-service'
+import { claimReward, getAllTasks, getTaskStats } from '../services/daily-task-service'
+import { getPointsSummary } from '../services/points-service'
 
 interface DailyTasksProps {
   onTaskComplete?: (taskId: string) => void
+  loggedInAccount?: string
 }
 
-function DailyTasks({ onTaskComplete }: DailyTasksProps) {
+function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
   const [tasks, setTasks] = useState<DailyTask[]>([])
   const [stats, setStats] = useState<TaskStats | null>(null)
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'achievement'>('daily')
   const [isExpanded, setIsExpanded] = useState(true)
+  const [backendTotalPoints, setBackendTotalPoints] = useState<number | null>(null)
+  const [isLoadingBackendPoints, setIsLoadingBackendPoints] = useState(false)
 
-  // 加载任务和统计数据
   useEffect(() => {
     loadTasks()
     loadStats()
   }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    const loadBackendPoints = async () => {
+      if (!loggedInAccount) {
+        setBackendTotalPoints(null)
+        return
+      }
+
+      setIsLoadingBackendPoints(true)
+      try {
+        const summary = await getPointsSummary(loggedInAccount, 10)
+        if (cancelled) return
+        setBackendTotalPoints(Number(summary.account?.totalEarned || 0))
+      } catch {
+        if (cancelled) return
+        setBackendTotalPoints(null)
+      } finally {
+        if (!cancelled) {
+          setIsLoadingBackendPoints(false)
+        }
+      }
+    }
+
+    loadBackendPoints()
+
+    return () => {
+      cancelled = true
+    }
+  }, [loggedInAccount])
 
   const loadTasks = () => {
     const allTasks = getAllTasks()
@@ -41,18 +66,24 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
 
   const handleClaimReward = (taskId: string) => {
     const success = claimReward(taskId)
-    if (success) {
-      loadTasks()
-      loadStats()
-      onTaskComplete?.(taskId)
+    if (!success) return
+
+    loadTasks()
+    loadStats()
+    onTaskComplete?.(taskId)
+  }
+
+  const filteredTasks = useMemo(() => tasks.filter((task) => task.type === activeTab), [tasks, activeTab])
+
+  const totalPointsDisplay = useMemo(() => {
+    if (loggedInAccount) {
+      if (isLoadingBackendPoints && backendTotalPoints === null) return '--'
+      return backendTotalPoints ?? 0
     }
-  }
+    return stats?.totalPoints ?? 0
+  }, [loggedInAccount, isLoadingBackendPoints, backendTotalPoints, stats?.totalPoints])
 
-  const filteredTasks = tasks.filter(task => task.type === activeTab)
-
-  const getProgressPercentage = (task: DailyTask) => {
-    return Math.min((task.progress / task.target) * 100, 100)
-  }
+  const getProgressPercentage = (task: DailyTask) => Math.min((task.progress / task.target) * 100, 100)
 
   const getTaskCategoryColor = (category: string) => {
     switch (category) {
@@ -69,7 +100,6 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
 
   return (
     <div className="relative">
-      {/* 任务统计卡片 */}
       <div
         className="p-6 rounded-2xl border mb-6 cartoon-card cartoon-card-pink animate-slide-in-up"
         style={{
@@ -78,16 +108,10 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
         }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3
-            className="text-xl font-bold gradient-text-candy"
-            style={{ fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive' }}
-          >
+          <h3 className="text-xl font-bold gradient-text-candy" style={{ fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive' }}>
             🎯 每日任务
           </h3>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-white/60 hover:text-white transition-colors"
-          >
+          <button onClick={() => setIsExpanded(!isExpanded)} className="text-white/60 hover:text-white transition-colors">
             {isExpanded ? '收起 ▲' : '展开 ▼'}
           </button>
         </div>
@@ -95,8 +119,8 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 rounded-xl bg-white/5">
-              <div className="text-2xl font-bold gradient-text-candy">{stats.totalPoints}</div>
-              <div className="text-sm text-white/60 mt-1">总积分</div>
+              <div className="text-2xl font-bold gradient-text-candy">{totalPointsDisplay}</div>
+              <div className="text-sm text-white/60 mt-1">{loggedInAccount ? '活动总积分' : '总积分'}</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/5">
               <div className="text-2xl font-bold gradient-text-sky">{stats.completedToday}</div>
@@ -116,20 +140,17 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
 
       {isExpanded && (
         <>
-          {/* 任务类型切换 */}
           <div className="flex gap-3 mb-6">
             {[
               { key: 'daily', label: '每日任务', icon: '📅' },
               { key: 'weekly', label: '每周任务', icon: '📆' },
               { key: 'achievement', label: '成就任务', icon: '🏆' },
-            ].map(tab => (
+            ].map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key as any)}
+                onClick={() => setActiveTab(tab.key as 'daily' | 'weekly' | 'achievement')}
                 className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
-                  activeTab === tab.key
-                    ? 'cartoon-btn cartoon-btn-pink'
-                    : 'bg-white/5 hover:bg-white/10 text-white/60 hover:text-white'
+                  activeTab === tab.key ? 'cartoon-btn cartoon-btn-pink' : 'bg-white/5 hover:bg-white/10 text-white/60 hover:text-white'
                 }`}
               >
                 {tab.icon} {tab.label}
@@ -137,36 +158,30 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
             ))}
           </div>
 
-          {/* 任务列表 */}
           <div className="space-y-4">
             {filteredTasks.map((task, index) => (
               <div
                 key={task.id}
-                className={`p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up delay-${index * 100}`}
+                className="p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up"
                 style={{
                   background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',
                   borderColor: `rgba(${
                     getTaskCategoryColor(task.category) === 'cartoon-pink'
                       ? '255,107,157'
                       : getTaskCategoryColor(task.category) === 'cartoon-cyan'
-                      ? '107,207,255'
-                      : getTaskCategoryColor(task.category) === 'cartoon-purple'
-                      ? '199,125,255'
-                      : '74,222,128'
+                        ? '107,207,255'
+                        : getTaskCategoryColor(task.category) === 'cartoon-purple'
+                          ? '199,125,255'
+                          : '74,222,128'
                   },.3)`,
                   animationDelay: `${index * 0.1}s`,
                 }}
               >
                 <div className="flex items-start gap-4">
-                  {/* 任务图标 */}
-                  <div
-                    className="text-4xl flex-shrink-0 animate-float"
-                    style={{ animationDelay: `${index * 0.2}s` }}
-                  >
+                  <div className="text-4xl flex-shrink-0 animate-float" style={{ animationDelay: `${index * 0.2}s` }}>
                     {task.icon}
                   </div>
 
-                  {/* 任务信息 */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-bold text-lg text-white">{task.title}</h4>
@@ -175,21 +190,16 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
                           task.status === 'claimed'
                             ? 'bg-green-500/20 text-green-300'
                             : task.status === 'completed'
-                            ? 'bg-yellow-500/20 text-yellow-300'
-                            : 'bg-blue-500/20 text-blue-300'
+                              ? 'bg-yellow-500/20 text-yellow-300'
+                              : 'bg-blue-500/20 text-blue-300'
                         }`}
                       >
-                        {task.status === 'claimed'
-                          ? '已完成'
-                          : task.status === 'completed'
-                          ? '待领取'
-                          : '进行中'}
+                        {task.status === 'claimed' ? '已完成' : task.status === 'completed' ? '待领取' : '进行中'}
                       </span>
                     </div>
 
                     <p className="text-white/60 text-sm mb-3">{task.description}</p>
 
-                    {/* 进度条 */}
                     <div className="mb-3">
                       <div className="flex items-center justify-between text-sm mb-1">
                         <span className="text-white/60">
@@ -205,16 +215,11 @@ function DailyTasks({ onTaskComplete }: DailyTasksProps) {
                       </div>
                     </div>
 
-                    {/* 奖励和操作 */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-yellow-300">💰 {task.reward.points} 积分</span>
-                        {task.reward.badge && (
-                          <span className="text-purple-300">🎖️ {task.reward.badge}</span>
-                        )}
-                        {task.reward.title && (
-                          <span className="text-cyan-300">👑 {task.reward.title}</span>
-                        )}
+                        {task.reward.badge && <span className="text-purple-300">🎖️ {task.reward.badge}</span>}
+                        {task.reward.title && <span className="text-cyan-300">👑 {task.reward.title}</span>}
                       </div>
 
                       {task.status === 'completed' && (

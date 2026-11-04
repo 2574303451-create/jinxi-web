@@ -6,11 +6,11 @@ import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
-import { RocketIcon, SendIcon, MailIcon, Icon, ImageIcon } from "../components/ui/icons"
-import { useMemoryOptimization, useComponentCleanup } from "../hooks/use-memory-optimization"
+import { RocketIcon, SendIcon, MailIcon, ImageIcon } from "../components/ui/icons"
 import { FloatingBubbles } from "../components/ui/floating-bubbles"
 import { CyberAnnouncement } from "../components/cyber-announcement"
 import { GuildUptimeTerminal } from "../components/guild-uptime-terminal"
+import { GuildSponsorship } from "../components/guild-sponsorship"
 
 
 // 动态导入重型组件以减少初始内存占用
@@ -22,7 +22,10 @@ const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m
 const Tabs = lazy(() => import("../components/ui/tabs").then(m => ({ default: m.Tabs })))
 const Progress = lazy(() => import("../components/ui/progress").then(m => ({ default: m.Progress })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
+const CheckinWidget = lazy(() => import("../components/checkin-widget").then(m => ({ default: m.CheckinWidget })))
+const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(m => ({ default: m.LeaderboardWidget })))
 const DailyTasks = lazy(() => import("../components/daily-tasks"))
+const PointsRankingWidget = lazy(() => import("../components/points-ranking-widget"))
 const TeamSystem = lazy(() => import("../components/team-system"))
 const GameDataPanel = lazy(() => import("../components/game-data-panel"))
 
@@ -41,13 +44,30 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 function PageContent() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoginSubmitting, setIsLoginSubmitting] = useState(false)
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [isStrategyWallOpen, setIsStrategyWallOpen] = useState(false)
-  
-  // 使用内存优化钩子
-  const { registerCleanup, getMemoryUsage } = useMemoryOptimization()
-  const { addCleanup } = useComponentCleanup()
+  const [loginAccount, setLoginAccount] = useState("")
+  const [loginNickname, setLoginNickname] = useState("")
+  const [loginError, setLoginError] = useState("")
+  const [changePasswordError, setChangePasswordError] = useState("")
+  const [authMode, setAuthMode] = useState<"login" | "changePassword">("login")
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [loginForm, setLoginForm] = useState({
+    account: "",
+    password: "",
+  })
+  const [changePasswordForm, setChangePasswordForm] = useState({
+    account: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  })
   
   // 招新表单数据
   const [formData, setFormData] = useState<RecruitmentData>({
@@ -58,6 +78,270 @@ function PageContent() {
     message: ''
   })
   const toast = useToast()
+
+  const AUTH_ACCOUNT_KEY = "jinxi-auth-account"
+  const AUTH_PROFILE_KEY = "jinxi-auth-profile"
+
+  const persistAuthProfile = (profile: { account: string; nickname?: string; employeeNo?: string; forceResetPassword?: boolean }) => {
+    if (typeof window === "undefined") return
+
+    const normalized = {
+      account: profile.account,
+      nickname: profile.nickname || profile.account,
+      employeeNo: profile.employeeNo || "",
+      forceResetPassword: !!profile.forceResetPassword,
+    }
+    localStorage.setItem(AUTH_ACCOUNT_KEY, normalized.account)
+    localStorage.setItem(AUTH_PROFILE_KEY, JSON.stringify(normalized))
+    window.dispatchEvent(new Event("jinxi-auth-changed"))
+  }
+
+  const clearAuthProfile = () => {
+    if (typeof window === "undefined") return
+    localStorage.removeItem(AUTH_ACCOUNT_KEY)
+    localStorage.removeItem(AUTH_PROFILE_KEY)
+    window.dispatchEvent(new Event("jinxi-auth-changed"))
+  }
+
+  const syncLoginState = () => {
+    if (typeof window === "undefined") return
+    let resolvedAccount = localStorage.getItem(AUTH_ACCOUNT_KEY) || ""
+    const rawProfile = localStorage.getItem(AUTH_PROFILE_KEY)
+
+    let nickname = resolvedAccount
+    if (rawProfile) {
+      try {
+        const profile = JSON.parse(rawProfile)
+        const profileAccount = String(profile?.account || "").trim()
+        if (!resolvedAccount && profileAccount) {
+          resolvedAccount = profileAccount
+          localStorage.setItem(AUTH_ACCOUNT_KEY, resolvedAccount)
+        }
+        if (profileAccount && profileAccount === resolvedAccount) {
+          nickname = String(profile.nickname || profileAccount)
+        }
+      } catch {
+        // ignore invalid local profile
+      }
+    }
+
+    setLoginAccount(resolvedAccount)
+    setLoginNickname(resolvedAccount ? nickname || resolvedAccount : "")
+  }
+
+  const handleLoginInputChange = (field: "account" | "password", value: string) => {
+    setLoginForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleChangePasswordInputChange = (
+    field: "currentPassword" | "newPassword" | "confirmPassword",
+    value: string
+  ) => {
+    setChangePasswordForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const resetAuthModalState = () => {
+    setLoginError("")
+    setChangePasswordError("")
+    setShowLoginPassword(false)
+    setShowCurrentPassword(false)
+    setShowNewPassword(false)
+    setShowConfirmPassword(false)
+    setLoginForm({ account: "", password: "" })
+    setChangePasswordForm({
+      account: loginAccount,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    })
+  }
+
+  const openLoginModal = () => {
+    setAuthMode("login")
+    setLoginError("")
+    setChangePasswordError("")
+    setLoginForm((prev) => ({ ...prev, account: loginAccount || "" }))
+    setIsLoginModalOpen(true)
+  }
+
+  const openChangePasswordModal = () => {
+    setAuthMode("changePassword")
+    setLoginError("")
+    setChangePasswordError("")
+    setChangePasswordForm({
+      account: loginAccount,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    })
+    setIsLoginModalOpen(true)
+  }
+
+  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setLoginError("")
+
+    if (!loginForm.account.trim() || !loginForm.password.trim()) {
+      setLoginError("请输入账号和密码")
+      return
+    }
+
+    setIsLoginSubmitting(true)
+    try {
+      const response = await fetch("/.netlify/functions/auth-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account: loginForm.account.trim(),
+          password: loginForm.password,
+        }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok || !data?.success) {
+        const msg = data?.error || `登录失败 (${response.status})`
+        setLoginError(msg)
+        return
+      }
+
+      const profile = {
+        account: data.account || loginForm.account.trim(),
+        nickname: data.nickname || data.account || loginForm.account.trim(),
+        employeeNo: data.employeeNo || "",
+        forceResetPassword: !!data.forceResetPassword,
+      }
+      persistAuthProfile(profile)
+      setLoginAccount(profile.account)
+      setLoginNickname(profile.nickname)
+
+      if (profile.forceResetPassword) {
+        setAuthMode("changePassword")
+        setChangePasswordForm({
+          account: profile.account,
+          currentPassword: loginForm.password,
+          newPassword: "",
+          confirmPassword: "",
+        })
+        setShowCurrentPassword(false)
+        setShowNewPassword(false)
+        setShowConfirmPassword(false)
+        setLoginError("")
+        toast.addToast("首次登录请先修改密码", "info")
+      } else {
+        setIsLoginModalOpen(false)
+        resetAuthModalState()
+        toast.addToast(`登录成功：${profile.nickname}`, "success")
+      }
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "登录失败，请稍后重试")
+    } finally {
+      setIsLoginSubmitting(false)
+    }
+  }
+
+  const handleChangePasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setChangePasswordError("")
+
+    const account = loginAccount || changePasswordForm.account
+    if (!account) {
+      setChangePasswordError("请先登录账号后再修改密码")
+      return
+    }
+    if (!changePasswordForm.currentPassword.trim()) {
+      setChangePasswordError("请输入当前密码")
+      return
+    }
+    if (changePasswordForm.newPassword.length < 8) {
+      setChangePasswordError("新密码至少需要 8 位")
+      return
+    }
+    if (!/[A-Za-z]/.test(changePasswordForm.newPassword) || !/\d/.test(changePasswordForm.newPassword)) {
+      setChangePasswordError("新密码需包含字母和数字")
+      return
+    }
+    if (changePasswordForm.newPassword !== changePasswordForm.confirmPassword) {
+      setChangePasswordError("两次输入的新密码不一致")
+      return
+    }
+    if (changePasswordForm.currentPassword === changePasswordForm.newPassword) {
+      setChangePasswordError("新密码不能与当前密码相同")
+      return
+    }
+
+    setIsChangingPassword(true)
+    try {
+      const response = await fetch("/.netlify/functions/auth-change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account,
+          currentPassword: changePasswordForm.currentPassword,
+          newPassword: changePasswordForm.newPassword,
+        }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok || !data?.success) {
+        const msg = data?.error || `修改密码失败 (${response.status})`
+        setChangePasswordError(msg)
+        return
+      }
+
+      const profile = {
+        account: data.account || account,
+        nickname: data.nickname || loginNickname || account,
+        employeeNo: data.employeeNo || "",
+        forceResetPassword: false,
+      }
+      persistAuthProfile(profile)
+      setLoginAccount(profile.account)
+      setLoginNickname(profile.nickname)
+      setIsLoginModalOpen(false)
+      setAuthMode("login")
+      setLoginError("")
+      setShowCurrentPassword(false)
+      setShowNewPassword(false)
+      setShowConfirmPassword(false)
+      setChangePasswordForm({
+        account: profile.account,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      })
+      setLoginForm({
+        account: profile.account,
+        password: "",
+      })
+      setChangePasswordError("")
+      toast.addToast("密码修改成功", "success")
+    } catch (error) {
+      setChangePasswordError(error instanceof Error ? error.message : "修改密码失败，请稍后重试")
+    } finally {
+      setIsChangingPassword(false)
+    }
+  }
+
+  const handleLogout = () => {
+    clearAuthProfile()
+    setLoginAccount("")
+    setLoginNickname("")
+    setLoginError("")
+    setChangePasswordError("")
+    setAuthMode("login")
+    setLoginForm({ account: "", password: "" })
+    setChangePasswordForm({
+      account: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    })
+    toast.addToast("已退出登录", "info")
+  }
 
   // 处理表单输入
   const handleInputChange = (field: keyof RecruitmentData, value: string) => {
@@ -591,41 +875,25 @@ function PageContent() {
     if (yearElement) {
       yearElement.textContent = new Date().getFullYear().toString()
     }
+  }, [])
 
-    // Simulate loading with memory monitoring
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false)
-      // 显示内存使用情况（仅在开发模式）
-      if (process.env.NODE_ENV === 'development') {
-        const memoryUsage = getMemoryUsage()
-        if (memoryUsage) {
-          console.log('页面加载完成，内存使用:', {
-            used: `${Math.round(memoryUsage.usedJSHeapSize! / 1024 / 1024)}MB`,
-            total: `${Math.round(memoryUsage.totalJSHeapSize! / 1024 / 1024)}MB`
-          })
-        }
+  useEffect(() => {
+    syncLoginState()
+    if (typeof window === "undefined") return
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === AUTH_ACCOUNT_KEY || event.key === AUTH_PROFILE_KEY) {
+        syncLoginState()
       }
-    }, 2000)
+    }
 
-    // 注册清理函数
-    addCleanup(() => {
-      clearTimeout(loadingTimeout)
-    })
-  }, [getMemoryUsage, addCleanup])
-
-
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 loading">
-        <div className="text-center">
-          <LoadingSpinner size="lg" />
-          <p className="mt-4 text-white/80">正在加载今夕公会...</p>
-        </div>
-      </div>
-    )
-  }
-
+    window.addEventListener("storage", handleStorage)
+    window.addEventListener("jinxi-auth-changed", syncLoginState as EventListener)
+    return () => {
+      window.removeEventListener("storage", handleStorage)
+      window.removeEventListener("jinxi-auth-changed", syncLoginState as EventListener)
+    }
+  }, [])
   return (
     <div
       className="min-h-screen relative bg-enhanced"
@@ -637,8 +905,6 @@ function PageContent() {
     >
       {/* 浮动气泡装饰 */}
       <FloatingBubbles />
-
-      {/* </CHANGE> */}
 
       {/* Header */}
       <header
@@ -714,12 +980,44 @@ function PageContent() {
               })}
             </ul>
 
+            <div className="flex items-center gap-2">
+              {loginAccount ? (
+                <>
+                  <span
+                    className="inline-flex max-w-[170px] sm:max-w-none flex-col items-start px-3 py-2 rounded-xl text-sm bg-white/10 text-white/90 border border-white/20"
+                    title={`${loginNickname || loginAccount} (${loginAccount})`}
+                  >
+                    <span className="text-white w-full truncate">{loginNickname || loginAccount}</span>
+                    <span className="text-white/60 text-xs w-full truncate">账号：{loginAccount}</span>
+                  </span>
+                  <button
+                    onClick={openChangePasswordModal}
+                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
+                  >
+                    修改密码
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
+                  >
+                    退出
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={openLoginModal}
+                  className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-emerald-400/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-100 transition-transform hover-effect"
+                >
+                  登录
+                </button>
+              )}
               <button
                 onClick={handleJoinClick}
                 className="cartoon-btn cartoon-btn-pink inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline transition-transform hover-effect"
               >
                 <RocketIcon className="mr-2" size={18} /> 加入
               </button>
+            </div>
           </nav>
         </div>
       </header>
@@ -817,6 +1115,7 @@ function PageContent() {
                     id="heroVideo"
                     src="/1.MP4"
                     className="absolute inset-0 w-full h-full object-cover"
+                    preload="metadata"
                     playsInline
                     muted
                     autoPlay
@@ -973,11 +1272,30 @@ function PageContent() {
         </ComponentLoader>
 
         {/* 签到功能区域 */}
+        <ComponentLoader>
+            <section id="checkin" className="py-9 relative">
+              <h3
+                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
+                style={{
+                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
+                }}
+              >
+                <i className="ri-calendar-check-line"></i> 每日签到
+              </h3>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <CheckinWidget loggedInAccount={loginAccount} />
+                <LeaderboardWidget />
+              </div>
+            </section>
+        </ComponentLoader>
 
         {/* 每日任务系统 */}
         <ComponentLoader>
             <section id="daily-tasks" className="py-9 relative">
-              <DailyTasks />
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                <DailyTasks loggedInAccount={loginAccount} />
+                <PointsRankingWidget loggedInAccount={loginAccount} />
+              </div>
             </section>
         </ComponentLoader>
 
@@ -996,7 +1314,7 @@ function PageContent() {
         </ComponentLoader>
 
         <ComponentLoader>
-            <MessageWall />
+            <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />
         </ComponentLoader>
 
         <ComponentLoader>
@@ -1027,6 +1345,7 @@ function PageContent() {
 
       <CyberAnnouncement />
       <GuildUptimeTerminal />
+      <GuildSponsorship />
 
       {/* Footer */}
       <footer className="text-center py-4 relative z-10">
@@ -1167,6 +1486,238 @@ function PageContent() {
               取消
             </button>
           </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isLoginModalOpen}
+        onClose={() => {
+          setIsLoginModalOpen(false)
+          setAuthMode("login")
+          resetAuthModalState()
+        }}
+        title={authMode === "login" ? "账号登录" : "修改密码"}
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div className="flex gap-2 p-1 rounded-xl bg-white/5 border border-white/10">
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode("login")
+                setChangePasswordError("")
+              }}
+              className={`flex-1 py-2 rounded-lg text-sm transition-all ${
+                authMode === "login" ? "bg-emerald-600 text-white" : "text-white/70 hover:text-white"
+              }`}
+            >
+              登录
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode("changePassword")
+                setLoginError("")
+                setChangePasswordForm((prev) => ({
+                  ...prev,
+                  account: loginAccount || prev.account || loginForm.account.trim(),
+                }))
+              }}
+              className={`flex-1 py-2 rounded-lg text-sm transition-all ${
+                authMode === "changePassword" ? "bg-blue-600 text-white" : "text-white/70 hover:text-white"
+              }`}
+            >
+              修改密码
+            </button>
+          </div>
+
+          {authMode === "login" ? (
+            <form onSubmit={handleLoginSubmit} className="space-y-4">
+              <p className="text-white/80 text-sm">输入账号和密码后即可登录，签到和积分会自动绑定账号身份。</p>
+              {loginError && (
+                <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+                  {loginError}
+                </div>
+              )}
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="账号"
+                  value={loginForm.account}
+                  onChange={(e) => handleLoginInputChange("account", e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                  style={{ borderColor: "rgba(255,255,255,.14)" }}
+                  autoComplete="username"
+                />
+                <div className="relative">
+                  <input
+                    type={showLoginPassword ? "text" : "password"}
+                    placeholder="密码"
+                    value={loginForm.password}
+                    onChange={(e) => handleLoginInputChange("password", e.target.value)}
+                    className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                    style={{ borderColor: "rgba(255,255,255,.14)" }}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+                    aria-label={showLoginPassword ? "隐藏密码" : "显示密码"}
+                  >
+                    <i className={showLoginPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode("changePassword")
+                    setChangePasswordForm((prev) => ({
+                      ...prev,
+                      account: loginForm.account.trim() || loginAccount || prev.account,
+                    }))
+                  }}
+                  className="text-blue-300 hover:text-blue-200 transition-colors"
+                >
+                  需要修改密码？
+                </button>
+                <span className="text-white/50">登录后将显示昵称</span>
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button
+                  type="submit"
+                  disabled={isLoginSubmitting}
+                  className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    background: "linear-gradient(180deg,#22c55e,#15803d)",
+                  }}
+                >
+                  {isLoginSubmitting ? "登录中..." : "登录"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLoginModalOpen(false)
+                    setAuthMode("login")
+                    resetAuthModalState()
+                  }}
+                  className="px-6 py-3 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
+                  style={{ borderColor: "rgba(255,255,255,.2)" }}
+                >
+                  取消
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
+              <p className="text-white/80 text-sm">修改后将立即写入后端数据库，彻底替换初始密码。</p>
+              {changePasswordError && (
+                <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+                  {changePasswordError}
+                </div>
+              )}
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="账号"
+                  value={loginAccount || changePasswordForm.account}
+                  onChange={(e) => setChangePasswordForm((prev) => ({ ...prev, account: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                  style={{ borderColor: "rgba(255,255,255,.14)" }}
+                  autoComplete="username"
+                  readOnly={!!loginAccount}
+                />
+                <div className="relative">
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    placeholder="当前密码"
+                    value={changePasswordForm.currentPassword}
+                    onChange={(e) => handleChangePasswordInputChange("currentPassword", e.target.value)}
+                    className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                    style={{ borderColor: "rgba(255,255,255,.14)" }}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+                    aria-label={showCurrentPassword ? "隐藏当前密码" : "显示当前密码"}
+                  >
+                    <i className={showCurrentPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="新密码（至少 8 位，含字母+数字）"
+                    value={changePasswordForm.newPassword}
+                    onChange={(e) => handleChangePasswordInputChange("newPassword", e.target.value)}
+                    className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                    style={{ borderColor: "rgba(255,255,255,.14)" }}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+                    aria-label={showNewPassword ? "隐藏新密码" : "显示新密码"}
+                  >
+                    <i className={showNewPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="确认新密码"
+                    value={changePasswordForm.confirmPassword}
+                    onChange={(e) => handleChangePasswordInputChange("confirmPassword", e.target.value)}
+                    className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
+                    style={{ borderColor: "rgba(255,255,255,.14)" }}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+                    aria-label={showConfirmPassword ? "隐藏确认密码" : "显示确认密码"}
+                  >
+                    <i className={showConfirmPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    background: "linear-gradient(180deg,#2563eb,#1d4ed8)",
+                  }}
+                >
+                  {isChangingPassword ? "修改中..." : "确认修改"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode("login")
+                    setChangePasswordError("")
+                    setChangePasswordForm((prev) => ({
+                      ...prev,
+                      currentPassword: "",
+                      newPassword: "",
+                      confirmPassword: "",
+                    }))
+                  }}
+                  className="px-6 py-3 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
+                  style={{ borderColor: "rgba(255,255,255,.2)" }}
+                >
+                  返回
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </Modal>
 

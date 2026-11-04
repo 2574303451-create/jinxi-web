@@ -1,4 +1,5 @@
 import type { GuildMilestone, SecurityClearance, SecurityClearanceRule } from "./guild-terminal-config"
+import type { MemberProfile } from "./guild-terminal-config"
 
 const HOUR_MS = 60 * 60 * 1000
 const DAY_MS = 24 * HOUR_MS
@@ -139,3 +140,38 @@ export function buildCyberHash(memberId: string, joinDate: string) {
   return `ID-${memberId}-${compactDate}-${suffix}`
 }
 
+export interface MemberLookupResult {
+  memberId: string
+  profile: MemberProfile
+  matchedBy: "id" | "nickname"
+}
+
+export function findMemberByQuery(
+  query: string,
+  members: Record<string, MemberProfile>,
+): MemberLookupResult | null {
+  const normalized = query.trim()
+  if (!normalized) return null
+
+  const direct = members[normalized]
+  if (direct) {
+    return { memberId: normalized, profile: direct, matchedBy: "id" }
+  }
+
+  const lowered = normalized.toLowerCase()
+  for (const [memberId, profile] of Object.entries(members)) {
+    if (String(profile?.name || "").trim().toLowerCase() === lowered) {
+      return { memberId, profile, matchedBy: "nickname" }
+    }
+  }
+
+  const partialMatches = Object.entries(members).filter(([, profile]) =>
+    String(profile?.name || "").trim().toLowerCase().includes(lowered),
+  )
+  if (partialMatches.length === 1) {
+    const [memberId, profile] = partialMatches[0]
+    return { memberId, profile, matchedBy: "nickname" }
+  }
+
+  return null
+}

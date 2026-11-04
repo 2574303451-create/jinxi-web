@@ -5,6 +5,7 @@ import { guildTerminalConfig } from "../lib/guild-terminal-config"
 import {
   buildCyberHash,
   calculateRuntime,
+  findMemberByQuery,
   formatRuntime,
   getSecurityClearance,
   getUnlockedMilestones,
@@ -38,7 +39,7 @@ export function GuildUptimeTerminal() {
   const [inputFocused, setInputFocused] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [lookupHint, setLookupHint] = useState("输入工号或入会日期（YYYY-MM-DD），按 Enter 查询")
+  const [lookupHint, setLookupHint] = useState("输入工号、昵称或入会日期（YYYY-MM-DD），按 Enter 查询")
   const [profile, setProfile] = useState<QueryProfile>(INITIAL_PROFILE)
 
   const guildStartDate = useMemo(
@@ -100,7 +101,7 @@ export function GuildUptimeTerminal() {
 
     const input = queryValue.trim()
     if (!input) {
-      setLookupHint("请输入工号或入会日期（YYYY-MM-DD）")
+      setLookupHint("请输入工号、昵称或入会日期（YYYY-MM-DD）")
       setProfile(INITIAL_PROFILE)
       return
     }
@@ -109,10 +110,10 @@ export function GuildUptimeTerminal() {
     setLookupHint("数据检索中...")
 
     window.setTimeout(() => {
-      const matchedMember = guildTerminalConfig.members[input]
+      const matched = findMemberByQuery(input, guildTerminalConfig.members)
 
-      if (matchedMember) {
-        const joinAt = parseDateStrict(matchedMember.joinDate)
+      if (matched) {
+        const joinAt = parseDateStrict(matched.profile.joinDate)
         if (!joinAt || joinAt.getTime() > now.getTime()) {
           setLookupHint("成员档案日期异常，请检查配置文件")
           setProfile(INITIAL_PROFILE)
@@ -122,16 +123,17 @@ export function GuildUptimeTerminal() {
 
         setProfile({
           mode: "member",
-          memberId: input,
-          memberName: matchedMember.name,
-          joinDate: matchedMember.joinDate,
-          badges: matchedMember.badges || [],
+          memberId: matched.memberId,
+          memberName: matched.profile.name,
+          joinDate: matched.profile.joinDate,
+          badges: matched.profile.badges || [],
         })
 
-        if (input === guildTerminalConfig.founderMemberId) {
+        if (matched.memberId === guildTerminalConfig.founderMemberId) {
           setLookupHint("创始人档案已载入：致敬创始人")
         } else {
-          setLookupHint(`成员档案已载入：${matchedMember.name}（工号 ${input}）`)
+          const sourceText = matched.matchedBy === "nickname" ? "昵称" : "工号"
+          setLookupHint(`成员档案已载入：${matched.profile.name}（工号 ${matched.memberId}，匹配来源：${sourceText}）`)
         }
         setIsSearching(false)
         return
@@ -159,7 +161,7 @@ export function GuildUptimeTerminal() {
       }
 
       setProfile(INITIAL_PROFILE)
-      setLookupHint("系统档案中未找到该工号，请直接输入入会日期(YYYY-MM-DD)进行测算")
+      setLookupHint("系统档案中未找到该工号/昵称，请直接输入入会日期(YYYY-MM-DD)进行测算")
       setIsSearching(false)
     }, SEARCH_DELAY_MS)
   }
@@ -228,7 +230,7 @@ export function GuildUptimeTerminal() {
               onFocus={() => setInputFocused(true)}
               onBlur={() => setInputFocused(false)}
               className={styles.cliInput}
-              placeholder="输入工号或 YYYY-MM-DD"
+              placeholder="输入工号、昵称或 YYYY-MM-DD"
               autoComplete="off"
               spellCheck={false}
             />
@@ -287,7 +289,7 @@ export function GuildUptimeTerminal() {
                   <div className={styles.emptyText}>暂无已解锁里程碑</div>
                 )
               ) : (
-                <div className={styles.emptyText}>输入有效工号后显示</div>
+                <div className={styles.emptyText}>输入有效工号或昵称后显示</div>
               )}
             </div>
 
@@ -306,7 +308,7 @@ export function GuildUptimeTerminal() {
                   <div className={styles.emptyText}>暂无专属勋章</div>
                 )
               ) : (
-                <div className={styles.emptyText}>输入有效工号后显示</div>
+                <div className={styles.emptyText}>输入有效工号或昵称后显示</div>
               )}
             </div>
           </section>
@@ -320,4 +322,3 @@ export function GuildUptimeTerminal() {
     </aside>
   )
 }
-

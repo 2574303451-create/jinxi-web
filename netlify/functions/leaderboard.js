@@ -27,6 +27,11 @@ exports.handler = async (event) => {
 
   try {
     const { type = 'total', limit = 15 } = event.queryStringParameters || {};
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 15, 1), 100);
+    const [{ point_account_table }] = await sql`
+      SELECT to_regclass('public.point_account') AS point_account_table
+    `;
+    const hasPointAccount = !!point_account_table;
     
     let query;
     let title;
@@ -45,7 +50,7 @@ exports.handler = async (event) => {
           FROM ranked_users 
           WHERE rn = 1
           ORDER BY total_checkins DESC, max_continuous DESC, total_points DESC
-          LIMIT ${parseInt(limit)}
+          LIMIT ${parsedLimit}
         `;
         break;
 
@@ -62,7 +67,7 @@ exports.handler = async (event) => {
           FROM ranked_users 
           WHERE rn = 1
           ORDER BY continuous_checkins DESC, total_checkins DESC, total_points DESC
-          LIMIT ${parseInt(limit)}
+          LIMIT ${parsedLimit}
         `;
         break;
 
@@ -79,7 +84,7 @@ exports.handler = async (event) => {
           FROM ranked_users 
           WHERE rn = 1
           ORDER BY this_month_checkins DESC, continuous_checkins DESC, total_points DESC
-          LIMIT ${parseInt(limit)}
+          LIMIT ${parsedLimit}
         `;
         break;
 
@@ -96,25 +101,48 @@ exports.handler = async (event) => {
           FROM ranked_users 
           WHERE rn = 1
           ORDER BY this_year_checkins DESC, continuous_checkins DESC, total_points DESC
-          LIMIT ${parseInt(limit)}
+          LIMIT ${parsedLimit}
         `;
         break;
 
       case 'points':
         title = '积分排行榜';
-        query = sql`
-          WITH ranked_users AS (
-            SELECT user_name, total_checkins, continuous_checkins, max_continuous, total_points, last_checkin_date,
-                   ROW_NUMBER() OVER (PARTITION BY user_name ORDER BY total_points DESC, total_checkins DESC) as rn
-            FROM user_checkin_stats 
-            WHERE total_points > 0
-          )
-          SELECT user_name, total_checkins, continuous_checkins, max_continuous, total_points, last_checkin_date
-          FROM ranked_users 
-          WHERE rn = 1
-          ORDER BY total_points DESC, total_checkins DESC, max_continuous DESC
-          LIMIT ${parseInt(limit)}
-        `;
+        if (hasPointAccount) {
+          query = sql`
+            SELECT
+              pa.user_id,
+              COALESCE(p.nickname, p.display_name, pa.user_id) AS user_name,
+              COALESCE(ucs.total_checkins, 0) AS total_checkins,
+              COALESCE(ucs.continuous_checkins, 0) AS continuous_checkins,
+              COALESCE(ucs.max_continuous, 0) AS max_continuous,
+              pa.balance AS total_points
+            FROM point_account pa
+            LEFT JOIN guild_member_accounts a
+              ON a.login_account = pa.user_id
+            LEFT JOIN guild_member_profiles p
+              ON p.employee_no = a.employee_no
+            LEFT JOIN user_checkin_stats ucs
+              ON ucs.user_id = pa.user_id
+            WHERE pa.balance > 0
+            ORDER BY pa.balance DESC, COALESCE(ucs.total_checkins, 0) DESC
+            LIMIT ${parsedLimit}
+          `;
+        } else {
+          // compatibility fallback before points schema migration
+          query = sql`
+            WITH ranked_users AS (
+              SELECT user_name, total_checkins, continuous_checkins, max_continuous, total_points, last_checkin_date,
+                     ROW_NUMBER() OVER (PARTITION BY user_name ORDER BY total_points DESC, total_checkins DESC) as rn
+              FROM user_checkin_stats 
+              WHERE total_points > 0
+            )
+            SELECT user_name, total_checkins, continuous_checkins, max_continuous, total_points, last_checkin_date
+            FROM ranked_users 
+            WHERE rn = 1
+            ORDER BY total_points DESC, total_checkins DESC, max_continuous DESC
+            LIMIT ${parsedLimit}
+          `;
+        }
         break;
 
       case 'max_continuous':
@@ -130,7 +158,7 @@ exports.handler = async (event) => {
           FROM ranked_users 
           WHERE rn = 1
           ORDER BY max_continuous DESC, total_checkins DESC, total_points DESC
-          LIMIT ${parseInt(limit)}
+          LIMIT ${parsedLimit}
         `;
         break;
 
@@ -176,7 +204,7 @@ exports.handler = async (event) => {
 
       return {
         rank: index + 1,
-        userId: `merged_${user.user_name}`, // 使用合并后的虚拟ID
+        userId: user.user_id ? String(user.user_id) : `merged_${user.user_name}`, // 使用合并后的虚拟ID
         userName: user.user_name,
         value: value,
         label: label,

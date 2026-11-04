@@ -14,6 +14,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
   const [activeTab, setActiveTab] = useState<'total' | 'continuous' | 'monthly' | 'points' | 'max_continuous'>('total')
   const [leaderboards, setLeaderboards] = useState<{[key: string]: Leaderboard}>({})
   const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
   const [refreshing, setRefreshing] = useState(false)
 
   // 排行榜标签配置
@@ -29,6 +30,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
   const loadLeaderboards = async () => {
     try {
       setIsLoading(true)
+      setLoadError("")
       const data = await checkinAPI.getAllLeaderboards(50)
       setLeaderboards({
         total: data.total,
@@ -38,7 +40,7 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
         max_continuous: data.maxContinuous
       })
     } catch (error) {
-      console.error('加载排行榜失败:', error)
+      setLoadError('排行榜暂时加载失败，请重试。')
     } finally {
       setIsLoading(false)
     }
@@ -50,13 +52,14 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
     
     try {
       setRefreshing(true)
+      setLoadError("")
       const data = await checkinAPI.getLeaderboard(activeTab, 50)
       setLeaderboards(prev => ({
         ...prev,
         [activeTab]: data
       }))
     } catch (error) {
-      console.error('刷新排行榜失败:', error)
+      setLoadError('排行榜暂时加载失败，请重试。')
     } finally {
       setRefreshing(false)
     }
@@ -87,6 +90,8 @@ export function LeaderboardWidget({ className }: LeaderboardWidgetProps) {
   }
 
   const currentLeaderboard = leaderboards[activeTab]
+
+  if (loadError) return <div className="night-empty" role="alert"><h3>签到排行榜</h3><p>{loadError}</p><button className="night-button" onClick={loadLeaderboards}>重试</button></div>
 
   if (isLoading) {
     return (

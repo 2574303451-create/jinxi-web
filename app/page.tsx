@@ -7,9 +7,11 @@ import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
 import { RocketIcon, SendIcon, MailIcon, ImageIcon } from "../components/ui/icons"
-import { FloatingBubbles } from "../components/ui/floating-bubbles"
+import { GuildNavigation, StarNightHero, SectionHeading, ActionLinks } from "../components/home/star-night"
 import { CyberAnnouncement } from "../components/cyber-announcement"
-import { GuildUptimeTerminal } from "../components/guild-uptime-terminal"
+import { MotionConfig } from "framer-motion"
+import dynamic from "next/dynamic"
+const GuildUptimeTerminal = dynamic(() => import("../components/guild-uptime-terminal").then(m => m.GuildUptimeTerminal), { ssr: false })
 import { GuildSponsorship } from "../components/guild-sponsorship"
 
 
@@ -19,8 +21,6 @@ const MessageWall = lazy(() => import("../components/message-wall").then(m => ({
 const StrategyWall = lazy(() => import("../components/strategy-wall").then(m => ({ default: m.StrategyWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
-const Tabs = lazy(() => import("../components/ui/tabs").then(m => ({ default: m.Tabs })))
-const Progress = lazy(() => import("../components/ui/progress").then(m => ({ default: m.Progress })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
 const CheckinWidget = lazy(() => import("../components/checkin-widget").then(m => ({ default: m.CheckinWidget })))
 const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(m => ({ default: m.LeaderboardWidget })))
@@ -42,7 +42,6 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 )
 
 function PageContent() {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -735,93 +734,6 @@ function PageContent() {
     },
   ]
 
-  const infoTabs = [
-    {
-      id: "about",
-      label: "关于公会",
-      icon: "ri-heart-2-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-❤️ 公会宣言
-            </h4>
-            <p className="text-white/80 text-sm mb-2">以战会友，彼此成就。强势在操作，温柔在态度。</p>
-            <div className="text-yellow-300 font-medium text-sm">愿你每次出场，都被掌声围绕。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-⏰ 活跃时段
-            </h4>
-            <p className="text-white/80 text-sm mb-2">工作日 20:00–23:00；周末弹性开黑。</p>
-            <div className="text-yellow-300 font-medium text-sm">如果星光不问赶路人，我们就把星光点亮。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🛡️ 入会要点
-            </h4>
-            <p className="text-white/80 text-sm mb-2">文明游戏、支持指挥、接受分工。</p>
-            <div className="text-yellow-300 font-medium text-sm">把"配合"写进肌肉记忆。</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "news",
-      label: "公告动态",
-      icon: "ri-megaphone-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-📢 置顶公告
-            </h4>
-            <p className="text-white/80 text-sm mb-2">夏季冲榜进行中，组队排位、周常挑战、擂台切磋均可累计今夕积分。</p>
-            <div className="text-yellow-300 font-medium text-sm">上分如风，稳住我们能赢。</div>
-            <Progress value={75} className="mt-3" showLabel />
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🏆 战绩速览
-            </h4>
-            <p className="text-white/80 text-sm mb-2">周冠军 ×2、跨区赛 Top10、公会任务连续满进度。</p>
-            <div className="text-yellow-300 font-medium text-sm">胜利不是终点，它只是下一局的开场曲。</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "events",
-      label: "活动赛事",
-      icon: "ri-calendar-event-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-👥 周常团练
-            </h4>
-            <p className="text-white/80 text-sm mb-2">周三/六晚 21:00，战术走位与默契磨合。</p>
-            <div className="text-yellow-300 font-medium text-sm">同频的人，会在下一次转角相遇。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🎮 友谊赛
-            </h4>
-            <p className="text-white/80 text-sm mb-2">跨会交流，礼貌第一；支持录屏剪辑高光。</p>
-            <div className="text-yellow-300 font-medium text-sm">友谊第一，输出也要第一。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🎬 混剪征集
-            </h4>
-            <p className="text-white/80 text-sm mb-2">征集精彩操作，季末发布「今夕混剪」。</p>
-            <div className="text-yellow-300 font-medium text-sm">你的镜头，正在等待上场。</div>
-          </div>
-        </div>
-      ),
-    },
-  ]
-
   const faqItems = [
     {
       id: "1",
@@ -848,21 +760,6 @@ function PageContent() {
       content: "积极参与活动、帮助新人、展现良好的团队合作精神。我们重视每个成员的贡献，表现优秀者有机会晋升管理层。",
     },
   ]
-
-  const toggleVideo = () => {
-    const video = document.getElementById("heroVideo") as HTMLVideoElement
-    if (video) {
-      if (video.paused) {
-        video.play()
-        setIsVideoPlaying(true)
-        toast.addToast("视频已开始播放", "info")
-      } else {
-        video.pause()
-        setIsVideoPlaying(false)
-        toast.addToast("视频已暂停", "info")
-      }
-    }
-  }
 
   const handleJoinClick = () => {
     setIsModalOpen(true)
@@ -896,282 +793,33 @@ function PageContent() {
   }, [])
   return (
     <div
-      className="min-h-screen relative bg-enhanced"
+      className="star-night min-h-screen relative"
       style={{
         color: "#e8edf6",
         fontFamily:
           '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
       }}
     >
-      {/* 浮动气泡装饰 */}
-      <FloatingBubbles />
-
-      {/* Header */}
-      <header
-        className="sticky top-0 z-50 relative"
-        style={{
-          backdropFilter: "saturate(1.2) blur(8px)",
-          background: "rgba(11,16,32,.6)",
-          borderBottom: "1px solid rgba(255,255,255,.06)",
-        }}
-      >
-        <div className="max-w-[1180px] mx-auto px-4">
-          <nav className="flex items-center justify-between h-[68px]">
-            <ComponentLoader>
-                <a href="#top" className="flex items-center gap-3 text-white no-underline">
-                <OptimizedImage
-                  src="/logo.png"
-                  alt="Logo"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-xl object-cover"
-                  priority={true}
-                  quality={80}
-                  unoptimized={true}
-                />
-                <h1
-                  className="m-0 font-semibold text-lg tracking-wide"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-                  弹弹堂 · 今夕公会
-                </h1>
-                </a>
-            </ComponentLoader>
-
-            <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
-              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "攻略墙"].map((item, index) => {
-                const links = ["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "strategy-wall"]
-                const section = links[index]
-                const isStrategyWall = section === "strategy-wall"
-                const isAnnouncement = section === "news"
-
-                return (
-                    <li key={index}>
-                      {isStrategyWall ? (
-                        <button
-                          onClick={() => setIsStrategyWallOpen(true)}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
-                        >
-                          {item}
-                        </button>
-                      ) : isAnnouncement ? (
-                        <button
-                          onClick={() => {
-                            if (typeof window !== "undefined") {
-                              window.dispatchEvent(new Event("cyber-announcement:open"))
-                            }
-                          }}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
-                        >
-                          {item}
-                        </button>
-                      ) : (
-                        <a
-                          href={`#${section}`}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity"
-                        >
-                          {item}
-                        </a>
-                      )}
-                    </li>
-                )
-              })}
-            </ul>
-
-            <div className="flex items-center gap-2">
-              {loginAccount ? (
-                <>
-                  <span
-                    className="inline-flex max-w-[170px] sm:max-w-none flex-col items-start px-3 py-2 rounded-xl text-sm bg-white/10 text-white/90 border border-white/20"
-                    title={`${loginNickname || loginAccount} (${loginAccount})`}
-                  >
-                    <span className="text-white w-full truncate">{loginNickname || loginAccount}</span>
-                    <span className="text-white/60 text-xs w-full truncate">账号：{loginAccount}</span>
-                  </span>
-                  <button
-                    onClick={openChangePasswordModal}
-                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
-                  >
-                    修改密码
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
-                  >
-                    退出
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={openLoginModal}
-                  className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-emerald-400/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-100 transition-transform hover-effect"
-                >
-                  登录
-                </button>
-              )}
-              <button
-                onClick={handleJoinClick}
-                className="cartoon-btn cartoon-btn-pink inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline transition-transform hover-effect"
-              >
-                <RocketIcon className="mr-2" size={18} /> 加入
-              </button>
-            </div>
-          </nav>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-[1180px] mx-auto px-4 relative z-10">
-        {/* Hero Section */}
-        <section className="py-16 pb-7 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-7 items-center relative z-10">
-            <ComponentLoader>
-                <div
-                className="p-6 rounded-2xl border relative"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                  <span
-                    className="inline-flex items-center gap-2 px-3 py-[6px] rounded-full text-sm border mb-4 relative z-10"
-                    style={{
-                      background: "rgba(96,165,250,.18)",
-                      color: "#cfe3ff",
-                      borderColor: "rgba(96,165,250,.3)",
-                    }}
-                  >
-✨ 今夕 · 欢迎回家
-                  </span>
-
-                <h2
-                  className="my-2 font-bold text-[34px] leading-tight tracking-wide relative z-10 gradient-text-candy animate-bounce-in"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-                  今晚开黑，星光作陪
-                </h2>
-
-                <p className="text-[#d5def0] mb-4 relative z-10">
-                  组队、磨合、提升；每一局都有高光，每一次集合都有欢笑。
-                </p>
-
-                {/* 入会联系方式 */}
-                <div className="mb-6 p-4 rounded-xl border relative z-10" style={{
-                  background: "linear-gradient(180deg,rgba(96,165,250,.15),rgba(96,165,250,.05))",
-                  borderColor: "rgba(96,165,250,.3)",
-                }}>
-                  <div className="flex items-center gap-2 mb-3">
-👥
-                    <span className="text-blue-200 font-medium text-sm">入会联系方式</span>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-[#e1eafc]">
-🐧
-                      <span>QQ群：<strong className="text-blue-200">713162467</strong></span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[#e1eafc]">
-👤
-                      <span>联系人：<strong className="text-blue-200">执手</strong></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 flex-wrap relative z-10">
-                  {[
-                    { href: "#info-tabs", icon: "ri-megaphone-line", text: "公告", color: "sky" },
-                    { href: "#info-tabs", icon: "ri-calendar-event-line", text: "活动", color: "fresh" },
-                    { href: "#roster", icon: "ri-gallery-view-2", text: "展示墙", color: "sunset", primary: true },
-                  ].map((btn, index) => (
-                      <a
-                        key={index}
-                        href={btn.href}
-                        className={`inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none no-underline transition-transform ${
-                          btn.primary ? `cartoon-btn cartoon-btn-${btn.color}` : "bg-white/5 hover:bg-white/10 border border-white/10"
-                        }`}
-                      >
-                        {btn.icon === "ri-megaphone-line" ? "📢" : btn.icon === "ri-calendar-event-line" ? "📅" : btn.icon === "ri-gallery-view-2" ? "🖼️" : "📋"} {btn.text}
-                      </a>
-                  ))}
-                </div>
-                </div>
-            </ComponentLoader>
-
-            <ComponentLoader>
-                <div
-                  className="relative rounded-2xl overflow-hidden border aspect-[4/3]"
-                  style={{
-                    background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                    borderColor: "rgba(255,255,255,.1)",
-                    boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                    isolation: "isolate",
-                  }}
-                >
-                  <video
-                    id="heroVideo"
-                    src="/1.MP4"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    preload="metadata"
-                    playsInline
-                    muted
-                    autoPlay
-                    loop
-                    controls
-                  />
-                  <button
-                    onClick={toggleVideo}
-                    className="absolute right-[10px] bottom-[10px] z-10 inline-flex items-center gap-[6px] px-3 py-2 rounded-xl border text-white cursor-pointer hover:scale-110 transition-transform hover-effect"
-                    style={{
-                      borderColor: "rgba(255,255,255,.25)",
-                      background: "rgba(0,0,0,.35)",
-                      backdropFilter: "blur(6px)",
-                    }}
-                  >
-{isVideoPlaying ? "⏸️" : "▶️"}
-                    {isVideoPlaying ? "暂停" : "播放"}
-                  </button>
-
-                  {/* Animated border effect */}
-                  <div
-                    className="absolute inset-[-1px] rounded-[calc(16px+2px)] opacity-70 pointer-events-none"
-                    style={{
-                      background: "conic-gradient(from 160deg at 30% 10%, #60a5fa, #22c55e, #f59e0b, #fb7185, #60a5fa)",
-                      animation: "spin 10s linear infinite",
-                      WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-                      WebkitMaskComposite: "xor",
-                      maskComposite: "exclude",
-                      padding: "1px",
-                    }}
-                  />
-                </div>
-            </ComponentLoader>
+      <a className="skip-link" href="#main-content">跳到主要内容</a>
+      <GuildNavigation account={loginAccount} nickname={loginNickname} onLogin={openLoginModal}
+        onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
+        onStrategy={() => setIsStrategyWallOpen(true)} />
+      <main id="main-content" className="night-main">
+        <StarNightHero onJoin={handleJoinClick} />
+        <ActionLinks />
+        <section id="info-tabs" className="night-section">
+          <SectionHeading eyebrow="OUR GUILD / 公会档案" title="在这里，认识今夕"
+            description="以战会友，彼此成就。我们期待认真配合的队友，也珍惜每一次并肩作战的相遇。" />
+          <div className="guild-profile">
+            <article><span className="profile-symbol" aria-hidden="true">✦</span><h3>认真配合，温柔相待</h3><p>强势在操作，温柔在态度。文明游戏、支持指挥、接受分工，让每一次集结都有默契。</p></article>
+            <article><span className="profile-symbol" aria-hidden="true">☾</span><h3>留一段时间，一起开黑</h3><p>历史活跃时段为工作日 20:00–23:00，周末弹性安排。当前活动时间待确认，请以公会公告为准。</p><a href="#faq">了解入会与活动常见问题 ↗</a></article>
+            <article><span className="profile-symbol" aria-hidden="true">↗</span><h3>公会动态</h3><p>查看公会发布的公告，了解经过确认的通知与活动安排。</p><button onClick={() => window.dispatchEvent(new Event("cyber-announcement:open"))}>打开公会公告 ↗</button></article>
           </div>
         </section>
-
-        <ComponentLoader>
-            <section id="info-tabs" className="py-9 relative">
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Tabs tabs={infoTabs} defaultTab="about" />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
         {/* Management Team Section with Enhanced Marquee */}
         <ComponentLoader>
-            <section id="members" className="py-9 relative">
+            <section id="members" className="night-section">
+              <SectionHeading eyebrow="THE PEOPLE / 成员群像" title="并肩作战的人" description="每一个名字，都是今夕故事的一部分。" />
               <div
                 className="p-6 rounded-2xl border relative"
                 style={{
@@ -1273,7 +921,8 @@ function PageContent() {
 
         {/* 签到功能区域 */}
         <ComponentLoader>
-            <section id="checkin" className="py-9 relative">
+            <section id="checkin" className="night-section">
+              <SectionHeading eyebrow="YOUR NEXT MOVE / 今日行动" title="下一场集结，从这里开始" description="签到、完成任务，或找到下一局的伙伴。" />
               <h3
                 className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
                 style={{
@@ -1293,7 +942,7 @@ function PageContent() {
         <ComponentLoader>
             <section id="daily-tasks" className="py-9 relative">
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                <DailyTasks loggedInAccount={loginAccount} />
+                {loginAccount ? <DailyTasks loggedInAccount={loginAccount} /> : <div className="night-empty"><h3>每日任务与积分</h3><p>登录后查看你的个人任务与积分。</p><button className="night-button primary" onClick={openLoginModal}>登录账号</button></div>}
                 <PointsRankingWidget loggedInAccount={loginAccount} />
               </div>
             </section>
@@ -1302,17 +951,20 @@ function PageContent() {
         {/* 战队系统 */}
         <ComponentLoader>
             <section id="team-system" className="py-9 relative">
-              <TeamSystem />
+              <p className="night-notice">组队信息来自当前浏览器的本地记录与默认示例，不代表实时战绩。</p>
+              {loginAccount ? <TeamSystem /> : <div className="night-empty"><h3>寻找队伍</h3><p>登录后打开本地组队面板，查看队伍与申请入口。</p><button className="night-button" onClick={openLoginModal}>登录后组队</button></div>}
             </section>
         </ComponentLoader>
 
         {/* 游戏数据展示 */}
         <ComponentLoader>
             <section id="game-data" className="py-9 relative">
-              <GameDataPanel />
+              <p className="night-notice">此处展示浏览器本地游戏记录与默认示例，供个人参考。</p>
+              {loginAccount ? <GameDataPanel /> : <div className="night-empty"><h3>游戏数据</h3><p>登录后打开你的本地游戏数据面板。</p><button className="night-button" onClick={openLoginModal}>登录后查看</button></div>}
             </section>
         </ComponentLoader>
 
+        <section className="night-section"><SectionHeading eyebrow="COMMUNITY / 公会交流" title="留下你的声音" description="聊聊这一局的故事，也为下一位伙伴留一点经验。" /><div className="strategy-entry"><div><h3>分享经验，一起变强</h3><p>打法、配合与心得，都值得分享。</p></div><button className="night-button" onClick={() => setIsStrategyWallOpen(true)}>打开攻略墙 ↗</button></div></section>
         <ComponentLoader>
             <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />
         </ComponentLoader>
@@ -1358,39 +1010,13 @@ function PageContent() {
         </div>
       </footer>
 
-      {/* 安全保护脚本 */}
-      <script 
-        dangerouslySetInnerHTML={{
-          __html: `
-            // 基础反调试保护
-            (function() {
-              // 禁用右键
-              document.addEventListener('contextmenu', e => e.preventDefault());
-              
-              // 禁用开发者工具快捷键
-              document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'U')) {
-                  e.preventDefault();
-                }
-              });
-              
-              // 控制台警告
-              console.log('%c🔒 网站受到保护', 'color: red; font-size: 16px; font-weight: bold;');
-              console.log('%c未经授权访问源代码是违法行为', 'color: orange; font-size: 12px;');
-            })();
-          `
-        }}
-      />
-
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="加入今夕公会" size="md">
         <div className="space-y-4">
           <p className="text-white/80">欢迎加入今夕公会！请填写以下信息，我们会尽快与您联系。</p>
           <div className="space-y-3">
             <input
               type="text"
-              placeholder="游戏昵称"
+              aria-label="游戏昵称" placeholder="游戏昵称"
               value={formData.nickname}
               onChange={(e) => handleInputChange('nickname', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1398,13 +1024,13 @@ function PageContent() {
             />
             <input
               type="text"
-              placeholder="联系方式 (QQ/微信/邮箱)"
+              aria-label="联系方式 (QQ/微信/邮箱)" placeholder="联系方式 (QQ/微信/邮箱)"
               value={formData.contact}
               onChange={(e) => handleInputChange('contact', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
             />
-            <select
+            <select aria-label="常在线时段"
               value={formData.time}
               onChange={(e) => handleInputChange('time', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
@@ -1426,7 +1052,7 @@ function PageContent() {
                 不固定 / 看通知
               </option>
             </select>
-            <select
+            <select aria-label="偏好定位"
               value={formData.role}
               onChange={(e) => handleInputChange('role', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
@@ -1449,7 +1075,7 @@ function PageContent() {
               </option>
             </select>
             <textarea
-              placeholder="想说的话（选填）"
+              aria-label="想说的话（选填）" placeholder="想说的话（选填）"
               value={formData.message}
               onChange={(e) => handleInputChange('message', e.target.value)}
               rows={3}
@@ -1739,7 +1365,7 @@ function PageContent() {
 export default function Page() {
   return (
     <ToastProvider>
-      <PageContent />
+      <MotionConfig reducedMotion="user"><PageContent /></MotionConfig>
     </ToastProvider>
   )
 }

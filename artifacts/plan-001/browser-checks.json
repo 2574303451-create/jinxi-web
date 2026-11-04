@@ -1,0 +1,65 @@
+{
+  "results": [
+    {
+      "name": "viewport 320 no overflow",
+      "passed": true
+    },
+    {
+      "name": "viewport 390 no overflow",
+      "passed": true
+    },
+    {
+      "name": "viewport 768 no overflow",
+      "passed": true
+    },
+    {
+      "name": "viewport 1440 no overflow",
+      "passed": true
+    },
+    {
+      "name": "all anchor targets exist",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation opens, navigates and closes",
+      "passed": true
+    },
+    {
+      "name": "join form traps focus and restores it on Escape",
+      "passed": true
+    },
+    {
+      "name": "announcement opens and shows actual local API failure",
+      "passed": true
+    },
+    {
+      "name": "strategy opens and reports API failure",
+      "passed": true
+    },
+    {
+      "name": "member details open with keyboard and close",
+      "passed": true
+    },
+    {
+      "name": "video plays from lowercase resource",
+      "passed": true
+    },
+    {
+      "name": "no uncaught browser exceptions",
+      "passed": true
+    },
+    {
+      "name": "simulated video failure preserves cover",
+      "passed": true
+    },
+    {
+      "name": "simulated API failures are explicit",
+      "passed": true
+    },
+    {
+      "name": "reduced motion disables marquee and carousel auto-advance",
+      "passed": true
+    }
+  ],
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded."
+}

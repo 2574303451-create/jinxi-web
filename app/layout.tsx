@@ -2,10 +2,11 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import '../styles/star-night.css'
 
 export const metadata: Metadata = {
-  title: '今夕-弹弹堂工会-执手创',
-  description: 'Jinxi guild community website',
+  title: '今夕公会 · 今晚开黑，星光作陪',
+  description: '弹弹堂今夕公会。认识并肩作战的伙伴，交流攻略，记录属于我们的高光时刻。',
   generator: 'Jinxi Guild Web',
   robots: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
   icons: {
@@ -65,10 +66,6 @@ html {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" crossOrigin="anonymous" />
         <style dangerouslySetInnerHTML={{ __html: REMIX_ICON_FIX_CSS }} />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap"
-          rel="stylesheet"
-        />
         <style dangerouslySetInnerHTML={{ __html: rootFontCss }} />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>

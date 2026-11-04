@@ -1,0 +1,184 @@
+{
+  "modalMetrics": {},
+  "domHierarchy": [
+    {
+      "tag": "DIV",
+      "class": "",
+      "children": []
+    },
+    {
+      "tag": "DIV",
+      "class": "min-h-screen bg-background font-sans",
+      "children": [
+        {
+          "tag": "HEADER",
+          "class": "border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "min-h-[calc(100vh-80px)] bg-dot-pattern relative overflow-hidden flex items-center justify-center py-20",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 py-8",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 pt-0 pb-4",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 pt-0 pb-4",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 pt-0 pb-4",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 pt-0 pb-4",
+          "id": ""
+        },
+        {
+          "tag": "STYLE",
+          "class": "",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "py-20 bg-slate-50 border-y-2 border-black",
+          "id": ""
+        },
+        {
+          "tag": "SECTION",
+          "class": "container mx-auto px-4 py-20",
+          "id": ""
+        },
+        {
+          "tag": "FOOTER",
+          "class": "border-t-2 border-black bg-slate-50",
+          "id": ""
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-black text-white font-bold rounded-full border-2 border-black shadow-[4px_4px_0_0_#facc15] hover:shadow-[6px_6px_0_0_#facc15] hover:-translate-y-0.5 transition-all text-sm",
+      "children": [
+        {
+          "tag": "svg",
+          "class": {},
+          "id": ""
+        }
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "",
+      "children": []
+    },
+    {
+      "tag": "NEXT-ROUTE-ANNOUNCER",
+      "class": "",
+      "children": []
+    }
+  ],
+  "root": {
+    "--background": "oklch(98% 0 0)",
+    "--foreground": "oklch(10% 0 0)",
+    "--primary": "oklch(10% 0 0)",
+    "--border": "oklch(92% 0 0)",
+    "--radius": ".625rem"
+  },
+  "pattern": {
+    "background": "radial-gradient(rgb(203, 213, 225) 1.5px, rgba(0, 0, 0, 0) 0px)",
+    "size": "24px 24px"
+  },
+  "animations": [
+    {
+      "target": "absolute top-20 left-[10%] w-16 h-16 bg-yellow-400 rounded-full border-2 border-black animate-float opacity-80 shadow-[4px_4px_0_0_#000]",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 6000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      }
+    },
+    {
+      "target": "absolute bottom-40 right-[10%] w-24 h-24 bg-blue-500 rotate-12 border-2 border-black animate-float opacity-80 shadow-[4px_4px_0_0_#000]",
+      "timing": {
+        "delay": 1500,
+        "direction": "normal",
+        "duration": 6000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      }
+    },
+    {
+      "target": "character-wrapper",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 4000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      }
+    },
+    {
+      "target": "flex py-1",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 28000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      }
+    },
+    {
+      "target": "flex py-1",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 28000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      }
+    }
+  ],
+  "headerButtons": [
+    {
+      "text": "",
+      "title": "",
+      "aria": null,
+      "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+    },
+    {
+      "text": "",
+      "title": "",
+      "aria": "打开导航",
+      "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+    }
+  ]
+}

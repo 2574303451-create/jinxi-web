@@ -1,26 +1,28 @@
 "use client"
 
 import { useState, useEffect, lazy, Suspense } from "react"
-import { OptimizedImage, AvatarImage } from "../components/ui/optimized-image"
 import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
 import { Modal } from "../components/ui/modal"
-import { RocketIcon, SendIcon, MailIcon, ImageIcon } from "../components/ui/icons"
-import { FloatingBubbles } from "../components/ui/floating-bubbles"
+import { SendIcon, MailIcon } from "../components/ui/icons"
+import { GuildNavigation } from "../components/home/guild-navigation"
+import { GuildHero } from "../components/home/guild-hero"
+import { GuildIntroduction, MemberActions, JoinBanner, SectionHeading, type MemberAction } from "../components/home/guild-sections"
+import { GuildManagement, GuildMembers } from "../components/home/guild-members"
+import { CommunityUpdates } from "../components/home/community-updates"
 import { CyberAnnouncement } from "../components/cyber-announcement"
-import { GuildUptimeTerminal } from "../components/guild-uptime-terminal"
+import { MotionConfig } from "framer-motion"
+import dynamic from "next/dynamic"
+const GuildUptimeTerminal = dynamic(() => import("../components/guild-uptime-terminal").then(m => m.GuildUptimeTerminal), { ssr: false })
 import { GuildSponsorship } from "../components/guild-sponsorship"
 
 
 // 动态导入重型组件以减少初始内存占用
-const Marquee = lazy(() => import("../components/magicui/marquee").then(m => ({ default: m.Marquee })))
 const MessageWall = lazy(() => import("../components/message-wall").then(m => ({ default: m.MessageWall })))
 const StrategyWall = lazy(() => import("../components/strategy-wall").then(m => ({ default: m.StrategyWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
-const Tabs = lazy(() => import("../components/ui/tabs").then(m => ({ default: m.Tabs })))
-const Progress = lazy(() => import("../components/ui/progress").then(m => ({ default: m.Progress })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
 const CheckinWidget = lazy(() => import("../components/checkin-widget").then(m => ({ default: m.CheckinWidget })))
 const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(m => ({ default: m.LeaderboardWidget })))
@@ -32,9 +34,9 @@ const GameDataPanel = lazy(() => import("../components/game-data-panel"))
 // 组件加载占位符
 const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
-    <div className="flex items-center justify-center py-8">
+    <div role="status" className="module-loading flex items-center justify-center py-8">
       <LoadingSpinner size="sm" />
-      <span className="ml-2 text-white/60">加载中...</span>
+      <span className="ml-2">正在加载，请稍候…</span>
     </div>
   }>
     {children}
@@ -42,7 +44,7 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 )
 
 function PageContent() {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true)
+  const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -735,93 +737,6 @@ function PageContent() {
     },
   ]
 
-  const infoTabs = [
-    {
-      id: "about",
-      label: "关于公会",
-      icon: "ri-heart-2-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-❤️ 公会宣言
-            </h4>
-            <p className="text-white/80 text-sm mb-2">以战会友，彼此成就。强势在操作，温柔在态度。</p>
-            <div className="text-yellow-300 font-medium text-sm">愿你每次出场，都被掌声围绕。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-⏰ 活跃时段
-            </h4>
-            <p className="text-white/80 text-sm mb-2">工作日 20:00–23:00；周末弹性开黑。</p>
-            <div className="text-yellow-300 font-medium text-sm">如果星光不问赶路人，我们就把星光点亮。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🛡️ 入会要点
-            </h4>
-            <p className="text-white/80 text-sm mb-2">文明游戏、支持指挥、接受分工。</p>
-            <div className="text-yellow-300 font-medium text-sm">把"配合"写进肌肉记忆。</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "news",
-      label: "公告动态",
-      icon: "ri-megaphone-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-📢 置顶公告
-            </h4>
-            <p className="text-white/80 text-sm mb-2">夏季冲榜进行中，组队排位、周常挑战、擂台切磋均可累计今夕积分。</p>
-            <div className="text-yellow-300 font-medium text-sm">上分如风，稳住我们能赢。</div>
-            <Progress value={75} className="mt-3" showLabel />
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🏆 战绩速览
-            </h4>
-            <p className="text-white/80 text-sm mb-2">周冠军 ×2、跨区赛 Top10、公会任务连续满进度。</p>
-            <div className="text-yellow-300 font-medium text-sm">胜利不是终点，它只是下一局的开场曲。</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "events",
-      label: "活动赛事",
-      icon: "ri-calendar-event-line",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-👥 周常团练
-            </h4>
-            <p className="text-white/80 text-sm mb-2">周三/六晚 21:00，战术走位与默契磨合。</p>
-            <div className="text-yellow-300 font-medium text-sm">同频的人，会在下一次转角相遇。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🎮 友谊赛
-            </h4>
-            <p className="text-white/80 text-sm mb-2">跨会交流，礼貌第一；支持录屏剪辑高光。</p>
-            <div className="text-yellow-300 font-medium text-sm">友谊第一，输出也要第一。</div>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="font-bold mb-2 flex items-center gap-2">
-🎬 混剪征集
-            </h4>
-            <p className="text-white/80 text-sm mb-2">征集精彩操作，季末发布「今夕混剪」。</p>
-            <div className="text-yellow-300 font-medium text-sm">你的镜头，正在等待上场。</div>
-          </div>
-        </div>
-      ),
-    },
-  ]
-
   const faqItems = [
     {
       id: "1",
@@ -848,21 +763,6 @@ function PageContent() {
       content: "积极参与活动、帮助新人、展现良好的团队合作精神。我们重视每个成员的贡献，表现优秀者有机会晋升管理层。",
     },
   ]
-
-  const toggleVideo = () => {
-    const video = document.getElementById("heroVideo") as HTMLVideoElement
-    if (video) {
-      if (video.paused) {
-        video.play()
-        setIsVideoPlaying(true)
-        toast.addToast("视频已开始播放", "info")
-      } else {
-        video.pause()
-        setIsVideoPlaying(false)
-        toast.addToast("视频已暂停", "info")
-      }
-    }
-  }
 
   const handleJoinClick = () => {
     setIsModalOpen(true)
@@ -896,501 +796,54 @@ function PageContent() {
   }, [])
   return (
     <div
-      className="min-h-screen relative bg-enhanced"
-      style={{
-        color: "#e8edf6",
-        fontFamily:
-          '"Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif',
-      }}
+      className="jinxi-site min-h-screen relative"
     >
-      {/* 浮动气泡装饰 */}
-      <FloatingBubbles />
-
-      {/* Header */}
-      <header
-        className="sticky top-0 z-50 relative"
-        style={{
-          backdropFilter: "saturate(1.2) blur(8px)",
-          background: "rgba(11,16,32,.6)",
-          borderBottom: "1px solid rgba(255,255,255,.06)",
-        }}
-      >
-        <div className="max-w-[1180px] mx-auto px-4">
-          <nav className="flex items-center justify-between h-[68px]">
-            <ComponentLoader>
-                <a href="#top" className="flex items-center gap-3 text-white no-underline">
-                <OptimizedImage
-                  src="/logo.png"
-                  alt="Logo"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-xl object-cover"
-                  priority={true}
-                  quality={80}
-                  unoptimized={true}
-                />
-                <h1
-                  className="m-0 font-semibold text-lg tracking-wide"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-                  弹弹堂 · 今夕公会
-                </h1>
-                </a>
-            </ComponentLoader>
-
-            <ul className="hidden md:flex gap-[18px] list-none m-0 p-0">
-              {["关于", "公告", "活动", "成员", "展示墙", "成员列表", "签到", "留言墙", "攻略墙"].map((item, index) => {
-                const links = ["about", "news", "events", "members", "roster", "members-page", "checkin", "message-wall", "strategy-wall"]
-                const section = links[index]
-                const isStrategyWall = section === "strategy-wall"
-                const isAnnouncement = section === "news"
-
-                return (
-                    <li key={index}>
-                      {isStrategyWall ? (
-                        <button
-                          onClick={() => setIsStrategyWallOpen(true)}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
-                        >
-                          {item}
-                        </button>
-                      ) : isAnnouncement ? (
-                        <button
-                          onClick={() => {
-                            if (typeof window !== "undefined") {
-                              window.dispatchEvent(new Event("cyber-announcement:open"))
-                            }
-                          }}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity bg-transparent border-none text-white cursor-pointer"
-                        >
-                          {item}
-                        </button>
-                      ) : (
-                        <a
-                          href={`#${section}`}
-                          className="opacity-90 hover:opacity-100 no-underline transition-opacity"
-                        >
-                          {item}
-                        </a>
-                      )}
-                    </li>
-                )
-              })}
-            </ul>
-
-            <div className="flex items-center gap-2">
-              {loginAccount ? (
-                <>
-                  <span
-                    className="inline-flex max-w-[170px] sm:max-w-none flex-col items-start px-3 py-2 rounded-xl text-sm bg-white/10 text-white/90 border border-white/20"
-                    title={`${loginNickname || loginAccount} (${loginAccount})`}
-                  >
-                    <span className="text-white w-full truncate">{loginNickname || loginAccount}</span>
-                    <span className="text-white/60 text-xs w-full truncate">账号：{loginAccount}</span>
-                  </span>
-                  <button
-                    onClick={openChangePasswordModal}
-                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
-                  >
-                    修改密码
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-transform hover-effect"
-                  >
-                    退出
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={openLoginModal}
-                  className="inline-flex items-center gap-2 px-[12px] py-[10px] rounded-xl border border-emerald-400/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-100 transition-transform hover-effect"
-                >
-                  登录
-                </button>
-              )}
-              <button
-                onClick={handleJoinClick}
-                className="cartoon-btn cartoon-btn-pink inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none text-white no-underline transition-transform hover-effect"
-              >
-                <RocketIcon className="mr-2" size={18} /> 加入
-              </button>
-            </div>
-          </nav>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-[1180px] mx-auto px-4 relative z-10">
-        {/* Hero Section */}
-        <section className="py-16 pb-7 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-7 items-center relative z-10">
-            <ComponentLoader>
-                <div
-                className="p-6 rounded-2xl border relative"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                  <span
-                    className="inline-flex items-center gap-2 px-3 py-[6px] rounded-full text-sm border mb-4 relative z-10"
-                    style={{
-                      background: "rgba(96,165,250,.18)",
-                      color: "#cfe3ff",
-                      borderColor: "rgba(96,165,250,.3)",
-                    }}
-                  >
-✨ 今夕 · 欢迎回家
-                  </span>
-
-                <h2
-                  className="my-2 font-bold text-[34px] leading-tight tracking-wide relative z-10 gradient-text-candy animate-bounce-in"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-                  今晚开黑，星光作陪
-                </h2>
-
-                <p className="text-[#d5def0] mb-4 relative z-10">
-                  组队、磨合、提升；每一局都有高光，每一次集合都有欢笑。
-                </p>
-
-                {/* 入会联系方式 */}
-                <div className="mb-6 p-4 rounded-xl border relative z-10" style={{
-                  background: "linear-gradient(180deg,rgba(96,165,250,.15),rgba(96,165,250,.05))",
-                  borderColor: "rgba(96,165,250,.3)",
-                }}>
-                  <div className="flex items-center gap-2 mb-3">
-👥
-                    <span className="text-blue-200 font-medium text-sm">入会联系方式</span>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-[#e1eafc]">
-🐧
-                      <span>QQ群：<strong className="text-blue-200">713162467</strong></span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[#e1eafc]">
-👤
-                      <span>联系人：<strong className="text-blue-200">执手</strong></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 flex-wrap relative z-10">
-                  {[
-                    { href: "#info-tabs", icon: "ri-megaphone-line", text: "公告", color: "sky" },
-                    { href: "#info-tabs", icon: "ri-calendar-event-line", text: "活动", color: "fresh" },
-                    { href: "#roster", icon: "ri-gallery-view-2", text: "展示墙", color: "sunset", primary: true },
-                  ].map((btn, index) => (
-                      <a
-                        key={index}
-                        href={btn.href}
-                        className={`inline-flex items-center gap-2 px-[14px] py-[10px] rounded-xl border-none no-underline transition-transform ${
-                          btn.primary ? `cartoon-btn cartoon-btn-${btn.color}` : "bg-white/5 hover:bg-white/10 border border-white/10"
-                        }`}
-                      >
-                        {btn.icon === "ri-megaphone-line" ? "📢" : btn.icon === "ri-calendar-event-line" ? "📅" : btn.icon === "ri-gallery-view-2" ? "🖼️" : "📋"} {btn.text}
-                      </a>
-                  ))}
-                </div>
-                </div>
-            </ComponentLoader>
-
-            <ComponentLoader>
-                <div
-                  className="relative rounded-2xl overflow-hidden border aspect-[4/3]"
-                  style={{
-                    background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                    borderColor: "rgba(255,255,255,.1)",
-                    boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                    isolation: "isolate",
-                  }}
-                >
-                  <video
-                    id="heroVideo"
-                    src="/1.MP4"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    preload="metadata"
-                    playsInline
-                    muted
-                    autoPlay
-                    loop
-                    controls
-                  />
-                  <button
-                    onClick={toggleVideo}
-                    className="absolute right-[10px] bottom-[10px] z-10 inline-flex items-center gap-[6px] px-3 py-2 rounded-xl border text-white cursor-pointer hover:scale-110 transition-transform hover-effect"
-                    style={{
-                      borderColor: "rgba(255,255,255,.25)",
-                      background: "rgba(0,0,0,.35)",
-                      backdropFilter: "blur(6px)",
-                    }}
-                  >
-{isVideoPlaying ? "⏸️" : "▶️"}
-                    {isVideoPlaying ? "暂停" : "播放"}
-                  </button>
-
-                  {/* Animated border effect */}
-                  <div
-                    className="absolute inset-[-1px] rounded-[calc(16px+2px)] opacity-70 pointer-events-none"
-                    style={{
-                      background: "conic-gradient(from 160deg at 30% 10%, #60a5fa, #22c55e, #f59e0b, #fb7185, #60a5fa)",
-                      animation: "spin 10s linear infinite",
-                      WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-                      WebkitMaskComposite: "xor",
-                      maskComposite: "exclude",
-                      padding: "1px",
-                    }}
-                  />
-                </div>
-            </ComponentLoader>
-          </div>
+      <a className="skip-link" href="#main-content">跳到主要内容</a>
+      <GuildNavigation account={loginAccount} nickname={loginNickname} onLogin={openLoginModal}
+        onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
+        onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))}
+        onStrategy={() => setIsStrategyWallOpen(true)} />
+      <main id="main-content">
+        <GuildHero onJoin={handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
+        <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
+        <GuildManagement members={managementTeam} onJoin={handleJoinClick} />
+        <GuildMembers members={allMembers} onAll={() => setActivePanel("members")} onShowcase={() => setActivePanel("showcase")} />
+        <MemberActions account={loginAccount} onOpen={setActivePanel} />
+        <section id="community" className="guild-shell guild-section">
+          <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
+          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => setActivePanel("messages")} onStrategy={() => setIsStrategyWallOpen(true)} />
         </section>
-
-        <ComponentLoader>
-            <section id="info-tabs" className="py-9 relative">
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Tabs tabs={infoTabs} defaultTab="about" />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* Management Team Section with Enhanced Marquee */}
-        <ComponentLoader>
-            <section id="members" className="py-9 relative">
-              <div
-                className="p-6 rounded-2xl border relative"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <h3
-                  className="mt-0 mb-4 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
-                  style={{
-                    fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                  }}
-                >
-⭐ 管理团队
-                </h3>
-
-                <ComponentLoader>
-                  <Marquee className="py-4 relative z-10" pauseOnHover>
-                    {managementTeam.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center gap-[10px] p-3 rounded-xl mx-4 min-w-[280px] hover:scale-105 transition-transform"
-                    style={{
-                      background: "rgba(255,255,255,.04)",
-                      border: "1px solid rgba(255,255,255,.08)",
-                    }}
-                  >
-                    <AvatarImage
-                      src={member.avatar || "/placeholder.svg"}
-                      alt={member.name}
-                      size={36}
-                      fallbackText={member.name}
-                      loading="lazy"
-                    />
-                    <div>
-                      <div className="font-semibold">{member.name}</div>
-                      <div className="text-sm" style={{ color: "#a5b2cc" }}>
-                        {member.role}
-                      </div>
-                    </div>
-                  </div>
-                    ))}
-                  </Marquee>
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="roster" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-<ImageIcon className="inline" size={16} /> 成员展示
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Carousel3D members={carouselMembers} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="members-page" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 text-center relative z-10 gradient-text-rainbow"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-👥 公会成员列表
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <MemberGrid members={allMembers} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 签到功能区域 */}
-        <ComponentLoader>
-            <section id="checkin" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-sky"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-                <i className="ri-calendar-check-line"></i> 每日签到
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <CheckinWidget loggedInAccount={loginAccount} />
-                <LeaderboardWidget />
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 每日任务系统 */}
-        <ComponentLoader>
-            <section id="daily-tasks" className="py-9 relative">
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                <DailyTasks loggedInAccount={loginAccount} />
-                <PointsRankingWidget loggedInAccount={loginAccount} />
-              </div>
-            </section>
-        </ComponentLoader>
-
-        {/* 战队系统 */}
-        <ComponentLoader>
-            <section id="team-system" className="py-9 relative">
-              <TeamSystem />
-            </section>
-        </ComponentLoader>
-
-        {/* 游戏数据展示 */}
-        <ComponentLoader>
-            <section id="game-data" className="py-9 relative">
-              <GameDataPanel />
-            </section>
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />
-        </ComponentLoader>
-
-        <ComponentLoader>
-            <section id="faq" className="py-9 relative">
-              <h3
-                className="mb-6 font-bold text-[26px] leading-tight flex items-center gap-2 relative z-10 gradient-text-fresh"
-                style={{
-                  fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-                }}
-              >
-❓ 常见问题
-              </h3>
-              <div
-                className="p-6 rounded-2xl border relative z-10"
-                style={{
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: "rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-                }}
-              >
-                <ComponentLoader>
-                  <Accordion items={faqItems} />
-                </ComponentLoader>
-              </div>
-            </section>
-        </ComponentLoader>
+        <section id="faq" className="guild-shell guild-section">
+          <SectionHeading label="想了解更多" title="入会前，你可能想问" description="活动时间、奖励和具体安排，请以公会实际通知为准。" />
+          <div className="guild-panel faq-panel legacy-module"><ComponentLoader><Accordion items={faqItems} /></ComponentLoader></div>
+        </section>
+        <JoinBanner onJoin={handleJoinClick} />
       </main>
-
       <CyberAnnouncement />
       <GuildUptimeTerminal />
       <GuildSponsorship />
-
-      {/* Footer */}
-      <footer className="text-center py-4 relative z-10">
-        <div className="max-w-[1180px] mx-auto px-4">
-          <div className="flex items-center justify-center">
-            <p className="text-white/80">
-              © <span id="y">2018</span> 今夕公会
-            </p>
-          </div>
+      <footer className="guild-footer"><div className="guild-shell"><a className="guild-brand" href="#top"><img src="/logo.png" alt="" width={32} height={32} /><span>今夕公会</span></a><p>以战会友，彼此成就。一起记录属于我们的高光。</p><div><span>© <span id="y">2026</span> 今夕公会</span><a href="#top">回到顶部 ↑</a></div></div></footer>
+      <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl">
+        <div className="legacy-module">
+          <ComponentLoader>
+            {activePanel === "checkin" && <CheckinWidget loggedInAccount={loginAccount} />}
+            {activePanel === "points" && <div className="business-grid"><LeaderboardWidget /><PointsRankingWidget loggedInAccount={loginAccount} /></div>}
+            {activePanel === "tasks" && (loginAccount ? <DailyTasks loggedInAccount={loginAccount} /> : <div className="guild-empty"><h3>你的任务，从登录开始</h3><p>登录后查看你的个人任务与积分。</p><button className="guild-button yellow" onClick={openLoginModal}>登录账号</button></div>)}
+            {activePanel === "teams" && (loginAccount ? <><p className="module-notice">当前浏览器的本地记录与默认示例，供个人管理参考。</p><TeamSystem /></> : <div className="guild-empty"><h3>寻找下一局的伙伴</h3><p>登录后打开浏览器本地组队面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后组队</button></div>)}
+            {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
+            {activePanel === "members" && <MemberGrid members={allMembers} />}
+            {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
+            {activePanel === "messages" && <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />}
+          </ComponentLoader>
         </div>
-      </footer>
-
-      {/* 安全保护脚本 */}
-      <script 
-        dangerouslySetInnerHTML={{
-          __html: `
-            // 基础反调试保护
-            (function() {
-              // 禁用右键
-              document.addEventListener('contextmenu', e => e.preventDefault());
-              
-              // 禁用开发者工具快捷键
-              document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'U')) {
-                  e.preventDefault();
-                }
-              });
-              
-              // 控制台警告
-              console.log('%c🔒 网站受到保护', 'color: red; font-size: 16px; font-weight: bold;');
-              console.log('%c未经授权访问源代码是违法行为', 'color: orange; font-size: 12px;');
-            })();
-          `
-        }}
-      />
-
+      </Modal>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="加入今夕公会" size="md">
         <div className="space-y-4">
           <p className="text-white/80">欢迎加入今夕公会！请填写以下信息，我们会尽快与您联系。</p>
           <div className="space-y-3">
             <input
               type="text"
-              placeholder="游戏昵称"
+              aria-label="游戏昵称" placeholder="游戏昵称"
               value={formData.nickname}
               onChange={(e) => handleInputChange('nickname', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1398,13 +851,13 @@ function PageContent() {
             />
             <input
               type="text"
-              placeholder="联系方式 (QQ/微信/邮箱)"
+              aria-label="联系方式 (QQ/微信/邮箱)" placeholder="联系方式 (QQ/微信/邮箱)"
               value={formData.contact}
               onChange={(e) => handleInputChange('contact', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
               style={{ borderColor: "rgba(255,255,255,.14)" }}
             />
-            <select
+            <select aria-label="常在线时段"
               value={formData.time}
               onChange={(e) => handleInputChange('time', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
@@ -1426,7 +879,7 @@ function PageContent() {
                 不固定 / 看通知
               </option>
             </select>
-            <select
+            <select aria-label="偏好定位"
               value={formData.role}
               onChange={(e) => handleInputChange('role', e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white"
@@ -1449,7 +902,7 @@ function PageContent() {
               </option>
             </select>
             <textarea
-              placeholder="想说的话（选填）"
+              aria-label="想说的话（选填）" placeholder="想说的话（选填）"
               value={formData.message}
               onChange={(e) => handleInputChange('message', e.target.value)}
               rows={3}
@@ -1542,7 +995,7 @@ function PageContent() {
               <div className="space-y-3">
                 <input
                   type="text"
-                  placeholder="账号"
+                  aria-label="账号" placeholder="账号"
                   value={loginForm.account}
                   onChange={(e) => handleLoginInputChange("account", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1552,7 +1005,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showLoginPassword ? "text" : "password"}
-                    placeholder="密码"
+                    aria-label="密码" placeholder="密码"
                     value={loginForm.password}
                     onChange={(e) => handleLoginInputChange("password", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1621,7 +1074,7 @@ function PageContent() {
               <div className="space-y-3">
                 <input
                   type="text"
-                  placeholder="账号"
+                  aria-label="账号" placeholder="账号"
                   value={loginAccount || changePasswordForm.account}
                   onChange={(e) => setChangePasswordForm((prev) => ({ ...prev, account: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1632,7 +1085,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showCurrentPassword ? "text" : "password"}
-                    placeholder="当前密码"
+                    aria-label="当前密码" placeholder="当前密码"
                     value={changePasswordForm.currentPassword}
                     onChange={(e) => handleChangePasswordInputChange("currentPassword", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1670,7 +1123,7 @@ function PageContent() {
                 <div className="relative">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="确认新密码"
+                    aria-label="确认新密码" placeholder="确认新密码"
                     value={changePasswordForm.confirmPassword}
                     onChange={(e) => handleChangePasswordInputChange("confirmPassword", e.target.value)}
                     className="w-full px-4 py-3 pr-11 rounded-xl border bg-white/5 text-white placeholder-white/60"
@@ -1739,7 +1192,7 @@ function PageContent() {
 export default function Page() {
   return (
     <ToastProvider>
-      <PageContent />
+      <MotionConfig reducedMotion="user"><PageContent /></MotionConfig>
     </ToastProvider>
   )
 }

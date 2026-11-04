@@ -1,0 +1,50 @@
+[
+  {
+    "name": "no overflow 390",
+    "ok": true
+  },
+  {
+    "name": "no overflow 768",
+    "ok": true
+  },
+  {
+    "name": "no overflow 1440",
+    "ok": true
+  },
+  {
+    "name": "mobile menu opens",
+    "ok": true
+  },
+  {
+    "name": "mobile menu closes",
+    "ok": true
+  },
+  {
+    "name": "about anchor",
+    "ok": true
+  },
+  {
+    "name": "join form opens",
+    "ok": true
+  },
+  {
+    "name": "escape closes join",
+    "ok": true
+  },
+  {
+    "name": "focus returns to join",
+    "ok": true
+  },
+  {
+    "name": "announcement dialog",
+    "ok": true
+  },
+  {
+    "name": "strategy dialog",
+    "ok": true
+  },
+  {
+    "name": "strategy error visible",
+    "ok": true
+  }
+]

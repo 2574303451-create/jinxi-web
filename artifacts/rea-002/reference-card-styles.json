@@ -1,0 +1,44 @@
+{
+  "before": {
+    "text": "我看谁不学 Grok Bot：零基础全流程（建Bot·云电脑·协作·拉群）这期是「我看谁不学」零基础系列第一节：一条视频",
+    "rect": {
+      "x": 96,
+      "y": 193.5,
+      "width": 394.65625,
+      "height": 512.734375,
+      "top": 193.5,
+      "right": 490.65625,
+      "bottom": 706.234375,
+      "left": 96
+    },
+    "background": "rgb(255, 255, 255)",
+    "color": "oklch(0.1 0 0)",
+    "border": "2px solid rgb(0, 0, 0)",
+    "borderRadius": "14px",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+    "transform": "none",
+    "transition": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  },
+  "hover": {
+    "text": "我看谁不学 Grok Bot：零基础全流程（建Bot·云电脑·协作·拉群）这期是「我看谁不学」零基础系列第一节：一条视频",
+    "rect": {
+      "x": 96,
+      "y": 189.5,
+      "width": 394.65625,
+      "height": 512.734375,
+      "top": 189.5,
+      "right": 490.65625,
+      "bottom": 702.234375,
+      "left": 96
+    },
+    "background": "rgb(255, 255, 255)",
+    "color": "oklch(0.1 0 0)",
+    "border": "2px solid rgb(0, 0, 0)",
+    "borderRadius": "14px",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+    "transform": "none",
+    "transition": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "animation": "none 0s ease 0s 1 normal none running"
+  }
+}

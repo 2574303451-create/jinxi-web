@@ -24,6 +24,7 @@ export const MessageWall = memo(function MessageWall({
 }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -69,10 +70,12 @@ export const MessageWall = memo(function MessageWall({
   const loadMessages = useCallback(async () => {
     try {
       setIsLoading(true)
+      setLoadError("")
       const data = await backendAPI.getMessages()
       setMessages(data)
     } catch (error) {
       console.error('加载留言失败:', error)
+      setLoadError("留言暂时加载失败，请重试。")
       // 这里可以添加 toast 通知
     } finally {
       setIsLoading(false)
@@ -313,6 +316,7 @@ export const MessageWall = memo(function MessageWall({
             </button>
           </div>
 
+{loadError && <div role="alert" className="module-error">{loadError}<button onClick={() => loadMessages()}>重试</button></div>}
           {/* 分类筛选 */}
           <div className="mb-6 flex flex-wrap gap-2">
             {categories.map((category) => (
@@ -442,7 +446,7 @@ export const MessageWall = memo(function MessageWall({
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">💬</div>
                 <div className="text-white/60">
-                  {activeFilter === 'all' ? '暂无留言，来发布第一条吧！' : `暂无${activeFilter}类型的留言`}
+                  {loadError ? '留言尚未加载，请使用上方重试。' : activeFilter === 'all' ? '暂无留言，来发布第一条吧！' : `暂无${activeFilter}类型的留言`}
                 </div>
               </div>
             ) : (

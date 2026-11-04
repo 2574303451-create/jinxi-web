@@ -3,6 +3,7 @@
 import { ChangeEvent, ClipboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { type Announcement, fetchAnnouncements, postAnnouncement, verifyAnnouncementAdminToken } from "../services/announcement-service"
 import { useToast } from "./ui/toast"
+import { Modal } from "./ui/modal"
 import styles from "./cyber-announcement.module.css"
 
 interface CyberAnnouncementProps {
@@ -533,11 +534,12 @@ export function CyberAnnouncement({ isAdmin = false, adminTokenStorageKey = "jin
         <span>{isOpen ? "关闭公告" : "查看公告"}</span>
       </button>
 
-      <div className={`${styles.cyberAnnPanel} ${isOpen ? styles.cyberAnnPanelOpen : styles.cyberAnnPanelClosed}`}>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="公会动态" size="lg">
+      <div className={styles.cyberAnnPanel}>
         <div className={styles.cyberAnnHeader}>
           <div>
-            <h3 className={styles.cyberAnnTitle}>Cyber Announcements</h3>
-            <div className={styles.cyberAnnSubtitle}>实时公告流</div>
+            <h3 className={styles.cyberAnnTitle}>公会公告</h3>
+            <div className={styles.cyberAnnSubtitle}>以公会实际发布内容为准</div>
           </div>
           <button type="button" className={styles.cyberAnnClose} onClick={() => setIsOpen(false)} aria-label="关闭公告面板">
             ×
@@ -631,6 +633,7 @@ export function CyberAnnouncement({ isAdmin = false, adminTokenStorageKey = "jin
           )}
         </div>
       </div>
+      </Modal>
     </aside>
   )
 }

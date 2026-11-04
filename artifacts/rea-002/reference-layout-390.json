@@ -1,0 +1,147 @@
+{
+  "viewport": 390,
+  "scrollWidth": 390,
+  "h1": {
+    "size": "48px",
+    "line": "60px",
+    "rect": {
+      "x": 16,
+      "y": 229,
+      "width": 358,
+      "height": 120,
+      "top": 229,
+      "right": 374,
+      "bottom": 349,
+      "left": 16
+    }
+  },
+  "header": {
+    "x": 0,
+    "y": 0,
+    "width": 390,
+    "height": 65,
+    "top": 0,
+    "right": 390,
+    "bottom": 65,
+    "left": 0
+  },
+  "sections": [
+    {
+      "class": "min-h-[calc(100vh-80px)] bg-dot-pattern relative overflow-hidden flex items-center justify-center py-20",
+      "rect": {
+        "x": 0,
+        "y": 65,
+        "width": 390,
+        "height": 1492,
+        "top": 65,
+        "right": 390,
+        "bottom": 1557,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 py-8",
+      "rect": {
+        "x": 0,
+        "y": 1557,
+        "width": 390,
+        "height": 436.75,
+        "top": 1557,
+        "right": 390,
+        "bottom": 1993.75,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "rect": {
+        "x": 0,
+        "y": 1993.75,
+        "width": 390,
+        "height": 151,
+        "top": 1993.75,
+        "right": 390,
+        "bottom": 2144.75,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "rect": {
+        "x": 0,
+        "y": 2144.75,
+        "width": 390,
+        "height": 111,
+        "top": 2144.75,
+        "right": 390,
+        "bottom": 2255.75,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "rect": {
+        "x": 0,
+        "y": 2255.75,
+        "width": 390,
+        "height": 151,
+        "top": 2255.75,
+        "right": 390,
+        "bottom": 2406.75,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "rect": {
+        "x": 0,
+        "y": 2406.75,
+        "width": 390,
+        "height": 111,
+        "top": 2406.75,
+        "right": 390,
+        "bottom": 2517.75,
+        "left": 0
+      }
+    },
+    {
+      "class": "py-20 bg-slate-50 border-y-2 border-black",
+      "rect": {
+        "x": 0,
+        "y": 2517.75,
+        "width": 390,
+        "height": 1097.25,
+        "top": 2517.75,
+        "right": 390,
+        "bottom": 3615,
+        "left": 0
+      }
+    },
+    {
+      "class": "container mx-auto px-4 py-20",
+      "rect": {
+        "x": 0,
+        "y": 3615,
+        "width": 390,
+        "height": 9790.25,
+        "top": 3615,
+        "right": 390,
+        "bottom": 13405.25,
+        "left": 0
+      }
+    },
+    {
+      "class": "",
+      "rect": {
+        "x": 0,
+        "y": 13656.25,
+        "width": 390,
+        "height": 0,
+        "top": 13656.25,
+        "right": 390,
+        "bottom": 13656.25,
+        "left": 0
+      }
+    }
+  ]
+}

@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Modal } from "./ui/modal"
 import { cn } from "../lib/utils"
 
 interface Member {
   id: number
   name: string
   image: string
-  role: string
+  role?: string
   description?: string
 }
 
@@ -81,18 +82,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
   }
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* 背景遮罩 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            onClick={onClose}
-          />
-
+    <Modal isOpen={isOpen} onClose={onClose} title={member.name} size="xl">
           {/* 模态框内容 */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -104,14 +94,14 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
               stiffness: 300,
               duration: 0.3 
             }}
-            className="relative max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            className="relative max-w-4xl w-full overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* 高光边框效果 */}
             <div 
               className="absolute inset-0 rounded-3xl p-[3px]"
               style={{
-                background: `conic-gradient(from 0deg, ${getRoleColor(member.role)}, transparent, ${getRoleColor(member.role)})`,
+                background: `conic-gradient(from 0deg, ${getRoleColor(member.role || "成员")}, transparent, ${getRoleColor(member.role || "成员")})`,
                 animation: "spin 6s linear infinite"
               }}
             >
@@ -124,7 +114,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
             </div>
 
             {/* 内容区域 */}
-            <div className="relative z-10 p-8 h-full flex flex-col lg:flex-row gap-8 items-center">
+            <div className="relative z-10 p-3 sm:p-8 h-full flex flex-col lg:flex-row gap-8 items-center">
               
               {/* 图片区域 */}
               <div className="flex-1 flex justify-center items-center">
@@ -140,6 +130,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                         transition: "filter 0.3s ease"
                       }}
                       onLoad={() => setImageLoaded(true)}
+                      onError={(event) => { setImageLoaded(true); if (!event.currentTarget.src.endsWith("/logo.png")) event.currentTarget.src = "/logo.png" }}
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.1, duration: 0.4 }}
@@ -149,7 +140,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                     <div 
                       className="absolute inset-0 rounded-2xl opacity-60"
                       style={{
-                        background: `linear-gradient(45deg, transparent 30%, ${getRoleColor(member.role)}20 50%, transparent 70%)`,
+                        background: `linear-gradient(45deg, transparent 30%, ${getRoleColor(member.role || "成员")}20 50%, transparent 70%)`,
                         animation: "shimmer 3s ease-in-out infinite"
                       }}
                     />
@@ -165,10 +156,10 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                     <div 
                       className={cn(
                         "px-4 py-2 rounded-xl text-white font-bold text-sm shadow-lg",
-                        `bg-gradient-to-r ${getRoleGradient(member.role)}`
+                        `bg-gradient-to-r ${getRoleGradient(member.role || "成员")}`
                       )}
                       style={{
-                        boxShadow: `0 0 20px ${getRoleColor(member.role)}40`
+                        boxShadow: `0 0 20px ${getRoleColor(member.role || "成员")}40`
                       }}
                     >
                       {member.role}
@@ -188,7 +179,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                   <h2 
                     className="text-4xl font-bold text-transparent bg-clip-text mb-2"
                     style={{
-                      backgroundImage: `linear-gradient(135deg, ${getRoleColor(member.role)}, #ffffff)`
+                      backgroundImage: `linear-gradient(135deg, ${getRoleColor(member.role || "成员")}, #ffffff)`
                     }}
                   >
                     {member.name}
@@ -208,15 +199,15 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                       className="p-6 rounded-2xl border relative overflow-hidden"
                       style={{
                         background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
-                        borderColor: `${getRoleColor(member.role)}40`,
-                        boxShadow: `0 8px 32px ${getRoleColor(member.role)}20`
+                        borderColor: `${getRoleColor(member.role || "成员")}40`,
+                        boxShadow: `0 8px 32px ${getRoleColor(member.role || "成员")}20`
                       }}
                     >
                       {/* 背景装饰 */}
                       <div 
                         className="absolute inset-0 opacity-5"
                         style={{
-                          background: `radial-gradient(circle at 30% 20%, ${getRoleColor(member.role)}, transparent 50%)`
+                          background: `radial-gradient(circle at 30% 20%, ${getRoleColor(member.role || "成员")}, transparent 50%)`
                         }}
                       />
                       
@@ -227,7 +218,7 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                       {/* 引用装饰 */}
                       <div 
                         className="absolute top-2 left-2 text-6xl opacity-20"
-                        style={{ color: getRoleColor(member.role) }}
+                        style={{ color: getRoleColor(member.role || "成员") }}
                       >
                         "
                       </div>
@@ -259,21 +250,9 @@ export function MemberDetailModal({ isOpen, onClose, member }: MemberDetailModal
                 </motion.div>
               </div>
 
-              {/* 关闭按钮 */}
-              <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.5, type: "spring" }}
-                onClick={onClose}
-                className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white/80 hover:text-white transition-all duration-200 hover:scale-110"
-              >
-                <i className="ri-close-line text-xl"></i>
-              </motion.button>
             </div>
           </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+    </Modal>
   )
 }
 

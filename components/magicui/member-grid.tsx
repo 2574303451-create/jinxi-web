@@ -84,12 +84,15 @@ export function MemberGrid({ members, className }: MemberGridProps) {
               whileHover={{
                 boxShadow: "0 8px 25px rgba(0,0,0,.4), 0 0 20px rgba(96,165,250,.3)",
               }}
+              role="button" tabIndex={0} aria-label={`查看 ${member.name} 的详情`}
+              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); handleMemberClick(member) } }}
               onClick={() => handleMemberClick(member)}
             >
               <div className="aspect-square relative overflow-hidden">
                 <img
                   src={member.image || "/placeholder.svg"}
                   alt={member.name}
+                  onError={(event) => { if (!event.currentTarget.src.endsWith("/logo.png")) event.currentTarget.src = "/logo.png" }}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
 

@@ -8,7 +8,7 @@ const nextConfig = {
     tsconfigPath: './tsconfig.json',
   },
   images: {
-    unoptimized: false, // 启用图片优化以减少内存占用
+    unoptimized: true, // 静态导出不提供 Next 图片优化服务器
     domains: [],
     formats: ['image/webp', 'image/avif'],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

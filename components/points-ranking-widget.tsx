@@ -174,6 +174,7 @@ export default function PointsRankingWidget({ className, loggedInAccount = "" }:
         </div>
       )}
 
+      {!errorMessage && <>
       <div className="grid grid-cols-3 gap-3 mb-5">
         <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
           <div className="text-lg font-semibold text-white">{overview.totalActivityPoints}</div>
@@ -271,6 +272,7 @@ export default function PointsRankingWidget({ className, loggedInAccount = "" }:
           <div className="text-white/60">暂无积分排行榜数据</div>
         </div>
       )}
+      </>}
     </motion.div>
   )
 }

@@ -1,0 +1,274 @@
+{
+  "base": "http://127.0.0.1:3003",
+  "environment": "Edge headless. Actual local API failures are tested. Separate isolated ui-fixture uses intercepted API errors and local UI identity only. Authentication correctness and database writes are not verified.",
+  "results": [
+    {
+      "name": "no document overflow at 320",
+      "passed": true
+    },
+    {
+      "name": "no document overflow at 390",
+      "passed": true
+    },
+    {
+      "name": "no document overflow at 768",
+      "passed": true
+    },
+    {
+      "name": "no document overflow at 1440",
+      "passed": true
+    },
+    {
+      "name": "member audience switches to task shortcut",
+      "passed": true
+    },
+    {
+      "name": "member card hover moves four pixels and grows hard shadow",
+      "passed": true
+    },
+    {
+      "name": "all anchor targets exist",
+      "passed": true
+    },
+    {
+      "name": "mobile menu opens, navigates and closes",
+      "passed": true
+    },
+    {
+      "name": "mobile menu Escape restores focus",
+      "passed": true
+    },
+    {
+      "name": "join form opens, traps focus, restores trigger",
+      "passed": true
+    },
+    {
+      "name": "FAQ expands through keyboard",
+      "passed": true
+    },
+    {
+      "name": "member card opens detail and returns focus",
+      "passed": true
+    },
+    {
+      "name": "all member filters and load more remain accessible",
+      "passed": true
+    },
+    {
+      "name": "carousel controls remain accessible",
+      "passed": true
+    },
+    {
+      "name": "guest checkin is read-only and has no fake personal balance",
+      "passed": true
+    },
+    {
+      "name": "tasks open login and password-change dialogs",
+      "passed": true
+    },
+    {
+      "name": "ranking API failure is explicit",
+      "passed": true
+    },
+    {
+      "name": "寻找队伍 entry retained",
+      "passed": true
+    },
+    {
+      "name": "游戏数据 entry retained",
+      "passed": true
+    },
+    {
+      "name": "message wall real API error state",
+      "passed": true
+    },
+    {
+      "name": "announcement opens original interaction",
+      "passed": true
+    },
+    {
+      "name": "strategy opens original interaction",
+      "passed": true
+    },
+    {
+      "name": "sponsorship QR remains accessible",
+      "passed": true
+    },
+    {
+      "name": "video lowercase path plays",
+      "passed": true
+    },
+    {
+      "name": "no uncaught exceptions or business writes",
+      "passed": true
+    },
+    {
+      "name": "member image failure falls back to logo",
+      "passed": true
+    },
+    {
+      "name": "reduced motion stops hero decoration",
+      "passed": true
+    },
+    {
+      "name": "video failure returns a real cover",
+      "passed": true
+    },
+    {
+      "name": "isolated UI fixture renders 每日任务",
+      "passed": true
+    },
+    {
+      "name": "isolated UI fixture renders 寻找队伍",
+      "passed": true
+    },
+    {
+      "name": "isolated UI fixture renders 游戏数据",
+      "passed": true
+    },
+    {
+      "name": "isolated empty announcements show empty state",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "layouts": [
+    {
+      "width": 320,
+      "heading": {
+        "x": 42.984375,
+        "y": 235,
+        "width": 234.015625,
+        "height": 120,
+        "top": 235,
+        "right": 277,
+        "bottom": 355,
+        "left": 42.984375
+      },
+      "fontSize": "48px",
+      "hero": {
+        "x": 0,
+        "y": 65,
+        "width": 320,
+        "height": 1405.5,
+        "top": 65,
+        "right": 320,
+        "bottom": 1470.5,
+        "left": 0
+      },
+      "card": {
+        "x": 16,
+        "y": 3436.65625,
+        "width": 288,
+        "height": 345.1875,
+        "top": 3436.65625,
+        "right": 304,
+        "bottom": 3781.84375,
+        "left": 16
+      }
+    },
+    {
+      "width": 390,
+      "heading": {
+        "x": 77.984375,
+        "y": 235,
+        "width": 234.015625,
+        "height": 120,
+        "top": 235,
+        "right": 312,
+        "bottom": 355,
+        "left": 77.984375
+      },
+      "fontSize": "48px",
+      "hero": {
+        "x": 0,
+        "y": 65,
+        "width": 390,
+        "height": 1337.5,
+        "top": 65,
+        "right": 390,
+        "bottom": 1402.5,
+        "left": 0
+      },
+      "card": {
+        "x": 16,
+        "y": 3257.90625,
+        "width": 358,
+        "height": 388.9375,
+        "top": 3257.90625,
+        "right": 374,
+        "bottom": 3646.84375,
+        "left": 16
+      }
+    },
+    {
+      "width": 768,
+      "heading": {
+        "x": 208.484375,
+        "y": 215,
+        "width": 351.015625,
+        "height": 180,
+        "top": 215,
+        "right": 559.5,
+        "bottom": 395,
+        "left": 208.484375
+      },
+      "fontSize": "72px",
+      "hero": {
+        "x": 0,
+        "y": 69,
+        "width": 768,
+        "height": 1259,
+        "top": 69,
+        "right": 768,
+        "bottom": 1328,
+        "left": 0
+      },
+      "card": {
+        "x": 16,
+        "y": 3112.21875,
+        "width": 356,
+        "height": 401.59375,
+        "top": 3112.21875,
+        "right": 372,
+        "bottom": 3513.8125,
+        "left": 16
+      }
+    },
+    {
+      "width": 1440,
+      "heading": {
+        "x": 368.984375,
+        "y": 215,
+        "width": 702.03125,
+        "height": 90,
+        "top": 215,
+        "right": 1071.015625,
+        "bottom": 305,
+        "left": 368.984375
+      },
+      "fontSize": "72px",
+      "hero": {
+        "x": 0,
+        "y": 69,
+        "width": 1440,
+        "height": 1169,
+        "top": 69,
+        "right": 1440,
+        "bottom": 1238,
+        "left": 0
+      },
+      "card": {
+        "x": 96,
+        "y": 2975.5625,
+        "width": 394.65625,
+        "height": 433.75,
+        "top": 2975.5625,
+        "right": 490.65625,
+        "bottom": 3409.3125,
+        "left": 96
+      }
+    }
+  ]
+}

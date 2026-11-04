@@ -1,0 +1,15 @@
+{
+  "network": [
+    {
+      "type": "http",
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "type": "http",
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    }
+  ],
+  "errors": []
+}

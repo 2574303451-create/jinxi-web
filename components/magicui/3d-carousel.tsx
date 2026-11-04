@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { cn } from "../../lib/utils"
 import { MemberDetailModal } from "../member-detail-modal"
 
@@ -19,6 +19,7 @@ interface Carousel3DProps {
 }
 
 export function Carousel3D({ members, className }: Carousel3DProps) {
+  const reducedMotion = useReducedMotion()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [radius, setRadius] = useState(600)
@@ -62,14 +63,14 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
   }, [theta])
 
   useEffect(() => {
-    if (!isAutoPlaying) return
+    if (!isAutoPlaying || reducedMotion) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % totalMembers)
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [isAutoPlaying, totalMembers])
+  }, [isAutoPlaying, totalMembers, reducedMotion])
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + totalMembers) % totalMembers)
@@ -96,7 +97,7 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
           className="absolute inset-0 w-full h-full transition-transform duration-700 ease-out"
           style={{
             transformStyle: "preserve-3d",
-            transform: `rotateY(${angle}deg)`,
+            transform: `translateZ(-${radius}px) rotateY(${angle}deg)`,
           }}
         >
           {members.map((member, index) => {
@@ -117,6 +118,8 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
                     : "0 18px 52px rgba(0,0,0,.48)",
                 }}
                 whileHover={{ scale: isSelected ? 1.05 : 1.02 }}
+              role="button" tabIndex={0} aria-label={`查看 ${member.name} 的详情`}
+              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); handleMemberDoubleClick(member) } }}
                 onClick={() => setCurrentIndex(index)}
                 onDoubleClick={() => handleMemberDoubleClick(member)}
               >
@@ -124,6 +127,7 @@ export function Carousel3D({ members, className }: Carousel3DProps) {
                   <img
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}
+                  onError={(event) => { if (!event.currentTarget.src.endsWith("/logo.png")) event.currentTarget.src = "/logo.png" }}
                     className="w-full h-3/4 object-cover"
                     style={{ transform: "translateZ(20px)" }}
                   />

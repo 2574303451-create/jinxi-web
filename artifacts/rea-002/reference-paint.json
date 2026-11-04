@@ -1,0 +1,21 @@
+{
+  "background": [
+    248,
+    248,
+    248,
+    255
+  ],
+  "yellow": [
+    255,
+    223,
+    32,
+    255
+  ],
+  "headingBlue": [
+    21,
+    93,
+    252,
+    255
+  ],
+  "font": "Geist, \"Geist Fallback\""
+}

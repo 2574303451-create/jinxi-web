@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Image from 'next/image'
 import { useState, memo, forwardRef } from 'react'
@@ -16,6 +16,7 @@ interface OptimizedImageProps {
   sizes?: string
   quality?: number
   loading?: 'lazy' | 'eager'
+  onError?: () => void
   onClick?: () => void
   unoptimized?: boolean
 }
@@ -35,7 +36,8 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
     quality = 75, // 闄嶄綆榛樿璐ㄩ噺浠ュ噺灏戝唴瀛樺崰鐢?
     loading = 'lazy',
     onClick,
-    unoptimized = false,
+    onError,
+    unoptimized = true,
     ...props
   }, ref) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -47,7 +49,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
       const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
           <rect width="100%" height="100%" fill="#f3f4f6"/>
           <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="14">
-            鍔犺浇涓?.. 
+            加载中…
           </text>
         </svg>`
       return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
@@ -62,7 +64,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
           )}
           style={{ width, height }}
         >
-          鍥剧墖鍔犺浇澶辫触
+          图片暂不可用
         </div>
       )
     }
@@ -90,6 +92,7 @@ export const OptimizedImage = memo(forwardRef<HTMLImageElement, OptimizedImagePr
           )}
           onLoad={() => setIsLoading(false)}
           onError={() => {
+            onError?.()
             setHasError(true)
             setIsLoading(false)
           }}

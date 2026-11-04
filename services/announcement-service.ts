@@ -54,7 +54,7 @@ export async function fetchAnnouncements(): Promise<Announcement[]> {
   })
 
   if (!response.ok) {
-    const message = await parseError(response, `鍔犺浇鍏憡澶辫触 (${response.status})`)
+    const message = await parseError(response, `公告加载失败，请重试 (${response.status})`)
     throw new Error(message)
   }
 

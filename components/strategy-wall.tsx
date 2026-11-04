@@ -33,6 +33,7 @@ interface StrategyWallProps {
 export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
   const [strategies, setStrategies] = useState<Strategy[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<StrategyCategory | 'all'>('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState<number | 'all'>('all')
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -65,6 +66,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
   const loadStrategies = async (reset = false) => {
     try {
       setIsLoading(true)
+      setLoadError("")
       const offset = reset ? 0 : currentPage * PAGE_SIZE
       
       const result = await strategyAPI.getStrategies({
@@ -87,6 +89,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
       setHasMore(result.pagination.hasMore)
     } catch (error) {
       console.error('加载攻略失败:', error)
+      setLoadError("攻略暂时加载失败，请重试。")
     } finally {
       setIsLoading(false)
     }
@@ -213,9 +216,9 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} title="分享经验，一起变强" size="xl">
         <div 
-          className="h-screen bg-cover bg-center bg-fixed relative overflow-hidden"
+          className="strategy-content legacy-module relative"
           style={{ 
             backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%234f46e5" stop-opacity="0.3"/><stop offset="100%" stop-color="%231e40af" stop-opacity="0.1"/></radialGradient></defs><rect width="1000" height="1000" fill="url(%23a)"/><circle cx="200" cy="200" r="100" fill="%236366f1" fill-opacity="0.1"/><circle cx="800" cy="300" r="150" fill="%238b5cf6" fill-opacity="0.08"/><circle cx="300" cy="800" r="120" fill="%2306b6d4" fill-opacity="0.12"/><circle cx="700" cy="700" r="80" fill="%2310b981" fill-opacity="0.1"/></svg>')` 
           }}
@@ -230,10 +233,10 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
           </button>
 
           {/* 内容区域 */}
-          <div className="h-full overflow-y-auto p-6">
+          <div className="p-2 sm:p-6">
             <div className="max-w-7xl mx-auto">
               {/* 头部 */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-wrap gap-4 items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
 <BookIcon className="text-white text-2xl" />
@@ -344,6 +347,7 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                 </div>
               </div>
 
+{loadError && <div role="alert" className="module-error">{loadError}<button onClick={() => loadStrategies(true)}>重试</button></div>}
             {/* 攻略列表 */}
             {isLoading && strategies.length === 0 ? (
               <div className="flex items-center justify-center py-20">

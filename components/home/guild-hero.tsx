@@ -210,8 +210,8 @@ export function GuildHero({
               aria-hidden="true"
               focusable="false"
             >
-              <path d="M15 2 C15 20 48 9 53 24 M44 21 L53 24 L51 14" />
-              <path d="M15 2 C15 20 48 9 53 24 M44 21 L53 24 L51 14" />
+              <path d="M45 3 C13 2 8 27 34 32 M25 23 L34 32 L21 34" />
+              <path d="M45 3 C13 2 8 27 34 32 M25 23 L34 32 L21 34" />
             </svg>
           </span>
         </div>

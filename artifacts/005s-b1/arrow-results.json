@@ -1,0 +1,87 @@
+{
+  "port": 3042,
+  "rows": [
+    {
+      "width": 390,
+      "summary": {
+        "x": 16,
+        "y": 1320.5,
+        "width": 358,
+        "height": 42
+      },
+      "hero": {
+        "x": 0,
+        "y": 65,
+        "width": 390,
+        "height": 1337.5
+      },
+      "facts": {
+        "x": 16,
+        "y": 1402.5,
+        "width": 358,
+        "height": 535.359375
+      },
+      "tip": {
+        "x": 114,
+        "y": 1338.5
+      },
+      "icon": {
+        "x": 118.5,
+        "y": 1334,
+        "width": 15,
+        "height": 15
+      },
+      "gapToIcon": 4.5,
+      "collisions": 0,
+      "overflow": false,
+      "focus": {
+        "outline": "3px",
+        "z": "1"
+      },
+      "keyboard": true,
+      "touch": true,
+      "openHidesCue": true
+    },
+    {
+      "width": 320,
+      "summary": {
+        "x": 16,
+        "y": 1388.5,
+        "width": 288,
+        "height": 42
+      },
+      "hero": {
+        "x": 0,
+        "y": 65,
+        "width": 320,
+        "height": 1405.5
+      },
+      "facts": {
+        "x": 16,
+        "y": 1470.5,
+        "width": 288,
+        "height": 586.234375
+      },
+      "tip": {
+        "x": 79,
+        "y": 1406.5
+      },
+      "icon": {
+        "x": 83.5,
+        "y": 1402,
+        "width": 15,
+        "height": 15
+      },
+      "gapToIcon": 4.5,
+      "collisions": 0,
+      "overflow": false,
+      "focus": {
+        "outline": "3px",
+        "z": "1"
+      },
+      "keyboard": true,
+      "touch": true,
+      "openHidesCue": true
+    }
+  ]
+}

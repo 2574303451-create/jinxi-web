@@ -1,0 +1,28 @@
+✖ actual isolated PostgreSQL read path (0.6813ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98.9348
+
+✖ failing tests:
+
+test at tests\strategy-postgres.test.cjs:4:1
+✖ actual isolated PostgreSQL read path (0.6813ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\lilei\AppData\Local\Temp\jinxi-005s-b1-postgres\runtime.json'
+      at Object.readFileSync (node:fs:440:20)
+      at settings (E:\Recovery\jinxi-web\tests\support\postgres.cjs:4:31)
+      at connect (E:\Recovery\jinxi-web\tests\support\postgres.cjs:8:64)
+      at TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\strategy-postgres.test.cjs:5:20)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1081:25)
+      at Test.start (node:internal/test_runner/test:978:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:332:17) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\lilei\\AppData\\Local\\Temp\\jinxi-005s-b1-postgres\\runtime.json'
+  }

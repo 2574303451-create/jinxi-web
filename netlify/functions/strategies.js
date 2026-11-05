@@ -1,9 +1,10 @@
 // netlify/functions/strategies.js - 攻略墙主API
 const { neon } = require('@neondatabase/serverless');
 const { readStrategies } = require('./_shared/strategy-read');
+const { publicReadError } = require('./_shared/strategy-query');
+const { publicReadDatabaseUrl } = require('./_shared/strategy-database');
 
 exports.handler = async (event) => {
-  const sql = neon(process.env.DATABASE_URL);
   
   // 设置 CORS 头
   const headers = {
@@ -22,10 +23,17 @@ exports.handler = async (event) => {
     };
   }
 
-  try {
-    if (event.httpMethod === 'GET') {
-      return await handleGetStrategies(sql, event.queryStringParameters || {}, headers);
+  if (event.httpMethod === 'GET') {
+    try {
+      return await handleGetStrategies(neon(publicReadDatabaseUrl(process.env)), event.queryStringParameters || {}, headers);
+    } catch (error) {
+      const result = publicReadError(error);
+      return resp(result.status, result.body, { ...headers, 'Cache-Control': 'no-store' });
     }
+  }
+
+  try {
+    const sql = neon(process.env.DATABASE_URL);
 
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');
@@ -42,7 +50,7 @@ exports.handler = async (event) => {
 // 获取攻略列表
 async function handleGetStrategies(sql, params, headers) {
   const result = await readStrategies(sql, params);
-  return resp(result.status, result.body, headers);
+  return resp(result.status, result.body, { ...headers, 'Cache-Control': 'no-store' });
 }
 
 // 创建新攻略

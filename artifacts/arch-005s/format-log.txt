@@ -1,0 +1,22 @@
+artifacts/arch-005s/audit-members.cjs 38ms
+artifacts/arch-005s/avatar-css-scope.cjs 9ms
+artifacts/arch-005s/avatar-frames.cjs 20ms
+artifacts/arch-005s/browser-checks.cjs 24ms
+artifacts/arch-005s/capture-closeups.cjs 5ms
+artifacts/arch-005s/capture-protection.cjs 5ms (unchanged)
+artifacts/arch-005s/capture-visual.cjs 5ms
+artifacts/arch-005s/check-delivery.cjs 6ms
+artifacts/arch-005s/clock-activity.cjs 4ms
+artifacts/arch-005s/compare-types.cjs 3ms (unchanged)
+artifacts/arch-005s/live-public-read.cjs 5ms
+artifacts/arch-005s/measure-initial.cjs 7ms
+artifacts/arch-005s/measure.cjs 7ms
+artifacts/arch-005s/protected-components.cjs 5ms (unchanged)
+artifacts/arch-005s/redact-reference.cjs 2ms
+artifacts/arch-005s/regression-checks.cjs 8ms (unchanged)
+artifacts/arch-005s/render-review.cjs 1ms
+artifacts/arch-005s/serve.cjs 5ms
+artifacts/arch-005s/service-checks.cjs 4ms
+artifacts/arch-005s/summarize-performance.cjs 3ms
+artifacts/arch-005s/ui004-checks.cjs 21ms
+artifacts/arch-005s/reference/collect.cjs 5ms

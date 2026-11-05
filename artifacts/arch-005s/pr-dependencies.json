@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-11-05T08:46:45.099Z",
+  "prs": [
+    {
+      "number": 1,
+      "state": "open",
+      "merged": false,
+      "head": "328819a57c671b33b743d1ad3f969c0fb7917048",
+      "branch": "codex/jinxi-rea-002",
+      "base": "codex/planning-handoff-2026-11-04"
+    },
+    {
+      "number": 2,
+      "state": "open",
+      "merged": false,
+      "head": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+      "branch": "codex/jinxi-rea-003-batch-1",
+      "base": "codex/jinxi-rea-002"
+    },
+    {
+      "number": 3,
+      "state": "open",
+      "merged": false,
+      "head": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+      "branch": "codex/jinxi-ui-004-a",
+      "base": "codex/jinxi-rea-003-batch-1"
+    },
+    {
+      "number": 4,
+      "state": "open",
+      "merged": false,
+      "head": "80737413d3bb981b3a3287c603893eb6c09decf2",
+      "branch": "codex/jinxi-arch-005",
+      "base": "codex/jinxi-ui-004-a"
+    },
+    {
+      "number": 5,
+      "state": "open",
+      "merged": false,
+      "head": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+      "branch": "codex/jinxi-arch-005r",
+      "base": "codex/jinxi-arch-005"
+    }
+  ]
+}

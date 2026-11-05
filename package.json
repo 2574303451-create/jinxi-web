@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-guild-summary.cjs",
     "build": "next build",
     "build:netlify": "NODE_ENV=production next build",
     "build:optimized": "node optimize-images.js && NODE_ENV=production next build",

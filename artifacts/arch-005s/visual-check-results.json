@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "width": 1440,
+      "hover": {
+        "transform": "matrix(1, 0, 0, 1, 0, -4)",
+        "shadow": "rgb(21, 21, 21) 8px 8px 0px 0px",
+        "duration": "0.3s, 0.3s"
+      },
+      "reducedMotionTransform": "none"
+    },
+    {
+      "width": 390,
+      "touchFilterAndNavigation": true
+    }
+  ],
+  "method": "Actual baseline/current full-page captures with public snapshot. Component closeups hide only the old floating announcement button through test-only CSS to avoid covering cards; full-page images keep it. Real-source titles untouched. Hover/reduced and native touch taps checked, no online/data writes."
+}

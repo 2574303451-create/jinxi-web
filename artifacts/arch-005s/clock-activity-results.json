@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "before": "8年\n268天\n公会同行时长\n始于 2018-02-10",
+  "after": "8年\n269天\n公会同行时长\n始于 2018-02-10",
+  "activeLongTimers": 1,
+  "activeDelay": [
+    43200050
+  ],
+  "offscreenLongTimers": 0,
+  "backgroundLongTimers": 0,
+  "scope": "Actual statistic component in browser. Controlled fixed Date and explicit invocation of the captured due callback exercise UTC day rollover; actual24h passage not observed; long owned timeouts observed, no extra second interval added. Hidden state explicitly simulated with Page Visibility event, not physical phone lock. This is NOT online heartbeat/session validation."
+}

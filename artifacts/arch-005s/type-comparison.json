@@ -1,0 +1,9 @@
+{
+  "baseline": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+  "before": 28,
+  "after": 28,
+  "added": [],
+  "resolved": [],
+  "method": "Raw complete diagnostic comparison by file and TS code; ignore only line/column shifts, no union-order normalization.",
+  "passed": true
+}

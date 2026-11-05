@@ -1,0 +1,21 @@
+{
+  "results": [
+    {
+      "name": "only valid published ID/title rows accepted; draft/archived/malformed rows rejected",
+      "passed": true
+    },
+    {
+      "name": "legacy media arrays and malformed structures distinguish true/false/unknown; invalid covers rejected, zero metadata preserved",
+      "passed": true
+    },
+    {
+      "name": "concurrent consumers share one request, cache does not poll, duplicate ID and draft excluded, explicit force reload works",
+      "passed": true
+    },
+    {
+      "name": "12s abort path rejects and clears owned deadline; controlled timer test, not measured network timeout",
+      "passed": true
+    }
+  ],
+  "scope": "Actual TypeScript source transpiled in isolated VM, controlled HTTP promise/clock. Exercises projection, cache and abort logic; not a database, authentication or live API integration test."
+}

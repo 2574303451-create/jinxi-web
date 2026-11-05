@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-05T08:17:19.662Z",
+  "requests": [
+    {
+      "url": "https://jinxi-web.netlify.app/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 2862,
+      "sha256": "dceb5d6c7615c317a7c820e47aef2180d18096f56a559d42901e7deb035f1015"
+    }
+  ],
+  "writes": [],
+  "passed": true,
+  "publishedIDs": [
+    "13",
+    "5",
+    "1"
+  ],
+  "scope": "Actual live anonymous HTTPS GET, no credentials or writes, body forwarded unchanged to real local exported UI through explicit Playwright route. This proves UI compatibility with current public response, not a deployed new frontend/SQL API. Normal screenshots also replay sanitized snapshot separately. Raw body and comment/reaction identity arrays not retained."
+}

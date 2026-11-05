@@ -24,11 +24,13 @@ export type MemberAction =
   | "showcase";
 
 export function SectionHeading({
+  id,
   label,
   title,
   description,
   action,
 }: {
+  id?: string;
   label: string;
   title: string;
   description: string;
@@ -38,7 +40,7 @@ export function SectionHeading({
     <div className="guild-section-heading">
       <div>
         <span className="guild-badge">{label}</span>
-        <h2>{title}</h2>
+        <h2 id={id}>{title}</h2>
         <p>{description}</p>
       </div>
       {action}

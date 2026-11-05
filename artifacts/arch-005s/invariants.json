@@ -1,0 +1,192 @@
+{
+  "baseline": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+  "invariants": [
+    {
+      "file": "components/home/guild-hero.tsx",
+      "sha256": "d5799af782ff87186928203058fbb161c6073a0168dcf381ccc464dda5989137",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/guild-members.tsx",
+      "sha256": "455771904df0ba6e06603e05a75fb3b6038c3b62ca16eb6e27ccfde32014a965",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/message-showcase.tsx",
+      "sha256": "492b227eec43e9938521f7a3a4b9a0fe7496251251a7e4be5705db854ea7431a",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/ribbon-card.tsx",
+      "sha256": "cfc8527247635bd2f4ad86af15c10dcd74683e81a0ce2fe5deb9871e717d9ace",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/community-updates.tsx",
+      "sha256": "ba3eb337f6b61778862e15795624a3a228927eec61ff6c63999bd331b2c3fade",
+      "unchanged": true
+    },
+    {
+      "file": "hooks/use-public-messages.ts",
+      "sha256": "09848926ef3ce55379ee10e121d53147a05a12a4ff504520c6d1204fc76bae7d",
+      "unchanged": true
+    },
+    {
+      "file": "components/message-wall.tsx",
+      "sha256": "09315daa02ec178afa35386b3e7745eacf54a4a4f25958d7a0e756106a8882ef",
+      "unchanged": true
+    },
+    {
+      "file": "components/magicui/member-grid.tsx",
+      "sha256": "76cf7514d805a96d31d625e4fa016aa91937ffda23751c201e4b518b3833c6d3",
+      "unchanged": true
+    },
+    {
+      "file": "components/magicui/3d-carousel.tsx",
+      "sha256": "3a61d84bc444bae88e5207d2de321a7fa98d30420029d75789e8e2fc36d6638e",
+      "unchanged": true
+    },
+    {
+      "file": "components/member-detail-modal.tsx",
+      "sha256": "72b7727fd88bda981034fedbe812a714cce557309274ab050751b04fc25f2dda",
+      "unchanged": true
+    },
+    {
+      "file": "components/guild-time/runtime-clock.tsx",
+      "sha256": "ec4af8ae085730d57047cf639a51f20b61945a063a3f2ad1ec23f55024139a79",
+      "unchanged": true
+    },
+    {
+      "file": "components/guild-uptime-terminal.module.css",
+      "sha256": "3cab7a203f36f4ec880b68a70ad2a2f2eed1d5e06ac91ab54ae7119a67f5a752",
+      "unchanged": true
+    },
+    {
+      "file": "config/guild-terminal.config.json",
+      "sha256": "73f686a2c1c2fa547bf84b94de38fa6edb69ef55eda288b89581e636e9ea7bcb",
+      "unchanged": true
+    },
+    {
+      "file": "lib/guild-terminal-utils.ts",
+      "sha256": "1d398743461718b91b6297884438b402828d94c6980cd24b63e136a73187c3ed",
+      "unchanged": true
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "sha256": "1e1b8316d314fee13d85020546c12b5e490fecec515051aef69a39aaf1120957",
+      "unchanged": true
+    },
+    {
+      "file": "components/ui/paper.tsx",
+      "sha256": "f5143a719429a02a7e5e7b4075e7ee75958b9dfe643a55ff725906ab1dc59cd0",
+      "unchanged": true
+    },
+    {
+      "file": "styles/community-components.css",
+      "sha256": "1fff770d42c6dc3e9fc9132f1ca7e45e5184346034804fc00194ff38b9e97bf8",
+      "unchanged": true
+    },
+    {
+      "file": "styles/profile-lab.css",
+      "sha256": "860b6cffa8b6e8bdd13bbce8dc24372ddb54dcd99182182e8593cde6a9a4e5c7",
+      "unchanged": true
+    },
+    {
+      "file": "components/profile/avatar-editor.tsx",
+      "sha256": "45673c30e064ee847ee1d9226301a79640086d7251d6dcd45386dc7decca40f8",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/points.js",
+      "sha256": "395fb0c7055ed067d4292ab995fe9121a96efa5e24dcad8a44a9f619202988f5",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/auth-login.js",
+      "sha256": "bf928dec6305967013ec0ebb4b1d7640c12ff3fd02cc0a97f11ce25058c19476",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/auth-change-password.js",
+      "sha256": "4babd4bdfb98f98cb2f38c0533e953ffe2aae0f76a35344fb32eafb6bcb8e85f",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/strategies.js",
+      "sha256": "941cab638bf41c2e699cf3e35d17576a86d8c4601320fef8deeb00ef10e5fb3b",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-read.js",
+      "sha256": "ba7ab6183ea5264f9e36dd42ceb04c5ce4cd3ce6ce673f270944be5a90433f25",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/_shared/admin-password.js",
+      "sha256": "7772dcdbc08ff71a61ee410bfe009c52cc8fc54be87dd1e79c1fba2d9153b13d",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/strategy-actions.js",
+      "sha256": "4d60b26480e8b5bf4c2c04b281fffbe52410de45832fb9e5d296cf99f556691f",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/message-actions.js",
+      "sha256": "04220f4b5bbd21f014dd0c56089486299a16376aedaf9c578ae42b27d0edf953",
+      "unchanged": true
+    },
+    {
+      "file": "database-strategy-schema.sql",
+      "sha256": "f15a410d7ec1c741d1b130190c1bb801f836ad326b074b16bb3666b4197f31c4",
+      "unchanged": true
+    },
+    {
+      "file": "database-member-auth-schema.sql",
+      "sha256": "3a41755e9f47bfef117bfc7bb18b32ee2f432e7c4ab3548a4042832c973421eb",
+      "unchanged": true
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "f5f9bc67e61c03de0b1098bc3300cc0553566bc8dfc1f87d144892b9ff26b092",
+      "unchanged": true
+    },
+    {
+      "file": "next.config.mjs",
+      "sha256": "08480a017258e76b073d1e8ab93a13b96bc165012a6d13f87c311bf408a8404c",
+      "unchanged": true
+    },
+    {
+      "file": "netlify.toml",
+      "sha256": "2b55c63ed66c2b97f6a93a0bb52acf8ed7c1d6d4dc1d1ea0cabd7351eea35a06",
+      "unchanged": true
+    },
+    {
+      "file": "styles/guild-theme.css",
+      "sha256": "326e4f10e84ba9792be065245a28168240336f4c523e46218b13f8f99f9550bc",
+      "unchanged": true
+    },
+    {
+      "file": "app/page.tsx",
+      "onlyAdditions": "two imports and two new module mounts",
+      "passed": true
+    },
+    {
+      "file": "components/guild-uptime-terminal.tsx",
+      "onlyAddition": "stable aside anchor ID",
+      "passed": true
+    },
+    {
+      "file": "components/home/guild-sections.tsx",
+      "onlyAddition": "optional heading ID, no existing layout/content changes",
+      "passed": true
+    },
+    {
+      "file": "package.json",
+      "onlyAddition": "prebuild aggregate generation; dependencies and framework unchanged",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Protected source hashes, exact whitelist of homepage/anchor/heading/prebuild additions. No production API, schema, identity or visual baseline rewrites."
+}

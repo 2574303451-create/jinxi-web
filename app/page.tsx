@@ -12,6 +12,8 @@ import { GuildIntroduction, MemberActions, JoinBanner, SectionHeading, type Memb
 import { GuildManagement, GuildMembers } from "../components/home/guild-members"
 import { CommunityUpdates } from "../components/home/community-updates"
 import { MessageShowcase } from "../components/home/message-showcase"
+import { GuildFacts } from "../components/home/guild-facts"
+import { FeaturedGuides } from "../components/home/featured-guides"
 import { CyberAnnouncement } from "../components/cyber-announcement"
 import { MotionConfig } from "framer-motion"
 import dynamic from "next/dynamic"
@@ -805,10 +807,12 @@ function PageContent() {
         onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
       <main id="main-content">
         <GuildHero onJoin={handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
+        <GuildFacts />
         <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
         <GuildManagement members={managementTeam} onJoin={handleJoinClick} />
         <GuildMembers members={allMembers} onAll={() => setActivePanel("members")} onShowcase={() => setActivePanel("showcase")} />
         <MemberActions account={loginAccount} onOpen={setActivePanel} />
+        <FeaturedGuides />
         <section id="community" className="guild-shell guild-section">
           <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
           <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} />

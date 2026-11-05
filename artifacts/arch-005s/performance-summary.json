@@ -1,0 +1,218 @@
+[
+  {
+    "stage": "before",
+    "slow": false,
+    "width": 1440,
+    "samples": 3,
+    "lcp": [
+      276,
+      220,
+      252
+    ],
+    "lcpMedian": 252,
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "afterScrollCls": [
+      0,
+      0,
+      0
+    ],
+    "initialJs": 586833,
+    "initialCss": 132631,
+    "initialJsGzip": 175978,
+    "initialCssGzip": 26296,
+    "initialImageDecodedBytes": [
+      733976,
+      1014802,
+      1014802
+    ],
+    "initialImageEncodedBytes": [
+      735582,
+      1100768,
+      1100768
+    ],
+    "initialImageCounts": [
+      8,
+      12,
+      12
+    ],
+    "imageEncodedMedian": 1100768,
+    "contentGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "initialGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "fullGuideCode": 0,
+    "errors": []
+  },
+  {
+    "stage": "after",
+    "slow": false,
+    "width": 1440,
+    "samples": 3,
+    "lcp": [
+      216,
+      232,
+      292
+    ],
+    "lcpMedian": 232,
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "afterScrollCls": [
+      0,
+      0,
+      0
+    ],
+    "initialJs": 601164,
+    "initialCss": 140679,
+    "initialJsGzip": 180908,
+    "initialCssGzip": 28005,
+    "initialImageDecodedBytes": [
+      733976,
+      819350,
+      819350
+    ],
+    "initialImageEncodedBytes": [
+      735582,
+      821159,
+      904725
+    ],
+    "initialImageCounts": [
+      8,
+      9,
+      9
+    ],
+    "imageEncodedMedian": 821159,
+    "contentGuideApi": [
+      1,
+      1,
+      1
+    ],
+    "initialGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "fullGuideCode": 0,
+    "errors": []
+  },
+  {
+    "stage": "before",
+    "slow": true,
+    "width": 390,
+    "samples": 3,
+    "lcp": [
+      3172,
+      3072,
+      2840
+    ],
+    "lcpMedian": 3072,
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "afterScrollCls": [
+      0,
+      0,
+      0
+    ],
+    "initialJs": 586833,
+    "initialCss": 132631,
+    "initialJsGzip": 175978,
+    "initialCssGzip": 26296,
+    "initialImageDecodedBytes": [
+      733976,
+      733976,
+      733976
+    ],
+    "initialImageEncodedBytes": [
+      735582,
+      735582,
+      1046231
+    ],
+    "initialImageCounts": [
+      8,
+      8,
+      8
+    ],
+    "imageEncodedMedian": 735582,
+    "contentGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "initialGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "fullGuideCode": 0,
+    "errors": []
+  },
+  {
+    "stage": "after",
+    "slow": true,
+    "width": 390,
+    "samples": 3,
+    "lcp": [
+      3200,
+      3104,
+      3052
+    ],
+    "lcpMedian": 3104,
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "afterScrollCls": [
+      0,
+      0,
+      0
+    ],
+    "initialJs": 601164,
+    "initialCss": 140679,
+    "initialJsGzip": 180908,
+    "initialCssGzip": 28005,
+    "initialImageDecodedBytes": [
+      733976,
+      733976,
+      733976
+    ],
+    "initialImageEncodedBytes": [
+      1046231,
+      1046231,
+      1046231
+    ],
+    "initialImageCounts": [
+      8,
+      8,
+      8
+    ],
+    "imageEncodedMedian": 1046231,
+    "contentGuideApi": [
+      1,
+      1,
+      1
+    ],
+    "initialGuideApi": [
+      0,
+      0,
+      0
+    ],
+    "fullGuideCode": 0,
+    "errors": []
+  }
+]

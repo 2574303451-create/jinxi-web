@@ -1,0 +1,75 @@
+{
+  "fetchedAt": "2026-11-05T07:47:10.116Z",
+  "url": "https://jinxi-web.netlify.app/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0",
+  "httpStatus": 200,
+  "contentType": "application/json",
+  "legacyFullResponse": true,
+  "scope": "Public published GET only, max3 records. No author/member IDs, reaction user arrays or comment bodies retained. These are real site titles, including existing test content; not generated examples.",
+  "rows": [
+    {
+      "id": "13",
+      "title": "1",
+      "content": "测试",
+      "excerpt": "测试",
+      "author": "执手问年华",
+      "category": "PVE",
+      "difficulty": 5,
+      "status": "published",
+      "isPinned": false,
+      "imageUrl": null,
+      "mediaFiles": [],
+      "viewCount": 80,
+      "commentCount": 8,
+      "likeCount": 4,
+      "favoriteCount": 1,
+      "tags": [
+        "1"
+      ],
+      "createdAt": "2025-08-19T14:34:51.945Z",
+      "updatedAt": "2025-08-19T14:34:51.945Z"
+    },
+    {
+      "id": "5",
+      "title": "API测试攻略",
+      "content": "这是一个测试攻略，用于验证API是否正常工作。",
+      "excerpt": "这是一个测试攻略，用于验证API是否正常工作。",
+      "author": "API测试",
+      "category": "PVE",
+      "difficulty": 1,
+      "status": "published",
+      "isPinned": false,
+      "imageUrl": null,
+      "mediaFiles": [],
+      "viewCount": 43,
+      "commentCount": 0,
+      "likeCount": 2,
+      "favoriteCount": 0,
+      "tags": [
+        "测试",
+        "API"
+      ],
+      "createdAt": "2025-08-19T13:37:31.679Z",
+      "updatedAt": "2025-08-19T13:37:31.679Z"
+    },
+    {
+      "id": "1",
+      "title": "执手攻略模板",
+      "content": "执手攻略模板",
+      "excerpt": "执手攻略模板",
+      "author": "执手问年华",
+      "category": "PVE",
+      "difficulty": 1,
+      "status": "published",
+      "isPinned": false,
+      "imageUrl": null,
+      "mediaFiles": [],
+      "viewCount": 77,
+      "commentCount": 1,
+      "likeCount": 2,
+      "favoriteCount": 0,
+      "tags": [],
+      "createdAt": "2025-08-19T11:27:15.302Z",
+      "updatedAt": "2025-08-19T11:27:15.302Z"
+    }
+  ]
+}

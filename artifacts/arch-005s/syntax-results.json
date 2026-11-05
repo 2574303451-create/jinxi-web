@@ -1,0 +1,120 @@
+{
+  "checks": [
+    {
+      "file": "artifacts/arch-005s/audit-members.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/avatar-css-scope.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/avatar-frames.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/browser-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/capture-closeups.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/capture-protection.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/capture-visual.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/check-delivery.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/clock-activity.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/compare-types.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/live-public-read.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/measure-initial.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/measure.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/protected-components.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/redact-reference.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/reference/collect.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/regression-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/render-review.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/serve.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/service-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/summarize-performance.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/ui004-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "scripts/generate-guild-summary.cjs",
+      "exit": 0,
+      "error": ""
+    }
+  ],
+  "passed": true
+}

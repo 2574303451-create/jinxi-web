@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "width": 1440,
+      "id": "guild-facts",
+      "viewportHeight": 1000,
+      "rectBeforeScreenshot": {
+        "x": 96,
+        "y": 0,
+        "width": 1248,
+        "height": 414.375
+      },
+      "captureRect": {
+        "x": 96,
+        "y": 192,
+        "width": 1248,
+        "height": 414.375
+      },
+      "footerBounds": []
+    },
+    {
+      "width": 1440,
+      "id": "home-guides",
+      "viewportHeight": 1057,
+      "rectBeforeScreenshot": {
+        "x": 96,
+        "y": 0,
+        "width": 1248,
+        "height": 896.53125
+      },
+      "captureRect": {
+        "x": 96,
+        "y": 160,
+        "width": 1248,
+        "height": 896.53125
+      },
+      "footerBounds": [
+        {
+          "top": 957.9375,
+          "bottom": 990.9375
+        },
+        {
+          "top": 957.9375,
+          "bottom": 990.9375
+        },
+        {
+          "top": 957.9375,
+          "bottom": 990.9375
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "id": "guild-facts",
+      "viewportHeight": 1000,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": 0,
+        "width": 736,
+        "height": 607.265625
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 192,
+        "width": 736,
+        "height": 607.265625
+      },
+      "footerBounds": []
+    },
+    {
+      "width": 768,
+      "id": "home-guides",
+      "viewportHeight": 1620,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": 0.015625,
+        "width": 736,
+        "height": 1459.875
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 160.015625,
+        "width": 736,
+        "height": 1459.875
+      },
+      "footerBounds": [
+        {
+          "top": 969.046875,
+          "bottom": 1002.046875
+        },
+        {
+          "top": 969.046875,
+          "bottom": 1002.046875
+        },
+        {
+          "top": 1525.296875,
+          "bottom": 1558.296875
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "id": "guild-facts",
+      "viewportHeight": 1000,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": -0.5,
+        "width": 358,
+        "height": 535.359375
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 191.5,
+        "width": 358,
+        "height": 535.359375
+      },
+      "footerBounds": []
+    },
+    {
+      "width": 390,
+      "id": "home-guides",
+      "viewportHeight": 2119,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": 0.109375,
+        "width": 358,
+        "height": 1958.328125
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 161.109375,
+        "width": 358,
+        "height": 1958.328125
+      },
+      "footerBounds": [
+        {
+          "top": 996.59375,
+          "bottom": 1029.59375
+        },
+        {
+          "top": 1501.71875,
+          "bottom": 1534.71875
+        },
+        {
+          "top": 2006.84375,
+          "bottom": 2039.84375
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "id": "guild-facts",
+      "viewportHeight": 1000,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": -0.5,
+        "width": 288,
+        "height": 586.234375
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 191.5,
+        "width": 288,
+        "height": 586.234375
+      },
+      "footerBounds": []
+    },
+    {
+      "width": 320,
+      "id": "home-guides",
+      "viewportHeight": 2009,
+      "rectBeforeScreenshot": {
+        "x": 16,
+        "y": -0.28125,
+        "width": 288,
+        "height": 1848.078125
+      },
+      "captureRect": {
+        "x": 16,
+        "y": 160.71875,
+        "width": 288,
+        "height": 1848.078125
+      },
+      "footerBounds": [
+        {
+          "top": 956.828125,
+          "bottom": 989.828125
+        },
+        {
+          "top": 1430.453125,
+          "bottom": 1463.453125
+        },
+        {
+          "top": 1896.203125,
+          "bottom": 1929.203125
+        }
+      ]
+    }
+  ],
+  "method": "Element screenshot in original1000px viewport could clip below screen while retaining a blank tail in headless capture; debug-final.png retained. Final closeups increase ONLY viewport height to component height+160, align target at viewport y0, hide fixed navigation/announcement with test-only visibility CSS. Bounding boxes prove full card footers are inside capture. Product source and full-page screenshots unchanged. Widths1440/768/390/320 remain exact."
+}

@@ -1,0 +1,325 @@
+{
+  "capturedAt": "2026-11-04T23:59:41.799Z",
+  "home": {
+    "headings": [],
+    "buttons": [
+      {
+        "text": "",
+        "aria": null,
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "",
+        "aria": "打开导航",
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "给麦当留言",
+        "aria": null,
+        "class": "fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-black text-white font-bold rounded-full border-2 border-black shadow-[4px_4px_0_0_#facc15] hover:shadow-[6px_6px_0_0_#facc15] hover:-translate-y-0.5 transition-all text-sm"
+      }
+    ],
+    "animations": [],
+    "sections": [
+      {
+        "class": "",
+        "children": []
+      }
+    ]
+  },
+  "modal": {
+    "fields": [
+      {
+        "tag": "INPUT",
+        "placeholder": "随便填",
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "class": ""
+          },
+          {
+            "tag": "DIV",
+            "class": "grid grid-cols-2 gap-3"
+          },
+          {
+            "tag": "DIV",
+            "class": "flex flex-col gap-4"
+          },
+          {
+            "tag": "DIV",
+            "class": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up"
+          }
+        ]
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "微信 / 邮箱",
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "class": ""
+          },
+          {
+            "tag": "DIV",
+            "class": "grid grid-cols-2 gap-3"
+          },
+          {
+            "tag": "DIV",
+            "class": "flex flex-col gap-4"
+          },
+          {
+            "tag": "DIV",
+            "class": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up"
+          }
+        ]
+      },
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "想说什么都可以，问课程、提建议、合作都行…",
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "class": ""
+          },
+          {
+            "tag": "DIV",
+            "class": "flex flex-col gap-4"
+          },
+          {
+            "tag": "DIV",
+            "class": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up"
+          },
+          {
+            "tag": "DIV",
+            "class": "fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "aria": null,
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "",
+        "aria": "打开导航",
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "给麦当留言",
+        "aria": null,
+        "class": "fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-black text-white font-bold rounded-full border-2 border-black shadow-[4px_4px_0_0_#facc15] hover:shadow-[6px_6px_0_0_#facc15] hover:-translate-y-0.5 transition-all text-sm"
+      },
+      {
+        "text": "",
+        "aria": null,
+        "class": "w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+      },
+      {
+        "text": "复制",
+        "aria": null,
+        "class": "text-[10px] font-black text-green-700 border border-green-400 bg-white px-2 py-0.5 rounded-md hover:bg-green-100 transition-colors"
+      },
+      {
+        "text": " 发送留言",
+        "aria": null,
+        "class": "flex items-center justify-center gap-2 w-full py-3 bg-black text-white font-black rounded-xl border-2 border-black shadow-[4px_4px_0_0_#facc15] hover:shadow-[6px_6px_0_0_#facc15] hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+      }
+    ]
+  },
+  "courses": {
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "所有课程",
+        "class": "text-3xl font-bold text-foreground mb-2"
+      },
+      {
+        "tag": "H3",
+        "text": "AI 创业访谈",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学Grokbot！",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "会员直播｜每周 AI 实战",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "从0开始学AIGC！",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学DeepSeek-herness",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学workbuddy！",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "AIGC训练营",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "Codex 项目实战：3 天上线一个 AI Newsletter 产品",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学CodeX！",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学Claude Code",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学OpenClaw🦞",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "我看谁不学coze-扣子2.0进阶课",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "麦当的AI碎碎念",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      },
+      {
+        "tag": "H3",
+        "text": "《复制我的AI经验-0基础AIagent落地实操课》",
+        "class": "text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors"
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "aria": null,
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "",
+        "aria": "打开导航",
+        "class": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5"
+      },
+      {
+        "text": "全部",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full"
+      },
+      {
+        "text": "AIagent开发",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full"
+      },
+      {
+        "text": "AI基础",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full"
+      },
+      {
+        "text": "AIGC",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full"
+      },
+      {
+        "text": "AI碎碎念",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full"
+      },
+      {
+        "text": "上一页",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3"
+      },
+      {
+        "text": "1",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 bg-primary text-primary-foreground"
+      },
+      {
+        "text": "下一页",
+        "aria": null,
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3"
+      },
+      {
+        "text": "给麦当留言",
+        "aria": null,
+        "class": "fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-black text-white font-bold rounded-full border-2 border-black shadow-[4px_4px_0_0_#facc15] hover:shadow-[6px_6px_0_0_#facc15] hover:-translate-y-0.5 transition-all text-sm"
+      }
+    ],
+    "inputs": [
+      {
+        "placeholder": "搜索课程、课时、知识点，比如：中转站 / 飞书 / PPT...",
+        "type": "text",
+        "class": "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10 pr-10"
+      }
+    ],
+    "candidateCards": [
+      {
+        "tag": "DIV",
+        "class": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabindex": null,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "aspect-video overflow-hidden"
+          },
+          {
+            "tag": "DIV",
+            "class": "p-6"
+          }
+        ]
+      },
+      {
+        "tag": "DIV",
+        "class": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabindex": null,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "aspect-video overflow-hidden"
+          },
+          {
+            "tag": "DIV",
+            "class": "p-6"
+          }
+        ]
+      },
+      {
+        "tag": "DIV",
+        "class": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabindex": null,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "aspect-video overflow-hidden"
+          },
+          {
+            "tag": "DIV",
+            "class": "p-6"
+          }
+        ]
+      }
+    ]
+  }
+}

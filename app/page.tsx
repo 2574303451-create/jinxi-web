@@ -11,6 +11,7 @@ import { GuildHero } from "../components/home/guild-hero"
 import { GuildIntroduction, MemberActions, JoinBanner, SectionHeading, type MemberAction } from "../components/home/guild-sections"
 import { GuildManagement, GuildMembers } from "../components/home/guild-members"
 import { CommunityUpdates } from "../components/home/community-updates"
+import { MessageShowcase } from "../components/home/message-showcase"
 import { CyberAnnouncement } from "../components/cyber-announcement"
 import { MotionConfig } from "framer-motion"
 import dynamic from "next/dynamic"
@@ -45,6 +46,8 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 
 function PageContent() {
   const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
+  const legacyPanel = activePanel !== null && !["messages", "members", "showcase"].includes(activePanel)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -811,7 +814,8 @@ function PageContent() {
         <MemberActions account={loginAccount} onOpen={setActivePanel} />
         <section id="community" className="guild-shell guild-section">
           <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
-          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => setActivePanel("messages")} onStrategy={() => setIsStrategyWallOpen(true)} />
+          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} onStrategy={() => setIsStrategyWallOpen(true)} />
+          <MessageShowcase onOpen={(id) => { setSelectedMessageId(id || null); setActivePanel("messages") }} />
         </section>
         <section id="faq" className="guild-shell guild-section">
           <SectionHeading label="想了解更多" title="入会前，你可能想问" description="活动时间、奖励和具体安排，请以公会实际通知为准。" />
@@ -823,8 +827,8 @@ function PageContent() {
       <GuildUptimeTerminal />
       <GuildSponsorship />
       <footer className="guild-footer"><div className="guild-shell"><a className="guild-brand" href="#top"><img src="/logo.png" alt="" width={32} height={32} /><span>今夕公会</span></a><p>以战会友，彼此成就。一起记录属于我们的高光。</p><div><span>© <span id="y">2026</span> 今夕公会</span><a href="#top">回到顶部 ↑</a></div></div></footer>
-      <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl">
-        <div className="legacy-module">
+      <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl" legacy={legacyPanel}>
+        <div className={legacyPanel ? "legacy-module" : undefined}>
           <ComponentLoader>
             {activePanel === "checkin" && <CheckinWidget loggedInAccount={loginAccount} />}
             {activePanel === "points" && <div className="business-grid"><LeaderboardWidget /><PointsRankingWidget loggedInAccount={loginAccount} /></div>}
@@ -833,7 +837,7 @@ function PageContent() {
             {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
             {activePanel === "members" && <MemberGrid members={allMembers} />}
             {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
-            {activePanel === "messages" && <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} />}
+            {activePanel === "messages" && <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
           </ComponentLoader>
         </div>
       </Modal>

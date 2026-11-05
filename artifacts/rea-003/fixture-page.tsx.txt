@@ -1,0 +1,9 @@
+"use client";
+import { useState } from "react";
+import { MemberGrid } from "../../components/magicui/member-grid";
+import { Carousel3D } from "../../components/magicui/3d-carousel";
+export default function BoundaryFixture() {
+  const [mode,setMode]=useState("empty");
+  const members=mode==="empty"?[]:[{id:99999,name:"仅用于组件边界测试的较长成员昵称",role:"测试角色",image:"/missing-rea003-fixture.png",description:mode==="single"?undefined:"这是独立测试数据，不是公会真实成员。".repeat(25)}];
+  return <main className="jinxi-site guild-shell" style={{paddingBlock:24}}><h1>组件边界测试（非业务数据）</h1><div style={{display:"flex",gap:16,marginBlock:24}}>{["empty","single","long"].map(value=><button className="paper-button" key={value} onClick={()=>setMode(value)}>{value}</button>)}</div><MemberGrid members={members}/><Carousel3D members={members}/></main>;
+}

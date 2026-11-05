@@ -1,0 +1,180 @@
+{
+  "capturedAt": "2026-11-05T00:05:52.052Z",
+  "readOnly": true,
+  "observations": [
+    {
+      "width": 1440,
+      "testimonialClick": {
+        "urlBefore": "https://www.mdldm.club/",
+        "urlAfter": "https://www.mdldm.club/",
+        "textareasBefore": 0,
+        "textareasAfter": 0,
+        "dialogCount": 0
+      },
+      "testimonialDom": {
+        "self": {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "textLength": 71
+        },
+        "children": [
+          {
+            "self": {
+              "tag": "DIV",
+              "class": "flex items-center justify-between",
+              "role": null,
+              "tabIndex": null,
+              "textLength": 13
+            },
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-center gap-2",
+                "role": null,
+                "tabIndex": null,
+                "textLength": 13
+              }
+            ]
+          },
+          {
+            "self": {
+              "tag": "P",
+              "class": "text-xs text-slate-600 leading-relaxed font-medium",
+              "role": null,
+              "tabIndex": null,
+              "textLength": 58
+            },
+            "children": []
+          }
+        ]
+      },
+      "strip": {
+        "overflowX": "hidden",
+        "scrollLeft": 0,
+        "clientWidth": 840,
+        "scrollWidth": 2208
+      },
+      "homeCardClick": {
+        "url": "https://www.mdldm.club/",
+        "headings": [
+          "你好，我是麦当mdldm",
+          "不知道先学哪门课？先看清自己的 AI 基础设施缺哪一层。",
+          "他们这样说",
+          "精选推荐"
+        ],
+        "dialogCount": 0
+      },
+      "search450ms": {
+        "text": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "正在搜索..."
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105"
+      },
+      "searchFinal": {
+        "text": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "找到 0 个相关内容",
+          "没有精确命中，AI 帮你找了找",
+          "未找到精确课程，推荐相关小课",
+          "暂时没有合适推荐",
+          "没有找到与 “rea003_no_matching_course_20261105” 足够相关的小课或系列课",
+          "清除搜索"
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105",
+        "cardCount": 0
+      }
+    },
+    {
+      "width": 390,
+      "testimonialClick": {
+        "urlBefore": "https://www.mdldm.club/",
+        "urlAfter": "https://www.mdldm.club/",
+        "textareasBefore": 0,
+        "textareasAfter": 0,
+        "dialogCount": 0
+      },
+      "testimonialDom": {
+        "self": {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "textLength": 71
+        },
+        "children": [
+          {
+            "self": {
+              "tag": "DIV",
+              "class": "flex items-center justify-between",
+              "role": null,
+              "tabIndex": null,
+              "textLength": 13
+            },
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-center gap-2",
+                "role": null,
+                "tabIndex": null,
+                "textLength": 13
+              }
+            ]
+          },
+          {
+            "self": {
+              "tag": "P",
+              "class": "text-xs text-slate-600 leading-relaxed font-medium",
+              "role": null,
+              "tabIndex": null,
+              "textLength": 58
+            },
+            "children": []
+          }
+        ]
+      },
+      "strip": {
+        "overflowX": "hidden",
+        "scrollLeft": 163,
+        "clientWidth": 358,
+        "scrollWidth": 2208
+      },
+      "nativeTouchAfter": {
+        "scrollLeft": 163,
+        "scrollTop": 2616
+      },
+      "homeCardClick": {
+        "url": "https://www.mdldm.club/",
+        "headings": [
+          "你好，我是麦当mdldm",
+          "不知道先学哪门课？先看清自己的 AI 基础设施缺哪一层。",
+          "他们这样说",
+          "精选推荐"
+        ],
+        "dialogCount": 0
+      },
+      "search450ms": {
+        "text": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "正在搜索..."
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105"
+      },
+      "searchFinal": {
+        "text": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "找到 0 个相关内容",
+          "普通搜索没找到完全匹配的内容，我正在从小课标题和简介里做语义推荐。"
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105",
+        "cardCount": 0
+      }
+    }
+  ]
+}

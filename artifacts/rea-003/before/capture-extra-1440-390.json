@@ -1,0 +1,1129 @@
+{
+  "baseline": "328819a57c671b33b743d1ad3f969c0fb7917048",
+  "base": "http://127.0.0.1:3010",
+  "startedAt": "2026-11-05T00:33:36.974Z",
+  "widths": [
+    1440,
+    390
+  ],
+  "environment": "Local isolated Edge; no production API. All non-GET requests are intercepted. UI localStorage profile is not authentication.",
+  "automationCorrections": [
+    "Initial announcement locator matched both preview and modal; scoped to dialog heading.",
+    "Initial media click targeted covered image; actual visible caption bubbles to gallery card, now used. These were locator corrections, not business-code changes."
+  ],
+  "screenshots": [
+    {
+      "file": "homepage-full-1440.png",
+      "width": 1440,
+      "kind": "baseline-ui-with-synthetic-api-preview",
+      "note": "首页静态结构与原始素材；公告预览为明确合成 fixture",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "checkin-guest-1440.png",
+      "width": 1440,
+      "kind": "anonymous-ui",
+      "note": "游客提示，无签到写入",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "rankings-fixture-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "points-ranking-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "announcements-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "announcement-admin-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "sponsorship-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "faq-1440.png",
+      "width": 1440,
+      "kind": "static-baseline-ui",
+      "note": "真实 FAQ 展开，不涉及 API",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "uptime-1440.png",
+      "width": 1440,
+      "kind": "static-baseline-ui",
+      "note": "展开真实本地终端，没有查询生产档案",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "join-1440.png",
+      "width": 1440,
+      "kind": "static-baseline-ui",
+      "note": "只打开原表单，不发邮件",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "auth-1440.png",
+      "width": 1440,
+      "kind": "anonymous-ui",
+      "note": "只打开登录表单，无登录请求",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "password-1440.png",
+      "width": 1440,
+      "kind": "anonymous-ui",
+      "note": "只打开改密表单，无账号或密码写入",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "image-upload-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "仅原图像选择区域，不提交文件/留言",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "message-image-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "基线旧 fixed 图片层；仅一个原生父 dialog。截图不代表已修复 top-layer/焦点",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "admin-password-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "旧 fixed 管理员密码层。只打开，不提交密码/置顶操作",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "tasks-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "仅浏览器合成账号打开既有任务 UI，不是身份认证；进度是本地记录",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "teams-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "既有默认本地队伍示例，不是线上公会队伍/排名",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "teams-ranking-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "既有默认装备示例，不是实时游戏数据",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-pets-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-character-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-achievements-1440.png",
+      "width": 1440,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategies-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategy-submission-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "仅打开投稿，不提交；作者为本地 UI fixture",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-upload-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategy-detail-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "详情 view POST 已拦截并合成响应，未真实增加浏览量",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-gallery-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-preview-1440.png",
+      "width": 1440,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 3,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "homepage-full-390.png",
+      "width": 390,
+      "kind": "baseline-ui-with-synthetic-api-preview",
+      "note": "首页静态结构与原始素材；公告预览为明确合成 fixture",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "checkin-guest-390.png",
+      "width": 390,
+      "kind": "anonymous-ui",
+      "note": "游客提示，无签到写入",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "rankings-fixture-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "points-ranking-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "announcements-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "announcement-admin-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "sponsorship-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "faq-390.png",
+      "width": 390,
+      "kind": "static-baseline-ui",
+      "note": "真实 FAQ 展开，不涉及 API",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "uptime-390.png",
+      "width": 390,
+      "kind": "static-baseline-ui",
+      "note": "展开真实本地终端，没有查询生产档案",
+      "openDialogs": 0,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "join-390.png",
+      "width": 390,
+      "kind": "static-baseline-ui",
+      "note": "只打开原表单，不发邮件",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "auth-390.png",
+      "width": 390,
+      "kind": "anonymous-ui",
+      "note": "只打开登录表单，无登录请求",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "password-390.png",
+      "width": 390,
+      "kind": "anonymous-ui",
+      "note": "只打开改密表单，无账号或密码写入",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "image-upload-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "仅原图像选择区域，不提交文件/留言",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "message-image-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "基线旧 fixed 图片层；仅一个原生父 dialog。截图不代表已修复 top-layer/焦点",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "admin-password-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "旧 fixed 管理员密码层。只打开，不提交密码/置顶操作",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "tasks-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "仅浏览器合成账号打开既有任务 UI，不是身份认证；进度是本地记录",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "teams-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "既有默认本地队伍示例，不是线上公会队伍/排名",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "teams-ranking-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "既有默认装备示例，不是实时游戏数据",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-pets-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-character-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "game-achievements-390.png",
+      "width": 390,
+      "kind": "localStorage-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategies-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 1,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategy-submission-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "仅打开投稿，不提交；作者为本地 UI fixture",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-upload-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "strategy-detail-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "详情 view POST 已拦截并合成响应，未真实增加浏览量",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-gallery-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 2,
+      "url": "http://127.0.0.1:3010/"
+    },
+    {
+      "file": "media-preview-390.png",
+      "width": 390,
+      "kind": "synthetic-ui-fixture",
+      "note": "",
+      "openDialogs": 3,
+      "url": "http://127.0.0.1:3010/"
+    }
+  ],
+  "checks": [
+    {
+      "name": "guest-checkin-1440",
+      "result": "observed"
+    },
+    {
+      "name": "rankings-1440",
+      "result": "observed"
+    },
+    {
+      "name": "announcements-1440",
+      "result": "observed"
+    },
+    {
+      "name": "sponsorship-1440",
+      "result": "observed"
+    },
+    {
+      "name": "faq-1440",
+      "result": "observed"
+    },
+    {
+      "name": "uptime-1440",
+      "result": "observed"
+    },
+    {
+      "name": "join-1440",
+      "result": "observed"
+    },
+    {
+      "name": "auth-1440",
+      "result": "observed"
+    },
+    {
+      "name": "old-message-image-layer-1440",
+      "dom": {
+        "dialogCount": 1,
+        "imageLayers": [
+          {
+            "className": "fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4",
+            "zIndex": "50",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 960,
+              "top": 0,
+              "right": 1440,
+              "bottom": 960,
+              "left": 0
+            }
+          }
+        ],
+        "activeTag": "DIALOG",
+        "afterEscapeNativeDialogCount": 0
+      }
+    },
+    {
+      "name": "old-message-image-1440",
+      "result": "observed"
+    },
+    {
+      "name": "old-admin-password-layer-1440",
+      "dom": {
+        "dialogCount": 1,
+        "activeTag": "INPUT",
+        "passwordFocused": true,
+        "passwordInNativeDialog": true,
+        "shiftTabFocus": [
+          {
+            "tag": "BUTTON",
+            "text": "",
+            "title": null,
+            "placeholder": null
+          },
+          {
+            "tag": "BUTTON",
+            "text": "↩️ 回复",
+            "title": null,
+            "placeholder": null
+          },
+          {
+            "tag": "BUTTON",
+            "text": "😡",
+            "title": null,
+            "placeholder": null
+          }
+        ],
+        "afterEscapeNativeDialogCount": 0
+      }
+    },
+    {
+      "name": "old-admin-password-1440",
+      "result": "observed"
+    },
+    {
+      "name": "tasks-local-fixture-1440",
+      "result": "observed"
+    },
+    {
+      "name": "teams-local-fixture-1440",
+      "result": "observed"
+    },
+    {
+      "name": "game-local-fixture-1440",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-wall-1440",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-submission-1440",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-detail-1440",
+      "result": "observed"
+    },
+    {
+      "name": "guest-checkin-390",
+      "result": "observed"
+    },
+    {
+      "name": "rankings-390",
+      "result": "observed"
+    },
+    {
+      "name": "announcements-390",
+      "result": "observed"
+    },
+    {
+      "name": "sponsorship-390",
+      "result": "observed"
+    },
+    {
+      "name": "faq-390",
+      "result": "observed"
+    },
+    {
+      "name": "uptime-390",
+      "result": "observed"
+    },
+    {
+      "name": "join-390",
+      "result": "observed"
+    },
+    {
+      "name": "auth-390",
+      "result": "observed"
+    },
+    {
+      "name": "old-message-image-layer-390",
+      "dom": {
+        "dialogCount": 1,
+        "imageLayers": [
+          {
+            "className": "fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4",
+            "zIndex": "50",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 960,
+              "top": 0,
+              "right": 390,
+              "bottom": 960,
+              "left": 0
+            }
+          }
+        ],
+        "activeTag": "DIALOG",
+        "afterEscapeNativeDialogCount": 0
+      }
+    },
+    {
+      "name": "old-message-image-390",
+      "result": "observed"
+    },
+    {
+      "name": "old-admin-password-layer-390",
+      "dom": {
+        "dialogCount": 1,
+        "activeTag": "INPUT",
+        "passwordFocused": true,
+        "passwordInNativeDialog": true,
+        "shiftTabFocus": [
+          {
+            "tag": "BUTTON",
+            "text": "",
+            "title": null,
+            "placeholder": null
+          },
+          {
+            "tag": "BUTTON",
+            "text": "↩️ 回复",
+            "title": null,
+            "placeholder": null
+          },
+          {
+            "tag": "BUTTON",
+            "text": "😡",
+            "title": null,
+            "placeholder": null
+          }
+        ],
+        "afterEscapeNativeDialogCount": 0
+      }
+    },
+    {
+      "name": "old-admin-password-390",
+      "result": "observed"
+    },
+    {
+      "name": "tasks-local-fixture-390",
+      "result": "observed"
+    },
+    {
+      "name": "teams-local-fixture-390",
+      "result": "observed"
+    },
+    {
+      "name": "game-local-fixture-390",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-wall-390",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-submission-390",
+      "result": "observed"
+    },
+    {
+      "name": "strategy-detail-390",
+      "result": "observed"
+    }
+  ],
+  "errors": [],
+  "apiRequests": [
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=total&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=monthly&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=points&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=max_continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points-board",
+      "query": "?limit=30",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=total&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=monthly&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=points&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=max_continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points-board",
+      "query": "?limit=30",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/sponsorship",
+      "query": "?limit=100",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points",
+      "query": "?userId=ui-fixture-only&action=summary&limit=10",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points",
+      "query": "?userId=ui-fixture-only&action=summary&limit=10",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=total&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=monthly&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=points&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=max_continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points-board",
+      "query": "?limit=30",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=total&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=monthly&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=points&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/leaderboard",
+      "query": "?type=max_continuous&limit=50",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points-board",
+      "query": "?limit=30",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/sponsorship",
+      "query": "?limit=100",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/messages",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/announcements",
+      "query": "",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points",
+      "query": "?userId=ui-fixture-only&action=summary&limit=10",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/points",
+      "query": "?userId=ui-fixture-only&action=summary&limit=10",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/strategies",
+      "query": "?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+      "handling": "synthetic-local-only"
+    }
+  ],
+  "blockedWrites": [
+    {
+      "method": "POST",
+      "path": "/.netlify/functions/strategy-actions",
+      "action": "view",
+      "handling": "synthetic-view-response-no-network"
+    },
+    {
+      "method": "POST",
+      "path": "/.netlify/functions/strategy-actions",
+      "action": "view",
+      "handling": "synthetic-view-response-no-network"
+    }
+  ],
+  "blockedExternal": [],
+  "completedAt": "2026-11-05T00:34:42.803Z"
+}

@@ -1116,10 +1116,10 @@ button:disabled {
 }
 
 /* Existing business components retain their behavior inside the shared visual frame. */
-:is(.jinxi-dialog, .legacy-module) [class*="text-white"] {
+:is(.legacy-dialog-content, .legacy-module) [class*="text-white"] {
   color: var(--ink) !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is(
     [class*="text-white/"],
     [class*="text-gray-400"],
@@ -1127,59 +1127,59 @@ button:disabled {
   ) {
   color: var(--muted) !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="text-blue-"], [class*="text-cyan-"], [class*="text-purple-"]) {
   color: #224db1 !important;
 }
-:is(.jinxi-dialog, .legacy-module) [class*="text-yellow-"] {
+:is(.legacy-dialog-content, .legacy-module) [class*="text-yellow-"] {
   color: #775300 !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="text-red-"], [class*="text-pink-"]) {
   color: var(--danger) !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="text-green-"], [class*="text-emerald-"]) {
   color: var(--success) !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="bg-white/"], [class*="bg-slate-"], [class*="bg-gray-"]) {
   background: var(--surface-strong) !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="bg-gradient-"], [style*="linear-gradient"]) {
   background: var(--surface) !important;
   box-shadow: none !important;
 }
-:is(.jinxi-dialog, .legacy-module) [class*="gradient-text-"] {
+:is(.legacy-dialog-content, .legacy-module) [class*="gradient-text-"] {
   background: none !important;
   color: var(--ink) !important;
   -webkit-text-fill-color: currentColor;
 }
-:is(.jinxi-dialog, .legacy-module) [style*="font-family"] {
+:is(.legacy-dialog-content, .legacy-module) [style*="font-family"] {
   font-family: inherit !important;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is([class*="border-white/"], [style*="border-color"]) {
   border-color: #aab3c1 !important;
 }
-:is(.jinxi-dialog, .legacy-module) :is(button, [role="button"]) {
+:is(.legacy-dialog-content, .legacy-module) :is(button, [role="button"]) {
   min-height: 44px;
 }
-:is(.jinxi-dialog, .legacy-module) :is(input, select, textarea) {
+:is(.legacy-dialog-content, .legacy-module) :is(input, select, textarea) {
   border: 2px solid var(--line) !important;
   border-radius: 10px;
   background: white !important;
   color: var(--ink) !important;
 }
-.jinxi-dialog :is(input, select, textarea)[class*="bg-white/"] {
+.legacy-dialog-content :is(input, select, textarea)[class*="bg-white/"] {
   background: white !important;
 }
-.jinxi-dialog :is(input, textarea)::placeholder {
+.legacy-dialog-content :is(input, textarea)::placeholder {
   color: #6b7280;
   opacity: 1;
 }
-:is(.jinxi-dialog, .legacy-module)
+:is(.legacy-dialog-content, .legacy-module)
   :is(
     button[class*="bg-gradient-"],
     button[style*="linear-gradient"],
@@ -1191,22 +1191,16 @@ button:disabled {
   border-radius: 10px;
   box-shadow: 3px 3px 0 var(--line) !important;
 }
-.legacy-module .carousel-stage {
-  height: 440px;
-}
-.legacy-module .carousel-stage [class*="text-white"] {
-  color: white !important;
-}
 .legacy-module [class*="animate-"] {
   animation: none;
 }
 .legacy-module [class*="bg-gradient-"].h-full {
   background: var(--accent) !important;
 }
-.jinxi-dialog [style*="conic-gradient"] {
+.legacy-dialog-content [style*="conic-gradient"] {
   display: none;
 }
-.jinxi-dialog :is(button.bg-emerald-500, button.bg-emerald-600) {
+.legacy-dialog-content :is(button.bg-emerald-500, button.bg-emerald-600) {
   color: var(--ink) !important;
   background: var(--accent);
   border: 2px solid var(--line);
@@ -1621,9 +1615,6 @@ button:disabled {
   }
   .dialog-heading h2 {
     font-size: 18px;
-  }
-  .legacy-module .carousel-stage {
-    height: 420px;
   }
   .mobile-only {
     display: block;

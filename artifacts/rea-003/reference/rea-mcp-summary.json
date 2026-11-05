@@ -1,0 +1,411 @@
+{
+  "captures": [
+    {
+      "evidenceId": "ev_ee6728c9e2a016354a79c99e2cc955af4ce547afeaed4235ddebeac5d2593a79",
+      "parameters": {
+        "browser": {
+          "mode": "launch",
+          "executable_path": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+          "headless": true
+        },
+        "start_url": {
+          "url": "https://www.mdldm.club/",
+          "query": []
+        },
+        "environment": {
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "device_scale_factor": 1
+          },
+          "locale": "zh-CN",
+          "timezone": "Asia/Shanghai",
+          "color_scheme": "light",
+          "reduced_motion": "no-preference",
+          "service_workers": "block"
+        },
+        "actions": [
+          {
+            "step_id": "settled-public-home",
+            "action": "wait_for_timeout",
+            "duration_ms": 2500
+          }
+        ],
+        "storage": {
+          "cookies": [],
+          "local_storage": [],
+          "session_storage": []
+        },
+        "secrets": [],
+        "capture": {
+          "after_each_step": [],
+          "at_end": [
+            "dom",
+            "accessibility",
+            "url",
+            "screenshot"
+          ],
+          "events": [
+            "console",
+            "page-errors",
+            "network"
+          ],
+          "network": {
+            "request_body": false,
+            "response_body": false,
+            "header_values": false
+          },
+          "limits": {
+            "max_events": 10000,
+            "max_event_allocation_bytes": 4194304,
+            "max_total_event_allocation_bytes": 16777216,
+            "max_network_transactions": 1024,
+            "max_network_body_bytes": 65536,
+            "max_network_body_allocation_bytes": 1048576,
+            "max_network_header_allocation_bytes": 1048576,
+            "max_network_metadata_allocation_bytes": 1048576
+          }
+        },
+        "scenario_sha256": "4c290a1ba1d462cca0309bfbcd1e9ace0a1ff8abf75eeed33ce372cadf0f2d43"
+      },
+      "operation": "capture_browser_scenario",
+      "browser": {
+        "mode": "launch",
+        "process_ownership": "provider-owned",
+        "cleanup": "terminated-owned-process",
+        "product": "Chromium",
+        "version": "140.0.3485.66"
+      },
+      "completeness": {
+        "status": "incomplete",
+        "equality_eligible": false,
+        "missing_sections": [
+          "events"
+        ],
+        "truncated_sections": []
+      },
+      "steps": [
+        {
+          "step_id": "scenario_start",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "not_requested"
+            },
+            "dom": {
+              "state": "not_requested"
+            },
+            "accessibility": {
+              "state": "not_requested"
+            },
+            "url": {
+              "state": "not_requested"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        },
+        {
+          "step_id": "settled-public-home",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "captured",
+              "sha256": "8c762cedf4eab29a11ce4db5c18417208dbdf63b50a4dd382088b8730476914b",
+              "bytes": 112726
+            },
+            "dom": {
+              "state": "captured",
+              "sha256": "e291fdefbeeac591d0b4736034f28ebab0ca97554704f31c0068443b905101da",
+              "bytes": 118880
+            },
+            "accessibility": {
+              "state": "captured",
+              "sha256": "61a205e0ecd55f250e40ca92fb44fbe7f969f9ecec86eaeca1935bd951938305",
+              "bytes": 23813
+            },
+            "url": {
+              "state": "captured"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "kind": "console",
+          "level": "info",
+          "text": "Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113",
+          "url": "https://www.mdldm.club/"
+        },
+        {
+          "kind": "response",
+          "status": 401,
+          "url": "https://www.mdldm.club/api/auth/me"
+        },
+        {
+          "kind": "console",
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 401 ()",
+          "url": "https://www.mdldm.club/api/auth/me"
+        }
+      ],
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "Event sequence records provider receipt order; simultaneous browser causality is not inferred.",
+        "Network content is retained only when selected; Playwright response-body bytes are API results and are not guaranteed to match wire bytes.",
+        "Request bytes are limited to what Playwright exposes; not_exposed does not establish body absence or multipart file coverage.",
+        "Network content reads settle within 5 seconds each and the observer does not request bodies from unfinished responses.",
+        "Playwright scenario events do not expose request initiator stacks; receipt order does not prove causality.",
+        "Storage values are hashed only after declared-secret redaction.",
+        "Some network requests had not completed when capture ended; later activity is unknown.",
+        "Browser host platform and architecture were not observed."
+      ]
+    },
+    {
+      "evidenceId": "ev_7956ee42587ea4c9605c7bb26bc0746ceb1370c22e4288732cbc808a7c5446bc",
+      "parameters": {
+        "browser": {
+          "mode": "launch",
+          "executable_path": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+          "headless": true
+        },
+        "start_url": {
+          "url": "https://www.mdldm.club/",
+          "query": []
+        },
+        "environment": {
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "device_scale_factor": 1
+          },
+          "locale": "zh-CN",
+          "timezone": "Asia/Shanghai",
+          "color_scheme": "light",
+          "reduced_motion": "no-preference",
+          "service_workers": "block"
+        },
+        "actions": [
+          {
+            "step_id": "wait-public-content",
+            "action": "wait_for_timeout",
+            "duration_ms": 8000
+          },
+          {
+            "step_id": "open-public-message-form",
+            "timeout_ms": 12000,
+            "action": "click",
+            "locator": {
+              "kind": "role",
+              "role": "button",
+              "name": "给麦当留言"
+            },
+            "button": "left",
+            "click_count": 1
+          },
+          {
+            "step_id": "settled-public-message-form",
+            "action": "wait_for_timeout",
+            "duration_ms": 400
+          }
+        ],
+        "storage": {
+          "cookies": [],
+          "local_storage": [],
+          "session_storage": []
+        },
+        "secrets": [],
+        "capture": {
+          "after_each_step": [],
+          "at_end": [
+            "dom",
+            "accessibility",
+            "url",
+            "screenshot"
+          ],
+          "events": [
+            "console",
+            "page-errors",
+            "network"
+          ],
+          "network": {
+            "request_body": false,
+            "response_body": false,
+            "header_values": false
+          },
+          "limits": {
+            "max_events": 10000,
+            "max_event_allocation_bytes": 4194304,
+            "max_total_event_allocation_bytes": 16777216,
+            "max_network_transactions": 1024,
+            "max_network_body_bytes": 65536,
+            "max_network_body_allocation_bytes": 1048576,
+            "max_network_header_allocation_bytes": 1048576,
+            "max_network_metadata_allocation_bytes": 1048576
+          }
+        },
+        "scenario_sha256": "3e96e93494ac965a86389ed48bc1a2110166c5b4d90e920308e48c2dc6e7c794"
+      },
+      "operation": "capture_browser_scenario",
+      "browser": {
+        "mode": "launch",
+        "process_ownership": "provider-owned",
+        "cleanup": "terminated-owned-process",
+        "product": "Chromium",
+        "version": "140.0.3485.66"
+      },
+      "completeness": {
+        "status": "incomplete",
+        "equality_eligible": false,
+        "missing_sections": [
+          "events"
+        ],
+        "truncated_sections": []
+      },
+      "steps": [
+        {
+          "step_id": "scenario_start",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "not_requested"
+            },
+            "dom": {
+              "state": "not_requested"
+            },
+            "accessibility": {
+              "state": "not_requested"
+            },
+            "url": {
+              "state": "not_requested"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        },
+        {
+          "step_id": "wait-public-content",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "not_requested"
+            },
+            "dom": {
+              "state": "not_requested"
+            },
+            "accessibility": {
+              "state": "not_requested"
+            },
+            "url": {
+              "state": "not_requested"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        },
+        {
+          "step_id": "open-public-message-form",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "not_requested"
+            },
+            "dom": {
+              "state": "not_requested"
+            },
+            "accessibility": {
+              "state": "not_requested"
+            },
+            "url": {
+              "state": "not_requested"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        },
+        {
+          "step_id": "settled-public-message-form",
+          "status": "completed",
+          "artifactSummary": {
+            "screenshot": {
+              "state": "captured",
+              "sha256": "cd5e0d5a01646bf67ba42294c39ab334cc59b040c5fca5fcede1fdb47df5c9ca",
+              "bytes": 75634
+            },
+            "dom": {
+              "state": "captured",
+              "sha256": "be6f620958091412069ac2a1c9a04035d29c79b54908292d19ecdc2b75be6b9a",
+              "bytes": 121778
+            },
+            "accessibility": {
+              "state": "captured",
+              "sha256": "11a41ef5d2b243505d337216c1db8304a10d471f607d1e2b5642643acc221376",
+              "bytes": 23898
+            },
+            "url": {
+              "state": "captured"
+            },
+            "history": {
+              "state": "not_requested"
+            },
+            "storage": {
+              "state": "not_requested"
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "kind": "console",
+          "level": "info",
+          "text": "Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113",
+          "url": "https://www.mdldm.club/"
+        },
+        {
+          "kind": "response",
+          "status": 401,
+          "url": "https://www.mdldm.club/api/auth/me"
+        },
+        {
+          "kind": "console",
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 401 ()",
+          "url": "https://www.mdldm.club/api/auth/me"
+        }
+      ],
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "Event sequence records provider receipt order; simultaneous browser causality is not inferred.",
+        "Network content is retained only when selected; Playwright response-body bytes are API results and are not guaranteed to match wire bytes.",
+        "Request bytes are limited to what Playwright exposes; not_exposed does not establish body absence or multipart file coverage.",
+        "Network content reads settle within 5 seconds each and the observer does not request bodies from unfinished responses.",
+        "Playwright scenario events do not expose request initiator stacks; receipt order does not prove causality.",
+        "Storage values are hashed only after declared-secret redaction.",
+        "Some network requests had not completed when capture ended; later activity is unknown.",
+        "Browser host platform and architecture were not observed."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "name": "ribbon speed and sufficient copies 1440",
+      "passed": true
+    },
+    {
+      "name": "ribbon hover and focus actually stop 1440",
+      "passed": true
+    },
+    {
+      "name": "ribbon manual pause/resume 1440",
+      "passed": true
+    },
+    {
+      "name": "ribbon touch/manual browse 1440",
+      "passed": true
+    },
+    {
+      "name": "ribbon speed and sufficient copies 768",
+      "passed": true
+    },
+    {
+      "name": "ribbon hover and focus actually stop 768",
+      "passed": true
+    },
+    {
+      "name": "ribbon manual pause/resume 768",
+      "passed": true
+    },
+    {
+      "name": "ribbon touch/manual browse 768",
+      "passed": true
+    },
+    {
+      "name": "ribbon speed and sufficient copies 390",
+      "passed": true
+    },
+    {
+      "name": "ribbon hover and focus actually stop 390",
+      "passed": true
+    },
+    {
+      "name": "ribbon manual pause/resume 390",
+      "passed": true
+    },
+    {
+      "name": "ribbon touch/manual browse 390",
+      "passed": true
+    },
+    {
+      "name": "carousel genuine autoplay switches after five seconds",
+      "passed": true
+    },
+    {
+      "name": "carousel hover/focus suspend timer and detail restores pause",
+      "passed": true
+    },
+    {
+      "name": "member card hover and button pressed/focus",
+      "passed": true
+    },
+    {
+      "name": "empty grid/carousel safe 1440",
+      "passed": true
+    },
+    {
+      "name": "member image failure fallback and single slide 1440",
+      "passed": true
+    },
+    {
+      "name": "long original text remains complete and dialog no overflow 1440",
+      "passed": true
+    },
+    {
+      "name": "empty grid/carousel safe 768",
+      "passed": true
+    },
+    {
+      "name": "member image failure fallback and single slide 768",
+      "passed": true
+    },
+    {
+      "name": "long original text remains complete and dialog no overflow 768",
+      "passed": true
+    },
+    {
+      "name": "empty grid/carousel safe 390",
+      "passed": true
+    },
+    {
+      "name": "member image failure fallback and single slide 390",
+      "passed": true
+    },
+    {
+      "name": "long original text remains complete and dialog no overflow 390",
+      "passed": true
+    }
+  ],
+  "measurements": [
+    {
+      "width": 1440,
+      "delta": 26,
+      "ms": 830.1000000005588,
+      "speed": 31.321527526782912
+    },
+    {
+      "width": 768,
+      "delta": 27,
+      "ms": 826.9000000003725,
+      "speed": 32.65207401135305
+    },
+    {
+      "width": 390,
+      "delta": 26,
+      "ms": 815.5,
+      "speed": 31.882280809319436
+    }
+  ],
+  "environment": "Local Edge actual timing, native mouse/keyboard. Boundary page uses explicit synthetic component props and intercepts missing image only. No production writes."
+}

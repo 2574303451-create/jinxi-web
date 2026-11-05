@@ -1,0 +1,4234 @@
+{
+  "capturedAt": "2026-11-05T00:02:40.218Z",
+  "browser": "Edge isolated Playwright context",
+  "observations": [
+    {
+      "page": "home",
+      "width": 1440,
+      "reducedMotion": false,
+      "states": {
+        "initial": {
+          "headings": [],
+          "skeletonCount": 0
+        }
+      },
+      "section": {
+        "tag": "SECTION",
+        "classes": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 0,
+          "y": 83.75,
+          "width": 1440,
+          "height": 732.75
+        },
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "styles": {
+          "display": "block",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "1440px",
+          "height": "732.75px",
+          "maxWidth": "none",
+          "padding": "80px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.984 0.003 247.858)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px 0px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "structure": {
+        "tag": "SECTION",
+        "class": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "childCount": 1,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "container mx-auto px-4",
+            "role": null,
+            "tabIndex": null,
+            "childCount": 2,
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-end justify-between mb-8",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 3,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-300 border-2 border-black rounded-full shadow-[3px_3px_0_0_#000] text-xs font-black mb-3",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "svg",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 2
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "H2",
+                        "class": "text-3xl md:text-4xl font-black text-slate-900",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "P",
+                        "class": "text-slate-500 font-medium mt-1",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "hidden md:flex items-center gap-2 text-sm font-bold text-slate-400 bg-white border-2 border-slate-200 rounded-full px-4 py-2",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "svg",
+                        "class": {},
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "path",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "DIV",
+                "class": "flex flex-col lg:flex-row gap-6 items-stretch",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "lg:w-80 xl:w-96 shrink-0",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "h-full bg-black border-2 border-black rounded-2xl shadow-[6px_6px_0_0_#3b82f6] p-7 flex flex-col justify-between",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 2,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 4
+                          },
+                          {
+                            "tag": "A",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "flex-1 relative overflow-hidden rounded-2xl min-h-[280px] flex flex-col justify-center gap-5",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 4,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "animations": [
+        {
+          "name": "marquee-left",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2383.2110000001503,
+            "progress": 0.08511467857143394
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 1
+            }
+          ]
+        },
+        {
+          "name": "marquee-right",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2383.2110000001503,
+            "progress": 0.08511467857143394
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 1
+            }
+          ]
+        }
+      ],
+      "trackCount": 2,
+      "visibleEmptyText": null,
+      "trackDefault": {
+        "tag": "DIV",
+        "classes": "flex py-1",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 408.71649169921875,
+          "y": 347.875,
+          "width": 2208,
+          "height": 191.5
+        },
+        "scrollWidth": 2208,
+        "clientWidth": 2208,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "2208px",
+          "height": "191.5px",
+          "maxWidth": "none",
+          "padding": "4px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "matrix(1, 0, 0, 1, -95.2835, 0)",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "marquee-left",
+          "animationDuration": "28s",
+          "animationTimingFunction": "linear",
+          "animationIterationCount": "infinite",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "trackChildren": [
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 255.99993896484375
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        }
+      ],
+      "card": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 417.40216064453125,
+          "y": 351.875,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "motion": {
+        "before": {
+          "time": 15879.299999999814,
+          "transform": "matrix(1, 0, 0, 1, -97.9108, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 16553.900000000373,
+          "transform": "matrix(1, 0, 0, 1, -124.2, 0)",
+          "state": "running"
+        }
+      },
+      "hover": {
+        "before": {
+          "time": 16956.60000000056,
+          "transform": "matrix(1, 0, 0, 1, -139.97, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 17629.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -166.911, 0)",
+          "state": "running"
+        }
+      },
+      "focusableCount": 2,
+      "focus": {
+        "before": {
+          "time": 17721.60000000056,
+          "transform": "matrix(1, 0, 0, 1, -170.198, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 18394.60000000056,
+          "transform": "matrix(1, 0, 0, 1, -197.137, 0)",
+          "state": "running"
+        }
+      },
+      "cardHover": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 316.20477294921875,
+          "y": 351.875,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "horizontalContainers": [
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 840,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        },
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 840,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        }
+      ],
+      "pageOverflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "homeCardCount": 18,
+      "homeCard": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 96,
+          "y": 193.5,
+          "width": 394.65625,
+          "height": 512.734375
+        },
+        "scrollWidth": 391,
+        "clientWidth": 391,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "394.656px",
+          "height": "512.734px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardHover": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 96,
+          "y": 189.5,
+          "width": 394.65625,
+          "height": 512.734375
+        },
+        "scrollWidth": 391,
+        "clientWidth": 391,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "394.656px",
+          "height": "512.734px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardSemantics": {
+        "tag": "DIV",
+        "role": null,
+        "tabIndex": null,
+        "links": [],
+        "buttons": []
+      },
+      "messageModal": {
+        "panel": {
+          "tag": "DIV",
+          "classes": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 496,
+            "y": 197.5,
+            "width": 448,
+            "height": 505
+          },
+          "scrollWidth": 444,
+          "clientWidth": 444,
+          "styles": {
+            "display": "block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "448px",
+            "height": "505px",
+            "maxWidth": "448px",
+            "padding": "24px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "16px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "overlay": {
+          "tag": "DIV",
+          "classes": "fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900
+          },
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "styles": {
+            "display": "flex",
+            "position": "fixed",
+            "zIndex": "50",
+            "width": "1440px",
+            "height": "900px",
+            "maxWidth": "none",
+            "padding": "16px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "oklab(0 0 0 / 0.4)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "0px",
+            "borderColor": "oklch(0.92 0 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "textarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 522,
+            "y": 501.5,
+            "width": 396,
+            "height": 100
+          },
+          "scrollWidth": 392,
+          "clientWidth": 392,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "396px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "inputs": [
+          {
+            "type": "text",
+            "placeholder": "想了解什么？直接问我...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "输入你想了解的内容...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "随便填",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "微信 / 邮箱",
+            "required": false
+          }
+        ],
+        "sendDisabled": true,
+        "dialogRoleCount": 0,
+        "bodyOverflow": "visible",
+        "animation": [],
+        "focusedTextarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 522,
+            "y": 501.5,
+            "width": 396,
+            "height": 100
+          },
+          "scrollWidth": 392,
+          "clientWidth": 392,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "396px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.852 0.199 91.936) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "escapeClosed": false,
+        "closeButtonClosed": true,
+        "backdropClosed": true
+      }
+    },
+    {
+      "page": "courses",
+      "width": 1440,
+      "filterBefore": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 96,
+          "y": 269,
+          "width": 60,
+          "height": 36
+        },
+        "scrollWidth": 60,
+        "clientWidth": 60,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "60px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.1 0 0)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "filterStructure": {
+        "tag": "DIV",
+        "class": "flex flex-wrap gap-2 mb-8",
+        "buttons": [
+          {
+            "text": "全部",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIagent开发",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI基础",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIGC",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI碎碎念",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          }
+        ]
+      },
+      "card": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 96,
+          "y": 337,
+          "width": 400,
+          "height": 501.875
+        },
+        "scrollWidth": 398,
+        "clientWidth": 398,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "400px",
+          "height": "501.875px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "oklch(1 0 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "1px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countBefore": 14,
+      "cardHover": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 96,
+          "y": 337,
+          "width": 400,
+          "height": 501.875
+        },
+        "scrollWidth": 398,
+        "clientWidth": 398,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "400px",
+          "height": "501.875px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "oklch(1 0 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "1px",
+          "borderColor": "oklab(0.1 0 0 / 0.5)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "filterAfter": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 286.6875,
+          "y": 269,
+          "width": 73.265625,
+          "height": 36
+        },
+        "scrollWidth": 73,
+        "clientWidth": 73,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "73.2656px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklab(0.1 0 0 / 0.9)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countAfter": 2,
+      "emptySearch": {
+        "count": 0,
+        "visibleText": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "正在搜索..."
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105"
+      },
+      "overflow": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "containers": []
+      }
+    },
+    {
+      "page": "home",
+      "width": 768,
+      "reducedMotion": false,
+      "states": {
+        "initial": {
+          "headings": [],
+          "skeletonCount": 0
+        }
+      },
+      "section": {
+        "tag": "SECTION",
+        "classes": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 0,
+          "y": -68.5,
+          "width": 768,
+          "height": 1101.25
+        },
+        "scrollWidth": 768,
+        "clientWidth": 768,
+        "styles": {
+          "display": "block",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "768px",
+          "height": "1101.25px",
+          "maxWidth": "none",
+          "padding": "80px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.984 0.003 247.858)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px 0px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "structure": {
+        "tag": "SECTION",
+        "class": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "childCount": 1,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "container mx-auto px-4",
+            "role": null,
+            "tabIndex": null,
+            "childCount": 2,
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-end justify-between mb-8",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 3,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-300 border-2 border-black rounded-full shadow-[3px_3px_0_0_#000] text-xs font-black mb-3",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "svg",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 2
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "H2",
+                        "class": "text-3xl md:text-4xl font-black text-slate-900",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "P",
+                        "class": "text-slate-500 font-medium mt-1",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "hidden md:flex items-center gap-2 text-sm font-bold text-slate-400 bg-white border-2 border-slate-200 rounded-full px-4 py-2",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "svg",
+                        "class": {},
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "path",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "DIV",
+                "class": "flex flex-col lg:flex-row gap-6 items-stretch",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "lg:w-80 xl:w-96 shrink-0",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "h-full bg-black border-2 border-black rounded-2xl shadow-[6px_6px_0_0_#3b82f6] p-7 flex flex-col justify-between",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 2,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 4
+                          },
+                          {
+                            "tag": "A",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "flex-1 relative overflow-hidden rounded-2xl min-h-[280px] flex flex-col justify-center gap-5",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 4,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "animations": [
+        {
+          "name": "marquee-left",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2466.5080000005446,
+            "progress": 0.08808957142859088
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 1
+            }
+          ]
+        },
+        {
+          "name": "marquee-right",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2466.5080000005446,
+            "progress": 0.08808957142859088
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 1
+            }
+          ]
+        }
+      ],
+      "trackCount": 2,
+      "visibleEmptyText": null,
+      "trackDefault": {
+        "tag": "DIV",
+        "classes": "flex py-1",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -81.90807342529297,
+          "y": 606.25,
+          "width": 2208,
+          "height": 191.5
+        },
+        "scrollWidth": 2208,
+        "clientWidth": 2208,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "2208px",
+          "height": "191.5px",
+          "maxWidth": "none",
+          "padding": "4px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "matrix(1, 0, 0, 1, -97.9081, 0)",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "marquee-left",
+          "animationDuration": "28s",
+          "animationTimingFunction": "linear",
+          "animationIterationCount": "infinite",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "trackChildren": [
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        }
+      ],
+      "card": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -73.22499084472656,
+          "y": 610.25,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "motion": {
+        "before": {
+          "time": 13498.099999999627,
+          "transform": "matrix(1, 0, 0, 1, -99.8821, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 14174.5,
+          "transform": "matrix(1, 0, 0, 1, -126.821, 0)",
+          "state": "running"
+        }
+      },
+      "hover": {
+        "before": {
+          "time": 14575.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -142.6, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 15250.599999999627,
+          "transform": "matrix(1, 0, 0, 1, -168.882, 0)",
+          "state": "running"
+        }
+      },
+      "focusableCount": 2,
+      "focus": {
+        "before": {
+          "time": 15315.099999999627,
+          "transform": "matrix(1, 0, 0, 1, -171.509, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 16009,
+          "transform": "matrix(1, 0, 0, 1, -199.12, 0)",
+          "state": "running"
+        }
+      },
+      "cardHover": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -173.77700805664062,
+          "y": 610.25,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "horizontalContainers": [
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 736,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        },
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 736,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        }
+      ],
+      "pageOverflow": {
+        "innerWidth": 768,
+        "scrollWidth": 768
+      },
+      "homeCardCount": 18,
+      "homeCard": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 205.75,
+          "width": 352,
+          "height": 488.75
+        },
+        "scrollWidth": 348,
+        "clientWidth": 348,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "352px",
+          "height": "488.75px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardHover": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 201.75,
+          "width": 352,
+          "height": 488.75
+        },
+        "scrollWidth": 348,
+        "clientWidth": 348,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "352px",
+          "height": "488.75px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardSemantics": {
+        "tag": "DIV",
+        "role": null,
+        "tabIndex": null,
+        "links": [],
+        "buttons": []
+      },
+      "messageModal": {
+        "panel": {
+          "tag": "DIV",
+          "classes": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 160,
+            "y": 197.5,
+            "width": 448,
+            "height": 505
+          },
+          "scrollWidth": 444,
+          "clientWidth": 444,
+          "styles": {
+            "display": "block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "448px",
+            "height": "505px",
+            "maxWidth": "448px",
+            "padding": "24px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "16px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "overlay": {
+          "tag": "DIV",
+          "classes": "fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 768,
+            "height": 900
+          },
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "styles": {
+            "display": "flex",
+            "position": "fixed",
+            "zIndex": "50",
+            "width": "768px",
+            "height": "900px",
+            "maxWidth": "none",
+            "padding": "16px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "oklab(0 0 0 / 0.4)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "0px",
+            "borderColor": "oklch(0.92 0 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "textarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 186,
+            "y": 501.5,
+            "width": 396,
+            "height": 100
+          },
+          "scrollWidth": 392,
+          "clientWidth": 392,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "396px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "inputs": [
+          {
+            "type": "text",
+            "placeholder": "想了解什么？直接问我...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "输入你想了解的内容...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "随便填",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "微信 / 邮箱",
+            "required": false
+          }
+        ],
+        "sendDisabled": true,
+        "dialogRoleCount": 0,
+        "bodyOverflow": "visible",
+        "animation": [],
+        "focusedTextarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 186,
+            "y": 501.5,
+            "width": 396,
+            "height": 100
+          },
+          "scrollWidth": 392,
+          "clientWidth": 392,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "396px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.852 0.199 91.936) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "escapeClosed": false,
+        "closeButtonClosed": true,
+        "backdropClosed": true
+      }
+    },
+    {
+      "page": "courses",
+      "width": 768,
+      "filterBefore": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 265,
+          "width": 60,
+          "height": 36
+        },
+        "scrollWidth": 60,
+        "clientWidth": 60,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "60px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.1 0 0)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "filterStructure": {
+        "tag": "DIV",
+        "class": "flex flex-wrap gap-2 mb-8",
+        "buttons": [
+          {
+            "text": "全部",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIagent开发",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI基础",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIGC",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI碎碎念",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          }
+        ]
+      },
+      "card": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 333,
+          "width": 356,
+          "height": 477.125
+        },
+        "scrollWidth": 354,
+        "clientWidth": 354,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "356px",
+          "height": "477.125px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "oklch(1 0 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "1px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countBefore": 14,
+      "filterAfter": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 206.6875,
+          "y": 265,
+          "width": 73.265625,
+          "height": 36
+        },
+        "scrollWidth": 73,
+        "clientWidth": 73,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "73.2656px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklab(0.1 0 0 / 0.9)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countAfter": 2,
+      "emptySearch": {
+        "count": 0,
+        "visibleText": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "正在搜索..."
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105"
+      },
+      "overflow": {
+        "viewport": 768,
+        "pageWidth": 768,
+        "containers": []
+      }
+    },
+    {
+      "page": "home",
+      "width": 390,
+      "reducedMotion": false,
+      "states": {
+        "initial": {
+          "headings": [],
+          "skeletonCount": 0
+        }
+      },
+      "section": {
+        "tag": "SECTION",
+        "classes": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 0,
+          "y": -66.25,
+          "width": 390,
+          "height": 1097.25
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "styles": {
+          "display": "block",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "390px",
+          "height": "1097.25px",
+          "maxWidth": "none",
+          "padding": "80px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.984 0.003 247.858)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px 0px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "structure": {
+        "tag": "SECTION",
+        "class": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "childCount": 1,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "container mx-auto px-4",
+            "role": null,
+            "tabIndex": null,
+            "childCount": 2,
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-end justify-between mb-8",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 3,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-300 border-2 border-black rounded-full shadow-[3px_3px_0_0_#000] text-xs font-black mb-3",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "svg",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 2
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "H2",
+                        "class": "text-3xl md:text-4xl font-black text-slate-900",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "P",
+                        "class": "text-slate-500 font-medium mt-1",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "hidden md:flex items-center gap-2 text-sm font-bold text-slate-400 bg-white border-2 border-slate-200 rounded-full px-4 py-2",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "svg",
+                        "class": {},
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "path",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "DIV",
+                "class": "flex flex-col lg:flex-row gap-6 items-stretch",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "lg:w-80 xl:w-96 shrink-0",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "h-full bg-black border-2 border-black rounded-2xl shadow-[6px_6px_0_0_#3b82f6] p-7 flex flex-col justify-between",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 2,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 4
+                          },
+                          {
+                            "tag": "A",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "flex-1 relative overflow-hidden rounded-2xl min-h-[280px] flex flex-col justify-center gap-5",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 4,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "animations": [
+        {
+          "name": "marquee-left",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2449.940999999697,
+            "progress": 0.08749789285713204
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 1
+            }
+          ]
+        },
+        {
+          "name": "marquee-right",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2449.940999999697,
+            "progress": 0.08749789285713204
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 1
+            }
+          ]
+        }
+      ],
+      "trackCount": 2,
+      "visibleEmptyText": null,
+      "trackDefault": {
+        "tag": "DIV",
+        "classes": "flex py-1",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -81.25479125976562,
+          "y": 604.5,
+          "width": 2208,
+          "height": 191.5
+        },
+        "scrollWidth": 2208,
+        "clientWidth": 2208,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "2208px",
+          "height": "191.5px",
+          "maxWidth": "none",
+          "padding": "4px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "matrix(1, 0, 0, 1, -97.2548, 0)",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "marquee-left",
+          "animationDuration": "28s",
+          "animationTimingFunction": "linear",
+          "animationIterationCount": "infinite",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "trackChildren": [
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256.0000305175781
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 255.9998779296875
+        }
+      ],
+      "card": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -71.91458892822266,
+          "y": 608.5,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "motion": {
+        "before": {
+          "time": 13779.599999999627,
+          "transform": "matrix(1, 0, 0, 1, -98.5717, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 14445.599999999627,
+          "transform": "matrix(1, 0, 0, 1, -124.856, 0)",
+          "state": "running"
+        }
+      },
+      "hover": {
+        "before": {
+          "time": 14834.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -139.977, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 15501.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -166.255, 0)",
+          "state": "running"
+        }
+      },
+      "focusableCount": 2,
+      "focus": {
+        "before": {
+          "time": 15576.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -169.539, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 16253.299999999814,
+          "transform": "matrix(1, 0, 0, 1, -195.826, 0)",
+          "state": "running"
+        }
+      },
+      "cardHover": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -170.47811889648438,
+          "y": 608.5,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "horizontalContainers": [
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 358,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        },
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 358,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        }
+      ],
+      "pageOverflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "homeCardCount": 18,
+      "homeCard": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 410,
+          "width": 358,
+          "height": 492.125
+        },
+        "scrollWidth": 354,
+        "clientWidth": 354,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "358px",
+          "height": "492.125px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardHover": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 410,
+          "width": 358,
+          "height": 492.125
+        },
+        "scrollWidth": 354,
+        "clientWidth": 354,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "358px",
+          "height": "492.125px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "homeCardSemantics": {
+        "tag": "DIV",
+        "role": null,
+        "tabIndex": null,
+        "links": [],
+        "buttons": []
+      },
+      "messageModal": {
+        "panel": {
+          "tag": "DIV",
+          "classes": "w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[8px_8px_0_0_#000] p-6 animate-slide-in-up",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 16,
+            "y": 379,
+            "width": 358,
+            "height": 505
+          },
+          "scrollWidth": 354,
+          "clientWidth": 354,
+          "styles": {
+            "display": "block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "358px",
+            "height": "505px",
+            "maxWidth": "448px",
+            "padding": "24px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "16px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "overlay": {
+          "tag": "DIV",
+          "classes": "fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 900
+          },
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "styles": {
+            "display": "flex",
+            "position": "fixed",
+            "zIndex": "50",
+            "width": "390px",
+            "height": "900px",
+            "maxWidth": "none",
+            "padding": "16px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "oklab(0 0 0 / 0.4)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "0px",
+            "borderColor": "oklch(0.92 0 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px",
+            "overflowX": "visible",
+            "overflowY": "visible",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "textarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 42,
+            "y": 683,
+            "width": 306,
+            "height": 100
+          },
+          "scrollWidth": 302,
+          "clientWidth": 302,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "306px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "inputs": [
+          {
+            "type": "text",
+            "placeholder": "想了解什么？直接问我...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "输入你想了解的内容...",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "随便填",
+            "required": false
+          },
+          {
+            "type": "text",
+            "placeholder": "微信 / 邮箱",
+            "required": false
+          }
+        ],
+        "sendDisabled": true,
+        "dialogRoleCount": 0,
+        "bodyOverflow": "visible",
+        "animation": [],
+        "focusedTextarea": {
+          "tag": "TEXTAREA",
+          "classes": "w-full px-3 py-2 border-2 border-black rounded-lg text-sm font-medium resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400",
+          "role": null,
+          "tabIndex": null,
+          "ariaLabel": null,
+          "ariaModal": null,
+          "rect": {
+            "x": 42,
+            "y": 683,
+            "width": 306,
+            "height": 100
+          },
+          "scrollWidth": 302,
+          "clientWidth": 302,
+          "styles": {
+            "display": "inline-block",
+            "position": "static",
+            "zIndex": "auto",
+            "width": "306px",
+            "height": "100px",
+            "maxWidth": "none",
+            "padding": "8px 12px",
+            "gap": "normal",
+            "margin": "0px",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "color": "oklch(0.1 0 0)",
+            "borderWidth": "2px",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.852 0.199 91.936) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "fontFamily": "Geist, \"Geist Fallback\"",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lineHeight": "20px",
+            "overflowX": "auto",
+            "overflowY": "auto",
+            "transform": "none",
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionTimingFunction": "ease",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationTimingFunction": "ease",
+            "animationIterationCount": "1",
+            "animationPlayState": "running",
+            "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+            "touchAction": "auto"
+          }
+        },
+        "escapeClosed": false,
+        "closeButtonClosed": true,
+        "backdropClosed": true
+      },
+      "mobileNavigation": {
+        "buttonLabel": "关闭导航",
+        "visibleLinks": [
+          {
+            "text": "麦当mdldm的知识站",
+            "href": "/"
+          },
+          {
+            "text": "",
+            "href": "/updates"
+          },
+          {
+            "text": "课程",
+            "href": "/courses"
+          },
+          {
+            "text": "直播回放",
+            "href": "/live-replay"
+          },
+          {
+            "text": "学习先看路径地图",
+            "href": "/roadmap"
+          },
+          {
+            "text": "项目",
+            "href": "/projects"
+          },
+          {
+            "text": "工作空间",
+            "href": "/docs"
+          },
+          {
+            "text": "AI 工具NEW",
+            "href": "/ai-tools"
+          },
+          {
+            "text": "登录",
+            "href": "/login"
+          },
+          {
+            "text": "注册",
+            "href": "/signup"
+          }
+        ]
+      }
+    },
+    {
+      "page": "courses",
+      "width": 390,
+      "filterBefore": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 265,
+          "width": 60,
+          "height": 36
+        },
+        "scrollWidth": 60,
+        "clientWidth": 60,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "60px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.1 0 0)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "filterStructure": {
+        "tag": "DIV",
+        "class": "flex flex-wrap gap-2 mb-8",
+        "buttons": [
+          {
+            "text": "全部",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIagent开发",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI基础",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AIGC",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          },
+          {
+            "text": "AI碎碎念",
+            "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+            "ariaPressed": null
+          }
+        ]
+      },
+      "card": {
+        "tag": "DIV",
+        "classes": "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 16,
+          "y": 377,
+          "width": 358,
+          "height": 478.25
+        },
+        "scrollWidth": 356,
+        "clientWidth": 356,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "358px",
+          "height": "478.25px",
+          "maxWidth": "none",
+          "padding": "24px 0px",
+          "gap": "24px",
+          "margin": "0px",
+          "backgroundColor": "oklch(1 0 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "1px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "hidden",
+          "overflowY": "hidden",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.3s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countBefore": 14,
+      "filterAfter": {
+        "tag": "BUTTON",
+        "classes": "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-full",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 206.6875,
+          "y": 265,
+          "width": 73.265625,
+          "height": 36
+        },
+        "scrollWidth": 73,
+        "clientWidth": 73,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "73.2656px",
+          "height": "36px",
+          "maxWidth": "none",
+          "padding": "8px 16px",
+          "gap": "8px",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.1 0 0)",
+          "color": "oklch(1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "3.35544e+07px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0.15s",
+          "transitionTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "countAfter": 2,
+      "emptySearch": {
+        "count": 0,
+        "visibleText": [
+          "搜索课程内容",
+          "搜索会同时匹配系列课、小课标题和小课简介，帮你直达具体内容",
+          "普通搜索没找到完全匹配的内容，我正在从小课标题和简介里做语义推荐。"
+        ],
+        "url": "https://www.mdldm.club/courses?q=rea003_no_matching_course_20261105"
+      },
+      "overflow": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "containers": []
+      }
+    },
+    {
+      "page": "home",
+      "width": 390,
+      "reducedMotion": true,
+      "states": {
+        "initial": {
+          "headings": [],
+          "skeletonCount": 0
+        }
+      },
+      "section": {
+        "tag": "SECTION",
+        "classes": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": 0,
+          "y": -66.25,
+          "width": 390,
+          "height": 1097.25
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "styles": {
+          "display": "block",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "390px",
+          "height": "1097.25px",
+          "maxWidth": "none",
+          "padding": "80px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "oklch(0.984 0.003 247.858)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px 0px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "structure": {
+        "tag": "SECTION",
+        "class": "py-20 bg-slate-50 border-y-2 border-black",
+        "role": null,
+        "tabIndex": null,
+        "childCount": 1,
+        "children": [
+          {
+            "tag": "DIV",
+            "class": "container mx-auto px-4",
+            "role": null,
+            "tabIndex": null,
+            "childCount": 2,
+            "children": [
+              {
+                "tag": "DIV",
+                "class": "flex items-end justify-between mb-8",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 3,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-300 border-2 border-black rounded-full shadow-[3px_3px_0_0_#000] text-xs font-black mb-3",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "svg",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 2
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "H2",
+                        "class": "text-3xl md:text-4xl font-black text-slate-900",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "P",
+                        "class": "text-slate-500 font-medium mt-1",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "hidden md:flex items-center gap-2 text-sm font-bold text-slate-400 bg-white border-2 border-slate-200 rounded-full px-4 py-2",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "svg",
+                        "class": {},
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "path",
+                            "class": {},
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "DIV",
+                "class": "flex flex-col lg:flex-row gap-6 items-stretch",
+                "role": null,
+                "tabIndex": null,
+                "childCount": 2,
+                "children": [
+                  {
+                    "tag": "DIV",
+                    "class": "lg:w-80 xl:w-96 shrink-0",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 1,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "h-full bg-black border-2 border-black rounded-2xl shadow-[6px_6px_0_0_#3b82f6] p-7 flex flex-col justify-between",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 2,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 4
+                          },
+                          {
+                            "tag": "A",
+                            "class": "",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "DIV",
+                    "class": "flex-1 relative overflow-hidden rounded-2xl min-h-[280px] flex flex-col justify-center gap-5",
+                    "role": null,
+                    "tabIndex": null,
+                    "childCount": 4,
+                    "children": [
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-slate-50 to-transparent",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 0,
+                        "children": []
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "DIV",
+                        "class": "overflow-hidden",
+                        "role": null,
+                        "tabIndex": null,
+                        "childCount": 1,
+                        "children": [
+                          {
+                            "tag": "DIV",
+                            "class": "flex py-1",
+                            "role": null,
+                            "tabIndex": null,
+                            "childCount": 8
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "animations": [
+        {
+          "name": "marquee-left",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2283.1930000003167,
+            "progress": 0.08154260714286846
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 1
+            }
+          ]
+        },
+        {
+          "name": "marquee-right",
+          "target": "flex py-1",
+          "timing": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null
+          },
+          "computed": {
+            "delay": 0,
+            "direction": "normal",
+            "duration": 28000,
+            "easing": "linear",
+            "endDelay": 0,
+            "fill": "none",
+            "iterationStart": 0,
+            "iterations": null,
+            "activeDuration": null,
+            "currentIteration": 0,
+            "endTime": null,
+            "localTime": 2283.1930000003167,
+            "progress": 0.08154260714286846
+          },
+          "keyframes": [
+            {
+              "offset": 0,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(-50%)",
+              "computedOffset": 0
+            },
+            {
+              "offset": 1,
+              "easing": "linear",
+              "composite": "auto",
+              "transform": "translateX(0px)",
+              "computedOffset": 1
+            }
+          ]
+        }
+      ],
+      "trackCount": 2,
+      "visibleEmptyText": null,
+      "trackDefault": {
+        "tag": "DIV",
+        "classes": "flex py-1",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -74.68283081054688,
+          "y": 604.5,
+          "width": 2208,
+          "height": 191.5
+        },
+        "scrollWidth": 2208,
+        "clientWidth": 2208,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "2208px",
+          "height": "191.5px",
+          "maxWidth": "none",
+          "padding": "4px 0px",
+          "gap": "normal",
+          "margin": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "0px",
+          "borderColor": "oklch(0.92 0 0)",
+          "borderRadius": "0px",
+          "boxShadow": "none",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "matrix(1, 0, 0, 1, -90.6828, 0)",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "marquee-left",
+          "animationDuration": "28s",
+          "animationTimingFunction": "linear",
+          "animationIterationCount": "infinite",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "trackChildren": [
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 255.99996948242188
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        },
+        {
+          "tag": "DIV",
+          "class": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+          "role": null,
+          "tabIndex": null,
+          "width": 256
+        }
+      ],
+      "card": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -65.99581146240234,
+          "y": 608.5,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "motion": {
+        "before": {
+          "time": 10244.700000000186,
+          "transform": "matrix(1, 0, 0, 1, -92.6529, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 10909,
+          "transform": "matrix(1, 0, 0, 1, -118.283, 0)",
+          "state": "running"
+        }
+      },
+      "hover": {
+        "before": {
+          "time": 11297.799999999814,
+          "transform": "matrix(1, 0, 0, 1, -134.054, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 11968.599999999627,
+          "transform": "matrix(1, 0, 0, 1, -160.337, 0)",
+          "state": "running"
+        }
+      },
+      "focusableCount": 2,
+      "focus": {
+        "before": {
+          "time": 12054.399999999441,
+          "transform": "matrix(1, 0, 0, 1, -163.63, 0)",
+          "state": "running"
+        },
+        "after": {
+          "time": 12743.200000000186,
+          "transform": "matrix(1, 0, 0, 1, -190.563, 0)",
+          "state": "running"
+        }
+      },
+      "cardHover": {
+        "tag": "DIV",
+        "classes": "group w-64 shrink-0 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0_0_#000] p-4 flex flex-col gap-2.5 mx-2.5",
+        "role": null,
+        "tabIndex": null,
+        "ariaLabel": null,
+        "ariaModal": null,
+        "rect": {
+          "x": -165.2204132080078,
+          "y": 608.5,
+          "width": 256,
+          "height": 183.5
+        },
+        "scrollWidth": 252,
+        "clientWidth": 252,
+        "styles": {
+          "display": "flex",
+          "position": "static",
+          "zIndex": "auto",
+          "width": "256px",
+          "height": "183.5px",
+          "maxWidth": "none",
+          "padding": "16px",
+          "gap": "10px",
+          "margin": "0px 10px",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "oklch(0.1 0 0)",
+          "borderWidth": "2px",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderRadius": "14px",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 3px 3px 0px 0px",
+          "fontFamily": "Geist, \"Geist Fallback\"",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "overflowX": "visible",
+          "overflowY": "visible",
+          "transform": "none",
+          "transitionProperty": "all",
+          "transitionDuration": "0s",
+          "transitionTimingFunction": "ease",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationTimingFunction": "ease",
+          "animationIterationCount": "1",
+          "animationPlayState": "running",
+          "outline": "oklab(0.2 0 0 / 0.5) none 0px",
+          "touchAction": "auto"
+        }
+      },
+      "horizontalContainers": [
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 358,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        },
+        {
+          "class": "overflow-hidden",
+          "clientWidth": 358,
+          "scrollWidth": 2208,
+          "overflowX": "hidden",
+          "touchAction": "auto"
+        }
+      ],
+      "pageOverflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      }
+    }
+  ],
+  "network": [
+    {
+      "width": 1440,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 1440,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 768,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 768,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 390,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 390,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    },
+    {
+      "width": 390,
+      "url": "https://www.mdldm.club/api/auth/me",
+      "status": 401
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    {
+      "width": 1440,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 1440,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 768,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 768,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 390,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 390,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    },
+    {
+      "width": 390,
+      "text": "Failed to load resource: the server responded with a status of 401 ()"
+    }
+  ],
+  "browserVersion": "140.0.3485.66"
+}

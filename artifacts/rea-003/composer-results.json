@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "name": "default composer layout 1440",
+      "passed": true,
+      "width": 1440,
+      "open": true,
+      "formDisplay": "flex",
+      "formHeight": 758.96875,
+      "formRects": 1
+    },
+    {
+      "name": "default composer layout 768",
+      "passed": true,
+      "width": 768,
+      "open": false,
+      "formDisplay": "none",
+      "formHeight": 0,
+      "formRects": 0
+    },
+    {
+      "name": "native keyboard open and click close 768",
+      "passed": true
+    },
+    {
+      "name": "default composer layout 390",
+      "passed": true,
+      "width": 390,
+      "open": false,
+      "formDisplay": "none",
+      "formHeight": 0,
+      "formRects": 0
+    },
+    {
+      "name": "native keyboard open and click close 390",
+      "passed": true
+    },
+    {
+      "name": "cross-breakpoint composer remains reachable",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

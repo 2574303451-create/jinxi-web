@@ -1,0 +1,10 @@
+{
+  "baseline": "328819a57c671b33b743d1ad3f969c0fb7917048",
+  "widths": [
+    1440,
+    768,
+    390
+  ],
+  "environment": "Local Edge, intercepted synthetic UI records only; no database writes.",
+  "errors": []
+}

@@ -1,0 +1,236 @@
+{
+  "base": "http://127.0.0.1:3005",
+  "environment": "Local Edge. UI fixture records explicitly synthetic. All POST requests intercepted into disposable memory; real authentication, server authorization and database writes NOT verified.",
+  "results": [
+    {
+      "name": "homepage/anchors/overflow 1440",
+      "passed": true
+    },
+    {
+      "name": "showcase real IDs/one accessible copy/reduced-motion 1440",
+      "passed": true
+    },
+    {
+      "name": "showcase click positions correct message and focus 1440",
+      "passed": true
+    },
+    {
+      "name": "wall uses direct semantic styles 1440",
+      "passed": true
+    },
+    {
+      "name": "image nested dialog trap/Escape/focus 1440",
+      "passed": true
+    },
+    {
+      "name": "explicit empty no invented records 1440",
+      "passed": true
+    },
+    {
+      "name": "explicit error no invented records 1440",
+      "passed": true
+    },
+    {
+      "name": "explicit loading no invented records 1440",
+      "passed": true
+    },
+    {
+      "name": "member filters/load more 1440",
+      "passed": true
+    },
+    {
+      "name": "directory nested detail close restores card 1440",
+      "passed": true
+    },
+    {
+      "name": "carousel controls/keyboard/visible detail 1440",
+      "passed": true
+    },
+    {
+      "name": "carousel touch next 1440",
+      "passed": true
+    },
+    {
+      "name": "homepage/anchors/overflow 768",
+      "passed": true
+    },
+    {
+      "name": "showcase real IDs/one accessible copy/reduced-motion 768",
+      "passed": true
+    },
+    {
+      "name": "showcase click positions correct message and focus 768",
+      "passed": true
+    },
+    {
+      "name": "wall uses direct semantic styles 768",
+      "passed": true
+    },
+    {
+      "name": "image nested dialog trap/Escape/focus 768",
+      "passed": true
+    },
+    {
+      "name": "explicit empty no invented records 768",
+      "passed": true
+    },
+    {
+      "name": "explicit error no invented records 768",
+      "passed": true
+    },
+    {
+      "name": "explicit loading no invented records 768",
+      "passed": true
+    },
+    {
+      "name": "member filters/load more 768",
+      "passed": true
+    },
+    {
+      "name": "directory nested detail close restores card 768",
+      "passed": true
+    },
+    {
+      "name": "carousel controls/keyboard/visible detail 768",
+      "passed": true
+    },
+    {
+      "name": "carousel touch next 768",
+      "passed": true
+    },
+    {
+      "name": "homepage/anchors/overflow 390",
+      "passed": true
+    },
+    {
+      "name": "showcase real IDs/one accessible copy/reduced-motion 390",
+      "passed": true
+    },
+    {
+      "name": "showcase click positions correct message and focus 390",
+      "passed": true
+    },
+    {
+      "name": "wall uses direct semantic styles 390",
+      "passed": true
+    },
+    {
+      "name": "image nested dialog trap/Escape/focus 390",
+      "passed": true
+    },
+    {
+      "name": "explicit empty no invented records 390",
+      "passed": true
+    },
+    {
+      "name": "explicit error no invented records 390",
+      "passed": true
+    },
+    {
+      "name": "explicit loading no invented records 390",
+      "passed": true
+    },
+    {
+      "name": "member filters/load more 390",
+      "passed": true
+    },
+    {
+      "name": "directory nested detail close restores card 390",
+      "passed": true
+    },
+    {
+      "name": "carousel controls/keyboard/visible detail 390",
+      "passed": true
+    },
+    {
+      "name": "carousel touch next 390",
+      "passed": true
+    },
+    {
+      "name": "category empty filter/reset",
+      "passed": true
+    },
+    {
+      "name": "upload validation/preview/remove",
+      "passed": true
+    },
+    {
+      "name": "failed submit retains draft, successful mock submit refreshes ribbon",
+      "passed": true
+    },
+    {
+      "name": "mock reply preserved failure/retry and reaction toggle",
+      "passed": true
+    },
+    {
+      "name": "admin server rejection remains retryable, then mock pin/unpin",
+      "passed": true
+    },
+    {
+      "name": "delete confirmation and mock delete restore parent focus",
+      "passed": true
+    },
+    {
+      "name": "actual local API failure, no fake messages",
+      "passed": true
+    },
+    {
+      "name": "no uncaught JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "writes": [
+    {
+      "endpoint": "messages",
+      "action": "create",
+      "intercepted": true
+    },
+    {
+      "endpoint": "messages",
+      "action": "create",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "reply",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "reply",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "reaction",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "reaction",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "pin",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "pin",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "pin",
+      "intercepted": true
+    },
+    {
+      "endpoint": "message-actions",
+      "action": "delete",
+      "intercepted": true
+    }
+  ],
+  "metrics": []
+}

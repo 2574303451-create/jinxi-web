@@ -1,0 +1,277 @@
+{
+  "baseline": "328819a57c671b33b743d1ad3f969c0fb7917048",
+  "roots": [
+    "app/page.tsx",
+    "app/layout.tsx"
+  ],
+  "graph": {
+    "app/page.tsx": [
+      "components/ui/loading-spinner.tsx",
+      "components/ui/toast.tsx",
+      "components/email-service.tsx",
+      "components/ui/modal.tsx",
+      "components/ui/icons.tsx",
+      "components/home/guild-navigation.tsx",
+      "components/home/guild-hero.tsx",
+      "components/home/guild-sections.tsx",
+      "components/home/guild-members.tsx",
+      "components/home/community-updates.tsx",
+      "components/cyber-announcement.tsx",
+      "components/guild-uptime-terminal.tsx",
+      "components/guild-sponsorship.tsx",
+      "components/message-wall.tsx",
+      "components/strategy-wall.tsx",
+      "components/magicui/3d-carousel.tsx",
+      "components/magicui/member-grid.tsx",
+      "components/ui/accordion.tsx",
+      "components/checkin-widget.tsx",
+      "components/leaderboard-widget.tsx",
+      "components/daily-tasks.tsx",
+      "components/points-ranking-widget.tsx",
+      "components/team-system.tsx",
+      "components/game-data-panel.tsx"
+    ],
+    "app/layout.tsx": [
+      "app/globals.css",
+      "styles/guild-theme.css"
+    ],
+    "components/ui/loading-spinner.tsx": [],
+    "components/ui/toast.tsx": [],
+    "components/email-service.tsx": [],
+    "components/ui/modal.tsx": [],
+    "components/ui/icons.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/home/guild-navigation.tsx": [
+      "components/home/guild-image.tsx"
+    ],
+    "components/home/guild-hero.tsx": [
+      "components/home/guild-image.tsx"
+    ],
+    "components/home/guild-sections.tsx": [],
+    "components/home/guild-members.tsx": [
+      "components/home/guild-image.tsx",
+      "components/member-detail-modal.tsx"
+    ],
+    "components/home/community-updates.tsx": [
+      "services/announcement-service.ts"
+    ],
+    "components/cyber-announcement.tsx": [
+      "services/announcement-service.ts",
+      "components/ui/toast.tsx",
+      "components/ui/modal.tsx",
+      "components/cyber-announcement.module.css"
+    ],
+    "components/guild-uptime-terminal.tsx": [
+      "lib/guild-terminal-config.ts",
+      "lib/guild-terminal-utils.ts",
+      "components/guild-uptime-terminal.module.css"
+    ],
+    "components/guild-sponsorship.tsx": [
+      "components/ui/modal.tsx"
+    ],
+    "components/message-wall.tsx": [
+      "lib/utils.ts",
+      "lib/user-utils.ts",
+      "types/message-wall.ts",
+      "services/message-wall-backend.ts",
+      "components/ui/image-upload.tsx",
+      "components/ui/admin-password-dialog.tsx",
+      "components/ui/optimized-image.tsx",
+      "components/ui/icons.tsx",
+      "services/daily-task-service.ts"
+    ],
+    "components/strategy-wall.tsx": [
+      "lib/utils.ts",
+      "lib/user-utils.ts",
+      "types/strategy-wall.ts",
+      "services/strategy-wall-service.ts",
+      "components/ui/modal.tsx",
+      "components/ui/admin-password-dialog.tsx",
+      "components/strategy-submission-modal.tsx",
+      "components/strategy-detail-modal.tsx",
+      "components/ui/icons.tsx"
+    ],
+    "components/magicui/3d-carousel.tsx": [
+      "lib/utils.ts",
+      "components/member-detail-modal.tsx"
+    ],
+    "components/magicui/member-grid.tsx": [
+      "lib/utils.ts",
+      "components/member-detail-modal.tsx"
+    ],
+    "components/ui/accordion.tsx": [],
+    "components/checkin-widget.tsx": [
+      "lib/utils.ts",
+      "types/checkin.ts",
+      "services/checkin-service.ts",
+      "services/daily-task-service.ts"
+    ],
+    "components/leaderboard-widget.tsx": [
+      "lib/utils.ts",
+      "types/checkin.ts",
+      "services/checkin-service.ts"
+    ],
+    "components/daily-tasks.tsx": [
+      "types/daily-task.ts",
+      "services/daily-task-service.ts",
+      "services/points-service.ts"
+    ],
+    "components/points-ranking-widget.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/team-system.tsx": [
+      "types/team.ts",
+      "services/team-service.ts"
+    ],
+    "components/game-data-panel.tsx": [
+      "types/game-data.ts",
+      "services/game-data-service.ts"
+    ],
+    "app/globals.css": [],
+    "styles/guild-theme.css": [],
+    "lib/utils.ts": [],
+    "components/home/guild-image.tsx": [],
+    "components/member-detail-modal.tsx": [
+      "components/ui/modal.tsx",
+      "lib/utils.ts"
+    ],
+    "services/announcement-service.ts": [],
+    "components/cyber-announcement.module.css": [],
+    "lib/guild-terminal-config.ts": [
+      "config/guild-terminal.config.json"
+    ],
+    "lib/guild-terminal-utils.ts": [
+      "lib/guild-terminal-config.ts",
+      "lib/guild-terminal-config.ts"
+    ],
+    "components/guild-uptime-terminal.module.css": [],
+    "lib/user-utils.ts": [],
+    "types/message-wall.ts": [],
+    "services/message-wall-backend.ts": [
+      "types/message-wall.ts"
+    ],
+    "components/ui/image-upload.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/admin-password-dialog.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/optimized-image.tsx": [
+      "lib/utils.ts"
+    ],
+    "services/daily-task-service.ts": [
+      "types/daily-task.ts",
+      "lib/user-utils.ts"
+    ],
+    "types/strategy-wall.ts": [],
+    "services/strategy-wall-service.ts": [
+      "types/strategy-wall.ts"
+    ],
+    "components/strategy-submission-modal.tsx": [
+      "lib/utils.ts",
+      "types/strategy-wall.ts",
+      "components/ui/modal.tsx",
+      "components/ui/media-upload.tsx",
+      "services/strategy-wall-service.ts"
+    ],
+    "components/strategy-detail-modal.tsx": [
+      "lib/utils.ts",
+      "types/strategy-wall.ts",
+      "components/ui/modal.tsx",
+      "components/ui/media-gallery.tsx",
+      "services/strategy-wall-service.ts"
+    ],
+    "types/checkin.ts": [],
+    "services/checkin-service.ts": [
+      "types/checkin.ts"
+    ],
+    "types/daily-task.ts": [],
+    "services/points-service.ts": [
+      "types/points.ts"
+    ],
+    "types/team.ts": [],
+    "services/team-service.ts": [
+      "types/team.ts",
+      "lib/user-utils.ts"
+    ],
+    "types/game-data.ts": [],
+    "services/game-data-service.ts": [
+      "types/game-data.ts",
+      "lib/user-utils.ts"
+    ],
+    "config/guild-terminal.config.json": [],
+    "components/ui/media-upload.tsx": [
+      "lib/utils.ts",
+      "types/strategy-wall.ts"
+    ],
+    "components/ui/media-gallery.tsx": [
+      "lib/utils.ts",
+      "types/strategy-wall.ts",
+      "components/ui/modal.tsx"
+    ],
+    "types/points.ts": []
+  },
+  "reachableFiles": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/checkin-widget.tsx",
+    "components/cyber-announcement.module.css",
+    "components/cyber-announcement.tsx",
+    "components/daily-tasks.tsx",
+    "components/email-service.tsx",
+    "components/game-data-panel.tsx",
+    "components/guild-sponsorship.tsx",
+    "components/guild-uptime-terminal.module.css",
+    "components/guild-uptime-terminal.tsx",
+    "components/home/community-updates.tsx",
+    "components/home/guild-hero.tsx",
+    "components/home/guild-image.tsx",
+    "components/home/guild-members.tsx",
+    "components/home/guild-navigation.tsx",
+    "components/home/guild-sections.tsx",
+    "components/leaderboard-widget.tsx",
+    "components/magicui/3d-carousel.tsx",
+    "components/magicui/member-grid.tsx",
+    "components/member-detail-modal.tsx",
+    "components/message-wall.tsx",
+    "components/points-ranking-widget.tsx",
+    "components/strategy-detail-modal.tsx",
+    "components/strategy-submission-modal.tsx",
+    "components/strategy-wall.tsx",
+    "components/team-system.tsx",
+    "components/ui/accordion.tsx",
+    "components/ui/admin-password-dialog.tsx",
+    "components/ui/icons.tsx",
+    "components/ui/image-upload.tsx",
+    "components/ui/loading-spinner.tsx",
+    "components/ui/media-gallery.tsx",
+    "components/ui/media-upload.tsx",
+    "components/ui/modal.tsx",
+    "components/ui/optimized-image.tsx",
+    "components/ui/toast.tsx",
+    "config/guild-terminal.config.json",
+    "lib/guild-terminal-config.ts",
+    "lib/guild-terminal-utils.ts",
+    "lib/user-utils.ts",
+    "lib/utils.ts",
+    "services/announcement-service.ts",
+    "services/checkin-service.ts",
+    "services/daily-task-service.ts",
+    "services/game-data-service.ts",
+    "services/message-wall-backend.ts",
+    "services/points-service.ts",
+    "services/strategy-wall-service.ts",
+    "services/team-service.ts",
+    "styles/guild-theme.css",
+    "types/checkin.ts",
+    "types/daily-task.ts",
+    "types/game-data.ts",
+    "types/message-wall.ts",
+    "types/points.ts",
+    "types/strategy-wall.ts",
+    "types/team.ts"
+  ],
+  "note": "Static imports, lazy imports, and relative resources; reachability is code-level, not proof each export renders."
+}

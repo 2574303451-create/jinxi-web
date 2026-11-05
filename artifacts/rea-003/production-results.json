@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "name": "preview visibly identifies fixture and loads built application",
+      "passed": true
+    },
+    {
+      "name": "preview API read is synthetic, writes rejected before handlers",
+      "passed": true
+    },
+    {
+      "name": "preview message dialog uses built semantic component",
+      "passed": true
+    },
+    {
+      "name": "remaining business components retain compatibility classes",
+      "passed": true
+    },
+    {
+      "name": "review gallery renders original before/after PNG files",
+      "passed": true
+    },
+    {
+      "name": "approved hero screenshot comparison 1440",
+      "passed": true
+    },
+    {
+      "name": "approved hero screenshot comparison 768",
+      "passed": true
+    },
+    {
+      "name": "approved hero screenshot comparison 390",
+      "passed": true
+    },
+    {
+      "name": "no uncaught production-preview exceptions",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "measured": [
+    {
+      "width": 1440,
+      "cropHeight": 600,
+      "changedPixels": 0,
+      "pixels": 864000,
+      "changedRatio": 0,
+      "meanChannelDelta": 0
+    },
+    {
+      "width": 768,
+      "cropHeight": 600,
+      "changedPixels": 0,
+      "pixels": 460800,
+      "changedRatio": 0,
+      "meanChannelDelta": 0
+    },
+    {
+      "width": 390,
+      "cropHeight": 600,
+      "changedPixels": 0,
+      "pixels": 234000,
+      "changedRatio": 0,
+      "meanChannelDelta": 0
+    }
+  ],
+  "environment": "Actual npm build output via local read-only fixture preview; POST probe only tests local preview rejection, never a business backend."
+}

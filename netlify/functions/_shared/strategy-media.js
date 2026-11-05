@@ -18,7 +18,8 @@ function urlPredicate(url, excludePromos = false) {
 const validVideo = `jsonb_typeof(m.value)='object' AND m.value->>'type'='video' AND jsonb_typeof(m.value->'url')='string' AND ${urlPredicate("m.value->>'url'", true)}`;
 const videoCount = `(SELECT count(*) FROM jsonb_array_elements(${jsonArray("s.media_files")}) AS m(value) WHERE ${validVideo})`;
 const hasVideo = `EXISTS (SELECT 1 FROM jsonb_array_elements(${jsonArray("s.media_files")}) AS m(value) WHERE ${validVideo})`;
-const cover = `COALESCE(CASE WHEN ${urlPredicate("s.image_url")} THEN s.image_url END,(SELECT m.value->>'url' FROM jsonb_array_elements(${jsonArray("s.media_files")}) WITH ORDINALITY AS m(value,position) WHERE jsonb_typeof(m.value)='object' AND m.value->>'type'='image' AND jsonb_typeof(m.value->'url')='string' AND ${urlPredicate("m.value->>'url'")} ORDER BY m.position LIMIT 1))`;
+const videoThumbnail = `(SELECT m.value->>'thumbnail' FROM jsonb_array_elements(${jsonArray("s.media_files")}) WITH ORDINALITY AS m(value,position) WHERE ${validVideo} AND jsonb_typeof(m.value->'thumbnail')='string' AND ${urlPredicate("m.value->>'thumbnail'")} ORDER BY m.position LIMIT 1)`;
+const cover = `COALESCE(CASE WHEN ${urlPredicate("s.image_url")} THEN s.image_url END,(SELECT m.value->>'url' FROM jsonb_array_elements(${jsonArray("s.media_files")}) WITH ORDINALITY AS m(value,position) WHERE jsonb_typeof(m.value)='object' AND m.value->>'type'='image' AND jsonb_typeof(m.value->'url')='string' AND ${urlPredicate("m.value->>'url'")} ORDER BY m.position LIMIT 1),${videoThumbnail})`;
 const videoAggregate = `SELECT count(*)::text AS video_count, statement_timestamp() AS calculated_at FROM strategies AS s CROSS JOIN LATERAL jsonb_array_elements(${jsonArray("s.media_files")}) AS m(value) WHERE s.status='published' AND ${validVideo}`;
 module.exports = {
   jsonArray,

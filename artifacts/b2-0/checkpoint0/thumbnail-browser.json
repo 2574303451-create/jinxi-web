@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "syntheticOnly": true,
+  "src": "/14.png",
+  "requests": [
+    {
+      "type": "document",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/logo.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/14.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/13.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/43.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/44.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/45.png"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/46.png"
+    },
+    {
+      "type": "stylesheet",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/css/89ff6cf2f2223c4b.css"
+    },
+    {
+      "type": "stylesheet",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/css/3f109eb114abd446.css"
+    },
+    {
+      "type": "stylesheet",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/css/bbf9cdd3b6568cdd.css"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/webpack-72559a270ef16808.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/dded304f-806669fb45a8c9f4.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/144-3e5647cd2ddd98d6.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/main-app-ef3f54c6f73e3386.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/996-af7a449b304a2071.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/425-2b08906077118095.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/app/page-da5b57ae7601320d.js"
+    },
+    {
+      "type": "stylesheet",
+      "method": "GET",
+      "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/bg.png"
+    },
+    {
+      "type": "font",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/media/028c0d39d2e8f589-s.p.woff2"
+    },
+    {
+      "type": "font",
+      "method": "GET",
+      "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff2"
+    },
+    {
+      "type": "fetch",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/.netlify/functions/announcements"
+    },
+    {
+      "type": "fetch",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/.netlify/functions/messages"
+    },
+    {
+      "type": "fetch",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/.netlify/functions/announcements"
+    },
+    {
+      "type": "stylesheet",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/css/99e71b93752a6c6b.css"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/399.4ce2f80ab9811afa.js"
+    },
+    {
+      "type": "script",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/_next/static/chunks/512.2f033559e1ec3986.js"
+    },
+    {
+      "type": "other",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/logo.png"
+    },
+    {
+      "type": "fetch",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest"
+    },
+    {
+      "type": "image",
+      "method": "GET",
+      "url": "http://127.0.0.1:3047/__missing_isolated_cover__.png"
+    }
+  ]
+}

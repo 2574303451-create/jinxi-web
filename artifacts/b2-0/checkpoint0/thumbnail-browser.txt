@@ -1,0 +1,1 @@
+PASS real SQL -> summary -> existing homepage thumbnail-only card

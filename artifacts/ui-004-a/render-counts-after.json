@@ -1,0 +1,38 @@
+{
+  "base": "http://127.0.0.1:3012",
+  "stage": "after",
+  "method": "V8 precise function execution counts in actual development browser over 6.1 seconds per case. React development StrictMode may invoke twice. Coverage instrumentation affects timing, so these are execution counts only, not performance durations.",
+  "samples": [
+    {
+      "name": "collapsed-visible",
+      "elapsedMs": 6100,
+      "counts": []
+    },
+    {
+      "name": "expanded-visible",
+      "elapsedMs": 6100,
+      "counts": [
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-time/runtime-clock.tsx",
+          "name": "useVisibleTime",
+          "calls": 12
+        },
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-time/runtime-clock.tsx",
+          "name": "RuntimeReadout",
+          "calls": 12
+        },
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-time/runtime-clock.tsx",
+          "name": "GuildRuntimeClock",
+          "calls": 12
+        }
+      ]
+    },
+    {
+      "name": "expanded-offscreen",
+      "elapsedMs": 6100,
+      "counts": []
+    }
+  ]
+}

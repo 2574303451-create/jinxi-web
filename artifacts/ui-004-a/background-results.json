@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "observations": [
+    {
+      "phase": "tab-switch-observation",
+      "main": "hidden",
+      "sibling": "visible"
+    },
+    {
+      "phase": "background-ribbon",
+      "visibility": "hidden",
+      "running": [
+        "false",
+        "false"
+      ],
+      "animations": 0
+    },
+    {
+      "phase": "background-clock",
+      "visibility": "hidden",
+      "ticking": [
+        "false"
+      ]
+    },
+    {
+      "phase": "foreground-resume",
+      "visibility": "visible"
+    }
+  ],
+  "method": "Owned independent headful Edge window; actual tab switching and document.visibilityState, not a mocked visibility property. All owned browser windows closed in finally."
+}

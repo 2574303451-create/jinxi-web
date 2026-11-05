@@ -1,0 +1,803 @@
+{
+  "stage": "after",
+  "base": "http://127.0.0.1:3013/preview-app/",
+  "labOnly": true,
+  "config": {
+    "edge": "system Edge, independent headless context",
+    "runtimeSampleMs": 7000,
+    "samples": 3,
+    "mobile": {
+      "cpuSlowdown": 6,
+      "latencyMs": 150,
+      "downloadBytesPerSecond": 200000,
+      "uploadBytesPerSecond": 93750
+    }
+  },
+  "profiles": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "cpu": 1,
+      "loadVitals": {
+        "lcp": {
+          "ms": 6560,
+          "element": "H1",
+          "url": null
+        },
+        "cls": 0,
+        "interactions": [],
+        "longTasks": [
+          {
+            "start": 5760.700000001118,
+            "duration": 380
+          },
+          {
+            "start": 6375.800000000745,
+            "duration": 67
+          }
+        ],
+        "navigation": {
+          "name": "http://127.0.0.1:3013/preview-app/",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 7907,
+          "initiatorType": "navigation",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.1",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 2.5,
+          "domainLookupStart": 2.5,
+          "domainLookupEnd": 2.5,
+          "connectStart": 2.5,
+          "secureConnectionStart": 0,
+          "connectEnd": 2.5,
+          "requestStart": 3.400000000372529,
+          "responseStart": 14.5,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 14.5,
+          "responseEnd": 15.400000000372529,
+          "transferSize": 41319,
+          "encodedBodySize": 41019,
+          "decodedBodySize": 41019,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 0,
+          "unloadEventEnd": 0,
+          "domInteractive": 6148.800000000745,
+          "domContentLoadedEventStart": 6148.9000000003725,
+          "domContentLoadedEventEnd": 6149.60000000149,
+          "domComplete": 7907,
+          "loadEventStart": 7907,
+          "loadEventEnd": 7907,
+          "type": "navigate",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null
+        },
+        "resources": [
+          {
+            "name": "/logo.png",
+            "duration": 11.900000000372529,
+            "bytes": 249161
+          },
+          {
+            "name": "/14.png",
+            "duration": 8.299999998882413,
+            "bytes": 61673
+          },
+          {
+            "name": "/13.png",
+            "duration": 10.900000000372529,
+            "bytes": 83663
+          },
+          {
+            "name": "/_next/static/css/b5c19fd6201c0c26.css",
+            "duration": 11.300000000745058,
+            "bytes": 69040
+          },
+          {
+            "name": "/43.png",
+            "duration": 14.199999999254942,
+            "bytes": 29815
+          },
+          {
+            "name": "/44.png",
+            "duration": 15.199999999254942,
+            "bytes": 47513
+          },
+          {
+            "name": "/45.png",
+            "duration": 16.800000000745058,
+            "bytes": 37407
+          },
+          {
+            "name": "/46.png",
+            "duration": 18.300000000745058,
+            "bytes": 34509
+          },
+          {
+            "name": "/_next/static/css/797eb2f4036175df.css",
+            "duration": 7.700000001117587,
+            "bytes": 10633
+          },
+          {
+            "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+            "duration": 10.400000000372529,
+            "bytes": 45840
+          },
+          {
+            "name": "/_next/static/chunks/webpack-39dac5d0b1740e71.js",
+            "duration": 18.300000000745058,
+            "bytes": 5275
+          },
+          {
+            "name": "/_next/static/chunks/117-7e475faf501989ee.js",
+            "duration": 21.600000001490116,
+            "bytes": 124098
+          },
+          {
+            "name": "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+            "duration": 21.700000001117587,
+            "bytes": 173131
+          },
+          {
+            "name": "/_next/static/chunks/main-app-4285e745653c870d.js",
+            "duration": 20.799999998882413,
+            "bytes": 761
+          },
+          {
+            "name": "/_next/static/chunks/app/page-0ba19e7a2524a882.js",
+            "duration": 22.299999998882413,
+            "bytes": 89885
+          },
+          {
+            "name": "/_next/static/chunks/326-11c4f61ea388f98e.js",
+            "duration": 22.5,
+            "bytes": 155377
+          },
+          {
+            "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+            "duration": 5733.299999998882,
+            "bytes": 18183
+          },
+          {
+            "name": "/bg.png",
+            "duration": 16.5,
+            "bytes": 192635
+          },
+          {
+            "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+            "duration": 370.40000000037253,
+            "bytes": 58812
+          },
+          {
+            "name": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+            "duration": 2104.699999999255,
+            "bytes": 163500
+          },
+          {
+            "name": "/.netlify/functions/announcements",
+            "duration": 4,
+            "bytes": 351
+          },
+          {
+            "name": "/.netlify/functions/messages",
+            "duration": 5.5,
+            "bytes": 4219
+          },
+          {
+            "name": "/.netlify/functions/announcements",
+            "duration": 3.199999999254942,
+            "bytes": 351
+          },
+          {
+            "name": "/_next/static/css/99e71b93752a6c6b.css",
+            "duration": 5.099999999627471,
+            "bytes": 7909
+          },
+          {
+            "name": "/_next/static/chunks/556.c65f6b1c1aa79e34.js",
+            "duration": 5.900000000372529,
+            "bytes": 39345
+          },
+          {
+            "name": "/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+            "duration": 4.5,
+            "bytes": 1672
+          },
+          {
+            "name": "/_next/static/chunks/526.5904e364e8128e6f.js",
+            "duration": 4.299999998882413,
+            "bytes": 57473
+          },
+          {
+            "name": "/logo.png",
+            "duration": 6.800000000745058,
+            "bytes": 249161
+          }
+        ]
+      },
+      "visible": {
+        "samples": [
+          {
+            "Timestamp": 8.404128000000128,
+            "ScriptDuration": 0.162059,
+            "TaskDuration": 0.21295200000000003,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.004955000000000001,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 17
+          },
+          {
+            "Timestamp": 7.008404000000155,
+            "ScriptDuration": 0.00031799999999998496,
+            "TaskDuration": 0.03593000000000002,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.006085999999999994,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 15
+          },
+          {
+            "Timestamp": 7.009645000000091,
+            "ScriptDuration": 0.00036200000000002897,
+            "TaskDuration": 0.040046000000000026,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.0035489999999999966,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 10
+          }
+        ],
+        "recording": {
+          "file": "desktop-visible.trace.json.gz",
+          "events": 35961,
+          "counts": {
+            "FireAnimationFrame": 0,
+            "RequestAnimationFrame": 0,
+            "Layout": 0,
+            "Paint": 0,
+            "UpdateLayoutTree": 12,
+            "FunctionCall": 5,
+            "RunTask": 8046
+          },
+          "durationMs": {
+            "Layout": 0,
+            "Paint": 0,
+            "UpdateLayoutTree": 3.8000000000000003,
+            "FunctionCall": 162.04200000000003
+          }
+        }
+      },
+      "offscreen": {
+        "samples": [
+          {
+            "Timestamp": 8.41750999999931,
+            "ScriptDuration": 0.031208000000000014,
+            "TaskDuration": 0.11457099999999998,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.0058949999999999975,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 29
+          },
+          {
+            "Timestamp": 7.032913999999437,
+            "ScriptDuration": 0.0003750000000000142,
+            "TaskDuration": 0.030850000000000044,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.0028780000000000056,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 14
+          },
+          {
+            "Timestamp": 7.003354999998919,
+            "ScriptDuration": 0.00032199999999998896,
+            "TaskDuration": 0.03449900000000006,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.004018999999999995,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 15
+          }
+        ],
+        "recording": {
+          "file": "desktop-offscreen.trace.json.gz",
+          "events": 37723,
+          "counts": {
+            "FireAnimationFrame": 0,
+            "RequestAnimationFrame": 0,
+            "Layout": 0,
+            "Paint": 0,
+            "UpdateLayoutTree": 29,
+            "FunctionCall": 16,
+            "RunTask": 8275
+          },
+          "durationMs": {
+            "Layout": 0,
+            "Paint": 0,
+            "UpdateLayoutTree": 5.894,
+            "FunctionCall": 31.388
+          }
+        }
+      },
+      "queryMs": 103,
+      "interactionSampleMaxMs": 96,
+      "finalVitals": {
+        "lcp": {
+          "ms": 6560,
+          "element": "H1",
+          "url": null
+        },
+        "cls": 0,
+        "interactions": [
+          {
+            "type": "pointerdown",
+            "duration": 88,
+            "id": 1665
+          },
+          {
+            "type": "pointerup",
+            "duration": 88,
+            "id": 1665
+          },
+          {
+            "type": "click",
+            "duration": 88,
+            "id": 1665
+          },
+          {
+            "type": "keydown",
+            "duration": 96,
+            "id": 1672
+          },
+          {
+            "type": "keypress",
+            "duration": 96,
+            "id": 1672
+          },
+          {
+            "type": "click",
+            "duration": 96,
+            "id": 1672
+          },
+          {
+            "type": "keyup",
+            "duration": 88,
+            "id": 1672
+          }
+        ],
+        "longTasks": [
+          {
+            "start": 5760.700000001118,
+            "duration": 380
+          },
+          {
+            "start": 6375.800000000745,
+            "duration": 67
+          },
+          {
+            "start": 12175,
+            "duration": 163
+          }
+        ]
+      },
+      "errors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+        "Failed to fetch announcements: Error: 本机预览未连接真实业务服务\n    at X (http://127.0.0.1:3013/_next/static/chunks/app/page-0ba19e7a2524a882.js:1:17937)\n    at async http:"
+      ]
+    },
+    {
+      "name": "slow-mobile",
+      "width": 390,
+      "cpu": 6,
+      "loadVitals": {
+        "lcp": {
+          "ms": 7452,
+          "element": "IMG",
+          "url": "http://127.0.0.1:3013/14.png"
+        },
+        "cls": 0,
+        "interactions": [],
+        "longTasks": [
+          {
+            "start": 6773.9000000003725,
+            "duration": 547
+          },
+          {
+            "start": 8336.900000000373,
+            "duration": 141
+          },
+          {
+            "start": 8646,
+            "duration": 50
+          },
+          {
+            "start": 8980,
+            "duration": 52
+          },
+          {
+            "start": 9034.5,
+            "duration": 80
+          }
+        ],
+        "navigation": {
+          "name": "http://127.0.0.1:3013/preview-app/",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 0,
+          "initiatorType": "navigation",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.1",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 2,
+          "domainLookupStart": 2,
+          "domainLookupEnd": 2,
+          "connectStart": 2,
+          "secureConnectionStart": 0,
+          "connectEnd": 2,
+          "requestStart": 3.599999999627471,
+          "responseStart": 5.200000001117587,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 5.200000001117587,
+          "responseEnd": 548.5,
+          "transferSize": 41319,
+          "encodedBodySize": 41019,
+          "decodedBodySize": 41019,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 0,
+          "unloadEventEnd": 0,
+          "domInteractive": 7336.5,
+          "domContentLoadedEventStart": 7337.0999999996275,
+          "domContentLoadedEventEnd": 7337.5999999996275,
+          "domComplete": 0,
+          "loadEventStart": 0,
+          "loadEventEnd": 0,
+          "type": "navigate",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null
+        },
+        "resources": [
+          {
+            "name": "/logo.png",
+            "duration": 5217.699999999255,
+            "bytes": 249161
+          },
+          {
+            "name": "/14.png",
+            "duration": 1420.2000000011176,
+            "bytes": 61673
+          },
+          {
+            "name": "/13.png",
+            "duration": 3642.89999999851,
+            "bytes": 83663
+          },
+          {
+            "name": "/43.png",
+            "duration": 2401.4000000003725,
+            "bytes": 29815
+          },
+          {
+            "name": "/44.png",
+            "duration": 3697.5,
+            "bytes": 47513
+          },
+          {
+            "name": "/45.png",
+            "duration": 4015.5,
+            "bytes": 37407
+          },
+          {
+            "name": "/46.png",
+            "duration": 4531.700000001118,
+            "bytes": 34509
+          },
+          {
+            "name": "/_next/static/css/b5c19fd6201c0c26.css",
+            "duration": 1497.7999999988824,
+            "bytes": 69040
+          },
+          {
+            "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+            "duration": 1182.9000000003725,
+            "bytes": 45840
+          },
+          {
+            "name": "/_next/static/css/797eb2f4036175df.css",
+            "duration": 498.90000000037253,
+            "bytes": 10633
+          },
+          {
+            "name": "/_next/static/chunks/webpack-39dac5d0b1740e71.js",
+            "duration": 3992.9000000003725,
+            "bytes": 5275
+          },
+          {
+            "name": "/_next/static/chunks/117-7e475faf501989ee.js",
+            "duration": 7117.4000000003725,
+            "bytes": 124098
+          },
+          {
+            "name": "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+            "duration": 8134.800000000745,
+            "bytes": 173131
+          },
+          {
+            "name": "/_next/static/chunks/main-app-4285e745653c870d.js",
+            "duration": 4714.300000000745,
+            "bytes": 761
+          },
+          {
+            "name": "/_next/static/chunks/app/page-0ba19e7a2524a882.js",
+            "duration": 7511,
+            "bytes": 89885
+          },
+          {
+            "name": "/_next/static/chunks/326-11c4f61ea388f98e.js",
+            "duration": 8362.700000001118,
+            "bytes": 155377
+          },
+          {
+            "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+            "duration": 6571.4000000003725,
+            "bytes": 0
+          },
+          {
+            "name": "/bg.png",
+            "duration": 6056.800000000745,
+            "bytes": 192635
+          },
+          {
+            "name": "/14.png",
+            "duration": 2829,
+            "bytes": 61673
+          },
+          {
+            "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+            "duration": 1793.0999999996275,
+            "bytes": 58812
+          },
+          {
+            "name": "/.netlify/functions/announcements",
+            "duration": 175.80000000074506,
+            "bytes": 351
+          },
+          {
+            "name": "/.netlify/functions/messages",
+            "duration": 210.59999999962747,
+            "bytes": 4219
+          },
+          {
+            "name": "/.netlify/functions/announcements",
+            "duration": 181.7000000011176,
+            "bytes": 351
+          },
+          {
+            "name": "/_next/static/css/99e71b93752a6c6b.css",
+            "duration": 256.69999999925494,
+            "bytes": 7909
+          },
+          {
+            "name": "/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+            "duration": 368.30000000074506,
+            "bytes": 1672
+          }
+        ]
+      },
+      "visible": {
+        "samples": [
+          {
+            "Timestamp": 8.359268999998676,
+            "ScriptDuration": 0.153874,
+            "TaskDuration": 0.4185699999999999,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.006638000000000005,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 17
+          },
+          {
+            "Timestamp": 7.00750700000026,
+            "ScriptDuration": 0.0021889999999999965,
+            "TaskDuration": 0.041922000000000015,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.004576999999999998,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 16
+          },
+          {
+            "Timestamp": 7.006500999999844,
+            "ScriptDuration": 0.0005030000000000312,
+            "TaskDuration": 0.09810400000000019,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.007839000000000013,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 16
+          }
+        ],
+        "recording": {
+          "file": "slow-mobile-visible.trace.json.gz",
+          "events": 38854,
+          "counts": {
+            "FireAnimationFrame": 0,
+            "RequestAnimationFrame": 0,
+            "Layout": 0,
+            "Paint": 1,
+            "UpdateLayoutTree": 17,
+            "FunctionCall": 5,
+            "RunTask": 8602
+          },
+          "durationMs": {
+            "Layout": 0,
+            "Paint": 0.525,
+            "UpdateLayoutTree": 6.654,
+            "FunctionCall": 153.934
+          }
+        }
+      },
+      "offscreen": {
+        "samples": [
+          {
+            "Timestamp": 8.702008999998725,
+            "ScriptDuration": 0.12156599999999995,
+            "TaskDuration": 0.36239500000000024,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.019440000000000013,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 38
+          },
+          {
+            "Timestamp": 7.007803000000422,
+            "ScriptDuration": 0.0009280000000000399,
+            "TaskDuration": 0.03873799999999994,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.006167999999999979,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 17
+          },
+          {
+            "Timestamp": 7.015751000000819,
+            "ScriptDuration": 0.0007770000000000277,
+            "TaskDuration": 0.048672999999999966,
+            "LayoutDuration": 0,
+            "RecalcStyleDuration": 0.003501000000000004,
+            "LayoutCount": 0,
+            "RecalcStyleCount": 11
+          }
+        ],
+        "recording": {
+          "file": "slow-mobile-offscreen.trace.json.gz",
+          "events": 46653,
+          "counts": {
+            "FireAnimationFrame": 0,
+            "RequestAnimationFrame": 0,
+            "Layout": 0,
+            "Paint": 14,
+            "UpdateLayoutTree": 36,
+            "FunctionCall": 20,
+            "RunTask": 10067
+          },
+          "durationMs": {
+            "Layout": 0,
+            "Paint": 2.96,
+            "UpdateLayoutTree": 16.807000000000002,
+            "FunctionCall": 120.10900000000002
+          }
+        }
+      },
+      "queryMs": 110,
+      "interactionSampleMaxMs": 88,
+      "finalVitals": {
+        "lcp": {
+          "ms": 7452,
+          "element": "IMG",
+          "url": "http://127.0.0.1:3013/14.png"
+        },
+        "cls": 0,
+        "interactions": [
+          {
+            "type": "pointerdown",
+            "duration": 72,
+            "id": 9088
+          },
+          {
+            "type": "pointerup",
+            "duration": 72,
+            "id": 9088
+          },
+          {
+            "type": "click",
+            "duration": 72,
+            "id": 9088
+          },
+          {
+            "type": "keydown",
+            "duration": 88,
+            "id": 9095
+          },
+          {
+            "type": "keypress",
+            "duration": 88,
+            "id": 9095
+          },
+          {
+            "type": "click",
+            "duration": 80,
+            "id": 9095
+          },
+          {
+            "type": "keyup",
+            "duration": 72,
+            "id": 9095
+          }
+        ],
+        "longTasks": [
+          {
+            "start": 6773.9000000003725,
+            "duration": 547
+          },
+          {
+            "start": 8336.900000000373,
+            "duration": 141
+          },
+          {
+            "start": 8646,
+            "duration": 50
+          },
+          {
+            "start": 8980,
+            "duration": 52
+          },
+          {
+            "start": 9034.5,
+            "duration": 80
+          },
+          {
+            "start": 9466.300000000745,
+            "duration": 59
+          },
+          {
+            "start": 13350.700000001118,
+            "duration": 155
+          },
+          {
+            "start": 33920.09999999963,
+            "duration": 120
+          },
+          {
+            "start": 56989.5,
+            "duration": 56
+          },
+          {
+            "start": 57764.300000000745,
+            "duration": 64
+          }
+        ]
+      },
+      "errors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+        "Failed to fetch announcements: Error: 本机预览未连接真实业务服务\n    at X (http://127.0.0.1:3013/_next/static/chunks/app/page-0ba19e7a2524a882.js:1:17937)\n    at async http:"
+      ]
+    }
+  ],
+  "errors": []
+}

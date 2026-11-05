@@ -1,0 +1,218 @@
+{
+  "errors": [],
+  "measurements": [
+    [
+      {
+        "width": 1440,
+        "running": "true",
+        "loop": "true",
+        "direction": "left",
+        "distance": "1956",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 766.5840000000834,
+            "state": "running",
+            "duration": 61125
+          }
+        ],
+        "rect": {
+          "x": 96,
+          "y": 401.375,
+          "width": 1248,
+          "height": 184,
+          "top": 401.375,
+          "right": 1344,
+          "bottom": 585.375,
+          "left": 96
+        }
+      },
+      {
+        "width": 1440,
+        "running": "true",
+        "loop": "true",
+        "direction": "right",
+        "distance": "1956",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 61891.58400000008,
+            "state": "running",
+            "duration": 61125
+          }
+        ],
+        "rect": {
+          "x": 96,
+          "y": 597.375,
+          "width": 1248,
+          "height": 184,
+          "top": 597.375,
+          "right": 1344,
+          "bottom": 781.375,
+          "left": 96
+        }
+      }
+    ],
+    [
+      {
+        "width": 768,
+        "running": "true",
+        "loop": "true",
+        "direction": "left",
+        "distance": "1956",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 1577.0879999994208,
+            "state": "running",
+            "duration": 61125
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 401.09375,
+          "width": 736,
+          "height": 184,
+          "top": 401.09375,
+          "right": 752,
+          "bottom": 585.09375,
+          "left": 16
+        }
+      },
+      {
+        "width": 768,
+        "running": "true",
+        "loop": "true",
+        "direction": "right",
+        "distance": "1956",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 1577.0879999994208,
+            "state": "running",
+            "duration": 61125
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 597.09375,
+          "width": 736,
+          "height": 184,
+          "top": 597.09375,
+          "right": 752,
+          "bottom": 781.09375,
+          "left": 16
+        }
+      }
+    ],
+    [
+      {
+        "width": 390,
+        "running": "true",
+        "loop": "true",
+        "direction": "left",
+        "distance": "1776",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 2439.6799999997434,
+            "state": "running",
+            "duration": 55500
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 588.1875,
+          "width": 358,
+          "height": 184,
+          "top": 588.1875,
+          "right": 374,
+          "bottom": 772.1875,
+          "left": 16
+        }
+      },
+      {
+        "width": 390,
+        "running": "true",
+        "loop": "true",
+        "direction": "right",
+        "distance": "1776",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 52314.67999999974,
+            "state": "running",
+            "duration": 55500
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 784.1875,
+          "width": 358,
+          "height": 184,
+          "top": 784.1875,
+          "right": 374,
+          "bottom": 968.1875,
+          "left": 16
+        }
+      }
+    ],
+    [
+      {
+        "width": 320,
+        "running": "true",
+        "loop": "true",
+        "direction": "left",
+        "distance": "1776",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 3231.310999999433,
+            "state": "running",
+            "duration": 55500
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 420.796875,
+          "width": 288,
+          "height": 184,
+          "top": 420.796875,
+          "right": 304,
+          "bottom": 604.796875,
+          "left": 16
+        }
+      },
+      {
+        "width": 320,
+        "running": "true",
+        "loop": "true",
+        "direction": "right",
+        "distance": "1776",
+        "scrollLeft": 0,
+        "animation": [
+          {
+            "time": 53106.310999999434,
+            "state": "running",
+            "duration": 55500
+          }
+        ],
+        "rect": {
+          "x": 16,
+          "y": 616.796875,
+          "width": 288,
+          "height": 184,
+          "top": 616.796875,
+          "right": 304,
+          "bottom": 800.796875,
+          "left": 16
+        }
+      }
+    ]
+  ],
+  "visibility": {
+    "method": "CDP Browser.setWindowBounds on owned headless window",
+    "hidden": "visible",
+    "restored": "visible"
+  }
+}

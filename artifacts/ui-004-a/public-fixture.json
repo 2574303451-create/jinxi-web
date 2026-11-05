@@ -1,0 +1,134 @@
+[
+  {
+    "id": "ui004-1",
+    "name": "界面测试伙伴01",
+    "content": "【合成界面测试】练习配合的时候，多说一句提醒，往往就能让下一局更顺利。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "求助",
+    "isPinned": true,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-2",
+    "name": "界面测试伙伴02",
+    "content": "【合成界面测试】今天分享一个小心得：先观察对手的位置，再选择角度。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-3",
+    "name": "界面测试伙伴03",
+    "content": "【合成界面测试】有空一起练习组队，欢迎刚加入的伙伴来交流。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-4",
+    "name": "界面测试伙伴04",
+    "content": "【合成界面测试】这一局的配合很有意思，下次再试试新的打法。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "求助",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-5",
+    "name": "界面测试伙伴05",
+    "content": "【合成界面测试】刚整理好自己的练习笔记，准备去攻略墙分享。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-6",
+    "name": "界面测试伙伴06",
+    "content": "【合成界面测试】新手来报到，有不懂的地方想向大家请教。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-7",
+    "name": "界面测试伙伴07",
+    "content": "【合成界面测试】回看今天的高光时刻，配合比个人输出更有意思。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "求助",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-8",
+    "name": "界面测试伙伴08",
+    "content": "【合成界面测试】每一场对局都是一次新的练习，慢慢进步就好。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-9",
+    "name": "界面测试伙伴09",
+    "content": "【合成界面测试】谢谢队友耐心讲解，终于明白这个角度该怎么计算。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-10",
+    "name": "界面测试伙伴10",
+    "content": "【合成界面测试】一起交流失误也很有用，下一次记得及时补位。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "求助",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-11",
+    "name": "界面测试伙伴11",
+    "content": "【合成界面测试】不赶进度，和伙伴一起把基础练扎实。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": "ui004-12",
+    "name": "界面测试伙伴12",
+    "content": "【合成界面测试】今天的练习到这里，期待下一场并肩作战。",
+    "timestamp": "2026-11-01T12:00:00Z",
+    "color": "#3b82f6",
+    "category": "闲聊",
+    "isPinned": false,
+    "reactions": [],
+    "replies": []
+  }
+]

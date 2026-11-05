@@ -1,0 +1,9 @@
+{
+  "baseline": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+  "before": 28,
+  "after": 28,
+  "added": [],
+  "resolved": [],
+  "method": "Compare file + TS code + complete diagnostic text; ignore only line/column shifts.",
+  "passed": true
+}

@@ -1,0 +1,18 @@
+{
+  "reproduced": true,
+  "environment": "Actual production Edge, viewport resized from 1440 to 768 during browser-checks.cjs. Native IntersectionObserver callbacks transparently logged, no fabricated entries.",
+  "observedBatch": [
+    { "time": 32410.199999999255, "intersecting": false, "ratio": 0 },
+    { "time": 32503, "intersecting": true, "ratio": 0.6224810481071472 }
+  ],
+  "failure": {
+    "documentVisibility": "visible",
+    "rootActive": false,
+    "guildClockTicking": false,
+    "guildClockRect": { "top": 474.953125, "bottom": 620.734375 },
+    "independentNativeObservation": { "intersecting": true, "ratio": 1 }
+  },
+  "cause": "The callback used only entries[0], dropping the later visible transition in the same native callback batch.",
+  "fix": "Consume the observation with the newest entry.time; equal timestamps use the later queued entry. No continuous scroll listener or frame polling added.",
+  "verification": "Final browser-checks.cjs repeats modal, screenshot and responsive transitions and verifies visible ticking, offscreen freeze, resume and collapsed focus. See browser-results.json."
+}

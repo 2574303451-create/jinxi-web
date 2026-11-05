@@ -1,324 +1,124 @@
-"use client"
+"use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react"
-import { guildTerminalConfig } from "../lib/guild-terminal-config"
+import { useId, useRef, useState, type FormEvent } from "react";
+import { CalendarDays, ChevronDown, Search } from "lucide-react";
+import { guildTerminalConfig } from "../lib/guild-terminal-config";
 import {
-  buildCyberHash,
-  calculateRuntime,
-  findMemberByQuery,
-  formatRuntime,
-  getSecurityClearance,
-  getUnlockedMilestones,
-  parseDateStrict,
-} from "../lib/guild-terminal-utils"
-import styles from "./guild-uptime-terminal.module.css"
+  resolveGuildLookup,
+  type GuildLookupResult,
+} from "../lib/guild-terminal-utils";
+import { useElementActivity } from "../hooks/use-element-activity";
+import { GuildRuntimeClock } from "./guild-time/runtime-clock";
+import { ArchiveRecord } from "./guild-time/archive-record";
+import styles from "./guild-uptime-terminal.module.css";
 
-const SEARCH_DELAY_MS = 500
-
-type QueryMode = "none" | "member" | "date"
-
-interface QueryProfile {
-  mode: QueryMode
-  memberId: string | null
-  memberName: string | null
-  joinDate: string | null
-  badges: string[]
-}
-
-const INITIAL_PROFILE: QueryProfile = {
-  mode: "none",
-  memberId: null,
-  memberName: null,
-  joinDate: null,
-  badges: [],
-}
+const errors = {
+  empty: "请输入工号、昵称或入会日期（YYYY-MM-DD）。",
+  future: "入会日期不能晚于今天，请检查后重新查询。",
+  "invalid-date": "这个日期无效，请使用 YYYY-MM-DD 格式并检查年月日。",
+  "invalid-record": "这份档案的入会日期暂不可用，请联系公会核对。",
+  "not-found": "没有找到对应工号或昵称。你也可以直接输入入会日期测算。",
+};
 
 export function GuildUptimeTerminal() {
-  const [now, setNow] = useState(() => new Date())
-  const [queryValue, setQueryValue] = useState("")
-  const [inputFocused, setInputFocused] = useState(false)
-  const [isSearching, setIsSearching] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [lookupHint, setLookupHint] = useState("输入工号、昵称或入会日期（YYYY-MM-DD），按 Enter 查询")
-  const [profile, setProfile] = useState<QueryProfile>(INITIAL_PROFILE)
-
-  const guildStartDate = useMemo(
-    () => parseDateStrict(guildTerminalConfig.guildFoundedDate) ?? new Date(Date.UTC(2018, 1, 10, 0, 0, 0, 0)),
-    [],
-  )
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setNow(new Date())
-    }, 1000)
-    return () => window.clearInterval(timer)
-  }, [])
-
-  const guildRuntime = useMemo(() => calculateRuntime(guildStartDate, now), [guildStartDate, now])
-
-  const memberRuntime = useMemo(() => {
-    if (!profile.joinDate) {
-      return null
-    }
-    const start = parseDateStrict(profile.joinDate)
-    return start ? calculateRuntime(start, now) : null
-  }, [now, profile.joinDate])
-
-  const clearance = useMemo(() => {
-    if (!profile.memberId || !memberRuntime) {
-      return null
-    }
-    return getSecurityClearance(
-      profile.memberId,
-      memberRuntime.years,
-      guildTerminalConfig.founderMemberId,
-      guildTerminalConfig.founderClearance,
-      guildTerminalConfig.securityClearanceRules,
-    )
-  }, [memberRuntime, profile.memberId])
-
-  const unlockedMilestones = useMemo(() => {
-    if (!profile.memberId || !profile.joinDate) {
-      return []
-    }
-    return getUnlockedMilestones(profile.joinDate, guildTerminalConfig.milestones)
-  }, [profile.joinDate, profile.memberId])
-
-  const cyberHash = useMemo(() => {
-    if (!profile.memberId || !profile.joinDate) {
-      return "ID-NULL-00000000-0000"
-    }
-    return buildCyberHash(profile.memberId, profile.joinDate)
-  }, [profile.joinDate, profile.memberId])
-
-  const isFounderMode = profile.memberId === guildTerminalConfig.founderMemberId
-
-  const handleLookup = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (isSearching) {
-      return
-    }
-
-    const input = queryValue.trim()
-    if (!input) {
-      setLookupHint("请输入工号、昵称或入会日期（YYYY-MM-DD）")
-      setProfile(INITIAL_PROFILE)
-      return
-    }
-
-    setIsSearching(true)
-    setLookupHint("数据检索中...")
-
-    window.setTimeout(() => {
-      const matched = findMemberByQuery(input, guildTerminalConfig.members)
-
-      if (matched) {
-        const joinAt = parseDateStrict(matched.profile.joinDate)
-        if (!joinAt || joinAt.getTime() > now.getTime()) {
-          setLookupHint("成员档案日期异常，请检查配置文件")
-          setProfile(INITIAL_PROFILE)
-          setIsSearching(false)
-          return
-        }
-
-        setProfile({
-          mode: "member",
-          memberId: matched.memberId,
-          memberName: matched.profile.name,
-          joinDate: matched.profile.joinDate,
-          badges: matched.profile.badges || [],
-        })
-
-        if (matched.memberId === guildTerminalConfig.founderMemberId) {
-          setLookupHint("创始人档案已载入：致敬创始人")
-        } else {
-          const sourceText = matched.matchedBy === "nickname" ? "昵称" : "工号"
-          setLookupHint(`成员档案已载入：${matched.profile.name}（工号 ${matched.memberId}，匹配来源：${sourceText}）`)
-        }
-        setIsSearching(false)
-        return
-      }
-
-      const parsedDate = parseDateStrict(input)
-      if (parsedDate) {
-        if (parsedDate.getTime() > now.getTime()) {
-          setLookupHint("入会日期不能晚于当前时间")
-          setProfile(INITIAL_PROFILE)
-          setIsSearching(false)
-          return
-        }
-
-        setProfile({
-          mode: "date",
-          memberId: null,
-          memberName: null,
-          joinDate: input,
-          badges: [],
-        })
-        setLookupHint(`已按日期 ${input} 进行测算（未绑定工号）`)
-        setIsSearching(false)
-        return
-      }
-
-      setProfile(INITIAL_PROFILE)
-      setLookupHint("系统档案中未找到该工号/昵称，请直接输入入会日期(YYYY-MM-DD)进行测算")
-      setIsSearching(false)
-    }, SEARCH_DELAY_MS)
+  const root = useRef<HTMLElement>(null);
+  const { active } = useElementActivity(root);
+  const [expanded, setExpanded] = useState(false);
+  const [query, setQuery] = useState("");
+  const [result, setResult] = useState<GuildLookupResult | null>(null);
+  const id = useId();
+  const hint = !result
+    ? "支持工号、昵称，或 YYYY-MM-DD 日期。"
+    : result.kind === "error"
+      ? errors[result.reason]
+      : result.kind === "date"
+        ? `已按 ${result.joinDate} 测算，未绑定成员档案。`
+        : `已找到 ${result.profile.name} 的档案（${result.matchedBy === "nickname" ? "昵称" : "工号"}匹配）。`;
+  function lookup(event: FormEvent) {
+    event.preventDefault();
+    setResult(resolveGuildLookup(query, guildTerminalConfig.members));
   }
-
   return (
-    <aside className={styles.terminalRoot} aria-label="公会陪伴时间数据终端">
-      {!isExpanded ? (
+    <aside
+      ref={root}
+      className={styles.timeRoot}
+      aria-label="今夕同行时光"
+      data-guild-time
+      data-active={active}
+    >
+      <header className={styles.summary}>
+        <div className={styles.brand}>
+          <span className={styles.brandIcon}>
+            <CalendarDays size={26} aria-hidden="true" />
+          </span>
+          <div>
+            <h2 id={`${id}-title`}>今夕 · 同行时光</h2>
+            <p>从档案起点 {guildTerminalConfig.guildFoundedDate} 开始</p>
+          </div>
+        </div>
         <button
+          className={`paper-button ${styles.toggleButton}`}
           type="button"
-          className={styles.miniDock}
-          onClick={() => setIsExpanded(true)}
-          aria-label="展开公会数据终端"
+          aria-label={expanded ? "收起同行时光" : "展开同行时光"}
+          aria-expanded={expanded}
+          aria-controls={expanded ? `${id}-content` : undefined}
+          onClick={() => setExpanded((value) => !value)}
         >
-          <span className={styles.miniTitle}>公会运行时间</span>
-          <span className={styles.miniTime}>{formatRuntime(guildRuntime)}</span>
-          <span className={styles.miniHint}>点击展开</span>
+          {expanded ? "收起" : "展开"}
+          <ChevronDown
+            size={17}
+            className={expanded ? styles.chevronOpen : undefined}
+          />
         </button>
-      ) : null}
-
-      <section
-        className={`${styles.terminalPanel} ${isExpanded ? styles.terminalPanelOpen : styles.terminalPanelClosed}`}
-        aria-hidden={!isExpanded}
-      >
-        <header className={styles.terminalHeader}>
-          <h3 className={styles.terminalTitle}>公会数据终端</h3>
-          <div className={styles.headerActions}>
-            <span className={styles.terminalStatus}>在线</span>
-            <button
-              type="button"
-              className={styles.closeButton}
-              onClick={() => setIsExpanded(false)}
-              aria-label="折叠公会数据终端"
-            >
-              收起
-            </button>
-          </div>
-        </header>
-
-        <div className={styles.runtimeBlock}>
-          <div className={styles.runtimeLabel}>今夕公会已运行：</div>
-          <div className={styles.runtimeValue} aria-live="polite">
-            <span className={styles.runtimeNum}>{guildRuntime.years}</span>
-            <span className={styles.runtimeUnit}>年</span>
-            <span className={styles.runtimeNum}>{guildRuntime.days}</span>
-            <span className={styles.runtimeUnit}>天</span>
-            <span className={styles.runtimeNum}>{guildRuntime.hours}</span>
-            <span className={styles.runtimeUnit}>小时</span>
-            <span className={styles.runtimeNum}>{guildRuntime.minutes}</span>
-            <span className={styles.runtimeUnit}>分</span>
-            <span className={styles.runtimeNum}>{guildRuntime.seconds}</span>
-            <span className={styles.runtimeUnit}>秒</span>
-          </div>
-          <div className={styles.runtimeFoot}>基准日期：{guildTerminalConfig.guildFoundedDate}</div>
-        </div>
-
-        <form className={styles.lookupForm} onSubmit={handleLookup}>
-          <label className={styles.lookupLabel} htmlFor="guild-member-lookup">
-            成员检索
-          </label>
-          <div className={`${styles.cliInputShell} ${inputFocused ? styles.cliInputShellFocused : ""}`}>
-            <span className={styles.cliPrompt}>&gt;</span>
-            <input
-              id="guild-member-lookup"
-              value={queryValue}
-              onChange={(event) => setQueryValue(event.target.value)}
-              onFocus={() => setInputFocused(true)}
-              onBlur={() => setInputFocused(false)}
-              className={styles.cliInput}
-              placeholder="输入工号、昵称或 YYYY-MM-DD"
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <span className={`${styles.cliCursor} ${inputFocused ? styles.cliCursorVisible : ""}`} />
-          </div>
-        </form>
-
-        <div className={styles.lookupHint}>{lookupHint}</div>
-        {isSearching ? (
-          <div className={styles.searchingRow}>
-            <span className={styles.searchingDot} />
-            <span className={styles.searchingText}>数据检索中...</span>
-          </div>
-        ) : null}
-
-        <div className={styles.terminalGrid}>
-          <section className={`${styles.primaryBlock} ${isFounderMode ? styles.primaryBlockFounder : ""}`}>
-            <div className={styles.infoRow}>
-              <span className={styles.infoKey}>成员名称</span>
-              <span className={styles.infoValue}>{profile.memberName || (profile.mode === "date" ? "临时测算" : "--")}</span>
+        {!expanded && <GuildRuntimeClock active={active} compact />}
+      </header>
+      {expanded && (
+        <section
+          id={`${id}-content`}
+          className={styles.content}
+          aria-labelledby={`${id}-title`}
+        >
+          <div className={styles.overview}>
+            <div>
+              <GuildRuntimeClock active={active} />
+              <p className={styles.clockCaption}>每一段同行，都值得被记住。</p>
             </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoKey}>安全许可级别</span>
-              <span
-                className={`${styles.clearanceValue} ${clearance?.tone === "warning" ? styles.clearanceWarning : styles.clearanceNormal}`}
+            <form className={styles.lookupForm} onSubmit={lookup}>
+              <label className="paper-label" htmlFor="guild-member-lookup">
+                查找你的同行记录
+              </label>
+              <div className={styles.lookupActions}>
+                <input
+                  id="guild-member-lookup"
+                  className="paper-input"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="工号、昵称或 YYYY-MM-DD"
+                  autoComplete="off"
+                  spellCheck={false}
+                  aria-describedby={`${id}-hint`}
+                  aria-invalid={result?.kind === "error"}
+                />
+                <button type="submit" className="paper-button yellow">
+                  <Search size={17} />
+                  查询
+                </button>
+              </div>
+              <p
+                id={`${id}-hint`}
+                role="status"
+                className={`${styles.lookupHint} ${result?.kind === "error" ? styles.lookupError : ""}`}
               >
-                {clearance ? `[${clearance.code}] - ${clearance.title}` : "--"}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoKey}>陪伴时间</span>
-              <span className={`${styles.infoValueStrong} ${isFounderMode ? styles.infoValueFounder : ""}`}>
-                {memberRuntime ? formatRuntime(memberRuntime) : "--"}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoKey}>入会日期</span>
-              <span className={styles.infoValue}>{profile.joinDate || "--"}</span>
-            </div>
-          </section>
-
-          <section className={styles.secondaryBlock}>
-            <div className={styles.subSection}>
-              <h4 className={styles.subTitle}>历史档案见证</h4>
-              {profile.memberId ? (
-                unlockedMilestones.length > 0 ? (
-                  <ul className={styles.milestoneList}>
-                    {unlockedMilestones.map((item) => (
-                      <li key={`${item.date}-${item.event}`} className={styles.milestoneItem}>
-                        <span className={styles.milestoneDate}>{item.date}</span>
-                        <span className={styles.milestoneEvent}>{item.event}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className={styles.emptyText}>暂无已解锁里程碑</div>
-                )
-              ) : (
-                <div className={styles.emptyText}>输入有效工号或昵称后显示</div>
-              )}
-            </div>
-
-            <div className={styles.subSection}>
-              <h4 className={styles.subTitle}>专属勋章</h4>
-              {profile.memberId ? (
-                profile.badges.length > 0 ? (
-                  <div className={styles.badgesWrap}>
-                    {profile.badges.map((badge) => (
-                      <span key={badge} className={styles.badgeItem}>
-                        {badge}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <div className={styles.emptyText}>暂无专属勋章</div>
-                )
-              ) : (
-                <div className={styles.emptyText}>输入有效工号或昵称后显示</div>
-              )}
-            </div>
-          </section>
-        </div>
-
-        <footer className={styles.barcodeDock}>
-          <div className={styles.barcodeLines} aria-hidden />
-          <div className={styles.hashText}>{cyberHash}</div>
-        </footer>
-      </section>
+                {hint}
+              </p>
+            </form>
+          </div>
+          <ArchiveRecord result={result} active={active} />
+          <p className={styles.sourceNote}>
+            创立日与历史条目沿用现有公会档案，尚待公会确认。此处记录不代表实时在线状态。
+          </p>
+        </section>
+      )}
     </aside>
-  )
+  );
 }

@@ -1,0 +1,9 @@
+{
+  "baseline": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+  "changedFiles": 210,
+  "forbidden": [],
+  "findings": [],
+  "protectedChanges": [],
+  "scope": "Changed text files and selected protected source hashes. Does not constitute a full security audit, binary trace inspection or a fix of the known points P0.",
+  "passed": true
+}

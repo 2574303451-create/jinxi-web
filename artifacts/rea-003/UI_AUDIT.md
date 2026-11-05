@@ -1,5 +1,7 @@
 # JINXI-REA-003 全站 UI 基线审计
 
+后续状态（2026-11-05 / UI-004-A）：双行展播和guild-uptime-terminal内部已真正重构，删除了其终端专用全局兼容规则；原审计表仍保留基线语义。本次验收、截图与限制见[检查点A交付](../ui-004-a/DELIVERY.md)。攻略、签到/任务/排行、组队/数据、公告/赞助、账号/FAQ等仍待UI-004的B/C检查点，不视作完成。
+
 审计日期：2026-11-05。源码基线：`328819a57c671b33b743d1ad3f969c0fb7917048`（用户已审查的 REA-002 成果）。实施分支：`codex/jinxi-rea-003-batch-1`。**本文件是实施前的清查，不是所有批次已经完成的声明。** 源码行号均指上述固定提交；第一批修改后的行号可能移动。
 
 静态清查读取了 `COLLABORATION.md`、`WEB_EXPLORATION.md`、`AGENTS.md`、`DESIGN.md`、REA-002 调查及交付文档、主题 CSS，以及首页/布局的递归导入图。没有登录真实账号、调用写入接口或修改服务端权限。可达文件图见 [ui-import-graph.json](ui-import-graph.json)，样式定位线索见 [ui-style-markers.json](ui-style-markers.json)。静态代码证据不标为目标站 A 类浏览器实测；目标站定向研究另见本轮 REA 报告。

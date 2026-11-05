@@ -1,0 +1,74 @@
+{
+  "results": [
+    {
+      "name": "mobile navigation open/navigate/close and Escape focus",
+      "passed": true
+    },
+    {
+      "name": "retained entry 每日签到",
+      "passed": true
+    },
+    {
+      "name": "retained entry 每日任务",
+      "passed": true
+    },
+    {
+      "name": "retained entry 积分与排行",
+      "passed": true
+    },
+    {
+      "name": "retained entry 寻找队伍",
+      "passed": true
+    },
+    {
+      "name": "retained entry 游戏数据",
+      "passed": true
+    },
+    {
+      "name": "retained entry 公会动态",
+      "passed": true
+    },
+    {
+      "name": "retained entry 公会赞助",
+      "passed": true
+    },
+    {
+      "name": "strategy and submission entry retained",
+      "passed": true
+    },
+    {
+      "name": "join/login/change-password and FAQ retained",
+      "passed": true
+    },
+    {
+      "name": "stale showcase ID reports unavailable rather than inventing record",
+      "passed": true
+    },
+    {
+      "name": "single public message is static",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 1440",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 768",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 390",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 320",
+      "passed": true
+    },
+    {
+      "name": "local identity is only used as existing display nickname",
+      "passed": true
+    }
+  ],
+  "writes": [],
+  "environment": "Local Edge. No POST attempted; unrelated APIs deliberately failed. Local auth profile is a UI fixture only, never server authentication."
+}

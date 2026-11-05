@@ -615,9 +615,13 @@ button:disabled {
   .guild-video-cue .guild-video-cue-compact {
     display: block;
     top: 12px;
-    left: 100px;
+    left: -45px;
     width: 60px;
     height: 40px;
+  }
+  .guild-video summary:focus-visible {
+    position: relative;
+    z-index: 1;
   }
 }
 .guild-video summary {

@@ -1,5 +1,7 @@
-import { readGuideList } from "./guide-service";
-import { safeMediaUrl } from "../lib/guide-media-policy";
+import { readGuideList, type HomeGuideFeed } from "./guide-service";
+import { isPublicAttachmentUrl } from "../lib/guide-attachment-policy";
+import { publicReadCache } from "./public-read-cache";
+export type { HomeGuideFeed } from "./guide-service";
 export type HomeGuide = {
   id: string;
   title: string;
@@ -36,11 +38,7 @@ const record = (value: unknown): Record<string, unknown> | null =>
     : null;
 function image(value: unknown) {
   const src = text(value, 2049);
-  return src.length <= 2048 &&
-    /^(?:https?:\/\/|\/)/i.test(src) &&
-    safeMediaUrl(src)
-    ? src
-    : null;
+  return isPublicAttachmentUrl(src) ? src : null;
 }
 export function toHomeGuide(value: unknown): HomeGuide | null {
   const row = record(value);
@@ -93,39 +91,61 @@ export function toHomeGuide(value: unknown): HomeGuide | null {
     ].slice(0, 2),
   };
 }
-let cached: { at: number; items: HomeGuide[] } | null = null,
-  pending: Promise<HomeGuide[]> | null = null;
-export function readHomeGuides(force = false) {
-  if (pending) return pending;
-  if (!force && cached && Date.now() - cached.at < 60000)
-    return Promise.resolve(cached.items);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12_000);
-  pending = readGuideList(
-    {
-      limit: 3,
-      offset: 0,
-      sortBy: "created_at",
-      sortOrder: "DESC",
-    },
-    controller.signal,
-  )
-    .then((body) => {
-      if (!Array.isArray(body.strategies)) throw Error("攻略响应暂不可用");
-      const seen = new Set<string>(),
-        items = body.strategies
-          .slice(0, 3)
-          .map(toHomeGuide)
-          .filter(
-            (item): item is HomeGuide =>
-              !!item && !seen.has(item.id) && !!seen.add(item.id),
-          );
-      cached = { at: Date.now(), items };
-      return items;
-    })
-    .finally(() => {
-      clearTimeout(timeout);
-      pending = null;
-    });
-  return pending;
+export class HomeGuideReadError extends Error {
+  constructor(public readonly reason: "upgrade-required" | "invalid-response") {
+    super("首页攻略暂不可用");
+  }
+}
+const cachedRead = publicReadCache<HomeGuideFeed, HomeGuide[]>(
+  async (feed, signal) => {
+    const body = await readGuideList(
+      {
+        limit: 3,
+        offset: 0,
+        sortBy: "created_at",
+        sortOrder: "DESC",
+        feed,
+      },
+      signal,
+    );
+    if (
+      body.contract !== "jinxi.guides.summary.v2" ||
+      body.appliedFeed !== feed
+    )
+      throw new HomeGuideReadError("upgrade-required");
+    if (!Array.isArray(body.strategies) || body.strategies.length > 3)
+      throw new HomeGuideReadError("invalid-response");
+    for (const row of body.strategies) {
+      if (
+        row.status !== "published" ||
+        typeof row.hasVideo !== "boolean" ||
+        typeof row.videoCount !== "number" ||
+        !Number.isSafeInteger(row.videoCount) ||
+        row.videoCount < 0 ||
+        row.hasVideo !== row.videoCount > 0 ||
+        (row.imageUrl !== null && typeof row.imageUrl !== "string") ||
+        ["content", "comments", "likes", "favorites"].some(
+          (key) => key in row,
+        ) ||
+        (feed === "video" && !row.hasVideo) ||
+        (feed === "pinned" && !row.isPinned)
+      )
+        throw new HomeGuideReadError("invalid-response");
+    }
+    const seen = new Set<string>(),
+      items = body.strategies
+        .map(toHomeGuide)
+        .filter(
+          (item): item is HomeGuide =>
+            !!item && !seen.has(item.id) && !!seen.add(item.id),
+        );
+    if (items.length !== body.strategies.length)
+      throw new HomeGuideReadError("invalid-response");
+    return items;
+  },
+);
+export function readHomeGuides(feed: HomeGuideFeed = "latest", force = false) {
+  if (!["latest", "video", "pinned"].includes(feed))
+    return Promise.reject(new HomeGuideReadError("invalid-response"));
+  return cachedRead(feed, force);
 }

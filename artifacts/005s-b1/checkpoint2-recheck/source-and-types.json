@@ -1,0 +1,14 @@
+{
+  "sourceCopy": "E:/Recovery/.jinxi-research/005s-b1-checkpoint2/source",
+  "files": 207,
+  "missing": [],
+  "changed": [
+    "tests/fixtures/guides.cjs"
+  ],
+  "tsc": {
+    "exit": 2,
+    "before": 28,
+    "after": 28,
+    "exactDiagnosticMatch": true
+  }
+}

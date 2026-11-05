@@ -1,0 +1,36 @@
+{
+  "pg": {
+    "address": "127.0.0.1",
+    "port": 55433,
+    "database": "jinxi_005s_b1_test",
+    "role": "jinxi_005sb1_reader",
+    "read_only": "on",
+    "total": 16,
+    "published": 14,
+    "draft": 1,
+    "archived": 1
+  },
+  "stats": {
+    "contract": "jinxi.guides.video-stats.v1",
+    "count": 4,
+    "countType": "published-valid-url-video-attachments-v1",
+    "calculatedAt": "2026-11-05T13:32:41.025Z",
+    "status": "ready",
+    "playabilityVerified": false
+  },
+  "latest": {
+    "contract": "jinxi.guides.summary.v2",
+    "appliedFeed": "latest",
+    "ids": [
+      "14",
+      "13",
+      "12"
+    ]
+  },
+  "preview": {
+    "url": "http://127.0.0.1:3044",
+    "status": 200,
+    "writesBlocked": 0,
+    "scope": "Local synthetic, no production data"
+  }
+}

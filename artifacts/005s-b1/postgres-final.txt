@@ -1,0 +1,25 @@
+▶ actual isolated PostgreSQL read path
+  ✔ published video attachments are4, duplicateURLs counted, not playability (5.6653ms)
+  ✔ null/object/scalar JSONB and invalid array elements are safe (5.7918ms)
+  ✔ URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values (6.5939ms)
+  ✔ server filters before LIMIT3, latest ignores old pinned priority (7.0088ms)
+  ✔ summary has genuine covers/counts and no full/private author arrays (3.4424ms)
+  ✔ old full list and ID detail are retained, published only (2.4488ms)
+  ✔ draft/archived/forgedadmin never grant public reads (3.187ms)
+  ✔ pagination/sort/category rejected before SQL; search remains parameterized (1.991ms)
+  ✔ normal category/search/sorts and stable pages (9.2025ms)
+  ✔ read-only database role cannot write (0.6843ms)
+  ✔ stats rejects nonGET/identity parameters before DB factory (0.7489ms)
+  ✔ DB failure is503, countnull, no internal connection leakage (1.0187ms)
+  ✔ actual PG statement timeout returns504 and connection recovers (3004.1143ms)
+  ✔ concurrent readers have consistent counts and no mutation (314.1629ms)
+  ✔ actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown (43.8975ms)
+✔ actual isolated PostgreSQL read path (3578.6481ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3676.0588

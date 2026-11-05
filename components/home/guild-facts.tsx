@@ -14,12 +14,45 @@ import {
 } from "../../lib/guild-terminal-utils";
 import { useElementActivity } from "../../hooks/use-element-activity";
 import styles from "./guild-facts.module.css";
+import {
+  readGuideVideoStats,
+  type GuideVideoStats,
+} from "../../services/guide-video-stats";
 
 export function GuildFacts() {
   const root = useRef<HTMLElement>(null),
     { active } = useElementActivity(root);
+  const requestedVideoRevision = useRef(0);
   const [now, setNow] = useState<Date | null>(null),
     [methods, setMethods] = useState(false);
+  const [videoStats, setVideoStats] = useState<GuideVideoStats | null>(null),
+    [videoStatus, setVideoStatus] = useState<
+      "idle" | "loading" | "ready" | "error"
+    >("idle"),
+    [videoRevision, setVideoRevision] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let alive = true;
+    setVideoStatus("loading");
+    const force = requestedVideoRevision.current !== videoRevision;
+    requestedVideoRevision.current = videoRevision;
+    readGuideVideoStats(force)
+      .then((data) => {
+        if (alive) {
+          setVideoStats(data);
+          setVideoStatus("ready");
+        }
+      })
+      .catch(() => {
+        if (alive) {
+          setVideoStats(null);
+          setVideoStatus("error");
+        }
+      });
+    return () => {
+      alive = false;
+    };
+  }, [active, videoRevision]);
   useEffect(() => {
     if (!active) return;
     let timer: number;
@@ -102,13 +135,23 @@ export function GuildFacts() {
         <a className={styles.fact} href="/guides/">
           <BookOpen size={20} aria-hidden="true" />
           <span
-            className={`${styles.value} ${styles.pending}`}
-            aria-label="攻略视频总数尚未核实"
+            className={`${styles.value} ${videoStatus === "ready" ? "" : styles.pending}`}
+            aria-label={
+              videoStatus === "ready"
+                ? `${videoStats?.count}条公开攻略视频附件`
+                : "攻略视频统计暂不可用"
+            }
           >
-            —
+            {videoStatus === "ready" ? videoStats?.count : "—"}
           </span>
           <strong>已收录攻略视频</strong>
-          <span>公开攻略视频索引接入中</span>
+          <span>
+            {videoStatus === "ready"
+              ? "已发布攻略的有效链接附件"
+              : videoStatus === "error"
+                ? "暂时无法读取 · 查看说明"
+                : "正在核对公开攻略视频数"}
+          </span>
           <ArrowUpRight size={16} className={styles.arrow} aria-hidden="true" />
         </a>
       </div>
@@ -139,7 +182,20 @@ export function GuildFacts() {
           </p>
           <p>
             <strong>视频</strong>
-            ：未来只聚合published攻略中type=video的条目，不包含首页宣传片。服务端聚合尚未接入，本页不根据少量卡片推算全站总数。
+            ：仅统计已发布攻略中符合URL规则的视频附件，按独立附件累计，重复URL不去重，不包含首页宣传片；不代表已验证可播放。
+            {videoStatus === "ready" && videoStats
+              ? `数据计算于 ${new Date(videoStats.calculatedAt).toLocaleString("zh-CN", { hour12: false })}。`
+              : "当前尚无可用统计，不能按0计。"}
+            可见时读取，共享缓存60秒，不自动轮询。
+            {videoStatus === "error" && (
+              <button
+                type="button"
+                className="paper-button"
+                onClick={() => setVideoRevision((n) => n + 1)}
+              >
+                重试视频统计
+              </button>
+            )}
           </p>
         </div>
       </details>

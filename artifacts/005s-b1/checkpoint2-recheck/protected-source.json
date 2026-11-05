@@ -1,0 +1,108 @@
+{
+  "baseline": "d4769e719b2dd486b82cd2867f066d6c4dfa3e19",
+  "changed": [
+    "components/home/featured-guides.tsx",
+    "components/home/guild-facts.tsx",
+    "components/home/guild-hero.tsx",
+    "lib/guide-attachment-policy.d.ts",
+    "lib/guide-attachment-policy.js",
+    "package.json",
+    "services/guide-service.ts",
+    "services/guide-video-stats.ts",
+    "services/home-guides.ts",
+    "services/public-read-cache.ts",
+    "styles/guild-theme.css"
+  ],
+  "protectedFiles": [
+    {
+      "path": "components/home/guild-hero.tsx",
+      "sameAsAPlus": false,
+      "sha256": "e20928a1b4291182f74725b2f2f40714def7dfbae929430122e889cadc3e6363"
+    },
+    {
+      "path": "styles/guild-theme.css",
+      "sameAsAPlus": false,
+      "sha256": "b67f732ee99073beed9e80ba12ff163627dcd08cee2e1ae025384925b79dfe56"
+    },
+    {
+      "path": "components/message-wall.tsx",
+      "sameAsAPlus": true,
+      "sha256": "09315daa02ec178afa35386b3e7745eacf54a4a4f25958d7a0e756106a8882ef"
+    },
+    {
+      "path": "components/home/message-showcase.tsx",
+      "sameAsAPlus": true,
+      "sha256": "492b227eec43e9938521f7a3a4b9a0fe7496251251a7e4be5705db854ea7431a"
+    },
+    {
+      "path": "components/home/use-ribbon-motion.ts",
+      "sameAsAPlus": true,
+      "sha256": "21c52208c3a4652897125e048c238f22b4b363b6a13e6948343775d97bd68bc1"
+    },
+    {
+      "path": "components/home/message-ribbon-row.tsx",
+      "sameAsAPlus": true,
+      "sha256": "fa5be63b9a2da9f8758bf3e40266491d8f7dd5c0e58043a6157978cd9fb42261"
+    },
+    {
+      "path": "components/magicui/member-grid.tsx",
+      "sameAsAPlus": true,
+      "sha256": "76cf7514d805a96d31d625e4fa016aa91937ffda23751c201e4b518b3833c6d3"
+    },
+    {
+      "path": "components/magicui/3d-carousel.tsx",
+      "sameAsAPlus": true,
+      "sha256": "3a61d84bc444bae88e5207d2de321a7fa98d30420029d75789e8e2fc36d6638e"
+    },
+    {
+      "path": "components/member-detail-modal.tsx",
+      "sameAsAPlus": true,
+      "sha256": "72b7727fd88bda981034fedbe812a714cce557309274ab050751b04fc25f2dda"
+    },
+    {
+      "path": "components/guild-uptime-terminal.tsx",
+      "sameAsAPlus": true,
+      "sha256": "b9a5bca2f5d1b36df109fb7a4c834bebf12d4ec4dedc15e6cdc17316dabef648"
+    },
+    {
+      "path": "components/guild-time/runtime-clock.tsx",
+      "sameAsAPlus": true,
+      "sha256": "ec4af8ae085730d57047cf639a51f20b61945a063a3f2ad1ec23f55024139a79"
+    },
+    {
+      "path": "lib/guild-terminal-utils.ts",
+      "sameAsAPlus": true,
+      "sha256": "1d398743461718b91b6297884438b402828d94c6980cd24b63e136a73187c3ed"
+    },
+    {
+      "path": "config/guild-terminal.config.json",
+      "sameAsAPlus": true,
+      "sha256": "328267b1cb8fc0f1d3fd710ead37bb3ffa9e44255ddd79028a38fbdc61b8828e"
+    },
+    {
+      "path": "components/ui/paper.tsx",
+      "sameAsAPlus": true,
+      "sha256": "f5143a719429a02a7e5e7b4075e7ee75958b9dfe643a55ff725906ab1dc59cd0"
+    },
+    {
+      "path": "styles/community-components.css",
+      "sameAsAPlus": true,
+      "sha256": "1fff770d42c6dc3e9fc9132f1ca7e45e5184346034804fc00194ff38b9e97bf8"
+    },
+    {
+      "path": "app/page.tsx",
+      "sameAsAPlus": true,
+      "sha256": "1023cee71d033e326a8c4a2bfe11af3de1b88d9e5c6ce8da25ac64cdfb8d2bb4"
+    },
+    {
+      "path": "components/home/home-guide-card.tsx",
+      "sameAsAPlus": true,
+      "sha256": "b1973584be835d6ef938052391f2987ec7d814612bae914e2f696e2cc890e329"
+    },
+    {
+      "path": "components/home/featured-guides.module.css",
+      "sameAsAPlus": true,
+      "sha256": "46adfca355dbd3427ee0de05339ed66a4292cea602fd19108f77c990677e4f8d"
+    }
+  ]
+}

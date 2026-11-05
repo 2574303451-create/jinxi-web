@@ -1,0 +1,21 @@
+{
+  "rows": [
+    {
+      "name": "real guide filters, detail return, browser back/forward preserve URL context",
+      "passed": true
+    },
+    {
+      "name": "real SQL independent list page2 has remaining2 published cards",
+      "passed": true
+    },
+    {
+      "name": "real browser AbortController ends stalled fetch around12s, then retry recovers",
+      "passed": true,
+      "ms": 12090.2982,
+      "failed": [
+        "net::ERR_ABORTED"
+      ],
+      "networkDelayInjection": true
+    }
+  ]
+}

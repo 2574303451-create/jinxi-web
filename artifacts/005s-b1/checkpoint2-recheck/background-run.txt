@@ -1,0 +1,7 @@
+initial visible ribbon
+[{"phase":"tab-switch-observation","main":"hidden","sibling":"visible"}]
+background ribbon
+foreground ribbon
+visible clock
+background clock
+[{"phase":"tab-switch-observation","main":"hidden","sibling":"visible"},{"phase":"background-ribbon","visibility":"hidden","running":["false","false"],"animations":0},{"phase":"background-clock","visibility":"hidden","ticking":["false"]},{"phase":"foreground-resume","visibility":"visible"}]

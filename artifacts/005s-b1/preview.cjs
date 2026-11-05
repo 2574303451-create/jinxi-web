@@ -1,0 +1,22 @@
+// Read-only localhost export + actual handlers/SQL against the authorized synthetic PG.
+const http=require("node:http"),fs=require("node:fs"),path=require("node:path");
+const {connect,adapter}=require("../../tests/support/postgres.cjs"),{loadHandler}=require("../../tests/support/handler.cjs");
+const root=path.resolve(process.argv[2]||"out"),port=Number(process.argv[3]||3040),apiRoot=path.resolve(process.argv[4]||path.join(__dirname,"../..")),review=__dirname;
+const mime={".html":"text/html; charset=utf-8",".js":"text/javascript",".css":"text/css",".json":"application/json",".png":"image/png",".jpg":"image/jpeg",".svg":"image/svg+xml",".webp":"image/webp",".mp4":"video/mp4",".woff2":"font/woff2",".txt":"text/plain; charset=utf-8",".md":"text/plain; charset=utf-8"};
+const csp=fs.readFileSync(path.join(__dirname,"../../netlify.toml"),"utf8").match(/Content-Security-Policy = "([^"]+)"/)[1],messages=JSON.parse(fs.readFileSync(path.join(__dirname,"../ui-004-a/public-fixture.json")));
+const stats={requests:[],writesBlocked:0};
+http.createServer(async(req,res)=>{
+const u=new URL(req.url,"http://127.0.0.1"),json=(code,body)=>{res.writeHead(code,{"Content-Type":"application/json","Cache-Control":"no-store"});res.end(JSON.stringify(body))};
+if(req.method!=="GET"&&req.method!=="HEAD"){stats.writesBlocked++;return json(405,{error:"本机只读预览，禁止写入"})}
+if(u.pathname==="/__review/metrics")return json(200,stats);
+if(u.pathname.startsWith("/.netlify/functions/")){
+const name=u.pathname.split("/").pop();if(name==="messages")return json(200,messages);
+if(!["strategies","guide-video-stats"].includes(name))return json(503,{error:"隔离预览未连接此服务"});
+const file=path.join(apiRoot,"netlify/functions",name+".js");if(!fs.existsSync(file))return json(404,{error:"此版本未提供该只读接口"});
+let client;try{client=await connect();const queries=[],handler=loadHandler(file,()=>adapter(client,queries)),start=performance.now(),result=await handler({httpMethod:req.method,queryStringParameters:Object.fromEntries(u.searchParams)});stats.requests.push({path:u.pathname+u.search,status:result.statusCode,ms:performance.now()-start,queries:queries.length,dataQueries:queries.filter(q=>!q.text.startsWith("SELECT set_config")).length,bytes:Buffer.byteLength(result.body)});if(stats.requests.length>500)stats.requests.shift();res.writeHead(result.statusCode,result.headers);res.end(result.body)}catch{json(503,{error:"隔离数据库读取失败"})}finally{await client?.end()}return;
+}
+const isReview=u.pathname.startsWith("/review/"),base=isReview?review:root;let rel;try{rel=decodeURIComponent(isReview?u.pathname.slice(8):u.pathname.slice(1))}catch{return json(400,{error:"无效路径"})}let file=path.resolve(base,rel||"index.html");if(file!==base&&!file.startsWith(base+path.sep))return json(403,{error:"无效路径"});if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,"index.html");if(!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404,{"Content-Type":mime[".html"]});return res.end(fs.readFileSync(path.join(root,"404.html")))}
+if(!isReview&&path.extname(file)===".html")res.setHeader("Content-Security-Policy",csp);
+const size=fs.statSync(file).size,headers={"Content-Type":mime[path.extname(file)]||"application/octet-stream","X-Content-Type-Options":"nosniff","Cache-Control":u.pathname.startsWith("/_next/static/")?"public,max-age=31536000,immutable":/\.(png|jpg|gif|mp4)$/.test(file)?"public,max-age=2592000":"no-store"};
+if(path.extname(file)===".mp4"){headers["Accept-Ranges"]="bytes";if(req.headers.range){const m=/^bytes=(\d+)-(\d*)$/.exec(req.headers.range),start=m?Number(m[1]):size,end=m?.[2]?Math.min(Number(m[2]),size-1):size-1;if(start>=size||end<start){res.writeHead(416,{"Content-Range":"bytes */"+size});return res.end()}res.writeHead(206,{...headers,"Content-Range":`bytes ${start}-${end}/${size}`,"Content-Length":end-start+1});if(req.method==="HEAD")return res.end();const stream=fs.createReadStream(file,{start,end});res.once("close",()=>stream.destroy());stream.on("error",()=>res.destroy());return stream.pipe(res)}}res.writeHead(200,{...headers,"Content-Length":size});if(req.method==="HEAD")return res.end();const stream=fs.createReadStream(file);res.once("close",()=>stream.destroy());stream.on("error",()=>res.destroy());stream.pipe(res);
+}).listen(port,"127.0.0.1",()=>console.log(`B1 local read-only preview http://127.0.0.1:${port}/ (SYNTHETIC database, no production data)`));

@@ -216,7 +216,9 @@ export default function GuideReader({
                   <strong>{c.userName}</strong>
                   <small>
                     游客署名 ·{" "}
-                    {new Date(c.timestamp).toLocaleDateString("zh-CN")}
+                    {Number.isFinite(c.timestamp.getTime())
+                      ? c.timestamp.toLocaleDateString("zh-CN")
+                      : "时间未提供"}
                   </small>
                   <p>{c.content}</p>
                 </div>

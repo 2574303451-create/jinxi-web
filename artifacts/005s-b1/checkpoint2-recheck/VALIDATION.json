@@ -1,0 +1,65 @@
+{
+  "scope": "B1 local checkpoint2 and comprehensive recheck; production blocked by explicitly retained P0/quality/performance limits",
+  "branch": "codex/jinxi-005s-b1",
+  "head": "ca0723eea3e1874c7dc3ddb76a7b52f074fac4b3",
+  "git": {
+    "indexUnchanged": true,
+    "original19EvidenceUnchanged": true,
+    "unexpectedProtectedChanges": [],
+    "finalSourceMatchesBuild": true
+  },
+  "browser": {
+    "matrix": 26,
+    "reader": 13,
+    "extra": 3,
+    "focus": 4,
+    "members": 8,
+    "retainedEntries": 17,
+    "avatar": 8,
+    "lifecycle": 50,
+    "background": true,
+    "zoom": 5,
+    "video": 5
+  },
+  "tests": {
+    "api": 14,
+    "postgres": 16,
+    "detailRegression": "red then green",
+    "tsc": {
+      "exit": 2,
+      "before": 28,
+      "after": 28,
+      "exactMatch": true
+    }
+  },
+  "performance": {
+    "samples": 12,
+    "mobileLcp": [
+      {
+        "stage": "A+",
+        "median": 2904
+      },
+      {
+        "stage": "B1",
+        "median": 2916
+      }
+    ],
+    "initialMedia0": true,
+    "initialGuideAndStatsRequests0": true,
+    "initialFullReaderCode0": true,
+    "goal2500ms": false
+  },
+  "scale": {
+    "sizes": [
+      1000,
+      10000
+    ],
+    "allPassed": true,
+    "restored": 16
+  },
+  "committed": false,
+  "pushed": false,
+  "merged": false,
+  "deployed": false,
+  "b2Started": false
+}

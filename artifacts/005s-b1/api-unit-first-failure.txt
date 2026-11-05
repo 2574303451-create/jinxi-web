@@ -1,0 +1,45 @@
+▶ read API safety without a database
+  ✔ invalid public queries rejected before transaction (3.2805ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (0.789ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.1436ms)
+  ✖ installed Neon driver really serializes bounded READ ONLY batch (18.7362ms)
+✖ read API safety without a database (24.6015ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.8431
+
+✖ failing tests:
+
+test at tests\strategy-api.test.cjs:8:10
+✖ installed Neon driver really serializes bounded READ ONLY batch (18.7362ms)
+  Error [NeonDbError]: Neon internal error: unexpected result format
+      at execute (E:\Recovery\jinxi-web\node_modules\@neondatabase\serverless\index.js:1296:57)
+      at async readBatch (E:\Recovery\jinxi-web\netlify\functions\_shared\strategy-query.js:4:16)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\strategy-api.test.cjs:11:88)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\strategy-api.test.cjs:8:2)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    severity: undefined,
+    code: undefined,
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: undefined,
+    line: undefined,
+    routine: undefined,
+    sourceError: undefined
+  }

@@ -1,0 +1,32 @@
+▶ read API safety without a database
+  ✔ preview connections fail closed without separate configuration (1.1864ms)
+  ✔ invalid public queries rejected before transaction (3.6122ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (0.9177ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.2482ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (21.7219ms)
+✔ read API safety without a database (29.4892ms)
+▶ actual isolated PostgreSQL read path
+  ✔ published video attachments are4, duplicateURLs counted, not playability (6.4277ms)
+  ✔ null/object/scalar JSONB and invalid array elements are safe (5.9685ms)
+  ✔ URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values (7.8652ms)
+  ✔ server filters before LIMIT3, latest ignores old pinned priority (8.7469ms)
+  ✔ summary has genuine covers/counts and no full/private author arrays (3.3541ms)
+  ✔ old full list and ID detail are retained, published only (2.3718ms)
+  ✔ draft/archived/forgedadmin never grant public reads (3.0445ms)
+  ✔ pagination/sort/category rejected before SQL; search remains parameterized (2.3427ms)
+  ✔ normal category/search/sorts and stable pages (11.8734ms)
+  ✔ read-only database role cannot write (0.9584ms)
+  ✔ stats rejects nonGET/identity parameters before DB factory (1.3048ms)
+  ✔ DB failure is503, countnull, no internal connection leakage (1.4857ms)
+  ✔ actual PG statement timeout returns504 and connection recovers (3011.4894ms)
+  ✔ concurrent readers have consistent counts and no mutation (449.3977ms)
+  ✔ actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown (76.8684ms)
+✔ actual isolated PostgreSQL read path (3964.2232ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4116.1096

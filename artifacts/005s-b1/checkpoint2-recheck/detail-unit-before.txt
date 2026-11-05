@@ -1,0 +1,21 @@
+✖ legacy full detail normalizes malformed comments/media at the actual read boundary (10.8559ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.2779
+
+✖ failing tests:
+
+test at tests\guide-detail-read.test.cjs:4:1
+✖ legacy full detail normalizes malformed comments/media at the actual read boundary (10.8559ms)
+  TypeError [Error]: Cannot read properties of null (reading 'timestamp')
+      at E:\Recovery\jinxi-web\services\guide-service.ts:66:35
+      at Array.map (<anonymous>)
+      at readGuide (E:\Recovery\jinxi-web\services\guide-service.ts:64:50)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\guide-detail-read.test.cjs:8:16)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3)

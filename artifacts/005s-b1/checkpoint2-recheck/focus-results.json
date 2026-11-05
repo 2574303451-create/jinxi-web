@@ -1,0 +1,1126 @@
+{
+  "observations": [
+    {
+      "stage": "A+",
+      "width": 1440,
+      "pureTab": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "tabOrder": [
+        {
+          "tag": "A",
+          "text": "跳到主要内容",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕公会弹弹堂 · 并肩作战",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公告活动",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "签到与任务",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "攻略交流",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "登录",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "DDT弹弹堂 · 今夕公会，把下一局留给好伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "初次见面",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公会成员",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "管理团队",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员展示",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "活动公告",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "看看今夕的游戏影像",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "208份成员档案按唯一档案编号收录",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—当前在线登录成员统计接入中 · 查看说明",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "8年268天公会同行时长始于 2018-02-10",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—已收录攻略视频公开攻略视频索引接入中",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "数字从哪里来？",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会伙伴",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "入会要求与常见问题",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "配合 · 信任管理团队，认识带队的伙伴公会统筹、新人引导、战术配合与活动交流。",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "每个名字 · 一段故事并肩作战的人，都在这里看看游戏角色，也看看今夕成员的自我介绍。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "集合通知这一周怎么玩？先看公会公告历史活跃时段尚待确认，具体活动请以实际公告为准。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入这个大家庭",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看全部",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "会长今夕_执手问年华热爱今夕认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_淡意技术宅认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_啵咕有任何问题可以优先问我哦~认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_时光浙大高材生 时常查无此人认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_洗菜今夕现任团宠认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_一笑作春温负责团队支援和资源管理认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开轮播展示",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "去签到",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看任务",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看排行",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开组队",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开面板",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "查看全部攻略",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公开更新",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "视频附件",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "置顶精选",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕 · 攻略笔记原文暂无封面PVE置顶2026-11-05【隔离样本】攻略3【隔离测试正文】用于验证摘要不返回全文。【",
+          "id": "3"
+        }
+      ],
+      "mouseThenProgrammatic": {
+        "active": true,
+        "connected": true,
+        "focusVisible": false,
+        "outlineWidth": "0px",
+        "outlineStyle": "none",
+        "outlineColor": "rgb(23, 23, 23)",
+        "outlineOffset": "0px",
+        "id": "3"
+      },
+      "keyboardForward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "keyboardBackward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "stable": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "enterNavigates": true,
+      "detailRenders": true
+    },
+    {
+      "stage": "A+",
+      "width": 390,
+      "pureTab": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "tabOrder": [
+        {
+          "tag": "A",
+          "text": "跳到主要内容",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕公会弹弹堂 · 并肩作战",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "DDT弹弹堂 · 今夕公会，把下一局留给好伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "初次见面",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公会成员",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "管理团队",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员展示",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "活动公告",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "看看今夕的游戏影像",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "208份成员档案按唯一档案编号收录",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—当前在线登录成员统计接入中 · 查看说明",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "8年268天公会同行时长始于 2018-02-10",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—已收录攻略视频公开攻略视频索引接入中",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "数字从哪里来？",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会伙伴",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "入会要求与常见问题",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "配合 · 信任管理团队，认识带队的伙伴公会统筹、新人引导、战术配合与活动交流。",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "每个名字 · 一段故事并肩作战的人，都在这里看看游戏角色，也看看今夕成员的自我介绍。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "集合通知这一周怎么玩？先看公会公告历史活跃时段尚待确认，具体活动请以实际公告为准。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看全部",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "会长今夕_执手问年华热爱今夕认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_淡意技术宅认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_啵咕有任何问题可以优先问我哦~认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_时光浙大高材生 时常查无此人认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_洗菜今夕现任团宠认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_一笑作春温负责团队支援和资源管理认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开轮播展示",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "去签到",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看任务",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看排行",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开组队",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开面板",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "查看全部攻略",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公开更新",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "视频附件",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "置顶精选",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕 · 攻略笔记原文暂无封面PVE置顶2026-11-05【隔离样本】攻略3【隔离测试正文】用于验证摘要不返回全文。【",
+          "id": "3"
+        }
+      ],
+      "mouseThenProgrammatic": {
+        "active": true,
+        "connected": true,
+        "focusVisible": false,
+        "outlineWidth": "0px",
+        "outlineStyle": "none",
+        "outlineColor": "rgb(23, 23, 23)",
+        "outlineOffset": "0px",
+        "id": "3"
+      },
+      "keyboardForward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "keyboardBackward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "stable": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "3"
+      },
+      "enterNavigates": true,
+      "detailRenders": true
+    },
+    {
+      "stage": "B1",
+      "width": 1440,
+      "pureTab": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "tabOrder": [
+        {
+          "tag": "A",
+          "text": "跳到主要内容",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕公会弹弹堂 · 并肩作战",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公告活动",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "签到与任务",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "攻略交流",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "登录",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "DDT弹弹堂 · 今夕公会，把下一局留给好伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "初次见面",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公会成员",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "管理团队",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员展示",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "活动公告",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "看看今夕的游戏影像",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "208份成员档案按唯一档案编号收录",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—当前在线登录成员统计接入中 · 查看说明",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "8年268天公会同行时长始于 2018-02-10",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—已收录攻略视频正在核对公开攻略视频数",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "数字从哪里来？",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会伙伴",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "入会要求与常见问题",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "配合 · 信任管理团队，认识带队的伙伴公会统筹、新人引导、战术配合与活动交流。",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "每个名字 · 一段故事并肩作战的人，都在这里看看游戏角色，也看看今夕成员的自我介绍。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "集合通知这一周怎么玩？先看公会公告历史活跃时段尚待确认，具体活动请以实际公告为准。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入这个大家庭",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看全部",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "会长今夕_执手问年华热爱今夕认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_淡意技术宅认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_啵咕有任何问题可以优先问我哦~认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_时光浙大高材生 时常查无此人认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_洗菜今夕现任团宠认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_一笑作春温负责团队支援和资源管理认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开轮播展示",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "去签到",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看任务",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看排行",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开组队",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开面板",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "查看全部攻略",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "最近发布",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "视频附件",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "置顶精选",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "PVP公开攻略2026-11-05【隔离样本】攻略14【隔离测试正文】用于验证摘要不返回全文。【隔离测试正文】用于验证摘",
+          "id": "14"
+        }
+      ],
+      "mouseThenProgrammatic": {
+        "active": true,
+        "connected": true,
+        "focusVisible": false,
+        "outlineWidth": "0px",
+        "outlineStyle": "none",
+        "outlineColor": "rgb(23, 23, 23)",
+        "outlineOffset": "0px",
+        "id": "14"
+      },
+      "keyboardForward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "keyboardBackward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "stable": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "enterNavigates": true,
+      "detailRenders": true
+    },
+    {
+      "stage": "B1",
+      "width": 390,
+      "pureTab": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "tabOrder": [
+        {
+          "tag": "A",
+          "text": "跳到主要内容",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "今夕公会弹弹堂 · 并肩作战",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "DDT弹弹堂 · 今夕公会，把下一局留给好伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "初次见面",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "公会成员",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "公会介绍",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "管理团队",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "成员展示",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "活动公告",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "加入今夕",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "看看今夕的游戏影像",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "208份成员档案按唯一档案编号收录",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—当前在线登录成员统计接入中 · 查看说明",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "8年268天公会同行时长始于 2018-02-10",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "—已收录攻略视频正在核对公开攻略视频数",
+          "id": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "数字从哪里来？",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "认识公会伙伴",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "入会要求与常见问题",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "配合 · 信任管理团队，认识带队的伙伴公会统筹、新人引导、战术配合与活动交流。",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "每个名字 · 一段故事并肩作战的人，都在这里看看游戏角色，也看看今夕成员的自我介绍。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "集合通知这一周怎么玩？先看公会公告历史活跃时段尚待确认，具体活动请以实际公告为准。",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看全部",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "会长今夕_执手问年华热爱今夕认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_淡意技术宅认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_啵咕有任何问题可以优先问我哦~认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_时光浙大高材生 时常查无此人认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_洗菜今夕现任团宠认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "副会今夕_一笑作春温负责团队支援和资源管理认识这位伙伴",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开轮播展示",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "去签到",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看任务",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "查看排行",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开组队",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "打开面板",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "查看全部攻略",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "最近发布",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "视频附件",
+          "id": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "置顶精选",
+          "id": null
+        },
+        {
+          "tag": "A",
+          "text": "PVP公开攻略2026-11-05【隔离样本】攻略14【隔离测试正文】用于验证摘要不返回全文。【隔离测试正文】用于验证摘",
+          "id": "14"
+        }
+      ],
+      "mouseThenProgrammatic": {
+        "active": true,
+        "connected": true,
+        "focusVisible": false,
+        "outlineWidth": "0px",
+        "outlineStyle": "none",
+        "outlineColor": "rgb(23, 23, 23)",
+        "outlineOffset": "0px",
+        "id": "14"
+      },
+      "keyboardForward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "keyboardBackward": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "stable": {
+        "active": true,
+        "connected": true,
+        "focusVisible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineColor": "rgb(35, 96, 245)",
+        "outlineOffset": "4px",
+        "id": "14"
+      },
+      "enterNavigates": true,
+      "detailRenders": true
+    }
+  ]
+}

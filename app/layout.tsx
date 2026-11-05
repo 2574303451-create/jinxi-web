@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import '../styles/guild-theme.css'
+import '../styles/community-components.css'
 
 export const metadata: Metadata = {
   title: '今夕公会 · 今晚开黑，星光作陪',

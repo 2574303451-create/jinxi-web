@@ -1,0 +1,53 @@
+[
+  {
+    "id": 9001,
+    "name": "界面测试 · 小夕",
+    "content": "这是界面验收专用留言。今晚一起练习配合，也欢迎新伙伴分享自己的打法。",
+    "category": "闲聊",
+    "color": "#3b82f6",
+    "isPinned": true,
+    "timestamp": "2026-11-04T12:00:00Z",
+    "imageUrl": "/1.png",
+    "reactions": [
+      {
+        "type": "👍",
+        "count": 2,
+        "users": [
+          "fixture-a",
+          "fixture-b"
+        ]
+      }
+    ],
+    "replies": [
+      {
+        "id": "r1",
+        "name": "界面测试 · 阿星",
+        "content": "收到，配合练习见！",
+        "color": "#22c55e",
+        "timestamp": "2026-11-04T13:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": 9002,
+    "name": "界面测试 · 阿星",
+    "content": "想请教一下角度和力度的搭配，有没有适合新手练习的方式？",
+    "category": "求助",
+    "color": "#22c55e",
+    "isPinned": false,
+    "timestamp": "2026-11-04T11:00:00Z",
+    "reactions": [],
+    "replies": []
+  },
+  {
+    "id": 9003,
+    "name": "界面测试 · 团子",
+    "content": "这一局虽然没赢，但和大家一起玩的过程很开心。下次继续！",
+    "category": "闲聊",
+    "color": "#f59e0b",
+    "isPinned": false,
+    "timestamp": "2026-11-04T10:00:00Z",
+    "reactions": [],
+    "replies": []
+  }
+]

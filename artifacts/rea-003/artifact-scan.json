@@ -1,0 +1,5 @@
+{
+  "flags": [],
+  "method": "Pattern/JSON-field screening of task text artifacts only; potential matches require review. Does not certify absence of every possible secret.",
+  "filesRoot": "artifacts/rea-003"
+}

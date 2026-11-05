@@ -1,0 +1,2379 @@
+{
+  "baseline": "328819a57c671b33b743d1ad3f969c0fb7917048",
+  "markers": {
+    "app/page.tsx": [
+      {
+        "line": 818,
+        "text": "          <div className=\"guild-panel faq-panel legacy-module\"><ComponentLoader><Accordion items={faqItems} /></ComponentLoader></div>"
+      },
+      {
+        "line": 827,
+        "text": "        <div className=\"legacy-module\">"
+      },
+      {
+        "line": 850,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 858,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 864,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 886,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 910,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 919,
+        "text": "                background: \"linear-gradient(180deg,#2a5bd7,#1a3b8f)\","
+      },
+      {
+        "line": 928,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      },
+      {
+        "line": 937,
+        "text": "              style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      },
+      {
+        "line": 1002,
+        "text": "                  style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1012,
+        "text": "                    style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1047,
+        "text": "                    background: \"linear-gradient(180deg,#22c55e,#15803d)\","
+      },
+      {
+        "line": 1060,
+        "text": "                  style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      },
+      {
+        "line": 1081,
+        "text": "                  style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1092,
+        "text": "                    style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1111,
+        "text": "                    style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1130,
+        "text": "                    style={{ borderColor: \"rgba(255,255,255,.14)\" }}"
+      },
+      {
+        "line": 1149,
+        "text": "                    background: \"linear-gradient(180deg,#2563eb,#1d4ed8)\","
+      },
+      {
+        "line": 1167,
+        "text": "                  style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      }
+    ],
+    "app/layout.tsx": [],
+    "components/ui/loading-spinner.tsx": [
+      {
+        "line": 10,
+        "text": "export function LoadingSpinner({ size = \"md\", color = \"#60a5fa\" }: LoadingSpinnerProps) {"
+      }
+    ],
+    "components/ui/toast.tsx": [
+      {
+        "line": 51,
+        "text": "        return { bg: \"#22c55e\", icon: \"ri-check-line\" }"
+      },
+      {
+        "line": 53,
+        "text": "        return { bg: \"#ef4444\", icon: \"ri-close-line\" }"
+      },
+      {
+        "line": 55,
+        "text": "        return { bg: \"#f59e0b\", icon: \"ri-alert-line\" }"
+      },
+      {
+        "line": 58,
+        "text": "        return { bg: \"#60a5fa\", icon: \"ri-information-line\" }"
+      }
+    ],
+    "components/email-service.tsx": [],
+    "components/ui/modal.tsx": [],
+    "components/ui/icons.tsx": [],
+    "components/home/guild-navigation.tsx": [],
+    "components/home/guild-hero.tsx": [],
+    "components/home/guild-sections.tsx": [],
+    "components/home/guild-members.tsx": [],
+    "components/home/community-updates.tsx": [],
+    "components/cyber-announcement.tsx": [
+      {
+        "line": 172,
+        "text": "        `<p><img src=\"${safeSrc}\" alt=\"${safeAlt}\" style=\"max-width:100%;height:auto;border-radius:10px;border:1px solid rgba(0,243,255,.35);margin:8px 0;\" /></p><p><br></p>`,"
+      }
+    ],
+    "components/guild-uptime-terminal.tsx": [],
+    "components/guild-sponsorship.tsx": [
+      {
+        "line": 106,
+        "text": "        className=\"fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-[160] h-12 w-12 rounded-full border border-white/30 text-xl text-white shadow-xl transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/70\""
+      },
+      {
+        "line": 108,
+        "text": "          background: \"linear-gradient(180deg,#fb7185,#be123c)\","
+      },
+      {
+        "line": 109,
+        "text": "          boxShadow: \"0 10px 25px rgba(190,18,60,.35)\","
+      },
+      {
+        "line": 128,
+        "text": "              className=\"w-44 sm:w-52 md:w-60 h-auto rounded-xl border border-white/20 shadow-lg\""
+      },
+      {
+        "line": 152,
+        "text": "                style={{ background: \"linear-gradient(180deg,#22c55e,#15803d)\" }}"
+      }
+    ],
+    "components/message-wall.tsx": [
+      {
+        "line": 33,
+        "text": "    color: '#3b82f6',"
+      },
+      {
+        "line": 117,
+        "text": "        color: '#3b82f6',"
+      },
+      {
+        "line": 275,
+        "text": "            <div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-white loading\"></div>"
+      },
+      {
+        "line": 289,
+        "text": "          background: \"linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))\","
+      },
+      {
+        "line": 290,
+        "text": "          borderColor: \"rgba(255,255,255,.1)\","
+      },
+      {
+        "line": 291,
+        "text": "          boxShadow: \"0 10px 30px rgba(0,0,0,.35)\","
+      },
+      {
+        "line": 314,
+        "text": "<RefreshIcon className={cn(isLoading && \"animate-spin\")} size={16} />"
+      },
+      {
+        "line": 347,
+        "text": "            className=\"mb-8 p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\""
+      },
+      {
+        "line": 349,
+        "text": "              borderColor: \"rgba(255,255,255,.12)\","
+      },
+      {
+        "line": 350,
+        "text": "              background: \"rgba(255,255,255,.08)\","
+      },
+      {
+        "line": 409,
+        "text": "                  className=\"px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium transition-all"
+      },
+      {
+        "line": 413,
+        "text": "                      <div className=\"w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin\"></div>"
+      },
+      {
+        "line": 463,
+        "text": "                        \"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm hover:bg-white/8 transition-all duration-300\","
+      },
+      {
+        "line": 467,
+        "text": "                        borderColor: \"rgba(255,255,255,.12)\","
+      }
+    ],
+    "components/strategy-wall.tsx": [
+      {
+        "line": 221,
+        "text": "          className=\"strategy-content legacy-module relative\""
+      },
+      {
+        "line": 223,
+        "text": "            backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85)), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\"><defs><radialGradient id=\"a\" cx=\"50%\" cy=\"50%\"><stop offs"
+      },
+      {
+        "line": 229,
+        "text": "            className=\"absolute top-4 right-4 z-50 p-3 bg-black/30 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-black/50 transition-all duration-200 hover:scale-110\""
+      },
+      {
+        "line": 241,
+        "text": "                  <div className=\"p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl\">"
+      },
+      {
+        "line": 245,
+        "text": "                    <h1 className=\"text-3xl font-bold text-white drop-shadow-lg\">📖 攻略墙</h1>"
+      },
+      {
+        "line": 252,
+        "text": "                  className=\"flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 shadow-lg font-medium\""
+      },
+      {
+        "line": 260,
+        "text": "              <div className=\"bg-white/10 backdrop-blur-md rounded-2xl p-4 mb-6 border border-white/20 shadow-lg\">"
+      },
+      {
+        "line": 270,
+        "text": "                      className=\"w-full pl-10 pr-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 hover:bg-"
+      },
+      {
+        "line": 279,
+        "text": "                      className=\"w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/20 transition-all dur"
+      },
+      {
+        "line": 298,
+        "text": "                    <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 306,
+        "text": "                      className=\"w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 hover:bg-white/20 transition-all"
+      },
+      {
+        "line": 325,
+        "text": "                    <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 333,
+        "text": "                      className=\"w-full px-4 py-3 bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 hover:bg-white/20 transition-all d"
+      },
+      {
+        "line": 345,
+        "text": "                    <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 354,
+        "text": "                <div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400\"></div>"
+      },
+      {
+        "line": 373,
+        "text": "                          className=\"bg-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-"
+      },
+      {
+        "line": 545,
+        "text": "                          <div className=\"inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2\"></div>"
+      }
+    ],
+    "components/magicui/3d-carousel.tsx": [
+      {
+        "line": 114,
+        "text": "                  background: \"linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))\","
+      },
+      {
+        "line": 115,
+        "text": "                  borderColor: isSelected ? \"#60a5fa\" : \"rgba(255,255,255,.12)\","
+      },
+      {
+        "line": 117,
+        "text": "                    ? \"0 0 30px rgba(96,165,250,.6), 0 18px 52px rgba(0,0,0,.48)\""
+      },
+      {
+        "line": 118,
+        "text": "                    : \"0 18px 52px rgba(0,0,0,.48)\","
+      },
+      {
+        "line": 137,
+        "text": "                      background: \"linear-gradient(180deg,transparent,rgba(0,0,0,.8))\","
+      },
+      {
+        "line": 189,
+        "text": "          style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      },
+      {
+        "line": 197,
+        "text": "          style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      },
+      {
+        "line": 205,
+        "text": "          style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      }
+    ],
+    "components/magicui/member-grid.tsx": [
+      {
+        "line": 81,
+        "text": "                borderColor: \"rgba(255,255,255,.1)\","
+      },
+      {
+        "line": 82,
+        "text": "                boxShadow: \"0 4px 12px rgba(0,0,0,.3)\","
+      },
+      {
+        "line": 85,
+        "text": "                boxShadow: \"0 8px 25px rgba(0,0,0,.4), 0 0 20px rgba(96,165,250,.3)\","
+      },
+      {
+        "line": 106,
+        "text": "                        member.role === \"会长\" || member.role === \"创始\" ? \"#d69e2e\" :"
+      },
+      {
+        "line": 107,
+        "text": "                        member.role === \"技术\" || member.role === \"技术控\" ? \"#805ad5\" :"
+      },
+      {
+        "line": 108,
+        "text": "                        member.role === \"组织团结\" ? \"#22c55e\" :"
+      },
+      {
+        "line": 109,
+        "text": "                        member.role === \"摆烂\" || member.role === \"元老级摆烂\" ? \"#6b7280\" :"
+      },
+      {
+        "line": 110,
+        "text": "                        member.role === \"情绪调控\" ? \"#f59e0b\" :"
+      },
+      {
+        "line": 111,
+        "text": "                        member.role === \"东北老爷们\" ? \"#8b5cf6\" :"
+      },
+      {
+        "line": 112,
+        "text": "                        member.role === \"嘴炮\" ? \"#ef4444\" :"
+      },
+      {
+        "line": 114,
+        "text": "                        member.role === \"副会\" ? \"#dc2626\" :"
+      },
+      {
+        "line": 115,
+        "text": "                        member.role === \"精英\" ? \"#3b82f6\" :"
+      },
+      {
+        "line": 116,
+        "text": "                        member.role === \"萌新\" ? \"#10b981\" :"
+      },
+      {
+        "line": 117,
+        "text": "                        member.role === \"回忆\" ? \"#6366f1\" :"
+      },
+      {
+        "line": 119,
+        "text": "                        member.role === \"火力\" ? \"#e53e3e\" : "
+      },
+      {
+        "line": 120,
+        "text": "                        member.role === \"控位\" ? \"#4299e1\" : "
+      },
+      {
+        "line": 121,
+        "text": "                        member.role === \"后勤\" ? \"#38a169\" :"
+      },
+      {
+        "line": 122,
+        "text": "                        member.role === \"战术官\" ? \"#3182ce\" :"
+      },
+      {
+        "line": 123,
+        "text": "                        member.role === \"外交\" ? \"#e53e3e\" :"
+      },
+      {
+        "line": 124,
+        "text": "                        \"#38a169\","
+      },
+      {
+        "line": 132,
+        "text": "                <div className=\"absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300\">"
+      },
+      {
+        "line": 151,
+        "text": "                    background: \"conic-gradient(from 0deg, #60a5fa, #22c55e, #f59e0b, #fb7185, #60a5fa)\","
+      },
+      {
+        "line": 153,
+        "text": "                    WebkitMask: \"linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)\","
+      },
+      {
+        "line": 171,
+        "text": "            style={{ borderColor: \"rgba(255,255,255,.2)\" }}"
+      }
+    ],
+    "components/ui/accordion.tsx": [
+      {
+        "line": 37,
+        "text": "          <div key={item.id} className=\"rounded-xl border bg-white/5\" style={{ borderColor: \"rgba(255,255,255,.1)\" }}>"
+      }
+    ],
+    "components/checkin-widget.tsx": [
+      {
+        "line": 114,
+        "text": "      <div className={cn(\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\", className)}>"
+      },
+      {
+        "line": 134,
+        "text": "        className=\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\""
+      },
+      {
+        "line": 136,
+        "text": "          borderColor: \"rgba(255,255,255,.12)\","
+      },
+      {
+        "line": 137,
+        "text": "          background: \"rgba(255,255,255,.08)\","
+      },
+      {
+        "line": 185,
+        "text": "              ? \"bg-gradient-to-r from-green-600 to-emerald-600\""
+      },
+      {
+        "line": 186,
+        "text": "              : \"bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700\""
+      },
+      {
+        "line": 231,
+        "text": "          className=\"fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4\""
+      }
+    ],
+    "components/leaderboard-widget.tsx": [
+      {
+        "line": 98,
+        "text": "      <div className={cn(\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\", className)}>"
+      },
+      {
+        "line": 100,
+        "text": "          <div className=\"animate-spin rounded-full h-6 w-6 border-b-2 border-white\"></div>"
+      },
+      {
+        "line": 111,
+        "text": "      className={cn(\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\", className)}"
+      },
+      {
+        "line": 113,
+        "text": "        borderColor: \"rgba(255,255,255,.12)\","
+      },
+      {
+        "line": 114,
+        "text": "        background: \"rgba(255,255,255,.08)\","
+      },
+      {
+        "line": 132,
+        "text": "          <i className={cn(\"ri-refresh-line\", refreshing && \"animate-spin\")}></i>"
+      }
+    ],
+    "components/daily-tasks.tsx": [
+      {
+        "line": 104,
+        "text": "        className=\"p-6 rounded-2xl border mb-6 cartoon-card cartoon-card-pink animate-slide-in-up\""
+      },
+      {
+        "line": 106,
+        "text": "          background: 'linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03))',"
+      },
+      {
+        "line": 107,
+        "text": "          borderColor: 'rgba(255,107,157,.3)',"
+      },
+      {
+        "line": 111,
+        "text": "          <h3 className=\"text-xl font-bold gradient-text-candy\" style={{ fontFamily: '\"ZCOOL KuaiLe\", \"Noto Sans SC\", cursive' }}>"
+      },
+      {
+        "line": 122,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-candy\">{totalPointsDisplay}</div>"
+      },
+      {
+        "line": 126,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-sky\">{stats.completedToday}</div>"
+      },
+      {
+        "line": 130,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-fresh\">{stats.currentStreak}</div>"
+      },
+      {
+        "line": 134,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-rainbow\">{stats.badges.length}</div>"
+      },
+      {
+        "line": 165,
+        "text": "                className=\"p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up\""
+      },
+      {
+        "line": 167,
+        "text": "                  background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 168,
+        "text": "                  borderColor: `rgba(${"
+      },
+      {
+        "line": 181,
+        "text": "                  <div className=\"text-4xl flex-shrink-0 animate-float\" style={{ animationDelay: `${index * 0.2}s` }}>"
+      },
+      {
+        "line": 212,
+        "text": "                          className=\"h-full bg-gradient-candy transition-all duration-500 animate-gradient-shift\""
+      },
+      {
+        "line": 228,
+        "text": "                          className=\"cartoon-btn cartoon-btn-fresh px-4 py-2 text-sm animate-pulse-glow\""
+      }
+    ],
+    "components/points-ranking-widget.tsx": [
+      {
+        "line": 132,
+        "text": "      <div className={cn(\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\", className)}>"
+      },
+      {
+        "line": 134,
+        "text": "          <div className=\"animate-spin rounded-full h-6 w-6 border-b-2 border-white\"></div>"
+      },
+      {
+        "line": 145,
+        "text": "      className={cn(\"p-6 rounded-2xl border bg-white/5 backdrop-blur-sm\", className)}"
+      },
+      {
+        "line": 147,
+        "text": "        borderColor: \"rgba(255,255,255,.12)\","
+      },
+      {
+        "line": 148,
+        "text": "        background: \"rgba(255,255,255,.08)\","
+      },
+      {
+        "line": 164,
+        "text": "          <i className={cn(\"ri-refresh-line\", refreshing && \"animate-spin\")}></i>"
+      }
+    ],
+    "components/team-system.tsx": [
+      {
+        "line": 70,
+        "text": "      '#FFD93D': 'cartoon-yellow',"
+      },
+      {
+        "line": 71,
+        "text": "      '#6BCFFF': 'cartoon-cyan',"
+      },
+      {
+        "line": 72,
+        "text": "      '#FF6B9D': 'cartoon-pink',"
+      },
+      {
+        "line": 73,
+        "text": "      '#C77DFF': 'cartoon-purple',"
+      },
+      {
+        "line": 74,
+        "text": "      '#4ADE80': 'cartoon-green',"
+      },
+      {
+        "line": 84,
+        "text": "          className=\"p-6 rounded-2xl border mb-6 cartoon-card cartoon-card-pink animate-bounce-in\""
+      },
+      {
+        "line": 86,
+        "text": "            background: 'linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03))',"
+      },
+      {
+        "line": 95,
+        "text": "                  className=\"text-xl font-bold gradient-text-candy\""
+      },
+      {
+        "line": 113,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-candy\">{userTeam.stats.totalPoints}</div>"
+      },
+      {
+        "line": 117,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-sky\">#{userTeam.stats.rank}</div>"
+      },
+      {
+        "line": 121,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-fresh\">{userTeam.stats.winRate.toFixed(1)}%</div>"
+      },
+      {
+        "line": 125,
+        "text": "              <div className=\"text-2xl font-bold gradient-text-rainbow\">{userTeam.members.length}</div>"
+      },
+      {
+        "line": 135,
+        "text": "          className=\"text-2xl font-bold gradient-text-sky\""
+      },
+      {
+        "line": 172,
+        "text": "              className=\"p-6 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up\""
+      },
+      {
+        "line": 174,
+        "text": "                background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 183,
+        "text": "                    className=\"text-5xl animate-float\""
+      },
+      {
+        "line": 258,
+        "text": "              className=\"p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-left\""
+      },
+      {
+        "line": 262,
+        "text": "                    ? 'linear-gradient(180deg,rgba(255,215,0,.15),rgba(255,215,0,.05))'"
+      },
+      {
+        "line": 263,
+        "text": "                    : 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 264,
+        "text": "                borderColor: index < 3 ? '#FFD700' : 'rgba(255,255,255,.1)',"
+      },
+      {
+        "line": 295,
+        "text": "                  <div className=\"text-2xl font-bold gradient-text-candy\">{ranking.weeklyPoints}</div>"
+      },
+      {
+        "line": 306,
+        "text": "        <div className=\"fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4\">"
+      },
+      {
+        "line": 308,
+        "text": "            className=\"bg-gray-900 rounded-2xl border p-6 max-w-md w-full animate-bounce-in\""
+      }
+    ],
+    "components/game-data-panel.tsx": [
+      {
+        "line": 34,
+        "text": "      common: '#9CA3AF',"
+      },
+      {
+        "line": 35,
+        "text": "      normal: '#9CA3AF',"
+      },
+      {
+        "line": 36,
+        "text": "      rare: '#3B82F6',"
+      },
+      {
+        "line": 37,
+        "text": "      epic: '#A855F7',"
+      },
+      {
+        "line": 38,
+        "text": "      legendary: '#F59E0B',"
+      },
+      {
+        "line": 39,
+        "text": "      mythic: '#EF4444',"
+      },
+      {
+        "line": 40,
+        "text": "      bronze: '#CD7F32',"
+      },
+      {
+        "line": 41,
+        "text": "      silver: '#C0C0C0',"
+      },
+      {
+        "line": 42,
+        "text": "      gold: '#FFD700',"
+      },
+      {
+        "line": 43,
+        "text": "      platinum: '#E5E4E2',"
+      },
+      {
+        "line": 45,
+        "text": "    return colors[rarity] || '#9CA3AF'"
+      },
+      {
+        "line": 61,
+        "text": "        className=\"text-2xl font-bold gradient-text-rainbow mb-6\""
+      },
+      {
+        "line": 94,
+        "text": "            className=\"p-6 rounded-2xl border text-center animate-bounce-in\""
+      },
+      {
+        "line": 96,
+        "text": "              background: 'linear-gradient(180deg,rgba(255,215,0,.15),rgba(255,215,0,.05))',"
+      },
+      {
+        "line": 97,
+        "text": "              borderColor: '#FFD700',"
+      },
+      {
+        "line": 100,
+        "text": "            <div className=\"text-5xl font-bold gradient-text-candy mb-2\">"
+      },
+      {
+        "line": 129,
+        "text": "              className=\"p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up\""
+      },
+      {
+        "line": 131,
+        "text": "                background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 139,
+        "text": "                <div className=\"text-5xl animate-float\" style={{ animationDelay: `${index * 0.2}s` }}>"
+      },
+      {
+        "line": 218,
+        "text": "            className=\"p-6 rounded-xl border animate-bounce-in\""
+      },
+      {
+        "line": 220,
+        "text": "              background: 'linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03))',"
+      },
+      {
+        "line": 221,
+        "text": "              borderColor: 'rgba(255,107,157,.3)',"
+      },
+      {
+        "line": 226,
+        "text": "              <span className=\"text-2xl font-bold gradient-text-candy\">Lv.{gameData.character.stats.level}</span>"
+      },
+      {
+        "line": 237,
+        "text": "                  className=\"h-full bg-gradient-candy transition-all duration-500\""
+      },
+      {
+        "line": 250,
+        "text": "              background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 251,
+        "text": "              borderColor: 'rgba(107,207,255,.3)',"
+      },
+      {
+        "line": 276,
+        "text": "              background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 277,
+        "text": "              borderColor: 'rgba(199,125,255,.3)',"
+      },
+      {
+        "line": 291,
+        "text": "                          background: skill.type === 'active' ? '#3B82F630' : '#A855F730',"
+      },
+      {
+        "line": 292,
+        "text": "                          color: skill.type === 'active' ? '#3B82F6' : '#A855F7',"
+      },
+      {
+        "line": 315,
+        "text": "            className=\"p-6 rounded-2xl border text-center animate-bounce-in\""
+      },
+      {
+        "line": 317,
+        "text": "              background: 'linear-gradient(180deg,rgba(255,215,0,.15),rgba(255,215,0,.05))',"
+      },
+      {
+        "line": 318,
+        "text": "              borderColor: '#FFD700',"
+      },
+      {
+        "line": 321,
+        "text": "            <div className=\"text-4xl font-bold gradient-text-rainbow mb-2\">"
+      },
+      {
+        "line": 331,
+        "text": "              className=\"p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up\""
+      },
+      {
+        "line": 334,
+        "text": "                  ? 'linear-gradient(180deg,rgba(255,215,0,.1),rgba(255,215,0,.03))'"
+      },
+      {
+        "line": 335,
+        "text": "                  : 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 371,
+        "text": "                        className=\"h-full bg-gradient-candy transition-all duration-500\""
+      },
+      {
+        "line": 413,
+        "text": "      className=\"p-5 rounded-xl border transition-all hover:scale-[1.02] animate-slide-in-up\""
+      },
+      {
+        "line": 415,
+        "text": "        background: 'linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))',"
+      },
+      {
+        "line": 421,
+        "text": "        <div className=\"text-5xl animate-float\">{equipment.icon}</div>"
+      },
+      {
+        "line": 440,
+        "text": "              <div className=\"text-lg font-bold gradient-text-candy\">{equipment.power}</div>"
+      }
+    ],
+    "app/globals.css": [
+      {
+        "line": 134,
+        "text": ".animate-marquee {"
+      },
+      {
+        "line": 138,
+        "text": ".animate-marquee-vertical {"
+      }
+    ],
+    "styles/guild-theme.css": [
+      {
+        "line": 2,
+        "text": "  --page: #f8f8f8;"
+      },
+      {
+        "line": 3,
+        "text": "  --surface: #ffffff;"
+      },
+      {
+        "line": 4,
+        "text": "  --surface-strong: #f1f5f9;"
+      },
+      {
+        "line": 5,
+        "text": "  --ink: #101828;"
+      },
+      {
+        "line": 6,
+        "text": "  --muted: #52627a;"
+      },
+      {
+        "line": 7,
+        "text": "  --accent: #ffe528;"
+      },
+      {
+        "line": 8,
+        "text": "  --brand-blue: #2360f5;"
+      },
+      {
+        "line": 9,
+        "text": "  --success: #167447;"
+      },
+      {
+        "line": 10,
+        "text": "  --danger: #a12929;"
+      },
+      {
+        "line": 11,
+        "text": "  --line: #151515;"
+      },
+      {
+        "line": 13,
+        "text": "  --hard-shadow: 4px 4px 0 var(--line);"
+      },
+      {
+        "line": 14,
+        "text": "  --hard-shadow-hover: 8px 8px 0 var(--line);"
+      },
+      {
+        "line": 87,
+        "text": "  background: rgba(248, 248, 248, 0.97);"
+      },
+      {
+        "line": 88,
+        "text": "  border-bottom: 1px solid #e4e4e7;"
+      },
+      {
+        "line": 167,
+        "text": "  box-shadow: var(--hard-shadow);"
+      },
+      {
+        "line": 199,
+        "text": "  box-shadow: var(--hard-shadow);"
+      },
+      {
+        "line": 202,
+        "text": "    box-shadow var(--motion-duration) var(--motion-ease);"
+      },
+      {
+        "line": 206,
+        "text": "  box-shadow: 6px 6px 0 var(--line);"
+      },
+      {
+        "line": 210,
+        "text": "  box-shadow: 1px 1px 0 var(--line);"
+      },
+      {
+        "line": 214,
+        "text": "  background: #101010;"
+      },
+      {
+        "line": 215,
+        "text": "  box-shadow: 4px 4px 0 var(--accent);"
+      },
+      {
+        "line": 222,
+        "text": "  box-shadow: 6px 6px 0 var(--accent);"
+      },
+      {
+        "line": 238,
+        "text": "  box-shadow: var(--hard-shadow);"
+      },
+      {
+        "line": 256,
+        "text": "  background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);"
+      },
+      {
+        "line": 282,
+        "text": "  box-shadow: 4px 4px 0 var(--line);"
+      },
+      {
+        "line": 284,
+        "text": "  color: #101010;"
+      },
+      {
+        "line": 290,
+        "text": "  background: #101010;"
+      },
+      {
+        "line": 335,
+        "text": "  box-shadow: 6px 6px 0 var(--line);"
+      },
+      {
+        "line": 345,
+        "text": "  color: #65748d;"
+      },
+      {
+        "line": 354,
+        "text": "  box-shadow: 3px 3px 0 var(--line);"
+      },
+      {
+        "line": 370,
+        "text": "  box-shadow: 5px 5px 0 var(--line);"
+      },
+      {
+        "line": 384,
+        "text": "  background: #dceaff;"
+      },
+      {
+        "line": 407,
+        "text": "  box-shadow: 3px 3px 0 var(--line);"
+      },
+      {
+        "line": 421,
+        "text": "  box-shadow: 3px 3px 0 var(--line);"
+      },
+      {
+        "line": 427,
+        "text": "  box-shadow: 5px 5px 0 var(--line);"
+      },
+      {
+        "line": 448,
+        "text": "  background: #3b82f6;"
+      },
+      {
+        "line": 471,
+        "text": "  box-shadow: 3px 3px 0 #cbd5e1;"
+      },
+      {
+        "line": 491,
+        "text": "  border-top: 2px dashed #cbd5e1;"
+      },
+      {
+        "line": 509,
+        "text": "  box-shadow: 4px 4px 0 var(--line);"
+      },
+      {
+        "line": 516,
+        "text": "  background: #facc15;"
+      },
+      {
+        "line": 526,
+        "text": "  background: #3b82f6;"
+      },
+      {
+        "line": 561,
+        "text": "  background: #111827;"
+      },
+      {
+        "line": 587,
+        "text": "  box-shadow: 7px 7px 0 var(--line);"
+      },
+      {
+        "line": 594,
+        "text": "  background: #101827;"
+      },
+      {
+        "line": 614,
+        "text": "  color: #cbd5e1;"
+      },
+      {
+        "line": 626,
+        "text": "  color: #cbd5e1;"
+      },
+      {
+        "line": 646,
+        "text": "    box-shadow var(--motion-duration) var(--motion-ease);"
+      },
+      {
+        "line": 650,
+        "text": "  box-shadow: 6px 6px 0 var(--line);"
+      },
+      {
+        "line": 670,
+        "text": "  background: #eaf1ff;"
+      },
+      {
+        "line": 702,
+        "text": "  background: #f7fafc;"
+      },
+      {
+        "line": 711,
+        "text": "  box-shadow: 6px 6px 0 #3b82f6;"
+      },
+      {
+        "line": 723,
+        "text": "  color: #cbd5e1;"
+      },
+      {
+        "line": 766,
+        "text": "  background: #eaf1ff;"
+      },
+      {
+        "line": 787,
+        "text": "    box-shadow var(--card-duration) var(--motion-ease);"
+      },
+      {
+        "line": 791,
+        "text": "  box-shadow: var(--hard-shadow-hover);"
+      },
+      {
+        "line": 798,
+        "text": "  background: #edf0f7;"
+      },
+      {
+        "line": 830,
+        "text": "  border-top: 1px solid #e2e8f0;"
+      },
+      {
+        "line": 844,
+        "text": "  border: 2px dashed #aab6c8;"
+      },
+      {
+        "line": 919,
+        "text": "  background: #fff1f0;"
+      },
+      {
+        "line": 920,
+        "text": "  border: 1px solid #dc9a9a;"
+      },
+      {
+        "line": 955,
+        "text": "  box-shadow: 6px 6px 0 var(--line);"
+      },
+      {
+        "line": 961,
+        "text": "  border-top: 1px solid #d9dfe7;"
+      },
+      {
+        "line": 998,
+        "text": "  color: #4c4a25;"
+      },
+      {
+        "line": 1012,
+        "text": "  background: #f8fafc;"
+      },
+      {
+        "line": 1026,
+        "text": "  border-top: 1px solid #e2e8f0;"
+      },
+      {
+        "line": 1044,
+        "text": "  box-shadow: 8px 8px 0 var(--line);"
+      },
+      {
+        "line": 1046,
+        "text": ".jinxi-dialog::backdrop {"
+      },
+      {
+        "line": 1047,
+        "text": "  background: rgba(0, 0, 0, 0.4);"
+      },
+      {
+        "line": 1048,
+        "text": "  backdrop-filter: blur(6px);"
+      },
+      {
+        "line": 1094,
+        "text": "  border: 2px solid #bb6e6e;"
+      },
+      {
+        "line": 1095,
+        "text": "  background: #fff1f0;"
+      },
+      {
+        "line": 1109,
+        "text": "  background: #fff9ca;"
+      },
+      {
+        "line": 1110,
+        "text": "  border: 1px solid #d0b322;"
+      },
+      {
+        "line": 1119,
+        "text": ":is(.jinxi-dialog, .legacy-module) [class*=\"text-white\"] {"
+      },
+      {
+        "line": 1122,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1130,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1132,
+        "text": "  color: #224db1 !important;"
+      },
+      {
+        "line": 1134,
+        "text": ":is(.jinxi-dialog, .legacy-module) [class*=\"text-yellow-\"] {"
+      },
+      {
+        "line": 1135,
+        "text": "  color: #775300 !important;"
+      },
+      {
+        "line": 1137,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1141,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1145,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1149,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1150,
+        "text": "  :is([class*=\"bg-gradient-\"], [style*=\"linear-gradient\"]) {"
+      },
+      {
+        "line": 1152,
+        "text": "  box-shadow: none !important;"
+      },
+      {
+        "line": 1154,
+        "text": ":is(.jinxi-dialog, .legacy-module) [class*=\"gradient-text-\"] {"
+      },
+      {
+        "line": 1159,
+        "text": ":is(.jinxi-dialog, .legacy-module) [style*=\"font-family\"] {"
+      },
+      {
+        "line": 1162,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1164,
+        "text": "  border-color: #aab3c1 !important;"
+      },
+      {
+        "line": 1166,
+        "text": ":is(.jinxi-dialog, .legacy-module) :is(button, [role=\"button\"]) {"
+      },
+      {
+        "line": 1169,
+        "text": ":is(.jinxi-dialog, .legacy-module) :is(input, select, textarea) {"
+      },
+      {
+        "line": 1179,
+        "text": "  color: #6b7280;"
+      },
+      {
+        "line": 1182,
+        "text": ":is(.jinxi-dialog, .legacy-module)"
+      },
+      {
+        "line": 1184,
+        "text": "    button[class*=\"bg-gradient-\"],"
+      },
+      {
+        "line": 1185,
+        "text": "    button[style*=\"linear-gradient\"],"
+      },
+      {
+        "line": 1192,
+        "text": "  box-shadow: 3px 3px 0 var(--line) !important;"
+      },
+      {
+        "line": 1194,
+        "text": ".legacy-module .carousel-stage {"
+      },
+      {
+        "line": 1197,
+        "text": ".legacy-module .carousel-stage [class*=\"text-white\"] {"
+      },
+      {
+        "line": 1200,
+        "text": ".legacy-module [class*=\"animate-\"] {"
+      },
+      {
+        "line": 1203,
+        "text": ".legacy-module [class*=\"bg-gradient-\"].h-full {"
+      },
+      {
+        "line": 1206,
+        "text": ".jinxi-dialog [style*=\"conic-gradient\"] {"
+      },
+      {
+        "line": 1213,
+        "text": "  box-shadow: 3px 3px 0 var(--line);"
+      },
+      {
+        "line": 1222,
+        "text": "  box-shadow: var(--hard-shadow);"
+      },
+      {
+        "line": 1229,
+        "text": ".jinxi-dialog [class*=\"backdrop-blur\"] {"
+      },
+      {
+        "line": 1230,
+        "text": "  backdrop-filter: none !important;"
+      },
+      {
+        "line": 1239,
+        "text": "  box-shadow: none;"
+      },
+      {
+        "line": 1252,
+        "text": "  border-color: #9ca3af;"
+      },
+      {
+        "line": 1253,
+        "text": "  box-shadow: none;"
+      },
+      {
+        "line": 1263,
+        "text": "  background: #101010 !important;"
+      },
+      {
+        "line": 1266,
+        "text": "  box-shadow: 4px 4px 0 var(--accent) !important;"
+      },
+      {
+        "line": 1283,
+        "text": "  box-shadow: var(--hard-shadow);"
+      },
+      {
+        "line": 1288,
+        "text": "  text-shadow: none;"
+      },
+      {
+        "line": 1324,
+        "text": "    border-top: 1px solid #cbd5e1;"
+      },
+      {
+        "line": 1625,
+        "text": "  .legacy-module .carousel-stage {"
+      }
+    ],
+    "lib/utils.ts": [],
+    "components/home/guild-image.tsx": [],
+    "components/member-detail-modal.tsx": [
+      {
+        "line": 36,
+        "text": "      \"会长\": \"#d69e2e\","
+      },
+      {
+        "line": 37,
+        "text": "      \"创始\": \"#d69e2e\", "
+      },
+      {
+        "line": 38,
+        "text": "      \"技术\": \"#805ad5\","
+      },
+      {
+        "line": 39,
+        "text": "      \"技术控\": \"#805ad5\","
+      },
+      {
+        "line": 40,
+        "text": "      \"组织团结\": \"#22c55e\","
+      },
+      {
+        "line": 41,
+        "text": "      \"摆烂\": \"#6b7280\","
+      },
+      {
+        "line": 42,
+        "text": "      \"元老级摆烂\": \"#6b7280\","
+      },
+      {
+        "line": 43,
+        "text": "      \"情绪调控\": \"#f59e0b\","
+      },
+      {
+        "line": 44,
+        "text": "      \"东北老爷们\": \"#8b5cf6\","
+      },
+      {
+        "line": 45,
+        "text": "      \"嘴炮\": \"#ef4444\","
+      },
+      {
+        "line": 47,
+        "text": "      \"副会\": \"#dc2626\","
+      },
+      {
+        "line": 48,
+        "text": "      \"精英\": \"#3b82f6\", "
+      },
+      {
+        "line": 49,
+        "text": "      \"萌新\": \"#10b981\","
+      },
+      {
+        "line": 50,
+        "text": "      \"回忆\": \"#6366f1\","
+      },
+      {
+        "line": 52,
+        "text": "      \"火力\": \"#e53e3e\","
+      },
+      {
+        "line": 53,
+        "text": "      \"控位\": \"#4299e1\","
+      },
+      {
+        "line": 54,
+        "text": "      \"后勤\": \"#38a169\","
+      },
+      {
+        "line": 55,
+        "text": "      \"战术官\": \"#3182ce\","
+      },
+      {
+        "line": 56,
+        "text": "      \"外交\": \"#e53e3e\""
+      },
+      {
+        "line": 58,
+        "text": "    return roleColors[role as keyof typeof roleColors] || \"#38a169\""
+      },
+      {
+        "line": 65,
+        "text": "      \"#d69e2e\": \"from-yellow-400 to-orange-500\","
+      },
+      {
+        "line": 66,
+        "text": "      \"#805ad5\": \"from-purple-400 to-purple-600\", "
+      },
+      {
+        "line": 67,
+        "text": "      \"#22c55e\": \"from-green-400 to-green-600\","
+      },
+      {
+        "line": 68,
+        "text": "      \"#6b7280\": \"from-gray-400 to-gray-600\","
+      },
+      {
+        "line": 69,
+        "text": "      \"#f59e0b\": \"from-amber-400 to-orange-500\","
+      },
+      {
+        "line": 70,
+        "text": "      \"#8b5cf6\": \"from-violet-400 to-purple-500\","
+      },
+      {
+        "line": 71,
+        "text": "      \"#ef4444\": \"from-red-400 to-red-600\","
+      },
+      {
+        "line": 72,
+        "text": "      \"#dc2626\": \"from-red-500 to-red-700\","
+      },
+      {
+        "line": 73,
+        "text": "      \"#3b82f6\": \"from-blue-400 to-blue-600\","
+      },
+      {
+        "line": 74,
+        "text": "      \"#10b981\": \"from-emerald-400 to-green-500\", "
+      },
+      {
+        "line": 75,
+        "text": "      \"#6366f1\": \"from-indigo-400 to-purple-500\","
+      },
+      {
+        "line": 76,
+        "text": "      \"#e53e3e\": \"from-red-400 to-pink-500\","
+      },
+      {
+        "line": 77,
+        "text": "      \"#4299e1\": \"from-blue-300 to-blue-500\","
+      },
+      {
+        "line": 78,
+        "text": "      \"#38a169\": \"from-green-400 to-emerald-500\","
+      },
+      {
+        "line": 79,
+        "text": "      \"#3182ce\": \"from-blue-500 to-indigo-600\""
+      },
+      {
+        "line": 104,
+        "text": "                background: `conic-gradient(from 0deg, ${getRoleColor(member.role || \"成员\")}, transparent, ${getRoleColor(member.role || \"成员\")})`,"
+      },
+      {
+        "line": 111,
+        "text": "                  background: \"linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95))\""
+      },
+      {
+        "line": 143,
+        "text": "                        background: `linear-gradient(45deg, transparent 30%, ${getRoleColor(member.role || \"成员\")}20 50%, transparent 70%)`,"
+      },
+      {
+        "line": 158,
+        "text": "                        \"px-4 py-2 rounded-xl text-white font-bold text-sm shadow-lg\","
+      },
+      {
+        "line": 159,
+        "text": "                        `bg-gradient-to-r ${getRoleGradient(member.role || \"成员\")}`"
+      },
+      {
+        "line": 182,
+        "text": "                      backgroundImage: `linear-gradient(135deg, ${getRoleColor(member.role || \"成员\")}, #ffffff)`"
+      },
+      {
+        "line": 187,
+        "text": "                  <div className=\"h-1 w-24 rounded-full bg-gradient-to-r from-current to-transparent opacity-60\" />"
+      },
+      {
+        "line": 201,
+        "text": "                        background: \"linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))\","
+      },
+      {
+        "line": 210,
+        "text": "                          background: `radial-gradient(circle at 30% 20%, ${getRoleColor(member.role || \"成员\")}, transparent 50%)`"
+      }
+    ],
+    "services/announcement-service.ts": [],
+    "components/cyber-announcement.module.css": [
+      {
+        "line": 17,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.45);"
+      },
+      {
+        "line": 18,
+        "text": "  color: #dffcff;"
+      },
+      {
+        "line": 19,
+        "text": "  background: linear-gradient(135deg, rgba(7, 16, 32, 0.92), rgba(18, 8, 33, 0.9));"
+      },
+      {
+        "line": 20,
+        "text": "  box-shadow: 0 0 0 1px rgba(0, 243, 255, 0.15), 0 10px 30px rgba(1, 8, 28, 0.55), 0 0 18px rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 26,
+        "text": "  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;"
+      },
+      {
+        "line": 31,
+        "text": "  border-color: rgba(0, 243, 255, 0.72);"
+      },
+      {
+        "line": 32,
+        "text": "  box-shadow: 0 0 0 1px rgba(0, 243, 255, 0.28), 0 14px 35px rgba(1, 8, 28, 0.62), 0 0 22px rgba(0, 243, 255, 0.36);"
+      },
+      {
+        "line": 36,
+        "text": "  border-color: rgba(255, 72, 178, 0.72);"
+      },
+      {
+        "line": 37,
+        "text": "  box-shadow: 0 0 0 1px rgba(255, 72, 178, 0.22), 0 14px 35px rgba(1, 8, 28, 0.62), 0 0 22px rgba(255, 72, 178, 0.35);"
+      },
+      {
+        "line": 44,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.25);"
+      },
+      {
+        "line": 45,
+        "text": "  background: linear-gradient(180deg, rgba(8, 14, 28, 0.92), rgba(18, 10, 34, 0.9));"
+      },
+      {
+        "line": 46,
+        "text": "  backdrop-filter: blur(14px) saturate(140%);"
+      },
+      {
+        "line": 47,
+        "text": "  box-shadow: 0 0 0 1px rgba(0, 243, 255, 0.12), 0 20px 40px rgba(0, 3, 18, 0.6);"
+      },
+      {
+        "line": 61,
+        "text": "  background: linear-gradient(135deg, rgba(0, 243, 255, 0.58), rgba(255, 72, 178, 0.45), rgba(0, 243, 255, 0.58));"
+      },
+      {
+        "line": 62,
+        "text": "  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);"
+      },
+      {
+        "line": 98,
+        "text": "  color: #d9faff;"
+      },
+      {
+        "line": 103,
+        "text": "  color: #8eb5d6;"
+      },
+      {
+        "line": 109,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.35);"
+      },
+      {
+        "line": 110,
+        "text": "  background: rgba(7, 16, 32, 0.88);"
+      },
+      {
+        "line": 111,
+        "text": "  color: #b8ecff;"
+      },
+      {
+        "line": 126,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.25);"
+      },
+      {
+        "line": 127,
+        "text": "  background: rgba(8, 20, 36, 0.55);"
+      },
+      {
+        "line": 130,
+        "text": "  color: #9bc8e8;"
+      },
+      {
+        "line": 135,
+        "text": "  border-color: rgba(255, 102, 173, 0.35);"
+      },
+      {
+        "line": 136,
+        "text": "  color: #ffd3ea;"
+      },
+      {
+        "line": 152,
+        "text": "  background: rgba(6, 14, 24, 0.5);"
+      },
+      {
+        "line": 157,
+        "text": "  background: linear-gradient(180deg, rgba(0, 243, 255, 0.45), rgba(255, 72, 178, 0.5));"
+      },
+      {
+        "line": 162,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 163,
+        "text": "  background: rgba(7, 18, 36, 0.62);"
+      },
+      {
+        "line": 177,
+        "text": "  color: #e2f8ff;"
+      },
+      {
+        "line": 185,
+        "text": "  color: #7ca3c0;"
+      },
+      {
+        "line": 192,
+        "text": "  color: #c7e4f8;"
+      },
+      {
+        "line": 206,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.35);"
+      },
+      {
+        "line": 211,
+        "text": "  border: 1px solid rgba(255, 72, 178, 0.38);"
+      },
+      {
+        "line": 212,
+        "text": "  background: linear-gradient(135deg, rgba(18, 10, 34, 0.82), rgba(7, 16, 32, 0.92));"
+      },
+      {
+        "line": 213,
+        "text": "  color: #ffd7ee;"
+      },
+      {
+        "line": 230,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.32);"
+      },
+      {
+        "line": 231,
+        "text": "  background: rgba(8, 20, 36, 0.85);"
+      },
+      {
+        "line": 232,
+        "text": "  color: #bfe9ff;"
+      },
+      {
+        "line": 262,
+        "text": "  color: #9bc8e8;"
+      },
+      {
+        "line": 269,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.28);"
+      },
+      {
+        "line": 270,
+        "text": "  background: rgba(8, 20, 36, 0.75);"
+      },
+      {
+        "line": 271,
+        "text": "  color: #daf2ff;"
+      },
+      {
+        "line": 279,
+        "text": "  border-color: rgba(0, 243, 255, 0.7);"
+      },
+      {
+        "line": 280,
+        "text": "  box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 284,
+        "text": "  border: 1px solid rgba(255, 72, 178, 0.28);"
+      },
+      {
+        "line": 285,
+        "text": "  background: rgba(18, 10, 34, 0.5);"
+      },
+      {
+        "line": 304,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.28);"
+      },
+      {
+        "line": 305,
+        "text": "  background: rgba(8, 20, 36, 0.78);"
+      },
+      {
+        "line": 316,
+        "text": "  border-bottom: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 317,
+        "text": "  background: rgba(4, 12, 22, 0.85);"
+      },
+      {
+        "line": 321,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.24);"
+      },
+      {
+        "line": 322,
+        "text": "  color: #b7ebff;"
+      },
+      {
+        "line": 323,
+        "text": "  background: rgba(7, 18, 34, 0.88);"
+      },
+      {
+        "line": 334,
+        "text": "  border-color: rgba(0, 243, 255, 0.68);"
+      },
+      {
+        "line": 339,
+        "text": "  color: #7ca3c0;"
+      },
+      {
+        "line": 349,
+        "text": "  border-top: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 350,
+        "text": "  background: rgba(6, 15, 27, 0.92);"
+      },
+      {
+        "line": 354,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 355,
+        "text": "  background: rgba(8, 20, 36, 0.8);"
+      },
+      {
+        "line": 365,
+        "text": "  border-top: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 366,
+        "text": "  background: rgba(6, 15, 27, 0.92);"
+      },
+      {
+        "line": 372,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.25);"
+      },
+      {
+        "line": 373,
+        "text": "  background: rgba(7, 18, 34, 0.88);"
+      },
+      {
+        "line": 374,
+        "text": "  color: #daf2ff;"
+      },
+      {
+        "line": 382,
+        "text": "  border-color: rgba(0, 243, 255, 0.7);"
+      },
+      {
+        "line": 390,
+        "text": "  color: #d9f0ff;"
+      },
+      {
+        "line": 398,
+        "text": "  color: #6f93ac;"
+      },
+      {
+        "line": 409,
+        "text": "  color: #f2d7ff;"
+      },
+      {
+        "line": 424,
+        "text": "  border-left: 3px solid rgba(255, 72, 178, 0.55);"
+      },
+      {
+        "line": 426,
+        "text": "  color: #d8bddf;"
+      },
+      {
+        "line": 434,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.35);"
+      },
+      {
+        "line": 440,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.5);"
+      },
+      {
+        "line": 444,
+        "text": "  color: #dbfbff;"
+      },
+      {
+        "line": 445,
+        "text": "  background: linear-gradient(120deg, rgba(10, 33, 50, 0.88), rgba(42, 12, 46, 0.88));"
+      },
+      {
+        "line": 446,
+        "text": "  box-shadow: 0 0 14px rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 458,
+        "text": "  color: #7396b0;"
+      },
+      {
+        "line": 464,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.32);"
+      },
+      {
+        "line": 465,
+        "text": "  background: rgba(7, 18, 34, 0.92);"
+      },
+      {
+        "line": 466,
+        "text": "  color: #c9f3ff;"
+      },
+      {
+        "line": 479,
+        "text": "    filter: drop-shadow(0 0 4px rgba(0, 243, 255, 0.16));"
+      },
+      {
+        "line": 484,
+        "text": "    filter: drop-shadow(0 0 14px rgba(0, 243, 255, 0.45));"
+      }
+    ],
+    "lib/guild-terminal-config.ts": [],
+    "lib/guild-terminal-utils.ts": [],
+    "components/guild-uptime-terminal.module.css": [
+      {
+        "line": 15,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.28);"
+      },
+      {
+        "line": 20,
+        "text": "    linear-gradient(140deg, rgba(9, 18, 31, 0.86), rgba(6, 13, 24, 0.76)),"
+      },
+      {
+        "line": 21,
+        "text": "    rgba(5, 11, 22, 0.72);"
+      },
+      {
+        "line": 22,
+        "text": "  backdrop-filter: blur(12px) saturate(132%);"
+      },
+      {
+        "line": 23,
+        "text": "  box-shadow:"
+      },
+      {
+        "line": 24,
+        "text": "    0 8px 24px rgba(0, 0, 0, 0.34),"
+      },
+      {
+        "line": 25,
+        "text": "    0 0 0 1px rgba(0, 255, 204, 0.1),"
+      },
+      {
+        "line": 26,
+        "text": "    0 0 14px rgba(0, 255, 204, 0.1);"
+      },
+      {
+        "line": 27,
+        "text": "  color: #dff9f3;"
+      },
+      {
+        "line": 30,
+        "text": "  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;"
+      },
+      {
+        "line": 35,
+        "text": "  border-color: rgba(0, 255, 204, 0.45);"
+      },
+      {
+        "line": 36,
+        "text": "  box-shadow:"
+      },
+      {
+        "line": 37,
+        "text": "    0 10px 28px rgba(0, 0, 0, 0.4),"
+      },
+      {
+        "line": 38,
+        "text": "    0 0 0 1px rgba(0, 255, 204, 0.16),"
+      },
+      {
+        "line": 39,
+        "text": "    0 0 18px rgba(0, 255, 204, 0.16);"
+      },
+      {
+        "line": 45,
+        "text": "  color: rgba(173, 237, 226, 0.9);"
+      },
+      {
+        "line": 50,
+        "text": "  color: #00ffcc;"
+      },
+      {
+        "line": 51,
+        "text": "  text-shadow: 0 0 10px rgba(0, 255, 204, 0.42);"
+      },
+      {
+        "line": 58,
+        "text": "  color: rgba(166, 216, 210, 0.72);"
+      },
+      {
+        "line": 64,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.3);"
+      },
+      {
+        "line": 68,
+        "text": "    linear-gradient(150deg, rgba(8, 18, 31, 0.86), rgba(7, 12, 23, 0.76)),"
+      },
+      {
+        "line": 69,
+        "text": "    rgba(5, 11, 22, 0.72);"
+      },
+      {
+        "line": 70,
+        "text": "  backdrop-filter: blur(14px) saturate(135%);"
+      },
+      {
+        "line": 71,
+        "text": "  box-shadow:"
+      },
+      {
+        "line": 72,
+        "text": "    0 10px 32px rgba(0, 0, 0, 0.4),"
+      },
+      {
+        "line": 73,
+        "text": "    0 0 0 1px rgba(0, 255, 204, 0.12),"
+      },
+      {
+        "line": 74,
+        "text": "    0 0 20px rgba(0, 255, 204, 0.1);"
+      },
+      {
+        "line": 75,
+        "text": "  color: #dff9f3;"
+      },
+      {
+        "line": 110,
+        "text": "  color: #9ce8dc;"
+      },
+      {
+        "line": 121,
+        "text": "  color: #00ffcc;"
+      },
+      {
+        "line": 126,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.28);"
+      },
+      {
+        "line": 127,
+        "text": "  background: rgba(8, 18, 30, 0.78);"
+      },
+      {
+        "line": 128,
+        "text": "  color: #b9fff0;"
+      },
+      {
+        "line": 137,
+        "text": "  border-color: rgba(0, 255, 204, 0.5);"
+      },
+      {
+        "line": 141,
+        "text": "  border: 1px solid rgba(0, 243, 255, 0.2);"
+      },
+      {
+        "line": 144,
+        "text": "  background: rgba(4, 13, 24, 0.55);"
+      },
+      {
+        "line": 149,
+        "text": "  color: rgba(214, 252, 246, 0.9);"
+      },
+      {
+        "line": 163,
+        "text": "  color: #00ffcc;"
+      },
+      {
+        "line": 164,
+        "text": "  text-shadow: 0 0 10px rgba(0, 255, 204, 0.42);"
+      },
+      {
+        "line": 170,
+        "text": "  color: rgba(211, 255, 248, 0.9);"
+      },
+      {
+        "line": 178,
+        "text": "  color: rgba(174, 226, 220, 0.64);"
+      },
+      {
+        "line": 190,
+        "text": "  color: #9be9db;"
+      },
+      {
+        "line": 197,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.24);"
+      },
+      {
+        "line": 198,
+        "text": "  background: rgba(6, 12, 20, 0.8);"
+      },
+      {
+        "line": 201,
+        "text": "  transition: border-color 160ms ease, box-shadow 160ms ease;"
+      },
+      {
+        "line": 205,
+        "text": "  border-color: rgba(0, 255, 204, 0.58);"
+      },
+      {
+        "line": 206,
+        "text": "  box-shadow: 0 0 0 1px rgba(0, 255, 204, 0.24), 0 0 14px rgba(0, 255, 204, 0.17);"
+      },
+      {
+        "line": 212,
+        "text": "  color: #00ffcc;"
+      },
+      {
+        "line": 221,
+        "text": "  color: #d8fff7;"
+      },
+      {
+        "line": 227,
+        "text": "  color: rgba(162, 230, 220, 0.55);"
+      },
+      {
+        "line": 233,
+        "text": "  background: rgba(0, 255, 204, 0.24);"
+      },
+      {
+        "line": 248,
+        "text": "  color: rgba(180, 236, 228, 0.8);"
+      },
+      {
+        "line": 256,
+        "text": "  color: #76d8ff;"
+      },
+      {
+        "line": 263,
+        "text": "  background: #00e7ff;"
+      },
+      {
+        "line": 264,
+        "text": "  box-shadow: 0 0 10px rgba(0, 231, 255, 0.8);"
+      },
+      {
+        "line": 281,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.2);"
+      },
+      {
+        "line": 284,
+        "text": "  background: rgba(7, 15, 26, 0.62);"
+      },
+      {
+        "line": 288,
+        "text": "  border-color: rgba(255, 143, 61, 0.48);"
+      },
+      {
+        "line": 289,
+        "text": "  box-shadow: 0 0 12px rgba(255, 133, 53, 0.18) inset;"
+      },
+      {
+        "line": 306,
+        "text": "  color: rgba(173, 228, 221, 0.8);"
+      },
+      {
+        "line": 311,
+        "text": "  color: #d7fff8;"
+      },
+      {
+        "line": 317,
+        "text": "  color: #8fe8ff;"
+      },
+      {
+        "line": 318,
+        "text": "  text-shadow: 0 0 8px rgba(0, 243, 255, 0.24);"
+      },
+      {
+        "line": 322,
+        "text": "  color: #ffb566;"
+      },
+      {
+        "line": 323,
+        "text": "  text-shadow:"
+      },
+      {
+        "line": 324,
+        "text": "    0 0 12px rgba(255, 160, 72, 0.4),"
+      },
+      {
+        "line": 325,
+        "text": "    0 0 18px rgba(255, 120, 44, 0.26);"
+      },
+      {
+        "line": 334,
+        "text": "  color: #8fe8ff;"
+      },
+      {
+        "line": 338,
+        "text": "  color: #ff6a3d;"
+      },
+      {
+        "line": 339,
+        "text": "  text-shadow:"
+      },
+      {
+        "line": 340,
+        "text": "    0 0 10px rgba(255, 106, 61, 0.45),"
+      },
+      {
+        "line": 341,
+        "text": "    0 0 18px rgba(255, 132, 43, 0.28);"
+      },
+      {
+        "line": 345,
+        "text": "  border: 1px solid rgba(151, 189, 225, 0.16);"
+      },
+      {
+        "line": 348,
+        "text": "  background: rgba(5, 12, 21, 0.72);"
+      },
+      {
+        "line": 353,
+        "text": "  border-top: 1px dashed rgba(120, 178, 210, 0.2);"
+      },
+      {
+        "line": 360,
+        "text": "  color: #8ddcf0;"
+      },
+      {
+        "line": 379,
+        "text": "  color: rgba(165, 214, 239, 0.84);"
+      },
+      {
+        "line": 384,
+        "text": "  color: #d4f1ff;"
+      },
+      {
+        "line": 396,
+        "text": "  border: 1px solid rgba(0, 255, 204, 0.35);"
+      },
+      {
+        "line": 400,
+        "text": "  color: #afffed;"
+      },
+      {
+        "line": 401,
+        "text": "  background: rgba(1, 8, 14, 0.76);"
+      },
+      {
+        "line": 402,
+        "text": "  box-shadow: inset 0 0 8px rgba(0, 255, 204, 0.09);"
+      },
+      {
+        "line": 408,
+        "text": "  color: rgba(161, 207, 229, 0.72);"
+      },
+      {
+        "line": 414,
+        "text": "  border-top: 1px dashed rgba(0, 255, 204, 0.2);"
+      },
+      {
+        "line": 425,
+        "text": "    repeating-linear-gradient("
+      },
+      {
+        "line": 427,
+        "text": "      rgba(168, 255, 238, 0.16) 0,"
+      },
+      {
+        "line": 428,
+        "text": "      rgba(168, 255, 238, 0.16) 1px,"
+      },
+      {
+        "line": 429,
+        "text": "      rgba(12, 24, 38, 0.2) 1px,"
+      },
+      {
+        "line": 430,
+        "text": "      rgba(12, 24, 38, 0.2) 3px,"
+      },
+      {
+        "line": 431,
+        "text": "      rgba(168, 255, 238, 0.26) 3px,"
+      },
+      {
+        "line": 432,
+        "text": "      rgba(168, 255, 238, 0.26) 4px,"
+      },
+      {
+        "line": 433,
+        "text": "      rgba(12, 24, 38, 0.2) 4px,"
+      },
+      {
+        "line": 434,
+        "text": "      rgba(12, 24, 38, 0.2) 7px"
+      },
+      {
+        "line": 436,
+        "text": "    linear-gradient(180deg, rgba(3, 8, 15, 0.8), rgba(8, 16, 26, 0.8));"
+      },
+      {
+        "line": 444,
+        "text": "  color: rgba(156, 244, 231, 0.84);"
+      },
+      {
+        "line": 445,
+        "text": "  text-shadow: 0 0 8px rgba(0, 255, 204, 0.24);"
+      }
+    ],
+    "lib/user-utils.ts": [],
+    "types/message-wall.ts": [],
+    "services/message-wall-backend.ts": [
+      {
+        "line": 28,
+        "text": "      color: item.color || '#3b82f6',"
+      },
+      {
+        "line": 78,
+        "text": "      color: data.color || '#3b82f6',"
+      }
+    ],
+    "components/ui/image-upload.tsx": [],
+    "components/ui/admin-password-dialog.tsx": [
+      {
+        "line": 62,
+        "text": "            className=\"bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 max-w-md w-full\""
+      },
+      {
+        "line": 64,
+        "text": "              background: \"linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.90))\","
+      },
+      {
+        "line": 65,
+        "text": "              boxShadow: \"0 20px 40px rgba(0,0,0,.3)\","
+      },
+      {
+        "line": 121,
+        "text": "                  className=\"flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-medium transit"
+      },
+      {
+        "line": 125,
+        "text": "                      <div className=\"w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin\"></div>"
+      }
+    ],
+    "components/ui/optimized-image.tsx": [
+      {
+        "line": 50,
+        "text": "          <rect width=\"100%\" height=\"100%\" fill=\"#f3f4f6\"/>"
+      },
+      {
+        "line": 51,
+        "text": "          <text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#9ca3af\" font-size=\"14\">"
+      },
+      {
+        "line": 105,
+        "text": "          <div className=\"absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm\">"
+      },
+      {
+        "line": 106,
+        "text": "            <div className=\"w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin\"></div>"
+      },
+      {
+        "line": 137,
+        "text": "          \"flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold rounded-full\","
+      }
+    ],
+    "services/daily-task-service.ts": [],
+    "types/strategy-wall.ts": [],
+    "services/strategy-wall-service.ts": [],
+    "components/strategy-submission-modal.tsx": [
+      {
+        "line": 122,
+        "text": "      <div className=\"bg-gradient-to-br from-slate-900 to-blue-900 p-4 lg:p-8 min-h-[700px] max-h-[85vh] overflow-y-auto\">"
+      },
+      {
+        "line": 138,
+        "text": "                \"px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 backdrop-blur-sm border\","
+      },
+      {
+        "line": 140,
+        "text": "                  ? \"bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-400/50 shadow-lg shadow-cyan-500/25\" "
+      },
+      {
+        "line": 181,
+        "text": "                className=\"w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-400/20 hover:bg-w"
+      },
+      {
+        "line": 232,
+        "text": "                    className=\"w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 hover:bg-white/25 transition-"
+      },
+      {
+        "line": 250,
+        "text": "                  <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 263,
+        "text": "                    className=\"w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 hover:bg-white/25 transit"
+      },
+      {
+        "line": 281,
+        "text": "                  <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 299,
+        "text": "                  className=\"w-full sm:flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400"
+      },
+      {
+        "line": 305,
+        "text": "                  className=\"w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-500 disabled:to-gray-600 disabled:opacity-50 text-white rounded-xl transition-al"
+      },
+      {
+        "line": 317,
+        "text": "                      className=\"px-4 py-2 bg-gradient-to-r from-purple-500/30 to-pink-500/30 backdrop-blur-sm border border-purple-400/30 text-purple-200 rounded-full text-sm font-medium flex items-center gap-2 hover:from-purple-500/40 hov"
+      },
+      {
+        "line": 340,
+        "text": "              <div className=\"bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20\">"
+      },
+      {
+        "line": 359,
+        "text": "                className=\"w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-400/20 hover:bg-whi"
+      },
+      {
+        "line": 381,
+        "text": "              <div className=\"h-[350px] lg:h-[400px] p-4 lg:p-6 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl overflow-y-auto\">"
+      },
+      {
+        "line": 396,
+        "text": "                  className=\"w-full h-[350px] lg:h-[400px] px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white font-medium placeholder-white/70 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring"
+      },
+      {
+        "line": 398,
+        "text": "                <div className=\"absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-br from-transparent via-white/5 to-transparent\"></div>"
+      },
+      {
+        "line": 421,
+        "text": "            className=\"w-full sm:w-auto px-6 lg:px-8 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/30 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 hover:scale-105 flex items-cen"
+      },
+      {
+        "line": 432,
+        "text": "                ? \"bg-gradient-to-r from-gray-500 to-gray-600 text-white cursor-not-allowed\""
+      },
+      {
+        "line": 434,
+        "text": "                ? \"bg-gradient-to-r from-blue-600 to-purple-700 text-white\""
+      },
+      {
+        "line": 435,
+        "text": "                : \"bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white hover:scale-105 shadow-lg hover:shadow-xl\""
+      },
+      {
+        "line": 440,
+        "text": "                <div className=\"animate-spin rounded-full h-4 w-4 border-b-2 border-white\"></div>"
+      }
+    ],
+    "components/strategy-detail-modal.tsx": [
+      {
+        "line": 65,
+        "text": "      <div className=\"min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900\">"
+      },
+      {
+        "line": 195,
+        "text": "          <div className=\"bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 mb-8\">"
+      },
+      {
+        "line": 206,
+        "text": "            <div className=\"bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 mb-8\">"
+      },
+      {
+        "line": 212,
+        "text": "          <div className=\"bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10\">"
+      },
+      {
+        "line": 236,
+        "text": "                      <div className=\"animate-spin rounded-full h-4 w-4 border-b-2 border-white\"></div>"
+      }
+    ],
+    "types/checkin.ts": [],
+    "services/checkin-service.ts": [],
+    "types/daily-task.ts": [],
+    "services/points-service.ts": [],
+    "types/team.ts": [],
+    "services/team-service.ts": [
+      {
+        "line": 19,
+        "text": "    color: '#FFD93D',"
+      },
+      {
+        "line": 82,
+        "text": "    color: '#6BCFFF',"
+      },
+      {
+        "line": 134,
+        "text": "    color: '#FF6B9D',"
+      }
+    ],
+    "types/game-data.ts": [],
+    "services/game-data-service.ts": [],
+    "config/guild-terminal.config.json": [],
+    "components/ui/media-upload.tsx": [],
+    "components/ui/media-gallery.tsx": [],
+    "types/points.ts": []
+  }
+}

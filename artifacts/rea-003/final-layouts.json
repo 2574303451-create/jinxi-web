@@ -1,0 +1,51 @@
+{
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "artHeight": 520,
+      "controls": {
+        "x": 106,
+        "y": 814.890625,
+        "width": 1228,
+        "height": 45,
+        "top": 814.890625,
+        "right": 1334,
+        "bottom": 859.890625,
+        "left": 106
+      }
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "artHeight": 384,
+      "controls": {
+        "x": 42,
+        "y": 742.6875,
+        "width": 684,
+        "height": 45,
+        "top": 742.6875,
+        "right": 726,
+        "bottom": 787.6875,
+        "left": 42
+      }
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "artHeight": 240,
+      "controls": {
+        "x": 34,
+        "y": 778.9375,
+        "width": 322,
+        "height": 111,
+        "top": 778.9375,
+        "right": 356,
+        "bottom": 889.9375,
+        "left": 34
+      }
+    }
+  ],
+  "passed": true,
+  "environment": "Final visual review with intercepted synthetic public messages. No writes."
+}

@@ -1,676 +1,657 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback, useMemo, memo } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "../lib/utils"
-import { getUserId } from "../lib/user-utils"
-import { Message, Reply, Reaction } from "../types/message-wall"
-import * as backendAPI from "../services/message-wall-backend"
-import { ImageUpload } from "./ui/image-upload"
-import { AdminPasswordDialog } from "./ui/admin-password-dialog"
-import { OptimizedImage } from "./ui/optimized-image"
-import { Icon, RefreshIcon, SendIcon, CloseIcon } from "./ui/icons"
-import { updateTaskProgress } from "../services/daily-task-service"
+import {
+  memo,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
+import {
+  ImagePlus,
+  MessageCircle,
+  Pin,
+  RefreshCw,
+  Send,
+  Trash2,
+} from "lucide-react";
+import { getUserId } from "../lib/user-utils";
+import * as backendAPI from "../services/message-wall-backend";
+import { updateTaskProgress } from "../services/daily-task-service";
+import {
+  PUBLIC_MESSAGES_CHANGED,
+  usePublicMessages,
+} from "../hooks/use-public-messages";
+import { AdminPasswordDialog } from "./ui/admin-password-dialog";
+import { Modal } from "./ui/modal";
+import { ContentImage } from "./ui/content-image";
+import { PaperState, PublicAvatar, messageDate } from "./ui/paper";
 
-// 使用memo优化组件渲染性能
+const categories = ["闲聊", "公告", "提醒", "求助"];
+const reactions = ["👍", "❤️", "😂", "😮", "😢", "😡"];
+const colors = [
+  "#3b82f6",
+  "#22c55e",
+  "#f59e0b",
+  "#ef4444",
+  "#8b5cf6",
+  "#ec4899",
+];
+
+function MessageImageInput({
+  value,
+  onChange,
+}: {
+  value: string | null;
+  onChange: (value: string | null) => void;
+}) {
+  const input = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState("");
+  function read(file?: File) {
+    if (!file) return;
+    setError("");
+    if (!file.type.startsWith("image/")) {
+      setError("请选择图片文件。");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError("图片不能超过 2MB。");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") onChange(reader.result);
+    };
+    reader.onerror = () => setError("图片读取失败，请重新选择。");
+    reader.readAsDataURL(file);
+  }
+  return (
+    <div
+      className="message-image-input"
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+        e.preventDefault();
+        read(e.dataTransfer.files[0]);
+      }}
+    >
+      <input
+        ref={input}
+        type="file"
+        accept="image/*"
+        hidden
+        aria-label="留言配图文件"
+        onChange={(e) => {
+          read(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
+      {value ? (
+        <>
+          <div className="message-upload-preview">
+            <ContentImage src={value} alt="待发布的留言配图" />
+          </div>
+          <button
+            type="button"
+            className="paper-text-button"
+            onClick={() => onChange(null)}
+          >
+            移除配图
+          </button>
+        </>
+      ) : (
+        <button
+          type="button"
+          className="message-upload-button"
+          onClick={() => input.current?.click()}
+        >
+          <ImagePlus size={21} />
+          <span>
+            添加一张配图<small>点击或拖入 · 不超过 2MB</small>
+          </span>
+          <span aria-hidden="true">＋</span>
+        </button>
+      )}
+      {error && (
+        <p className="paper-notice error" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export const MessageWall = memo(function MessageWall({
-  className,
+  className = "",
   loggedInAccount = "",
   loggedInNickname = "",
+  initialMessageId,
 }: {
-  className?: string
-  loggedInAccount?: string
-  loggedInNickname?: string
+  className?: string;
+  loggedInAccount?: string;
+  loggedInNickname?: string;
+  initialMessageId?: string | null;
 }) {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [loadError, setLoadError] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    content: '',
-    category: '闲聊',
-    color: '#3b82f6',
-    imageUrl: null as string | null
-  })
-  const [replyingTo, setReplyingTo] = useState<string | null>(null)
-  const [replyContent, setReplyContent] = useState('')
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [imageModalOpen, setImageModalOpen] = useState(false)
-  const [activeFilter, setActiveFilter] = useState('all')
-
-  // 密码验证相关状态
-  const [adminDialogOpen, setAdminDialogOpen] = useState(false)
-  const [pendingAction, setPendingAction] = useState<{
-    type: 'pin' | 'delete'
-    messageId: string
-  } | null>(null)
-
-  // 使用共享的用户ID工具
-  const [userId, setUserId] = useState('anonymous')
-
+  const { messages, loading, error, reload } = usePublicMessages();
+  const [name, setName] = useState(""),
+    [content, setContent] = useState("");
+  const [category, setCategory] = useState("闲聊"),
+    [color, setColor] = useState("#3b82f6");
+  const [image, setImage] = useState<string | null>(null);
+  const [filter, setFilter] = useState("all"),
+    [userId, setUserId] = useState("anonymous");
+  const [submitting, setSubmitting] = useState(false),
+    [busy, setBusy] = useState<string | null>(null);
+  const [composerOpen, setComposerOpen] = useState(false);
+  const [notice, setNotice] = useState<{ error: boolean; text: string } | null>(
+    null,
+  );
+  const [replyingTo, setReplyingTo] = useState<string | null>(null),
+    [reply, setReply] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [pending, setPending] = useState<{
+    type: "pin" | "delete";
+    id: string;
+  } | null>(null);
+  const root = useRef<HTMLElement>(null),
+    located = useRef<string | null>(null);
+  const formId = useId();
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setUserId(getUserId())
-    }
-  }, [])
-
-  const effectiveLoggedInName = useMemo(() => {
-    if (!loggedInAccount) return ""
-    const nickname = String(loggedInNickname || "").trim()
-    return nickname || loggedInAccount
-  }, [loggedInAccount, loggedInNickname])
-
+    setUserId(getUserId());
+  }, []);
   useEffect(() => {
-    if (!loggedInAccount) return
-    setFormData((prev) => ({ ...prev, name: effectiveLoggedInName }))
-  }, [loggedInAccount, effectiveLoggedInName])
-
-  // 加载留言数据 - 使用useCallback优化
-  const loadMessages = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      setLoadError("")
-      const data = await backendAPI.getMessages()
-      setMessages(data)
-    } catch (error) {
-      console.error('加载留言失败:', error)
-      setLoadError("留言暂时加载失败，请重试。")
-      // 这里可以添加 toast 通知
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
+    const media = window.matchMedia("(min-width: 801px)");
+    const update = () => setComposerOpen(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
   useEffect(() => {
-    loadMessages()
-  }, [])
-
-  // 提交新留言
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!formData.content.trim()) {
-      alert('请填写留言内容')
-      return
-    }
-
-    setIsSubmitting(true)
-
+    if (loggedInAccount) setName(loggedInNickname.trim() || loggedInAccount);
+  }, [loggedInAccount, loggedInNickname]);
+  useEffect(() => {
+    if (
+      !initialMessageId ||
+      loading ||
+      error ||
+      located.current === initialMessageId
+    )
+      return;
+    setFilter("all");
+    const frame = requestAnimationFrame(() => {
+      const target = Array.from(
+        root.current?.querySelectorAll<HTMLElement>("[data-message-id]") || [],
+      ).find((element) => element.dataset.messageId === initialMessageId);
+      if (target) {
+        target.scrollIntoView({ block: "center", behavior: "instant" });
+        target.focus({ preventScroll: true });
+      }
+      located.current = initialMessageId;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [initialMessageId, loading, error]);
+  async function refresh() {
+    await reload();
+    window.dispatchEvent(new Event(PUBLIC_MESSAGES_CHANGED));
+  }
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!content.trim() || submitting) return;
+    setSubmitting(true);
+    setNotice(null);
     try {
       await backendAPI.addMessage({
-        name: formData.name || '匿名',
-        content: formData.content,
-        category: formData.category,
-        color: formData.color,
-        imageUrl: formData.imageUrl || undefined
-      })
-
-      // 更新每日任务进度
-      updateTaskProgress('daily-message', 1)
-
-      // 清空表单
-      setFormData({
-        name: formData.name, // 保留昵称
-        content: '',
-        category: '闲聊',
-        color: '#3b82f6',
-        imageUrl: null
-      })
-
-      // 立即刷新数据
-      await loadMessages()
-    } catch (error) {
-      console.error('发布失败:', error)
-      alert('发布失败，请重试')
+        name: name.trim() || "匿名",
+        content,
+        category,
+        color,
+        imageUrl: image || undefined,
+      });
+      updateTaskProgress("daily-message", 1);
+      setContent("");
+      setCategory("闲聊");
+      setColor("#3b82f6");
+      setImage(null);
+      setNotice({ error: false, text: "留言已发布。谢谢你留下这一刻。" });
+      await refresh();
+    } catch {
+      setNotice({ error: true, text: "发布失败，内容已保留，请稍后重试。" });
     } finally {
-      setIsSubmitting(false)
+      setSubmitting(false);
     }
   }
-
-  // 添加回复
-  const handleReply = async (messageId: string) => {
-    if (!replyContent.trim()) {
-      alert('请填写回复内容')
-      return
-    }
-
+  async function sendReply(event: FormEvent, id: string) {
+    event.preventDefault();
+    if (!reply.trim() || busy) return;
+    setBusy(id);
+    setNotice(null);
     try {
-      console.log('Attempting to add reply to messageId:', messageId, 'with content:', replyContent)
-      
-      const result = await backendAPI.addReply(messageId, {
-        name: formData.name || '匿名',
-        content: replyContent,
-        color: formData.color
-      })
-      
-      console.log('Reply added successfully:', result)
-      
-      setReplyContent('')
-      setReplyingTo(null)
-      await loadMessages()
-    } catch (error) {
-      console.error('回复失败 - 详细错误:', error)
-      
-      let errorMessage = '回复失败，请重试'
-      
-      if (error instanceof Error) {
-        console.error('Error message:', error.message)
-        
-        // 尝试解析具体的错误信息
-        if (error.message.includes('404')) {
-          errorMessage = '留言不存在，请刷新页面后重试'
-        } else if (error.message.includes('400')) {
-          errorMessage = '回复内容格式不正确'
-        } else if (error.message.includes('500')) {
-          errorMessage = '服务器错误，请稍后重试'
-        }
-      }
-      
-      alert(errorMessage)
-    }
-  }
-
-  // 切换反应
-  const handleReaction = async (messageId: string, reactionType: string) => {
-    console.log('表情反应点击:', { messageId, reactionType, userId })
-    try {
-      const result = await backendAPI.toggleReaction(messageId, reactionType, userId)
-      console.log('表情反应API结果:', result)
-      await loadMessages()
-    } catch (error) {
-      console.error('反应失败:', error)
-      alert(`表情反应失败: ${error.message}`)
-    }
-  }
-
-  // 验证管理密码 - 现在在后端验证
-  const verifyAdminPassword = (password: string): boolean => {
-    // 前端不再验证密码，所有验证都在后端进行
-    return password && password.trim().length > 0
-  }
-
-  // 处理管理密码验证
-  const handleAdminAction = async (password: string) => {
-    if (!verifyAdminPassword(password)) {
-      throw new Error('请输入有效密码')
-    }
-
-    if (!pendingAction) return
-
-    try {
-      if (pendingAction.type === 'pin') {
-        await backendAPI.togglePin(pendingAction.messageId, password)
-      } else if (pendingAction.type === 'delete') {
-        await backendAPI.deleteMessage(pendingAction.messageId, password)
-      }
-      await loadMessages()
-    } catch (error) {
-      console.error('操作失败:', error)
-      throw error
+      await backendAPI.addReply(id, {
+        name: name.trim() || "匿名",
+        content: reply,
+        color,
+      });
+      setReply("");
+      setReplyingTo(null);
+      await refresh();
+    } catch {
+      setNotice({
+        error: true,
+        text: "回复失败，内容已保留。请检查留言是否仍然存在后重试。",
+      });
     } finally {
-      setPendingAction(null)
+      setBusy(null);
     }
   }
-
-  // 切换置顶（需要密码验证）
-  const handlePin = async (messageId: string) => {
-    setPendingAction({ type: 'pin', messageId })
-    setAdminDialogOpen(true)
+  async function react(id: string, type: string) {
+    if (busy) return;
+    setBusy(id);
+    setNotice(null);
+    try {
+      await backendAPI.toggleReaction(id, type, userId);
+      await refresh();
+    } catch {
+      setNotice({ error: true, text: "表情回应失败，请稍后重试。" });
+    } finally {
+      setBusy(null);
+    }
   }
-
-  // 删除留言（需要密码验证）
-  const handleDelete = async (messageId: string) => {
-    if (!confirm('确定要删除这条留言吗？')) return
-    
-    setPendingAction({ type: 'delete', messageId })
-    setAdminDialogOpen(true)
+  async function adminAction(password: string) {
+    if (!pending) throw new Error("请重新选择需要管理的留言。");
+    if (!password.trim()) throw new Error("请输入管理密码。");
+    if (pending.type === "pin")
+      await backendAPI.togglePin(pending.id, password);
+    else await backendAPI.deleteMessage(pending.id, password);
+    // Keep the pending action if the server rejects the password, so retry is real.
+    await refresh();
+    setPending(null);
   }
-
-  // 格式化时间
-  const formatTime = (timestamp: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - timestamp.getTime()
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(diff / 3600000)
-    const days = Math.floor(diff / 86400000)
-
-    if (days > 0) return `${days}天前`
-    if (hours > 0) return `${hours}小时前`
-    if (minutes > 0) return `${minutes}分钟前`
-    return "刚刚"
-  }
-
-  // 打开图片模态框
-  const openImageModal = (imageUrl: string) => {
-    setSelectedImage(imageUrl)
-    setImageModalOpen(true)
-  }
-
-  // 过滤消息 - 使用useMemo优化
-  const filteredMessages = useMemo(() => {
-    return messages.filter(message => {
-      if (activeFilter === 'all') return true
-      return message.category === activeFilter
-    })
-  }, [messages, activeFilter])
-
-  // 使用useMemo优化常量数组
-  const reactions = useMemo(() => ['👍', '❤️', '😂', '😮', '😢', '😡'], [])
-  
-  // 使用useMemo优化分类数组
-  const categories = useMemo(() => [
-    { value: 'all', label: '全部', icon: 'ri-list-check' },
-    { value: '闲聊', label: '闲聊', icon: 'ri-chat-3-line' },
-    { value: '公告', label: '公告', icon: 'ri-megaphone-line' },
-    { value: '提醒', label: '提醒', icon: 'ri-alarm-line' },
-    { value: '求助', label: '求助', icon: 'ri-question-line' }
-  ], [])
-
-  if (isLoading) {
-    return (
-      <section id="message-wall" className="py-9">
-        <div className={cn("w-full max-w-4xl mx-auto", className)}>
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white loading"></div>
-            <span className="ml-3 text-white/70">加载留言中...</span>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
+  const filtered =
+    filter === "all"
+      ? messages
+      : messages.filter((item) => item.category === filter);
+  const missingTarget =
+    initialMessageId &&
+    !loading &&
+    !error &&
+    !messages.some((item) => item.id === initialMessageId);
   return (
-    <section id="message-wall" className="py-9">
-      <div className={cn("w-full max-w-4xl mx-auto message-wall", className)}>
-      <div
-        className="p-6 rounded-2xl border"
-        style={{
-          background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-          borderColor: "rgba(255,255,255,.1)",
-          boxShadow: "0 10px 30px rgba(0,0,0,.35)",
-        }}
-      >
-          <div className="flex items-center justify-between mb-6">
-        <h3
-              className="mt-0 font-bold text-[26px] leading-tight flex items-center gap-2"
-          style={{
-            fontFamily: '"ZCOOL KuaiLe", "Noto Sans SC", cursive',
-          }}
+    <section
+      ref={root}
+      className={`message-wall ${className}`}
+      aria-label="公会留言墙"
+    >
+      <header className="paper-section-head">
+        <div>
+          <span className="paper-eyebrow">今夕留言板</span>
+          <h3>留下你的声音</h3>
+          <p>一句问候、一点心得，或是下一次组队的邀约。</p>
+        </div>
+        <button
+          className="paper-button"
+          onClick={() => void reload()}
+          disabled={loading}
         >
-          <i className="ri-chat-3-line"></i> 留言墙
-        </h3>
-
-            {/* 手动刷新按钮 */}
-            <button
-              onClick={loadMessages}
-              disabled={isLoading}
-              className={cn(
-                "px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 hover-effect",
-                "bg-white/10 text-white/80 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          <RefreshCw
+            size={16}
+            className={loading ? "paper-spinner" : undefined}
+          />
+          刷新留言
+        </button>
+      </header>
+      <div className="message-wall-layout">
+        <details
+          className="message-composer-disclosure"
+          open={composerOpen}
+          onToggle={(event) => setComposerOpen(event.currentTarget.open)}
+        >
+          <summary>
+            <span>
+              <MessageCircle size={20} />
+              写一条留言
+            </span>
+            <span aria-hidden="true">{composerOpen ? "−" : "＋"}</span>
+          </summary>
+          <form
+            onSubmit={submit}
+            className="message-compose paper-form"
+            aria-busy={submitting}
+          >
+            <div className="message-compose-title">
+              <MessageCircle size={22} />
+              <h4>写给今夕的伙伴</h4>
+            </div>
+            <p className="paper-muted">
+              留言及配图对访客公开，请勿填写隐私或账号密码。
+            </p>
+            <div>
+              <label className="paper-label" htmlFor={`${formId}-name`}>
+                你的昵称 <span>可留空</span>
+              </label>
+              <input
+                id={`${formId}-name`}
+                className="paper-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                readOnly={Boolean(loggedInAccount)}
+                placeholder="匿名伙伴"
+              />
+              {loggedInAccount && (
+                <small className="paper-muted">使用当前账号的展示昵称</small>
               )}
-              title="刷新留言"
-            >
-<RefreshIcon className={cn(isLoading && "animate-spin")} size={16} />
-              {isLoading ? "刷新中..." : "刷新"}
-            </button>
-          </div>
-
-{loadError && <div role="alert" className="module-error">{loadError}<button onClick={() => loadMessages()}>重试</button></div>}
-          {/* 分类筛选 */}
-          <div className="mb-6 flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category.value}
-                onClick={() => setActiveFilter(category.value)}
-                className={cn(
-                  "px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 hover-effect",
-                  activeFilter === category.value
-                    ? "bg-blue-500 text-white"
-                    : "bg-white/10 text-white/80 hover:bg-white/20"
-                )}
+            </div>
+            <div>
+              <label className="paper-label" htmlFor={`${formId}-category`}>
+                留言分类
+              </label>
+              <select
+                id={`${formId}-category`}
+                className="paper-input"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               >
-{category.value === 'all' ? '📋' : 
-                 category.value === '闲聊' ? '💬' :
-                 category.value === '公告' ? '📢' :
-                 category.value === '提醒' ? '⏰' :
-                 category.value === '求助' ? '❓' : '📋'}
-                {category.label}
+                {categories.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="paper-label" htmlFor={`${formId}-content`}>
+                想说的话 <span>必填</span>
+              </label>
+              <textarea
+                id={`${formId}-content`}
+                className="paper-input"
+                rows={5}
+                required
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="分享此刻的想法…"
+              />
+            </div>
+            <MessageImageInput value={image} onChange={setImage} />
+            <fieldset className="message-color-picker">
+              <legend>头像标记色</legend>
+              {colors.map((item, i) => (
+                <button
+                  key={item}
+                  className="message-color"
+                  type="button"
+                  aria-label={`标记色 ${i + 1}`}
+                  aria-pressed={color === item}
+                  onClick={() => setColor(item)}
+                >
+                  <span style={{ backgroundColor: item }} />
+                  {color === item && <b aria-hidden="true">✓</b>}
+                </button>
+              ))}
+            </fieldset>
+            <button
+              type="submit"
+              className="paper-button yellow"
+              disabled={submitting || !content.trim()}
+            >
+              <Send size={17} />
+              {submitting ? "正在发布…" : "发布留言"}
+            </button>
+          </form>
+        </details>
+        <div className="message-feed">
+          <div
+            className="paper-filters"
+            role="group"
+            aria-label="按留言分类筛选"
+          >
+            {["all", ...categories].map((item) => (
+              <button
+                key={item}
+                className="paper-filter"
+                aria-pressed={filter === item}
+                onClick={() => setFilter(item)}
+              >
+                {item === "all" ? "全部留言" : item}
               </button>
             ))}
           </div>
-
-          {/* 发布新留言 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8 p-6 rounded-2xl border bg-white/5 backdrop-blur-sm"
-            style={{
-              borderColor: "rgba(255,255,255,.12)",
-              background: "rgba(255,255,255,.08)",
-            }}
-          >
-            <h4 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-✏️
-              发布留言
-            </h4>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {loggedInAccount && (
-                <div className="text-sm text-emerald-200/90 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-2">
-                  当前已登录身份：{effectiveLoggedInName}（账号：{loggedInAccount}）
-                </div>
-              )}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-                  placeholder={loggedInAccount ? "已绑定登录昵称（不可编辑）" : "你的昵称（可选）"}
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  readOnly={!!loggedInAccount}
-                />
-                
-            <select
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                >
-                  <option value="闲聊">闲聊</option>
-                  <option value="公告">公告</option>
-                  <option value="提醒">提醒</option>
-                  <option value="求助">求助</option>
-            </select>
-          </div>
-              
-            <textarea
-                placeholder="分享你的想法...（支持上传图片）"
-                value={formData.content}
-                onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              />
-
-              {/* 图片上传 */}
-              <ImageUpload
-                onImageUpload={(base64Image) => setFormData(prev => ({ ...prev, imageUrl: base64Image }))}
-                currentImage={formData.imageUrl}
-                label="上传图片（可选）"
-                maxSizeMB={2}
-              />
-
-              <div className="flex justify-between items-center">
-                <div className="text-xs text-white/50">
-                  发布后所有访客都能看到你的留言
-                </div>
-            <button
-                  type="submit"
-                  disabled={!formData.content.trim() || isSubmitting}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2 hover-effect"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      发布中...
-                    </>
-                  ) : (
-                    <>
-<SendIcon size={16} />
-                      发布留言
-                    </>
-                  )}
-            </button>
-          </div>
-            </form>
-          </motion.div>
-
-          {/* 留言列表 */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-medium text-white flex items-center gap-2">
-💬
-                留言列表 ({filteredMessages.length})
-              </h4>
-              {filteredMessages.length > 0 && (
+          {notice && (
+            <p
+              className={`paper-notice ${notice.error ? "error" : "success"}`}
+              role={notice.error ? "alert" : "status"}
+            >
+              {notice.text}
+            </p>
+          )}
+          {missingTarget && (
+            <p className="paper-notice" role="status">
+              这条留言不在当前公开列表中，可能已被移除或不在最近 100 条内。
+            </p>
+          )}
+          {loading ? (
+            <PaperState kind="loading" title="正在读取留言…">
+              稍等片刻，伙伴的声音正在路上。
+            </PaperState>
+          ) : error ? (
+            <PaperState
+              kind="error"
+              title={error}
+              action={
+                <button className="paper-button" onClick={() => void reload()}>
+                  重新加载
+                </button>
+              }
+            >
+              暂时无法取得公开留言，稍后再来看看。
+            </PaperState>
+          ) : filtered.length === 0 ? (
+            <PaperState
+              kind="empty"
+              title={
+                filter === "all" ? "留言板还是空的" : `还没有「${filter}」留言`
+              }
+            >
+              写一条留言，留下第一句问候。
+              {filter !== "all" && (
                 <button
-                  onClick={loadMessages}
-                  className="text-sm text-white/60 hover:text-white flex items-center gap-1 transition-colors hover-effect"
+                  className="paper-text-button"
+                  onClick={() => setFilter("all")}
                 >
-<RefreshIcon size={14} />
-                  刷新
+                  查看全部留言
                 </button>
               )}
-        </div>
-
-            {filteredMessages.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">💬</div>
-                <div className="text-white/60">
-                  {loadError ? '留言尚未加载，请使用上方重试。' : activeFilter === 'all' ? '暂无留言，来发布第一条吧！' : `暂无${activeFilter}类型的留言`}
-                </div>
-              </div>
-            ) : (
-        <div className="space-y-4 max-h-[600px] overflow-y-auto">
-          <AnimatePresence>
-                  {filteredMessages.map((message, index) => (
-              <motion.div
-                key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ delay: index * 0.05 }}
-                      className={cn(
-                        "p-6 rounded-2xl border bg-white/5 backdrop-blur-sm hover:bg-white/8 transition-all duration-300",
-                        message.isPinned && "ring-2 ring-yellow-500/50 bg-yellow-500/5"
-                      )}
-                style={{
-                        borderColor: "rgba(255,255,255,.12)",
-                      }}
-                    >
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                            style={{ backgroundColor: message.color }}
-                          >
-                            {message.name.slice(-2)}
-                  </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-white">{message.name}</span>
-                      <span
-                                className="px-2 py-1 text-xs rounded-full text-white"
-                                style={{ backgroundColor: message.color + '40' }}
-                              >
-                                {message.category}
-                      </span>
-                              {message.isPinned && (
-                                <i className="ri-pushpin-fill text-yellow-400 text-sm"></i>
-                              )}
-                            </div>
-                            <div className="text-xs text-white/60">{formatTime(message.timestamp)}</div>
-                          </div>
+            </PaperState>
+          ) : (
+            <div className="message-card-list">
+              <p className="message-list-caption">
+                当前展示 {filtered.length} 条公开留言
+                <span>置顶优先 · 由近到远</span>
+              </p>
+              {filtered.map((message) => (
+                <article
+                  key={message.id}
+                  className={`message-card${message.isPinned ? " is-pinned" : ""}${initialMessageId === message.id ? " is-target" : ""}`}
+                  data-message-id={message.id}
+                  tabIndex={-1}
+                  aria-label={`${message.name}的留言`}
+                >
+                  {message.isPinned && (
+                    <div className="message-pin">
+                      <Pin size={13} />
+                      置顶留言
                     </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handlePin(message.id)}
-                            className="p-2 rounded-lg bg-white/10 hover:bg-yellow-500/20 text-white/80 hover:text-yellow-400 transition-all duration-200 hover-effect"
-                            title={message.isPinned ? "取消置顶" : "置顶"}
-                          >
-                            <i className={message.isPinned ? "ri-pushpin-fill" : "ri-pushpin-line"}></i>
-                          </button>
-                          <button
-                            onClick={() => handleDelete(message.id)}
-                            className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-white/80 hover:text-red-400 transition-all duration-200 hover-effect"
-                            title="删除"
-                          >
-                            <i className="ri-delete-bin-line"></i>
-                          </button>
-                        </div>
-                </div>
-
-                      <div className="text-white/90 mb-4 leading-relaxed whitespace-pre-wrap">
-                        {message.content}
-                      </div>
-
-                      {/* 图片展示 - 使用优化的图片组件 */}
-                      {message.imageUrl && (
-                        <div className="mb-4">
-                          <OptimizedImage
-                            src={message.imageUrl}
-                            alt="Attached image"
-                            width={400}
-                            height={300}
-                            className="max-w-full h-auto rounded-lg cursor-pointer hover:scale-105 transition-transform border border-white/20 hover-effect"
-                            onClick={() => openImageModal(message.imageUrl!)}
-                            loading="lazy"
-                            quality={75}
-                            sizes="(max-width: 768px) 100vw, 400px"
-                          />
-                        </div>
-                      )}
-
-                      {/* 反应按钮 */}
-                <div className="flex items-center gap-2 mb-3">
-                    {reactions.map((reaction) => {
-                          const reactionData = message.reactions.find(r => r.type === reaction)
-                          const isActive = reactionData?.users.includes(userId)
-                          
+                  )}
+                  <header className="message-card-head">
+                    <PublicAvatar name={message.name} color={message.color} />
+                    <div>
+                      <h4>{message.name}</h4>
+                      <time>{messageDate(message.timestamp)}</time>
+                    </div>
+                    <span className="paper-tag">{message.category}</span>
+                  </header>
+                  <p className="message-content">{message.content}</p>
+                  {message.imageUrl && (
+                    <button
+                      className="message-attachment"
+                      aria-label={`查看${message.name}的留言配图`}
+                      onClick={() => setPreview(message.imageUrl || null)}
+                    >
+                      <ContentImage
+                        src={message.imageUrl}
+                        alt={`${message.name}的留言配图`}
+                      />
+                      <span>查看大图 ↗</span>
+                    </button>
+                  )}
+                  <div
+                    className="message-reactions"
+                    role="group"
+                    aria-label={`回应${message.name}的留言`}
+                  >
+                    {reactions.map((type) => {
+                      const data = message.reactions.find(
+                        (item) => item.type === type,
+                      );
                       return (
                         <button
-                          key={reaction}
-                              onClick={() => handleReaction(message.id, reaction)}
-                              className={cn(
-                                "flex items-center gap-1 px-2 py-1 rounded-full text-sm transition-all hover-effect",
-                                isActive 
-                                  ? "bg-blue-500/30 text-blue-300" 
-                                  : "bg-white/10 text-white/60 hover:bg-white/20"
-                              )}
-                            >
-                              <span>{reaction}</span>
-                              {reactionData && reactionData.count > 0 && (
-                                <span className="text-xs">{reactionData.count}</span>
-                              )}
+                          key={type}
+                          className="message-reaction"
+                          aria-label={`回应 ${type}`}
+                          aria-pressed={Boolean(data?.users.includes(userId))}
+                          disabled={busy === message.id}
+                          onClick={() => void react(message.id, type)}
+                        >
+                          {type}
+                          <span>{data?.count || 0}</span>
                         </button>
-                      )
+                      );
                     })}
                   </div>
-
-                      {/* 回复功能 */}
-                      <div className="border-t border-white/10 pt-3">
-                        <div className="flex items-center gap-4 mb-3">
+                  <div className="message-card-toolbar">
                     <button
-                      onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
-                            className="text-white/60 hover:text-white flex items-center gap-1 text-sm transition-colors hover-effect"
+                      className="paper-text-button"
+                      aria-expanded={replyingTo === message.id}
+                      aria-controls={`${formId}-reply-${message.id}`}
+                      onClick={() => {
+                        setReplyingTo(
+                          replyingTo === message.id ? null : message.id,
+                        );
+                        setReply("");
+                      }}
                     >
-                            ↩️
-                            回复
+                      <MessageCircle size={16} />
+                      回复
+                      {message.replies.length > 0
+                        ? ` · ${message.replies.length}`
+                        : ""}
                     </button>
-                          {message.replies.length > 0 && (
-                            <span className="text-white/40 text-sm">
-                              {message.replies.length} 条回复
-                            </span>
-                          )}
-                        </div>
-
-                        {/* 回复输入框 */}
-                        {replyingTo === message.id && (
-                          <div className="mb-3 flex gap-2">
-                            <input
-                              type="text"
-                              placeholder="写下你的回复..."
-                              value={replyContent}
-                              onChange={(e) => setReplyContent(e.target.value)}
-                              className="flex-1 px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                    <button
-                              onClick={() => handleReply(message.id)}
-                              disabled={!replyContent.trim()}
-                              className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white text-sm transition-all hover-effect"
-                            >
-                              发送
-                    </button>
-                  </div>
-                        )}
-
-                        {/* 回复列表 */}
-                {message.replies.length > 0 && (
-                          <div className="space-y-2">
-                    {message.replies.map((reply) => (
-                              <div key={reply.id} className="flex items-start gap-2 p-3 bg-white/5 rounded-lg">
-                                <div 
-                                  className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs"
-                                  style={{ backgroundColor: reply.color }}
-                                >
-                                  {reply.name.slice(-1)}
-                        </div>
-                                <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-white text-sm font-medium">{reply.name}</span>
-                                    <span className="text-white/40 text-xs">{formatTime(reply.timestamp)}</span>
-                                  </div>
-                                  <div className="text-white/80 text-sm">{reply.content}</div>
-                          </div>
-                        </div>
-                    ))}
-                  </div>
-                )}
+                    <details className="message-admin-menu">
+                      <summary>管理留言</summary>
+                      <div>
+                        <button
+                          onClick={() =>
+                            setPending({ type: "pin", id: message.id })
+                          }
+                        >
+                          <Pin size={15} />
+                          {message.isPinned ? "取消置顶" : "置顶留言"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "确定要删除这条留言吗？此操作需要管理员验证。",
+                              )
+                            )
+                              setPending({ type: "delete", id: message.id });
+                          }}
+                        >
+                          <Trash2 size={15} />
+                          删除留言
+                        </button>
                       </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                    </details>
+                  </div>
+                  {replyingTo === message.id && (
+                    <form
+                      className="message-reply-form"
+                      id={`${formId}-reply-${message.id}`}
+                      onSubmit={(e) => void sendReply(e, message.id)}
+                    >
+                      <label
+                        className="paper-label"
+                        htmlFor={`${formId}-reply-input-${message.id}`}
+                      >
+                        回复 {message.name}
+                      </label>
+                      <textarea
+                        autoFocus
+                        className="paper-input"
+                        id={`${formId}-reply-input-${message.id}`}
+                        rows={2}
+                        required
+                        value={reply}
+                        onChange={(e) => setReply(e.target.value)}
+                        placeholder="写下你的回复…"
+                      />
+                      <div>
+                        <small className="paper-muted">
+                          以「{name.trim() || "匿名"}」回复
+                        </small>
+                        <button
+                          className="paper-button yellow"
+                          type="submit"
+                          disabled={busy === message.id || !reply.trim()}
+                        >
+                          {busy === message.id ? "发送中…" : "发送回复"}
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                  {message.replies.length > 0 && (
+                    <ul className="message-replies" aria-label="留言回复">
+                      {message.replies.map((item) => (
+                        <li key={item.id}>
+                          <PublicAvatar name={item.name} color={item.color} />
+                          <div>
+                            <div className="reply-meta">
+                              <strong>{item.name}</strong>
+                              <time>{messageDate(item.timestamp)}</time>
+                            </div>
+                            <p>{item.content}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </article>
+              ))}
             </div>
           )}
-          </div>
         </div>
       </div>
-
-      {/* 图片模态框 */}
-      {imageModalOpen && selectedImage && (
-        <div 
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-          onClick={() => setImageModalOpen(false)}
-        >
-          <div className="relative max-w-4xl max-h-full">
-            <OptimizedImage
-              src={selectedImage}
-              alt="预览"
-              width={800}
-              height={600}
-              className="max-w-full max-h-full object-contain rounded-lg"
-              quality={85}
-              sizes="(max-width: 768px) 100vw, 800px"
-              priority={true}
-            />
-            <button
-              onClick={() => setImageModalOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors hover-effect"
-            >
-<CloseIcon size={16} />
-            </button>
+      <Modal
+        isOpen={preview !== null}
+        onClose={() => setPreview(null)}
+        title="留言配图"
+        size="xl"
+        legacy={false}
+      >
+        {preview && (
+          <div className="message-image-preview">
+            <ContentImage src={preview} alt="留言配图大图" loading="eager" />
           </div>
-        </div>
-      )}
-
-      {/* 管理密码验证对话框 */}
+        )}
+      </Modal>
       <AdminPasswordDialog
-        isOpen={adminDialogOpen}
-        onClose={() => {
-          setAdminDialogOpen(false)
-          setPendingAction(null)
-        }}
-        onConfirm={handleAdminAction}
-        title={pendingAction?.type === 'pin' ? '置顶留言' : '删除留言'}
+        isOpen={pending !== null}
+        onClose={() => setPending(null)}
+        onConfirm={adminAction}
+        title={pending?.type === "pin" ? "管理置顶" : "删除留言"}
         description={
-          pendingAction?.type === 'pin' 
-            ? '此操作需要管理员权限，请输入管理密码来置顶或取消置顶此留言。' 
-            : '此操作需要管理员权限，请输入管理密码来删除此留言。'
+          pending?.type === "pin"
+            ? "请输入管理员密码，确认置顶或取消置顶这条留言。"
+            : "删除后无法在留言墙恢复。请输入管理密码确认删除。"
         }
       />
     </section>
-  )
-})
-
-// 设置组件显示名称
-MessageWall.displayName = 'MessageWall'
+  );
+});

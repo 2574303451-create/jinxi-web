@@ -1,0 +1,416 @@
+{
+  "capturedAt": "2026-11-05T00:07:30.637Z",
+  "observations": [
+    {
+      "width": 1440,
+      "textStyles": {
+        "avatar": [
+          {
+            "class": "w-8 h-8 text-xs rounded-full border-2 border-black flex items-center justify-center font-black shrink-0 shadow-[2px_2px_0_0_#000] bg-orange-400 text-white",
+            "fontSize": "12px",
+            "border": "2px solid rgb(0, 0, 0)",
+            "width": "32px",
+            "height": "32px"
+          }
+        ],
+        "texts": [
+          {
+            "tag": "SPAN",
+            "class": "font-black text-xs text-slate-900",
+            "fontSize": "12px",
+            "fontWeight": "900",
+            "lineHeight": "16px",
+            "color": "oklch(0.208 0.042 265.755)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[8px] font-black bg-yellow-300 text-slate-800 px-1 py-0.5 border border-black rounded leading-none",
+            "fontSize": "8px",
+            "fontWeight": "900",
+            "lineHeight": "8px",
+            "color": "oklch(0.279 0.041 260.031)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[10px] text-slate-400 font-medium",
+            "fontSize": "10px",
+            "fontWeight": "500",
+            "lineHeight": "15px",
+            "color": "oklch(0.704 0.04 256.788)"
+          },
+          {
+            "tag": "P",
+            "class": "text-xs text-slate-600 leading-relaxed font-medium",
+            "fontSize": "12px",
+            "fontWeight": "500",
+            "lineHeight": "19.5px",
+            "color": "oklch(0.446 0.043 257.281)"
+          }
+        ]
+      },
+      "homeCardAncestors": [
+        {
+          "tag": "DIV",
+          "class": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "A",
+          "class": "",
+          "role": null,
+          "href": "/series/6acefd8514412a0452807216?courseId=6acf026a57340b390e15c973"
+        },
+        {
+          "tag": "DIV",
+          "class": "grid md:grid-cols-2 lg:grid-cols-3 gap-8",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "DIV",
+          "class": "mb-14",
+          "role": null,
+          "href": null
+        }
+      ],
+      "modalInitialFocus": {
+        "tag": "BUTTON",
+        "placeholder": null,
+        "text": "给麦当留言"
+      },
+      "focusCycle": [
+        {
+          "tag": "BUTTON",
+          "placeholder": null,
+          "insideModal": true,
+          "label": null,
+          "text": "复制"
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "随便填",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "微信 / 邮箱",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "TEXTAREA",
+          "placeholder": "想说什么都可以，问课程、提建议、合作都行…",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "BODY",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站课程直播回放学习项"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "课程"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "直播回放"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "textStyles": {
+        "avatar": [
+          {
+            "class": "w-8 h-8 text-xs rounded-full border-2 border-black flex items-center justify-center font-black shrink-0 shadow-[2px_2px_0_0_#000] bg-orange-400 text-white",
+            "fontSize": "12px",
+            "border": "2px solid rgb(0, 0, 0)",
+            "width": "32px",
+            "height": "32px"
+          }
+        ],
+        "texts": [
+          {
+            "tag": "SPAN",
+            "class": "font-black text-xs text-slate-900",
+            "fontSize": "12px",
+            "fontWeight": "900",
+            "lineHeight": "16px",
+            "color": "oklch(0.208 0.042 265.755)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[8px] font-black bg-yellow-300 text-slate-800 px-1 py-0.5 border border-black rounded leading-none",
+            "fontSize": "8px",
+            "fontWeight": "900",
+            "lineHeight": "8px",
+            "color": "oklch(0.279 0.041 260.031)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[10px] text-slate-400 font-medium",
+            "fontSize": "10px",
+            "fontWeight": "500",
+            "lineHeight": "15px",
+            "color": "oklch(0.704 0.04 256.788)"
+          },
+          {
+            "tag": "P",
+            "class": "text-xs text-slate-600 leading-relaxed font-medium",
+            "fontSize": "12px",
+            "fontWeight": "500",
+            "lineHeight": "19.5px",
+            "color": "oklch(0.446 0.043 257.281)"
+          }
+        ]
+      },
+      "homeCardAncestors": [
+        {
+          "tag": "DIV",
+          "class": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "A",
+          "class": "",
+          "role": null,
+          "href": "/series/6acefd8514412a0452807216?courseId=6acf026a57340b390e15c973"
+        },
+        {
+          "tag": "DIV",
+          "class": "grid md:grid-cols-2 lg:grid-cols-3 gap-8",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "DIV",
+          "class": "mb-14",
+          "role": null,
+          "href": null
+        }
+      ],
+      "modalInitialFocus": {
+        "tag": "BUTTON",
+        "placeholder": null,
+        "text": "给麦当留言"
+      },
+      "focusCycle": [
+        {
+          "tag": "BUTTON",
+          "placeholder": null,
+          "insideModal": true,
+          "label": null,
+          "text": "复制"
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "随便填",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "微信 / 邮箱",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "TEXTAREA",
+          "placeholder": "想说什么都可以，问课程、提建议、合作都行…",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "BODY",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站课程直播回放学习项"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": "查看最近更新",
+          "text": ""
+        },
+        {
+          "tag": "BUTTON",
+          "placeholder": null,
+          "insideModal": false,
+          "label": "打开导航",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "textStyles": {
+        "avatar": [
+          {
+            "class": "w-8 h-8 text-xs rounded-full border-2 border-black flex items-center justify-center font-black shrink-0 shadow-[2px_2px_0_0_#000] bg-orange-400 text-white",
+            "fontSize": "12px",
+            "border": "2px solid rgb(0, 0, 0)",
+            "width": "32px",
+            "height": "32px"
+          }
+        ],
+        "texts": [
+          {
+            "tag": "SPAN",
+            "class": "font-black text-xs text-slate-900",
+            "fontSize": "12px",
+            "fontWeight": "900",
+            "lineHeight": "16px",
+            "color": "oklch(0.208 0.042 265.755)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[8px] font-black bg-yellow-300 text-slate-800 px-1 py-0.5 border border-black rounded leading-none",
+            "fontSize": "8px",
+            "fontWeight": "900",
+            "lineHeight": "8px",
+            "color": "oklch(0.279 0.041 260.031)"
+          },
+          {
+            "tag": "SPAN",
+            "class": "text-[10px] text-slate-400 font-medium",
+            "fontSize": "10px",
+            "fontWeight": "500",
+            "lineHeight": "15px",
+            "color": "oklch(0.704 0.04 256.788)"
+          },
+          {
+            "tag": "P",
+            "class": "text-xs text-slate-600 leading-relaxed font-medium",
+            "fontSize": "12px",
+            "fontWeight": "500",
+            "lineHeight": "19.5px",
+            "color": "oklch(0.446 0.043 257.281)"
+          }
+        ]
+      },
+      "homeCardAncestors": [
+        {
+          "tag": "DIV",
+          "class": "text-card-foreground flex flex-col gap-6 py-6 bg-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all duration-300 overflow-hidden group rounded-xl",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "A",
+          "class": "",
+          "role": null,
+          "href": "/series/6acefd8514412a0452807216?courseId=6acf026a57340b390e15c973"
+        },
+        {
+          "tag": "DIV",
+          "class": "grid md:grid-cols-2 lg:grid-cols-3 gap-8",
+          "role": null,
+          "href": null
+        },
+        {
+          "tag": "DIV",
+          "class": "mb-14",
+          "role": null,
+          "href": null
+        }
+      ],
+      "modalInitialFocus": {
+        "tag": "BUTTON",
+        "placeholder": null,
+        "text": "给麦当留言"
+      },
+      "focusCycle": [
+        {
+          "tag": "BUTTON",
+          "placeholder": null,
+          "insideModal": true,
+          "label": null,
+          "text": "复制"
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "随便填",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "微信 / 邮箱",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "TEXTAREA",
+          "placeholder": "想说什么都可以，问课程、提建议、合作都行…",
+          "insideModal": true,
+          "label": null,
+          "text": ""
+        },
+        {
+          "tag": "BODY",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站课程直播回放学习项"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": null,
+          "text": "麦当mdldm的知识站"
+        },
+        {
+          "tag": "A",
+          "placeholder": null,
+          "insideModal": false,
+          "label": "查看最近更新",
+          "text": ""
+        },
+        {
+          "tag": "BUTTON",
+          "placeholder": null,
+          "insideModal": false,
+          "label": "打开导航",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}

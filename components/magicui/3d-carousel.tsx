@@ -1,232 +1,199 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
-import { cn } from "../../lib/utils"
-import { MemberDetailModal } from "../member-detail-modal"
+import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
+import { MemberDetailModal, type GuildMember } from "../member-detail-modal";
+import { ContentImage } from "../ui/content-image";
+import { PaperState } from "../ui/paper";
 
-interface Member {
-  id: number
-  name: string
-  image: string
-  role?: string
-  description?: string
-}
-
-interface Carousel3DProps {
-  members: Member[]
-  className?: string
-}
-
-export function Carousel3D({ members, className }: Carousel3DProps) {
-  const reducedMotion = useReducedMotion()
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [radius, setRadius] = useState(600)
-  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  
-  const handleMemberDoubleClick = (member: Member) => {
-    setSelectedMember(member)
-    setIsModalOpen(true)
-  }
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setTimeout(() => setSelectedMember(null), 300)
-  }
-
-  const totalMembers = members.length
-  const theta = 360 / totalMembers
-  const angle = -currentIndex * theta
-
+// Retain the public export used by existing callers; the stage is now a paper gallery.
+export function Carousel3D({
+  members,
+  className = "",
+}: {
+  members: GuildMember[];
+  className?: string;
+}) {
+  const reduced = useReducedMotion();
+  const [index, setIndex] = useState(0),
+    [playing, setPlaying] = useState(true);
+  const [hovered, setHovered] = useState(false),
+    [focused, setFocused] = useState(false);
+  const [hidden, setHidden] = useState(false),
+    [selected, setSelected] = useState<GuildMember | null>(null);
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const total = members.length,
+    active = total ? index % total : 0;
   useEffect(() => {
-    const updateRadius = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.clientWidth
-        const itemWidth = 320
-        const desiredGap = 40
-        const halfChord = (itemWidth + desiredGap) / 2
-        const minRadius = halfChord / Math.sin((theta / 2) * (Math.PI / 180))
-        const visibleRadius = containerWidth * 0.9
-        setRadius(Math.max(minRadius, visibleRadius, 600))
-      }
-    }
-
-    updateRadius()
-    
-    if (typeof window !== 'undefined') {
-      window.addEventListener("resize", updateRadius)
-      return () => window.removeEventListener("resize", updateRadius)
-    }
-  }, [theta])
-
+    const onVisibility = () => setHidden(document.hidden);
+    onVisibility();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+  const running =
+    playing &&
+    !reduced &&
+    !hovered &&
+    !focused &&
+    !selected &&
+    !hidden &&
+    total > 1;
   useEffect(() => {
-    if (!isAutoPlaying || reducedMotion) return
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % totalMembers)
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [isAutoPlaying, totalMembers, reducedMotion])
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalMembers) % totalMembers)
-    setIsAutoPlaying(false)
+    if (!running) return;
+    const timer = window.setInterval(
+      () => setIndex((i) => (i + 1) % total),
+      5000,
+    );
+    return () => window.clearInterval(timer);
+  }, [running, total]);
+  function move(delta: number) {
+    if (total < 2) return;
+    setPlaying(false);
+    setIndex((i) => (i + delta + total) % total);
   }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalMembers)
-    setIsAutoPlaying(false)
-  }
-
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying)
-  }
-
+  const member = members[active];
+  if (!member)
+    return (
+      <PaperState kind="empty" title="暂无成员展示">
+        成员素材准备好后，会在这里展示。
+      </PaperState>
+    );
   return (
-    <div className={cn("relative carousel-3d", className)}>
+    <section
+      className={`member-carousel ${className}`}
+      role="region"
+      aria-roledescription="轮播"
+      aria-label="成员精彩展示"
+      data-autoplay={running}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false);
+      }}
+      onKeyDown={(e) => {
+        if (selected) return;
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          move(-1);
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          move(1);
+        }
+      }}
+    >
+      <header className="paper-section-head">
+        <div>
+          <span className="paper-eyebrow">今夕群像</span>
+          <h3>这一页，留给我们的伙伴</h3>
+          <p>左右滑动或使用方向键浏览，随时打开完整成员档案。</p>
+        </div>
+        <span className="paper-tag yellow">成员精彩展示</span>
+      </header>
       <div
-        ref={containerRef}
-        className="relative h-[600px] md:h-[800px] lg:h-[1000px] overflow-hidden rounded-2xl carousel-stage"
-        style={{ perspective: "1800px" }}
+        className="member-carousel-stage"
+        onTouchStart={(e) => {
+          touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }}
+        onTouchEnd={(e) => {
+          const start = touch.current;
+          touch.current = null;
+          if (!start) return;
+          const dx = e.changedTouches[0].clientX - start.x,
+            dy = e.changedTouches[0].clientY - start.y;
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5)
+            move(dx > 0 ? -1 : 1);
+        }}
       >
+        <div className="member-carousel-art">
+          <ContentImage
+            key={member.id}
+            src={member.image}
+            alt={`${member.name}的成员展示图`}
+            fallback="brand"
+            loading="eager"
+          />
+          <span className="gallery-stamp" aria-hidden="true">
+            JINXI
+            <br />
+            GUILD
+          </span>
+        </div>
         <div
-          className="absolute inset-0 w-full h-full transition-transform duration-700 ease-out"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `translateZ(-${radius}px) rotateY(${angle}deg)`,
-          }}
+          className="member-carousel-copy"
+          aria-live={running ? "off" : "polite"}
+          aria-atomic="true"
         >
-          {members.map((member, index) => {
-            const isSelected = index === currentIndex
-            return (
-              <motion.div
-                key={member.id}
-                className={cn(
-                  "absolute left-1/2 top-1/2 w-80 h-96 -ml-40 -mt-48 rounded-2xl overflow-hidden border cursor-pointer",
-                  isSelected ? "z-10" : "z-0",
-                )}
-                style={{
-                  transform: `rotateY(${index * theta}deg) translateZ(${radius}px)`,
-                  background: "linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))",
-                  borderColor: isSelected ? "#60a5fa" : "rgba(255,255,255,.12)",
-                  boxShadow: isSelected
-                    ? "0 0 30px rgba(96,165,250,.6), 0 18px 52px rgba(0,0,0,.48)"
-                    : "0 18px 52px rgba(0,0,0,.48)",
-                }}
-                whileHover={{ scale: isSelected ? 1.05 : 1.02 }}
-              role="button" tabIndex={0} aria-label={`查看 ${member.name} 的详情`}
-              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); handleMemberDoubleClick(member) } }}
-                onClick={() => setCurrentIndex(index)}
-                onDoubleClick={() => handleMemberDoubleClick(member)}
-              >
-                <div className="relative w-full h-full">
-                  <img
-                    src={member.image || "/placeholder.svg"}
-                    alt={member.name}
-                  onError={(event) => { if (!event.currentTarget.src.endsWith("/logo.png")) event.currentTarget.src = "/logo.png" }}
-                    className="w-full h-3/4 object-cover"
-                    style={{ transform: "translateZ(20px)" }}
-                  />
-                  <div
-                    className="absolute bottom-0 left-0 right-0 p-4 text-white"
-                    style={{
-                      background: "linear-gradient(180deg,transparent,rgba(0,0,0,.8))",
-                      transform: "translateZ(25px)",
-                    }}
-                  >
-                    <div className="font-bold text-lg">{member.name}</div>
-                    {member.role && <div className="text-sm opacity-80">{member.role}</div>}
-                  </div>
-
-                  {/* Animated particles for selected member */}
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 pointer-events-none"
-                      >
-                        {Array.from({ length: 8 }).map((_, i) => (
-                          <motion.div
-                            key={i}
-                            className="absolute w-2 h-2 bg-blue-400 rounded-full"
-                            style={{
-                              left: `${20 + ((i * 10) % 60)}%`,
-                              top: `${15 + ((i * 15) % 70)}%`,
-                            }}
-                            animate={{
-                              y: [-10, -30, -10],
-                              opacity: [0, 1, 0],
-                              scale: [0.5, 1, 0.5],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Number.POSITIVE_INFINITY,
-                              delay: i * 0.2,
-                            }}
-                          />
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            )
-          })}
+          <span className="paper-eyebrow">
+            成员档案 / {String(active + 1).padStart(2, "0")}
+          </span>
+          <h3>{member.name}</h3>
+          {member.role && (
+            <span className="paper-tag yellow">{member.role}</span>
+          )}
+          <p>{member.description || "这位伙伴暂时还没有留下个人介绍。"}</p>
+          <button
+            className="paper-button dark"
+            onClick={() => {
+              setPlaying(false);
+              setSelected(member);
+            }}
+          >
+            查看成员详情 <ArrowRight size={18} />
+          </button>
         </div>
       </div>
-
-      {/* Controls */}
-      <div className="flex justify-center items-center gap-4 mt-6 flex-wrap">
+      <div className="member-carousel-controls">
+        <div>
+          <button
+            className="paper-button icon"
+            onClick={() => move(-1)}
+            disabled={total < 2}
+            aria-label="上一张"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <span
+            className="carousel-pagination"
+            aria-label={`第 ${active + 1} 张，共 ${total} 张`}
+          >
+            {active + 1} <span>/ {total}</span>
+          </span>
+          <button
+            className="paper-button icon"
+            onClick={() => move(1)}
+            disabled={total < 2}
+            aria-label="下一张"
+          >
+            <ArrowRight size={20} />
+          </button>
+        </div>
         <button
-          onClick={handlePrevious}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
-          style={{ borderColor: "rgba(255,255,255,.2)" }}
+          className="paper-button"
+          disabled={Boolean(reduced) || total < 2}
+          aria-pressed={!playing || Boolean(reduced)}
+          onClick={() => setPlaying((value) => !value)}
         >
-          <i className="ri-arrow-left-s-line"></i> 上一张
+          {playing && !reduced ? <Pause size={16} /> : <Play size={16} />}{" "}
+          {reduced
+            ? "已遵循减少动态设置"
+            : playing
+              ? "暂停自动播放"
+              : "恢复自动播放"}
         </button>
-
-        <button
-          onClick={handleNext}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
-          style={{ borderColor: "rgba(255,255,255,.2)" }}
-        >
-          下一张 <i className="ri-arrow-right-s-line"></i>
-        </button>
-
-        <button
-          onClick={toggleAutoPlay}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border bg-white/5 hover:bg-white/10 transition-colors"
-          style={{ borderColor: "rgba(255,255,255,.2)" }}
-        >
-          <i className={isAutoPlaying ? "ri-pause-mini-line" : "ri-play-mini-line"}></i>
-          {isAutoPlaying ? "暂停" : "恢复"}
-        </button>
-
-        <span className="text-sm opacity-70">
-          {currentIndex + 1} / {totalMembers}
-        </span>
       </div>
-
-      {/* 提示信息 */}
-      <div className="text-center mt-4">
-        <p className="text-white/60 text-sm">
-          <i className="ri-information-line mr-1"></i>
-          单击选择成员，双击查看详细信息
-        </p>
-      </div>
-
-      {/* 成员详情模态框 */}
+      <p className="paper-muted carousel-hint">
+        {reduced
+          ? "自动播放已关闭，可手动浏览。"
+          : "每 5 秒切换；悬停、键盘操作或打开详情时暂停。"}
+      </p>
       <MemberDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        member={selectedMember}
+        isOpen={selected !== null}
+        onClose={() => setSelected(null)}
+        member={selected}
       />
-    </div>
-  )
+    </section>
+  );
 }

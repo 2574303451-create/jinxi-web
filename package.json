@@ -12,12 +12,13 @@
     "lint": "next lint",
     "start": "next start",
     "export": "next export",
-    "test:api": "node test-api.js",
+    "test:api": "node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs",
     "deploy": "node deploy.js",
     "accounts:import": "node scripts/import_accounts_to_db.js",
     "deploy:preview": "netlify deploy --dir=out",
     "deploy:prod": "netlify deploy --prod --dir=out",
-    "analyze": "node optimize-images.js"
+    "analyze": "node optimize-images.js",
+    "test:postgres": "node --test tests/strategy-postgres.test.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

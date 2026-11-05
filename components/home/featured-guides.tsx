@@ -2,7 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, RefreshCw } from "lucide-react";
 import { useElementActivity } from "../../hooks/use-element-activity";
-import { readHomeGuides, type HomeGuide } from "../../services/home-guides";
+import {
+  readHomeGuides,
+  HomeGuideReadError,
+  type HomeGuide,
+  type HomeGuideFeed,
+} from "../../services/home-guides";
 import { PaperState } from "../ui/paper";
 import { HomeGuideCard } from "./home-guide-card";
 import { SectionHeading } from "./guild-sections";
@@ -10,43 +15,49 @@ import styles from "./featured-guides.module.css";
 export function FeaturedGuides() {
   const root = useRef<HTMLElement>(null),
     { active } = useElementActivity(root);
+  const requestedRevision = useRef(0);
   const [armed, setArmed] = useState(false),
     [revision, setRevision] = useState(0),
     [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
       "idle",
     ),
     [items, setItems] = useState<HomeGuide[]>([]),
-    [tab, setTab] = useState<"all" | "video" | "pinned">("all"),
-    [updated, setUpdated] = useState<Date | null>(null);
+    [tab, setTab] = useState<HomeGuideFeed>("latest"),
+    [loadedTab, setLoadedTab] = useState<HomeGuideFeed | null>(null),
+    [unsupported, setUnsupported] = useState(false);
   useEffect(() => {
     if (active) setArmed(true);
   }, [active]);
   useEffect(() => {
-    if (!armed) return;
+    if (!armed || !active) return;
     let alive = true;
     setStatus("loading");
-    readHomeGuides(revision > 0)
+    setUnsupported(false);
+    const force = requestedRevision.current !== revision;
+    requestedRevision.current = revision;
+    readHomeGuides(tab, force)
       .then((rows) => {
         if (alive) {
           setItems(rows);
-          setUpdated(new Date());
           setStatus("ready");
+          setLoadedTab(tab);
         }
       })
-      .catch(() => {
-        if (alive) setStatus("error");
+      .catch((error: unknown) => {
+        if (alive) {
+          setStatus("error");
+          setLoadedTab(tab);
+          setUnsupported(
+            error instanceof HomeGuideReadError &&
+              error.reason === "upgrade-required",
+          );
+        }
       });
     return () => {
       alive = false;
     };
-  }, [armed, revision]);
-  const filtered = items.filter(
-      (item) =>
-        tab === "all" ||
-        (tab === "video" ? item.hasVideo === true : item.isPinned),
-    ),
-    videoUnknown =
-      tab === "video" && items.some((item) => item.hasVideo === null);
+  }, [armed, active, revision, tab]);
+  const visibleStatus = loadedTab === tab ? status : "loading";
   return (
     <section
       ref={root}
@@ -70,7 +81,7 @@ export function FeaturedGuides() {
         <div className={styles.filters} aria-label="首页攻略筛选">
           {(
             [
-              ["all", "公开更新"],
+              ["latest", "最近发布"],
               ["video", "视频附件"],
               ["pinned", "置顶精选"],
             ] as const
@@ -87,7 +98,7 @@ export function FeaturedGuides() {
         </div>
         <p>首页最多展示3篇 · 更多内容见攻略中心</p>
       </div>
-      {status === "idle" || status === "loading" ? (
+      {visibleStatus === "idle" || visibleStatus === "loading" ? (
         <div className={styles.loading} role="status">
           <span className="sr-only">
             {status === "idle" ? "公开攻略在这里等你" : "正在读取公开攻略…"}
@@ -105,9 +116,13 @@ export function FeaturedGuides() {
             ))}
           </div>
         </div>
-      ) : status === "error" ? (
+      ) : visibleStatus === "error" ? (
         <PaperState kind="error" title="攻略暂时无法读取">
-          <span>原有攻略仍可从攻略中心访问。</span>
+          <span>
+            {unsupported
+              ? "当前服务暂不支持首页筛选，可前往攻略中心查看。"
+              : "原有攻略仍可从攻略中心访问。"}
+          </span>
           <button
             className="paper-button"
             onClick={() => {
@@ -118,9 +133,9 @@ export function FeaturedGuides() {
             重试
           </button>
         </PaperState>
-      ) : filtered.length ? (
+      ) : items.length ? (
         <div className={styles.grid}>
-          {filtered.map((item) => (
+          {items.map((item) => (
             <HomeGuideCard key={item.id} guide={item} />
           ))}
         </div>
@@ -128,29 +143,28 @@ export function FeaturedGuides() {
         <PaperState
           kind="empty"
           title={
-            videoUnknown
-              ? "视频索引接入中"
-              : !items.length
-                ? "暂时还没有可展示的公开攻略"
-                : tab === "pinned"
-                  ? "这批公开内容尚无置顶攻略"
-                  : "这批公开内容尚无视频附件"
+            tab === "pinned"
+              ? "暂无已置顶的公开攻略"
+              : tab === "video"
+                ? "暂无带有效视频链接的公开攻略"
+                : "暂时还没有可展示的公开攻略"
           }
         >
-          <span>
-            {videoUnknown
-              ? "当前摘要还未提供视频标记，不推算视频数量。"
-              : "保留真实内容，有新的分享时再来看看。"}
-          </span>
+          <span>保留真实内容，有新的分享时再来看看。</span>
           <a className="paper-button" href="/guides/">
             前往攻略中心
           </a>
         </PaperState>
       )}
       <p className={styles.source}>
-        来源：已发布攻略公开列表，沿用原列表顺序，置顶优先。
-        {updated &&
-          `本次读取：${updated.toLocaleString("zh-CN", { hour12: false })}。`}
+        来源：已发布攻略，服务端
+        {tab === "video"
+          ? "筛选有效视频链接"
+          : tab === "pinned"
+            ? "筛选置顶"
+            : "按发布时间排序"}
+        后取前3篇。
+        请求共享60秒缓存，停留时不自动刷新。
       </p>
     </section>
   );

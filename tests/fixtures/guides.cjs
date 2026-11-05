@@ -14,6 +14,8 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     {
       id: "fixture-comment",
       userId: "fixture-private-author",
+      userName: "隔离评论署名",
+      timestamp: "2026-10-01T00:00:00Z",
       content: "不应出现在摘要的评论全文",
     },
   ],

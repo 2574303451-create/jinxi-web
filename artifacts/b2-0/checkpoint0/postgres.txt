@@ -1,0 +1,29 @@
+
+> my-v0-project@0.1.0 test:postgres
+> node --test tests/strategy-postgres.test.cjs
+
+▶ actual isolated PostgreSQL read path
+  ✔ published video attachments are4, duplicateURLs counted, not playability (7.3457ms)
+  ✔ null/object/scalar JSONB and invalid array elements are safe (5.7638ms)
+  ✔ URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values (7.6709ms)
+  ✔ server filters before LIMIT3, latest ignores old pinned priority (9.2634ms)
+  ✔ summary has genuine covers/counts and no full/private author arrays (3.9322ms)
+  ✔ old full list and ID detail are retained, published only (2.8395ms)
+  ✔ draft/archived/forgedadmin never grant public reads (4.1138ms)
+  ✔ pagination/sort/category rejected before SQL; search remains parameterized (2.5262ms)
+  ✔ normal category/search/sorts and stable pages (12.4048ms)
+  ✔ read-only database role cannot write (0.7574ms)
+  ✔ stats rejects nonGET/identity parameters before DB factory (0.7799ms)
+  ✔ DB failure is503, countnull, no internal connection leakage (1.1585ms)
+  ✔ actual PG statement timeout returns504 and connection recovers (3005.9552ms)
+  ✔ concurrent readers have consistent counts and no mutation (250.4774ms)
+  ✔ actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown (24.052ms)
+✔ actual isolated PostgreSQL read path (3493.1639ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3586.9716

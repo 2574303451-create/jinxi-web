@@ -1,0 +1,38 @@
+✖ actual PG: thumbnail-only video cover is real, safe and lower priority than images (245.4267ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 346.3798
+
+✖ failing tests:
+
+test at tests\guide-thumbnail-postgres.test.cjs:4:1
+✖ actual PG: thumbnail-only video cover is real, safe and lower priority than images (245.4267ms)
+  error: inconsistent types deduced for parameter $1
+      at E:\Recovery\jinxi-web\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\guide-thumbnail-postgres.test.cjs:14:38)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    length: 145,
+    severity: 'ERROR',
+    code: '42P08',
+    detail: 'text versus integer',
+    hint: undefined,
+    position: '105',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_param.c',
+    line: '226',
+    routine: 'variable_coerce_param_hook'
+  }

@@ -18,7 +18,7 @@
     "deploy:preview": "netlify deploy --dir=out",
     "deploy:prod": "netlify deploy --prod --dir=out",
     "analyze": "node optimize-images.js",
-    "test:postgres": "node --test tests/strategy-postgres.test.cjs"
+    "test:postgres": "node --test --test-concurrency=1 tests/strategy-postgres.test.cjs tests/guide-thumbnail-postgres.test.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

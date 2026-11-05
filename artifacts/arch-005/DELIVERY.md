@@ -6,7 +6,7 @@
 
 - 分支：`codex/jinxi-arch-005`。基线`ffa71f8313d3f9895d1b664404c29fa8dbb2dda1`，开始时干净、远端一致，独立对照worktree保留。
 - 上游PR #3未合并，依赖#2→#1；已重新读取三者的实际状态与SHA。新PR基于`codex/jinxi-ui-004-a`，不合并上游。
-- 实现提交与最终HEAD在提交后交付回复/PR给出；独立文档记录可引用实现提交，避免自引用SHA。
+- 实现提交：`70ce1c69ed592f4b49c0baa26b0bd6ae8427d85f`。后续交付记录仅为文档，最终HEAD由交付回复/PR给出，避免文档自引用SHA。
 - [本机隔离预览](http://127.0.0.1:3021/review-preview/) · [攻略中心](http://127.0.0.1:3021/guides/) · [头像原型](http://127.0.0.1:3021/profile-lab/) · [截图与报告](http://127.0.0.1:3021/review/)。只在该电脑Node进程运行期间可用，不是公网部署。
 - 重启：`npm run build`，`node artifacts/arch-005/serve.cjs out 3021`。该本机服务器只连接导出文件、合成攻略/留言与内存操作，永远不转发生产API；头像在浏览器IndexedDB。其他业务API503，不伪造在线数据。
 

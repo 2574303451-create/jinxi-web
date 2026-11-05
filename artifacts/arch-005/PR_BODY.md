@@ -12,6 +12,8 @@
 
 基线：`ffa71f8313d3f9895d1b664404c29fa8dbb2dda1`，本PR依赖未合并PR #3（其依赖#2、#1），base=`codex/jinxi-ui-004-a`。
 
+实现提交：`70ce1c69ed592f4b49c0baa26b0bd6ae8427d85f`。后续交付记录仅文档，最终HEAD见PR。
+
 - [完整交付、修改文件、限制和回滚](https://github.com/2574303451-create/jinxi-web/blob/codex/jinxi-arch-005/artifacts/arch-005/DELIVERY.md)
 - [攻略架构与性能评估](https://github.com/2574303451-create/jinxi-web/blob/codex/jinxi-arch-005/artifacts/arch-005/GUIDE_ASSESSMENT.md)
 - [会话、头像、存储费用与数据模型](https://github.com/2574303451-create/jinxi-web/blob/codex/jinxi-arch-005/artifacts/arch-005/IDENTITY_ARCHITECTURE.md)

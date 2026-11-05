@@ -1,0 +1,37 @@
+{
+  "branch": "codex/jinxi-005s-b1",
+  "head": "ca0723eea3e1874c7dc3ddb76a7b52f074fac4b3",
+  "originalStagedPatchUnchanged": true,
+  "originalStagedFiles": [
+    "DESIGN.md",
+    "components/home/featured-guides.tsx",
+    "components/home/guild-facts.tsx",
+    "package.json",
+    "services/guide-service.ts",
+    "services/guide-video-stats.ts",
+    "services/home-guides.ts",
+    "services/public-read-cache.ts",
+    "tests/home-guides.test.cjs"
+  ],
+  "originalEvidenceUnchanged": true,
+  "originalEvidenceCount": 19,
+  "handoffOriginalBackupExists": true,
+  "finalBuildSourceFiles": 281,
+  "finalBuildSourceChangedSinceBuild": [],
+  "protectedSourceFiles": 202,
+  "changedFromAPlus": [
+    "components/guides/guide-reader.tsx",
+    "components/home/featured-guides.tsx",
+    "components/home/guild-facts.tsx",
+    "components/home/guild-hero.tsx",
+    "styles/guild-theme.css"
+  ],
+  "unexpectedProtectedChanges": [],
+  "extraTrackedWorkingChanges": [
+    "components/guides/guide-reader.tsx",
+    "package.json",
+    "services/guide-service.ts",
+    "tests/fixtures/guides.cjs"
+  ],
+  "untrackedFiles": 158
+}

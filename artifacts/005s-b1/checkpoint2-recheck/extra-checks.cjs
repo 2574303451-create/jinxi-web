@@ -1,0 +1,23 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {chromium}=require('C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright');
+const rows=[];
+(async()=>{const b=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});try{
+ const c=await b.newContext({viewport:{width:390,height:1000},reducedMotion:'reduce'}),p=await c.newPage(),writes=[],errors=[];
+ p.on('request',r=>{if(!['GET','HEAD'].includes(r.method()))writes.push(r.method())});p.on('pageerror',e=>errors.push(e.message));
+ const query='q='+encodeURIComponent('隔离样本')+'&category=PVP&difficulty=4&sort=view_count';
+ await p.goto('http://127.0.0.1:3044/guides/?'+query,{waitUntil:'networkidle'});await p.locator('.guide-card').first().waitFor();assert.equal(await p.locator('.guide-card').count(),2);
+ await p.locator('.guide-card a[href*="id=14"]').first().click();await p.locator('.guide-reader h1').waitFor();assert.equal(new URL(p.url()).searchParams.get('category'),'PVP');
+ await p.getByRole('link',{name:'← 返回攻略列表',exact:true}).click();await p.locator('.guide-card').first().waitFor();
+ for(const [key,value]of new URLSearchParams(query))assert.equal(new URL(p.url()).searchParams.get(key),value);assert.equal(new URL(p.url()).searchParams.has('id'),false);
+ await p.goBack();await p.locator('.guide-reader h1').waitFor();await p.goForward();await p.locator('.guide-card').first().waitFor();
+ rows.push({name:'real guide filters, detail return, browser back/forward preserve URL context',passed:true});
+ await p.goto('http://127.0.0.1:3044/guides/?page=2',{waitUntil:'networkidle'});await p.locator('.guide-card').first().waitFor();assert.equal(await p.locator('.guide-card').count(),2);assert.equal(new URL(p.url()).searchParams.get('page'),'2');rows.push({name:'real SQL independent list page2 has remaining2 published cards',passed:true});
+ assert.deepEqual(writes,[]);assert.deepEqual(errors,[]);await c.close();
+ const tc=await b.newContext({viewport:{width:390,height:1000},reducedMotion:'reduce'}),tp=await tc.newPage();let hold=true,failed=[];
+ await tc.route('**/.netlify/functions/guide-video-stats',async r=>{if(hold){await new Promise(resolve=>setTimeout(resolve,13000));await r.fulfill({status:503,json:{error:'delayed response'}}).catch(()=>{})}else await r.continue()});
+ tp.on('requestfailed',r=>{if(r.url().includes('guide-video-stats'))failed.push(r.failure()?.errorText)});
+ await tp.goto('http://127.0.0.1:3044/',{waitUntil:'networkidle'});const begin=performance.now();await tp.locator('#guild-facts').evaluate(el=>scrollTo({top:el.getBoundingClientRect().top+scrollY-90,behavior:'instant'}));
+ await tp.waitForFunction(()=>document.querySelector('#guild-facts').textContent.includes('暂时无法读取'),null,{timeout:16000});const ms=performance.now()-begin;
+ assert(ms>=11000&&ms<15000);assert.equal(await tp.getByLabel('攻略视频统计暂不可用').innerText(),'—');assert(failed.some(x=>x.includes('ERR_ABORTED')));
+ hold=false;await tp.locator('#online-status summary').click();await tp.getByRole('button',{name:'重试视频统计',exact:true}).click();await tp.getByLabel('4条公开攻略视频附件',{exact:true}).waitFor();rows.push({name:'real browser AbortController ends stalled fetch around12s, then retry recovers',passed:true,ms,failed,networkDelayInjection:true});await tc.close();
+ }finally{fs.writeFileSync(path.join(__dirname,'extra-results.json'),JSON.stringify({rows},null,2));await b.close()}})().catch(e=>{console.error(e);process.exitCode=1});

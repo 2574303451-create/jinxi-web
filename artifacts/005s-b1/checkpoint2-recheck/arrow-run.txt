@@ -1,0 +1,5 @@
+PASS arrow 1440
+PASS arrow 1024
+PASS arrow 768
+PASS arrow 390
+PASS arrow 320

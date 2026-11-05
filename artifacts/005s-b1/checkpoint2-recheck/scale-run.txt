@@ -1,0 +1,2 @@
+{"size":1000,"failedRequests":0,"failedPlans":0,"concurrent":[{"ok":true,"ms":3.5,"count":200},{"ok":true,"ms":5.242000000000019,"count":200},{"ok":true,"ms":3.3992999999999824,"count":200},{"ok":true,"ms":3.706800000000044,"count":200}]}
+{"size":10000,"failedRequests":0,"failedPlans":0,"concurrent":[{"ok":true,"ms":6.002399999999852,"count":2000},{"ok":true,"ms":5.950399999999945,"count":2000},{"ok":true,"ms":5.932499999999891,"count":2000},{"ok":true,"ms":5.918699999999944,"count":2000}]}

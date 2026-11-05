@@ -1,0 +1,12 @@
+{"stage":"A+","slow":false,"run":1,"lcp":288,"cls":0,"recommendationReadyMs":93.84799999999996,"feeds":[],"detailReadyMs":995.2880000000005}
+{"stage":"B1","slow":false,"run":1,"lcp":216,"cls":0,"recommendationReadyMs":211.97630000000026,"feeds":[{"name":"视频附件","ms":122.8180999999986},{"name":"置顶精选","ms":246.84209999999985},{"name":"最近发布","ms":75.23729999999887}],"detailReadyMs":1039.2698}
+{"stage":"B1","slow":false,"run":2,"lcp":216,"cls":0,"recommendationReadyMs":220.78169999999955,"feeds":[{"name":"视频附件","ms":244.94770000000062},{"name":"置顶精选","ms":236.61839999999938},{"name":"最近发布","ms":65.26859999999942}],"detailReadyMs":1031.0996000000014}
+{"stage":"A+","slow":false,"run":2,"lcp":212,"cls":0,"recommendationReadyMs":227.52829999999813,"feeds":[],"detailReadyMs":1001.0396000000001}
+{"stage":"A+","slow":false,"run":3,"lcp":208,"cls":0,"recommendationReadyMs":226.4418000000005,"feeds":[],"detailReadyMs":1030.8486000000012}
+{"stage":"B1","slow":false,"run":3,"lcp":220,"cls":0,"recommendationReadyMs":101.24779999999737,"feeds":[{"name":"视频附件","ms":241.5744999999988},{"name":"置顶精选","ms":234.0070999999989},{"name":"最近发布","ms":79.08020000000033}],"detailReadyMs":1074.463399999997}
+{"stage":"A+","slow":true,"run":1,"lcp":2944,"cls":0,"recommendationReadyMs":294.13729999999487,"feeds":[],"detailReadyMs":1546.171699999999}
+{"stage":"B1","slow":true,"run":1,"lcp":2912,"cls":0,"recommendationReadyMs":348.2137999999977,"feeds":[{"name":"视频附件","ms":244.3315999999977},{"name":"置顶精选","ms":234.9102999999959},{"name":"最近发布","ms":101.98659999999654}],"detailReadyMs":1548.0970000000016}
+{"stage":"B1","slow":true,"run":2,"lcp":2896,"cls":0,"recommendationReadyMs":324.2595000000001,"feeds":[{"name":"视频附件","ms":245.72939999999653},{"name":"置顶精选","ms":249.51549999999406},{"name":"最近发布","ms":91.58559999999125}],"detailReadyMs":1580.9026000000013}
+{"stage":"A+","slow":true,"run":2,"lcp":3168,"cls":0,"recommendationReadyMs":348.82570000000123,"feeds":[],"detailReadyMs":1499.0656000000017}
+{"stage":"A+","slow":true,"run":3,"lcp":2896,"cls":0,"recommendationReadyMs":271.9250000000029,"feeds":[],"detailReadyMs":1480.6196999999956}
+{"stage":"B1","slow":true,"run":3,"lcp":2976,"cls":0,"recommendationReadyMs":287.5399999999936,"feeds":[{"name":"视频附件","ms":270.0673000000097},{"name":"置顶精选","ms":251.73090000000957},{"name":"最近发布","ms":99.70209999999497}],"detailReadyMs":1503.3895000000048}

@@ -1,0 +1,21 @@
+PASS two public rows, unique originals, hidden copies 1440
+PASS measured left/right speed 1440
+PASS seam preserves visible content and position 1440
+PASS hover focus and explicit pause 1440
+PASS native touch browse and keyboard browse 1440
+PASS click locates actual current public ID 1440
+FAILURE-STATE {"scrollY":5098,"visibility":"visible","observerLog":[[{"time":3113.7999999970198,"intersecting":false,"ratio":0}]],"active":"false","clocks":[{"clock":"compact","ticking":"false","rect":{"x":122,"y":3086.984375,"width":1082,"height":36.796875,"top":3086.984375,"right":1204,"bottom":3123.78125,"left":122},"observed":{"intersecting":false,"ratio":0}}]}
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(await rows.evaluateAll(nodes=>nodes.every(el=>el.dataset.running==='false')))
+
+    at E:\Recovery\jinxi-web\artifacts\005s-b1\checkpoint2-recheck\lifecycle-checks.cjs:56:139
+    at async check (E:\Recovery\jinxi-web\artifacts\005s-b1\checkpoint2-recheck\lifecycle-checks.cjs:8:31)
+    at async E:\Recovery\jinxi-web\artifacts\005s-b1\checkpoint2-recheck\lifecycle-checks.cjs:56:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

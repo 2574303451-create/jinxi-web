@@ -1,0 +1,14 @@
+▶ read API safety without a database
+  ✔ invalid public queries rejected before transaction (3.6654ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (0.8798ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.4151ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (20.3907ms)
+✔ read API safety without a database (27.1487ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98.915

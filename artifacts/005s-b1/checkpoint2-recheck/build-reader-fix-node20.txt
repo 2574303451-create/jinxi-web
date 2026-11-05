@@ -1,0 +1,45 @@
+
+> my-v0-project@0.1.0 prebuild
+> node scripts/generate-guild-summary.cjs
+
+Archive facts: 208 unique records; no active/online inference.
+Archive date from checked-in hash-bound provenance (Git history unavailable or shallow).
+
+> my-v0-project@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+Browserslist: browsers data (caniuse-lite) is 15 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/6) ...
+   Generating static pages (1/6) 
+   Generating static pages (2/6) 
+   Generating static pages (4/6) 
+ ✓ Generating static pages (6/6)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    79.2 kB         173 kB
+├ ○ /_not-found                          871 B          88.8 kB
+├ ○ /guides                              6.16 kB        94.1 kB
+└ ○ /profile-lab                         14.3 kB         108 kB
++ First Load JS shared by all            87.9 kB
+  ├ chunks/144-3e5647cd2ddd98d6.js       31.7 kB
+  ├ chunks/dded304f-806669fb45a8c9f4.js  53.6 kB
+  └ other shared chunks (total)          2.59 kB
+
+
+○  (Static)  prerendered as static content
+

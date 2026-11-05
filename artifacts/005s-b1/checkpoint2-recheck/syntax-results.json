@@ -1,0 +1,34 @@
+{
+  "rows": [
+    {
+      "file": "netlify/functions/strategies.js",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "file": "netlify/functions/guide-video-stats.js",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-read.js",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-media.js",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-query.js",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-database.js",
+      "exit": 0,
+      "output": ""
+    }
+  ]
+}

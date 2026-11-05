@@ -1,0 +1,10 @@
+{
+  "originalFiles": 29,
+  "unchangedOriginalFiles": 27,
+  "changedOriginalFiles": [
+    "package.json",
+    "services/guide-service.ts"
+  ],
+  "originalStagedPatchUnchanged": true,
+  "note": "Only package.json and services/guide-service.ts now have additional unstaged reader-fix edits; original index content remains unchanged. Original19 evidence files and handoff remain byte-identical."
+}

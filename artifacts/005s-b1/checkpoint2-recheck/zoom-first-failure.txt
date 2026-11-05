@@ -1,0 +1,5 @@
+page.waitForFunction: Timeout 30000ms exceeded.
+    at E:\Recovery\jinxi-web\artifacts\005s-b1\checkpoint2-recheck\zoom-checks.cjs:8:147 {
+  log: [],
+  name: 'TimeoutError'
+}

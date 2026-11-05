@@ -1,0 +1,9 @@
+{
+  "scope": "All B1 changes from A+ plus all pending files, no ignored credentials read",
+  "backup": "E:/Recovery/.jinxi-research/b1-github-publish-20261105",
+  "pendingFiles": 173,
+  "totalChangedFilesFromBase": 203,
+  "bytes": 7924129,
+  "hits": [],
+  "allowed": true
+}

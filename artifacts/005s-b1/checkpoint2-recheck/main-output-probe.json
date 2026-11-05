@@ -1,0 +1,36 @@
+{
+  "rows": [
+    {
+      "path": "E:/Recovery/jinxi-web/out/1.mp4",
+      "lstat": {
+        "ok": false,
+        "code": "ENOENT"
+      },
+      "openRead": {
+        "ok": false,
+        "code": "ENOENT"
+      }
+    },
+    {
+      "path": "E:/Recovery/jinxi-web/public/1.mp4",
+      "lstat": {
+        "ok": true,
+        "size": 4172471
+      },
+      "openRead": {
+        "ok": true
+      }
+    },
+    {
+      "path": "E:/Recovery/.jinxi-research/005s-b1-checkpoint2/source/out/1.mp4",
+      "lstat": {
+        "ok": true,
+        "size": 4172471
+      },
+      "openRead": {
+        "ok": true
+      }
+    }
+  ],
+  "note": "Historical EPERM did not reproduce because main out/1.mp4 is currently absent; no deletion, permission change, or process termination was used. Root cause remains unproven."
+}

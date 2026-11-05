@@ -1,0 +1,4 @@
+PASS frame geometry/pixels 1440 photo
+PASS frame geometry/pixels 1440 replacement
+PASS frame geometry/pixels 390 photo
+PASS frame geometry/pixels 390 replacement

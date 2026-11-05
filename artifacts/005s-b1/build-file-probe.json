@@ -1,0 +1,10 @@
+[
+  {
+    "node": "D:\\Program Files\\nodejs\\node.exe",
+    "output": "{\"path\":\"E:/Recovery/jinxi-web/out/1.mp4\",\"ok\":true,\"bytes\":4172471}\n{\"path\":\"E:/Recovery/jinxi-web/public/1.mp4\",\"ok\":true,\"bytes\":4172471}\n{\"path\":\"E:/Recovery/.jinxi-research/005s-b1-checkpoint1/source/out/1.mp4\",\"ok\":true,\"bytes\":4172471}"
+  },
+  {
+    "node": "C:\\Users\\lilei\\AppData\\Local\\Temp\\jinxi-005s-next-runtime\\node-v20.20.2-win-x64\\node.exe",
+    "output": "{\"path\":\"E:/Recovery/jinxi-web/out/1.mp4\",\"ok\":false,\"code\":\"EPERM\"}\n{\"path\":\"E:/Recovery/jinxi-web/public/1.mp4\",\"ok\":true,\"bytes\":4172471}\n{\"path\":\"E:/Recovery/.jinxi-research/005s-b1-checkpoint1/source/out/1.mp4\",\"ok\":true,\"bytes\":4172471}"
+  }
+]

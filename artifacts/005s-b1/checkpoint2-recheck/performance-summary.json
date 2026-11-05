@@ -1,0 +1,258 @@
+{
+  "scope": "A+ d4769e7 vs B1 exact staged product build; 3 fresh contexts each, alternating stage order by repetition; desktop1440 CPU1, mobile390 CPU6/150ms/down200000/up93750 Bps. Same local native synthetic PG and cache headers. No Playwright routing; only identical external icon CDN block. CDP wire bytes differ from decoded bodies/calculated gzip. Not field vitals or Neon/Netlify network latency.",
+  "sampleCount": 12,
+  "conditions": [
+    {
+      "stage": "A+",
+      "width": 1440,
+      "runs": 3,
+      "lcp": [
+        288,
+        256,
+        224
+      ],
+      "lcpMedian": 256,
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "contentCls": [
+        0,
+        0,
+        0
+      ],
+      "initialJs": 602000,
+      "initialCss": 142010,
+      "initialImages": 733976,
+      "jsCalculatedGzip": 181117,
+      "wireJs": [
+        604159,
+        604159,
+        604159
+      ],
+      "wireCss": [
+        142941,
+        142941,
+        142941
+      ],
+      "wireImages": [
+        735762,
+        821359,
+        821359
+      ],
+      "statsReadyMedian": null,
+      "recommendationReadyMedian": 196.50830000000133,
+      "detailReadyMedian": 1030.4282999999996,
+      "feedMedians": null,
+      "initialImagesByRun": [
+        733976,
+        819350,
+        819350
+      ]
+    },
+    {
+      "stage": "B1",
+      "width": 1440,
+      "runs": 3,
+      "lcp": [
+        228,
+        224,
+        208
+      ],
+      "lcpMedian": 224,
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "contentCls": [
+        0,
+        0,
+        0
+      ],
+      "initialJs": 606871,
+      "initialCss": 142073,
+      "initialImages": 819350,
+      "jsCalculatedGzip": 182986,
+      "wireJs": [
+        609030,
+        609030,
+        609030
+      ],
+      "wireCss": [
+        143004,
+        143004,
+        143004
+      ],
+      "wireImages": [
+        821359,
+        821359,
+        821359
+      ],
+      "statsReadyMedian": 165.60199999999895,
+      "recommendationReadyMedian": 214.97379999999976,
+      "detailReadyMedian": 1049.0041999999994,
+      "feedMedians": {
+        "视频附件": 130.35410000000047,
+        "置顶精选": 218.84890000000087,
+        "最近发布": 69.6260999999995
+      },
+      "initialImagesByRun": [
+        819350,
+        819350,
+        819350
+      ]
+    },
+    {
+      "stage": "A+",
+      "width": 390,
+      "runs": 3,
+      "lcp": [
+        2960,
+        2900,
+        2904
+      ],
+      "lcpMedian": 2904,
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "contentCls": [
+        0,
+        0,
+        0
+      ],
+      "initialJs": 602000,
+      "initialCss": 142010,
+      "initialImages": 733976,
+      "jsCalculatedGzip": 181117,
+      "wireJs": [
+        604159,
+        604159,
+        604159
+      ],
+      "wireCss": [
+        142941,
+        142941,
+        142941
+      ],
+      "wireImages": [
+        735762,
+        735762,
+        735762
+      ],
+      "statsReadyMedian": null,
+      "recommendationReadyMedian": 343.9681999999957,
+      "detailReadyMedian": 1580.1010000000024,
+      "feedMedians": null,
+      "initialImagesByRun": [
+        733976,
+        733976,
+        733976
+      ]
+    },
+    {
+      "stage": "B1",
+      "width": 390,
+      "runs": 3,
+      "lcp": [
+        2832,
+        2916,
+        2940
+      ],
+      "lcpMedian": 2916,
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "contentCls": [
+        0,
+        0,
+        0
+      ],
+      "initialJs": 606871,
+      "initialCss": 142073,
+      "initialImages": 733976,
+      "jsCalculatedGzip": 182986,
+      "wireJs": [
+        609030,
+        609030,
+        609030
+      ],
+      "wireCss": [
+        143004,
+        143004,
+        143004
+      ],
+      "wireImages": [
+        735762,
+        735762,
+        735762
+      ],
+      "statsReadyMedian": 404.7832000000053,
+      "recommendationReadyMedian": 347.1374999999971,
+      "detailReadyMedian": 1487.4985000000015,
+      "feedMedians": {
+        "视频附件": 264.5222999999969,
+        "置顶精选": 250.86620000000403,
+        "最近发布": 87.92759999999544
+      },
+      "initialImagesByRun": [
+        733976,
+        733976,
+        733976
+      ]
+    }
+  ],
+  "api": [
+    {
+      "stage": "A+",
+      "firstRecommendation": [
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "bytes": 2404,
+          "status": 200,
+          "gzip": 453,
+          "fullGuideCode": false
+        }
+      ],
+      "stats": []
+    },
+    {
+      "stage": "B1",
+      "firstRecommendation": [
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "bytes": 2650,
+          "status": 200,
+          "gzip": 544,
+          "fullGuideCode": false
+        }
+      ],
+      "stats": [
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "bytes": 194,
+          "status": 200,
+          "gzip": 170,
+          "fullGuideCode": false
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "3 fresh lab samples per stage/condition, not a significance or production claim",
+    "Local cache-preserving HTTP/PG only; no Netlify compression/TLS or Neon service/network",
+    "LCP goal2.5s assessed explicitly; no INP claim from scripted interactions",
+    "HTTP503 unrelated announcements and deliberate404 synthetic cover retained in raw errors; no page exceptions"
+  ],
+  "allNoInitialMedia": true,
+  "allNoInitialGuideOrStats": true,
+  "allNoInitialReaderCode": true
+}

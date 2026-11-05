@@ -1,0 +1,147 @@
+{
+  "results": [
+    {
+      "name": "two public rows, unique originals, hidden copies 1440",
+      "passed": true
+    },
+    {
+      "name": "measured left/right speed 1440",
+      "passed": true
+    },
+    {
+      "name": "seam preserves visible content and position 1440",
+      "passed": true
+    },
+    {
+      "name": "hover focus and explicit pause 1440",
+      "passed": true
+    },
+    {
+      "name": "native touch browse and keyboard browse 1440",
+      "passed": true
+    },
+    {
+      "name": "click locates actual current public ID 1440",
+      "passed": true
+    }
+  ],
+  "measurements": [
+    {
+      "width": 1440,
+      "row": 0,
+      "direction": "left",
+      "speed": -31.650361290322582
+    },
+    {
+      "width": 1440,
+      "row": 1,
+      "direction": "right",
+      "speed": 31.824078879209672
+    },
+    {
+      "width": 1440,
+      "row": 0,
+      "seam": {
+        "duration": 61125,
+        "a": [
+          {
+            "id": "ui004-1",
+            "x": 2.511962890625,
+            "right": 312.511962890625
+          },
+          {
+            "id": "ui004-3",
+            "x": 328.511962890625,
+            "right": 638.511962890625
+          },
+          {
+            "id": "ui004-5",
+            "x": 654.511962890625,
+            "right": 964.511962890625
+          },
+          {
+            "id": "ui004-7",
+            "x": 980.511962890625,
+            "right": 1290.511962890625
+          }
+        ],
+        "b": [
+          {
+            "id": "ui004-1",
+            "x": 1.4879989624023438,
+            "right": 311.48799896240234
+          },
+          {
+            "id": "ui004-3",
+            "x": 327.4880065917969,
+            "right": 637.4879760742188
+          },
+          {
+            "id": "ui004-5",
+            "x": 653.4879760742188,
+            "right": 963.488037109375
+          },
+          {
+            "id": "ui004-7",
+            "x": 979.488037109375,
+            "right": 1289.488037109375
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "row": 1,
+      "seam": {
+        "duration": 61125,
+        "a": [
+          {
+            "id": "ui004-2",
+            "x": 1.4879989624023438,
+            "right": 311.48799896240234
+          },
+          {
+            "id": "ui004-4",
+            "x": 327.4880065917969,
+            "right": 637.4879760742188
+          },
+          {
+            "id": "ui004-6",
+            "x": 653.4879760742188,
+            "right": 963.488037109375
+          },
+          {
+            "id": "ui004-8",
+            "x": 979.488037109375,
+            "right": 1289.488037109375
+          }
+        ],
+        "b": [
+          {
+            "id": "ui004-2",
+            "x": 2.511962890625,
+            "right": 312.511962890625
+          },
+          {
+            "id": "ui004-4",
+            "x": 328.511962890625,
+            "right": 638.511962890625
+          },
+          {
+            "id": "ui004-6",
+            "x": 654.511962890625,
+            "right": 964.511962890625
+          },
+          {
+            "id": "ui004-8",
+            "x": 980.511962890625,
+            "right": 1290.511962890625
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(await rows.evaluateAll(nodes=>nodes.every(el=>el.dataset.running==='false')))\n"
+}

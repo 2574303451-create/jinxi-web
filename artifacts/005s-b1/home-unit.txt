@@ -1,0 +1,16 @@
+▶ frontend readonly contracts and bounded cache (network fixtures only)
+  ✔ feeds are sent to server, coalesced and cached separately (71.7081ms)
+  ✔ old backend cannot masquerade as working homepage filters (15.4269ms)
+  ✔ v2 acknowledgement, media fields and public status fail closed (56.0038ms)
+  ✔ success expires60s, failure drops stale cache; no polling (9.1033ms)
+  ✔ stats distinguishes real0 from errors, stale/unknown contracts and null (8.3958ms)
+  ✔ an unavailable stats endpoint never fabricates zero (11.5747ms)
+✔ frontend readonly contracts and bounded cache (network fixtures only) (173.0211ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 362.9432

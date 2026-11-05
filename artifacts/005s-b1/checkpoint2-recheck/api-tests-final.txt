@@ -1,0 +1,27 @@
+
+> my-v0-project@0.1.0 test:api
+> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs
+
+▶ frontend readonly contracts and bounded cache (network fixtures only)
+  ✔ feeds are sent to server, coalesced and cached separately (72.0598ms)
+  ✔ old backend cannot masquerade as working homepage filters (15.8882ms)
+  ✔ v2 acknowledgement, media fields and public status fail closed (57.93ms)
+  ✔ success expires60s, failure drops stale cache; no polling (10.5533ms)
+  ✔ stats distinguishes real0 from errors, stale/unknown contracts and null (8.545ms)
+  ✔ an unavailable stats endpoint never fabricates zero (12.0713ms)
+✔ frontend readonly contracts and bounded cache (network fixtures only) (177.884ms)
+▶ read API safety without a database
+  ✔ preview connections fail closed without separate configuration (0.9182ms)
+  ✔ invalid public queries rejected before transaction (3.2207ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (0.8998ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.23ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (20.1846ms)
+✔ read API safety without a database (27.2101ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 365.5395

@@ -1,0 +1,4 @@
+PASS real keyboard focus A+ 1440
+PASS real keyboard focus A+ 390
+PASS real keyboard focus B1 1440
+PASS real keyboard focus B1 390

@@ -1,0 +1,1757 @@
+{
+  "results": [
+    {
+      "name": "initial no API/media 1440",
+      "passed": true
+    },
+    {
+      "name": "archive/date preserved, true read count4, online—, no height change 1440",
+      "passed": true
+    },
+    {
+      "name": "database filters, few results, cover success/failure, no videos, keyed cache 1440",
+      "passed": true
+    },
+    {
+      "name": "keyboard reaches independent detail without writes 1440",
+      "passed": true
+    },
+    {
+      "name": "initial no API/media 1024",
+      "passed": true
+    },
+    {
+      "name": "archive/date preserved, true read count4, online—, no height change 1024",
+      "passed": true
+    },
+    {
+      "name": "database filters, few results, cover success/failure, no videos, keyed cache 1024",
+      "passed": true
+    },
+    {
+      "name": "keyboard reaches independent detail without writes 1024",
+      "passed": true
+    },
+    {
+      "name": "initial no API/media 768",
+      "passed": true
+    },
+    {
+      "name": "archive/date preserved, true read count4, online—, no height change 768",
+      "passed": true
+    },
+    {
+      "name": "database filters, few results, cover success/failure, no videos, keyed cache 768",
+      "passed": true
+    },
+    {
+      "name": "keyboard reaches independent detail without writes 768",
+      "passed": true
+    },
+    {
+      "name": "initial no API/media 390",
+      "passed": true
+    },
+    {
+      "name": "archive/date preserved, true read count4, online—, no height change 390",
+      "passed": true
+    },
+    {
+      "name": "database filters, few results, cover success/failure, no videos, keyed cache 390",
+      "passed": true
+    },
+    {
+      "name": "keyboard reaches independent detail without writes 390",
+      "passed": true
+    },
+    {
+      "name": "initial no API/media 320",
+      "passed": true
+    },
+    {
+      "name": "archive/date preserved, true read count4, online—, no height change 320",
+      "passed": true
+    },
+    {
+      "name": "database filters, few results, cover success/failure, no videos, keyed cache 320",
+      "passed": true
+    },
+    {
+      "name": "keyboard reaches independent detail without writes 320",
+      "passed": true
+    },
+    {
+      "name": "actual empty PostgreSQL reaches UI0 and no fake cards",
+      "passed": true
+    },
+    {
+      "name": "stats HTTP503 shows— and recovers with retry",
+      "passed": true,
+      "networkInjection": true
+    },
+    {
+      "name": "late video response cannot overwrite pinned selection",
+      "passed": true,
+      "networkDelayInjection": true
+    },
+    {
+      "name": "old backend: home fails closed, independent guide list still works",
+      "passed": true
+    },
+    {
+      "name": "list HTTP503 has no stale cards and explicit retry recovers",
+      "passed": true,
+      "networkInjection": true
+    },
+    {
+      "name": "browser cache reuses at59s, expires at62s, no polling",
+      "passed": true,
+      "clockInjection": "Date.now offset only",
+      "counts": {
+        "stats": 2,
+        "latest": 2
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/14.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/13.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/43.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/44.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/45.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/46.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/bbf9cdd3b6568cdd.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/996-af7a449b304a2071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/425-2b08906077118095.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/page-da5b57ae7601320d.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/99e71b93752a6c6b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/399.4ce2f80ab9811afa.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/512.2f033559e1ec3986.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/15.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/16.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/17.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/18.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=video",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=pinned",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/guides/?id=14",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/efdbe75815e8665d.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/guides/page-b8e91cc9f1b1a903.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/161.2f622ae21ebafa4f.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/230.e3fb85d54733f071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?id=14",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        }
+      ],
+      "bounds": {
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 1440,
+          "height": 1169
+        },
+        "facts": {
+          "x": 96,
+          "y": 1238,
+          "width": 1248,
+          "height": 414.375
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "requests": [
+        {
+          "path": "/",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/14.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/13.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/43.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/44.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/45.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/46.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/bbf9cdd3b6568cdd.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/996-af7a449b304a2071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/425-2b08906077118095.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/page-da5b57ae7601320d.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/15.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/99e71b93752a6c6b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/399.4ce2f80ab9811afa.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/512.2f033559e1ec3986.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/16.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/17.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/18.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=video",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=pinned",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/guides/?id=14",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/efdbe75815e8665d.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/guides/page-b8e91cc9f1b1a903.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/161.2f622ae21ebafa4f.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/230.e3fb85d54733f071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?id=14",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        }
+      ],
+      "bounds": {
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 1024,
+          "height": 1169
+        },
+        "facts": {
+          "x": 16,
+          "y": 1238,
+          "width": 992,
+          "height": 414.375
+        }
+      }
+    },
+    {
+      "width": 768,
+      "requests": [
+        {
+          "path": "/",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/14.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/13.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/43.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/44.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/45.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/46.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/bbf9cdd3b6568cdd.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/996-af7a449b304a2071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/425-2b08906077118095.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/page-da5b57ae7601320d.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/99e71b93752a6c6b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/399.4ce2f80ab9811afa.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/512.2f033559e1ec3986.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/15.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/16.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/17.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/18.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=video",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=pinned",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/guides/?id=14",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/efdbe75815e8665d.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/guides/page-b8e91cc9f1b1a903.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/161.2f622ae21ebafa4f.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/230.e3fb85d54733f071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?id=14",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        }
+      ],
+      "bounds": {
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 768,
+          "height": 1259
+        },
+        "facts": {
+          "x": 16,
+          "y": 1328,
+          "width": 736,
+          "height": 607.265625
+        }
+      }
+    },
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/14.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/13.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/43.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/44.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/45.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/46.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/bbf9cdd3b6568cdd.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/996-af7a449b304a2071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/425-2b08906077118095.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/page-da5b57ae7601320d.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/99e71b93752a6c6b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/399.4ce2f80ab9811afa.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/512.2f033559e1ec3986.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/15.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/16.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/17.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/18.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=video",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=pinned",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/guides/?id=14",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/efdbe75815e8665d.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/guides/page-b8e91cc9f1b1a903.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/161.2f622ae21ebafa4f.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/230.e3fb85d54733f071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?id=14",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        }
+      ],
+      "bounds": {
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 390,
+          "height": 1337.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1402.5,
+          "width": 358,
+          "height": 535.359375
+        }
+      }
+    },
+    {
+      "width": 320,
+      "requests": [
+        {
+          "path": "/",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/14.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/13.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/43.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/44.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/45.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/46.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/bbf9cdd3b6568cdd.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/996-af7a449b304a2071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/425-2b08906077118095.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/page-da5b57ae7601320d.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/99e71b93752a6c6b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/399.4ce2f80ab9811afa.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/512.2f033559e1ec3986.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/15.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/guide-video-stats",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/16.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/17.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/18.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=latest",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=video",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC&feed=pinned",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/__missing_isolated_cover__.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/guides/?id=14",
+          "type": "document",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "image",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/89ff6cf2f2223c4b.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/3f109eb114abd446.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/css/efdbe75815e8665d.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/webpack-72559a270ef16808.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/dded304f-806669fb45a8c9f4.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/144-3e5647cd2ddd98d6.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/main-app-ef3f54c6f73e3386.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/app/guides/page-b8e91cc9f1b1a903.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "type": "stylesheet",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "type": "font",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/161.2f622ae21ebafa4f.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/_next/static/chunks/230.e3fb85d54733f071.js",
+          "type": "script",
+          "method": "GET"
+        },
+        {
+          "path": "/logo.png",
+          "type": "other",
+          "method": "GET"
+        },
+        {
+          "path": "/.netlify/functions/strategies?id=14",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "path": "/bg.png",
+          "type": "image",
+          "method": "GET"
+        }
+      ],
+      "bounds": {
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 320,
+          "height": 1405.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1470.5,
+          "width": 288,
+          "height": 586.234375
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:20325)\n    at async http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:39251",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:20325)\n    at async http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:39251",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:20325)\n    at async http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:39251",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:20325)\n    at async http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:39251",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:20325)\n    at async http://127.0.0.1:3041/_next/static/chunks/app/page-073ed47833032458.js:1:39251",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3045/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3045/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to fetch announcements: Error: 隔离预览未连接此服务\n    at eO (http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:20323)\n    at async http://127.0.0.1:3044/_next/static/chunks/app/page-da5b57ae7601320d.js:1:41583",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "expectedConsole": "Local preview deliberately returns503 for unrelated announcements; exact known message and network HTTP errors recorded, unexpected JS/React errors fail.",
+  "scope": "Native PostgreSQL synthetic data through product GET handlers; network fault/delay injections individually labelled. No production DB or writes. Empty table uses the real isolated database, restored afterwards."
+}

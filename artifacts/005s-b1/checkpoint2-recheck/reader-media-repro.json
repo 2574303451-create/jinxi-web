@@ -1,0 +1,18 @@
+[
+  {
+    "stage": "A+",
+    "errors": [
+      "TypeError: Cannot read properties of null (reading 'url')\n    at http://127.0.0.1:3041/_next/static/chunks/633.01dd67fbece6d2dd.js:1:1458\n    at Array.map (<anonymous>)\n    at x (http://127.0.0.1:3041/_next/static/chunks/633.01dd67fbece6d2dd.js:1:1409)\n    at rE (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:40340)\n    at iZ (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:117025)\n    at ia (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:95161)\n    at http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:94983\n    at il (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:94990)\n    at oJ (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:92346)\n    at oZ (http://127.0.0.1:3041/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js:1:91765)"
+    ],
+    "reader": 0,
+    "body": "Application error: a client-side exception has occurred (see the browser console for more information)."
+  },
+  {
+    "stage": "B1",
+    "errors": [
+      "TypeError: Cannot read properties of null (reading 'url')\n    at http://127.0.0.1:3044/_next/static/chunks/230.36c42ad8144dcbe6.js:1:1457\n    at Array.map (<anonymous>)\n    at x (http://127.0.0.1:3044/_next/static/chunks/230.36c42ad8144dcbe6.js:1:1408)\n    at rE (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:40340)\n    at iZ (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:117025)\n    at ia (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:95161)\n    at http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:94983\n    at il (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:94990)\n    at oJ (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:92346)\n    at oZ (http://127.0.0.1:3044/_next/static/chunks/dded304f-806669fb45a8c9f4.js:1:91765)"
+    ],
+    "reader": 0,
+    "body": "Application error: a client-side exception has occurred (see the browser console for more information)."
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "source": "E:\\Recovery\\.jinxi-research\\005s-b1-checkpoint2\\source",
+  "scope": "Exact staged B1 frontend/backend source; separate build directory avoids main out file EPERM",
+  "stagedTree": "d8cc7b1ca7b9e74d17280783b0910ee1f4437dea"
+}

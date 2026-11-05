@@ -1,0 +1,14 @@
+E:\Recovery\.jinxi-research\005s-next-ci\no-git\scripts\generate-guild-summary.cjs:28
+  throw Error(
+  ^
+
+Error: Archive provenance missing or stale: verify source SHA-256 and last source commit timestamp before building.
+    at Object.<anonymous> (E:\Recovery\.jinxi-research\005s-next-ci\no-git\scripts\generate-guild-summary.cjs:28:9)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49
+
+Node.js v20.20.2

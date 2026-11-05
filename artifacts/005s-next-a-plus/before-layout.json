@@ -1,0 +1,142 @@
+[
+  {
+    "width": 1440,
+    "summary": {
+      "x": 420,
+      "y": 1132,
+      "width": 600,
+      "height": 42
+    },
+    "values": {
+      "x": 260,
+      "y": 992.5,
+      "width": 920,
+      "height": 111.5
+    },
+    "hero": {
+      "x": 0,
+      "y": 69,
+      "width": 1440,
+      "height": 1169
+    },
+    "facts": {
+      "x": 96,
+      "y": 1238,
+      "width": 1248,
+      "height": 414.375
+    },
+    "overflow": false
+  },
+  {
+    "width": 1024,
+    "summary": {
+      "x": 212,
+      "y": 1132,
+      "width": 600,
+      "height": 42
+    },
+    "values": {
+      "x": 52,
+      "y": 992.5,
+      "width": 920,
+      "height": 111.5
+    },
+    "hero": {
+      "x": 0,
+      "y": 69,
+      "width": 1024,
+      "height": 1169
+    },
+    "facts": {
+      "x": 16,
+      "y": 1238,
+      "width": 992,
+      "height": 414.375
+    },
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "summary": {
+      "x": 84,
+      "y": 1222,
+      "width": 600,
+      "height": 42
+    },
+    "values": {
+      "x": 16,
+      "y": 1082.5,
+      "width": 736,
+      "height": 111.5
+    },
+    "hero": {
+      "x": 0,
+      "y": 69,
+      "width": 768,
+      "height": 1259
+    },
+    "facts": {
+      "x": 16,
+      "y": 1328,
+      "width": 736,
+      "height": 607.265625
+    },
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "summary": {
+      "x": 16,
+      "y": 1320.5,
+      "width": 358,
+      "height": 42
+    },
+    "values": {
+      "x": 16,
+      "y": 1114.5,
+      "width": 358,
+      "height": 178
+    },
+    "hero": {
+      "x": 0,
+      "y": 65,
+      "width": 390,
+      "height": 1337.5
+    },
+    "facts": {
+      "x": 16,
+      "y": 1402.5,
+      "width": 358,
+      "height": 535.359375
+    },
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "summary": {
+      "x": 16,
+      "y": 1388.5,
+      "width": 288,
+      "height": 42
+    },
+    "values": {
+      "x": 16,
+      "y": 1182.5,
+      "width": 288,
+      "height": 178
+    },
+    "hero": {
+      "x": 0,
+      "y": 65,
+      "width": 320,
+      "height": 1405.5
+    },
+    "facts": {
+      "x": 16,
+      "y": 1470.5,
+      "width": 288,
+      "height": 586.234375
+    },
+    "overflow": false
+  }
+]

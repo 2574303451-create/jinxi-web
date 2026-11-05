@@ -538,12 +538,87 @@ button:disabled {
     transform: translateY(-12px);
   }
 }
-.guild-video {
+.guild-video-invitation {
+  position: relative;
   margin-top: 28px;
-  font-size: 12px;
-  color: var(--muted);
   max-width: 600px;
   width: 100%;
+}
+.guild-video {
+  font-size: 12px;
+  color: var(--muted);
+  width: 100%;
+}
+.guild-video-cue {
+  position: absolute;
+  top: -27px;
+  left: calc(50% + 85px);
+  width: 180px;
+  height: 85px;
+  pointer-events: none;
+  user-select: none;
+}
+.guild-video[open] + .guild-video-cue {
+  display: none;
+}
+.guild-video-cue-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 3px 8px;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: var(--accent);
+  box-shadow: 2px 2px 0 var(--line);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 16px;
+  white-space: nowrap;
+  transform: rotate(-3deg);
+}
+.guild-video-cue svg {
+  position: absolute;
+  left: 0;
+  top: 17px;
+  width: 165px;
+  height: 68px;
+  overflow: visible;
+}
+.guild-video-cue path {
+  stroke: var(--line);
+  stroke-width: 7px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.guild-video-cue path + path {
+  stroke: var(--brand-blue);
+  stroke-width: 4px;
+}
+.guild-video-cue .guild-video-cue-compact {
+  display: none;
+}
+@media (max-width: 540px) {
+  .guild-video-cue {
+    top: -26px;
+    left: calc(50% - 70px);
+    width: 190px;
+    height: 52px;
+  }
+  .guild-video-cue-label {
+    right: auto;
+    left: 0;
+  }
+  .guild-video-cue .guild-video-cue-curve {
+    display: none;
+  }
+  .guild-video-cue .guild-video-cue-compact {
+    display: block;
+    top: 12px;
+    left: 100px;
+    width: 60px;
+    height: 40px;
+  }
 }
 .guild-video summary {
   display: flex;
@@ -552,6 +627,20 @@ button:disabled {
   gap: 8px;
   padding: 12px;
   list-style: none;
+}
+/* Browser zoom can make the CSS viewport narrower than a 320px phone. */
+@media (max-width: 280px) {
+  .guild-video-cue {
+    left: auto;
+    right: 0;
+    width: 60px;
+  }
+  .guild-video-cue-label {
+    display: none;
+  }
+  .guild-video-cue .guild-video-cue-compact {
+    left: 0;
+  }
 }
 .video-frame {
   position: relative;

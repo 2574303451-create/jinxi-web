@@ -1,0 +1,59 @@
+{
+  "queriedAt": "2026-11-05T10:10:45.486Z",
+  "rows": [
+    {
+      "number": 1,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-rea-002",
+      "sha": "328819a57c671b33b743d1ad3f969c0fb7917048",
+      "base": "codex/planning-handoff-2026-11-04"
+    },
+    {
+      "number": 2,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-rea-003-batch-1",
+      "sha": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+      "base": "codex/jinxi-rea-002"
+    },
+    {
+      "number": 3,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-ui-004-a",
+      "sha": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+      "base": "codex/jinxi-rea-003-batch-1"
+    },
+    {
+      "number": 4,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005",
+      "sha": "80737413d3bb981b3a3287c603893eb6c09decf2",
+      "base": "codex/jinxi-ui-004-a"
+    },
+    {
+      "number": 5,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005r",
+      "sha": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+      "base": "codex/jinxi-arch-005"
+    },
+    {
+      "number": 6,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005s-a",
+      "sha": "04ca4ef972636ef7ac8169d80db2dbf4af9d8b00",
+      "base": "codex/jinxi-arch-005r"
+    }
+  ]
+}

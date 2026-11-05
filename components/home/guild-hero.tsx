@@ -152,44 +152,69 @@ export function GuildHero({
             <span>收藏并肩的时刻</span>
           </div>
         </div>
-        <details className="guild-video">
-          <summary>
-            <Play size={15} />
-            看看今夕的游戏影像 <ArrowDown size={14} />
-          </summary>
-          <div className="video-frame">
-            {!videoFailed && (
-              <video
-                ref={videoRef}
-                src="/1.mp4"
-                poster="/bg.png"
-                preload="none"
-                playsInline
-                controls={playing}
-                onPlay={() => setPlaying(true)}
-                onPause={() => setPlaying(false)}
-                onError={() => setVideoFailed(true)}
-              />
-            )}
-            {videoFailed && (
-              <>
-                <GuildImage src="/bg.png" alt="公会影像封面" />
-                <p role="status">视频暂不可用，已显示封面。</p>
-              </>
-            )}
-            {!playing && !videoFailed && (
-              <button
-                onClick={play}
-              disabled={videoLoading}
-                className="guild-button"
-                aria-label="播放公会视频"
-              >
-                <Play size={16} />
-              {videoLoading ? "影像加载中…" : "播放影像"}
-              </button>
-            )}
-          </div>
-        </details>
+        <div className="guild-video-invitation">
+          <details className="guild-video">
+            <summary>
+              <Play size={15} />
+              看看今夕的游戏影像 <ArrowDown size={14} />
+            </summary>
+            <div className="video-frame">
+              {!videoFailed && (
+                <video
+                  ref={videoRef}
+                  src="/1.mp4"
+                  poster="/bg.png"
+                  preload="none"
+                  playsInline
+                  controls={playing}
+                  onPlay={() => setPlaying(true)}
+                  onPause={() => setPlaying(false)}
+                  onError={() => setVideoFailed(true)}
+                />
+              )}
+              {videoFailed && (
+                <>
+                  <GuildImage src="/bg.png" alt="公会影像封面" />
+                  <p role="status">视频暂不可用，已显示封面。</p>
+                </>
+              )}
+              {!playing && !videoFailed && (
+                <button
+                  onClick={play}
+                  disabled={videoLoading}
+                  className="guild-button"
+                  aria-label="播放公会视频"
+                >
+                  <Play size={16} />
+                  {videoLoading ? "影像加载中…" : "播放影像"}
+                </button>
+              )}
+            </div>
+          </details>
+          <span className="guild-video-cue" aria-hidden="true">
+            <span className="guild-video-cue-label">看看我们的高光！</span>
+            <svg
+              className="guild-video-cue-curve"
+              viewBox="0 0 165 68"
+              fill="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M140 2 C178 43 125 72 78 49 C45 30 17 20 5 30 M14 19 L5 30 L19 34" />
+              <path d="M140 2 C178 43 125 72 78 49 C45 30 17 20 5 30 M14 19 L5 30 L19 34" />
+            </svg>
+            <svg
+              className="guild-video-cue-compact"
+              viewBox="0 0 60 40"
+              fill="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M15 2 C15 20 48 9 53 24 M44 21 L53 24 L51 14" />
+              <path d="M15 2 C15 20 48 9 53 24 M44 21 L53 24 L51 14" />
+            </svg>
+          </span>
+        </div>
       </div>
     </section>
   );

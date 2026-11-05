@@ -1,0 +1,834 @@
+[
+  {
+    "run": 1,
+    "counts": {
+      "/logo.png": 2,
+      "/14.png": 2,
+      "/13.png": 1,
+      "/43.png": 1,
+      "/44.png": 1,
+      "/45.png": 1,
+      "/46.png": 1,
+      "/bg.png": 1
+    },
+    "changes": [],
+    "events": [
+      {
+        "event": "request",
+        "id": "31504.2",
+        "url": "/logo.png",
+        "time": 39861.884451,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 181
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.3",
+        "url": "/14.png",
+        "time": 39861.88648,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 228
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.4",
+        "url": "/13.png",
+        "time": 39861.88689,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 275
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.5",
+        "url": "/43.png",
+        "time": 39861.887473,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 322
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.6",
+        "url": "/44.png",
+        "time": 39861.887881,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 369
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.7",
+        "url": "/45.png",
+        "time": 39861.888096,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 416
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.8",
+        "url": "/46.png",
+        "time": 39861.888468,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 463
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.42",
+        "url": "/bg.png",
+        "time": 39861.92374,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 6560
+        }
+      },
+      {
+        "event": "response",
+        "id": "31504.2",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39862.084773
+      },
+      {
+        "event": "response",
+        "id": "31504.3",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39862.115486
+      },
+      {
+        "event": "request",
+        "id": "31504.53",
+        "url": "/logo.png",
+        "time": 39862.117286,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 34907
+        }
+      },
+      {
+        "event": "request",
+        "id": "31504.56",
+        "url": "/14.png",
+        "time": 39862.120324,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 3645
+        }
+      },
+      {
+        "event": "response",
+        "id": "31504.4",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39862.487417
+      },
+      {
+        "event": "response",
+        "id": "31504.42",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39862.797646
+      },
+      {
+        "event": "response",
+        "id": "31504.56",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39863.58941
+      },
+      {
+        "event": "complete",
+        "id": "31504.3",
+        "encodedBytes": 61600,
+        "time": 39863.866505
+      },
+      {
+        "event": "complete",
+        "id": "31504.56",
+        "encodedBytes": 61600,
+        "time": 39865.292897
+      },
+      {
+        "event": "response",
+        "id": "31504.5",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39865.951015
+      },
+      {
+        "event": "complete",
+        "id": "31504.5",
+        "encodedBytes": 29742,
+        "time": 39864.879952
+      },
+      {
+        "event": "complete",
+        "id": "31504.4",
+        "encodedBytes": 83599,
+        "time": 39864.843286
+      },
+      {
+        "event": "response",
+        "id": "31504.6",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39865.979809
+      },
+      {
+        "event": "complete",
+        "id": "31504.6",
+        "encodedBytes": 47440,
+        "time": 39865.510497
+      },
+      {
+        "event": "response",
+        "id": "31504.7",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39866.013798
+      },
+      {
+        "event": "complete",
+        "id": "31504.7",
+        "encodedBytes": 37334,
+        "time": 39866.008525
+      },
+      {
+        "event": "response",
+        "id": "31504.8",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39866.032536
+      },
+      {
+        "event": "complete",
+        "id": "31504.8",
+        "encodedBytes": 34436,
+        "time": 39865.975308
+      },
+      {
+        "event": "complete",
+        "id": "31504.42",
+        "encodedBytes": 192580,
+        "time": 39867.878988
+      },
+      {
+        "event": "response",
+        "id": "31504.53",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39868.675722
+      },
+      {
+        "event": "complete",
+        "id": "31504.2",
+        "encodedBytes": 249115,
+        "time": 39868.70243
+      },
+      {
+        "event": "complete",
+        "id": "31504.53",
+        "encodedBytes": 249115,
+        "time": 39871.29859
+      }
+    ]
+  },
+  {
+    "run": 2,
+    "counts": {
+      "/logo.png": 1,
+      "/14.png": 1,
+      "/13.png": 1,
+      "/43.png": 1,
+      "/44.png": 1,
+      "/45.png": 1,
+      "/46.png": 1,
+      "/bg.png": 1
+    },
+    "changes": [],
+    "events": [
+      {
+        "event": "request",
+        "id": "4776.2",
+        "url": "/logo.png",
+        "time": 39875.673281,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 181
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.3",
+        "url": "/14.png",
+        "time": 39875.674679,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 228
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.4",
+        "url": "/13.png",
+        "time": 39875.675059,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 275
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.5",
+        "url": "/43.png",
+        "time": 39875.675275,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 322
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.6",
+        "url": "/44.png",
+        "time": 39875.675478,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 369
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.7",
+        "url": "/45.png",
+        "time": 39875.675682,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 416
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.8",
+        "url": "/46.png",
+        "time": 39875.67588,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 463
+        }
+      },
+      {
+        "event": "request",
+        "id": "4776.43",
+        "url": "/bg.png",
+        "time": 39875.707917,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 6560
+        }
+      },
+      {
+        "event": "response",
+        "id": "4776.2",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39875.876785
+      },
+      {
+        "event": "response",
+        "id": "4776.3",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39875.904592
+      },
+      {
+        "event": "response",
+        "id": "4776.4",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39877.093158
+      },
+      {
+        "event": "response",
+        "id": "4776.43",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39877.109153
+      },
+      {
+        "event": "response",
+        "id": "4776.5",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39877.109759
+      },
+      {
+        "event": "complete",
+        "id": "4776.3",
+        "encodedBytes": 61600,
+        "time": 39877.262818
+      },
+      {
+        "event": "response",
+        "id": "4776.6",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39877.449123
+      },
+      {
+        "event": "complete",
+        "id": "4776.5",
+        "encodedBytes": 29742,
+        "time": 39877.909886
+      },
+      {
+        "event": "complete",
+        "id": "4776.6",
+        "encodedBytes": 47440,
+        "time": 39878.792079
+      },
+      {
+        "event": "response",
+        "id": "4776.7",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39878.998849
+      },
+      {
+        "event": "complete",
+        "id": "4776.7",
+        "encodedBytes": 37334,
+        "time": 39878.699422
+      },
+      {
+        "event": "response",
+        "id": "4776.8",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39879.002906
+      },
+      {
+        "event": "complete",
+        "id": "4776.8",
+        "encodedBytes": 34436,
+        "time": 39879.037983
+      },
+      {
+        "event": "complete",
+        "id": "4776.4",
+        "encodedBytes": 83599,
+        "time": 39879.315806
+      },
+      {
+        "event": "complete",
+        "id": "4776.2",
+        "encodedBytes": 249115,
+        "time": 39881.850109
+      },
+      {
+        "event": "complete",
+        "id": "4776.43",
+        "encodedBytes": 192580,
+        "time": 39881.850374
+      }
+    ]
+  },
+  {
+    "run": 3,
+    "counts": {
+      "/logo.png": 2,
+      "/14.png": 2,
+      "/13.png": 1,
+      "/43.png": 1,
+      "/44.png": 1,
+      "/45.png": 1,
+      "/46.png": 1,
+      "/bg.png": 1
+    },
+    "changes": [],
+    "events": [
+      {
+        "event": "request",
+        "id": "16860.2",
+        "url": "/logo.png",
+        "time": 39887.623232,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 181
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.3",
+        "url": "/14.png",
+        "time": 39887.624436,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 228
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.4",
+        "url": "/13.png",
+        "time": 39887.624647,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 275
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.5",
+        "url": "/43.png",
+        "time": 39887.62502,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 322
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.6",
+        "url": "/44.png",
+        "time": 39887.625048,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 369
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.7",
+        "url": "/45.png",
+        "time": 39887.625424,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 416
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.8",
+        "url": "/46.png",
+        "time": 39887.625623,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 463
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.42",
+        "url": "/bg.png",
+        "time": 39887.656246,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 6560
+        }
+      },
+      {
+        "event": "response",
+        "id": "16860.2",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39887.814947
+      },
+      {
+        "event": "response",
+        "id": "16860.3",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39887.830546
+      },
+      {
+        "event": "request",
+        "id": "16860.53",
+        "url": "/logo.png",
+        "time": 39887.896091,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 34907
+        }
+      },
+      {
+        "event": "request",
+        "id": "16860.56",
+        "url": "/14.png",
+        "time": 39887.898886,
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 3645
+        }
+      },
+      {
+        "event": "response",
+        "id": "16860.4",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39889.050344
+      },
+      {
+        "event": "response",
+        "id": "16860.42",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39889.065738
+      },
+      {
+        "event": "response",
+        "id": "16860.56",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39889.066327
+      },
+      {
+        "event": "complete",
+        "id": "16860.3",
+        "encodedBytes": 61600,
+        "time": 39889.219698
+      },
+      {
+        "event": "response",
+        "id": "16860.5",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39890.44259
+      },
+      {
+        "event": "complete",
+        "id": "16860.5",
+        "encodedBytes": 29742,
+        "time": 39890.254851
+      },
+      {
+        "event": "response",
+        "id": "16860.6",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39890.454295
+      },
+      {
+        "event": "response",
+        "id": "16860.7",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39890.462718
+      },
+      {
+        "event": "complete",
+        "id": "16860.56",
+        "encodedBytes": 61600,
+        "time": 39890.826224
+      },
+      {
+        "event": "complete",
+        "id": "16860.6",
+        "encodedBytes": 47440,
+        "time": 39890.917975
+      },
+      {
+        "event": "complete",
+        "id": "16860.4",
+        "encodedBytes": 83599,
+        "time": 39891.32392
+      },
+      {
+        "event": "complete",
+        "id": "16860.7",
+        "encodedBytes": 37334,
+        "time": 39891.384893
+      },
+      {
+        "event": "response",
+        "id": "16860.8",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39891.55731
+      },
+      {
+        "event": "complete",
+        "id": "16860.8",
+        "encodedBytes": 34436,
+        "time": 39892.213485
+      },
+      {
+        "event": "complete",
+        "id": "16860.2",
+        "encodedBytes": 249115,
+        "time": 39893.712245
+      },
+      {
+        "event": "complete",
+        "id": "16860.42",
+        "encodedBytes": 192580,
+        "time": 39893.742735
+      },
+      {
+        "event": "response",
+        "id": "16860.53",
+        "status": 200,
+        "cache": false,
+        "headers": {
+          "cacheControl": "no-store"
+        },
+        "time": 39893.899627
+      },
+      {
+        "event": "complete",
+        "id": "16860.53",
+        "encodedBytes": 249115,
+        "time": 39897.05332
+      }
+    ]
+  }
+]

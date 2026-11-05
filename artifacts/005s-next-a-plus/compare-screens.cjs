@@ -1,0 +1,9 @@
+// Compose unchanged browser screenshots side by side. No generated visual assets.
+const fs=require('node:fs'),path=require('node:path');
+const {chromium}=require('C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright');
+(async()=>{const b=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});try{
+for(const width of [1440,1024,768,390,320]){
+const live=await b.newPage({viewport:{width,height:1000},reducedMotion:'reduce',locale:'zh-CN'});await live.goto('http://127.0.0.1:3029/',{waitUntil:'networkidle'});await live.evaluate(()=>document.fonts.ready);await live.locator('.guild-video summary').evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY-500,behavior:'instant'}));await live.screenshot({path:path.join(__dirname,`after-${width}-comparison.png`)});await live.close();
+const p=await b.newPage({viewport:{width:width*2+24,height:1056},deviceScaleFactor:1}),src=n=>'data:image/png;base64,'+fs.readFileSync(path.join(__dirname,n)).toString('base64');await p.setContent(`<html lang="zh-CN"><style>*{box-sizing:border-box}body{margin:0;background:#151515;font:15px system-ui;color:white}main{display:flex;gap:24px}section{width:${width}px}h2{height:56px;line-height:56px;padding:0 16px;margin:0;font-size:16px}img{display:block;width:100%}</style><main><section><h2>005S-A · 修改前 / ${width}px</h2><img src="${src(`before-${width}-collapsed.png`)}"></section><section><h2>A+ · 修改后 / ${width}px</h2><img src="${src(`after-${width}-comparison.png`)}"></section></main></html>`);await p.evaluate(()=>Promise.all([...document.images].map(i=>i.decode())));await p.screenshot({path:path.join(__dirname,`compare-${width}.png`)});await p.close();console.log('PAIR',width);
+}
+}finally{await b.close()}})().catch(e=>{console.error(e);process.exitCode=1});

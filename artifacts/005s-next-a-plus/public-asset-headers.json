@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-05T10:24:18.107Z",
+  "scope": "Currently deployed site, not this new PR",
+  "rows": [
+    {
+      "path": "/logo.png",
+      "status": 200,
+      "cacheControl": "public,max-age=2592000",
+      "contentLength": "248861",
+      "acceptRanges": "bytes",
+      "etag": "\"be374e7aed12f3c664b86e3a2e2f3f16-ssl\""
+    },
+    {
+      "path": "/14.png",
+      "status": 200,
+      "cacheControl": "public,max-age=2592000",
+      "contentLength": "61373",
+      "acceptRanges": "bytes",
+      "etag": "\"830917a38f3db28aab80263a9e063e31-ssl\""
+    },
+    {
+      "path": "/bg.png",
+      "status": 200,
+      "cacheControl": "public,max-age=2592000",
+      "contentLength": "192335",
+      "acceptRanges": "bytes",
+      "etag": "\"b93af3a601de6f6cafbb40747135965a-ssl\""
+    },
+    {
+      "path": "/1.mp4",
+      "status": 200,
+      "cacheControl": "public,max-age=2592000",
+      "contentLength": "4172471",
+      "acceptRanges": "bytes",
+      "etag": "\"d542bda673debf980675b9260b39427a-ssl\""
+    }
+  ]
+}

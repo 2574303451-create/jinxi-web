@@ -1,0 +1,294 @@
+[
+  {
+    "port": 3030,
+    "events": [
+      {
+        "event": "request",
+        "id": "740AF4AF120A119DBB63EDD4F5202A85",
+        "type": "Document",
+        "url": "http://127.0.0.1:3030/",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "other"
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.2",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/logo.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 181
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.3",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/14.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 228
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.4",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/13.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 275
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.5",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/43.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 322
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.6",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/44.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 369
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.7",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/45.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 416
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.8",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/46.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 0,
+          "columnNumber": 463
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.43",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/bg.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 6560
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.54",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/logo.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 34907
+        }
+      },
+      {
+        "event": "request",
+        "id": "2948.56",
+        "type": "Image",
+        "url": "http://127.0.0.1:3030/14.png",
+        "frame": "6A7039282949D04CAEC698896EE7F601",
+        "loader": "740AF4AF120A119DBB63EDD4F5202A85",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3030/",
+          "lineNumber": 30,
+          "columnNumber": 3645
+        }
+      }
+    ],
+    "navigations": [
+      "http://127.0.0.1:3030/",
+      "http://127.0.0.1:3030/"
+    ]
+  },
+  {
+    "port": 3028,
+    "events": [
+      {
+        "event": "request",
+        "id": "17F4F24A92CE15032ED4099A97408BCB",
+        "type": "Document",
+        "url": "http://127.0.0.1:3028/",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "other"
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.2",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/logo.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 181
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.3",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/14.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 228
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.4",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/13.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 275
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.5",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/43.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 322
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.6",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/44.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 369
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.7",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/45.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 416
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.8",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/46.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 0,
+          "columnNumber": 463
+        }
+      },
+      {
+        "event": "request",
+        "id": "31516.43",
+        "type": "Image",
+        "url": "http://127.0.0.1:3028/bg.png",
+        "frame": "3760DD7BE8E555F1C3D9A26F1964DE8D",
+        "loader": "17F4F24A92CE15032ED4099A97408BCB",
+        "initiator": {
+          "type": "parser",
+          "url": "http://127.0.0.1:3028/",
+          "lineNumber": 30,
+          "columnNumber": 6560
+        }
+      }
+    ],
+    "navigations": [
+      "http://127.0.0.1:3028/",
+      "http://127.0.0.1:3028/"
+    ]
+  }
+]

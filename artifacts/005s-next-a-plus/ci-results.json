@@ -1,0 +1,111 @@
+{
+  "runtime": "v20.20.2",
+  "npm": "10.8.2",
+  "environment": "Windows isolated Node20/npm10; not a Netlify Linux build",
+  "results": [
+    {
+      "name": "clone-full",
+      "exit": 0,
+      "ms": 2842
+    },
+    {
+      "name": "npm-ci-production",
+      "exit": 0,
+      "ms": 64383
+    },
+    {
+      "name": "build-production-dependencies",
+      "exit": 0,
+      "ms": 32810
+    },
+    {
+      "name": "npm-ci-include-dev",
+      "exit": 0,
+      "ms": 110153
+    },
+    {
+      "name": "build-with-dev-tools",
+      "exit": 0,
+      "ms": 22461
+    },
+    {
+      "name": "seed-init",
+      "exit": 0,
+      "ms": 64
+    },
+    {
+      "name": "seed-add",
+      "exit": 0,
+      "ms": 46
+    },
+    {
+      "name": "seed-commit",
+      "exit": 0,
+      "ms": 81
+    },
+    {
+      "name": "clone-depth-one",
+      "exit": 0,
+      "ms": 240
+    },
+    {
+      "name": "shallow-old-generator",
+      "exit": 0,
+      "ms": 278
+    },
+    {
+      "name": "shallow-old-date",
+      "value": "2026-11-05T00:00:00Z"
+    },
+    {
+      "name": "shallow-new-generator",
+      "exit": 0,
+      "ms": 293
+    },
+    {
+      "name": "shallow-repeat",
+      "exit": 0,
+      "ms": 273
+    },
+    {
+      "name": "shallow-deterministic",
+      "sameAsFull": true,
+      "repeatStable": true
+    },
+    {
+      "name": "no-git-old-generator",
+      "exit": 1,
+      "ms": 267
+    },
+    {
+      "name": "no-git-new-generator",
+      "exit": 0,
+      "ms": 264
+    },
+    {
+      "name": "no-git-repeat",
+      "exit": 0,
+      "ms": 325
+    },
+    {
+      "name": "no-git-deterministic",
+      "sameAsFull": true,
+      "repeatStable": true
+    },
+    {
+      "name": "stale-provenance-fail-closed",
+      "exit": 1,
+      "ms": 211
+    },
+    {
+      "name": "git-executable-unavailable",
+      "exit": 0,
+      "ms": 223
+    },
+    {
+      "name": "package-lock-preserved",
+      "passed": true,
+      "sha256": "41fae14ffa79f6f0ae9c22617e8f827eb8a9e882aa67565d6a1aaa891d7142f7"
+    }
+  ]
+}

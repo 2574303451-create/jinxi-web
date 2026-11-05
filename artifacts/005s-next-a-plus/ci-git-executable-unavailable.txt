@@ -1,0 +1,2 @@
+Archive facts: 208 unique records; no active/online inference.
+Archive date from checked-in hash-bound provenance (Git history unavailable or shallow).

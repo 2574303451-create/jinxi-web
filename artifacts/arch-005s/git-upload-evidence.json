@@ -1,0 +1,10 @@
+{
+  "requestedSha": "305c4b78476370ea4d0ddad66d5bcce5c9f74a5f",
+  "createdSha": "305c4b78476370ea4d0ddad66d5bcce5c9f74a5f",
+  "tree": "b766509d0e7a9b6fef1ed73b0e41aef9ec2afc59",
+  "parent": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+  "blobsVerified": 224,
+  "commitMatches": true,
+  "remoteRefVerified": true,
+  "method": "After Git HTTP408/reset and connector transport failure, official Git Data API uploaded224 content-addressed blobs and exact trees/commit. Every returned SHA matched local Git; no rewritten author/time/content or force update. Existing Git credential used in memory, never logged/saved. No global Git/network/MCP configuration changed."
+}

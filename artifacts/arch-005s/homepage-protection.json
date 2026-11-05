@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "height": 600,
+      "changed": 0,
+      "bounds": {
+        "minX": 1440,
+        "minY": 600,
+        "maxX": -1,
+        "maxY": -1
+      }
+    },
+    {
+      "width": 768,
+      "height": 600,
+      "changed": 0,
+      "bounds": {
+        "minX": 768,
+        "minY": 600,
+        "maxX": -1,
+        "maxY": -1
+      }
+    },
+    {
+      "width": 390,
+      "height": 600,
+      "changed": 0,
+      "bounds": {
+        "minX": 390,
+        "minY": 600,
+        "maxX": -1,
+        "maxY": -1
+      }
+    },
+    {
+      "width": 320,
+      "height": 600,
+      "changed": 0,
+      "bounds": {
+        "minX": 320,
+        "minY": 600,
+        "maxX": -1,
+        "maxY": -1
+      }
+    }
+  ],
+  "method": "Actual baseline/new static browser, same font/viewport/reduced-motion. Screenshots top600px exact RGBA comparison; dynamic image decoder/rendering may differ, retain bounded evidence instead of declaring equality from unchanged source."
+}

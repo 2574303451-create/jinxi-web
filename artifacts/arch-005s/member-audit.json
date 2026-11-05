@@ -1,0 +1,38 @@
+{
+  "source": "config/guild-terminal.config.json",
+  "sha256Raw": "328267b1cb8fc0f1d3fd710ead37bb3ffa9e44255ddd79028a38fbdc61b8828e",
+  "sha256Lf": "73f686a2c1c2fa547bf84b94de38fa6edb69ef55eda288b89581e636e9ea7bcb",
+  "checkedAt": "2026-11-05T08:29:21.936Z",
+  "guildFoundedDate": "2018-02-10",
+  "syntaxMemberProperties": 208,
+  "uniqueArchiveIDs": 208,
+  "duplicateJsonIDs": [],
+  "founder": 1,
+  "ordinary": 207,
+  "founderIdMatches": true,
+  "invalidIDs": [],
+  "numericRange": [
+    0,
+    207
+  ],
+  "missingInNumericRange": [],
+  "duplicateNicknameGroups": [
+    [
+      "19",
+      "138"
+    ],
+    [
+      "96",
+      "128"
+    ]
+  ],
+  "invalidDates": [],
+  "beforeFoundation": [],
+  "futureDates": [],
+  "explicitActiveField": false,
+  "joinDateRange": [
+    "2018-02-10",
+    "2026-02-18"
+  ],
+  "countMeaning": "Archive records keyed by unique archive ID, not nickname, current membership or online members. Real guild_member_profiles/is_active/import coverage not read."
+}

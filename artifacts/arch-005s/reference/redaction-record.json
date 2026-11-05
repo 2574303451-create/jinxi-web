@@ -1,0 +1,36 @@
+{
+  "originalDirectory": "E:/Recovery/.jinxi-research/arch-005s-original-evidence",
+  "scope": "No credential storage/header collection requested. Public page includes signed image asset URL parameters, which are redacted from repository copies. MCP Evidence IDs/digests refer to unchanged private original payload; repository redacted copy is not claimed byte-identical to original Evidence. Screenshot PNG unchanged.",
+  "results": [
+    {
+      "file": "reference/rea-desktop.json",
+      "originalSHA256": "09faa38e634543e396ec7b480febd1834f7233f96e5e802524752496eee0b3c8",
+      "redactedCopySHA256": "8b25ee716ac8ba4170bfc64044617eedf4661bf0bc3f6c93975685e0080e12f6",
+      "changed": true
+    },
+    {
+      "file": "reference/rea-mobile-observed.json",
+      "originalSHA256": "4f7a9c439796b8ce3df1931fbeb16cfc954b6e65cb0cb2ec326580c19d1a238a",
+      "redactedCopySHA256": "bcc43fcb4278ffd37293102f4f0f22e7c9df8cbf2503098fa4a5697521f4f72f",
+      "changed": true
+    },
+    {
+      "file": "reference/rea-desktop.html",
+      "originalSHA256": "0e800932c25ee7d1a31b13a9de9411e0bf5c79a18473aae5cdb1db18335261fd",
+      "redactedCopySHA256": "96c1ade6c21891af0e41a8ff351fac1d547fe8660a3f6710ef7ca50efea366ae",
+      "changed": true
+    },
+    {
+      "file": "reference/rea-mobile.html",
+      "originalSHA256": "717ccc709af42f491d14dcc8db27f2bd47be5a9e1a22b636ed20c0bed57bf1d3",
+      "redactedCopySHA256": "eec8dc0648ed03163627d667c60a2ca724877ef119cd9ba35e9a05f0f7c60863",
+      "changed": true
+    },
+    {
+      "file": "reference/card-dom.json",
+      "originalSHA256": "5f1e7a39972c1664b8f1e3448a6e3944eaeefe6b708f5344b25a56e7ae89a53d",
+      "redactedCopySHA256": "673cc2922e28d7384f199f7f6e82a0ccc84f45bb697e9c864f587af29896bbd4",
+      "changed": true
+    }
+  ]
+}

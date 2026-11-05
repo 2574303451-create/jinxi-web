@@ -1,0 +1,60 @@
+{
+  "baseline": {
+    "translate": "none",
+    "transform": "none",
+    "scale": "none",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 4px 4px 0px 0px",
+    "transition": "0.3s",
+    "animation": "none",
+    "duration": "0s"
+  },
+  "hover": {
+    "card": {
+      "translate": "0px -4px",
+      "transform": "none",
+      "scale": "none",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+      "transition": "0.3s",
+      "animation": "none",
+      "duration": "0s"
+    },
+    "image": {
+      "translate": "none",
+      "transform": "none",
+      "scale": "1.05",
+      "boxShadow": "none",
+      "transition": "0.5s",
+      "animation": "none",
+      "duration": "0s"
+    }
+  },
+  "focus": {
+    "tag": "A",
+    "focused": true,
+    "outline": "oklab(0.2 0 0 / 0.5) auto 1px",
+    "href": "/series/6aa0f5edb7acac97c66b2a0d?courseId=6ab76e50e280ed10ebbf4d67"
+  },
+  "reduced": {
+    "card": {
+      "translate": "0px -4px",
+      "transform": "none",
+      "scale": "none",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0) 8px 8px 0px 0px",
+      "transition": "0.3s",
+      "animation": "none",
+      "duration": "0s"
+    },
+    "image": {
+      "translate": "none",
+      "transform": "none",
+      "scale": "1.05",
+      "boxShadow": "none",
+      "transition": "0.5s",
+      "animation": "none",
+      "duration": "0s"
+    }
+  },
+  "keyboardAllHref": "/courses",
+  "actualDestination": "https://www.mdldm.club/courses",
+  "scope": "Actual public homepage focus/hover/style plus Enter on view-all. Course link inspected and focused only; paid detail not accessed. Reduced-motion styles measured after toggle, no guarantee all third-party animations disabled."
+}

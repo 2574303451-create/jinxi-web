@@ -1,0 +1,67 @@
+[
+  {
+    "file": "DESIGN.md",
+    "beforeBytes": 12545,
+    "afterBytes": 14385
+  },
+  {
+    "file": "app/page.tsx",
+    "beforeBytes": 44189,
+    "afterBytes": 45563
+  },
+  {
+    "file": "components/guild-uptime-terminal.tsx",
+    "beforeBytes": 4883,
+    "afterBytes": 4912
+  },
+  {
+    "file": "components/home/featured-guides.module.css",
+    "beforeBytes": 0,
+    "afterBytes": 4682
+  },
+  {
+    "file": "components/home/featured-guides.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 5215
+  },
+  {
+    "file": "components/home/guild-facts.module.css",
+    "beforeBytes": 0,
+    "afterBytes": 3188
+  },
+  {
+    "file": "components/home/guild-facts.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 5305
+  },
+  {
+    "file": "components/home/guild-sections.tsx",
+    "beforeBytes": 5664,
+    "afterBytes": 5693
+  },
+  {
+    "file": "components/home/home-guide-card.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 2588
+  },
+  {
+    "file": "lib/guild-home-facts.json",
+    "beforeBytes": 0,
+    "afterBytes": 293
+  },
+  {
+    "file": "package.json",
+    "beforeBytes": 2945,
+    "afterBytes": 3004
+  },
+  {
+    "file": "scripts/generate-guild-summary.cjs",
+    "beforeBytes": 0,
+    "afterBytes": 2216
+  },
+  {
+    "file": "services/home-guides.ts",
+    "beforeBytes": 0,
+    "afterBytes": 4074
+  }
+]

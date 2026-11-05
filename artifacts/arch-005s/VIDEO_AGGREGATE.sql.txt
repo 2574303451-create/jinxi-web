@@ -1,0 +1,16 @@
+-- DESIGN ONLY, NOT EXECUTED. No migration or production data access is authorized here.
+-- Proposed read-only aggregate; must be verified against the approved isolated PostgreSQL schema.
+SELECT COUNT(*)::bigint AS published_video_entries
+FROM strategies AS s
+CROSS JOIN LATERAL jsonb_array_elements(
+  CASE WHEN jsonb_typeof(s.media_files) = 'array'
+       THEN s.media_files ELSE '[]'::jsonb END
+) AS media(value)
+WHERE s.status = 'published'
+  AND jsonb_typeof(media.value) = 'object'
+  AND media.value ->> 'type' = 'video';
+
+-- A strategy with two video objects contributes TWO, not one.
+-- No full article content is selected. No source URL reachability claim is made.
+-- Bad top-level JSONB and scalar array elements contribute zero, not a query error.
+-- Do not reuse this proposal as evidence of real SQL execution.

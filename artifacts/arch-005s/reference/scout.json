@@ -1,0 +1,187 @@
+{
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "你好，我是麦当mdldm",
+      "class": "text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-tight tracking-tight drop-shadow-sm"
+    },
+    {
+      "tag": "H3",
+      "text": "M-Agent",
+      "class": "font-black text-slate-900 text-lg"
+    },
+    {
+      "tag": "H2",
+      "text": "不知道先学哪门课？先看清自己的 AI 基础设施缺哪一层。",
+      "class": "max-w-2xl text-3xl font-black leading-tight md:text-4xl"
+    },
+    {
+      "tag": "H2",
+      "text": "他们这样说",
+      "class": "text-3xl md:text-4xl font-black text-slate-900"
+    },
+    {
+      "tag": "H3",
+      "text": "加入 VIP解锁全站资源",
+      "class": "text-2xl font-black text-white mb-3 leading-tight"
+    },
+    {
+      "tag": "H2",
+      "text": "精选推荐",
+      "class": "text-3xl md:text-4xl font-black text-slate-900 mb-3"
+    },
+    {
+      "tag": "H3",
+      "text": "最近更新",
+      "class": "text-2xl font-black text-slate-900"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC： ①｜1.1AI对话基础剧本创作入门",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC：⑤｜1.5 AI 绘画实战：电影级视觉设计",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "会员直播第 4 期｜个人项目上线：服务器与部署怎么选",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "我看谁不学 Grok Bot：零基础全流程（建Bot·云电脑·协作·拉群）",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "Grokbot新玩法：打通微信收成果 + 本地工作站管家（跨设备长任务）",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "Grok Bot省钱秘籍：$20档够用，两招把额度打下来",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "Grok Bot 还能干嘛？100 个 Bot 模板全公开（附 Bot 小镇）",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC：④｜1.4 AI 绘画进阶：图生图与参考图应用",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "Personal AI到底是什么？Dots、Grok Bot、Muse怎么选",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "VIP 精选课程",
+      "class": "text-2xl font-black text-slate-900"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC： ①｜1.1AI对话基础剧本创作入门",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC：⑤｜1.5 AI 绘画实战：电影级视觉设计",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "会员直播第 4 期｜个人项目上线：服务器与部署怎么选",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC：④｜1.4 AI 绘画进阶：图生图与参考图应用",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "「Coze实操课001」扣子空间官方skill大赏",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "第0集-最短路径打造一款AI产品的能力",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "我看谁不学AIGC！零基础做 AI 短剧草履虫级教程： 跑完整个 AIGC 成片全流程",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "会员直播第 3 期｜个人网站设计与布局",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "从0学AIGC：③｜1.3AI绘画基础：模型选择与文生图",
+      "class": "text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors"
+    }
+  ],
+  "sections": [
+    {
+      "class": "min-h-[calc(100vh-80px)] bg-dot-pattern relative overflow-hidden flex items-center justify-center py-20",
+      "preview": "VIP重磅：全站 VIP 会员体系上线，解锁所有 AI 实战课！你好，我是麦当mdldm从0基础到实战高手，用最接地气的方式，带你玩转AI技术👤我是人类🤖我是 Agent零基础入门AI实战项目就业前景课程价格M-AgentOnline大"
+    },
+    {
+      "class": "container mx-auto px-4 py-8",
+      "title": "不知道先学哪门课？先看清自己的 AI 基础设施缺哪一层。",
+      "preview": "AI Infra 学习地图不知道先学哪门课？先看清自己的 AI 基础设施缺哪一层。从大脑、采集、知识、集成到构建与产品，公开查看完整路线；选好方向后再决定是否解锁课程。查看 AI Infra 学习地图 注册后保存我的路径"
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "preview": "免费 · 新上线🤖 100 个 Grok Bot，复制 Prompt 就能用按岗位找：打工人、自媒体、电商、财务、设计、生活"
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "preview": "新功能🧪 测测你的 AI 学习人格4 个维度 · 20 道题，找到最适合你的学习路径"
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "preview": "NEW麦当 AI · 同步上线🤖 一个 Key 直连 GPT · Claude · Gemini · Seedance文本、图像与视频模型 · 适配 Codex / Claude Code · 9.9 元 = 10,000 麦子"
+    },
+    {
+      "class": "container mx-auto px-4 pt-0 pb-4",
+      "preview": "麦当mdldm的号站AI 账号与订阅账号选购、订阅充值，前往号站查看商品与价格前往号站"
+    },
+    {
+      "class": "py-20 bg-slate-50 border-y-2 border-black",
+      "title": "他们这样说",
+      "preview": "VIP们的留言墙他们这样说一些真实反馈8 条留言加入 VIP解锁全站资源一年内所有新课自动解锁，不再为单课付费全站 AI 实战课程无限观看商业级工作流资源下载OMI、OpenClaw 等 skill 模板一年内所有新课自动解锁查看 VIP "
+    },
+    {
+      "class": "container mx-auto px-4 py-20",
+      "title": "精选推荐",
+      "preview": "精选推荐最近更新 + 高价值VIP课程，一站式开刷查看全部最近更新第一时间刷到最新内容VIP从0学AIGC： ①｜1.1AI对话基础剧本创作入门本系列为面对零基础小白学习 AIGC 的系统性入门课程。261 次播放15 分钟VIP从0学AI"
+    },
+    {
+      "class": "",
+      "preview": ""
+    }
+  ],
+  "stats": [
+    {
+      "class": "grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 w-full max-w-5xl border-t-2 border-dashed border-slate-300 pt-12",
+      "text": "133节精品课程2400+注册学员303人VIP 会员1187+资源下载",
+      "html": "<div class=\"grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 w-full max-w-5xl border-t-2 border-dashed border-slate-300 pt-12\"><div class=\"text-center animate-slide-in-up group cursor-default\" style=\"animation-delay: 400ms;\"><div class=\"text-4xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors\">133节</div><div class=\"text-sm font-bold text-slate-500 uppercase tracking-wide\">精品课程</div></div><div class=\"text-center animate-slide-in-up group cursor-default\" style=\"animation-delay: 500ms;\"><div class=\"text-4xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors\">2400+</div><div class=\"text-sm font-bold text-slate-500 uppercase tracking-wide\">注册学员</div></div><div class=\"text-center animate-slide-in-up group cursor-default\" style=\"animation-delay: 600ms;\"><div class=\"text-4xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors\">303人</div><div class=\"text-sm font-bold text-slate-500 uppercase tracking-wide\">VIP 会员</div></div><div class=\"text-center animate-slide-in-up group cursor-default\" style=\"animation-delay: 700ms;\"><div class=\"text-4xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors\">1187+</div><div class=\"text-sm font-bold text-slate-500 uppercase tracking-wide\">资源下载</div></div></div>"
+    },
+    {
+      "class": "grid md:grid-cols-4 gap-8",
+      "text": "M麦当mdldm专注于提供高质量的在线课程，帮助学习者提升技能",
+      "html": "<div class=\"grid md:grid-cols-4 gap-8\"><div><div class=\"flex items-center gap-2 mb-4\"><div class=\"w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold border border-black\">M</div><span class=\"font-black text-lg text-slate-900\">麦当mdldm</span></div><p class=\"text-sm text-slate-500 font-medium\">专注于提供高质量的在线课程，帮助学习者提升技能</p></div></div>"
+    }
+  ]
+}

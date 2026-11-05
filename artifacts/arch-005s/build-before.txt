@@ -1,0 +1,39 @@
+
+> my-v0-project@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+Browserslist: browsers data (caniuse-lite) is 15 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/6) ...
+   Generating static pages (1/6) 
+   Generating static pages (2/6) 
+   Generating static pages (4/6) 
+ ✓ Generating static pages (6/6)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    71.2 kB         165 kB
+├ ○ /_not-found                          870 B          88.8 kB
+├ ○ /guides                              5.64 kB        93.6 kB
+└ ○ /profile-lab                         14.3 kB         108 kB
++ First Load JS shared by all            88 kB
+  ├ chunks/553-5de6c0e543970ec9.js       31.7 kB
+  ├ chunks/c07ca1f5-9b0ab82ad8f52175.js  53.6 kB
+  └ other shared chunks (total)          2.6 kB
+
+
+○  (Static)  prerendered as static content
+

@@ -40,6 +40,7 @@ export function GuildUptimeTerminal() {
   }
   return (
     <aside
+      id="guild-time-anchor"
       ref={root}
       className={styles.timeRoot}
       aria-label="今夕同行时光"

@@ -6,7 +6,7 @@
 
 - 工作分支：`codex/jinxi-ui-004-a`。
 - 认可基线 / 本地与远端已复核：`0182518277831ba0d03df3a3e1973f1a7ae06efe`，开始时工作区干净，独立baseline worktree保留。
-- 本次实现提交：提交后记录于本节；最终HEAD由PR和交付回复给出，避免文档自引用SHA。
+- 本次实现提交：`a6df595df2fd7eb2c16539e4902839014edf3de0`；后续交付记录为文档提交，最终HEAD由PR和交付回复给出，避免文档自引用SHA。
 - 上游：PR #2仍为未合并草稿，base为`codex/jinxi-rea-002` / `328819a57c671b33b743d1ad3f969c0fb7917048`；PR #1仍未合并，base为planning-handoff分支 / `7dfbf69c2e2b61be7c08d4fd65d884c2b371b244`。本检查点叠在PR #2分支上，不合并或部署。
 - 基线、日期依据和环境边界：[BASELINE.md](BASELINE.md)。
 

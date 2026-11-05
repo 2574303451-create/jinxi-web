@@ -114,6 +114,11 @@
       "file": "scripts/generate-guild-summary.cjs",
       "exit": 0,
       "error": ""
+    },
+    {
+      "file": "artifacts/arch-005s/preview-check.cjs",
+      "exit": 0,
+      "error": ""
     }
   ],
   "passed": true

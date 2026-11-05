@@ -1,0 +1,157 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "path": "/review-preview/",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/review/compare-1440.html",
+      "status": 200
+    },
+    {
+      "path": "/review/compare-390.html",
+      "status": 200
+    },
+    {
+      "path": "/review/DELIVERY.md",
+      "status": 200
+    },
+    {
+      "path": "/review/VERSION.md",
+      "status": 200
+    },
+    {
+      "path": "/review/reference/REPORT.md",
+      "status": 200
+    },
+    {
+      "path": "/review/DATA_AND_ARCHITECTURE.md",
+      "status": 200
+    },
+    {
+      "path": "/review/member-audit.json",
+      "status": 200
+    },
+    {
+      "path": "/review/live-public-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/PERFORMANCE.md",
+      "status": 200
+    },
+    {
+      "path": "/review/performance-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/types-before.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/types-after.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/type-comparison.json",
+      "status": 200
+    },
+    {
+      "path": "/review/build-after.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/browser-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/invariants.json",
+      "status": 200
+    },
+    {
+      "path": "/review/overview.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-guild-facts-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-home-guides-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/compare-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/compare-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-guild-facts-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-home-guides-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-guild-facts-768.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-home-guides-768.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-guild-facts-320.png",
+      "status": 200
+    },
+    {
+      "path": "/review/final-home-guides-320.png",
+      "status": 200
+    },
+    {
+      "path": "/review/state-loading-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/state-error-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/state-empty-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/synthetic-media-states-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/before-full-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/after-full-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/before-full-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/after-full-390.png",
+      "status": 200
+    }
+  ],
+  "evidenceDOMServedAsText": true,
+  "localWritesRejected503": true,
+  "nonPublishedRejected403": true,
+  "scope": "Local read-only preview and all linked evidence resources. No production publishing or live database. HEAD used for large PNG evidence, real page/images rendered separately."
+}

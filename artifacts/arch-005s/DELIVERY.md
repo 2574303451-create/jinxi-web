@@ -6,6 +6,7 @@
 
 - 实际基线为005R最终`2836ed13cc5f7da7ffcbce52755063dfbe80b55d`，不是用户早先的005提交807374...。#5包含必须保护的R修复，远端与本地一致，开始工作区干净。
 - 工作分支`codex/jinxi-arch-005s-a`；新PR base=codex/jinxi-arch-005r，依赖#5→#4→#3→#2→#1，均未合并。实际PR与实现提交记录在VERSION.md/交付回复。
+- 实现提交`305c4b78476370ea4d0ddad66d5bcce5c9f74a5f`，独立草稿[PR #6](https://github.com/2574303451-create/jinxi-web/pull/6)。Git传输失败后通过官方Git对象接口逐项核对发布，保留相同完整SHA，未force或改上游。
 - [本机只读预览](http://127.0.0.1:3027/review-preview/) · [首页](http://127.0.0.1:3027/) · [截图与报告](http://127.0.0.1:3027/review/)。只在本机Node进程运行期间可用，不是公网部署。
 - 重启：npm run build，再`node artifacts/arch-005s/serve.cjs out 3027`。本机攻略是公开GET的脱敏快照回放、留言是明确合成fixture；不转发写入/生产API。详情快照不保留评论正文或用户反应数组，只证明路由可到达，不能当真实完整讨论数据。
 

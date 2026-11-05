@@ -1,5 +1,5 @@
 {
-  "filesChecked": 268,
+  "filesChecked": 274,
   "findings": [],
   "method": "Heuristic scan of delivery text only, no environment files read. Signed third-party image URL parameters redacted; originals outside Git. Not a full security certification."
 }

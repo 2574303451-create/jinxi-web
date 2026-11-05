@@ -1,0 +1,142 @@
+{
+  "baseline": "80737413d3bb981b3a3287c603893eb6c09decf2",
+  "invariants": [
+    {
+      "file": "app/page.tsx",
+      "sha256": "a3fa45ef040ff7b56686f802488c98ad23c0de017180fdffbf28eb8ce2d45d72",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/guild-hero.tsx",
+      "sha256": "d5799af782ff87186928203058fbb161c6073a0168dcf381ccc464dda5989137",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/message-showcase.tsx",
+      "sha256": "492b227eec43e9938521f7a3a4b9a0fe7496251251a7e4be5705db854ea7431a",
+      "unchanged": true
+    },
+    {
+      "file": "components/home/ribbon-card.tsx",
+      "sha256": "cfc8527247635bd2f4ad86af15c10dcd74683e81a0ce2fe5deb9871e717d9ace",
+      "unchanged": true
+    },
+    {
+      "file": "hooks/use-public-messages.ts",
+      "sha256": "09848926ef3ce55379ee10e121d53147a05a12a4ff504520c6d1204fc76bae7d",
+      "unchanged": true
+    },
+    {
+      "file": "components/message-wall.tsx",
+      "sha256": "09315daa02ec178afa35386b3e7745eacf54a4a4f25958d7a0e756106a8882ef",
+      "unchanged": true
+    },
+    {
+      "file": "components/magicui/member-grid.tsx",
+      "sha256": "76cf7514d805a96d31d625e4fa016aa91937ffda23751c201e4b518b3833c6d3",
+      "unchanged": true
+    },
+    {
+      "file": "components/magicui/3d-carousel.tsx",
+      "sha256": "3a61d84bc444bae88e5207d2de321a7fa98d30420029d75789e8e2fc36d6638e",
+      "unchanged": true
+    },
+    {
+      "file": "components/member-detail-modal.tsx",
+      "sha256": "72b7727fd88bda981034fedbe812a714cce557309274ab050751b04fc25f2dda",
+      "unchanged": true
+    },
+    {
+      "file": "components/guild-uptime-terminal.tsx",
+      "sha256": "bdb8c97f3626002522dcf156c2880432053bd66e4211097bf2b708350107f506",
+      "unchanged": true
+    },
+    {
+      "file": "components/guild-uptime-terminal.module.css",
+      "sha256": "3cab7a203f36f4ec880b68a70ad2a2f2eed1d5e06ac91ab54ae7119a67f5a752",
+      "unchanged": true
+    },
+    {
+      "file": "config/guild-terminal.config.json",
+      "sha256": "73f686a2c1c2fa547bf84b94de38fa6edb69ef55eda288b89581e636e9ea7bcb",
+      "unchanged": true
+    },
+    {
+      "file": "lib/guild-terminal-utils.ts",
+      "sha256": "1d398743461718b91b6297884438b402828d94c6980cd24b63e136a73187c3ed",
+      "unchanged": true
+    },
+    {
+      "file": "components/profile/member-avatar.tsx",
+      "sha256": "ef3d809d018cb851277fe5eb6c82ca6195b489c8f7b771e0fa57dd44c4283683",
+      "unchanged": true
+    },
+    {
+      "file": "styles/profile-lab.css",
+      "sha256": "860b6cffa8b6e8bdd13bbce8dc24372ddb54dcd99182182e8593cde6a9a4e5c7",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/points.js",
+      "sha256": "395fb0c7055ed067d4292ab995fe9121a96efa5e24dcad8a44a9f619202988f5",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/auth-login.js",
+      "sha256": "bf928dec6305967013ec0ebb4b1d7640c12ff3fd02cc0a97f11ce25058c19476",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/auth-change-password.js",
+      "sha256": "4babd4bdfb98f98cb2f38c0533e953ffe2aae0f76a35344fb32eafb6bcb8e85f",
+      "unchanged": true
+    },
+    {
+      "file": "netlify/functions/strategies.js",
+      "sha256": "941cab638bf41c2e699cf3e35d17576a86d8c4601320fef8deeb00ef10e5fb3b",
+      "unchanged": true
+    },
+    {
+      "file": "database-strategy-schema.sql",
+      "sha256": "f15a410d7ec1c741d1b130190c1bb801f836ad326b074b16bb3666b4197f31c4",
+      "unchanged": true
+    },
+    {
+      "file": "package.json",
+      "sha256": "08157e986688afb3f24320eef2eb87ef5a6160b8063b917fc7c1e11c86918dcb",
+      "unchanged": true
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "f5f9bc67e61c03de0b1098bc3300cc0553566bc8dfc1f87d144892b9ff26b092",
+      "unchanged": true
+    },
+    {
+      "file": "next.config.mjs",
+      "sha256": "08480a017258e76b073d1e8ab93a13b96bc165012a6d13f87c311bf408a8404c",
+      "unchanged": true
+    },
+    {
+      "selector": ".paper-avatar",
+      "unchanged": true
+    },
+    {
+      "selector": ".paper-avatar i",
+      "unchanged": true
+    },
+    {
+      "selector": ".message-replies .paper-avatar",
+      "unchanged": true
+    },
+    {
+      "selector": ".ribbon-card-top .paper-avatar",
+      "unchanged": true
+    },
+    {
+      "check": "CSP differs only by exact media-src allowlist; script-src unchanged",
+      "unchanged": true
+    }
+  ],
+  "passed": true,
+  "method": "Normalized line-ending hashes for protected files, exact original avatar-frame blocks, CSP directive comparison. No content or business changes permitted in protected files."
+}

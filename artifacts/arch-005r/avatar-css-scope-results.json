@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "before": {
+    "width": 42,
+    "height": 42,
+    "border": "2px",
+    "radius": "12px",
+    "overflow": "visible",
+    "marker": true,
+    "imgWidth": 38,
+    "imgHeight": 38,
+    "fit": "cover",
+    "position": "50% 50%",
+    "animation": "none"
+  },
+  "after": {
+    "width": 42,
+    "height": 42,
+    "border": "2px",
+    "radius": "12px",
+    "overflow": "visible",
+    "marker": true,
+    "imgWidth": 38,
+    "imgHeight": 38,
+    "fit": "cover",
+    "position": "50% 50%",
+    "animation": "none"
+  },
+  "disabled": [
+    "http://127.0.0.1:3025/_next/static/css/4cb71f2bf1b214ab.css"
+  ],
+  "scope": "Only the actual route-specific stylesheet containing member-avatar/profile-lab rules disabled by browser test. Global community CSS retained. Actual MessageWall PublicAvatar photo geometry unchanged; no production stylesheet mutation."
+}

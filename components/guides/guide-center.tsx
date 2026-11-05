@@ -1,53 +1,61 @@
 "use client";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { readGuideList, type GuideSummary } from "../../services/guide-service";
-import {
-  STRATEGY_CONFIG,
-  type StrategyCategory,
-} from "../../types/strategy-wall";
+import { STRATEGY_CONFIG } from "../../types/strategy-wall";
+import { useGuideLocation } from "../../hooks/use-guide-location";
+import { guideHref } from "../../lib/guide-location";
+import type { MouseEvent } from "react";
 import { PaperState, PublicAvatar } from "../ui/paper";
 const GuideReader = lazy(() => import("./guide-reader"));
 const GuideSubmission = lazy(() => import("./guide-submission"));
 export function GuideCenter() {
-  const [ready, setReady] = useState(false),
-    [id, setId] = useState<string | null>(null),
-    [query, setQuery] = useState(""),
-    [search, setSearch] = useState(""),
-    [category, setCategory] = useState(""),
-    [difficulty, setDifficulty] = useState(""),
-    [sort, setSort] = useState("created_at"),
-    [page, setPage] = useState(0),
+  const { route, navigate, restoreScroll } = useGuideLocation();
+  const [query, setQuery] = useState(""),
     [reload, setReload] = useState(0),
     [posting, setPosting] = useState(false);
+  const {
+    q: search = "",
+    category = "",
+    difficulty = "",
+    sort = "created_at",
+    page = 1,
+    id = null,
+  } = route || {};
+  useEffect(() => setQuery(search), [search]);
+  const follow = (
+    event: MouseEvent<HTMLAnchorElement>,
+    patch: Parameters<typeof navigate>[0],
+    target: number | "list" = 0,
+  ) => {
+    if (
+      event.button === 0 &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.shiftKey &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      navigate(patch, target);
+    }
+  };
   const [items, setItems] = useState<GuideSummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
     [pagination, setPagination] = useState({ total: 0, hasMore: false });
+  const [loadedRoute, setLoadedRoute] = useState<typeof route>(null);
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setId(params.get("id"));
-    setQuery(params.get("q") || "");
-    setSearch(params.get("q") || "");
-    setCategory(
-      STRATEGY_CONFIG.CATEGORIES.some((c) => c.key === params.get("category"))
-        ? params.get("category")!
-        : "",
-    );
-    setReady(true);
-  }, []);
-  useEffect(() => {
-    if (!ready || id !== null) return;
+    if (!route || id !== null) return;
     const controller = new AbortController();
     setLoading(true);
     setError("");
     readGuideList(
       {
         search,
-        category: (category as StrategyCategory) || undefined,
+        category: category || undefined,
         difficulty: difficulty ? Number(difficulty) : undefined,
         sortBy: sort as "created_at" | "view_count" | "likes",
         sortOrder: "DESC",
-        offset: page * 12,
+        offset: (page - 1) * 12,
         limit: 12,
       },
       controller.signal,
@@ -60,24 +68,27 @@ export function GuideCenter() {
         if (!controller.signal.aborted) setError(error.message);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+          setLoadedRoute(route);
+        }
       });
-    const params = new URLSearchParams();
-    if (search) params.set("q", search);
-    if (category) params.set("category", category);
-    history.replaceState(
-      null,
-      "",
-      `/guides/${params.size ? "?" + params : ""}`,
-    );
     return () => controller.abort();
-  }, [ready, id, search, category, difficulty, sort, page, reload]);
-  const reset = () => setPage(0);
-  if (!ready) return <PaperState kind="loading" title="正在打开攻略中心…" />;
+  }, [route, id, search, category, difficulty, sort, page, reload]);
+  useEffect(() => {
+    if (route && id === null && !loading && loadedRoute === route)
+      restoreScroll();
+  }, [route, id, loading, loadedRoute, restoreScroll]);
+  if (!route) return <PaperState kind="loading" title="正在打开攻略中心…" />;
   if (id !== null)
     return (
       <Suspense fallback={<PaperState kind="loading" title="正在打开攻略…" />}>
-        <GuideReader id={id} />
+        <GuideReader
+          id={id}
+          listHref={guideHref(route, { id: null })}
+          onReturn={(event) => follow(event, { id: null }, "list")}
+          onReady={restoreScroll}
+        />
       </Suspense>
     );
   return (
@@ -108,8 +119,7 @@ export function GuideCenter() {
           className="guide-search"
           onSubmit={(event) => {
             event.preventDefault();
-            setSearch(query.trim());
-            reset();
+            navigate({ q: query.trim(), page: 1 }, "list");
           }}
         >
           <label className="paper-label" htmlFor="guide-search">
@@ -136,8 +146,10 @@ export function GuideCenter() {
                 className="paper-filter"
                 aria-pressed={category === c.key}
                 onClick={() => {
-                  setCategory(c.key);
-                  reset();
+                  navigate(
+                    { category: c.key as typeof category, page: 1 },
+                    "list",
+                  );
                 }}
               >
                 {c.label}
@@ -158,8 +170,7 @@ export function GuideCenter() {
                 className="paper-input"
                 value={difficulty}
                 onChange={(e) => {
-                  setDifficulty(e.target.value);
-                  reset();
+                  navigate({ difficulty: e.target.value, page: 1 }, "list");
                 }}
               >
                 <option value="">全部难度</option>
@@ -176,8 +187,10 @@ export function GuideCenter() {
                 className="paper-input"
                 value={sort}
                 onChange={(e) => {
-                  setSort(e.target.value);
-                  reset();
+                  navigate(
+                    { sort: e.target.value as typeof sort, page: 1 },
+                    "list",
+                  );
                 }}
               >
                 <option value="created_at">最近发布</option>
@@ -221,7 +234,10 @@ export function GuideCenter() {
                   </span>
                 </div>
                 <h2>
-                  <a href={`/guides/?id=${encodeURIComponent(item.id)}`}>
+                  <a
+                    href={guideHref(route, { id: item.id })}
+                    onClick={(event) => follow(event, { id: item.id })}
+                  >
                     {item.title}
                   </a>
                 </h2>
@@ -242,7 +258,10 @@ export function GuideCenter() {
                   <span>
                     {item.likeCount} 点赞 · {item.commentCount} 评论
                   </span>
-                  <a href={`/guides/?id=${encodeURIComponent(item.id)}`}>
+                  <a
+                    href={guideHref(route, { id: item.id })}
+                    onClick={(event) => follow(event, { id: item.id })}
+                  >
                     阅读全文 ↗
                   </a>
                 </footer>
@@ -254,21 +273,19 @@ export function GuideCenter() {
           <div className="guide-pagination">
             <button
               className="paper-button"
-              disabled={page === 0}
+              disabled={page === 1}
               onClick={() => {
-                setPage((n) => n - 1);
-                document.querySelector(".guide-browser")?.scrollIntoView();
+                navigate({ page: page - 1 }, "list");
               }}
             >
               上一页
             </button>
-            <span>第 {page + 1} 页</span>
+            <span>第 {page} 页</span>
             <button
               className="paper-button"
               disabled={!pagination.hasMore}
               onClick={() => {
-                setPage((n) => n + 1);
-                document.querySelector(".guide-browser")?.scrollIntoView();
+                navigate({ page: page + 1 }, "list");
               }}
             >
               下一页
@@ -284,7 +301,7 @@ export function GuideCenter() {
             onClose={() => setPosting(false)}
             onSaved={() => {
               setPosting(false);
-              setPage(0);
+              navigate({ page: 1 }, "list");
               setReload((n) => n + 1);
             }}
           />

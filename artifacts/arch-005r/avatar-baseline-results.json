@@ -1,0 +1,94 @@
+{
+  "baseline": "80737413d3bb981b3a3287c603893eb6c09decf2",
+  "results": [
+    {
+      "width": 1440,
+      "stage": "text",
+      "frames": [
+        {
+          "class": "paper-avatar",
+          "width": 42,
+          "height": 42,
+          "border": "2px",
+          "radius": "12px",
+          "marker": true
+        },
+        {
+          "class": "paper-avatar",
+          "width": 30,
+          "height": 30,
+          "border": "2px",
+          "radius": "8px",
+          "marker": true
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "stage": "photo",
+      "frames": [
+        {
+          "class": "member-avatar",
+          "width": 32,
+          "height": 32,
+          "border": "2px",
+          "radius": "10px",
+          "marker": false
+        },
+        {
+          "class": "member-avatar",
+          "width": 32,
+          "height": 32,
+          "border": "2px",
+          "radius": "10px",
+          "marker": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "stage": "text",
+      "frames": [
+        {
+          "class": "paper-avatar",
+          "width": 42,
+          "height": 42,
+          "border": "2px",
+          "radius": "12px",
+          "marker": true
+        },
+        {
+          "class": "paper-avatar",
+          "width": 30,
+          "height": 30,
+          "border": "2px",
+          "radius": "8px",
+          "marker": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "stage": "photo",
+      "frames": [
+        {
+          "class": "member-avatar",
+          "width": 32,
+          "height": 32,
+          "border": "2px",
+          "radius": "10px",
+          "marker": false
+        },
+        {
+          "class": "member-avatar",
+          "width": 32,
+          "height": 32,
+          "border": "2px",
+          "radius": "10px",
+          "marker": false
+        }
+      ]
+    }
+  ],
+  "scope": "Actual accepted baseline export, same synthetic avatar fixture as after screenshots; old editor default zoom retained. Shows original outer-container substitution bug. No backend writes."
+}

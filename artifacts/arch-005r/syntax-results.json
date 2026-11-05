@@ -1,0 +1,125 @@
+{
+  "results": [
+    {
+      "file": "netlify/functions/strategy-actions.js",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "netlify/functions/message-actions.js",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "netlify/functions/_shared/strategy-read.js",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "netlify/functions/_shared/admin-password.js",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/admin-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/avatar-baseline.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/avatar-css-scope.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/avatar-frames.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/browser-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/capture-protection.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/check-delivery.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/compare-types-raw.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/compare-types.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/contracts.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/guide-browser.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/measure.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/postgres-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/postgres-runtime.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/profile-performance.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/protected-components.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/regression-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/serve.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/ui004-checks.cjs",
+      "exit": 0,
+      "error": ""
+    },
+    {
+      "file": "artifacts/arch-005r/video-csp.cjs",
+      "exit": 0,
+      "error": ""
+    }
+  ],
+  "passed": true
+}

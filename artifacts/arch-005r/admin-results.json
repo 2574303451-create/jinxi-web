@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "kind": "strategy",
+      "action": "pin",
+      "mode": "missing",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "pin",
+      "mode": "blank",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "pin",
+      "mode": "wrong",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "pin",
+      "mode": "valid",
+      "status": 200,
+      "sqlCalls": 3
+    },
+    {
+      "kind": "strategy",
+      "action": "delete",
+      "mode": "missing",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "delete",
+      "mode": "blank",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "delete",
+      "mode": "wrong",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "strategy",
+      "action": "delete",
+      "mode": "valid",
+      "status": 200,
+      "sqlCalls": 2
+    },
+    {
+      "kind": "message",
+      "action": "pin",
+      "mode": "missing",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "pin",
+      "mode": "blank",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "pin",
+      "mode": "wrong",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "pin",
+      "mode": "valid",
+      "status": 200,
+      "sqlCalls": 2
+    },
+    {
+      "kind": "message",
+      "action": "delete",
+      "mode": "missing",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "delete",
+      "mode": "blank",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "delete",
+      "mode": "wrong",
+      "status": 401,
+      "sqlCalls": 0
+    },
+    {
+      "kind": "message",
+      "action": "delete",
+      "mode": "valid",
+      "status": 200,
+      "sqlCalls": 1
+    },
+    {
+      "kind": "strategy",
+      "mode": "GET password ignored",
+      "status": 405
+    },
+    {
+      "kind": "message",
+      "mode": "GET password ignored",
+      "status": 405
+    }
+  ],
+  "scope": "Actual modified handlers loaded in isolated VM; randomly generated password injected only into that controlled runtime environment, never output or committed. Valid cases execute real UPDATE/DELETE on synthetic local PostgreSQL tables. Invalid/missing/blank cases reject before any database client or SQL. No production secret, account or database used."
+}

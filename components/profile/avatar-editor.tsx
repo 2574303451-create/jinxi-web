@@ -14,7 +14,6 @@ export function AvatarEditor({
   onReset: () => Promise<void>;
 }) {
   const [image, setImage] = useState<AvatarImage | null>(null),
-    [zoom, setZoom] = useState(1),
     [x, setX] = useState(50),
     [y, setY] = useState(50),
     [error, setError] = useState(""),
@@ -35,8 +34,8 @@ export function AvatarEditor({
     [image],
   );
   useEffect(() => {
-    if (canvas.current && image) drawAvatar(canvas.current, image, zoom, x, y);
-  }, [image, zoom, x, y]);
+    if (canvas.current && image) drawAvatar(canvas.current, image, 1, x, y);
+  }, [image, x, y]);
   async function choose(file?: File) {
     if (!file) return;
     const version = ++request.current;
@@ -49,7 +48,6 @@ export function AvatarEditor({
         return;
       }
       setImage(next);
-      setZoom(1);
       setX(50);
       setY(50);
     } catch (e) {
@@ -61,7 +59,7 @@ export function AvatarEditor({
       <h2>换一张喜欢的头像</h2>
       <p className="paper-muted">
         JPEG / PNG / WebP ·
-        2MB以内。裁剪为128px小图，仅保存在这台浏览器的隔离测试存储。
+        2MB以内。默认居中填满头像框，处理为128px小图，仅保存在这台浏览器的隔离测试存储。
       </p>
       <label className="paper-label" htmlFor="avatar-file">
         选择头像图片
@@ -85,10 +83,10 @@ export function AvatarEditor({
             role="img"
             aria-label="头像裁剪预览"
           />
-          <div>
+          <details>
+            <summary>调整位置（选填）</summary>
             {(
               [
-                ["缩放", zoom, setZoom, 1, 3, 0.05],
                 ["水平位置", x, setX, 0, 100, 1],
                 ["垂直位置", y, setY, 0, 100, 1],
               ] as const
@@ -105,7 +103,7 @@ export function AvatarEditor({
                 />
               </label>
             ))}
-          </div>
+          </details>
         </div>
       )}
       {error && (

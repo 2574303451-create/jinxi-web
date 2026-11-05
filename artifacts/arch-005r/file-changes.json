@@ -1,0 +1,102 @@
+[
+  {
+    "file": "DESIGN.md",
+    "beforeBytes": 10920,
+    "afterBytes": 12546
+  },
+  {
+    "file": "components/guides/guide-body.tsx",
+    "beforeBytes": 966,
+    "afterBytes": 4994
+  },
+  {
+    "file": "components/guides/guide-center.tsx",
+    "beforeBytes": 9660,
+    "afterBytes": 10165
+  },
+  {
+    "file": "components/guides/guide-media.tsx",
+    "beforeBytes": 2295,
+    "afterBytes": 1789
+  },
+  {
+    "file": "components/guides/guide-reader.tsx",
+    "beforeBytes": 8141,
+    "afterBytes": 8503
+  },
+  {
+    "file": "components/guides/guide-submission.tsx",
+    "beforeBytes": 8375,
+    "afterBytes": 8479
+  },
+  {
+    "file": "components/guides/guide-video.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 1799
+  },
+  {
+    "file": "components/profile/avatar-editor.tsx",
+    "beforeBytes": 4205,
+    "afterBytes": 4182
+  },
+  {
+    "file": "components/profile/profile-lab.tsx",
+    "beforeBytes": 7889,
+    "afterBytes": 7960
+  },
+  {
+    "file": "components/ui/paper.tsx",
+    "beforeBytes": 1682,
+    "afterBytes": 1925
+  },
+  {
+    "file": "hooks/use-guide-location.ts",
+    "beforeBytes": 0,
+    "afterBytes": 2096
+  },
+  {
+    "file": "lib/guide-location.ts",
+    "beforeBytes": 0,
+    "afterBytes": 1639
+  },
+  {
+    "file": "lib/guide-media-policy.ts",
+    "beforeBytes": 0,
+    "afterBytes": 937
+  },
+  {
+    "file": "netlify.toml",
+    "beforeBytes": 3182,
+    "afterBytes": 3351
+  },
+  {
+    "file": "netlify/functions/_shared/admin-password.js",
+    "beforeBytes": 0,
+    "afterBytes": 561
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-read.js",
+    "beforeBytes": 4236,
+    "afterBytes": 5058
+  },
+  {
+    "file": "netlify/functions/message-actions.js",
+    "beforeBytes": 6988,
+    "afterBytes": 6747
+  },
+  {
+    "file": "netlify/functions/strategy-actions.js",
+    "beforeBytes": 6781,
+    "afterBytes": 6603
+  },
+  {
+    "file": "styles/community-components.css",
+    "beforeBytes": 24986,
+    "afterBytes": 25430
+  },
+  {
+    "file": "styles/guides.css",
+    "beforeBytes": 7293,
+    "afterBytes": 8190
+  }
+]

@@ -1,0 +1,20 @@
+artifacts/arch-005r/admin-checks.cjs 39ms
+artifacts/arch-005r/avatar-baseline.cjs 10ms
+artifacts/arch-005r/avatar-css-scope.cjs 7ms
+artifacts/arch-005r/avatar-frames.cjs 16ms
+artifacts/arch-005r/browser-checks.cjs 17ms
+artifacts/arch-005r/capture-protection.cjs 4ms
+artifacts/arch-005r/check-delivery.cjs 5ms
+artifacts/arch-005r/compare-types-raw.cjs 2ms (unchanged)
+artifacts/arch-005r/compare-types.cjs 2ms
+artifacts/arch-005r/contracts.cjs 10ms
+artifacts/arch-005r/guide-browser.cjs 8ms
+artifacts/arch-005r/measure.cjs 7ms
+artifacts/arch-005r/postgres-checks.cjs 5ms
+artifacts/arch-005r/postgres-runtime.cjs 3ms
+artifacts/arch-005r/profile-performance.cjs 5ms
+artifacts/arch-005r/protected-components.cjs 5ms
+artifacts/arch-005r/regression-checks.cjs 8ms
+artifacts/arch-005r/serve.cjs 10ms
+artifacts/arch-005r/ui004-checks.cjs 22ms
+artifacts/arch-005r/video-csp.cjs 6ms

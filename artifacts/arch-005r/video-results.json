@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "same-origin",
+      "played": true,
+      "state": {
+        "time": 0.190874,
+        "width": 1136,
+        "height": 544,
+        "readyState": 4,
+        "error": 0,
+        "src": "http://127.0.0.1:3025/1.mp4"
+      }
+    },
+    {
+      "name": "trusted-https",
+      "played": true,
+      "state": {
+        "time": 0.158769,
+        "width": 960,
+        "height": 540,
+        "readyState": 4,
+        "error": 0,
+        "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+      }
+    },
+    {
+      "name": "allowed missing source (browser opaque response block)",
+      "explicitFallback": true
+    },
+    {
+      "name": "untrusted HTTPS source",
+      "externalLinkOnly": true
+    },
+    {
+      "name": "controlled negative CSP probe",
+      "mediaBlocked": true
+    },
+    {
+      "name": "invalid scheme",
+      "rejected": true
+    }
+  ],
+  "violations": [
+    {
+      "directive": "media-src",
+      "blocked": "https://example.org/csp-negative-probe.mp4"
+    }
+  ],
+  "network": [
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-4172470/4172471"
+    },
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "failed": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 4096000-4172470/4172471"
+    },
+    {
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-1128374/1128375"
+    },
+    {
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/jinxi-no-such-video.mp4",
+      "failed": "net::ERR_BLOCKED_BY_ORB"
+    }
+  ],
+  "scope": "Actual exported GuideMedia/GuideVideo in Edge with response CSP from current netlify.toml. Same-origin project MP4 and actual HTTPS MDN CC0 flower clip played using browser controls. Only API data synthetic; media responses NOT intercepted; Edge uses the already-running local SOCKS proxy on10910 for external networking (loopback bypassed). Direct networking returned206 but stalled, retained in video-direct-incomplete.json. Negative CSP probe inserted only by test. No deployment, upload or production database write."
+}

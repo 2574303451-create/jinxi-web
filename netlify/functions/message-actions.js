@@ -1,8 +1,8 @@
 // netlify/functions/message-actions.js
 const { neon } = require('@neondatabase/serverless');
+const { verifyAdminPassword } = require('./_shared/admin-password');
 
 exports.handler = async (event) => {
-  const sql = neon(process.env.DATABASE_URL);
   
   // 设置 CORS 头
   const headers = {
@@ -21,6 +21,8 @@ exports.handler = async (event) => {
     };
   }
 
+  if (!['POST','PUT','DELETE'].includes(event.httpMethod)) return resp(405, { error: 'Method not allowed' }, headers);
+
   try {
     const { messageId, action, data, password } = JSON.parse(event.body || '{}');
 
@@ -28,15 +30,10 @@ exports.handler = async (event) => {
       return resp(400, { error: 'messageId and action are required' }, headers);
     }
 
-    // 验证管理密码（用于删除和置顶操作）
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'defaultTempPassword123!';
-    const verifyAdminPassword = (inputPassword) => {
-      // 添加密码哈希验证（简化版本）
-      const crypto = require('crypto');
-      const hashedInput = crypto.createHash('sha256').update(inputPassword).digest('hex');
-      const hashedAdmin = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
-      return hashedInput === hashedAdmin;
-    };
+    if (['pin','delete'].includes(action) && !verifyAdminPassword(password)) {
+      return resp(401, { error: '管理验证失败' }, headers);
+    }
+    const sql = neon(process.env.DATABASE_URL);
 
     if (action === 'reply') {
       const { name, content, color } = data;
@@ -171,10 +168,6 @@ exports.handler = async (event) => {
     }
 
     if (action === 'pin') {
-      // 验证管理密码
-      if (!password || !verifyAdminPassword(password)) {
-        return resp(401, { error: '需要管理员权限，密码错误' }, headers);
-      }
 
       const [message] = await sql`SELECT is_pinned FROM messages WHERE id = ${messageId}`;
       if (!message) {
@@ -187,10 +180,6 @@ exports.handler = async (event) => {
     }
 
     if (action === 'delete') {
-      // 验证管理密码
-      if (!password || !verifyAdminPassword(password)) {
-        return resp(401, { error: '需要管理员权限，密码错误' }, headers);
-      }
 
       await sql`DELETE FROM messages WHERE id = ${messageId}`;
       return resp(200, { deleted: true }, headers);
@@ -199,7 +188,7 @@ exports.handler = async (event) => {
     return resp(400, { error: 'invalid action' }, headers);
   } catch (e) {
     console.error('Database error:', e);
-    return resp(500, { error: e.message || String(e) }, headers);
+    return resp(e instanceof SyntaxError ? 400 : 500, { error: e instanceof SyntaxError ? '请求格式无效' : '操作暂时失败，请稍后重试。' }, headers);
   }
 };
 

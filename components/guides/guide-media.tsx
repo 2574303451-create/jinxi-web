@@ -3,16 +3,8 @@ import { useState } from "react";
 import type { MediaFile } from "../../types/strategy-wall";
 import { Modal } from "../ui/modal";
 import { ContentImage } from "../ui/content-image";
-export function safeMediaUrl(value: string) {
-  // Preserve legacy inline raster/video media without accepting executable SVG/HTML URLs.
-  if (/^data:(?:image\/(?:jpeg|png|gif|webp)|video\/(?:mp4|webm|quicktime|x-msvideo));base64,[a-z\d+/=\s]+$/i.test(value)) return value;
-  try {
-    const url = new URL(value, "https://local.invalid");
-    return ["http:", "https:"].includes(url.protocol) ? value : null;
-  } catch {
-    return null;
-  }
-}
+import { safeMediaUrl } from "../../lib/guide-media-policy";
+import { GuideVideo } from "./guide-video";
 export function GuideMedia({
   items,
   cover,
@@ -35,15 +27,10 @@ export function GuideMedia({
           <figure key={item.id}>
             {safeMediaUrl(item.url) ? (
               item.type === "video" ? (
-                <video
-                  controls
-                  preload="none"
-                  src={item.url}
-                  poster={
-                    (item.thumbnail && safeMediaUrl(item.thumbnail)) ||
-                    undefined
-                  }
-                  aria-label={item.title}
+                <GuideVideo
+                  url={item.url}
+                  title={item.title}
+                  poster={item.thumbnail}
                 />
               ) : (
                 <button

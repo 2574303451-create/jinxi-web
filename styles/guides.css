@@ -193,6 +193,19 @@
   font-weight: 850;
   margin: 32px 0 12px;
 }
+.guide-body h3 {font-size:21px;font-weight:850;margin:26px 0 10px;}
+.guide-body h4,.guide-body h5,.guide-body h6 {font-size:18px;font-weight:800;margin:22px 0 8px;}
+.guide-body p + p {margin-top:16px;}
+.guide-body ul,.guide-body ol {padding-left:26px;margin-block:16px;}
+.guide-body ul {list-style:disc;}
+.guide-body ol {list-style:decimal;}
+.guide-body li + li {margin-top:8px;}
+.guide-body li > ul,.guide-body li > ol {margin-block:8px;}
+.guide-body pre {padding:18px;overflow:auto;background:var(--surface-strong);border:2px solid var(--line);border-radius:10px;line-height:1.7;margin-block:20px;}
+.guide-body pre code {border:0;padding:0;white-space:pre;}
+.guide-body a {text-decoration:underline;text-underline-offset:3px;}
+.guide-inline-image {display:block;max-width:100%;margin-block:20px;}
+.guide-inline-image img {width:100%;height:auto;border:2px solid var(--line);border-radius:12px;}
 .guide-body p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;

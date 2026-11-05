@@ -265,6 +265,22 @@ textarea.paper-input {
   border: 1px solid var(--line);
   border-radius: 3px;
 }
+/* Only the inner image is clipped. The original frame and outside color marker stay intact. */
+.paper-avatar-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.paper-avatar-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.message-replies .paper-avatar-image { border-radius: 6px; }
+.ribbon-card-top .paper-avatar-image { border-radius: 7px; }
 .paper-spinner {
   animation: paper-spin 1.1s linear infinite;
 }

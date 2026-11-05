@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "responses": [
+    {
+      "path": "/review-preview/",
+      "status": 200
+    },
+    {
+      "path": "/guides/",
+      "status": 200
+    },
+    {
+      "path": "/profile-lab/",
+      "status": 200
+    },
+    {
+      "path": "/review/avatar-comparison.html",
+      "status": 200
+    },
+    {
+      "path": "/review/DELIVERY.md",
+      "status": 200
+    },
+    {
+      "path": "/review/VERSION.md",
+      "status": 200
+    },
+    {
+      "path": "/review/AVATAR_REPORT.md",
+      "status": 200
+    },
+    {
+      "path": "/review/SECURITY.md",
+      "status": 200
+    },
+    {
+      "path": "/review/SQL_REPORT.md",
+      "status": 200
+    },
+    {
+      "path": "/review/MEDIA_AND_COMPATIBILITY.md",
+      "status": 200
+    },
+    {
+      "path": "/review/PERFORMANCE.md",
+      "status": 200
+    },
+    {
+      "path": "/review/types-before.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/types-after.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/type-comparison-raw.json",
+      "status": 200
+    },
+    {
+      "path": "/review/build-after.txt",
+      "status": 200
+    },
+    {
+      "path": "/review/postgres-cleanup.json",
+      "status": 200
+    },
+    {
+      "path": "/review/avatar-comparison-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/guides-filters-1440.png",
+      "status": 200
+    },
+    {
+      "path": "/review/guides-body-390.png",
+      "status": 200
+    },
+    {
+      "path": "/review/guides-submission-320.png",
+      "status": 200
+    },
+    {
+      "path": "/review/video-trusted-https.png",
+      "status": 200
+    },
+    {
+      "path": "/review/video-unavailable.png",
+      "status": 200
+    },
+    {
+      "path": "/review/browser-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/guide-browser-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/avatar-frame-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/avatar-css-scope-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/video-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/video-direct-incomplete.json",
+      "status": 200
+    },
+    {
+      "path": "/review/postgres-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/admin-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/performance-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/homepage-protection.json",
+      "status": 200
+    },
+    {
+      "path": "/review/ui004-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/protected-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/regression-results.json",
+      "status": 200
+    },
+    {
+      "path": "/review/invariants.json",
+      "status": 200
+    },
+    {
+      "path": "/review/file-changes.json",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "scope": "Restarted local isolated server on3025, current source wrapper and static export. All gallery/report URLs200, mobile review no overflow, filtered direct ID and prototype accessible. Not production."
+}

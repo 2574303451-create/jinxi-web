@@ -1,13 +1,16 @@
 // Read-only SQL. All user values are bound parameters; identifiers come only from this allowlist.
+const jsonArray = (column) =>
+  `CASE WHEN jsonb_typeof(${column})='array' THEN ${column} ELSE '[]'::jsonb END`;
+const arrayCount = (column) => `jsonb_array_length(${jsonArray(column)})`;
 const orderColumns = {
   created_at: "created_at",
   view_count: "view_count",
-  likes: "jsonb_array_length(COALESCE(likes, '[]'::jsonb))",
+  likes: arrayCount("likes"),
 };
 const fullColumns =
   "id,title,content,author,category,difficulty,tags,likes,favorites,comments,is_pinned,image_url,media_files,view_count,status,created_at,updated_at";
-const summaryColumns =
-  "id,title,LEFT(content,150) AS excerpt,author,category,difficulty,tags,is_pinned,view_count,status,created_at,updated_at,jsonb_array_length(COALESCE(likes,'[]'::jsonb)) AS like_count,jsonb_array_length(COALESCE(favorites,'[]'::jsonb)) AS favorite_count,jsonb_array_length(COALESCE(comments,'[]'::jsonb)) AS comment_count";
+const summaryColumns = `id,title,LEFT(content,150) AS excerpt,author,category,difficulty,tags,is_pinned,view_count,status,created_at,updated_at,${arrayCount("likes")} AS like_count,${arrayCount("favorites")} AS favorite_count,${arrayCount("comments")} AS comment_count`;
+const asArray = (value) => (Array.isArray(value) ? value : []);
 function format(row, summary = false) {
   const base = {
     id: String(row.id),
@@ -15,7 +18,7 @@ function format(row, summary = false) {
     author: row.author,
     category: row.category,
     difficulty: row.difficulty,
-    tags: row.tags || [],
+    tags: asArray(row.tags),
     isPinned: row.is_pinned,
     viewCount: row.view_count,
     status: row.status,
@@ -33,14 +36,24 @@ function format(row, summary = false) {
     : {
         ...base,
         content: row.content,
-        likes: row.likes || [],
-        favorites: row.favorites || [],
-        comments: row.comments || [],
+        likes: asArray(row.likes),
+        favorites: asArray(row.favorites),
+        comments: asArray(row.comments),
         imageUrl: row.image_url,
-        mediaFiles: row.media_files || [],
+        mediaFiles: asArray(row.media_files),
       };
 }
 async function readStrategies(sql, params) {
+  // This is the public read path. Client-supplied status/role/password never grant draft access.
+  if (
+    params.status !== undefined &&
+    params.status !== "" &&
+    params.status !== "published"
+  )
+    return {
+      status: 403,
+      body: { error: "公开接口仅提供已发布攻略；草稿读取需要服务端授权。" },
+    };
   if (params.id !== undefined) {
     if (!/^[1-9]\d{0,9}$/.test(params.id) || Number(params.id) > 2147483647)
       return { status: 400, body: { error: "攻略ID无效" } };
@@ -53,6 +66,23 @@ async function readStrategies(sql, params) {
       : { status: 404, body: { error: "攻略不存在或暂未公开" } };
   }
   // The legacy list response remains available; the new page explicitly opts into summaries.
+  for (const [key, minimum] of [
+    ["limit", 1],
+    ["offset", 0],
+  ]) {
+    if (
+      params[key] !== undefined &&
+      (!/^\d+$/.test(String(params[key])) ||
+        Number(params[key]) < minimum ||
+        !Number.isSafeInteger(Number(params[key])))
+    )
+      return { status: 400, body: { error: "分页参数无效" } };
+  }
+  if (
+    (params.sortBy && !Object.hasOwn(orderColumns, params.sortBy)) ||
+    (params.sortOrder && !["ASC", "DESC"].includes(params.sortOrder))
+  )
+    return { status: 400, body: { error: "排序参数无效" } };
   const summary = params.summary === "1",
     limit = Math.min(50, Math.max(1, Number.parseInt(params.limit, 10) || 12)),
     offset = Math.min(
@@ -65,10 +95,7 @@ async function readStrategies(sql, params) {
     values.push(value);
     where.push(clause.replaceAll("?", `$${values.length}`));
   };
-  // Preserve legacy status filtering for existing clients. New page always requests published.
-  const status = summary ? "published" :
-    typeof params.status === "string" ? params.status.trim() : "published";
-  if (status && status !== "all") add("status=?", status);
+  add("status=?", "published");
   if (params.category && params.category !== "all")
     add("category=?", String(params.category).trim());
   if (params.difficulty && params.difficulty !== "all") {

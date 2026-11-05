@@ -216,7 +216,9 @@ export function ProfileLab() {
       <LabCommunity
         src={
           member === "lab-member-a" && session && session.expiresAt > Date.now()
-            ? url
+            ? broken
+              ? "/__missing_avatar_test__.webp"
+              : url
             : undefined
         }
       />

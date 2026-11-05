@@ -1,0 +1,245 @@
+{
+  "passed": true,
+  "version": "PostgreSQL 17.11 on x86_64-windows, compiled by msvc-19.44.35229, 64-bit",
+  "schema": [
+    {
+      "column_name": "id",
+      "data_type": "integer",
+      "udt_name": "int4"
+    },
+    {
+      "column_name": "title",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "content",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "author",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "category",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "difficulty",
+      "data_type": "integer",
+      "udt_name": "int4"
+    },
+    {
+      "column_name": "tags",
+      "data_type": "ARRAY",
+      "udt_name": "_text"
+    },
+    {
+      "column_name": "likes",
+      "data_type": "jsonb",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_name": "favorites",
+      "data_type": "jsonb",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_name": "comments",
+      "data_type": "jsonb",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_name": "is_pinned",
+      "data_type": "boolean",
+      "udt_name": "bool"
+    },
+    {
+      "column_name": "image_url",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "media_files",
+      "data_type": "jsonb",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_name": "view_count",
+      "data_type": "integer",
+      "udt_name": "int4"
+    },
+    {
+      "column_name": "status",
+      "data_type": "text",
+      "udt_name": "text"
+    },
+    {
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz"
+    }
+  ],
+  "indexes": [
+    {
+      "indexname": "idx_strategies_category",
+      "indexdef": "CREATE INDEX idx_strategies_category ON public.strategies USING btree (category, created_at DESC)"
+    },
+    {
+      "indexname": "idx_strategies_created_at",
+      "indexdef": "CREATE INDEX idx_strategies_created_at ON public.strategies USING btree (created_at DESC)"
+    },
+    {
+      "indexname": "idx_strategies_difficulty",
+      "indexdef": "CREATE INDEX idx_strategies_difficulty ON public.strategies USING btree (difficulty, created_at DESC)"
+    },
+    {
+      "indexname": "idx_strategies_likes",
+      "indexdef": "CREATE INDEX idx_strategies_likes ON public.strategies USING gin (likes)"
+    },
+    {
+      "indexname": "idx_strategies_pinned",
+      "indexdef": "CREATE INDEX idx_strategies_pinned ON public.strategies USING btree (is_pinned DESC, created_at DESC)"
+    },
+    {
+      "indexname": "idx_strategies_status",
+      "indexdef": "CREATE INDEX idx_strategies_status ON public.strategies USING btree (status, created_at DESC)"
+    },
+    {
+      "indexname": "strategies_pkey",
+      "indexdef": "CREATE UNIQUE INDEX strategies_pkey ON public.strategies USING btree (id)"
+    }
+  ],
+  "checks": [
+    "normal published list, legacy DTO and malformed JSONB normalization",
+    "anonymous full/summary/search/id/direct status and forged role cannot read draft or archived",
+    "actual strategies.handler GET delegates into real PostgreSQL through an isolated Neon-shaped adapter",
+    "real SQL search/category/difficulty/ASC/DESC/all sort columns including guarded jsonb_array_length",
+    "stable nonoverlapping pages and bounded ID detail, scalar JSONB safe",
+    "invalid parameters rejected without executable SQL fragments",
+    "real EXPLAIN ANALYZE and empty table behavior"
+  ],
+  "plan": [
+    {
+      "QUERY PLAN": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 8.21,
+            "Total Cost": 8.22,
+            "Plan Rows": 1,
+            "Plan Width": 233,
+            "Actual Startup Time": 0.051,
+            "Actual Total Time": 0.052,
+            "Actual Rows": 12,
+            "Actual Loops": 1,
+            "Shared Hit Blocks": 2,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 8.21,
+                "Total Cost": 8.22,
+                "Plan Rows": 1,
+                "Plan Width": 233,
+                "Actual Startup Time": 0.05,
+                "Actual Total Time": 0.051,
+                "Actual Rows": 12,
+                "Actual Loops": 1,
+                "Sort Key": [
+                  "is_pinned DESC",
+                  "(jsonb_array_length(CASE WHEN (jsonb_typeof(likes) = 'array'::text) THEN likes ELSE '[]'::jsonb END)) DESC",
+                  "id DESC"
+                ],
+                "Sort Method": "top-N heapsort",
+                "Sort Space Used": 28,
+                "Sort Space Type": "Memory",
+                "Shared Hit Blocks": 2,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "idx_strategies_status",
+                    "Relation Name": "strategies",
+                    "Alias": "strategies",
+                    "Startup Cost": 0.14,
+                    "Total Cost": 8.2,
+                    "Plan Rows": 1,
+                    "Plan Width": 233,
+                    "Actual Startup Time": 0.006,
+                    "Actual Total Time": 0.029,
+                    "Actual Rows": 34,
+                    "Actual Loops": 1,
+                    "Index Cond": "(status = 'published'::text)",
+                    "Rows Removed by Index Recheck": 0,
+                    "Filter": "((strpos(lower(title), 'search'::text) > 0) OR (strpos(lower(content), 'search'::text) > 0))",
+                    "Rows Removed by Filter": 0,
+                    "Shared Hit Blocks": 2,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.054,
+          "Triggers": [],
+          "Execution Time": 0.064
+        }
+      ]
+    }
+  ],
+  "scope": "Native PostgreSQL 17.11, dedicated fresh cluster on127.0.0.1:55432 and database jinxi_005r_test. Tables recreated only in this disposable DB from an explicit minimal schema, not historical seed scripts. Actual repository readStrategies SQL executed through pg parameter binding, NOT fake SQL. Neon HTTP transport and deployed production schema are not tested."
+}

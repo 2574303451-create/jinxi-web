@@ -1,0 +1,14 @@
+{
+  "observations": [
+    {
+      "name": "legacy anonymous strategy writer accepts client-selected author",
+      "observedStatus": 201,
+      "meaning": "This is a remaining identity/spoofing risk, NOT a secure test pass. No real SQL ran."
+    },
+    {
+      "name": "auth-login source has no session cookie issuance",
+      "meaning": "Source observation only, not a real credential or session test."
+    }
+  ],
+  "environment": "Existing local source invoked in restricted VM with a fake SQL tag, empty environment and synthetic author. No Neon call, external request, cookie, account or database write."
+}

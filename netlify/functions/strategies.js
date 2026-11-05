@@ -1,5 +1,6 @@
 // netlify/functions/strategies.js - 攻略墙主API
 const { neon } = require('@neondatabase/serverless');
+const { readStrategies } = require('./_shared/strategy-read');
 
 exports.handler = async (event) => {
   const sql = neon(process.env.DATABASE_URL);
@@ -40,110 +41,8 @@ exports.handler = async (event) => {
 
 // 获取攻略列表
 async function handleGetStrategies(sql, params, headers) {
-  try {
-    const {
-      category = '',
-      difficulty = '',
-      search = '',
-      limit = '12',
-      offset = '0',
-      sortBy = 'created_at',
-      sortOrder = 'DESC',
-      status = 'published'
-    } = params;
-
-    console.log('=== Strategy Query Params ===');
-    console.log('Params:', params);
-    console.log('============================');
-
-    // 简化查询逻辑，先获取所有数据再在应用层过滤
-    const allStrategies = await sql`
-      SELECT id, title, content, author, category, difficulty, tags,
-             likes, favorites, comments, is_pinned, image_url, media_files,
-             view_count, status, created_at, updated_at
-      FROM strategies
-      ORDER BY is_pinned DESC, created_at DESC
-    `;
-
-    console.log(`Found ${allStrategies.length} total strategies in database`);
-
-    // 在应用层进行过滤
-    let filteredStrategies = allStrategies;
-
-    // 状态过滤
-    if (status && status.trim() && status !== 'all' && status !== '') {
-      filteredStrategies = filteredStrategies.filter(s => s.status === status.trim());
-      console.log(`After status filter (${status}): ${filteredStrategies.length}`);
-    }
-
-    // 分类过滤
-    if (category && category !== 'all' && category.trim()) {
-      filteredStrategies = filteredStrategies.filter(s => s.category === category.trim());
-      console.log(`After category filter (${category}): ${filteredStrategies.length}`);
-    }
-
-    // 难度过滤
-    if (difficulty && difficulty !== 'all' && difficulty.toString().trim()) {
-      const difficultyInt = parseInt(difficulty);
-      if (!isNaN(difficultyInt)) {
-        filteredStrategies = filteredStrategies.filter(s => s.difficulty === difficultyInt);
-        console.log(`After difficulty filter (${difficultyInt}): ${filteredStrategies.length}`);
-      }
-    }
-
-    // 搜索过滤
-    if (search && search.trim()) {
-      const searchTerm = search.trim().toLowerCase();
-      filteredStrategies = filteredStrategies.filter(s => 
-        s.title.toLowerCase().includes(searchTerm) || 
-        s.content.toLowerCase().includes(searchTerm)
-      );
-      console.log(`After search filter (${searchTerm}): ${filteredStrategies.length}`);
-    }
-
-    // 分页处理
-    const total = filteredStrategies.length;
-    const limitInt = parseInt(limit);
-    const offsetInt = parseInt(offset);
-    const paginatedStrategies = filteredStrategies.slice(offsetInt, offsetInt + limitInt);
-
-    console.log(`Pagination: offset=${offsetInt}, limit=${limitInt}, total=${total}`);
-    console.log(`Returning ${paginatedStrategies.length} strategies`);
-
-    // 格式化数据
-    const formattedStrategies = paginatedStrategies.map(strategy => ({
-      id: strategy.id.toString(),
-      title: strategy.title,
-      content: strategy.content,
-      author: strategy.author,
-      category: strategy.category,
-      difficulty: strategy.difficulty,
-      tags: strategy.tags || [],
-      likes: strategy.likes || [],
-      favorites: strategy.favorites || [],
-      comments: strategy.comments || [],
-      isPinned: strategy.is_pinned,
-      imageUrl: strategy.image_url,
-      mediaFiles: strategy.media_files || [],
-      viewCount: strategy.view_count,
-      status: strategy.status,
-      createdAt: new Date(strategy.created_at),
-      updatedAt: new Date(strategy.updated_at)
-    }));
-
-    return resp(200, {
-      strategies: formattedStrategies,
-      pagination: {
-        total: total,
-        limit: limitInt,
-        offset: offsetInt,
-        hasMore: offsetInt + limitInt < total
-      }
-    }, headers);
-  } catch (error) {
-    console.error('Get strategies error:', error);
-    throw error;
-  }
+  const result = await readStrategies(sql, params);
+  return resp(result.status, result.body, headers);
 }
 
 // 创建新攻略

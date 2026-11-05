@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "SQL values bound; order allowlisted; limits clamped; summaries exclude body/comments/identity arrays",
+    "published ID lookup is one bounded SQL query and preserves full record fields",
+    "invalid ID/difficulty and missing record return explicit status",
+    "legacy full response and deterministic SQL pagination/filter/sort preserved"
+  ],
+  "passed": true,
+  "method": "Actual new read handler invoked with a recording fake sql.query adapter; verifies SQL structure and response mapping. NO PostgreSQL, EXPLAIN, live schema, database transaction or deployed Function integration was executed."
+}

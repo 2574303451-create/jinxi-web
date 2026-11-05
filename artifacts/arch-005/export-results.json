@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "name": "static export exists out/index.html",
+      "passed": true
+    },
+    {
+      "name": "static export exists out/guides/index.html",
+      "passed": true
+    },
+    {
+      "name": "static export exists out/profile-lab/index.html",
+      "passed": true
+    },
+    {
+      "name": "static export exists out/404.html",
+      "passed": true
+    },
+    {
+      "name": "Netlify configuration uses file shadowing and final true404, no homepage fallback",
+      "passed": true
+    },
+    {
+      "name": "local static direct route /guides/",
+      "passed": true
+    },
+    {
+      "name": "local static direct route /guides/?id=1",
+      "passed": true
+    },
+    {
+      "name": "local static direct route /profile-lab/",
+      "passed": true
+    },
+    {
+      "name": "local static direct route /review/",
+      "passed": true
+    },
+    {
+      "name": "local missing route is404",
+      "passed": true
+    }
+  ],
+  "scope": "Actual Next export, TOML rule inspection and equivalent local static server. Netlify CLI unavailable; no deploy or real Netlify redirect/CDN/Functions integration test."
+}

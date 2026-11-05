@@ -1,0 +1,840 @@
+[
+  {
+    "stage": "after",
+    "slow": false,
+    "width": 1440,
+    "openedMs": 196,
+    "initial": {
+      "metrics": {
+        "Timestamp": 20914.036408,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 410,
+        "LayoutObjects": 1073,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 1183,
+        "Resources": 29,
+        "ContextLifecycleStateObservers": 10,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.137835,
+        "RecalcStyleDuration": 0.01533,
+        "DevToolsCommandDuration": 0.003506,
+        "ScriptDuration": 0.051701,
+        "V8CompileDuration": 0.000198,
+        "TaskDuration": 0.256476,
+        "TaskOtherDuration": 0.047906,
+        "ThreadTime": 0.2884,
+        "ProcessTime": 0.376429,
+        "JSHeapUsedSize": 3391040,
+        "JSHeapTotalSize": 3670016,
+        "FirstMeaningfulPaint": 20912.073792,
+        "DomContentLoaded": 20911.818623,
+        "NavigationStart": 20911.77074
+      },
+      "vitals": {
+        "lcp": 304,
+        "cls": 0,
+        "events": []
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853545959,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853545960,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853545960,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-e122f6a8bf675f51.js": {
+          "bytes": 5043,
+          "gzip": 2356,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-4285e745653c870d.js": {
+          "bytes": 461,
+          "gzip": 218,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/117-7e475faf501989ee.js": {
+          "bytes": 123798,
+          "gzip": 31827,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/962-a51c75c9ee4136c3.js": {
+          "bytes": 16791,
+          "gzip": 6107,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js": {
+          "bytes": 172831,
+          "gzip": 53742,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-590ae7e7add6b69b.js": {
+          "bytes": 72663,
+          "gzip": 21626,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/326-11c4f61ea388f98e.js": {
+          "bytes": 155077,
+          "gzip": 49768,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/556.c65f6b1c1aa79e34.js": {
+          "bytes": 39045,
+          "gzip": 9702,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/596.c06a9bbffdd1c17f.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        }
+      },
+      "resources": [
+        {
+          "name": "/logo.png",
+          "initiator": "link",
+          "transferSize": 249161,
+          "duration": 9.800000000745058
+        },
+        {
+          "name": "/14.png",
+          "initiator": "link",
+          "transferSize": 61673,
+          "duration": 18.199999999254942
+        },
+        {
+          "name": "/13.png",
+          "initiator": "link",
+          "transferSize": 83663,
+          "duration": 19
+        },
+        {
+          "name": "/43.png",
+          "initiator": "link",
+          "transferSize": 29815,
+          "duration": 22.799999997019768
+        },
+        {
+          "name": "/44.png",
+          "initiator": "link",
+          "transferSize": 47513,
+          "duration": 23
+        },
+        {
+          "name": "/45.png",
+          "initiator": "link",
+          "transferSize": 37407,
+          "duration": 24
+        },
+        {
+          "name": "/_next/static/css/b5c19fd6201c0c26.css",
+          "initiator": "link",
+          "transferSize": 69040,
+          "duration": 17.600000001490116
+        },
+        {
+          "name": "/46.png",
+          "initiator": "link",
+          "transferSize": 34509,
+          "duration": 25
+        },
+        {
+          "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+          "initiator": "link",
+          "transferSize": 45840,
+          "duration": 18.099999997764826
+        },
+        {
+          "name": "/_next/static/css/797eb2f4036175df.css",
+          "initiator": "link",
+          "transferSize": 10633,
+          "duration": 18.300000000745058
+        },
+        {
+          "name": "/_next/static/chunks/webpack-e122f6a8bf675f51.js",
+          "initiator": "link",
+          "transferSize": 5343,
+          "duration": 25
+        },
+        {
+          "name": "/_next/static/chunks/117-7e475faf501989ee.js",
+          "initiator": "script",
+          "transferSize": 124098,
+          "duration": 28.399999998509884
+        },
+        {
+          "name": "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+          "initiator": "script",
+          "transferSize": 173131,
+          "duration": 29.099999997764826
+        },
+        {
+          "name": "/_next/static/chunks/main-app-4285e745653c870d.js",
+          "initiator": "script",
+          "transferSize": 761,
+          "duration": 27.800000000745058
+        },
+        {
+          "name": "/_next/static/chunks/326-11c4f61ea388f98e.js",
+          "initiator": "script",
+          "transferSize": 155377,
+          "duration": 30.300000000745058
+        },
+        {
+          "name": "/_next/static/chunks/962-a51c75c9ee4136c3.js",
+          "initiator": "script",
+          "transferSize": 17091,
+          "duration": 29.199999999254942
+        },
+        {
+          "name": "/_next/static/chunks/app/page-590ae7e7add6b69b.js",
+          "initiator": "script",
+          "transferSize": 72963,
+          "duration": 30
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 11.199999999254942
+        },
+        {
+          "name": "/bg.png",
+          "initiator": "video",
+          "transferSize": 192635,
+          "duration": 21.199999999254942
+        },
+        {
+          "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "initiator": "css",
+          "transferSize": 58812,
+          "duration": 2.699999999254942
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 4.5
+        },
+        {
+          "name": "/.netlify/functions/messages",
+          "initiator": "fetch",
+          "transferSize": 3498,
+          "duration": 4.300000000745058
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 4.099999997764826
+        },
+        {
+          "name": "/logo.png",
+          "initiator": "other",
+          "transferSize": 249161,
+          "duration": 3.899999998509884
+        },
+        {
+          "name": "/_next/static/css/99e71b93752a6c6b.css",
+          "initiator": "link",
+          "transferSize": 7909,
+          "duration": 4.5
+        },
+        {
+          "name": "/_next/static/chunks/556.c65f6b1c1aa79e34.js",
+          "initiator": "script",
+          "transferSize": 39345,
+          "duration": 4.600000001490116
+        },
+        {
+          "name": "/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+          "initiator": "script",
+          "transferSize": 1672,
+          "duration": 4
+        }
+      ]
+    },
+    "opened": {
+      "metrics": {
+        "Timestamp": 20915.290853,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 1,
+        "Frames": 1,
+        "JSEventListeners": 299,
+        "LayoutObjects": 479,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 542,
+        "Resources": 13,
+        "ContextLifecycleStateObservers": 6,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 1,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 11,
+        "RecalcStyleCount": 15,
+        "LayoutDuration": 0.180649,
+        "RecalcStyleDuration": 0.020171,
+        "DevToolsCommandDuration": 0.02141,
+        "ScriptDuration": 0.076247,
+        "V8CompileDuration": 0.000327,
+        "TaskDuration": 0.39312,
+        "TaskOtherDuration": 0.094316,
+        "ThreadTime": 0.414583,
+        "ProcessTime": 0.548114,
+        "JSHeapUsedSize": 3109512,
+        "JSHeapTotalSize": 4001792,
+        "FirstMeaningfulPaint": 20914.257077,
+        "DomContentLoaded": 20914.171956,
+        "NavigationStart": 20914.112939
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853545959,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853545960,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853545960,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+          "at": 1793853548141,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-e122f6a8bf675f51.js": {
+          "bytes": 5043,
+          "gzip": 2356,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-4285e745653c870d.js": {
+          "bytes": 461,
+          "gzip": 218,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/117-7e475faf501989ee.js": {
+          "bytes": 123798,
+          "gzip": 31827,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/962-a51c75c9ee4136c3.js": {
+          "bytes": 16791,
+          "gzip": 6107,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js": {
+          "bytes": 172831,
+          "gzip": 53742,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-590ae7e7add6b69b.js": {
+          "bytes": 72663,
+          "gzip": 21626,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/326-11c4f61ea388f98e.js": {
+          "bytes": 155077,
+          "gzip": 49768,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/556.c65f6b1c1aa79e34.js": {
+          "bytes": 39045,
+          "gzip": 9702,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/596.c06a9bbffdd1c17f.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/guides/page-200696b0791042fc.js": {
+          "bytes": 12325,
+          "gzip": 4975,
+          "strategyCode": false,
+          "mediaCode": false
+        }
+      },
+      "vitals": {
+        "lcp": 80,
+        "cls": 0.8983701497395834,
+        "events": []
+      }
+    },
+    "errors": [],
+    "method": "Same synthetic25-record HTTP fixture, production static export; CDN icon requests deliberately aborted on both sides to control known external variability. Post-GC heap metrics are renderer estimates. New page navigation replaces document; heap delta is not solely component allocation. One lab sample, not field Web Vitals."
+  },
+  {
+    "stage": "after",
+    "slow": true,
+    "width": 390,
+    "openedMs": 4959,
+    "initial": {
+      "metrics": {
+        "Timestamp": 20927.450681,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 410,
+        "LayoutObjects": 1033,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 1181,
+        "Resources": 30,
+        "ContextLifecycleStateObservers": 10,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 8,
+        "RecalcStyleCount": 11,
+        "LayoutDuration": 1.017364,
+        "RecalcStyleDuration": 0.083548,
+        "DevToolsCommandDuration": 0.030857,
+        "ScriptDuration": 0.356726,
+        "V8CompileDuration": 0.003416,
+        "TaskDuration": 2.15974,
+        "TaskOtherDuration": 0.667829,
+        "ThreadTime": 0.682447,
+        "ProcessTime": 11.954628,
+        "JSHeapUsedSize": 3395204,
+        "JSHeapTotalSize": 3932160,
+        "FirstMeaningfulPaint": 20918.356801,
+        "DomContentLoaded": 20918.28576,
+        "NavigationStart": 20915.656705
+      },
+      "vitals": {
+        "lcp": 2704,
+        "cls": 0,
+        "events": []
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853557686,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853557688,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853557688,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-e122f6a8bf675f51.js": {
+          "bytes": 5043,
+          "gzip": 2356,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-4285e745653c870d.js": {
+          "bytes": 461,
+          "gzip": 218,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/962-a51c75c9ee4136c3.js": {
+          "bytes": 16791,
+          "gzip": 6107,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-590ae7e7add6b69b.js": {
+          "bytes": 72663,
+          "gzip": 21626,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/117-7e475faf501989ee.js": {
+          "bytes": 123798,
+          "gzip": 31827,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js": {
+          "bytes": 172831,
+          "gzip": 53742,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/326-11c4f61ea388f98e.js": {
+          "bytes": 155077,
+          "gzip": 49768,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/596.c06a9bbffdd1c17f.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/556.c65f6b1c1aa79e34.js": {
+          "bytes": 39045,
+          "gzip": 9702,
+          "strategyCode": false,
+          "mediaCode": false
+        }
+      },
+      "resources": [
+        {
+          "name": "/logo.png",
+          "initiator": "link",
+          "transferSize": 249161,
+          "duration": 6151.699999999255
+        },
+        {
+          "name": "/14.png",
+          "initiator": "link",
+          "transferSize": 61673,
+          "duration": 1515.5999999977648
+        },
+        {
+          "name": "/13.png",
+          "initiator": "link",
+          "transferSize": 83663,
+          "duration": 3529.800000000745
+        },
+        {
+          "name": "/43.png",
+          "initiator": "link",
+          "transferSize": 29815,
+          "duration": 2151.800000000745
+        },
+        {
+          "name": "/44.png",
+          "initiator": "link",
+          "transferSize": 47513,
+          "duration": 3020.800000000745
+        },
+        {
+          "name": "/45.png",
+          "initiator": "link",
+          "transferSize": 37407,
+          "duration": 2895.300000000745
+        },
+        {
+          "name": "/46.png",
+          "initiator": "link",
+          "transferSize": 34509,
+          "duration": 3253
+        },
+        {
+          "name": "/_next/static/css/b5c19fd6201c0c26.css",
+          "initiator": "link",
+          "transferSize": 69040,
+          "duration": 1651.5999999977648
+        },
+        {
+          "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+          "initiator": "link",
+          "transferSize": 45840,
+          "duration": 1169.6000000014901
+        },
+        {
+          "name": "/_next/static/css/797eb2f4036175df.css",
+          "initiator": "link",
+          "transferSize": 10633,
+          "duration": 469.3999999985099
+        },
+        {
+          "name": "/_next/static/chunks/webpack-e122f6a8bf675f51.js",
+          "initiator": "link",
+          "transferSize": 5343,
+          "duration": 3805.2000000029802
+        },
+        {
+          "name": "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+          "initiator": "script",
+          "transferSize": 173131,
+          "duration": 7583.199999999255
+        },
+        {
+          "name": "/_next/static/chunks/117-7e475faf501989ee.js",
+          "initiator": "script",
+          "transferSize": 124098,
+          "duration": 7287.400000002235
+        },
+        {
+          "name": "/_next/static/chunks/main-app-4285e745653c870d.js",
+          "initiator": "script",
+          "transferSize": 761,
+          "duration": 4360.10000000149
+        },
+        {
+          "name": "/_next/static/chunks/326-11c4f61ea388f98e.js",
+          "initiator": "script",
+          "transferSize": 155377,
+          "duration": 7598.60000000149
+        },
+        {
+          "name": "/_next/static/chunks/962-a51c75c9ee4136c3.js",
+          "initiator": "script",
+          "transferSize": 17091,
+          "duration": 5043.300000000745
+        },
+        {
+          "name": "/_next/static/chunks/app/page-590ae7e7add6b69b.js",
+          "initiator": "script",
+          "transferSize": 72963,
+          "duration": 6975.10000000149
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 12.600000001490116
+        },
+        {
+          "name": "/bg.png",
+          "initiator": "video",
+          "transferSize": 192635,
+          "duration": 6092.400000002235
+        },
+        {
+          "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "initiator": "css",
+          "transferSize": 58812,
+          "duration": 2461.5
+        },
+        {
+          "name": "/logo.png",
+          "initiator": "other",
+          "transferSize": 249161,
+          "duration": 1725.5
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 187.19999999925494
+        },
+        {
+          "name": "/.netlify/functions/messages",
+          "initiator": "fetch",
+          "transferSize": 3498,
+          "duration": 215.60000000149012
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 184.69999999925494
+        },
+        {
+          "name": "/_next/static/css/99e71b93752a6c6b.css",
+          "initiator": "link",
+          "transferSize": 7909,
+          "duration": 266.80000000074506
+        },
+        {
+          "name": "/_next/static/chunks/556.c65f6b1c1aa79e34.js",
+          "initiator": "script",
+          "transferSize": 39345,
+          "duration": 746.6999999992549
+        },
+        {
+          "name": "/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+          "initiator": "script",
+          "transferSize": 1672,
+          "duration": 346.3999999985099
+        }
+      ]
+    },
+    "opened": {
+      "metrics": {
+        "Timestamp": 20933.47641,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 1,
+        "Frames": 1,
+        "JSEventListeners": 298,
+        "LayoutObjects": 479,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 542,
+        "Resources": 13,
+        "ContextLifecycleStateObservers": 6,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 1,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 15,
+        "RecalcStyleCount": 23,
+        "LayoutDuration": 1.295881,
+        "RecalcStyleDuration": 0.112536,
+        "DevToolsCommandDuration": 0.121927,
+        "ScriptDuration": 0.567008,
+        "V8CompileDuration": 0.003889,
+        "TaskDuration": 3.315323,
+        "TaskOtherDuration": 1.214082,
+        "ThreadTime": 1.175965,
+        "ProcessTime": 17.93507,
+        "JSHeapUsedSize": 3145224,
+        "JSHeapTotalSize": 4001792,
+        "FirstMeaningfulPaint": 20932.256498,
+        "DomContentLoaded": 20929.058575,
+        "NavigationStart": 20927.585505
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853557686,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853557688,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853557688,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+          "at": 1793853565872,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-e122f6a8bf675f51.js": {
+          "bytes": 5043,
+          "gzip": 2356,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-4285e745653c870d.js": {
+          "bytes": 461,
+          "gzip": 218,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/962-a51c75c9ee4136c3.js": {
+          "bytes": 16791,
+          "gzip": 6107,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-590ae7e7add6b69b.js": {
+          "bytes": 72663,
+          "gzip": 21626,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/117-7e475faf501989ee.js": {
+          "bytes": 123798,
+          "gzip": 31827,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js": {
+          "bytes": 172831,
+          "gzip": 53742,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/326-11c4f61ea388f98e.js": {
+          "bytes": 155077,
+          "gzip": 49768,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/596.c06a9bbffdd1c17f.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/556.c65f6b1c1aa79e34.js": {
+          "bytes": 39045,
+          "gzip": 9702,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/guides/page-200696b0791042fc.js": {
+          "bytes": 12325,
+          "gzip": 4975,
+          "strategyCode": false,
+          "mediaCode": false
+        }
+      },
+      "vitals": {
+        "lcp": 4340,
+        "cls": 0.35143364062500004,
+        "events": []
+      }
+    },
+    "errors": [],
+    "method": "Same synthetic25-record HTTP fixture, production static export; CDN icon requests deliberately aborted on both sides to control known external variability. Post-GC heap metrics are renderer estimates. New page navigation replaces document; heap delta is not solely component allocation. One lab sample, not field Web Vitals."
+  }
+]

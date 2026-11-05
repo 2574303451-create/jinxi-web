@@ -1,0 +1,125 @@
+{
+  "baseline": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+  "protectedResults": [
+    {
+      "file": "config/guild-terminal.config.json",
+      "unchanged": true,
+      "sha256": "73f686a2c1c2fa547bf84b94de38fa6edb69ef55eda288b89581e636e9ea7bcb"
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "unchanged": true,
+      "sha256": "1e1b8316d314fee13d85020546c12b5e490fecec515051aef69a39aaf1120957"
+    },
+    {
+      "file": "components/guild-uptime-terminal.tsx",
+      "unchanged": true,
+      "sha256": "bdb8c97f3626002522dcf156c2880432053bd66e4211097bf2b708350107f506"
+    },
+    {
+      "file": "components/guild-uptime-terminal.module.css",
+      "unchanged": true,
+      "sha256": "3cab7a203f36f4ec880b68a70ad2a2f2eed1d5e06ac91ab54ae7119a67f5a752"
+    },
+    {
+      "file": "components/guild-time/archive-record.tsx",
+      "unchanged": true,
+      "sha256": "ac2e412edf56964c1b4aac72c103c2bd522e8aed76f8ae0009314d2b40942505"
+    },
+    {
+      "file": "components/guild-time/runtime-clock.tsx",
+      "unchanged": true,
+      "sha256": "ec4af8ae085730d57047cf639a51f20b61945a063a3f2ad1ec23f55024139a79"
+    },
+    {
+      "file": "components/home/message-ribbon-row.tsx",
+      "unchanged": true,
+      "sha256": "fa5be63b9a2da9f8758bf3e40266491d8f7dd5c0e58043a6157978cd9fb42261"
+    },
+    {
+      "file": "components/home/use-ribbon-motion.ts",
+      "unchanged": true,
+      "sha256": "21c52208c3a4652897125e048c238f22b4b363b6a13e6948343775d97bd68bc1"
+    },
+    {
+      "file": "components/magicui/3d-carousel.tsx",
+      "unchanged": true,
+      "sha256": "3a61d84bc444bae88e5207d2de321a7fa98d30420029d75789e8e2fc36d6638e"
+    },
+    {
+      "file": "components/magicui/member-grid.tsx",
+      "unchanged": true,
+      "sha256": "76cf7514d805a96d31d625e4fa016aa91937ffda23751c201e4b518b3833c6d3"
+    },
+    {
+      "file": "components/member-detail-modal.tsx",
+      "unchanged": true,
+      "sha256": "72b7727fd88bda981034fedbe812a714cce557309274ab050751b04fc25f2dda"
+    },
+    {
+      "file": "components/home/guild-hero.tsx",
+      "unchanged": true,
+      "sha256": "d5799af782ff87186928203058fbb161c6073a0168dcf381ccc464dda5989137"
+    },
+    {
+      "file": "components/home/guild-members.tsx",
+      "unchanged": true,
+      "sha256": "455771904df0ba6e06603e05a75fb3b6038c3b62ca16eb6e27ccfde32014a965"
+    },
+    {
+      "file": "netlify/functions/auth-login.js",
+      "unchanged": true,
+      "sha256": "bf928dec6305967013ec0ebb4b1d7640c12ff3fd02cc0a97f11ce25058c19476"
+    },
+    {
+      "file": "netlify/functions/auth-change-password.js",
+      "unchanged": true,
+      "sha256": "4babd4bdfb98f98cb2f38c0533e953ffe2aae0f76a35344fb32eafb6bcb8e85f"
+    },
+    {
+      "file": "netlify/functions/strategy-actions.js",
+      "unchanged": true,
+      "sha256": "df18dd4e86d95a53cd9f23848654afd80dfde2cf57dbd5afbd7c69da33be70fc"
+    },
+    {
+      "file": "netlify/functions/points.js",
+      "unchanged": true,
+      "sha256": "395fb0c7055ed067d4292ab995fe9121a96efa5e24dcad8a44a9f619202988f5"
+    },
+    {
+      "file": "package.json",
+      "unchanged": true,
+      "sha256": "08157e986688afb3f24320eef2eb87ef5a6160b8063b917fc7c1e11c86918dcb"
+    },
+    {
+      "file": "package-lock.json",
+      "unchanged": true,
+      "sha256": "f5f9bc67e61c03de0b1098bc3300cc0553566bc8dfc1f87d144892b9ff26b092"
+    },
+    {
+      "file": "next.config.mjs",
+      "unchanged": true,
+      "sha256": "08480a017258e76b073d1e8ab93a13b96bc165012a6d13f87c311bf408a8404c"
+    },
+    {
+      "file": "database-member-auth-schema.sql",
+      "unchanged": true,
+      "sha256": "3a41755e9f47bfef117bfc7bb18b32ee2f432e7c4ab3548a4042832c973421eb"
+    },
+    {
+      "file": "database-strategy-schema.sql",
+      "unchanged": true,
+      "sha256": "f15a410d7ec1c741d1b130190c1bb801f836ad326b074b16bb3666b4197f31c4"
+    },
+    {
+      "file": "database-schema.sql",
+      "unchanged": true,
+      "sha256": "a1b988a85c7887f1916776c7997ee47515a6b753b0b8b9c1fed0be5fc6ca11ad"
+    }
+  ],
+  "strategyPostUnchanged": true,
+  "strategyPostSHA256": "bd8d71893a336e074ab8932d79246215b99a7c737d350efc22629e4e19abe92e",
+  "hashMethod": "Text SHA256 after CRLF to LF normalization; unchanged additionally verified by git diff against the fixed baseline. No raw byte-equality claim across checkout line-ending conversion.",
+  "databaseAccess": "No database connection or migration executed by this task. Actual deployed row invariance/schema not queried; source-level evidence only.",
+  "passed": true
+}

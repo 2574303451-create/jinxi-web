@@ -1,0 +1,72 @@
+{
+  "results": [
+    {
+      "name": "homepage plus guide-link hover causes no guide API/module or upload-editor prefetch",
+      "passed": true,
+      "scripts": [
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/webpack-3e5417bc8de6cc26.js",
+          "bytes": 5066
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/main-app-4285e745653c870d.js",
+          "bytes": 461
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/117-7e475faf501989ee.js",
+          "bytes": 123798
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/962-a51c75c9ee4136c3.js",
+          "bytes": 16791
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/app/page-590ae7e7add6b69b.js",
+          "bytes": 72663
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+          "bytes": 172831
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/326-11c4f61ea388f98e.js",
+          "bytes": 155077
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+          "bytes": 1372
+        },
+        {
+          "url": "http://127.0.0.1:3021/_next/static/chunks/556.c65f6b1c1aa79e34.js",
+          "bytes": 39045
+        }
+      ]
+    },
+    {
+      "name": "guide list excludes reader, media body, submission and avatar editor",
+      "passed": true
+    },
+    {
+      "name": "direct share URL reads only one ID, no list scan requested by browser",
+      "passed": true
+    },
+    {
+      "name": "loading failure retry and empty states reflect real controlled HTTP responses",
+      "passed": true
+    },
+    {
+      "name": "legacy display account menu links to explicitly synthetic profile, without carrying account to URL",
+      "passed": true
+    },
+    {
+      "name": "JPEG and WebP valid decoding and blob avatars work under configured CSP",
+      "passed": true,
+      "violations": []
+    },
+    {
+      "name": "isolated blob persists reload but session does not; clear removes test data",
+      "passed": true
+    }
+  ],
+  "method": "Actual exported pages and browser network inspection. Error routes/avatars use controlled synthetic test responses. CSP checked via response header matching netlify.toml; this is not a deployed Netlify verification."
+}

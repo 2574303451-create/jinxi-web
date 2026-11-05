@@ -21,7 +21,6 @@ import { GuildSponsorship } from "../components/guild-sponsorship"
 
 // 动态导入重型组件以减少初始内存占用
 const MessageWall = lazy(() => import("../components/message-wall").then(m => ({ default: m.MessageWall })))
-const StrategyWall = lazy(() => import("../components/strategy-wall").then(m => ({ default: m.StrategyWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
@@ -53,7 +52,6 @@ function PageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoginSubmitting, setIsLoginSubmitting] = useState(false)
   const [isChangingPassword, setIsChangingPassword] = useState(false)
-  const [isStrategyWallOpen, setIsStrategyWallOpen] = useState(false)
   const [loginAccount, setLoginAccount] = useState("")
   const [loginNickname, setLoginNickname] = useState("")
   const [loginError, setLoginError] = useState("")
@@ -804,8 +802,7 @@ function PageContent() {
       <a className="skip-link" href="#main-content">跳到主要内容</a>
       <GuildNavigation account={loginAccount} nickname={loginNickname} onLogin={openLoginModal}
         onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
-        onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))}
-        onStrategy={() => setIsStrategyWallOpen(true)} />
+        onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
       <main id="main-content">
         <GuildHero onJoin={handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
         <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
@@ -814,7 +811,7 @@ function PageContent() {
         <MemberActions account={loginAccount} onOpen={setActivePanel} />
         <section id="community" className="guild-shell guild-section">
           <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
-          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} onStrategy={() => setIsStrategyWallOpen(true)} />
+          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} />
           <MessageShowcase onOpen={(id) => { setSelectedMessageId(id || null); setActivePanel("messages") }} />
         </section>
         <section id="faq" className="guild-shell guild-section">
@@ -1178,13 +1175,6 @@ function PageContent() {
         </div>
       </Modal>
 
-      {/* 攻略墙弹窗 */}
-      <ComponentLoader>
-        <StrategyWall
-          isOpen={isStrategyWallOpen}
-          onClose={() => setIsStrategyWallOpen(false)}
-        />
-      </ComponentLoader>
 
 
 

@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "anonymous model rejects save",
+    "expired model rejects save",
+    "cross-account model rejects save",
+    "failed save rejects before modifying isolated store"
+  ],
+  "passed": true,
+  "scope": "Actual prototype helper code, synthetic inputs only. Client-side session model is forgeable. This does NOT prove production session, CSRF, upload authorization, spoof-proof publishing, rate limiting or points security; all remain unimplemented and require approved isolated backend integration."
+}

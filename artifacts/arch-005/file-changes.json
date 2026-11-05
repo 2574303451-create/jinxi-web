@@ -1,0 +1,182 @@
+[
+  {
+    "file": "DESIGN.md",
+    "beforeBytes": 9876,
+    "afterBytes": 10921,
+    "deltaBytes": 1045
+  },
+  {
+    "file": "app/page.tsx",
+    "beforeBytes": 44678,
+    "afterBytes": 45381,
+    "deltaBytes": 703
+  },
+  {
+    "file": "components/home/community-updates.tsx",
+    "beforeBytes": 3248,
+    "afterBytes": 3167,
+    "deltaBytes": -81
+  },
+  {
+    "file": "components/home/guild-navigation.tsx",
+    "beforeBytes": 3213,
+    "afterBytes": 3363,
+    "deltaBytes": 150
+  },
+  {
+    "file": "components/home/ribbon-card.tsx",
+    "beforeBytes": 1616,
+    "afterBytes": 1647,
+    "deltaBytes": 31
+  },
+  {
+    "file": "components/message-wall.tsx",
+    "beforeBytes": 22607,
+    "afterBytes": 23082,
+    "deltaBytes": 475
+  },
+  {
+    "file": "components/ui/paper.tsx",
+    "beforeBytes": 1413,
+    "afterBytes": 1682,
+    "deltaBytes": 269
+  },
+  {
+    "file": "hooks/use-public-messages.ts",
+    "beforeBytes": 1070,
+    "afterBytes": 1297,
+    "deltaBytes": 227
+  },
+  {
+    "file": "netlify.toml",
+    "beforeBytes": 3183,
+    "afterBytes": 3288,
+    "deltaBytes": 105
+  },
+  {
+    "file": "netlify/functions/strategies.js",
+    "beforeBytes": 8354,
+    "afterBytes": 5015,
+    "deltaBytes": -3339
+  },
+  {
+    "file": "styles/guild-theme.css",
+    "beforeBytes": 31314,
+    "afterBytes": 31355,
+    "deltaBytes": 41
+  },
+  {
+    "file": "app/guides/page.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 1239,
+    "deltaBytes": 1239
+  },
+  {
+    "file": "app/profile-lab/page.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 406,
+    "deltaBytes": 406
+  },
+  {
+    "file": "components/guides/guide-body.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 966,
+    "deltaBytes": 966
+  },
+  {
+    "file": "components/guides/guide-center.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 9660,
+    "deltaBytes": 9660
+  },
+  {
+    "file": "components/guides/guide-media.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 2295,
+    "deltaBytes": 2295
+  },
+  {
+    "file": "components/guides/guide-reader.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 8141,
+    "deltaBytes": 8141
+  },
+  {
+    "file": "components/guides/guide-submission.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 8375,
+    "deltaBytes": 8375
+  },
+  {
+    "file": "components/profile/avatar-editor.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 4205,
+    "deltaBytes": 4205
+  },
+  {
+    "file": "components/profile/avatar-scope.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 380,
+    "deltaBytes": 380
+  },
+  {
+    "file": "components/profile/lab-community.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 3034,
+    "deltaBytes": 3034
+  },
+  {
+    "file": "components/profile/member-avatar.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 693,
+    "deltaBytes": 693
+  },
+  {
+    "file": "components/profile/profile-lab.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 7889,
+    "deltaBytes": 7889
+  },
+  {
+    "file": "components/profile/public-message-scope.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 229,
+    "deltaBytes": 229
+  },
+  {
+    "file": "lib/avatar-crop.ts",
+    "beforeBytes": 0,
+    "afterBytes": 2134,
+    "deltaBytes": 2134
+  },
+  {
+    "file": "lib/avatar-lab-store.ts",
+    "beforeBytes": 0,
+    "afterBytes": 2857,
+    "deltaBytes": 2857
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-read.js",
+    "beforeBytes": 0,
+    "afterBytes": 4236,
+    "deltaBytes": 4236
+  },
+  {
+    "file": "services/guide-service.ts",
+    "beforeBytes": 0,
+    "afterBytes": 1815,
+    "deltaBytes": 1815
+  },
+  {
+    "file": "styles/guides.css",
+    "beforeBytes": 0,
+    "afterBytes": 7293,
+    "deltaBytes": 7293
+  },
+  {
+    "file": "styles/profile-lab.css",
+    "beforeBytes": 0,
+    "afterBytes": 4845,
+    "deltaBytes": 4845
+  }
+]

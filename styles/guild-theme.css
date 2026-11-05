@@ -166,13 +166,15 @@ button:disabled {
   border-radius: 10px;
   box-shadow: var(--hard-shadow);
 }
-.account-menu button {
+.account-menu button,
+.account-menu a {
   display: block;
   width: 100%;
   padding: 12px;
   text-align: left;
 }
-.account-menu button:hover {
+.account-menu button:hover,
+.account-menu a:hover {
   background: var(--surface-strong);
 }
 .mobile-menu-button {

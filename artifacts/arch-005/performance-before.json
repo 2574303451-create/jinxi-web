@@ -1,0 +1,2260 @@
+[
+  {
+    "stage": "before",
+    "slow": false,
+    "width": 1440,
+    "waterfall": [
+      {
+        "event": "request",
+        "id": "8959D7D1A1955A1D1D6EF5E811619FB0",
+        "time": 21170.918966,
+        "url": "http://127.0.0.1:3020/",
+        "type": "Document"
+      },
+      {
+        "event": "response",
+        "id": "8959D7D1A1955A1D1D6EF5E811619FB0",
+        "time": 21170.922209,
+        "url": "http://127.0.0.1:3020/",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "26012.2",
+        "time": 21170.925074,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.3",
+        "time": 21170.925263,
+        "url": "http://127.0.0.1:3020/14.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.4",
+        "time": 21170.9253,
+        "url": "http://127.0.0.1:3020/13.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.5",
+        "time": 21170.925341,
+        "url": "http://127.0.0.1:3020/43.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.6",
+        "time": 21170.925375,
+        "url": "http://127.0.0.1:3020/44.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.7",
+        "time": 21170.925406,
+        "url": "http://127.0.0.1:3020/45.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.8",
+        "time": 21170.925435,
+        "url": "http://127.0.0.1:3020/46.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.9",
+        "time": 21170.925466,
+        "url": "http://127.0.0.1:3020/_next/static/css/b5c19fd6201c0c26.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "26012.10",
+        "time": 21170.925503,
+        "url": "http://127.0.0.1:3020/_next/static/css/b67cbbfd4f64c03a.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "26012.11",
+        "time": 21170.925532,
+        "url": "http://127.0.0.1:3020/_next/static/css/797eb2f4036175df.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "26012.12",
+        "time": 21170.92557,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.13",
+        "time": 21170.925598,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.14",
+        "time": 21170.925631,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/553-5de6c0e543970ec9.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.15",
+        "time": 21170.925659,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.16",
+        "time": 21170.925701,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/850-63f14b79111951ff.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.17",
+        "time": 21170.925727,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/app/page-976e3c4157adeff2.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.23",
+        "time": 21170.925865,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.46",
+        "time": 21170.928344,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "response",
+        "id": "26012.2",
+        "time": 21170.931683,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.2",
+        "time": 21170.928343,
+        "encodedBytes": 249082
+      },
+      {
+        "event": "response",
+        "id": "26012.9",
+        "time": 21170.932479,
+        "url": "http://127.0.0.1:3020/_next/static/css/b5c19fd6201c0c26.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.10",
+        "time": 21170.93271,
+        "url": "http://127.0.0.1:3020/_next/static/css/b67cbbfd4f64c03a.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.11",
+        "time": 21170.932856,
+        "url": "http://127.0.0.1:3020/_next/static/css/797eb2f4036175df.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.3",
+        "time": 21170.932961,
+        "url": "http://127.0.0.1:3020/14.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.3",
+        "time": 21170.931962,
+        "encodedBytes": 61567
+      },
+      {
+        "event": "response",
+        "id": "26012.4",
+        "time": 21170.933307,
+        "url": "http://127.0.0.1:3020/13.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.4",
+        "time": 21170.932695,
+        "encodedBytes": 83566
+      },
+      {
+        "event": "complete",
+        "id": "26012.11",
+        "time": 21170.931797,
+        "encodedBytes": 10553
+      },
+      {
+        "event": "complete",
+        "id": "26012.10",
+        "time": 21170.931655,
+        "encodedBytes": 45760
+      },
+      {
+        "event": "complete",
+        "id": "26012.9",
+        "time": 21170.932462,
+        "encodedBytes": 68968
+      },
+      {
+        "event": "response",
+        "id": "26012.23",
+        "time": 21170.935813,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.23",
+        "time": 21170.935058,
+        "encodedBytes": 192547
+      },
+      {
+        "event": "response",
+        "id": "26012.5",
+        "time": 21170.936382,
+        "url": "http://127.0.0.1:3020/43.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "8959D7D1A1955A1D1D6EF5E811619FB0",
+        "time": 21170.921588,
+        "encodedBytes": 41228
+      },
+      {
+        "event": "response",
+        "id": "26012.6",
+        "time": 21170.93702,
+        "url": "http://127.0.0.1:3020/44.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.5",
+        "time": 21170.936795,
+        "encodedBytes": 29709
+      },
+      {
+        "event": "response",
+        "id": "26012.7",
+        "time": 21170.937533,
+        "url": "http://127.0.0.1:3020/45.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.8",
+        "time": 21170.937707,
+        "url": "http://127.0.0.1:3020/46.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "26012.66",
+        "time": 21170.939361,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+        "type": "Font"
+      },
+      {
+        "event": "request",
+        "id": "26012.67",
+        "time": 21170.939392,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff",
+        "type": "Font"
+      },
+      {
+        "event": "request",
+        "id": "26012.64",
+        "time": 21170.948946,
+        "url": "http://127.0.0.1:3020/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+        "type": "Font"
+      },
+      {
+        "event": "complete",
+        "id": "26012.6",
+        "time": 21170.93806,
+        "encodedBytes": 47407
+      },
+      {
+        "event": "complete",
+        "id": "26012.7",
+        "time": 21170.938242,
+        "encodedBytes": 37301
+      },
+      {
+        "event": "complete",
+        "id": "26012.8",
+        "time": 21170.938473,
+        "encodedBytes": 34403
+      },
+      {
+        "event": "response",
+        "id": "26012.12",
+        "time": 21170.949963,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.12",
+        "time": 21170.93901,
+        "encodedBytes": 5206
+      },
+      {
+        "event": "response",
+        "id": "26012.15",
+        "time": 21170.95011,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.15",
+        "time": 21170.941712,
+        "encodedBytes": 687
+      },
+      {
+        "event": "response",
+        "id": "26012.14",
+        "time": 21170.950186,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/553-5de6c0e543970ec9.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.14",
+        "time": 21170.941817,
+        "encodedBytes": 124037
+      },
+      {
+        "event": "response",
+        "id": "26012.13",
+        "time": 21170.950263,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.13",
+        "time": 21170.941935,
+        "encodedBytes": 173075
+      },
+      {
+        "event": "response",
+        "id": "26012.17",
+        "time": 21170.95037,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/app/page-976e3c4157adeff2.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.17",
+        "time": 21170.942672,
+        "encodedBytes": 89861
+      },
+      {
+        "event": "response",
+        "id": "26012.16",
+        "time": 21170.950467,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/850-63f14b79111951ff.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.16",
+        "time": 21170.942907,
+        "encodedBytes": 155320
+      },
+      {
+        "event": "response",
+        "id": "26012.64",
+        "time": 21170.985025,
+        "url": "http://127.0.0.1:3020/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.64",
+        "time": 21170.952072,
+        "encodedBytes": 58734
+      },
+      {
+        "event": "request",
+        "id": "26012.68",
+        "time": 21171.101022,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "26012.69",
+        "time": 21171.101943,
+        "url": "http://127.0.0.1:3020/.netlify/functions/messages",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "26012.70",
+        "time": 21171.102273,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "type": "Fetch"
+      },
+      {
+        "event": "response",
+        "id": "26012.68",
+        "time": 21171.105585,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "status": 503,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.69",
+        "time": 21171.105871,
+        "url": "http://127.0.0.1:3020/.netlify/functions/messages",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "26012.71",
+        "time": 21171.107571,
+        "url": "http://127.0.0.1:3020/_next/static/css/99e71b93752a6c6b.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "26012.72",
+        "time": 21171.108066,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.73",
+        "time": 21171.10896,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/990.e1bdd24600bba296.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "26012.74",
+        "time": 21171.109183,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/597.65af0f28f0fadcda.js",
+        "type": "Script"
+      },
+      {
+        "event": "response",
+        "id": "26012.70",
+        "time": 21171.109516,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "status": 503,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "26012.75",
+        "time": 21171.109731,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "type": "Other"
+      },
+      {
+        "event": "complete",
+        "id": "26012.68",
+        "time": 21171.103152,
+        "encodedBytes": 261
+      },
+      {
+        "event": "complete",
+        "id": "26012.69",
+        "time": 21171.103436,
+        "encodedBytes": 3398
+      },
+      {
+        "event": "complete",
+        "id": "26012.70",
+        "time": 21171.10382,
+        "encodedBytes": 261
+      },
+      {
+        "event": "response",
+        "id": "26012.71",
+        "time": 21171.110592,
+        "url": "http://127.0.0.1:3020/_next/static/css/99e71b93752a6c6b.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.71",
+        "time": 21171.110619,
+        "encodedBytes": 7829
+      },
+      {
+        "event": "response",
+        "id": "26012.72",
+        "time": 21171.123187,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.72",
+        "time": 21171.111244,
+        "encodedBytes": 39272
+      },
+      {
+        "event": "response",
+        "id": "26012.73",
+        "time": 21171.123292,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/990.e1bdd24600bba296.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.73",
+        "time": 21171.1117,
+        "encodedBytes": 1598
+      },
+      {
+        "event": "response",
+        "id": "26012.75",
+        "time": 21171.123389,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.75",
+        "time": 21171.112945,
+        "encodedBytes": 249082
+      },
+      {
+        "event": "response",
+        "id": "26012.74",
+        "time": 21171.129647,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/597.65af0f28f0fadcda.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.74",
+        "time": 21171.112039,
+        "encodedBytes": 57398
+      },
+      {
+        "event": "request",
+        "id": "26012.76",
+        "time": 21173.250672,
+        "url": "http://127.0.0.1:3020/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "26012.60",
+        "time": 21173.253514,
+        "url": "http://127.0.0.1:3020/16.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.61",
+        "time": 21173.253582,
+        "url": "http://127.0.0.1:3020/17.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "26012.62",
+        "time": 21173.253629,
+        "url": "http://127.0.0.1:3020/18.png",
+        "type": "Image"
+      },
+      {
+        "event": "response",
+        "id": "26012.76",
+        "time": 21173.255364,
+        "url": "http://127.0.0.1:3020/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.76",
+        "time": 21173.252443,
+        "encodedBytes": 70716
+      },
+      {
+        "event": "response",
+        "id": "26012.61",
+        "time": 21173.256279,
+        "url": "http://127.0.0.1:3020/17.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.61",
+        "time": 21173.255737,
+        "encodedBytes": 59312
+      },
+      {
+        "event": "response",
+        "id": "26012.60",
+        "time": 21173.256493,
+        "url": "http://127.0.0.1:3020/16.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "26012.62",
+        "time": 21173.257824,
+        "url": "http://127.0.0.1:3020/18.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.62",
+        "time": 21173.256503,
+        "encodedBytes": 49625
+      },
+      {
+        "event": "complete",
+        "id": "26012.60",
+        "time": 21173.256326,
+        "encodedBytes": 87106
+      },
+      {
+        "event": "request",
+        "id": "26012.80",
+        "time": 21173.259656,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "type": "Image"
+      },
+      {
+        "event": "response",
+        "id": "26012.80",
+        "time": 21173.264666,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "26012.80",
+        "time": 21173.262351,
+        "encodedBytes": 192547
+      }
+    ],
+    "openedMs": 108,
+    "initial": {
+      "metrics": {
+        "Timestamp": 21173.150143,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 420,
+        "LayoutObjects": 1073,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 1187,
+        "Resources": 29,
+        "ContextLifecycleStateObservers": 10,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.119924,
+        "RecalcStyleDuration": 0.016033,
+        "DevToolsCommandDuration": 0.004128,
+        "ScriptDuration": 0.055623,
+        "V8CompileDuration": 0.000196,
+        "TaskDuration": 0.243656,
+        "TaskOtherDuration": 0.047752,
+        "ThreadTime": 0.272286,
+        "ProcessTime": 0.369101,
+        "JSHeapUsedSize": 3826444,
+        "JSHeapTotalSize": 4456448,
+        "FirstMeaningfulPaint": 21171.215458,
+        "DomContentLoaded": 21170.938736,
+        "NavigationStart": 21170.916566
+      },
+      "vitals": {
+        "lcp": 300,
+        "cls": 0,
+        "events": []
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853805062,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853805062,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853805062,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-85069fbc49bc4ca5.js": {
+          "bytes": 4979,
+          "gzip": 2323,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js": {
+          "bytes": 461,
+          "gzip": 219,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/553-5de6c0e543970ec9.js": {
+          "bytes": 123801,
+          "gzip": 31806,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js": {
+          "bytes": 172830,
+          "gzip": 53741,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-976e3c4157adeff2.js": {
+          "bytes": 89625,
+          "gzip": 27080,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/850-63f14b79111951ff.js": {
+          "bytes": 155075,
+          "gzip": 49767,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/754.ad9ed68df13fe8e8.js": {
+          "bytes": 39045,
+          "gzip": 9700,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/990.e1bdd24600bba296.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/597.65af0f28f0fadcda.js": {
+          "bytes": 57171,
+          "gzip": 13536,
+          "strategyCode": true,
+          "mediaCode": true
+        }
+      },
+      "resources": [
+        {
+          "name": "/logo.png",
+          "initiator": "link",
+          "transferSize": 249161,
+          "duration": 3.2999999970197678
+        },
+        {
+          "name": "/14.png",
+          "initiator": "link",
+          "transferSize": 61673,
+          "duration": 6.699999999254942
+        },
+        {
+          "name": "/13.png",
+          "initiator": "link",
+          "transferSize": 83663,
+          "duration": 7.399999998509884
+        },
+        {
+          "name": "/43.png",
+          "initiator": "link",
+          "transferSize": 29815,
+          "duration": 11.5
+        },
+        {
+          "name": "/44.png",
+          "initiator": "link",
+          "transferSize": 47513,
+          "duration": 12.800000000745058
+        },
+        {
+          "name": "/_next/static/css/b5c19fd6201c0c26.css",
+          "initiator": "link",
+          "transferSize": 69040,
+          "duration": 7.100000001490116
+        },
+        {
+          "name": "/45.png",
+          "initiator": "link",
+          "transferSize": 37407,
+          "duration": 12.900000002235174
+        },
+        {
+          "name": "/46.png",
+          "initiator": "link",
+          "transferSize": 34509,
+          "duration": 13.100000001490116
+        },
+        {
+          "name": "/_next/static/css/797eb2f4036175df.css",
+          "initiator": "link",
+          "transferSize": 10633,
+          "duration": 6.300000000745058
+        },
+        {
+          "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+          "initiator": "link",
+          "transferSize": 45840,
+          "duration": 6.199999999254942
+        },
+        {
+          "name": "/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+          "initiator": "link",
+          "transferSize": 5279,
+          "duration": 13.399999998509884
+        },
+        {
+          "name": "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+          "initiator": "script",
+          "transferSize": 761,
+          "duration": 16.199999999254942
+        },
+        {
+          "name": "/_next/static/chunks/553-5de6c0e543970ec9.js",
+          "initiator": "script",
+          "transferSize": 124101,
+          "duration": 16.199999999254942
+        },
+        {
+          "name": "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+          "initiator": "script",
+          "transferSize": 173130,
+          "duration": 16.399999998509884
+        },
+        {
+          "name": "/_next/static/chunks/850-63f14b79111951ff.js",
+          "initiator": "script",
+          "transferSize": 155375,
+          "duration": 17.199999999254942
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/_next/static/chunks/app/page-976e3c4157adeff2.js",
+          "initiator": "script",
+          "transferSize": 89925,
+          "duration": 16.899999998509884
+        },
+        {
+          "name": "/bg.png",
+          "initiator": "video",
+          "transferSize": 192635,
+          "duration": 9.200000002980232
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "initiator": "css",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "initiator": "css",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "initiator": "css",
+          "transferSize": 58812,
+          "duration": 3.100000001490116
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 1.4000000022351742
+        },
+        {
+          "name": "/.netlify/functions/messages",
+          "initiator": "fetch",
+          "transferSize": 3498,
+          "duration": 1.2999999970197678
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 1.300000000745058
+        },
+        {
+          "name": "/_next/static/css/99e71b93752a6c6b.css",
+          "initiator": "link",
+          "transferSize": 7909,
+          "duration": 2.800000000745058
+        },
+        {
+          "name": "/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+          "initiator": "script",
+          "transferSize": 39345,
+          "duration": 3.199999999254942
+        },
+        {
+          "name": "/_next/static/chunks/990.e1bdd24600bba296.js",
+          "initiator": "script",
+          "transferSize": 1672,
+          "duration": 2.699999999254942
+        },
+        {
+          "name": "/_next/static/chunks/597.65af0f28f0fadcda.js",
+          "initiator": "script",
+          "transferSize": 57471,
+          "duration": 2.800000000745058
+        },
+        {
+          "name": "/logo.png",
+          "initiator": "other",
+          "transferSize": 249161,
+          "duration": 3.300000000745058
+        }
+      ]
+    },
+    "opened": {
+      "metrics": {
+        "Timestamp": 21174.331356,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 525,
+        "LayoutObjects": 1908,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 2099,
+        "Resources": 30,
+        "ContextLifecycleStateObservers": 12,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 12,
+        "RecalcStyleCount": 24,
+        "LayoutDuration": 0.143397,
+        "RecalcStyleDuration": 0.034585,
+        "DevToolsCommandDuration": 0.016311,
+        "ScriptDuration": 0.07256,
+        "V8CompileDuration": 0.000196,
+        "TaskDuration": 0.370875,
+        "TaskOtherDuration": 0.103826,
+        "ThreadTime": 0.396803,
+        "ProcessTime": 0.59704,
+        "JSHeapUsedSize": 5769592,
+        "JSHeapTotalSize": 6623232,
+        "FirstMeaningfulPaint": 21171.215458,
+        "DomContentLoaded": 21170.938736,
+        "NavigationStart": 21170.916566
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853805062,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853805062,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853805062,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+          "at": 1793853807210,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-85069fbc49bc4ca5.js": {
+          "bytes": 4979,
+          "gzip": 2323,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js": {
+          "bytes": 461,
+          "gzip": 219,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/553-5de6c0e543970ec9.js": {
+          "bytes": 123801,
+          "gzip": 31806,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js": {
+          "bytes": 172830,
+          "gzip": 53741,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-976e3c4157adeff2.js": {
+          "bytes": 89625,
+          "gzip": 27080,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/850-63f14b79111951ff.js": {
+          "bytes": 155075,
+          "gzip": 49767,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/754.ad9ed68df13fe8e8.js": {
+          "bytes": 39045,
+          "gzip": 9700,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/990.e1bdd24600bba296.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/597.65af0f28f0fadcda.js": {
+          "bytes": 57171,
+          "gzip": 13536,
+          "strategyCode": true,
+          "mediaCode": true
+        }
+      },
+      "vitals": {
+        "lcp": 300,
+        "cls": 0,
+        "events": [
+          176,
+          176,
+          176
+        ]
+      }
+    },
+    "errors": [],
+    "method": "Same synthetic25-record HTTP fixture, production static export; CDP blocks CDN icon requests equally; native HTTP cache remains enabled. Earlier cache-disabled Playwright-route samples are separately retained. Post-GC heap metrics are renderer estimates. New page navigation replaces document; heap delta is not solely component allocation. One lab sample, not field Web Vitals."
+  },
+  {
+    "stage": "before",
+    "slow": true,
+    "width": 390,
+    "waterfall": [
+      {
+        "event": "request",
+        "id": "01FDA5CD920460E109F5AF23076B65E3",
+        "time": 21174.846775,
+        "url": "http://127.0.0.1:3020/",
+        "type": "Document"
+      },
+      {
+        "event": "response",
+        "id": "01FDA5CD920460E109F5AF23076B65E3",
+        "time": 21175.020627,
+        "url": "http://127.0.0.1:3020/",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "28632.2",
+        "time": 21175.034168,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.3",
+        "time": 21175.035359,
+        "url": "http://127.0.0.1:3020/14.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.4",
+        "time": 21175.035581,
+        "url": "http://127.0.0.1:3020/13.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.5",
+        "time": 21175.035962,
+        "url": "http://127.0.0.1:3020/43.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.6",
+        "time": 21175.036159,
+        "url": "http://127.0.0.1:3020/44.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.7",
+        "time": 21175.036356,
+        "url": "http://127.0.0.1:3020/45.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.8",
+        "time": 21175.036554,
+        "url": "http://127.0.0.1:3020/46.png",
+        "type": "Image"
+      },
+      {
+        "event": "request",
+        "id": "28632.9",
+        "time": 21175.036581,
+        "url": "http://127.0.0.1:3020/_next/static/css/b5c19fd6201c0c26.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "28632.10",
+        "time": 21175.036957,
+        "url": "http://127.0.0.1:3020/_next/static/css/b67cbbfd4f64c03a.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "28632.11",
+        "time": 21175.037158,
+        "url": "http://127.0.0.1:3020/_next/static/css/797eb2f4036175df.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "28632.12",
+        "time": 21175.037359,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.13",
+        "time": 21175.037558,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.14",
+        "time": 21175.037582,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/553-5de6c0e543970ec9.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.15",
+        "time": 21175.037775,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.16",
+        "time": 21175.037977,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/850-63f14b79111951ff.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.17",
+        "time": 21175.038172,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/app/page-976e3c4157adeff2.js",
+        "type": "Script"
+      },
+      {
+        "event": "request",
+        "id": "28632.36",
+        "time": 21175.05459,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "28632.41",
+        "time": 21175.067986,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "type": "Image"
+      },
+      {
+        "event": "response",
+        "id": "28632.2",
+        "time": 21175.205822,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.9",
+        "time": 21175.220807,
+        "url": "http://127.0.0.1:3020/_next/static/css/b5c19fd6201c0c26.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.10",
+        "time": 21175.221405,
+        "url": "http://127.0.0.1:3020/_next/static/css/b67cbbfd4f64c03a.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.11",
+        "time": 21175.237013,
+        "url": "http://127.0.0.1:3020/_next/static/css/797eb2f4036175df.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.3",
+        "time": 21175.237415,
+        "url": "http://127.0.0.1:3020/14.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "01FDA5CD920460E109F5AF23076B65E3",
+        "time": 21175.330045,
+        "encodedBytes": 41228
+      },
+      {
+        "event": "complete",
+        "id": "28632.11",
+        "time": 21175.517039,
+        "encodedBytes": 10553
+      },
+      {
+        "event": "complete",
+        "id": "28632.10",
+        "time": 21176.201095,
+        "encodedBytes": 45760
+      },
+      {
+        "event": "response",
+        "id": "28632.5",
+        "time": 21176.374982,
+        "url": "http://127.0.0.1:3020/43.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.41",
+        "time": 21176.388399,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.4",
+        "time": 21176.388996,
+        "url": "http://127.0.0.1:3020/13.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.3",
+        "time": 21176.543351,
+        "encodedBytes": 61567
+      },
+      {
+        "event": "complete",
+        "id": "28632.9",
+        "time": 21176.698373,
+        "encodedBytes": 68968
+      },
+      {
+        "event": "request",
+        "id": "28632.66",
+        "time": 21176.708891,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+        "type": "Font"
+      },
+      {
+        "event": "request",
+        "id": "28632.67",
+        "time": 21176.709091,
+        "url": "https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff",
+        "type": "Font"
+      },
+      {
+        "event": "request",
+        "id": "28632.64",
+        "time": 21176.761664,
+        "url": "http://127.0.0.1:3020/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+        "type": "Font"
+      },
+      {
+        "event": "response",
+        "id": "28632.6",
+        "time": 21177.492487,
+        "url": "http://127.0.0.1:3020/44.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.5",
+        "time": 21177.165923,
+        "encodedBytes": 29709
+      },
+      {
+        "event": "response",
+        "id": "28632.7",
+        "time": 21177.49439,
+        "url": "http://127.0.0.1:3020/45.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.8",
+        "time": 21177.495784,
+        "url": "http://127.0.0.1:3020/46.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.7",
+        "time": 21177.945036,
+        "encodedBytes": 37301
+      },
+      {
+        "event": "complete",
+        "id": "28632.6",
+        "time": 21178.054392,
+        "encodedBytes": 47407
+      },
+      {
+        "event": "complete",
+        "id": "28632.8",
+        "time": 21178.288276,
+        "encodedBytes": 34403
+      },
+      {
+        "event": "complete",
+        "id": "28632.4",
+        "time": 21178.567222,
+        "encodedBytes": 83566
+      },
+      {
+        "event": "response",
+        "id": "28632.12",
+        "time": 21178.847696,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.12",
+        "time": 21178.844179,
+        "encodedBytes": 5206
+      },
+      {
+        "event": "response",
+        "id": "28632.64",
+        "time": 21179.246525,
+        "url": "http://127.0.0.1:3020/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.64",
+        "time": 21179.220687,
+        "encodedBytes": 58734
+      },
+      {
+        "event": "response",
+        "id": "28632.15",
+        "time": 21179.421759,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.15",
+        "time": 21179.414133,
+        "encodedBytes": 687
+      },
+      {
+        "event": "complete",
+        "id": "28632.41",
+        "time": 21181.170024,
+        "encodedBytes": 192547
+      },
+      {
+        "event": "complete",
+        "id": "28632.2",
+        "time": 21181.200829,
+        "encodedBytes": 249082
+      },
+      {
+        "event": "response",
+        "id": "28632.17",
+        "time": 21181.920099,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/app/page-976e3c4157adeff2.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.17",
+        "time": 21181.918615,
+        "encodedBytes": 89861
+      },
+      {
+        "event": "response",
+        "id": "28632.14",
+        "time": 21182.326155,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/553-5de6c0e543970ec9.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.14",
+        "time": 21182.323669,
+        "encodedBytes": 124037
+      },
+      {
+        "event": "response",
+        "id": "28632.13",
+        "time": 21182.607543,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.13",
+        "time": 21182.604888,
+        "encodedBytes": 173075
+      },
+      {
+        "event": "response",
+        "id": "28632.16",
+        "time": 21182.668426,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/850-63f14b79111951ff.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.16",
+        "time": 21182.620602,
+        "encodedBytes": 155320
+      },
+      {
+        "event": "request",
+        "id": "28632.68",
+        "time": 21182.898174,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "type": "Other"
+      },
+      {
+        "event": "response",
+        "id": "28632.68",
+        "time": 21183.09039,
+        "url": "http://127.0.0.1:3020/logo.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "28632.69",
+        "time": 21183.118343,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "28632.70",
+        "time": 21183.143741,
+        "url": "http://127.0.0.1:3020/.netlify/functions/messages",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "28632.71",
+        "time": 21183.157623,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "type": "Fetch"
+      },
+      {
+        "event": "request",
+        "id": "28632.72",
+        "time": 21183.313171,
+        "url": "http://127.0.0.1:3020/_next/static/css/99e71b93752a6c6b.css",
+        "type": "Stylesheet"
+      },
+      {
+        "event": "request",
+        "id": "28632.73",
+        "time": 21183.322725,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+        "type": "Script"
+      },
+      {
+        "event": "response",
+        "id": "28632.69",
+        "time": 21183.338807,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "status": 503,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "response",
+        "id": "28632.70",
+        "time": 21183.344971,
+        "url": "http://127.0.0.1:3020/.netlify/functions/messages",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "request",
+        "id": "28632.74",
+        "time": 21183.356877,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/990.e1bdd24600bba296.js",
+        "type": "Script"
+      },
+      {
+        "event": "response",
+        "id": "28632.71",
+        "time": 21183.364831,
+        "url": "http://127.0.0.1:3020/.netlify/functions/announcements",
+        "status": 503,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.69",
+        "time": 21183.319138,
+        "encodedBytes": 261
+      },
+      {
+        "event": "complete",
+        "id": "28632.70",
+        "time": 21183.361467,
+        "encodedBytes": 3398
+      },
+      {
+        "event": "request",
+        "id": "28632.75",
+        "time": 21183.383199,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/597.65af0f28f0fadcda.js",
+        "type": "Script"
+      },
+      {
+        "event": "complete",
+        "id": "28632.71",
+        "time": 21183.333181,
+        "encodedBytes": 261
+      },
+      {
+        "event": "response",
+        "id": "28632.72",
+        "time": 21183.710656,
+        "url": "http://127.0.0.1:3020/_next/static/css/99e71b93752a6c6b.css",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.72",
+        "time": 21183.595371,
+        "encodedBytes": 7829
+      },
+      {
+        "event": "response",
+        "id": "28632.74",
+        "time": 21183.901969,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/990.e1bdd24600bba296.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.74",
+        "time": 21183.564422,
+        "encodedBytes": 1598
+      },
+      {
+        "event": "response",
+        "id": "28632.73",
+        "time": 21184.067739,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.73",
+        "time": 21184.065674,
+        "encodedBytes": 39272
+      },
+      {
+        "event": "response",
+        "id": "28632.75",
+        "time": 21184.428262,
+        "url": "http://127.0.0.1:3020/_next/static/chunks/597.65af0f28f0fadcda.js",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.75",
+        "time": 21184.424674,
+        "encodedBytes": 57398
+      },
+      {
+        "event": "complete",
+        "id": "28632.68",
+        "time": 21184.908312,
+        "encodedBytes": 249082
+      },
+      {
+        "event": "request",
+        "id": "28632.76",
+        "time": 21187.431409,
+        "url": "http://127.0.0.1:3020/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+        "type": "Fetch"
+      },
+      {
+        "event": "response",
+        "id": "28632.76",
+        "time": 21187.617106,
+        "url": "http://127.0.0.1:3020/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.76",
+        "time": 21187.960356,
+        "encodedBytes": 70716
+      },
+      {
+        "event": "request",
+        "id": "28632.77",
+        "time": 21187.969464,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "type": "Image"
+      },
+      {
+        "event": "response",
+        "id": "28632.77",
+        "time": 21188.155076,
+        "url": "http://127.0.0.1:3020/bg.png",
+        "status": 200,
+        "fromDiskCache": false,
+        "fromServiceWorker": false
+      },
+      {
+        "event": "complete",
+        "id": "28632.77",
+        "time": 21189.097169,
+        "encodedBytes": 192547
+      }
+    ],
+    "openedMs": 1233,
+    "initial": {
+      "metrics": {
+        "Timestamp": 21187.119878,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 420,
+        "LayoutObjects": 1033,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 1185,
+        "Resources": 29,
+        "ContextLifecycleStateObservers": 10,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 7,
+        "RecalcStyleCount": 9,
+        "LayoutDuration": 0.919818,
+        "RecalcStyleDuration": 0.181815,
+        "DevToolsCommandDuration": 0.03244,
+        "ScriptDuration": 0.812775,
+        "V8CompileDuration": 0.006249,
+        "TaskDuration": 2.922865,
+        "TaskOtherDuration": 0.969768,
+        "ThreadTime": 0.758236,
+        "ProcessTime": 12.602332,
+        "JSHeapUsedSize": 3818556,
+        "JSHeapTotalSize": 4194304,
+        "FirstMeaningfulPaint": 21177.598528,
+        "DomContentLoaded": 21177.504989,
+        "NavigationStart": 21174.845435
+      },
+      "vitals": {
+        "lcp": 2756,
+        "cls": 0,
+        "events": []
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853817135,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853817137,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853817139,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-85069fbc49bc4ca5.js": {
+          "bytes": 4979,
+          "gzip": 2323,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js": {
+          "bytes": 461,
+          "gzip": 219,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-976e3c4157adeff2.js": {
+          "bytes": 89625,
+          "gzip": 27080,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/553-5de6c0e543970ec9.js": {
+          "bytes": 123801,
+          "gzip": 31806,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js": {
+          "bytes": 172830,
+          "gzip": 53741,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/850-63f14b79111951ff.js": {
+          "bytes": 155075,
+          "gzip": 49767,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/990.e1bdd24600bba296.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/754.ad9ed68df13fe8e8.js": {
+          "bytes": 39045,
+          "gzip": 9700,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/597.65af0f28f0fadcda.js": {
+          "bytes": 57171,
+          "gzip": 13536,
+          "strategyCode": true,
+          "mediaCode": true
+        }
+      },
+      "resources": [
+        {
+          "name": "/logo.png",
+          "initiator": "link",
+          "transferSize": 249161,
+          "duration": 6166.400000002235
+        },
+        {
+          "name": "/14.png",
+          "initiator": "link",
+          "transferSize": 61673,
+          "duration": 1507.8999999985099
+        },
+        {
+          "name": "/13.png",
+          "initiator": "link",
+          "transferSize": 83663,
+          "duration": 3531.39999999851
+        },
+        {
+          "name": "/43.png",
+          "initiator": "link",
+          "transferSize": 29815,
+          "duration": 2129.89999999851
+        },
+        {
+          "name": "/44.png",
+          "initiator": "link",
+          "transferSize": 47513,
+          "duration": 3018.2999999970198
+        },
+        {
+          "name": "/45.png",
+          "initiator": "link",
+          "transferSize": 37407,
+          "duration": 2908.699999999255
+        },
+        {
+          "name": "/46.png",
+          "initiator": "link",
+          "transferSize": 34509,
+          "duration": 3251.599999997765
+        },
+        {
+          "name": "/_next/static/css/b5c19fd6201c0c26.css",
+          "initiator": "link",
+          "transferSize": 69040,
+          "duration": 1661.5999999977648
+        },
+        {
+          "name": "/_next/static/css/b67cbbfd4f64c03a.css",
+          "initiator": "link",
+          "transferSize": 45840,
+          "duration": 1164.2000000029802
+        },
+        {
+          "name": "/_next/static/css/797eb2f4036175df.css",
+          "initiator": "link",
+          "transferSize": 10633,
+          "duration": 479.8999999985099
+        },
+        {
+          "name": "/_next/static/chunks/webpack-85069fbc49bc4ca5.js",
+          "initiator": "link",
+          "transferSize": 5279,
+          "duration": 3806.800000000745
+        },
+        {
+          "name": "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js",
+          "initiator": "script",
+          "transferSize": 173130,
+          "duration": 7567.39999999851
+        },
+        {
+          "name": "/_next/static/chunks/553-5de6c0e543970ec9.js",
+          "initiator": "script",
+          "transferSize": 124101,
+          "duration": 7286
+        },
+        {
+          "name": "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js",
+          "initiator": "script",
+          "transferSize": 761,
+          "duration": 4376.10000000149
+        },
+        {
+          "name": "/_next/static/chunks/850-63f14b79111951ff.js",
+          "initiator": "script",
+          "transferSize": 155375,
+          "duration": 7582.5
+        },
+        {
+          "name": "/_next/static/chunks/app/page-976e3c4157adeff2.js",
+          "initiator": "script",
+          "transferSize": 89925,
+          "duration": 6880.300000000745
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+          "initiator": "link",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/bg.png",
+          "initiator": "video",
+          "transferSize": 192635,
+          "duration": 6101.800000000745
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+          "initiator": "css",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+          "initiator": "css",
+          "transferSize": 0,
+          "duration": 0
+        },
+        {
+          "name": "/_next/static/media/028c0d39d2e8f589-s.p.woff2",
+          "initiator": "css",
+          "transferSize": 58812,
+          "duration": 2458.800000000745
+        },
+        {
+          "name": "/logo.png",
+          "initiator": "other",
+          "transferSize": 249161,
+          "duration": 2009.300000000745
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 185.10000000149012
+        },
+        {
+          "name": "/.netlify/functions/messages",
+          "initiator": "fetch",
+          "transferSize": 3498,
+          "duration": 211.69999999925494
+        },
+        {
+          "name": "/.netlify/functions/announcements",
+          "initiator": "fetch",
+          "transferSize": 345,
+          "duration": 170.30000000074506
+        },
+        {
+          "name": "/_next/static/css/99e71b93752a6c6b.css",
+          "initiator": "link",
+          "transferSize": 7909,
+          "duration": 279.79999999701977
+        },
+        {
+          "name": "/_next/static/chunks/754.ad9ed68df13fe8e8.js",
+          "initiator": "script",
+          "transferSize": 39345,
+          "duration": 742.5999999977648
+        },
+        {
+          "name": "/_next/static/chunks/990.e1bdd24600bba296.js",
+          "initiator": "script",
+          "transferSize": 1672,
+          "duration": 204.09999999776483
+        },
+        {
+          "name": "/_next/static/chunks/597.65af0f28f0fadcda.js",
+          "initiator": "script",
+          "transferSize": 57471,
+          "duration": 1039.699999999255
+        }
+      ]
+    },
+    "opened": {
+      "metrics": {
+        "Timestamp": 21189.42767,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 2,
+        "Frames": 1,
+        "JSEventListeners": 525,
+        "LayoutObjects": 1868,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 2097,
+        "Resources": 30,
+        "ContextLifecycleStateObservers": 12,
+        "V8PerContextDatas": 2,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 2,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 27,
+        "LayoutDuration": 0.994351,
+        "RecalcStyleDuration": 0.290078,
+        "DevToolsCommandDuration": 0.167665,
+        "ScriptDuration": 0.912493,
+        "V8CompileDuration": 0.006249,
+        "TaskDuration": 3.732559,
+        "TaskOtherDuration": 1.361723,
+        "ThreadTime": 1.123988,
+        "ProcessTime": 15.102789,
+        "JSHeapUsedSize": 5780712,
+        "JSHeapTotalSize": 6361088,
+        "FirstMeaningfulPaint": 21177.598528,
+        "DomContentLoaded": 21177.504989,
+        "NavigationStart": 21174.845435
+      },
+      "api": [
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853817135,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/messages",
+          "at": 1793853817137,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/announcements",
+          "at": 1793853817139,
+          "method": "GET"
+        },
+        {
+          "url": "/.netlify/functions/strategies?sortBy=created_at&sortOrder=DESC&limit=12&offset=0",
+          "at": 1793853821395,
+          "method": "GET"
+        }
+      ],
+      "scripts": {
+        "/_next/static/chunks/webpack-85069fbc49bc4ca5.js": {
+          "bytes": 4979,
+          "gzip": 2323,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/main-app-939c3d86b3b5f3fe.js": {
+          "bytes": 461,
+          "gzip": 219,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/app/page-976e3c4157adeff2.js": {
+          "bytes": 89625,
+          "gzip": 27080,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/553-5de6c0e543970ec9.js": {
+          "bytes": 123801,
+          "gzip": 31806,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/c07ca1f5-9b0ab82ad8f52175.js": {
+          "bytes": 172830,
+          "gzip": 53741,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/850-63f14b79111951ff.js": {
+          "bytes": 155075,
+          "gzip": 49767,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/990.e1bdd24600bba296.js": {
+          "bytes": 1372,
+          "gzip": 694,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/754.ad9ed68df13fe8e8.js": {
+          "bytes": 39045,
+          "gzip": 9700,
+          "strategyCode": false,
+          "mediaCode": false
+        },
+        "/_next/static/chunks/597.65af0f28f0fadcda.js": {
+          "bytes": 57171,
+          "gzip": 13536,
+          "strategyCode": true,
+          "mediaCode": true
+        }
+      },
+      "vitals": {
+        "lcp": 2756,
+        "cls": 0.08151852307692307,
+        "events": [
+          328,
+          328,
+          328
+        ]
+      }
+    },
+    "errors": [],
+    "method": "Same synthetic25-record HTTP fixture, production static export; CDP blocks CDN icon requests equally; native HTTP cache remains enabled. Earlier cache-disabled Playwright-route samples are separately retained. Post-GC heap metrics are renderer estimates. New page navigation replaces document; heap delta is not solely component allocation. One lab sample, not field Web Vitals."
+  }
+]

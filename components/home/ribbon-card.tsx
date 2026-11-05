@@ -28,7 +28,7 @@ export function RibbonCard({
         onClick={() => onOpen(item.id)}
       >
         <span className="ribbon-card-top">
-          <PublicAvatar name={item.name} />
+          <PublicAvatar name={item.name} subject={`message:${item.id}`} />
           <span>
             <strong>{item.name}</strong>
             <small>{messageDate(item.timestamp)}</small>

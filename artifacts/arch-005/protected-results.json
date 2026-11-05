@@ -1,0 +1,39 @@
+{
+  "results": [
+    {
+      "name": "approved member directory and nested details 1440",
+      "passed": true
+    },
+    {
+      "name": "approved gallery controls and nested focus 1440",
+      "passed": true
+    },
+    {
+      "name": "approved member directory and nested details 768",
+      "passed": true
+    },
+    {
+      "name": "approved gallery controls and nested focus 768",
+      "passed": true
+    },
+    {
+      "name": "approved member directory and nested details 390",
+      "passed": true
+    },
+    {
+      "name": "approved gallery controls and nested focus 390",
+      "passed": true
+    },
+    {
+      "name": "approved member directory and nested details 320",
+      "passed": true
+    },
+    {
+      "name": "approved gallery controls and nested focus 320",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "environment": "Actual production static browser. Member records/assets unchanged. Unrelated APIs fail explicitly. No authenticated or database write tested."
+}

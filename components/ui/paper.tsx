@@ -1,3 +1,7 @@
+"use client";
+
+import { useScopedAvatar } from "../profile/avatar-scope";
+import { MemberAvatar } from "../profile/member-avatar";
 import type { ReactNode } from "react";
 import { AlertCircle, Inbox, LoaderCircle } from "lucide-react";
 
@@ -34,10 +38,14 @@ export function PaperState({
 export function PublicAvatar({
   name,
   color,
+  subject,
 }: {
   name: string;
   color?: string;
+  subject?: string;
 }) {
+  const scoped = useScopedAvatar(subject);
+  if (scoped) return <MemberAvatar name={name} src={scoped} />;
   return (
     <span className="paper-avatar" aria-hidden="true">
       {Array.from(name.trim() || "匿名").slice(-1)}

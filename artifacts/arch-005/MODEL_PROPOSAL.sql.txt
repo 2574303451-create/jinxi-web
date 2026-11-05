@@ -1,0 +1,47 @@
+-- DESIGN ONLY. NOT EXECUTED. Verify actual authorized test schema first.
+-- Do not run historical schema files containing sample INSERT statements.
+-- PostgreSQL version and gen_random_uuid availability must be checked before approval.
+
+-- Phase 1: stable internal/public subject separate from human employee number.
+ALTER TABLE guild_member_profiles ADD COLUMN member_id UUID;
+-- Approved test migration would backfill only profile IDs with gen_random_uuid(),
+-- create a UNIQUE constraint, validate uniqueness, then set NOT NULL and a default.
+-- Keep existing employee_no primary key and account identity data unchanged.
+ALTER TABLE guild_member_profiles ADD COLUMN avatar_key TEXT;
+ALTER TABLE guild_member_profiles ADD COLUMN avatar_version INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE guild_member_profiles ADD COLUMN avatar_updated_at TIMESTAMPTZ;
+ALTER TABLE guild_member_accounts ADD COLUMN auth_version INTEGER NOT NULL DEFAULT 0;
+
+-- Requires the approved UNIQUE(member_id) constraint before foreign keys below.
+CREATE TABLE guild_member_sessions (
+  token_hash BYTEA PRIMARY KEY,
+  member_id UUID NOT NULL REFERENCES guild_member_profiles(member_id),
+  auth_version INTEGER NOT NULL,
+  csrf_hash BYTEA NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL,
+  last_seen_at TIMESTAMPTZ NOT NULL,
+  idle_expires_at TIMESTAMPTZ NOT NULL,
+  absolute_expires_at TIMESTAMPTZ NOT NULL,
+  revoked_at TIMESTAMPTZ,
+  CHECK (octet_length(token_hash) = 32)
+);
+CREATE INDEX ON guild_member_sessions(member_id);
+CREATE INDEX ON guild_member_sessions(absolute_expires_at);
+
+-- Optional content bindings after server requireSession is enforced:
+ALTER TABLE messages ADD COLUMN author_member_id UUID NULL
+  REFERENCES guild_member_profiles(member_id);
+ALTER TABLE strategies ADD COLUMN author_member_id UUID NULL
+  REFERENCES guild_member_profiles(member_id);
+-- Existing name/author fields, original IDs, content, likes and comments remain.
+-- Legacy rows stay NULL; never infer member ownership from a nickname.
+-- New replies/comments may add a server-only authorMemberId in existing JSONB.
+-- A later normalized reply/comment migration needs its own approved plan.
+
+-- Example avatar pointer CAS after a new sanitized object is durable:
+-- UPDATE guild_member_profiles
+-- SET avatar_key=$newKey, avatar_version=avatar_version+1, avatar_updated_at=NOW()
+-- WHERE member_id=$sessionMember AND avatar_version=$expectedVersion
+-- RETURNING avatar_key, avatar_version;
+-- Schedule old-key cleanup ONLY after a successful commit.
+-- Object store writes and SQL are not a shared transaction; handle orphans.

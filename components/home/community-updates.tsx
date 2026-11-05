@@ -10,11 +10,9 @@ import {
 export function CommunityUpdates({
   onAnnouncement,
   onMessages,
-  onStrategy,
 }: {
   onAnnouncement: () => void;
   onMessages: () => void;
-  onStrategy: () => void;
 }) {
   const [items, setItems] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,19 +88,16 @@ export function CommunityUpdates({
           </span>
           <ArrowRight size={20} />
         </button>
-        <button
-          className="guild-panel community-door yellow"
-          onClick={onStrategy}
-        >
+        <a className="guild-panel community-door yellow" href="/guides/">
           <span className="door-symbol" aria-hidden="true">
             ↗
           </span>
           <span>
             <b>分享经验，一起变强</b>
-            <small>打开攻略墙，交流打法与心得。</small>
+            <small>进入攻略中心，交流打法与心得。</small>
           </span>
           <ArrowRight size={20} />
-        </button>
+        </a>
       </div>
     </div>
   );

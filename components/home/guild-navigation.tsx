@@ -13,7 +13,6 @@ export interface GuildNavigationProps {
   onLogout: () => void;
   onJoin: () => void;
   onAnnouncement: () => void;
-  onStrategy: () => void;
 }
 
 export function GuildNavigation(props: GuildNavigationProps) {
@@ -71,13 +70,14 @@ export function GuildNavigation(props: GuildNavigationProps) {
             <a href="#actions" onClick={() => setOpen(false)}>
               签到与任务
             </a>
-            <button onClick={() => act(props.onStrategy)}>攻略交流</button>
+            <a href="/guides/" onClick={() => setOpen(false)}>攻略交流</a>
           </div>
           <div className="nav-account">
             {props.account ? (
               <details>
                 <summary>{props.nickname || props.account}</summary>
                 <div className="account-menu">
+                  <a href="/profile-lab/">我的资料（隔离原型）</a>
                   <button onClick={() => act(props.onPassword)}>
                     修改密码
                   </button>

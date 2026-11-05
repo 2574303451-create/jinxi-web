@@ -132,7 +132,7 @@ export const MessageWall = memo(function MessageWall({
   loggedInNickname?: string;
   initialMessageId?: string | null;
 }) {
-  const { messages, loading, error, reload } = usePublicMessages();
+  const { messages, loading, error, reload, readOnly } = usePublicMessages();
   const [name, setName] = useState(""),
     [content, setContent] = useState("");
   const [category, setCategory] = useState("闲聊"),
@@ -196,6 +196,7 @@ export const MessageWall = memo(function MessageWall({
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (readOnly) { setNotice({error:true,text:"隔离头像原型只读，未发布留言。"}); return; }
     if (!content.trim() || submitting) return;
     setSubmitting(true);
     setNotice(null);
@@ -222,6 +223,7 @@ export const MessageWall = memo(function MessageWall({
   }
   async function sendReply(event: FormEvent, id: string) {
     event.preventDefault();
+    if (readOnly) { setNotice({error:true,text:"隔离头像原型只读，未发布回复。"}); return; }
     if (!reply.trim() || busy) return;
     setBusy(id);
     setNotice(null);
@@ -244,6 +246,7 @@ export const MessageWall = memo(function MessageWall({
     }
   }
   async function react(id: string, type: string) {
+    if (readOnly) { setNotice({error:true,text:"隔离头像原型不提交表情操作。"}); return; }
     if (busy) return;
     setBusy(id);
     setNotice(null);
@@ -257,6 +260,7 @@ export const MessageWall = memo(function MessageWall({
     }
   }
   async function adminAction(password: string) {
+    if (readOnly) throw new Error("隔离头像原型不执行管理操作。");
     if (!pending) throw new Error("请重新选择需要管理的留言。");
     if (!password.trim()) throw new Error("请输入管理密码。");
     if (pending.type === "pin")
@@ -480,7 +484,7 @@ export const MessageWall = memo(function MessageWall({
                     </div>
                   )}
                   <header className="message-card-head">
-                    <PublicAvatar name={message.name} color={message.color} />
+                    <PublicAvatar name={message.name} color={message.color} subject={`message:${message.id}`} />
                     <div>
                       <h4>{message.name}</h4>
                       <time>{messageDate(message.timestamp)}</time>
@@ -610,7 +614,7 @@ export const MessageWall = memo(function MessageWall({
                     <ul className="message-replies" aria-label="留言回复">
                       {message.replies.map((item) => (
                         <li key={item.id}>
-                          <PublicAvatar name={item.name} color={item.color} />
+                          <PublicAvatar name={item.name} color={item.color} subject={`reply:${item.id}`} />
                           <div>
                             <div className="reply-meta">
                               <strong>{item.name}</strong>

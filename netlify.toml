@@ -35,7 +35,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-DNS-Prefetch-Control = "on"
     # 内容安全策略
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://busuanzi.ibruce.info http://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https: http://busuanzi.ibruce.info https://busuanzi.ibruce.info; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://busuanzi.ibruce.info http://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https: http://busuanzi.ibruce.info https://busuanzi.ibruce.info; frame-ancestors 'none'"
     # 严格传输安全
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     # 权限策略
@@ -105,17 +105,9 @@
     X-Robots-Tag = "noindex, nofollow"
     Access-Control-Allow-Origin = "https://jinxi-web.netlify.app"
 
+# Static export: existing files (including /guides/index.html) use Netlify file shadowing.
+# Unknown routes must be genuine 404s instead of rewriting to the homepage.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/_next/static/*"
-  to = "/_next/static/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/_next/image/*"
-  to = "/_next/image/:splat"
-  status = 200
+  to = "/404.html"
+  status = 404

@@ -1,0 +1,6 @@
+{
+  "changedFiles": 203,
+  "findings": [],
+  "passed": true,
+  "scope": "Changed text and forbidden path scan; not a full security or binary trace audit."
+}

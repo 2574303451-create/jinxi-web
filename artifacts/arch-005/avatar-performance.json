@@ -1,0 +1,16 @@
+{
+  "viewport": 390,
+  "cpuSlowdown": 6,
+  "inputBytes": 36306,
+  "cropReadyMs": 95,
+  "saveObservedMs": 175,
+  "blobInfo": {
+    "width": 128,
+    "height": 128,
+    "bytes": 1302,
+    "type": "image/webp"
+  },
+  "status": "已保存到本机隔离测试存储（1302字节，11ms）。未保存到生产账号。",
+  "backendRequests": [],
+  "method": "One local synthetic image, real browser decode/crop/WebP encode/IndexedDB/save and linked actual wall/reply. Slow mobile lab; observed timings include automation. Blob URLs are local and share one encoded object across 32/48/64 uses; no HTTP avatar upload, CDN cache, remote durability, server validation or security tested."
+}

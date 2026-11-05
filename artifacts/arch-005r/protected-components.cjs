@@ -1,0 +1,140 @@
+const {
+  chromium,
+} = require("C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright");
+const fs = require("node:fs"),
+  path = require("node:path"),
+  assert = require("node:assert/strict");
+(async () => {
+  const browser = await chromium.launch({
+    executablePath:
+      "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+    headless: true,
+  });
+  const results = [],
+    errors = [],
+    writes = [];
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 1000 },
+      reducedMotion: "reduce",
+    });
+    await context.route("**/.netlify/functions/**", (route) => {
+      if (route.request().method() !== "GET") {
+        writes.push("blocked");
+        return route.abort();
+      }
+      return route.fulfill({
+        status: 503,
+        json: { error: "UI read-only fixture" },
+      });
+    });
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto("http://127.0.0.1:3025", {
+        waitUntil: "domcontentloaded",
+      });
+      await page.getByRole("button", { name: "查看全部", exact: true }).click();
+      await page.locator(".member-directory-card").first().waitFor();
+      assert.equal(await page.locator(".member-directory-card").count(), 12);
+      await page
+        .getByRole("button", { name: "加载更多成员", exact: false })
+        .click();
+      assert.equal(await page.locator(".member-directory-card").count(), 24);
+      await page.getByRole("button", { name: "萌新", exact: true }).click();
+      assert.equal(
+        await page
+          .getByRole("button", { name: "萌新", exact: true })
+          .getAttribute("aria-pressed"),
+        "true",
+      );
+      const card = page.locator(".member-directory-card").first();
+      await card.focus();
+      await page.keyboard.press("Enter");
+      await page.locator(".member-profile").waitFor();
+      assert.equal(await page.locator("dialog[open]").count(), 2);
+      await page.keyboard.press("Escape");
+      assert(await card.evaluate((el) => el === document.activeElement));
+      await page.keyboard.press("Escape");
+      results.push({
+        name: `approved member directory and nested details ${width}`,
+        passed: true,
+      });
+      await page
+        .getByRole("button", { name: "打开轮播展示", exact: true })
+        .click();
+      await page.locator(".member-carousel").waitFor();
+      await page.getByRole("button", { name: "下一张", exact: true }).click();
+      assert(
+        (await page.locator(".carousel-pagination").innerText()).startsWith(
+          "2",
+        ),
+      );
+      await page.keyboard.press("ArrowLeft");
+      assert(
+        (await page.locator(".carousel-pagination").innerText()).startsWith(
+          "1",
+        ),
+      );
+      const trigger = page.getByRole("button", {
+        name: "查看成员详情",
+        exact: false,
+      });
+      await trigger.focus();
+      await page.keyboard.press("Space");
+      await page.locator(".member-profile").waitFor();
+      assert.equal(await page.locator("dialog[open]").count(), 2);
+      assert(
+        await page
+          .locator("dialog[open]")
+          .evaluateAll((nodes) =>
+            nodes.every((node) => node.scrollWidth <= node.clientWidth + 1),
+          ),
+      );
+      await page.keyboard.press("Escape");
+      assert(await trigger.evaluate((el) => el === document.activeElement));
+      assert.equal(
+        await page.evaluate(() => document.body.style.overflow),
+        "hidden",
+      );
+      await page.keyboard.press("Escape");
+      results.push({
+        name: `approved gallery controls and nested focus ${width}`,
+        passed: true,
+      });
+      console.log("PASS protected member components", width);
+    }
+    assert.deepEqual(errors, []);
+    assert.deepEqual(writes, []);
+    fs.writeFileSync(
+      path.join(__dirname, "protected-results.json"),
+      JSON.stringify(
+        {
+          results,
+          errors,
+          writes,
+          environment:
+            "Actual production static browser. Member records/assets unchanged. Unrelated APIs fail explicitly. No authenticated or database write tested.",
+        },
+        null,
+        2,
+      ),
+    );
+  } catch (error) {
+    fs.writeFileSync(
+      path.join(__dirname, "protected-results.json"),
+      JSON.stringify(
+        { results, errors, writes, error: String(error) },
+        null,
+        2,
+      ),
+    );
+    throw error;
+  } finally {
+    await browser.close();
+  }
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

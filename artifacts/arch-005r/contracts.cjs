@@ -1,0 +1,245 @@
+const {
+    chromium,
+  } = require("C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright"),
+  assert = require("node:assert/strict"),
+  fs = require("node:fs"),
+  path = require("node:path");
+(async () => {
+  const browser = await chromium.launch({
+      executablePath:
+        "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+      headless: true,
+    }),
+    results = [];
+  try {
+    const context = await browser.newContext({
+        viewport: { width: 390, height: 1000 },
+      }),
+      page = await context.newPage();
+    const requests = [],
+      js = [];
+    page.on("request", (r) => requests.push(r.url()));
+    page.on("response", async (r) => {
+      if (r.request().resourceType() === "script")
+        js.push({ url: r.url(), text: await r.text().catch(() => "") });
+    });
+    await page.goto("http://127.0.0.1:3025/", { waitUntil: "networkidle" });
+    await page.getByRole("link", { name: "攻略交流", exact: true }).count();
+    await page.locator(".community-door").last().hover();
+    await page.waitForTimeout(1200);
+    assert(!requests.some((url) => url.includes("/strategies")));
+    assert(
+      !js.some((r) => /提交攻略|投稿攻略|上传到云|avatar-file/.test(r.text)),
+    );
+    results.push({
+      name: "homepage plus guide-link hover causes no guide API/module or upload-editor prefetch",
+      passed: true,
+      scripts: js.map((r) => ({
+        url: r.url,
+        bytes: Buffer.byteLength(r.text),
+      })),
+    });
+    requests.length = 0;
+    js.length = 0;
+    await page.goto("http://127.0.0.1:3025/guides/", {
+      waitUntil: "networkidle",
+    });
+    assert(
+      !js.some((r) => /复制分享链接|保存到隔离测试存储|预览正文/.test(r.text)),
+    );
+    assert(!requests.some((url) => url.endsWith("/bg.png")));
+    results.push({
+      name: "guide list excludes reader, media body, submission and avatar editor",
+      passed: true,
+    });
+    requests.length = 0;
+    await page.goto("http://127.0.0.1:3025/guides/?id=1", {
+      waitUntil: "networkidle",
+    });
+    assert(requests.some((url) => url.includes("/strategies?id=1")));
+    assert(!requests.some((url) => url.includes("summary=1")));
+    await page
+      .getByRole("button", { name: "复制分享链接", exact: true })
+      .waitFor();
+    results.push({
+      name: "direct share URL reads only one ID, no list scan requested by browser",
+      passed: true,
+    });
+    let mode = "loading",
+      release;
+    await context.route(
+      "**/.netlify/functions/strategies?**",
+      async (route) => {
+        if (mode === "loading") await new Promise((r) => (release = r));
+        if (mode === "error")
+          return route.fulfill({
+            status: 503,
+            json: { error: "synthetic failure" },
+          });
+        return route.fulfill({
+          json: { strategies: [], pagination: { total: 0, hasMore: false } },
+        });
+      },
+    );
+    await page.goto("http://127.0.0.1:3025/guides/", {
+      waitUntil: "domcontentloaded",
+    });
+    await page.getByText("正在读取公开攻略…", { exact: true }).waitFor();
+    await page.screenshot({
+      path: path.join(__dirname, "guides-loading-390.png"),
+    });
+    mode = "error";
+    release();
+    await page.getByRole("alert").waitFor();
+    await page.screenshot({
+      path: path.join(__dirname, "guides-failure-390.png"),
+    });
+    mode = "empty";
+    await page.getByRole("button", { name: "重试", exact: true }).click();
+    await page.getByText("这里还没有匹配的攻略", { exact: true }).waitFor();
+    results.push({
+      name: "loading failure retry and empty states reflect real controlled HTTP responses",
+      passed: true,
+    });
+    await page.goto("http://127.0.0.1:3025/");
+    await page.evaluate(() => {
+      localStorage.setItem("jinxi-auth-account", "synthetic-account");
+      localStorage.setItem(
+        "jinxi-auth-profile",
+        JSON.stringify({ account: "synthetic-account", nickname: "合成账号" }),
+      );
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "打开导航", exact: true }).click();
+    await page.locator(".nav-account summary").click();
+    assert.equal(
+      await page
+        .getByRole("link", { name: "我的资料（隔离原型）", exact: true })
+        .getAttribute("href"),
+      "/profile-lab/",
+    );
+    results.push({
+      name: "legacy display account menu links to explicitly synthetic profile, without carrying account to URL",
+      passed: true,
+    });
+    await context.close();
+    const csp = fs
+      .readFileSync("netlify.toml", "utf8")
+      .match(/Content-Security-Policy = "([^"]+)"/)[1];
+    const secure = await browser.newContext({
+        viewport: { width: 390, height: 1000 },
+      }),
+      lab = await secure.newPage();
+    const violations = [];
+    await lab.exposeFunction("cspReport", (value) => violations.push(value));
+    await lab.addInitScript(() =>
+      document.addEventListener("securitypolicyviolation", (e) =>
+        window.cspReport({
+          directive: e.violatedDirective,
+          blocked: e.blockedURI,
+        }),
+      ),
+    );
+    await secure.route("**/profile-lab/", async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({
+        response,
+        headers: { ...response.headers(), "content-security-policy": csp },
+      });
+    });
+    await lab.goto("http://127.0.0.1:3025/profile-lab/", {
+      waitUntil: "networkidle",
+    });
+    await lab
+      .getByRole("button", { name: "进入合成账号 A", exact: true })
+      .click();
+    await lab
+      .getByRole("button", { name: "恢复默认头像", exact: true })
+      .waitFor();
+    const images = await lab.evaluate(async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 160;
+      canvas.height = 160;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffe528";
+      ctx.fillRect(0, 0, 160, 160);
+      return Promise.all(
+        ["image/jpeg", "image/webp"].map(async (type) => ({
+          type,
+          data: [
+            ...new Uint8Array(
+              await (
+                await new Promise((r) => canvas.toBlob(r, type))
+              ).arrayBuffer(),
+            ),
+          ],
+        })),
+      );
+    });
+    for (const image of images) {
+      await lab
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "test." + image.type.split("/")[1],
+          mimeType: image.type,
+          buffer: Buffer.from(image.data),
+        });
+      await lab.locator(".avatar-crop-layout canvas").waitFor();
+      await lab
+        .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+        .click();
+      await lab
+        .getByRole("status")
+        .filter({ hasText: "已保存到本机隔离测试存储" })
+        .waitFor();
+      await lab.locator(".avatar-sizes img").last().waitFor();
+      assert(
+        await lab
+          .locator(".avatar-sizes img")
+          .evaluateAll((imgs) => imgs.every((img) => img.naturalWidth === 128)),
+      );
+    }
+    assert(!violations.some((e) => e.directive.startsWith("img-src")));
+    results.push({
+      name: "JPEG and WebP valid decoding and blob avatars work under configured CSP",
+      passed: true,
+      violations,
+    });
+    await lab.reload({ waitUntil: "networkidle" });
+    assert.equal(
+      await lab
+        .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+        .count(),
+      0,
+    );
+    await lab
+      .getByRole("button", { name: "进入合成账号 A", exact: true })
+      .click();
+    await lab.locator(".avatar-sizes img").first().waitFor();
+    await lab
+      .getByRole("button", { name: "清理全部测试头像", exact: true })
+      .click();
+    results.push({
+      name: "isolated blob persists reload but session does not; clear removes test data",
+      passed: true,
+    });
+    fs.writeFileSync(
+      path.join(__dirname, "contract-results.json"),
+      JSON.stringify(
+        {
+          results,
+          method:
+            "Actual exported pages and browser network inspection. Error routes/avatars use controlled synthetic test responses. CSP checked via response header matching netlify.toml; this is not a deployed Netlify verification.",
+        },
+        null,
+        2,
+      ),
+    );
+    console.log(results.map((r) => r.name).join("\n"));
+  } finally {
+    await browser.close();
+  }
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

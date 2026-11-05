@@ -11,7 +11,7 @@ import {
   validateStrategySubmission,
 } from "../../services/strategy-wall-service";
 import { GuideBody } from "./guide-body";
-import { safeMediaUrl } from "./guide-media";
+import { safeMediaUrl } from "../../lib/guide-media-policy";
 export default function GuideSubmission({
   onClose,
   onSaved,
@@ -174,7 +174,7 @@ export default function GuideSubmission({
             <fieldset className="guide-media-input">
               <legend>附加媒体（选填）</legend>
               <p className="paper-muted">
-                填写已公开的图片或视频链接。本原型不提供云端文件上传。
+                填写已公开的图片或视频链接。本原型不提供云端文件上传。本站和MDN示例来源的视频可内嵌，其他HTTPS视频提供原站打开入口。
               </p>
               <label className="paper-label" htmlFor="media-url">
                 媒体URL

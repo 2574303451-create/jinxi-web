@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import type { Strategy } from "../../types/strategy-wall";
 import { readGuide } from "../../services/guide-service";
 import * as api from "../../services/strategy-wall-service";
@@ -8,7 +8,17 @@ import { PaperState, PublicAvatar } from "../ui/paper";
 import { AdminPasswordDialog } from "../ui/admin-password-dialog";
 import { GuideBody } from "./guide-body";
 import { GuideMedia } from "./guide-media";
-export default function GuideReader({ id }: { id: string }) {
+export default function GuideReader({
+  id,
+  listHref,
+  onReturn,
+  onReady,
+}: {
+  id: string;
+  listHref: string;
+  onReturn: (event: MouseEvent<HTMLAnchorElement>) => void;
+  onReady: () => void;
+}) {
   const [guide, setGuide] = useState<Strategy | null>(null),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(true),
@@ -19,6 +29,7 @@ export default function GuideReader({ id }: { id: string }) {
     [comment, setComment] = useState(""),
     [admin, setAdmin] = useState<"pin" | "delete" | null>(null),
     [userId, setUserId] = useState("");
+  const [loadedId, setLoadedId] = useState<string | null>(null);
   useEffect(() => {
     setUserId(getUserId());
     const controller = new AbortController();
@@ -30,10 +41,16 @@ export default function GuideReader({ id }: { id: string }) {
         if (!controller.signal.aborted) setError(e.message);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+          setLoadedId(id);
+        }
       });
     return () => controller.abort();
   }, [id, revision]);
+  useEffect(() => {
+    if (!loading && loadedId === id) onReady();
+  }, [loading, loadedId, id, onReady]);
   async function action(kind: "like" | "favorite") {
     if (busy || !guide) return;
     setBusy(true);
@@ -54,7 +71,9 @@ export default function GuideReader({ id }: { id: string }) {
   if (error || !guide)
     return (
       <section className="guide-reader">
-        <a href="/guides/">← 返回攻略列表</a>
+        <a href={listHref} onClick={onReturn}>
+          ← 返回攻略列表
+        </a>
         <PaperState
           kind="error"
           title={error || "攻略暂不可用"}
@@ -71,7 +90,7 @@ export default function GuideReader({ id }: { id: string }) {
     );
   return (
     <article className="guide-reader">
-      <a className="paper-text-button" href="/guides/">
+      <a className="paper-text-button" href={listHref} onClick={onReturn}>
         ← 返回攻略列表
       </a>
       <header>
@@ -120,9 +139,7 @@ export default function GuideReader({ id }: { id: string }) {
           className="paper-button"
           onClick={async () => {
             try {
-              await navigator.clipboard.writeText(
-                `${location.origin}/guides/?id=${encodeURIComponent(id)}`,
-              );
+              await navigator.clipboard.writeText(location.href);
               setNotice("攻略链接已复制。");
             } catch {
               setNotice("复制失败，请复制浏览器地址栏中的链接。");
@@ -226,7 +243,7 @@ export default function GuideReader({ id }: { id: string }) {
         onConfirm={async (password) => {
           if (admin === "delete") {
             await api.deleteStrategy(id, password);
-            location.assign("/guides/");
+            location.assign(listHref);
           } else {
             await api.pinStrategy(id, password);
             setGuide(await readGuide(id));

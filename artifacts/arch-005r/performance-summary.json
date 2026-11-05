@@ -1,0 +1,126 @@
+[
+  {
+    "stage": "before",
+    "slow": false,
+    "width": 1440,
+    "samples": 3,
+    "openMs": [
+      162,
+      183,
+      176
+    ],
+    "medianOpenMs": 176,
+    "initialJs": 587107,
+    "initialCss": 132260,
+    "initialJsGzip": 176042,
+    "initialCssGzip": 26245,
+    "guideApi": [
+      "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12"
+    ],
+    "openedJs": 599542,
+    "initialLcp": [
+      288,
+      188,
+      204
+    ],
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "errors": []
+  },
+  {
+    "stage": "after",
+    "slow": false,
+    "width": 1440,
+    "samples": 3,
+    "openMs": [
+      189,
+      160,
+      179
+    ],
+    "medianOpenMs": 179,
+    "initialJs": 586828,
+    "initialCss": 132631,
+    "initialJsGzip": 175997,
+    "initialCssGzip": 26296,
+    "guideApi": [
+      "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12"
+    ],
+    "openedJs": 600833,
+    "initialLcp": [
+      180,
+      208,
+      180
+    ],
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "errors": []
+  },
+  {
+    "stage": "before",
+    "slow": true,
+    "width": 390,
+    "samples": 3,
+    "openMs": [
+      2294,
+      2055,
+      1669
+    ],
+    "medianOpenMs": 2055,
+    "initialJs": 587107,
+    "initialCss": 132260,
+    "initialJsGzip": 176042,
+    "initialCssGzip": 26245,
+    "guideApi": [
+      "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12"
+    ],
+    "openedJs": 599542,
+    "initialLcp": [
+      2876,
+      3488,
+      3340
+    ],
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "errors": []
+  },
+  {
+    "stage": "after",
+    "slow": true,
+    "width": 390,
+    "samples": 3,
+    "openMs": [
+      1584,
+      2280,
+      1869
+    ],
+    "medianOpenMs": 1869,
+    "initialJs": 586828,
+    "initialCss": 132631,
+    "initialJsGzip": 175997,
+    "initialCssGzip": 26296,
+    "guideApi": [
+      "/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12"
+    ],
+    "openedJs": 600833,
+    "initialLcp": [
+      3156,
+      3196,
+      2944
+    ],
+    "initialCls": [
+      0,
+      0,
+      0
+    ],
+    "errors": []
+  }
+]

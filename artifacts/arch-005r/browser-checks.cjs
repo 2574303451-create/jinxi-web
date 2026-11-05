@@ -1,0 +1,405 @@
+const {
+    chromium,
+  } = require("C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright"),
+  assert = require("node:assert/strict"),
+  fs = require("node:fs"),
+  path = require("node:path");
+const base = process.env.PREVIEW_URL || "http://127.0.0.1:3025",
+  out = __dirname,
+  results = [],
+  errors = [],
+  api = [];
+async function check(name, fn) {
+  await fn();
+  results.push({ name, passed: true });
+  console.log("PASS", name);
+}
+(async () => {
+  const browser = await chromium.launch({
+    executablePath:
+      "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+    headless: true,
+  });
+  let page;
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 1000 },
+      reducedMotion: "reduce",
+      locale: "zh-CN",
+    });
+    await context.request.post(base + "/__review/reset");
+    await context.route("https://cdn.jsdelivr.net/**", (r) => r.abort());
+    page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("request", (r) => {
+      if (r.url().includes("/.netlify/"))
+        api.push({ url: r.url(), method: r.method() });
+    });
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto(base + "/guides/", { waitUntil: "networkidle" });
+      await page.locator(".guide-card").first().waitFor();
+      await check("guide list and no overflow " + width, async () => {
+        assert.equal(await page.locator(".guide-card").count(), 12);
+        assert(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth,
+          ),
+        );
+        await page.screenshot({
+          path: path.join(out, `guides-list-${width}.png`),
+        });
+      });
+      await check("filters search sort pagination " + width, async () => {
+        await page
+          .getByRole("button", { name: "PVP对战", exact: true })
+          .click();
+        await page.waitForTimeout(150);
+        assert.equal(
+          await page
+            .getByRole("button", { name: "PVP对战", exact: true })
+            .getAttribute("aria-pressed"),
+          "true",
+        );
+        await page
+          .getByRole("button", { name: "全部攻略", exact: true })
+          .click();
+        await page.getByRole("button", { name: "下一页", exact: true }).click();
+        await page.getByText("第 2 页", { exact: true }).waitFor();
+        await page.getByRole("button", { name: "上一页", exact: true }).click();
+        await page.getByLabel("找一篇需要的攻略").fill("找不到的合成测试");
+        await page.getByRole("button", { name: "搜索", exact: true }).click();
+        await page.getByText("这里还没有匹配的攻略", { exact: true }).waitFor();
+        await page.screenshot({
+          path: path.join(out, `guides-empty-${width}.png`),
+        });
+        await page.getByLabel("找一篇需要的攻略").fill("");
+        await page.getByRole("button", { name: "搜索", exact: true }).click();
+        await page.locator(".guide-card").first().waitFor();
+      });
+      await check("deep link refresh media and back " + width, async () => {
+        await page.locator(".guide-card h2 a").first().click();
+        await page.locator(".guide-reader h1").waitFor();
+        assert(new URL(page.url()).searchParams.has("id"));
+        await page.reload({ waitUntil: "networkidle" });
+        await page.locator(".guide-body").waitFor();
+        await page.screenshot({
+          path: path.join(out, `guides-reader-${width}.png`),
+        });
+        await page.getByRole("button", { name: /预览 现有游戏封面/ }).click();
+        assert.equal(await page.locator("dialog[open]").count(), 1);
+        await page.keyboard.press("Escape");
+        assert.equal(await page.locator("dialog[open]").count(), 0);
+        assert(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth,
+          ),
+        );
+        await page.goBack();
+        await page.locator(".guide-card").first().waitFor();
+      });
+      await check("submission preview focus and close " + width, async () => {
+        await page
+          .getByRole("button", { name: "写一篇攻略 ↗", exact: true })
+          .click();
+        await page
+          .getByRole("dialog", { name: "投稿攻略", exact: true })
+          .waitFor();
+        await page
+          .getByLabel("攻略标题", { exact: true })
+          .fill("【合成测试】草稿");
+        await page
+          .getByLabel("攻略正文", { exact: true })
+          .fill("<img src=x onerror=alert(1)>\n## 安全标题");
+        await page
+          .getByRole("button", { name: "预览正文", exact: true })
+          .click();
+        assert.equal(await page.locator(".guide-body-preview img").count(), 0);
+        await page.screenshot({
+          path: path.join(out, `guides-submission-${width}.png`),
+        });
+        await page.keyboard.press("Escape");
+        assert.equal(await page.locator("dialog[open]").count(), 0);
+      });
+    }
+    await check("comment and like use isolated memory adapter", async () => {
+      await page.goto(base + "/guides/?id=1");
+      await page.locator(".guide-reader h1").waitFor();
+      await page.getByLabel("你的署名", { exact: true }).fill("合成游客评论者");
+      await page
+        .getByLabel("评论内容", { exact: true })
+        .fill("【合成测试】新评论");
+      await page.getByRole("button", { name: "发布评论", exact: true }).click();
+      await page
+        .locator(".guide-comments li")
+        .getByText("【合成测试】新评论", { exact: true })
+        .waitFor();
+      await page.getByRole("button", { name: /^点赞 / }).click();
+      await page.getByRole("button", { name: /^已点赞 / }).waitFor();
+    });
+    for (const id of ["99999", "invalid"])
+      await check("missing or invalid ID " + id, async () => {
+        await page.goto(base + "/guides/?id=" + id);
+        await page.getByRole("alert").waitFor();
+        assert.equal(await page.locator(".guide-reader h1").count(), 0);
+      });
+    await check("unknown path true 404", async () => {
+      const response = await page.goto(base + "/guides/no-such-page/");
+      assert.equal(response.status(), 404);
+    });
+    await page.goto(base + "/profile-lab/", { waitUntil: "networkidle" });
+    const startRequests = api.length;
+    await check("guest has no save control", async () => {
+      assert.equal(
+        await page
+          .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+          .count(),
+        0,
+      );
+    });
+    await page
+      .getByRole("button", { name: "进入合成账号 A", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "恢复默认头像", exact: true })
+      .waitFor();
+    await page
+      .getByRole("button", { name: "清理全部测试头像", exact: true })
+      .click();
+    const png = await page.evaluate(async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 900;
+      canvas.height = 600;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffe528";
+      ctx.fillRect(0, 0, 900, 600);
+      ctx.fillStyle = "#2360f5";
+      ctx.fillRect(300, 0, 600, 600);
+      ctx.font = "bold 220px sans-serif";
+      ctx.fillStyle = "#101828";
+      ctx.fillText("今", 360, 380);
+      const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+      return [...new Uint8Array(await blob.arrayBuffer())];
+    });
+    await check("upload crop 128px WebP and save", async () => {
+      await page
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "synthetic-avatar.png",
+          mimeType: "image/png",
+          buffer: Buffer.from(png),
+        });
+      await page.locator(".avatar-crop-layout canvas").waitFor();
+      await page.locator(".avatar-crop-layout summary").click();
+      await page.getByLabel("水平位置", { exact: true }).fill("25");
+      await page
+        .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+        .click();
+      await page
+        .getByRole("status")
+        .filter({ hasText: "已保存到本机隔离测试存储" })
+        .waitFor();
+      assert.equal(await page.locator(".avatar-sizes img").count(), 3);
+      assert(
+        await page
+          .locator(".avatar-sizes img")
+          .evaluateAll((imgs) => imgs.every((img) => img.naturalWidth === 128)),
+      );
+      await page.screenshot({ path: path.join(out, "avatar-saved-320.png") });
+    });
+    const saved = await page
+      .locator(".avatar-sizes img")
+      .first()
+      .getAttribute("src");
+    await check(
+      "actual ribbon wall reply and same-name guest separation",
+      async () => {
+        await page
+          .locator('.message-ribbon [data-public-message="avatar-lab-0"]')
+          .waitFor();
+        assert.equal(
+          await page
+            .locator('[data-public-message="avatar-lab-0"] img')
+            .count(),
+          1,
+        );
+        assert.equal(
+          await page
+            .locator('[data-public-message="avatar-lab-1"] img')
+            .count(),
+          0,
+        );
+        await page
+          .getByRole("button", { name: "检查实际留言墙与回复区", exact: true })
+          .click();
+        await page.locator('[data-message-id="avatar-lab-0"]').waitFor();
+        assert.equal(
+          await page
+            .locator('[data-message-id="avatar-lab-0"] .message-card-head img')
+            .count(),
+          1,
+        );
+        assert.equal(
+          await page
+            .locator('[data-message-id="avatar-lab-1"] .message-card-head img')
+            .count(),
+          0,
+        );
+        await page.screenshot({
+          path: path.join(out, "avatar-message-wall-320.png"),
+        });
+        await page.keyboard.press("Escape");
+      },
+    );
+    await check("failed save retains old image", async () => {
+      await page.getByLabel("模拟存储失败（旧头像保留）").check();
+      await page
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "synthetic-avatar.png",
+          mimeType: "image/png",
+          buffer: Buffer.from(png),
+        });
+      await page
+        .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+        .click();
+      await page
+        .getByRole("alert")
+        .filter({ hasText: "旧头像仍然保留" })
+        .waitFor();
+      assert.equal(
+        await page.locator(".avatar-sizes img").first().getAttribute("src"),
+        saved,
+      );
+      await page.getByLabel("模拟存储失败（旧头像保留）").uncheck();
+    });
+    await check("bad formats and oversized images rejected", async () => {
+      await page
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "bad.svg",
+          mimeType: "image/svg+xml",
+          buffer: Buffer.from("<svg/>"),
+        });
+      await page.getByRole("alert").filter({ hasText: "仅支持JPEG" }).waitFor();
+      await page
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "large.png",
+          mimeType: "image/png",
+          buffer: Buffer.alloc(2 * 1024 * 1024 + 1),
+        });
+      await page
+        .getByRole("alert")
+        .filter({ hasText: "不能超过2MB" })
+        .waitFor();
+      await page
+        .locator("#avatar-file")
+        .setInputFiles({
+          name: "fake.png",
+          mimeType: "image/png",
+          buffer: Buffer.from("not an image"),
+        });
+      await page
+        .getByRole("alert")
+        .filter({ hasText: "内容与文件格式不匹配" })
+        .waitFor();
+      assert.equal(
+        await page.locator(".avatar-sizes img").first().getAttribute("src"),
+        saved,
+      );
+      await page.screenshot({ path: path.join(out, "avatar-invalid-320.png") });
+    });
+    await check("broken image uses text fallback", async () => {
+      await page.getByLabel("模拟图片加载失败").check();
+      await page.waitForFunction(
+        () => document.querySelectorAll(".avatar-sizes img").length === 0,
+      );
+      await page.screenshot({
+        path: path.join(out, "avatar-fallback-320.png"),
+      });
+      await page.getByLabel("模拟图片加载失败").uncheck();
+    });
+    await check("isolated accounts and expired session", async () => {
+      await page
+        .getByRole("button", { name: "进入合成账号 B", exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "恢复默认头像", exact: true })
+        .waitFor();
+      assert.equal(await page.locator(".avatar-sizes img").count(), 0);
+      await page
+        .getByRole("button", { name: "进入合成账号 A", exact: true })
+        .click();
+      await page.locator(".avatar-sizes img").first().waitFor();
+      await page
+        .getByRole("button", { name: "模拟会话失效", exact: true })
+        .click();
+      await page
+        .getByText("会话已失效，请重新进入合成账号。", { exact: true })
+        .waitFor();
+      assert.equal(
+        await page
+          .getByRole("button", { name: "保存到隔离测试存储", exact: true })
+          .count(),
+        0,
+      );
+      await page
+        .getByRole("button", { name: "进入合成账号 A", exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "恢复默认头像", exact: true })
+        .click();
+      await page
+        .getByRole("status")
+        .filter({ hasText: "已恢复本机测试账号" })
+        .waitFor();
+      assert.equal(await page.locator(".avatar-sizes img").count(), 0);
+    });
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.screenshot({
+        path: path.join(out, `avatar-profile-${width}.png`),
+      });
+      assert(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
+    }
+    await check("avatar prototype makes no backend request", async () => {
+      assert.equal(api.length, startRequests);
+      assert.deepEqual(errors, []);
+    });
+    await page
+      .getByRole("button", { name: "清理全部测试头像", exact: true })
+      .click();
+    fs.writeFileSync(
+      path.join(out, "browser-results.json"),
+      JSON.stringify(
+        {
+          base,
+          results,
+          errors,
+          api,
+          method:
+            "Production static export, synthetic local HTTP strategies/messages and isolated browser IndexedDB. Explicit strategy comment/like test writes only local server memory. No production API or database invoked. Lab session checks are not real server authentication.",
+        },
+        null,
+        2,
+      ),
+    );
+  } catch (e) {
+    if (page) await page.screenshot({ path: path.join(out, "failure.png") });
+    fs.writeFileSync(
+      path.join(out, "browser-results.json"),
+      JSON.stringify({ results, errors, error: String(e) }, null, 2),
+    );
+    throw e;
+  } finally {
+    await browser.close();
+  }
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

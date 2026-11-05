@@ -1,7 +1,7 @@
 "use client";
 
 import { useScopedAvatar } from "../profile/avatar-scope";
-import { MemberAvatar } from "../profile/member-avatar";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { AlertCircle, Inbox, LoaderCircle } from "lucide-react";
 
@@ -45,10 +45,21 @@ export function PublicAvatar({
   subject?: string;
 }) {
   const scoped = useScopedAvatar(subject);
-  if (scoped) return <MemberAvatar name={name} src={scoped} />;
+  const [failed, setFailed] = useState<string | null>(null);
   return (
     <span className="paper-avatar" aria-hidden="true">
-      {Array.from(name.trim() || "匿名").slice(-1)}
+      {scoped && failed !== scoped ? (
+        <span className="paper-avatar-image">
+          <img
+            src={scoped}
+            alt=""
+            decoding="async"
+            onError={() => setFailed(scoped)}
+          />
+        </span>
+      ) : (
+        Array.from(name.trim() || "匿名").slice(-1)
+      )}
       {color && /^#[\da-f]{6}$/i.test(color) && (
         <i style={{ backgroundColor: color }} />
       )}

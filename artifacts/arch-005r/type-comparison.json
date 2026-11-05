@@ -1,0 +1,9 @@
+{
+  "baseline": "80737413d3bb981b3a3287c603893eb6c09decf2",
+  "before": 28,
+  "after": 28,
+  "added": [],
+  "resolved": [],
+  "method": "Compare file + TS code + complete diagnostic text; ignore line/column shifts and canonicalize only the equivalent member/founder literal-union display order. Raw comparison retained separately.",
+  "passed": true
+}

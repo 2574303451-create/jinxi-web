@@ -1,0 +1,301 @@
+{
+  "base": "http://127.0.0.1:3025",
+  "results": [
+    {
+      "name": "guide list and no overflow 1440",
+      "passed": true
+    },
+    {
+      "name": "filters search sort pagination 1440",
+      "passed": true
+    },
+    {
+      "name": "deep link refresh media and back 1440",
+      "passed": true
+    },
+    {
+      "name": "submission preview focus and close 1440",
+      "passed": true
+    },
+    {
+      "name": "guide list and no overflow 768",
+      "passed": true
+    },
+    {
+      "name": "filters search sort pagination 768",
+      "passed": true
+    },
+    {
+      "name": "deep link refresh media and back 768",
+      "passed": true
+    },
+    {
+      "name": "submission preview focus and close 768",
+      "passed": true
+    },
+    {
+      "name": "guide list and no overflow 390",
+      "passed": true
+    },
+    {
+      "name": "filters search sort pagination 390",
+      "passed": true
+    },
+    {
+      "name": "deep link refresh media and back 390",
+      "passed": true
+    },
+    {
+      "name": "submission preview focus and close 390",
+      "passed": true
+    },
+    {
+      "name": "guide list and no overflow 320",
+      "passed": true
+    },
+    {
+      "name": "filters search sort pagination 320",
+      "passed": true
+    },
+    {
+      "name": "deep link refresh media and back 320",
+      "passed": true
+    },
+    {
+      "name": "submission preview focus and close 320",
+      "passed": true
+    },
+    {
+      "name": "comment and like use isolated memory adapter",
+      "passed": true
+    },
+    {
+      "name": "missing or invalid ID 99999",
+      "passed": true
+    },
+    {
+      "name": "missing or invalid ID invalid",
+      "passed": true
+    },
+    {
+      "name": "unknown path true 404",
+      "passed": true
+    },
+    {
+      "name": "guest has no save control",
+      "passed": true
+    },
+    {
+      "name": "upload crop 128px WebP and save",
+      "passed": true
+    },
+    {
+      "name": "actual ribbon wall reply and same-name guest separation",
+      "passed": true
+    },
+    {
+      "name": "failed save retains old image",
+      "passed": true
+    },
+    {
+      "name": "bad formats and oversized images rejected",
+      "passed": true
+    },
+    {
+      "name": "broken image uses text fallback",
+      "passed": true
+    },
+    {
+      "name": "isolated accounts and expired session",
+      "passed": true
+    },
+    {
+      "name": "avatar prototype makes no backend request",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "api": [
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&category=PVP&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=12&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&search=%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E5%90%88%E6%88%90%E6%B5%8B%E8%AF%95&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&category=PVP&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=12&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&search=%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E5%90%88%E6%88%90%E6%B5%8B%E8%AF%95&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&category=PVP&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=12&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&search=%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E5%90%88%E6%88%90%E6%B5%8B%E8%AF%95&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&category=PVP&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=12&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&search=%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E5%90%88%E6%88%90%E6%B5%8B%E8%AF%95&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?summary=1&status=published&sortBy=created_at&sortOrder=DESC&offset=0&limit=12",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategy-actions",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategy-actions",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:3025/.netlify/functions/strategies?id=1",
+      "method": "GET"
+    }
+  ],
+  "method": "Production static export, synthetic local HTTP strategies/messages and isolated browser IndexedDB. Explicit strategy comment/like test writes only local server memory. No production API or database invoked. Lab session checks are not real server authentication."
+}

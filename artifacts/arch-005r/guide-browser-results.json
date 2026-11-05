@@ -1,0 +1,30 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "name": "full URL state, refresh, detail, back/forward, pagination scroll, one API per transition, safe Markdown subset",
+      "passed": true
+    },
+    {
+      "width": 768,
+      "name": "full URL state, refresh, detail, back/forward, pagination scroll, one API per transition, safe Markdown subset",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "name": "full URL state, refresh, detail, back/forward, pagination scroll, one API per transition, safe Markdown subset",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "name": "full URL state, refresh, detail, back/forward, pagination scroll, one API per transition, safe Markdown subset",
+      "passed": true
+    },
+    {
+      "name": "submission preview stays safe, one close control, no fake cloud file upload",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "scope": "Actual exported pages. Synthetic HTTP list/detail responses deliberately intercepted for deterministic 36-record pagination/Markdown tests, not production API or database writes. Request counts and browser history observed."
+}

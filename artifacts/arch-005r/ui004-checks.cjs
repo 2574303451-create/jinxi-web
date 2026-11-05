@@ -1,0 +1,644 @@
+const { chromium } = require(
+  process.env.PLAYWRIGHT_MODULE ||
+    "C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright",
+);
+const fs = require("node:fs"),
+  path = require("node:path"),
+  assert = require("node:assert/strict");
+const base = process.env.PREVIEW_URL || "http://127.0.0.1:3025";
+const out = path.join(__dirname, "protected");
+fs.mkdirSync(out, { recursive: true });
+const fixture = JSON.parse(
+  fs.readFileSync(
+    path.join(__dirname, "../ui-004-a/public-fixture.json"),
+    "utf8",
+  ),
+);
+const archive = require("../../config/guild-terminal.config.json");
+const results = [],
+  measurements = [],
+  errors = [],
+  writes = [];
+let debugPage;
+async function check(name, fn) {
+  await fn();
+  results.push({ name, passed: true });
+  console.log("PASS", name);
+}
+async function shot(page, name) {
+  await page.screenshot({ path: path.join(out, name + ".png") });
+}
+async function x(row) {
+  return row
+    .locator(".message-ribbon-track")
+    .evaluate((el) => ({
+      x: new DOMMatrixReadOnly(getComputedStyle(el).transform).m41,
+      t: performance.now(),
+    }));
+}
+async function stopped(row) {
+  const a = await x(row);
+  await row.page().waitForTimeout(400);
+  return Math.abs((await x(row)).x - a.x) < 0.8;
+}
+async function normalize(page) {
+  await page.mouse.move(1, 1);
+  await page.locator(".message-showcase").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(200);
+}
+(async () => {
+  const browser = await chromium.launch({
+    executablePath:
+      "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+    headless: true,
+  });
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 1000 },
+      locale: "zh-CN",
+      timezoneId: "Asia/Shanghai",
+      reducedMotion: "no-preference",
+    });
+    await context.addInitScript(() => {
+      const Native = window.IntersectionObserver;
+      window.__activityEvidence = [];
+      window.IntersectionObserver = class extends Native {
+        constructor(callback, options) {
+          super((entries, observer) => {
+            const batch = entries
+              .filter((e) => e.target.matches("[data-guild-time]"))
+              .map((e) => ({
+                time: e.time,
+                intersecting: e.isIntersecting,
+                ratio: e.intersectionRatio,
+              }));
+            if (batch.length) window.__activityEvidence.push(batch);
+            callback(entries, observer);
+          }, options);
+        }
+      };
+    });
+    let mode = "data",
+      records = structuredClone(fixture),
+      release = [];
+    await context.route("**/.netlify/functions/**", async (route) => {
+      if (route.request().method() !== "GET") {
+        writes.push("blocked " + route.request().url());
+        return route.abort();
+      }
+      if (!route.request().url().includes("/messages"))
+        return route.fulfill({
+          status: 503,
+          json: { error: "UI fixture unavailable" },
+        });
+      if (mode === "loading")
+        await new Promise((resolve) => release.push(resolve));
+      return route
+        .fulfill({
+          status: mode === "error" ? 503 : 200,
+          json:
+            mode === "error"
+              ? { error: "UI fixture unavailable" }
+              : mode === "empty"
+                ? []
+                : records,
+        })
+        .catch(() => {});
+    });
+    const page = await context.newPage();
+    debugPage = page;
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(base, { waitUntil: "domcontentloaded" });
+    await page.locator(".message-ribbon-card").first().waitFor();
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(() => scrollTo(0, 0));
+      await shot(page, `home-${width}`);
+      await normalize(page);
+      const rows = page.locator(".message-ribbon");
+      await check(
+        `two public rows, unique originals, hidden copies ${width}`,
+        async () => {
+          assert.equal(await rows.count(), 2);
+          const originals = await page
+            .locator(".message-ribbon [data-public-message]")
+            .evaluateAll((nodes) =>
+              nodes.map((node) => node.dataset.publicMessage),
+            );
+          assert.equal(originals.length, 12);
+          assert.equal(new Set(originals).size, 12);
+          assert(
+            await page
+              .locator('.message-ribbon-group[aria-hidden="true"] button')
+              .evaluateAll((nodes) =>
+                nodes.every((node) => node.tabIndex === -1),
+              ),
+          );
+          assert.equal(
+            await page
+              .locator('.message-ribbon-group[aria-hidden="true"]')
+              .count(),
+            2,
+          );
+          assert(
+            await page.evaluate(
+              () => document.documentElement.scrollWidth <= innerWidth,
+            ),
+          );
+          assert(
+            await page
+              .locator(".ribbon-excerpt")
+              .first()
+              .evaluate(
+                (el) =>
+                  el.getBoundingClientRect().height >=
+                  parseFloat(getComputedStyle(el).lineHeight) * 2 - 1,
+              ),
+          );
+        },
+      );
+      await check(`measured left/right speed ${width}`, async () => {
+        for (let i = 0; i < 2; i++) {
+          const row = rows.nth(i);
+          await row.scrollIntoViewIfNeeded();
+          await page.mouse.move(1, 1);
+          await page.waitForFunction(
+            (index) =>
+              [...document.querySelectorAll(".message-ribbon")][index]?.dataset
+                .running === "true",
+            i,
+          );
+          const a = await x(row);
+          await page.waitForTimeout(750);
+          const b = await x(row);
+          const speed = (b.x - a.x) / ((b.t - a.t) / 1000);
+          measurements.push({
+            width,
+            row: i,
+            direction: i === 0 ? "left" : "right",
+            speed,
+          });
+          assert(
+            i === 0 ? speed < -28 && speed > -36 : speed > 28 && speed < 36,
+            JSON.stringify({ width, i, speed }),
+          );
+        }
+      });
+      await check(
+        `seam preserves visible content and position ${width}`,
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const row = rows.nth(index);
+            await row.scrollIntoViewIfNeeded();
+            await page.mouse.move(1, 1);
+            const seam = await row.evaluate((el) => {
+              const rail = el.querySelector(".message-ribbon-track"),
+                animation = rail.getAnimations()[0];
+              if (!animation) throw new Error("No active animation");
+              const duration = animation.effect.getComputedTiming().duration;
+              animation.pause();
+              const sample = (time) => {
+                animation.currentTime = time;
+                const port = el.getBoundingClientRect();
+                return [...el.querySelectorAll(".message-ribbon-card")]
+                  .map((card) => ({
+                    id: card.dataset.ribbonId,
+                    x: card.getBoundingClientRect().left - port.left,
+                    right: card.getBoundingClientRect().right - port.left,
+                  }))
+                  .filter((card) => card.right > 2 && card.x < port.width - 2);
+              };
+              const a = sample(duration - 16),
+                b = sample(duration + 16);
+              animation.play();
+              return { duration, a, b };
+            });
+            assert.deepEqual(
+              seam.a.map((card) => card.id),
+              seam.b.map((card) => card.id),
+            );
+            assert(
+              seam.a.every((card, i) => Math.abs(card.x - seam.b[i].x) < 2),
+            );
+            measurements.push({ width, row: index, seam });
+          }
+        },
+      );
+      await check(`hover focus and explicit pause ${width}`, async () => {
+        const row = rows.first();
+        await row.scrollIntoViewIfNeeded();
+        await row.hover();
+        await page.waitForTimeout(150);
+        assert(await stopped(row));
+        await shot(page, `ribbon-hover-${width}`);
+        await page.mouse.move(1, 1);
+        await row.locator("[data-public-message]").first().focus();
+        await page.waitForTimeout(150);
+        assert(await stopped(row));
+        const box = await row
+            .locator("[data-public-message]")
+            .first()
+            .boundingBox(),
+          port = await row.boundingBox();
+        assert(
+          box.x >= port.x - 1 && box.x + box.width <= port.x + port.width + 1,
+        );
+        await shot(page, `ribbon-focus-${width}`);
+        await page
+          .getByRole("button", { name: "暂停滚动", exact: true })
+          .click();
+        await page.mouse.move(1, 1);
+        assert(await stopped(row));
+        await shot(page, `ribbon-paused-${width}`);
+        await page
+          .getByRole("button", { name: "恢复滚动", exact: true })
+          .click();
+        await page.mouse.move(1, 1);
+      });
+      await check(
+        `native touch browse and keyboard browse ${width}`,
+        async () => {
+          const row = rows.first();
+          await row.scrollIntoViewIfNeeded();
+          const box = await row.boundingBox(),
+            session = await context.newCDPSession(page);
+          const y = Math.min(900, Math.max(150, box.y + 80));
+          await session.send("Input.dispatchTouchEvent", {
+            type: "touchStart",
+            touchPoints: [{ x: box.x + box.width * 0.8, y }],
+          });
+          await session.send("Input.dispatchTouchEvent", {
+            type: "touchMove",
+            touchPoints: [{ x: box.x + box.width * 0.25, y }],
+          });
+          await session.send("Input.dispatchTouchEvent", {
+            type: "touchEnd",
+            touchPoints: [],
+          });
+          await session.detach();
+          assert.equal(await row.getAttribute("data-running"), "false");
+          await row.focus();
+          const before = await row.evaluate((el) => el.scrollLeft);
+          await page.keyboard.press("ArrowRight");
+          await page.waitForTimeout(100);
+          assert((await row.evaluate((el) => el.scrollLeft)) > before);
+          await page
+            .getByRole("button", { name: "恢复滚动", exact: true })
+            .click();
+          await page.mouse.move(1, 1);
+        },
+      );
+      await check(
+        `click locates actual current public ID ${width}`,
+        async () => {
+          const button = rows.first().locator("[data-public-message]").nth(2);
+          const id = await button.getAttribute("data-public-message");
+          await button.focus();
+          await page.keyboard.press("Enter");
+          await page.waitForFunction(
+            (id) =>
+              document.activeElement?.getAttribute("data-message-id") === id,
+            id,
+          );
+          await shot(page, `message-location-${width}`);
+          await page.keyboard.press("Escape");
+          assert(await button.evaluate((el) => el === document.activeElement));
+        },
+      );
+      await check(`offscreen ribbon animations stop ${width}`, async () => {
+        await page.evaluate(() => scrollTo(0, 0));
+        await page.waitForTimeout(250);
+        assert(
+          await rows.evaluateAll((nodes) =>
+            nodes.every((el) => el.dataset.running === "false"),
+          ),
+        );
+        assert.equal(
+          await page
+            .locator(".message-ribbon-track")
+            .evaluateAll(
+              (nodes) =>
+                nodes
+                  .flatMap((el) => el.getAnimations())
+                  .filter((a) => a.playState === "running").length,
+            ),
+          0,
+        );
+      });
+      await page.locator("[data-guild-time]").scrollIntoViewIfNeeded();
+      await page.waitForTimeout(250);
+      const time = page.locator("[data-guild-time]");
+      await time.screenshot({
+        path: path.join(out, `time-collapsed-${width}.png`),
+      });
+      await check(
+        `collapsed archive controls not mounted ${width}`,
+        async () => {
+          assert.equal(await time.getByRole("textbox").count(), 0);
+          assert.equal(
+            await time
+              .getByRole("button", { name: "查询", exact: true })
+              .count(),
+            0,
+          );
+          assert.equal(
+            await time.locator('[data-time-clock="compact"]').count(),
+            1,
+          );
+        },
+      );
+      await page
+        .getByRole("button", { name: "展开同行时光", exact: true })
+        .click();
+      await time.screenshot({
+        path: path.join(out, `time-empty-${width}.png`),
+      });
+      const input = page.getByLabel("查找你的同行记录", { exact: true }),
+        query = page.getByRole("button", { name: "查询", exact: true });
+      await check(
+        `archive ID/nickname/history/badges unchanged ${width}`,
+        async () => {
+          await input.fill("0");
+          await input.press("Enter");
+          await time.locator('[data-profile-mode="member"]').waitFor();
+          assert.equal(
+            await time.locator("[data-profile-date]").innerText(),
+            archive.members["0"].joinDate,
+          );
+          assert(
+            await time
+              .getByText(archive.members["0"].name, { exact: true })
+              .isVisible(),
+          );
+          for (const badge of archive.members["0"].badges)
+            assert(await time.getByText(badge, { exact: true }).isVisible());
+          for (const event of archive.milestones)
+            assert(
+              await time.getByText(event.event, { exact: true }).isVisible(),
+            );
+          await time.screenshot({
+            path: path.join(out, `time-record-${width}.png`),
+          });
+          await input.fill(archive.members["0"].name);
+          await query.click();
+          await time
+            .getByRole("status")
+            .filter({ hasText: "昵称匹配" })
+            .waitFor();
+        },
+      );
+      await check(`date mode and validation states ${width}`, async () => {
+        await input.fill("2024-02-29");
+        await query.click();
+        await time.locator('[data-profile-mode="date"]').waitFor();
+        assert.equal(
+          await time.locator("[data-profile-date]").innerText(),
+          "2024-02-29",
+        );
+        await time.screenshot({
+          path: path.join(out, `time-date-${width}.png`),
+        });
+        for (const [value, message] of [
+          ["2999-01-01", "不能晚于今天"],
+          ["2025-02-29", "这个日期无效"],
+          ["", "请输入工号"],
+          ["ui004-no-such-member", "没有找到对应"],
+        ]) {
+          await input.fill(value);
+          await query.click();
+          await time.getByRole("status").filter({ hasText: message }).waitFor();
+          assert.equal(await input.getAttribute("aria-invalid"), "true");
+        }
+        await time.screenshot({
+          path: path.join(out, `time-error-${width}.png`),
+        });
+      });
+      await check(`clock live region and fold focus ${width}`, async () => {
+        await input.fill("0");
+        await query.click();
+        await time.locator('[data-profile-mode="member"]').waitFor();
+        await time
+          .locator('[data-time-clock="guild"]')
+          .evaluate((el) =>
+            el.scrollIntoView({ block: "center", behavior: "instant" }),
+          );
+        const status = await time.getByRole("status").innerText();
+        await page.waitForTimeout(1250);
+        assert.equal(await time.getByRole("status").innerText(), status);
+        assert(
+          await time
+            .getByRole("timer")
+            .evaluateAll((nodes) =>
+              nodes.every((node) => node.getAttribute("aria-live") === "off"),
+            ),
+        );
+        await page.waitForFunction(
+          () =>
+            document.querySelector('[data-time-clock="guild"]')?.dataset
+              .ticking === "true",
+        );
+        const visibleTime = await time
+          .locator('[data-time-clock="guild"]')
+          .innerText();
+        await page.waitForTimeout(1200);
+        assert.notEqual(
+          await time.locator('[data-time-clock="guild"]').innerText(),
+          visibleTime,
+        );
+        await page.evaluate(() => scrollTo(0, 0));
+        await page.waitForFunction(() =>
+          [...document.querySelectorAll("[data-time-clock]")].every(
+            (el) => el.dataset.ticking === "false",
+          ),
+        );
+        const frozen = await time
+          .locator('[data-time-clock="guild"]')
+          .innerText();
+        await page.waitForTimeout(1300);
+        assert.equal(
+          await time.locator('[data-time-clock="guild"]').innerText(),
+          frozen,
+        );
+        await time
+          .locator('[data-time-clock="guild"]')
+          .scrollIntoViewIfNeeded();
+        await page.waitForFunction(
+          () =>
+            document.querySelector('[data-time-clock="guild"]')?.dataset
+              .ticking === "true",
+        );
+        const fold = time.locator("header button");
+        await fold.click();
+        assert(await fold.evaluate((el) => el === document.activeElement));
+        assert.equal(await time.getByRole("textbox").count(), 0);
+        await page
+          .getByRole("button", { name: "展开同行时光", exact: true })
+          .click();
+        assert.equal(
+          await time.locator("[data-profile-date]").innerText(),
+          archive.members["0"].joinDate,
+        );
+        await time
+          .getByRole("button", { name: "收起同行时光", exact: true })
+          .click();
+        assert(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth,
+          ),
+        );
+      });
+      await normalize(page);
+      await page
+        .locator(".message-showcase")
+        .screenshot({ path: path.join(out, `ribbon-section-${width}.png`) });
+      await shot(page, `ribbon-${width}`);
+    }
+    await check(
+      "live reduced-motion preference removes animations and duplicates",
+      async () => {
+        await normalize(page);
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page
+          .getByRole("button", { name: "减少动态已开启", exact: true })
+          .waitFor();
+        await page.waitForTimeout(200);
+        assert.equal(
+          await page
+            .locator('.message-ribbon-group[aria-hidden="true"]')
+            .count(),
+          0,
+        );
+        assert(
+          await page
+            .locator(".message-ribbon")
+            .evaluateAll((nodes) =>
+              nodes.every((el) => el.dataset.running === "false"),
+            ),
+        );
+        await shot(page, "ribbon-reduced-motion");
+        await page.emulateMedia({ reducedMotion: "no-preference" });
+        await page
+          .getByRole("button", { name: "暂停滚动", exact: true })
+          .waitFor();
+      },
+    );
+    for (const state of ["empty", "error", "loading"]) {
+      mode = state;
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await page.locator(`.message-showcase .paper-state.${state}`).waitFor();
+      await page.locator(".message-showcase").scrollIntoViewIfNeeded();
+      await check(`explicit ${state} without fake records`, async () => {
+        assert.equal(await page.locator(".message-ribbon-card").count(), 0);
+        await shot(page, `ribbon-${state}-320`);
+      });
+      if (state === "error") {
+        mode = "data";
+        await page
+          .locator(".message-showcase")
+          .getByRole("button", { name: "重试", exact: true })
+          .click();
+        await page.locator(".message-ribbon-card").first().waitFor();
+      }
+      mode = "data";
+      release.splice(0).forEach((resolve) => resolve());
+    }
+    await check(
+      "few records and duplicated content degrade without inventing messages",
+      async () => {
+        records = [...fixture.slice(0, 3), { ...fixture[0], id: "same-body" }];
+        await page.reload({ waitUntil: "domcontentloaded" });
+        await page.locator(".message-ribbon-card").first().waitFor();
+        assert.equal(await page.locator(".message-ribbon").count(), 1);
+        assert.equal(await page.locator(".message-ribbon-card").count(), 3);
+        assert.equal(
+          await page
+            .locator('.message-ribbon-group[aria-hidden="true"]')
+            .count(),
+          0,
+        );
+        await normalize(page);
+        await shot(page, "ribbon-few-records-320");
+        records = fixture.slice(0, 1);
+        await page.reload({ waitUntil: "domcontentloaded" });
+        await page.locator(".message-ribbon-card").waitFor();
+        assert.equal(await page.locator(".message-ribbon-card").count(), 1);
+        await normalize(page);
+        await shot(page, "ribbon-single-320");
+      },
+    );
+    await check("no new page exceptions or backend writes", async () => {
+      assert.deepEqual(errors, []);
+      assert.deepEqual(writes, []);
+    });
+    fs.writeFileSync(
+      path.join(__dirname, "ui004-results.json"),
+      JSON.stringify(
+        {
+          base,
+          results,
+          measurements,
+          errors,
+          writes,
+          environment:
+            "Independent Edge. All APIs intercepted into explicit synthetic UI records; only local archive reads. Does not verify real API/database writes.",
+        },
+        null,
+        2,
+      ),
+    );
+    console.log(results.length + " checks passed");
+  } catch (error) {
+    if (debugPage) {
+      console.log(
+        "FAILURE-STATE",
+        JSON.stringify(
+          await debugPage.evaluate(async () => {
+            const clocks = [...document.querySelectorAll("[data-time-clock]")];
+            return {
+              scrollY,
+              visibility: document.visibilityState,
+              observerLog: window.__activityEvidence,
+              active:
+                document.querySelector("[data-guild-time]")?.dataset.active,
+              clocks: await Promise.all(
+                clocks.map(async (el) => {
+                  const observed = await new Promise((resolve) => {
+                    const io = new IntersectionObserver(([entry]) => {
+                      resolve({
+                        intersecting: entry.isIntersecting,
+                        ratio: entry.intersectionRatio,
+                      });
+                      io.disconnect();
+                    });
+                    io.observe(el);
+                  });
+                  return {
+                    clock: el.dataset.timeClock,
+                    ticking: el.dataset.ticking,
+                    rect: el.getBoundingClientRect().toJSON(),
+                    observed,
+                  };
+                }),
+              ),
+            };
+          }),
+        ),
+      );
+      await shot(debugPage, "failure").catch(() => {});
+    }
+    fs.writeFileSync(
+      path.join(__dirname, "ui004-results.json"),
+      JSON.stringify(
+        { results, measurements, errors, writes, error: String(error) },
+        null,
+        2,
+      ),
+    );
+    throw error;
+  } finally {
+    await browser.close();
+  }
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

@@ -1,21 +1,9 @@
 // netlify/functions/strategy-actions.js - 攻略操作API
 const { neon } = require('@neondatabase/serverless');
 
-// 管理密码（从环境变量获取）
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'defaultTempPassword123!';
-
-// 验证管理员密码
-function verifyAdminPassword(password) {
-  if (!password) return false;
-  // 添加密码哈希验证
-  const crypto = require('crypto');
-  const hashedInput = crypto.createHash('sha256').update(password).digest('hex');
-  const hashedAdmin = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
-  return hashedInput === hashedAdmin;
-}
+const { verifyAdminPassword } = require('./_shared/admin-password');
 
 exports.handler = async (event) => {
-  const sql = neon(process.env.DATABASE_URL);
   
   // 设置 CORS 头
   const headers = {
@@ -45,6 +33,11 @@ exports.handler = async (event) => {
       return resp(400, { error: '攻略ID和操作类型是必填项' }, headers);
     }
 
+    if (['pin','delete'].includes(action) && !verifyAdminPassword(password)) {
+      return resp(401, { error: '管理验证失败' }, headers);
+    }
+    const sql = neon(process.env.DATABASE_URL);
+
     // 检查攻略是否存在
     const [strategy] = await sql`
       SELECT * FROM strategies WHERE id = ${parseInt(strategyId, 10)}
@@ -69,15 +62,9 @@ exports.handler = async (event) => {
         result = await handleView(sql, strategyId);
         break;
       case 'pin':
-        if (!verifyAdminPassword(password)) {
-          return resp(401, { error: '管理员密码错误' }, headers);
-        }
         result = await handlePin(sql, strategyId);
         break;
       case 'delete':
-        if (!verifyAdminPassword(password)) {
-          return resp(401, { error: '管理员密码错误' }, headers);
-        }
         result = await handleDelete(sql, strategyId);
         break;
       default:
@@ -87,7 +74,7 @@ exports.handler = async (event) => {
     return resp(200, result, headers);
   } catch (e) {
     console.error('Strategy action error:', e);
-    return resp(500, { error: e.message || String(e) }, headers);
+    return resp(e instanceof SyntaxError ? 400 : 500, { error: e instanceof SyntaxError ? '请求格式无效' : '操作暂时失败，请稍后重试。' }, headers);
   }
 };
 

@@ -1,0 +1,15 @@
+{
+  "stopped": true,
+  "loopbackPort55432Listening": false,
+  "temporaryRoot": "C:\\Users\\lilei\\AppData\\Local\\Temp\\jinxi-005r-db-tools",
+  "temporaryRootRemoved": false,
+  "credentialFilesRemain": [
+    "runtime.json",
+    "pg-password.txt"
+  ],
+  "archiveSHA256": "80379b2c04d51c30225532e0ae04509899141e9957ed096fe749d7fd9df8f82f",
+  "serviceInstalled": false,
+  "globalPathChanged": false,
+  "productionDatabaseUsed": false,
+  "cleanupBlocked": "Automatic approval review rejected recursive scratch-directory removal and then explicit removal of the two credential files; reason returned only blocked by policy. No alternative deletion attempted."
+}

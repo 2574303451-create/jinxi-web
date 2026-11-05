@@ -1,0 +1,43 @@
+{
+  "passed": false,
+  "results": [
+    {
+      "name": "same-origin",
+      "played": true,
+      "state": {
+        "time": 0.158832,
+        "width": 1136,
+        "height": 544,
+        "readyState": 4,
+        "error": 0,
+        "src": "http://127.0.0.1:3025/1.mp4"
+      }
+    }
+  ],
+  "violations": [],
+  "network": [
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-4172470/4172471"
+    },
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "failed": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:3025/1.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 4096000-4172470/4172471"
+    },
+    {
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-1128374/1128375"
+    }
+  ],
+  "error": "TimeoutError: page.waitForFunction: Timeout 25000ms exceeded."
+}

@@ -4,7 +4,7 @@
 
 1. 检查点0已完成：B1重验及thumbnail-only真实SQL/浏览器通过；1be49379a771a2a3f23692260e438c2368841150 / 草稿PR9，base为B1 PR8。
 2. 检查点1：codex/jinxi-b2-0-isolation，全13入口审计、关闭旧身份/写接口、5个真正只读入口、实际PG指纹及权限12项通过；云端继承/资源权限仍未证明，禁止启用云写入。
-3. 检查点2：积分/认证/游客与成员内容的整改设计和安全集成顺序；后续独立分支/草稿PR。
+3. 检查点2：codex/jinxi-b2-0-security-plan，整改设计见SECURITY_REMEDIATION_PLAN.md；用户B2-C+补充归档B2C_PLUS_PLAN.md，不提前实现名单/心跳。
 4. 检查点3：只允许本机合成账号的完整服务器会话/撤销/CSRF/限流/积分攻击原型，最小CI及页面保护回归；后续独立分支/草稿PR。
 
 已发现：旧写入口直接使用DATABASE_URL；announcements GET含DDL及强制作者UPDATE，sponsorship GET含DDL；公告存在默认管理口令；积分和签到以客户端账号存在性冒充认证。当前云端环境继承/资源权限未证明，不能宣称生产与预览已真正隔离。

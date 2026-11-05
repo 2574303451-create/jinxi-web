@@ -1,0 +1,51 @@
+PASS two public rows, unique originals, hidden copies 1440
+PASS measured left/right speed 1440
+PASS seam preserves visible content and position 1440
+PASS hover focus and explicit pause 1440
+PASS native touch browse and keyboard browse 1440
+PASS click locates actual current public ID 1440
+PASS offscreen ribbon animations stop 1440
+PASS collapsed archive controls not mounted 1440
+PASS archive ID/nickname/history/badges unchanged 1440
+PASS date mode and validation states 1440
+PASS clock live region and fold focus 1440
+PASS two public rows, unique originals, hidden copies 768
+PASS measured left/right speed 768
+PASS seam preserves visible content and position 768
+PASS hover focus and explicit pause 768
+PASS native touch browse and keyboard browse 768
+PASS click locates actual current public ID 768
+PASS offscreen ribbon animations stop 768
+PASS collapsed archive controls not mounted 768
+PASS archive ID/nickname/history/badges unchanged 768
+PASS date mode and validation states 768
+PASS clock live region and fold focus 768
+PASS two public rows, unique originals, hidden copies 390
+PASS measured left/right speed 390
+PASS seam preserves visible content and position 390
+PASS hover focus and explicit pause 390
+PASS native touch browse and keyboard browse 390
+PASS click locates actual current public ID 390
+PASS offscreen ribbon animations stop 390
+PASS collapsed archive controls not mounted 390
+PASS archive ID/nickname/history/badges unchanged 390
+PASS date mode and validation states 390
+PASS clock live region and fold focus 390
+PASS two public rows, unique originals, hidden copies 320
+PASS measured left/right speed 320
+PASS seam preserves visible content and position 320
+PASS hover focus and explicit pause 320
+PASS native touch browse and keyboard browse 320
+PASS click locates actual current public ID 320
+PASS offscreen ribbon animations stop 320
+PASS collapsed archive controls not mounted 320
+PASS archive ID/nickname/history/badges unchanged 320
+PASS date mode and validation states 320
+PASS clock live region and fold focus 320
+PASS live reduced-motion preference removes animations and duplicates
+PASS explicit empty without fake records
+PASS explicit error without fake records
+PASS explicit loading without fake records
+PASS few records and duplicated content degrade without inventing messages
+PASS no new page exceptions or backend writes
+50 checks passed

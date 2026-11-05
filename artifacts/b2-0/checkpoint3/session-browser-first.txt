@@ -1,0 +1,19 @@
+PASS 320/390/768/1440 layouts, labels, keyboard and reduced motion
+PASS old localStorage cannot authenticate; Secure HttpOnly host cookie stays out of JS/storage/URL
+PASS first login gates points; password change revokes session and requires new login
+PASS same-cookie tabs restore CSRF, concurrent claim credits once, logout clears both on validation
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: '重新核验', exact: true })
+    - locator resolved to <button disabled class="paper-button">重新核验</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is not enabled
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+  - element was detached from the DOM, retrying
+

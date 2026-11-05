@@ -1,0 +1,10 @@
+{
+  "compilerExit": 2,
+  "baseline": 28,
+  "current": 28,
+  "added": [],
+  "resolved": [],
+  "rawCompilerPassed": false,
+  "ratchetPassed": true
+}
+Compiler remains RED with historical diagnostics; ratchet only forbids new diagnostics.

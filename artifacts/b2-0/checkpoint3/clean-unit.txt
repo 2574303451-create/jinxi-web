@@ -1,0 +1,129 @@
+
+> my-v0-project@0.1.0 test
+> npm run test:api && npm run test:security
+
+
+> my-v0-project@0.1.0 test:api
+> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs
+
+TAP version 13
+# Subtest: legacy full detail normalizes malformed comments/media at the actual read boundary
+ok 1 - legacy full detail normalizes malformed comments/media at the actual read boundary
+  ---
+  duration_ms: 14.3447
+  ...
+# Subtest: frontend readonly contracts and bounded cache (network fixtures only)
+    # Subtest: feeds are sent to server, coalesced and cached separately
+    ok 1 - feeds are sent to server, coalesced and cached separately
+      ---
+      duration_ms: 90.3996
+      ...
+    # Subtest: old backend cannot masquerade as working homepage filters
+    ok 2 - old backend cannot masquerade as working homepage filters
+      ---
+      duration_ms: 24.8425
+      ...
+    # Subtest: v2 acknowledgement, media fields and public status fail closed
+    ok 3 - v2 acknowledgement, media fields and public status fail closed
+      ---
+      duration_ms: 83.1258
+      ...
+    # Subtest: success expires60s, failure drops stale cache; no polling
+    ok 4 - success expires60s, failure drops stale cache; no polling
+      ---
+      duration_ms: 11.9632
+      ...
+    # Subtest: stats distinguishes real0 from errors, stale/unknown contracts and null
+    ok 5 - stats distinguishes real0 from errors, stale/unknown contracts and null
+      ---
+      duration_ms: 12.5232
+      ...
+    # Subtest: an unavailable stats endpoint never fabricates zero
+    ok 6 - an unavailable stats endpoint never fabricates zero
+      ---
+      duration_ms: 17.4028
+      ...
+    1..6
+ok 2 - frontend readonly contracts and bounded cache (network fixtures only)
+  ---
+  duration_ms: 241.3502
+  ...
+# Subtest: read API safety without a database
+    # Subtest: old credentials and unapproved previews fail closed without identity policy
+    ok 1 - old credentials and unapproved previews fail closed without identity policy
+      ---
+      duration_ms: 2.4366
+      ...
+    # Subtest: invalid public queries rejected before transaction
+    ok 2 - invalid public queries rejected before transaction
+      ---
+      duration_ms: 4.5237
+      ...
+    # Subtest: stats rejects POST and arbitrary identity/status input without factory
+    ok 3 - stats rejects POST and arbitrary identity/status input without factory
+      ---
+      duration_ms: 1.6723
+      ...
+    # Subtest: unavailable and timeout never become zero or leak raw errors
+    ok 4 - unavailable and timeout never become zero or leak raw errors
+      ---
+      duration_ms: 1.9724
+      ...
+    # Subtest: installed Neon driver really serializes bounded READ ONLY batch
+    ok 5 - installed Neon driver really serializes bounded READ ONLY batch
+      ---
+      duration_ms: 21.9171
+      ...
+    1..5
+ok 3 - read API safety without a database
+  ---
+  duration_ms: 33.6061
+  ...
+1..3
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 471.0781
+
+> my-v0-project@0.1.0 test:security
+> node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs
+
+TAP version 13
+# Subtest: all legacy identity/mutations are denied without a database transport
+ok 1 - all legacy identity/mutations are denied without a database transport
+  ---
+  duration_ms: 25.4416
+  ...
+# Subtest: missing runtime context never reads an inherited DATABASE_URL
+ok 2 - missing runtime context never reads an inherited DATABASE_URL
+  ---
+  duration_ms: 6.6105
+  ...
+# Subtest: contexts and least-privilege policy are explicit; no old URL fallback
+ok 3 - contexts and least-privilege policy are explicit; no old URL fallback
+  ---
+  duration_ms: 0.3027
+  ...
+# Subtest: every deployed Function has an explicit security registration or local-only session boundary
+ok 4 - every deployed Function has an explicit security registration or local-only session boundary
+  ---
+  duration_ms: 2.6046
+  ...
+# Subtest: password hashing is bounded, async and salted; malformed records never bypass verification
+ok 5 - password hashing is bounded, async and salted; malformed records never bypass verification
+  ---
+  duration_ms: 992.3592
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1121.9634

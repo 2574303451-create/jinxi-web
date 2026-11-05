@@ -103,3 +103,49 @@ OWASP 建议优先使用维护中的框架会话功能；自行生成的 referen
 | 对象存储 | Blobs 的共享边界与独立 bucket 的授权设计 | 真实 bucket 已存在、策略已生效或生产对象不可达 |
 
 主任务若完成合成本地实验，需另记实际版本、命令、通过/失败及限制。生产迁移、真实成员登录、头像上传、在线心跳、生产发布和积分 P0 处理均不因本文被默认为已授权或已完成。
+
+## 6. CI 与 lint 依赖补充核对
+
+2026-11-05 追加。仅查询官方文档、公开 npm registry、官方 Action Git refs/API 及对应 commit 的公开文件；研究端未安装依赖、运行 CI、发布 workflow 或修改业务代码。
+
+### 当前兼容组合
+
+| 固定候选版本 | registry 的 Node engines / peer 要求 | 对本项目指定版本的判断 |
+| --- | --- | --- |
+| `eslint@10.14.0` | Node `^20.19.0 \|\| ^22.13.0 \|\| >=24` | Node `20.20.2` 满足。来源：[版本元数据](https://registry.npmjs.org/eslint/10.14.0)。 |
+| `typescript-eslint@8.72.1` | Node `^18.18.0 \|\| ^20.9.0 \|\| >=21.1.0`；ESLint `^8.57.0 \|\| ^9.0.0 \|\| ^10.0.0`；TypeScript `>=4.8.4 <6.1.0` | Node `20.20.2`、ESLint `10.14.0`、TS `5.9.2` 均满足。该包依赖同版本 parser/plugin；来源：[版本元数据](https://registry.npmjs.org/typescript-eslint/8.72.1)。 |
+| `@eslint/js@10.0.1`（若使用其 config） | 同 ESLint 10 的 Node engines；peer ESLint `^10.0.0` | 与上述组合兼容。来源：[registry 元数据](https://registry.npmjs.org/@eslint%2fjs/10.0.1)。 |
+| `typescript@5.9.2` | Node `>=14.17` | 满足指定 Node。来源：[版本元数据](https://registry.npmjs.org/typescript/5.9.2)。 |
+
+以上是明确 engines/peers 的静态交集，**不是本仓库安装/运行测试通过的声明**。官方文档也给出 ESLint 10 的 Node 下限及 typescript-eslint 支持范围，见 [ESLint prerequisites](https://eslint.org/docs/latest/use/getting-started#prerequisites)、[typescript-eslint dependency versions](https://typescript-eslint.io/users/dependency-versions/)。候选版本应精确锁定并提交 lockfile，由主任务用 clean install 和实际 lint 验证；本研究没有代为执行。
+
+当前 ESLint 官方把 10.x 列为 Current，9.x 自 2026-08-06、8.x 自 2024-10-05 已 EOL，见 [ESLint version support](https://eslint.org/version-support/)。`eslint-config-next@14.2.16` 的 registry peer 仍是 ESLint `^7.23.0 || ^8.0.0`，与 ESLint 10 不匹配，见 [该配置版本元数据](https://registry.npmjs.org/eslint-config-next/14.2.16)。因此不为恢复旧 `next lint` 引入 ESLint 8/Next 14 配置，也不通过强制忽略 peer 冲突拼接。
+
+**配置建议：**直接用 ESLint CLI 和 `eslint.config.mjs` flat config，显式配置 JS/CJS/TS/TSX 范围、parser、运行环境及生成物忽略；官方接入示例见 [ESLint configuration files](https://eslint.org/docs/latest/use/configure/configuration-files)、[typescript-eslint quickstart](https://typescript-eslint.io/getting-started/)。可选择项目自定的小范围 correctness 规则，并明确加入禁止动态代码执行的 [`no-eval`](https://eslint.org/docs/latest/rules/no-eval)、[`no-new-func`](https://eslint.org/docs/latest/rules/no-new-func)，以及重复键/不可达分支/不安全 finally 等检查；规则选择属于实施决定，不能称为官方完整推荐集或安全审计。
+
+只有配置了所需 type information 才能声称运行 type-aware lint，见 [typescript-eslint shared configs](https://typescript-eslint.io/users/configs/)。独立 `tsc` 仍是单独检查；该聚焦 lint 不覆盖完整 Next、React Hooks、a11y、跨账号授权、CSRF 或依赖漏洞检查。CI 应如实报告具体规则/文件范围及命令结果，不能将“lint 通过”扩展为这些未启用项目已通过。
+
+### 官方 Actions 的不可变引用
+
+下列 SHA 经官方仓库 `git ls-remote` 与 GitHub Git-ref API 双重核对，API 返回 object type 为 `commit`；又读取了该 SHA 下的 `action.yml` 和 README，非凭记忆填写。
+
+| Action | 核对版本与完整 commit SHA | 官方证据 |
+| --- | --- | --- |
+| `actions/checkout` | `v6.1.0` → `d23441a48e516b6c34aea4fa41551a30e30af803` | [Git ref](https://api.github.com/repos/actions/checkout/git/ref/tags/v6.1.0)、[固定 action.yml](https://github.com/actions/checkout/blob/d23441a48e516b6c34aea4fa41551a30e30af803/action.yml)、[固定 README](https://github.com/actions/checkout/blob/d23441a48e516b6c34aea4fa41551a30e30af803/README.md)。 |
+| `actions/setup-node` | `v6.5.0` → `249970729cb0ef3589644e2896645e5dc5ba9c38` | [Git ref](https://api.github.com/repos/actions/setup-node/git/ref/tags/v6.5.0)、[固定 action.yml](https://github.com/actions/setup-node/blob/249970729cb0ef3589644e2896645e5dc5ba9c38/action.yml)、[固定 README](https://github.com/actions/setup-node/blob/249970729cb0ef3589644e2896645e5dc5ba9c38/README.md)。 |
+
+这两个 Action 自身运行于 **Node 24**，所需 runner 至少 `2.327.1`；它们的运行引擎与项目安装的 Node 不同，`setup-node` 仍可显式指定项目 `node-version: '20.20.2'`。checkout 的容器内认证 Git 场景另要求 runner `2.329.0`，普通无持久凭据检查不依赖该场景。建议用完整 SHA，并标注对应版本、`permissions: contents: read`、checkout `persist-credentials: false`；不向本轮检查注入生产/Netlify/Neon 凭据。完整 SHA 固定与最小权限原则参见 [GitHub secure use](https://docs.github.com/en/actions/reference/security/secure-use)。本轮未在托管或自建 runner 实际执行上述引用。
+
+### Next/Node 生命周期是独立生产门槛
+
+**Next `14.2.16` 不应作为生产安全基线。**当前官方支持表将 14.x 列为 Unsupported，16.x 为 Active LTS、15.x 为 Maintenance LTS（已延长至 2027-01-31），见 [Next.js support policy](https://nextjs.org/support-policy)。2025-12 的 App Router RSC DoS 公告已要求 14.x 至少升级到 `14.2.35`，见 [2025-12-11 security update](https://nextjs.org/blog/security-update-2025-12-11)；这只是该次公告的修复线，不能据此断言 14.2.35 在今天仍获支持或解决全部问题。
+
+最新核到的 2026-11-03 官方安全发布给出的受支持修复版本是 `16.4.5` / `15.5.29`，见 [November 2026 security release](https://nextjs.org/blog/november-2026-security-release)。漏洞适用性取决于具体部署方式和使用的功能；旧架构稿的静态导出配置不能证明线上运行路径，也不能据版本号就声称本站存在某个可利用 RCE。Next 14 stable 也不能误套用 2025 React2Shell RCE 影响范围，官方对此明确区分，见 [CVE-2025-66478 advisory](https://nextjs.org/blog/CVE-2025-66478)。
+
+Node `20.x` 当前也已在官方发布表列为 EOL，见 [Node.js releases](https://nodejs.org/en/about/previous-releases)。它满足 lint 工具的 engines 并不表示它仍是获得安全维护的生产运行时。B2 本地/CI 可按要求用 `20.20.2` 保持可复现，但生产启用前仍须独立规划受支持 Next/React/Node 组合、Netlify 适配、构建/页面回归及当前依赖安全核验；本次聚焦 CI/lint 和会话原型不会顺带完成或宣称解除这一升级门槛。
+
+### 脱敏报告 artifact 引用补核
+
+2026-11-05 核到官方 latest release 为 **`actions/upload-artifact@v7.0.2`**，完整 commit **`cf430e030ddbb5b0abf93d22962f4752f3646cd9`**。官方 `git ls-remote` 与 [Git-ref API](https://api.github.com/repos/actions/upload-artifact/git/ref/tags/v7.0.2) 的 commit object 一致，另见 [官方发布页](https://github.com/actions/upload-artifact/releases/tag/v7.0.2)。该 commit 的 [`action.yml`](https://github.com/actions/upload-artifact/blob/cf430e030ddbb5b0abf93d22962f4752f3646cd9/action.yml) 为 `runs.using: node24`，[`package.json`](https://github.com/actions/upload-artifact/blob/cf430e030ddbb5b0abf93d22962f4752f3646cd9/package.json) 要求 Node `>=24`。runner 需支持 Node24；上游 Node24 切换公告给出的最低版本为 **`2.327.1`**，见 [v6 runtime 公告](https://github.com/actions/upload-artifact/releases/tag/v6.0.0)，未发现 v7 提高该下限的额外要求。Action runtime 与项目 Node20/Node24 测试矩阵分别配置。
+
+本任务建议仅 allowlist 已脱敏 test/tsc 等报告的具体路径，显式保持 `include-hidden-files: false`，设置短期 retention。默认排除隐藏文件不代替内容脱敏；禁止上传整个工作区、TEMP/runtime、数据库目录、`.env`、凭据或原始 Cookie/token 日志。输入及默认行为见 [固定 README](https://github.com/actions/upload-artifact/blob/cf430e030ddbb5b0abf93d22962f4752f3646cd9/README.md)。此候选针对 github.com；该 README 明确 v4+ 不支持 GHES。本研究没有执行上传、CI 发布或读取任何待上传报告内容。

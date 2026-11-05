@@ -1,0 +1,146 @@
+{
+  "sourceBaseline": "115bf854a7977a3e582a89af13459115178a1e31",
+  "method": "Complete file/code/message; ignore line/column only; raw compiler errors remain visible",
+  "diagnostics": [
+    {
+      "file": "components/strategy-wall.tsx",
+      "code": "TS2322",
+      "message": "Type 'boolean | \"\"' is not assignable to type 'boolean | undefined'.\n  Type '\"\"' is not assignable to type 'boolean | undefined'."
+    },
+    {
+      "file": "components/strategy-wall.tsx",
+      "code": "TS2322",
+      "message": "Type 'boolean | \"\"' is not assignable to type 'boolean | undefined'.\n  Type '\"\"' is not assignable to type 'boolean | undefined'."
+    },
+    {
+      "file": "components/ui/media-gallery.tsx",
+      "code": "TS2322",
+      "message": "Type '\"large\"' is not assignable to type '\"lg\" | \"md\" | \"sm\" | \"xl\" | \"2xl\" | \"full\" | undefined'."
+    },
+    {
+      "file": "components/ui/sidebar.tsx",
+      "code": "TS2307",
+      "message": "Cannot find module '@/hooks/use-mobile' or its corresponding type declarations."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2307",
+      "message": "Cannot find module '@/hooks/use-toast' or its corresponding type declarations."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2459",
+      "message": "Module '\"@/components/ui/toast\"' declares 'Toast' locally, but it is not exported."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastClose'."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastDescription'."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastTitle'."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastViewport'."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS7031",
+      "message": "Binding element 'id' implicitly has an 'any' type."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS7031",
+      "message": "Binding element 'title' implicitly has an 'any' type."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS7031",
+      "message": "Binding element 'description' implicitly has an 'any' type."
+    },
+    {
+      "file": "components/ui/toaster.tsx",
+      "code": "TS7031",
+      "message": "Binding element 'action' implicitly has an 'any' type."
+    },
+    {
+      "file": "components/ui/use-toast.ts",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastActionElement'."
+    },
+    {
+      "file": "components/ui/use-toast.ts",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastProps'."
+    },
+    {
+      "file": "components/ui/use-toast.ts",
+      "code": "TS7006",
+      "message": "Parameter 'open' implicitly has an 'any' type."
+    },
+    {
+      "file": "hooks/use-toast.ts",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastActionElement'."
+    },
+    {
+      "file": "hooks/use-toast.ts",
+      "code": "TS2305",
+      "message": "Module '\"@/components/ui/toast\"' has no exported member 'ToastProps'."
+    },
+    {
+      "file": "hooks/use-toast.ts",
+      "code": "TS7006",
+      "message": "Parameter 'open' implicitly has an 'any' type."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS2677",
+      "message": "A type predicate's type must be assignable to its parameter's type.\n  Type 'readonly [string, MemberProfile]' is not assignable to type 'readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]'.\n    Type at position 1 in source is not compatible with type at position 1 in target.\n      The types of 'role' are incompatible between these types.\n        Type '\"member\" | \"founder\" | undefined' is not assignable to type '\"member\" | \"founder\"'.\n          Type 'undefined' is not assignable to type '\"member\" | \"founder\"'."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS2769",
+      "message": "No overload matches this call.\n  Overload 1 of 2, '(entries: Iterable<readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]>): { [k: string]: { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }; }', gave the following error.\n    Argument of type '(readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null)[]' is not assignable to parameter of type 'Iterable<readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]>'.\n      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.\n        Type 'IteratorResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null, undefined>' is not assignable to type 'IteratorResult<readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }], any>'.\n          Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorResult<readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }], any>'.\n            Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorYieldResult<readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]>'.\n              Type 'readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null' is not assignable to type 'readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]'.\n                Type 'null' is not assignable to type 'readonly [PropertyKey, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }]'.\n  Overload 2 of 2, '(entries: Iterable<readonly any[]>): any', gave the following error.\n    Argument of type '(readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null)[]' is not assignable to parameter of type 'Iterable<readonly any[]>'.\n      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.\n        Type 'IteratorResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null, undefined>' is not assignable to type 'IteratorResult<readonly any[], any>'.\n          Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorResult<readonly any[], any>'.\n            Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorYieldResult<readonly any[]>'.\n              Type 'readonly [string, { name: string; joinDate: string; role: \"member\" | \"founder\"; badges: string[] | undefined; }] | null' is not assignable to type 'readonly any[]'.\n                Type 'null' is not assignable to type 'readonly any[]'."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS2677",
+      "message": "A type predicate's type must be assignable to its parameter's type.\n  Type 'SecurityClearanceRule' is not assignable to type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; }'.\n    Property 'maxYearsExclusive' is optional in type 'SecurityClearanceRule' but required in type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; }'."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS18047",
+      "message": "'a' is possibly 'null'."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS18047",
+      "message": "'b' is possibly 'null'."
+    },
+    {
+      "file": "lib/guild-terminal-config.ts",
+      "code": "TS2322",
+      "message": "Type 'SecurityClearanceRule[] | ({ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null)[]' is not assignable to type 'SecurityClearanceRule[]'.\n  Type '({ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null)[]' is not assignable to type 'SecurityClearanceRule[]'.\n    Type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null' is not assignable to type 'SecurityClearanceRule'.\n      Type 'null' is not assignable to type 'SecurityClearanceRule'."
+    },
+    {
+      "file": "services/strategy-wall-service.ts",
+      "code": "TS1501",
+      "message": "This regular expression flag is only available when targeting 'es2018' or later."
+    },
+    {
+      "file": "services/strategy-wall-service.ts",
+      "code": "TS1501",
+      "message": "This regular expression flag is only available when targeting 'es2018' or later."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+
+> my-v0-project@0.1.0 test:security
+> node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/typecheck-ratchet.test.cjs
+
+TAP version 13
+# Subtest: all legacy identity/mutations are denied without a database transport
+ok 1 - all legacy identity/mutations are denied without a database transport
+  ---
+  duration_ms: 26.8772
+  ...
+# Subtest: missing runtime context never reads an inherited DATABASE_URL
+ok 2 - missing runtime context never reads an inherited DATABASE_URL
+  ---
+  duration_ms: 6.8694
+  ...
+# Subtest: contexts and least-privilege policy are explicit; no old URL fallback
+ok 3 - contexts and least-privilege policy are explicit; no old URL fallback
+  ---
+  duration_ms: 0.2867
+  ...
+# Subtest: every deployed Function has an explicit security registration or local-only session boundary
+ok 4 - every deployed Function has an explicit security registration or local-only session boundary
+  ---
+  duration_ms: 3.3731
+  ...
+# Subtest: password hashing is bounded, async and salted; malformed records never bypass verification
+ok 5 - password hashing is bounded, async and salted; malformed records never bypass verification
+  ---
+  duration_ms: 1034.7415
+  ...
+# Subtest: CI ratchet exposes historical red and rejects new/global errors or compiler failure
+ok 6 - CI ratchet exposes historical red and rejects new/global errors or compiler failure
+  ---
+  duration_ms: 6.7472
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1164.9656

@@ -1,0 +1,23 @@
+▶ actual local synthetic session, access and points security
+  ✔ cloud/missing config and cross-origin requests cannot connect (1.5288ms)
+  ✔ cookie attributes and DB-only token/CSRF digests (808.5373ms)
+  ✔ first reset restricts access and password change revokes old sessions (1289.0703ms)
+  ✔ untrusted identity, reward and price fields never choose another member (529.5418ms)
+  ✔ two devices and concurrent tabs claim server reward once (1570.4857ms)
+  ✔ trusted catalog, idempotent redemption and concurrent nonnegative balance (1199.6554ms)
+  ✔ logout invalidates this device without killing another valid session (1154.5158ms)
+  ✔ normal password change revokes every device (1369.8818ms)
+  ✔ lock/deactivate revoke permanently, including after reactivation (1223.8301ms)
+  ✔ absolute and idle expiration reject replay (1149.0049ms)
+  ✔ CSRF and content/origin limits reject before writes (1137.1076ms)
+  ✔ unknown/wrong/locked accounts do not enumerate, failed attempts persist (1604.9839ms)
+  ✔ data failure rolls back reward and retry remains exactly once (859.017ms)
+✔ actual local synthetic session, access and points security (13963.3309ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14063.3835

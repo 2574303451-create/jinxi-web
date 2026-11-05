@@ -1,0 +1,237 @@
+
+> my-v0-project@0.1.0 test:integration
+> node --test --test-concurrency=1 tests/strategy-postgres.test.cjs tests/guide-thumbnail-postgres.test.cjs tests/environment-postgres.test.cjs tests/session-postgres.test.cjs
+
+TAP version 13
+# Subtest: actual local environment identity and effective least privilege
+    # Subtest: effective column, view and sequence grants outside the lab are unsafe
+    ok 1 - effective column, view and sequence grants outside the lab are unsafe
+      ---
+      duration_ms: 19.7124
+      ...
+    # Subtest: real fingerprint and read-only role permit B1 public reads
+    ok 2 - real fingerprint and read-only role permit B1 public reads
+      ---
+      duration_ms: 23.3188
+      ...
+    # Subtest: wrong actual fingerprint rejects before data mutation
+    ok 3 - wrong actual fingerprint rejects before data mutation
+      ---
+      duration_ms: 3.0815
+      ...
+    # Subtest: actual privileged credential is rejected, not accepted by matching URL
+    ok 4 - actual privileged credential is rejected, not accepted by matching URL
+      ---
+      duration_ms: 5.6116
+      ...
+    # Subtest: reader cannot write, relabel identity, create schema or elevate
+    ok 5 - reader cannot write, relabel identity, create schema or elevate
+      ---
+      duration_ms: 1.5171
+      ...
+    # Subtest: session role cannot read/write the separate protected resources
+    ok 6 - session role cannot read/write the separate protected resources
+      ---
+      duration_ms: 2.3568
+      ...
+    # Subtest: all endpoints deny every legacy mutation even with a valid local proof configuration
+    ok 7 - all endpoints deny every legacy mutation even with a valid local proof configuration
+      ---
+      duration_ms: 21.6672
+      ...
+    # Subtest: missing cloud approval and mismatched contexts never create transport
+    ok 8 - missing cloud approval and mismatched contexts never create transport
+      ---
+      duration_ms: 2.0109
+      ...
+    # Subtest: all5 public read handlers use real restricted PG, never mutate on GET
+    ok 9 - all5 public read handlers use real restricted PG, never mutate on GET
+      ---
+      duration_ms: 36.1226
+      ...
+    1..9
+ok 1 - actual local environment identity and effective least privilege
+  ---
+  duration_ms: 668.2552
+  ...
+# Subtest: actual PG: thumbnail-only video cover is real, safe and lower priority than images
+ok 2 - actual PG: thumbnail-only video cover is real, safe and lower priority than images
+  ---
+  duration_ms: 140.2442
+  ...
+# Subtest: actual local synthetic session, access and points security
+    # Subtest: cloud/missing config and cross-origin requests cannot connect
+    ok 1 - cloud/missing config and cross-origin requests cannot connect
+      ---
+      duration_ms: 1.8052
+      ...
+    # Subtest: cookie attributes and DB-only token/CSRF digests
+    ok 2 - cookie attributes and DB-only token/CSRF digests
+      ---
+      duration_ms: 901.0824
+      ...
+    # Subtest: first reset restricts access and password change revokes old sessions
+    ok 3 - first reset restricts access and password change revokes old sessions
+      ---
+      duration_ms: 1839.37
+      ...
+    # Subtest: untrusted identity, reward and price fields never choose another member
+    ok 4 - untrusted identity, reward and price fields never choose another member
+      ---
+      duration_ms: 1289.6286
+      ...
+    # Subtest: two devices and concurrent tabs claim server reward once
+    ok 5 - two devices and concurrent tabs claim server reward once
+      ---
+      duration_ms: 2221.708
+      ...
+    # Subtest: trusted catalog, idempotent redemption and concurrent nonnegative balance
+    ok 6 - trusted catalog, idempotent redemption and concurrent nonnegative balance
+      ---
+      duration_ms: 1682.3884
+      ...
+    # Subtest: logout invalidates this device without killing another valid session
+    ok 7 - logout invalidates this device without killing another valid session
+      ---
+      duration_ms: 2184.8007
+      ...
+    # Subtest: lost-response redemption retry survives catalog removal, conflicting SKU rejects
+    ok 8 - lost-response redemption retry survives catalog removal, conflicting SKU rejects
+      ---
+      duration_ms: 1743.3959
+      ...
+    # Subtest: unsafe numeric balances fail closed instead of rounding
+    ok 9 - unsafe numeric balances fail closed instead of rounding
+      ---
+      duration_ms: 1977.7788
+      ...
+    # Subtest: same nickname cannot merge identities or balances
+    ok 10 - same nickname cannot merge identities or balances
+      ---
+      duration_ms: 2438.2263
+      ...
+    # Subtest: normal password change revokes every device
+    ok 11 - normal password change revokes every device
+      ---
+      duration_ms: 2553.1551
+      ...
+    # Subtest: lock/deactivate revoke permanently, including after reactivation
+    ok 12 - lock/deactivate revoke permanently, including after reactivation
+      ---
+      duration_ms: 2298.9675
+      ...
+    # Subtest: absolute and idle expiration reject replay
+    ok 13 - absolute and idle expiration reject replay
+      ---
+      duration_ms: 1760.745
+      ...
+    # Subtest: CSRF and content/origin limits reject before writes
+    ok 14 - CSRF and content/origin limits reject before writes
+      ---
+      duration_ms: 1352.5127
+      ...
+    # Subtest: unknown/wrong/locked accounts do not enumerate, failed attempts persist
+    ok 15 - unknown/wrong/locked accounts do not enumerate, failed attempts persist
+      ---
+      duration_ms: 3050.8681
+      ...
+    # Subtest: data failure rolls back reward and retry remains exactly once
+    ok 16 - data failure rolls back reward and retry remains exactly once
+      ---
+      duration_ms: 1606.0543
+      ...
+    1..16
+ok 3 - actual local synthetic session, access and points security
+  ---
+  duration_ms: 28973.0777
+  ...
+# Subtest: actual isolated PostgreSQL read path
+    # Subtest: published video attachments are4, duplicateURLs counted, not playability
+    ok 1 - published video attachments are4, duplicateURLs counted, not playability
+      ---
+      duration_ms: 6.395
+      ...
+    # Subtest: null/object/scalar JSONB and invalid array elements are safe
+    ok 2 - null/object/scalar JSONB and invalid array elements are safe
+      ---
+      duration_ms: 5.3345
+      ...
+    # Subtest: URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values
+    ok 3 - URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values
+      ---
+      duration_ms: 6.3693
+      ...
+    # Subtest: server filters before LIMIT3, latest ignores old pinned priority
+    ok 4 - server filters before LIMIT3, latest ignores old pinned priority
+      ---
+      duration_ms: 8.0931
+      ...
+    # Subtest: summary has genuine covers/counts and no full/private author arrays
+    ok 5 - summary has genuine covers/counts and no full/private author arrays
+      ---
+      duration_ms: 2.988
+      ...
+    # Subtest: old full list and ID detail are retained, published only
+    ok 6 - old full list and ID detail are retained, published only
+      ---
+      duration_ms: 3.3097
+      ...
+    # Subtest: draft/archived/forgedadmin never grant public reads
+    ok 7 - draft/archived/forgedadmin never grant public reads
+      ---
+      duration_ms: 4.2161
+      ...
+    # Subtest: pagination/sort/category rejected before SQL; search remains parameterized
+    ok 8 - pagination/sort/category rejected before SQL; search remains parameterized
+      ---
+      duration_ms: 2.6292
+      ...
+    # Subtest: normal category/search/sorts and stable pages
+    ok 9 - normal category/search/sorts and stable pages
+      ---
+      duration_ms: 11.2009
+      ...
+    # Subtest: read-only database role cannot write
+    ok 10 - read-only database role cannot write
+      ---
+      duration_ms: 0.7189
+      ...
+    # Subtest: stats rejects nonGET/identity parameters before DB factory
+    ok 11 - stats rejects nonGET/identity parameters before DB factory
+      ---
+      duration_ms: 0.9133
+      ...
+    # Subtest: DB failure is503, countnull, no internal connection leakage
+    ok 12 - DB failure is503, countnull, no internal connection leakage
+      ---
+      duration_ms: 1.6559
+      ...
+    # Subtest: actual PG statement timeout returns504 and connection recovers
+    ok 13 - actual PG statement timeout returns504 and connection recovers
+      ---
+      duration_ms: 3008.8771
+      ...
+    # Subtest: concurrent readers have consistent counts and no mutation
+    ok 14 - concurrent readers have consistent counts and no mutation
+      ---
+      duration_ms: 388.3354
+      ...
+    # Subtest: actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown
+    ok 15 - actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown
+      ---
+      duration_ms: 30.4913
+      ...
+    1..15
+ok 4 - actual isolated PostgreSQL read path
+  ---
+  duration_ms: 3628.5084
+  ...
+1..4
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 33886.7637

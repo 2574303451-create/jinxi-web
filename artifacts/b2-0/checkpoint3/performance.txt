@@ -1,0 +1,12 @@
+{"stage":"B1","slow":false,"run":1,"vitals":{"lcp":300,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":false,"run":1,"vitals":{"lcp":172,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":false,"run":2,"vitals":{"lcp":212,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B1","slow":false,"run":2,"vitals":{"lcp":220,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B1","slow":false,"run":3,"vitals":{"lcp":220,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":false,"run":3,"vitals":{"lcp":208,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B1","slow":true,"run":1,"vitals":{"lcp":2992,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":true,"run":1,"vitals":{"lcp":2924,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":true,"run":2,"vitals":{"lcp":2876,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B1","slow":true,"run":2,"vitals":{"lcp":2920,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B1","slow":true,"run":3,"vitals":{"lcp":2940,"cls":0},"js":606871,"jsGzip":182986,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}
+{"stage":"B2-A","slow":true,"run":3,"vitals":{"lcp":2868,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderOrLabCode":0}

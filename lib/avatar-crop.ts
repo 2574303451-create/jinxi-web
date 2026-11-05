@@ -47,7 +47,7 @@ export function drawAvatar(
     ?.drawImage(bitmap, sx, sy, crop, crop, 0, 0, 128, 128);
 }
 export function encodeAvatar(canvas: HTMLCanvasElement): Promise<Blob> {
-  return new Promise((resolve, reject) =>
+  return new Promise((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
         if (blob && blob.type === "image/webp" && blob.size <= 40 * 1024)
@@ -56,6 +56,6 @@ export function encodeAvatar(canvas: HTMLCanvasElement): Promise<Blob> {
       },
       "image/webp",
       0.82,
-    ),
-  );
+    );
+  });
 }

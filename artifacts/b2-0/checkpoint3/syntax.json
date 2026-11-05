@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "files": [
+    "netlify/functions\\_shared\\strategy-read.js",
+    "netlify/functions\\_shared\\strategy-query.js",
+    "netlify/functions\\_shared\\strategy-media.js",
+    "netlify/functions\\_shared\\strategy-database.js",
+    "netlify/functions\\_shared\\session-lab.js",
+    "netlify/functions\\_shared\\password.js",
+    "netlify/functions\\_shared\\function-security.js",
+    "netlify/functions\\_shared\\admin-password.js",
+    "netlify/functions\\strategy-actions.js",
+    "netlify/functions\\strategies.js",
+    "netlify/functions\\sponsorship.js",
+    "netlify/functions\\session-lab.js",
+    "netlify/functions\\points.js",
+    "netlify/functions\\points-board.js",
+    "netlify/functions\\messages.js",
+    "netlify/functions\\message-actions.js",
+    "netlify/functions\\leaderboard.js",
+    "netlify/functions\\guide-video-stats.js",
+    "netlify/functions\\checkin.js",
+    "netlify/functions\\auth-login.js",
+    "netlify/functions\\auth-change-password.js",
+    "netlify/functions\\announcements.js"
+  ]
+}

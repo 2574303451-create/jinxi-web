@@ -1,0 +1,10 @@
+
+> my-v0-project@0.1.0 lint
+> eslint app components hooks lib services types netlify/functions tests scripts --no-warn-ignored --max-warnings 0
+
+
+E:\Recovery\.jinxi-research\b2-a-ci-check\source\tests\password-security.test.cjs
+  4:704  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+✖ 1 problem (1 error, 0 warnings)
+

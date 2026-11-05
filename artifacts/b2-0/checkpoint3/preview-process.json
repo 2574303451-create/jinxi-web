@@ -1,0 +1,6 @@
+{
+  "scope": "local synthetic only",
+  "httpsPort": 3048,
+  "pid": 8820,
+  "publicRegressionPort": 3049
+}

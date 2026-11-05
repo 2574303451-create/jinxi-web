@@ -1,0 +1,2 @@
+Local synthetic HTTPS preview: https://localhost:3048/session-lab/ (self-signed certificate; no production)
+Public-page regression harness: http://127.0.0.1:3049/

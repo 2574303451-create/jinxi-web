@@ -5,6 +5,20 @@ const {guardedDatabase,POLICIES}=require('../netlify/functions/_shared/function-
 test('actual local environment identity and effective least privilege',async t=>{
  await b2.setup();await require('./support/b2-public-fixtures.cjs').seedPublic();const admin=await adminConnect('admin'),reader=await b2.connect(),session=await b2.connect('session');
  try{
+  await t.test('effective column, view and sequence grants outside the lab are unsafe',async()=>{
+   const {databaseConfig,validateProof,ATTESTATION_SQL}=require('../netlify/functions/_shared/function-security'),config=databaseConfig(b2.environment('session-lab'),'session-lab');
+   await admin.query('GRANT USAGE ON SCHEMA b2_forbidden TO jinxi_b2_session');
+   try{
+    await admin.query('GRANT UPDATE(content) ON b2_forbidden.production_like_canary TO jinxi_b2_session');
+    const column=(await session.query(ATTESTATION_SQL,['b2_lab'])).rows;assert.throws(()=>validateProof(config,column),e=>e.code==='DATABASE_PERMISSION_UNSAFE');
+    await admin.query('REVOKE UPDATE(content) ON b2_forbidden.production_like_canary FROM jinxi_b2_session');
+    await admin.query('CREATE VIEW b2_forbidden.test_canary_view AS SELECT * FROM b2_forbidden.production_like_canary;ALTER VIEW b2_forbidden.test_canary_view OWNER TO jinxi_b2_owner;GRANT UPDATE ON b2_forbidden.test_canary_view TO jinxi_b2_session');
+    const view=(await session.query(ATTESTATION_SQL,['b2_lab'])).rows;assert.throws(()=>validateProof(config,view),e=>e.code==='DATABASE_PERMISSION_UNSAFE');
+    await admin.query('DROP VIEW b2_forbidden.test_canary_view');
+    await admin.query('CREATE SEQUENCE b2_forbidden.test_canary_sequence;ALTER SEQUENCE b2_forbidden.test_canary_sequence OWNER TO jinxi_b2_owner;GRANT USAGE ON SEQUENCE b2_forbidden.test_canary_sequence TO jinxi_b2_session');
+    const sequence=(await session.query(ATTESTATION_SQL,['b2_lab'])).rows;assert.throws(()=>validateProof(config,sequence),e=>e.code==='DATABASE_PERMISSION_UNSAFE');
+   }finally{await admin.query('REVOKE UPDATE(content) ON b2_forbidden.production_like_canary FROM jinxi_b2_session;DROP VIEW IF EXISTS b2_forbidden.test_canary_view;DROP SEQUENCE IF EXISTS b2_forbidden.test_canary_sequence;REVOKE USAGE ON SCHEMA b2_forbidden FROM jinxi_b2_session');}
+  });
   await t.test('real fingerprint and read-only role permit B1 public reads',async()=>{const sql=guardedDatabase(b2.environment(),()=>b2.adapter(reader));assert.equal((await sql.query('SELECT count(*)::int AS n FROM strategies'))[0].n,16);const api=handler('strategies',b2.environment(),()=>b2.adapter(reader));const result=await api({httpMethod:'GET',queryStringParameters:{summary:'1',feed:'video',limit:'3'}});assert.equal(result.statusCode,200);assert.deepEqual(JSON.parse(result.body).strategies.map(x=>x.id),['11','2','1']);});
   await t.test('wrong actual fingerprint rejects before data mutation',async()=>{const env=b2.environment(),p=JSON.parse(env.JINXI_LOCAL_READ_POLICY);p.fingerprint='a'.repeat(64);env.JINXI_LOCAL_READ_POLICY=JSON.stringify(p);await assert.rejects(guardedDatabase(env,()=>b2.adapter(reader)).query('SELECT * FROM strategies'),e=>e.code==='ACTUAL_DATABASE_IDENTITY_MISMATCH');});
   await t.test('actual privileged credential is rejected, not accepted by matching URL',async()=>{const env=b2.environment(),local=settings('admin'),p=JSON.parse(env.JINXI_LOCAL_READ_POLICY);p.role=local.user;env.JINXI_LOCAL_READ_POLICY=JSON.stringify(p);env.JINXI_LOCAL_READ_DATABASE_URL=`postgresql://${local.user}@127.0.0.1:55433/jinxi_005s_b1_test`;await assert.rejects(guardedDatabase(env,()=>b2.adapter(admin)).query('SELECT 1'),e=>e.code==='DATABASE_PERMISSION_UNSAFE');});

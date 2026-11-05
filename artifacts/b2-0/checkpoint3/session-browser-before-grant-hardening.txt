@@ -1,0 +1,7 @@
+PASS 320/390/768/1440 layouts, labels, keyboard and reduced motion
+PASS old localStorage cannot authenticate; Secure HttpOnly host cookie stays out of JS/storage/URL
+PASS first login gates points; password change revokes session and requires new login
+PASS same-cookie tabs restore CSRF, concurrent claim credits once, logout clears both on validation
+PASS two browser devices survive single logout; idle expiry preserves draft
+PASS offline/reconnect preserves draft and restores server session
+PASS lost successful redemption response retries same nonce without a second debit

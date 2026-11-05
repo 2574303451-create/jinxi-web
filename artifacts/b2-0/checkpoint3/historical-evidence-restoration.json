@@ -1,0 +1,26 @@
+{
+  "scope": "Only agent-overwritten four PNGs; new screenshots retained; original binary Git blobs restored exactly",
+  "unchangedHistoricalTree": true,
+  "files": [
+    {
+      "file": "artifacts/005s-b1/checkpoint2-recheck/browser-first-failure.png",
+      "restoredOriginalBlob": "e9d7e679f217941a2c5634a44433a45fac490ca2",
+      "newEvidence": "artifacts\\b2-0\\checkpoint3\\protected\\browser-checks\\browser-first-failure.png"
+    },
+    {
+      "file": "artifacts/005s-b1/checkpoint2-recheck/synthetic-guides-compare-1440.png",
+      "restoredOriginalBlob": "3e997e90a9dc33a0636d5b795bf6987d16b4018d",
+      "newEvidence": "artifacts\\b2-0\\checkpoint3\\protected\\browser-checks\\synthetic-guides-compare-1440.png"
+    },
+    {
+      "file": "artifacts/005s-b1/checkpoint2-recheck/synthetic-guides-compare-390.png",
+      "restoredOriginalBlob": "4eb2426fc502d860e46f5c6654021dc25ad46356",
+      "newEvidence": "artifacts\\b2-0\\checkpoint3\\protected\\browser-checks\\synthetic-guides-compare-390.png"
+    },
+    {
+      "file": "artifacts/005s-b1/checkpoint2-recheck/synthetic-statistics-1440.png",
+      "restoredOriginalBlob": "4cc29949273f98886085ef55579d78333f880656",
+      "newEvidence": "artifacts\\b2-0\\checkpoint3\\protected\\browser-checks\\synthetic-statistics-1440.png"
+    }
+  ]
+}

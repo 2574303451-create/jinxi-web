@@ -1,0 +1,3 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+const {POLICIES}=require('../netlify/functions/_shared/function-security');
+test('every deployed Function has an explicit security registration or local-only session boundary',()=>{const files=fs.readdirSync('netlify/functions').filter(x=>x.endsWith('.js'));assert.equal(files.length,Object.keys(POLICIES).length+1);for(const file of files){const text=fs.readFileSync('netlify/functions/'+file,'utf8'),name=file.slice(0,-3);assert(Object.hasOwn(POLICIES,name)||name==='session-lab',name);assert(!text.includes('process.env.DATABASE_URL'),name);assert(!/console\.(log|warn|error)/.test(text),name);assert(!/CREATE TABLE|ALTER TABLE|CREATE INDEX/.test(text),name);}});

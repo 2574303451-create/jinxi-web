@@ -1,0 +1,1382 @@
+{
+  "scope": "Authorized local synthetic database only; actual cluster/DB identity, effective capabilities and metadata. Not evidence of cloud/production isolation.",
+  "proof": [
+    {
+      "role": "reader",
+      "mode": "public-read",
+      "proof": {
+        "environment_id": "a965a987-5c78-485e-994d-17b044f18796",
+        "classification": "synthetic-local",
+        "cluster_id": "7704646019698940864",
+        "database_oid": "16388",
+        "database_name": "jinxi_005s_b1_test",
+        "role": "jinxi_b2_reader",
+        "rolsuper": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false,
+        "rolbypassrls": false,
+        "default_read_only": "on",
+        "role_memberships": false,
+        "database_create": false,
+        "schema_create": false,
+        "owns_objects": false,
+        "writes_outside_schema": false,
+        "unsafe_definer_access": false
+      }
+    },
+    {
+      "role": "session",
+      "mode": "session-lab",
+      "proof": {
+        "environment_id": "a965a987-5c78-485e-994d-17b044f18796",
+        "classification": "synthetic-local",
+        "cluster_id": "7704646019698940864",
+        "database_oid": "16388",
+        "database_name": "jinxi_005s_b1_test",
+        "role": "jinxi_b2_session",
+        "rolsuper": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false,
+        "rolbypassrls": false,
+        "default_read_only": "off",
+        "role_memberships": false,
+        "database_create": false,
+        "schema_create": false,
+        "owns_objects": false,
+        "writes_outside_schema": false,
+        "unsafe_definer_access": false
+      }
+    }
+  ],
+  "schema": [
+    {
+      "table_schema": "b2_forbidden",
+      "table_name": "production_like_canary",
+      "column_name": "id",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_forbidden",
+      "table_name": "production_like_canary",
+      "column_name": "content",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "employee_no",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "login_account",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_hash",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "hash_algorithm",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "force_reset_password",
+      "data_type": "boolean"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "is_locked",
+      "data_type": "boolean"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "auth_version",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "last_login_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "employee_no",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "member_id",
+      "data_type": "uuid"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "display_name",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "nickname",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "is_active",
+      "data_type": "boolean"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "lock_version",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "source",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "member_id",
+      "data_type": "uuid"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "balance",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_earned",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_spent",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "code",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "price",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "active",
+      "data_type": "boolean"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "member_id",
+      "data_type": "uuid"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "biz_key",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "kind",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "item_code",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "amount",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "balance_after",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "code",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "reward",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "active",
+      "data_type": "boolean"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "bucket",
+      "data_type": "text"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "hits",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "reset_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "id",
+      "data_type": "uuid"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "token_hash",
+      "data_type": "character"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "csrf_hash",
+      "data_type": "character"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "auth_version",
+      "data_type": "integer"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "idle_expires_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "last_seen_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "revoked_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_schema": "jinxi_guard",
+      "table_name": "environment_registration",
+      "column_name": "id",
+      "data_type": "smallint"
+    },
+    {
+      "table_schema": "jinxi_guard",
+      "table_name": "environment_registration",
+      "column_name": "environment_id",
+      "data_type": "uuid"
+    },
+    {
+      "table_schema": "jinxi_guard",
+      "table_name": "environment_registration",
+      "column_name": "classification",
+      "data_type": "text"
+    }
+  ],
+  "privileges": [
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "author",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "content_html",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "title",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "announcements",
+      "column_name": "updated_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "guild_sponsorship_entries",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "guild_sponsorship_entries",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "guild_sponsorship_entries",
+      "column_name": "sponsor_name",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "guild_sponsorship_entries",
+      "column_name": "sponsor_time",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "category",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "color",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "content",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "image_url",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "is_pinned",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "name",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "reactions",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "messages",
+      "column_name": "replies",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "author",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "category",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "comments",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "content",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "difficulty",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "favorites",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "image_url",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "is_pinned",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "likes",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "media_files",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "status",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "tags",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "title",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "updated_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_reader",
+      "table_schema": "public",
+      "table_name": "strategies",
+      "column_name": "view_count",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "auth_version",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "auth_version",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "employee_no",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "force_reset_password",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "force_reset_password",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "hash_algorithm",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "hash_algorithm",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "is_locked",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "last_login_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "last_login_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "login_account",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_hash",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_hash",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_updated_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_updated_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "display_name",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "employee_no",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "is_active",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "lock_version",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "lock_version",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "member_id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "nickname",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "source",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "balance",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "balance",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "balance",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "member_id",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "member_id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "member_id",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_earned",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_earned",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_earned",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_spent",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_spent",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_account",
+      "column_name": "total_spent",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "active",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "code",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_catalog",
+      "column_name": "price",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "amount",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "amount",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "amount",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "balance_after",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "balance_after",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "balance_after",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "biz_key",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "biz_key",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "biz_key",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "created_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "created_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "id",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "id",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "item_code",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "item_code",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "item_code",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "kind",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "kind",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "kind",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "member_id",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "member_id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_ledger",
+      "column_name": "member_id",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "active",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "code",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "point_rule",
+      "column_name": "reward",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "bucket",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "bucket",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "bucket",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "hits",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "hits",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "hits",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "reset_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "reset_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "rate_limits",
+      "column_name": "reset_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "account_id",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "account_id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "account_id",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "auth_version",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "auth_version",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "auth_version",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "created_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "created_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "created_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "csrf_hash",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "csrf_hash",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "csrf_hash",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "expires_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "expires_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "expires_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "id",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "id",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "id",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "idle_expires_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "idle_expires_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "idle_expires_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "last_seen_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "last_seen_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "last_seen_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "revoked_at",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "revoked_at",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "revoked_at",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "token_hash",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "token_hash",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "jinxi_b2_session",
+      "table_schema": "b2_lab",
+      "table_name": "sessions",
+      "column_name": "token_hash",
+      "privilege_type": "UPDATE"
+    }
+  ]
+}

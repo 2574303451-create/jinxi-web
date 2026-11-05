@@ -1,0 +1,13 @@
+
+E:\Recovery\jinxi-web\components\marquee-3d.tsx
+  1:1  error  Definition for rule '@next/next/no-img-element' was not found  @next/next/no-img-element
+
+E:\Recovery\jinxi-web\lib\avatar-crop.ts
+  51:5  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+E:\Recovery\jinxi-web\scripts\import_accounts_to_db.js
+  2:1  warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+
+✖ 3 problems (2 errors, 1 warning)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

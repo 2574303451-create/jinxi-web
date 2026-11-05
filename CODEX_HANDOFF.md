@@ -1,3 +1,4 @@
+> **2026-11-06 B2接管更新（优先于下方历史快照）**：用户已授权B2-0检查点0–3及GitHub独立草稿PR。本机当前分支codex/jinxi-b2-a-session-lab，base为PR11/d516b8643c73797ddfbd8109d46a7dba58f6016c；最新SHA请核对该分支HEAD及GitHub PR，不以旧正文ca0723e为准。B1审核基线115bf854a7977a3e582a89af13459115178a1e31/PR8；新增检查点PR9、10、11均draft/open/unmerged，当前检查点3独立提交。完整入口：[B2状态](artifacts/b2-0/STATUS.md)、[会话原型](artifacts/b2-0/SESSION_LAB.md)、[工程/集成/阻断](artifacts/b2-0/ENGINEERING_AND_INTEGRATION.md)。原始tsc仍28项/exit2，只设新增诊断失败的历史基线，未假称完整类型通过。新证据含本机真实PG44、HTTPS会话7组、B1保护回归；GitHub CI必须看当前head的实际Checks。云变量继承及真实PROD权限未证明，旧写/旧登录暂停；正式会话、头像、在线心跳与名单均不启用。没有生产连接/密钥读取/迁移/上传、合并或部署。B2-C+新增要求只归档后续计划，不能据此提前开始B2-C。原B1截图已恢复原Git字节，新截图另存，主out不改；3044仍固定B1快照，3048/3049为本机合成隔离验证。
 # 今夕公会官网｜Codex 项目交接
 
 > **GitHub审核版更新**：用户已明确授权将完整B1本地提交、原暂存工作、本轮修补和证据提交GitHub。审核入口为 [B1 REVIEW_GUIDE](artifacts/005s-b1/REVIEW_GUIDE.md)，分支codex/jinxi-005s-b1，base仍为A+ d4769e719b2dd486b82cd2867f066d6c4dfa3e19。检查点2代码提交为55825f1a8146d0418bfa6380d7fa5254f093d6cc；完整最终SHA见草稿PR/分支。

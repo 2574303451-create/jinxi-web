@@ -8,7 +8,8 @@ async function setup(){
  const admin=await adminConnect('admin');
  try{
   const a=(await admin.query("SELECT current_database() AS database,host(inet_server_addr()) AS host,inet_server_port() AS port,(SELECT system_identifier::text FROM pg_control_system()) AS cluster_id,(SELECT oid::text FROM pg_database WHERE datname=current_database()) AS database_oid")).rows[0];
-  if(a.database!=='jinxi_005s_b1_test'||a.host!=='127.0.0.1'||a.port!==55433)throw Error('Unauthorized local DB');
+  const githubService=process.env.CI==='true'&&process.env.GITHUB_ACTIONS==='true'&&process.env.JINXI_CI_PG==='synthetic-55433'&&a.port===5432&&/^172\.(1[6-9]|2\d|3[01])\./.test(a.host);
+  if(a.database!=='jinxi_005s_b1_test'||!githubService&&(a.host!=='127.0.0.1'||a.port!==55433))throw Error('Unauthorized local DB');
   if(fs.existsSync(runtimeFile)){
    const saved=JSON.parse(fs.readFileSync(runtimeFile));
    if(saved.fingerprint!==fingerprint(a.cluster_id,a.database_oid,a.database))throw Error('Disposable instance identity changed; inspect before reuse');
@@ -44,7 +45,7 @@ async function setup(){
     GRANT USAGE ON SCHEMA b2_lab TO jinxi_b2_session;`);
    await admin.query('COMMIT');
   }catch(e){await admin.query('ROLLBACK');throw e}
-  const value={host:a.host,port:a.port,database:a.database,environmentId,fingerprint:fingerprint(a.cluster_id,a.database_oid,a.database),reader:{user:'jinxi_b2_reader',password:readPassword},session:{user:'jinxi_b2_session',password:sessionPassword},csrfSecret:crypto.randomBytes(32).toString('hex'),rateSecret:crypto.randomBytes(32).toString('hex')};
+  const value={host:"127.0.0.1",port:55433,database:a.database,environmentId,fingerprint:fingerprint(a.cluster_id,a.database_oid,a.database),reader:{user:'jinxi_b2_reader',password:readPassword},session:{user:'jinxi_b2_session',password:sessionPassword},csrfSecret:crypto.randomBytes(32).toString('hex'),rateSecret:crypto.randomBytes(32).toString('hex')};
   fs.mkdirSync(runtimeDir,{recursive:true});fs.writeFileSync(runtimeFile,JSON.stringify(value),{flag:'wx',mode:0o600});return value;
  }finally{await admin.end()}
 }

@@ -1,0 +1,355 @@
+{
+  "port": 3030,
+  "rows": [
+    {
+      "run": 1,
+      "counts": {
+        "/logo.png": 2,
+        "/14.png": 2,
+        "/13.png": 1,
+        "/43.png": 1,
+        "/44.png": 1,
+        "/45.png": 1,
+        "/46.png": 1,
+        "/bg.png": 1
+      },
+      "passed": false,
+      "events": [
+        {
+          "id": "18376.2",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 181
+          }
+        },
+        {
+          "id": "18376.3",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 228
+          }
+        },
+        {
+          "id": "18376.4",
+          "path": "/13.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 275
+          }
+        },
+        {
+          "id": "18376.5",
+          "path": "/43.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 322
+          }
+        },
+        {
+          "id": "18376.6",
+          "path": "/44.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 369
+          }
+        },
+        {
+          "id": "18376.7",
+          "path": "/45.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 416
+          }
+        },
+        {
+          "id": "18376.8",
+          "path": "/46.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 463
+          }
+        },
+        {
+          "id": "18376.42",
+          "path": "/bg.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 6560
+          }
+        },
+        {
+          "id": "18376.53",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 34907
+          }
+        },
+        {
+          "id": "18376.56",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 3645
+          }
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "counts": {
+        "/logo.png": 2,
+        "/14.png": 2,
+        "/13.png": 1,
+        "/43.png": 1,
+        "/44.png": 1,
+        "/45.png": 1,
+        "/46.png": 1,
+        "/bg.png": 1
+      },
+      "passed": false,
+      "events": [
+        {
+          "id": "29220.2",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 181
+          }
+        },
+        {
+          "id": "29220.3",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 228
+          }
+        },
+        {
+          "id": "29220.4",
+          "path": "/13.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 275
+          }
+        },
+        {
+          "id": "29220.5",
+          "path": "/43.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 322
+          }
+        },
+        {
+          "id": "29220.6",
+          "path": "/44.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 369
+          }
+        },
+        {
+          "id": "29220.7",
+          "path": "/45.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 416
+          }
+        },
+        {
+          "id": "29220.8",
+          "path": "/46.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 463
+          }
+        },
+        {
+          "id": "29220.42",
+          "path": "/bg.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 6560
+          }
+        },
+        {
+          "id": "29220.53",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 34907
+          }
+        },
+        {
+          "id": "29220.56",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 3645
+          }
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "counts": {
+        "/logo.png": 2,
+        "/14.png": 2,
+        "/13.png": 1,
+        "/43.png": 1,
+        "/44.png": 1,
+        "/45.png": 1,
+        "/46.png": 1,
+        "/bg.png": 1
+      },
+      "passed": false,
+      "events": [
+        {
+          "id": "24880.2",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 181
+          }
+        },
+        {
+          "id": "24880.3",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 228
+          }
+        },
+        {
+          "id": "24880.4",
+          "path": "/13.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 275
+          }
+        },
+        {
+          "id": "24880.5",
+          "path": "/43.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 322
+          }
+        },
+        {
+          "id": "24880.6",
+          "path": "/44.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 369
+          }
+        },
+        {
+          "id": "24880.7",
+          "path": "/45.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 416
+          }
+        },
+        {
+          "id": "24880.8",
+          "path": "/46.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 0,
+            "columnNumber": 463
+          }
+        },
+        {
+          "id": "24880.42",
+          "path": "/bg.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 6560
+          }
+        },
+        {
+          "id": "24880.53",
+          "path": "/logo.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 34907
+          }
+        },
+        {
+          "id": "24880.56",
+          "path": "/14.png",
+          "initiator": {
+            "type": "parser",
+            "url": "http://127.0.0.1:3030/",
+            "lineNumber": 30,
+            "columnNumber": 3645
+          }
+        }
+      ]
+    }
+  ],
+  "passed": false,
+  "scope": "Real 04ca4ef baseline or final static export in a cold browser context. No route interception or cache disabling. Assertions apply to actual logo/14 preload and IMG paths, not the non-reproducing miniature HTML."
+}

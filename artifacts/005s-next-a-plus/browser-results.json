@@ -1,0 +1,398 @@
+{
+  "results": [
+    {
+      "name": "initial homepage has no guide API or media request 1440",
+      "passed": true
+    },
+    {
+      "name": "four accurate statistic cards, safe placeholders and source details 1440",
+      "passed": true
+    },
+    {
+      "name": "real published snapshot, scoped filters, zero fake cards, one request 1440",
+      "passed": true
+    },
+    {
+      "name": "keyboard link reaches independent guide, reduced motion 1440",
+      "passed": true
+    },
+    {
+      "name": "initial homepage has no guide API or media request 1024",
+      "passed": true
+    },
+    {
+      "name": "four accurate statistic cards, safe placeholders and source details 1024",
+      "passed": true
+    },
+    {
+      "name": "real published snapshot, scoped filters, zero fake cards, one request 1024",
+      "passed": true
+    },
+    {
+      "name": "keyboard link reaches independent guide, reduced motion 1024",
+      "passed": true
+    },
+    {
+      "name": "initial homepage has no guide API or media request 768",
+      "passed": true
+    },
+    {
+      "name": "four accurate statistic cards, safe placeholders and source details 768",
+      "passed": true
+    },
+    {
+      "name": "real published snapshot, scoped filters, zero fake cards, one request 768",
+      "passed": true
+    },
+    {
+      "name": "keyboard link reaches independent guide, reduced motion 768",
+      "passed": true
+    },
+    {
+      "name": "initial homepage has no guide API or media request 390",
+      "passed": true
+    },
+    {
+      "name": "four accurate statistic cards, safe placeholders and source details 390",
+      "passed": true
+    },
+    {
+      "name": "real published snapshot, scoped filters, zero fake cards, one request 390",
+      "passed": true
+    },
+    {
+      "name": "keyboard link reaches independent guide, reduced motion 390",
+      "passed": true
+    },
+    {
+      "name": "initial homepage has no guide API or media request 320",
+      "passed": true
+    },
+    {
+      "name": "four accurate statistic cards, safe placeholders and source details 320",
+      "passed": true
+    },
+    {
+      "name": "real published snapshot, scoped filters, zero fake cards, one request 320",
+      "passed": true
+    },
+    {
+      "name": "keyboard link reaches independent guide, reduced motion 320",
+      "passed": true
+    },
+    {
+      "name": "explicit controlled state loading-error-retry",
+      "passed": true,
+      "syntheticOnly": true
+    },
+    {
+      "name": "explicit controlled state empty",
+      "passed": true,
+      "syntheticOnly": true
+    },
+    {
+      "name": "explicit controlled state few",
+      "passed": true,
+      "syntheticOnly": true
+    },
+    {
+      "name": "explicit controlled state summary-unknown",
+      "passed": true,
+      "syntheticOnly": true
+    },
+    {
+      "name": "explicit controlled state media-fixture",
+      "passed": true,
+      "syntheticOnly": true
+    }
+  ],
+  "measurements": [
+    {
+      "width": 1440,
+      "boxes": [
+        {
+          "width": 311,
+          "height": 191.890625,
+          "x": 98,
+          "y": 358.484375
+        },
+        {
+          "width": 311,
+          "height": 191.890625,
+          "x": 409,
+          "y": 358.484375
+        },
+        {
+          "width": 311,
+          "height": 191.890625,
+          "x": 720,
+          "y": 358.484375
+        },
+        {
+          "width": 311,
+          "height": 191.890625,
+          "x": 1031,
+          "y": 358.484375
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?id=13",
+          "type": "fetch",
+          "method": "GET"
+        }
+      ],
+      "scope": "Real public snapshot replay; detail snapshot excludes comment contents and user arrays. No live database writes."
+    },
+    {
+      "width": 1024,
+      "boxes": [
+        {
+          "width": 247,
+          "height": 191.890625,
+          "x": 18,
+          "y": 358.484375
+        },
+        {
+          "width": 247,
+          "height": 191.890625,
+          "x": 265,
+          "y": 358.484375
+        },
+        {
+          "width": 247,
+          "height": 191.890625,
+          "x": 512,
+          "y": 358.484375
+        },
+        {
+          "width": 247,
+          "height": 191.890625,
+          "x": 759,
+          "y": 358.484375
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?id=13",
+          "type": "fetch",
+          "method": "GET"
+        }
+      ],
+      "scope": "Real public snapshot replay; detail snapshot excludes comment contents and user arrays. No live database writes."
+    },
+    {
+      "width": 768,
+      "boxes": [
+        {
+          "width": 366,
+          "height": 192.890625,
+          "x": 18,
+          "y": 451.484375
+        },
+        {
+          "width": 366,
+          "height": 192.890625,
+          "x": 384,
+          "y": 451.484375
+        },
+        {
+          "width": 366,
+          "height": 191.890625,
+          "x": 18,
+          "y": 644.375
+        },
+        {
+          "width": 366,
+          "height": 191.890625,
+          "x": 384,
+          "y": 644.375
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?id=13",
+          "type": "fetch",
+          "method": "GET"
+        }
+      ],
+      "scope": "Real public snapshot replay; detail snapshot excludes comment contents and user arrays. No live database writes."
+    },
+    {
+      "width": 390,
+      "boxes": [
+        {
+          "width": 177,
+          "height": 165.1875,
+          "x": 18,
+          "y": 465.484375
+        },
+        {
+          "width": 177,
+          "height": 165.1875,
+          "x": 195,
+          "y": 465.484375
+        },
+        {
+          "width": 177,
+          "height": 164.1875,
+          "x": 18,
+          "y": 630.671875
+        },
+        {
+          "width": 177,
+          "height": 164.1875,
+          "x": 195,
+          "y": 630.671875
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?id=13",
+          "type": "fetch",
+          "method": "GET"
+        }
+      ],
+      "scope": "Real public snapshot replay; detail snapshot excludes comment contents and user arrays. No live database writes."
+    },
+    {
+      "width": 320,
+      "boxes": [
+        {
+          "width": 142,
+          "height": 165.1875,
+          "x": 18,
+          "y": 465.671875
+        },
+        {
+          "width": 142,
+          "height": 165.1875,
+          "x": 160,
+          "y": 465.671875
+        },
+        {
+          "width": 142,
+          "height": 182.875,
+          "x": 18,
+          "y": 630.859375
+        },
+        {
+          "width": 142,
+          "height": 182.875,
+          "x": 160,
+          "y": 630.859375
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/messages",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/announcements",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?summary=1&status=published&limit=3&offset=0&sortBy=created_at&sortOrder=DESC",
+          "type": "fetch",
+          "method": "GET"
+        },
+        {
+          "url": "http://127.0.0.1:3029/.netlify/functions/strategies?id=13",
+          "type": "fetch",
+          "method": "GET"
+        }
+      ],
+      "scope": "Real public snapshot replay; detail snapshot excludes comment contents and user arrays. No live database writes."
+    }
+  ],
+  "errors": [],
+  "method": "Actual production static export in Edge. Normal screenshots replay sanitized public published snapshot; state/media tests explicitly synthetic and labelled. All POST blocked by review server; no real login, online heartbeat, database, or video aggregation API tested."
+}

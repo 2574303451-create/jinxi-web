@@ -1,0 +1,34 @@
+{
+  "policy": "legacy",
+  "rows": [
+    {
+      "run": 1,
+      "requests": [
+        {
+          "path": "/logo.png"
+        }
+      ],
+      "oneDownload": true
+    },
+    {
+      "run": 2,
+      "requests": [
+        {
+          "path": "/logo.png"
+        }
+      ],
+      "oneDownload": true
+    },
+    {
+      "run": 3,
+      "requests": [
+        {
+          "path": "/logo.png"
+        }
+      ],
+      "oneDownload": true
+    }
+  ],
+  "passed": true,
+  "scope": "Real browser preload and image through a two-chunk HTTP response; same bytes, one changed cache header. No user data/production requests."
+}

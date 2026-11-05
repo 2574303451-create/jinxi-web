@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "5 widths: true video, failed fallback, focus, static/reduced motion, full screenshot matrix",
+    "True200%: arrow safe, pre-existing full-page overflow retained and documented",
+    "TypeScript28/28, zero new complete diagnostics",
+    "Actual anonymous public guide GET200; no writes",
+    "Homepage state, member, avatar frame and original entry regressions",
+    "242 protected source/assets/config unchanged",
+    "Final Node20 build sources match final working sources",
+    "Final12-run performance record: CLS0, zero full guide code/errors",
+    "74 gallery links and images return200"
+  ]
+}

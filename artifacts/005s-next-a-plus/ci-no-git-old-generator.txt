@@ -1,0 +1,31 @@
+fatal: not a git repository (or any of the parent directories): .git
+node:child_process:930
+    throw err;
+    ^
+
+Error: Command failed: git log -1 --format=%cI -- config/guild-terminal.config.json
+fatal: not a git repository (or any of the parent directories): .git
+
+    at genericNodeError (node:internal/errors:984:15)
+    at wrappedFn (node:internal/errors:538:14)
+    at checkExecSyncError (node:child_process:891:11)
+    at execFileSync (node:child_process:927:15)
+    at Object.<anonymous> (E:\Recovery\.jinxi-research\005s-next-ci\no-git\scripts\old-summary.cjs:47:20)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {
+  status: 128,
+  signal: null,
+  output: [
+    null,
+    '',
+    'fatal: not a git repository (or any of the parent directories): .git\n'
+  ],
+  pid: 24832,
+  stdout: '',
+  stderr: 'fatal: not a git repository (or any of the parent directories): .git\n'
+}
+
+Node.js v20.20.2

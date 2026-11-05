@@ -1,0 +1,302 @@
+{
+  "results": [
+    {
+      "link": "/",
+      "status": 200
+    },
+    {
+      "link": "/guides/",
+      "status": 200
+    },
+    {
+      "link": "DELIVERY.md",
+      "status": 200
+    },
+    {
+      "link": "PERFORMANCE.md",
+      "status": 200
+    },
+    {
+      "link": "BUILD_RELIABILITY.md",
+      "status": 200
+    },
+    {
+      "link": "IMAGE_DIAGNOSIS.md",
+      "status": 200
+    },
+    {
+      "link": "REMAINING.md",
+      "status": 200
+    },
+    {
+      "link": "arrow-results.json",
+      "status": 200
+    },
+    {
+      "link": "zoom-results.json",
+      "status": 200
+    },
+    {
+      "link": "browser-results.json",
+      "status": 200
+    },
+    {
+      "link": "FILES.json",
+      "status": 200
+    },
+    {
+      "link": "compare-1440.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-hero.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-playing.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-failed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-keyboard.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-reduced-motion.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1440-zoom200-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "before-1440-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "compare-1024.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-hero.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-playing.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-failed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-keyboard.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-reduced-motion.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-1024-zoom200-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "before-1024-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "compare-768.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-hero.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-playing.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-failed.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-keyboard.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-reduced-motion.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-768-zoom200-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "before-768-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "compare-390.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-hero.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-playing.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-failed.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-keyboard.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-reduced-motion.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-390-zoom200-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "before-390-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "compare-320.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-hero.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-playing.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-failed.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-keyboard.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-reduced-motion.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "after-320-zoom200-expanded.png",
+      "status": 200
+    },
+    {
+      "link": "before-320-zoom200-collapsed.png",
+      "status": 200
+    },
+    {
+      "link": "statistics-1440.png",
+      "status": 200
+    },
+    {
+      "link": "statistics-390.png",
+      "status": 200
+    },
+    {
+      "link": "live-public-guides-1440.png",
+      "status": 200
+    },
+    {
+      "link": "live-public-guides-390.png",
+      "status": 200
+    },
+    {
+      "link": "state-loading-390.png",
+      "status": 200
+    },
+    {
+      "link": "state-error-390.png",
+      "status": 200
+    },
+    {
+      "link": "state-empty-390.png",
+      "status": 200
+    },
+    {
+      "link": "synthetic-media-states-390.png",
+      "status": 200
+    }
+  ],
+  "bad": [],
+  "passed": true
+}

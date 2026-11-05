@@ -1,0 +1,155 @@
+{
+  "method": "chrome.tabs.setZoom(tabId,2), temporary extension in disposable Edge profile, verified devicePixelRatio2 and half-width CSS viewport; not installed in user browser.",
+  "rows": [
+    {
+      "width": 1440,
+      "innerWidth": 720,
+      "outerWidth": 1440,
+      "dpr": 2,
+      "overflow": false,
+      "summary": {
+        "x": 60,
+        "y": 277,
+        "width": 600,
+        "height": 42
+      },
+      "tip": {
+        "x": 450,
+        "y": 297
+      },
+      "tipInsideSummary": true,
+      "pointerEvents": "none",
+      "baselineLayout": {
+        "innerWidth": 720,
+        "scrollWidth": 720
+      },
+      "currentLayout": {
+        "innerWidth": 720,
+        "scrollWidth": 720
+      },
+      "existingOverflow": false,
+      "keyboardOpen": true,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "innerWidth": 512,
+      "outerWidth": 1024,
+      "dpr": 2,
+      "overflow": false,
+      "summary": {
+        "x": 16,
+        "y": 277,
+        "width": 480,
+        "height": 42
+      },
+      "tip": {
+        "x": 339,
+        "y": 287
+      },
+      "tipInsideSummary": true,
+      "pointerEvents": "none",
+      "baselineLayout": {
+        "innerWidth": 512,
+        "scrollWidth": 512
+      },
+      "currentLayout": {
+        "innerWidth": 512,
+        "scrollWidth": 512
+      },
+      "existingOverflow": false,
+      "keyboardOpen": true,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "innerWidth": 384,
+      "outerWidth": 768,
+      "dpr": 2,
+      "overflow": false,
+      "summary": {
+        "x": 16,
+        "y": 277,
+        "width": 352,
+        "height": 42
+      },
+      "tip": {
+        "x": 275,
+        "y": 287
+      },
+      "tipInsideSummary": true,
+      "pointerEvents": "none",
+      "baselineLayout": {
+        "innerWidth": 384,
+        "scrollWidth": 384
+      },
+      "currentLayout": {
+        "innerWidth": 384,
+        "scrollWidth": 384
+      },
+      "existingOverflow": false,
+      "keyboardOpen": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "innerWidth": 195,
+      "outerWidth": 511,
+      "dpr": 2,
+      "overflow": true,
+      "summary": {
+        "x": 16,
+        "y": 268,
+        "width": 163,
+        "height": 60
+      },
+      "tip": {
+        "x": 172,
+        "y": 278
+      },
+      "tipInsideSummary": true,
+      "pointerEvents": "none",
+      "baselineLayout": {
+        "innerWidth": 195,
+        "scrollWidth": 197
+      },
+      "currentLayout": {
+        "innerWidth": 195,
+        "scrollWidth": 197
+      },
+      "existingOverflow": true,
+      "keyboardOpen": true,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "innerWidth": 160,
+      "outerWidth": 500,
+      "dpr": 2,
+      "overflow": true,
+      "summary": {
+        "x": 16,
+        "y": 268.09375,
+        "width": 128,
+        "height": 60
+      },
+      "tip": {
+        "x": 137,
+        "y": 278.09375
+      },
+      "tipInsideSummary": true,
+      "pointerEvents": "none",
+      "baselineLayout": {
+        "innerWidth": 160,
+        "scrollWidth": 197
+      },
+      "currentLayout": {
+        "innerWidth": 160,
+        "scrollWidth": 197
+      },
+      "existingOverflow": true,
+      "keyboardOpen": true,
+      "passed": true
+    }
+  ]
+}

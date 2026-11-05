@@ -103,7 +103,7 @@
   [headers.values]
     Cache-Control = "no-store, no-cache, must-revalidate"
     X-Robots-Tag = "noindex, nofollow"
-    Access-Control-Allow-Origin = "https://jinxi-web.netlify.app"
+    # CORS is handled by each Function; do not grant a site-wide cross-origin API policy.
 
 # Static export: existing files (including /guides/index.html) use Netlify file shadowing.
 # Unknown routes must be genuine 404s instead of rewriting to the homepage.

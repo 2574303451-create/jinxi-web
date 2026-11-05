@@ -1,0 +1,11 @@
+✔ all legacy identity/mutations are denied without a database transport (18.6847ms)
+✔ missing runtime context never reads an inherited DATABASE_URL (5.1391ms)
+✔ contexts and least-privilege policy are explicit; no old URL fallback (0.257ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.4429

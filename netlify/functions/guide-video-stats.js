@@ -1,9 +1,9 @@
 const { neon } = require("@neondatabase/serverless");
 const { videoAggregate } = require("./_shared/strategy-media");
 const { readBatch, publicReadError } = require("./_shared/strategy-query");
-const { publicReadDatabaseUrl } = require("./_shared/strategy-database");
+const {withFunctionSecurity,requestDatabase}=require("./_shared/function-security");
 const COUNT_TYPE = "published-valid-url-video-attachments-v1";
-exports.handler = async (event) => {
+exports.handler = withFunctionSecurity("guide-video-stats",neon,process.env,async (event) => {
   const headers = {
     "Content-Type": "application/json",
     "Cache-Control": "no-store",
@@ -29,7 +29,7 @@ exports.handler = async (event) => {
       error: "统计接口不接受筛选或身份参数。",
     });
   try {
-    const [[row]] = await readBatch(neon(publicReadDatabaseUrl(process.env)), [
+    const [[row]] = await readBatch(requestDatabase(), [
       { text: videoAggregate },
     ]);
     const count = Number(row?.video_count),
@@ -53,4 +53,4 @@ exports.handler = async (event) => {
     const result = publicReadError(error);
     return response(result.status, { ...unavailable, ...result.body });
   }
-};
+});

@@ -2,13 +2,16 @@ const { test } = require("node:test"),
   assert = require("node:assert/strict");
 const { loadHandler } = require("./support/handler.cjs");
 test("read API safety without a database", async (t) => {
-  await t.test("preview connections fail closed without separate configuration", () => {
+  await t.test("old credentials and unapproved previews fail closed without identity policy", () => {
     const { publicReadDatabaseUrl } = require("../netlify/functions/_shared/strategy-database");
     const production = "postgresql://production.invalid/guild";
     assert.throws(() => publicReadDatabaseUrl({ CONTEXT:"deploy-preview", DATABASE_URL:production }));
     assert.throws(() => publicReadDatabaseUrl({ CONTEXT:"branch-deploy", DATABASE_URL:production, JINXI_PREVIEW_DATABASE_URL:production }));
-    assert.equal(publicReadDatabaseUrl({ CONTEXT:"deploy-preview", DATABASE_URL:production, JINXI_PREVIEW_DATABASE_URL:"postgresql://isolated.invalid/test" }),"postgresql://isolated.invalid/test");
-    assert.equal(publicReadDatabaseUrl({ CONTEXT:"production", DATABASE_URL:production }),production);
+    assert.throws(()=>publicReadDatabaseUrl({ CONTEXT:"deploy-preview", DATABASE_URL:production, JINXI_PREVIEW_DATABASE_URL:"postgresql://isolated.invalid/test" }));
+    assert.throws(()=>publicReadDatabaseUrl({ CONTEXT:"production", DATABASE_URL:production }));
+    const env=require('./support/handler.cjs').contractEnvironment();
+    Object.defineProperty(env,'DATABASE_URL',{get(){throw Error('Must not read inherited production credentials')}});
+    assert.equal(publicReadDatabaseUrl(env),env.JINXI_LOCAL_READ_DATABASE_URL);
   });
   const forbidden = () => {
     throw Error("Database must not be queried");

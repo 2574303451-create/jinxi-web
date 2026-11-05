@@ -1,0 +1,110 @@
+{
+  "baseline": "115bf854a7977a3e582a89af13459115178a1e31",
+  "count": 13,
+  "rows": [
+    {
+      "file": "announcements.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": true
+    },
+    {
+      "file": "auth-change-password.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "auth-login.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "checkin.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "guide-video-stats.js",
+      "directDatabase": false,
+      "wildcardCors": false,
+      "logs": 0,
+      "rawErrorLeak": false,
+      "ddl": false
+    },
+    {
+      "file": "leaderboard.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "message-actions.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 15,
+      "rawErrorLeak": false,
+      "ddl": false
+    },
+    {
+      "file": "messages.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 10,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "points-board.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "points.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "sponsorship.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": true,
+      "ddl": true
+    },
+    {
+      "file": "strategies.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 7,
+      "rawErrorLeak": true,
+      "ddl": false
+    },
+    {
+      "file": "strategy-actions.js",
+      "directDatabase": true,
+      "wildcardCors": true,
+      "logs": 1,
+      "rawErrorLeak": false,
+      "ddl": false
+    }
+  ]
+}

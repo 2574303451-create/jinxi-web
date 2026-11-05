@@ -1,0 +1,78 @@
+[
+  {
+    "file": "netlify/functions/announcements.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/auth-change-password.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/auth-login.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/checkin.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/guide-video-stats.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/leaderboard.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/message-actions.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/messages.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/points-board.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/points.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/sponsorship.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/strategies.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/strategy-actions.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/admin-password.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/function-security.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-database.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-media.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-query.js",
+    "exit": 0
+  },
+  {
+    "file": "netlify/functions/_shared/strategy-read.js",
+    "exit": 0
+  }
+]

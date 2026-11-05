@@ -1,0 +1,18 @@
+{
+  "scope": "Authorized synthetic local DB catalog before B2 DDL; no account rows read",
+  "actual": {
+    "database": "jinxi_005s_b1_test",
+    "address": "127.0.0.1",
+    "port": 55433,
+    "cluster_id": "7704646019698940864",
+    "database_oid": "16388"
+  },
+  "tables": [
+    {
+      "schema": "public",
+      "name": "strategies"
+    }
+  ],
+  "memberColumns": [],
+  "productionSchema": "Not accessed or verified"
+}

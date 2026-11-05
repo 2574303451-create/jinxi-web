@@ -1,0 +1,22 @@
+
+> my-v0-project@0.1.0 test:environment
+> node --test tests/environment-postgres.test.cjs
+
+▶ actual local environment identity and effective least privilege
+  ✔ real fingerprint and read-only role permit B1 public reads (19.318ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.4025ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (5.2145ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.8073ms)
+  ✔ session role cannot read/write the separate protected resources (2.1606ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (20.2418ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (1.6523ms)
+  ✔ all5 public read handlers use real restricted PG, never mutate on GET (31.5433ms)
+✔ actual local environment identity and effective least privilege (630.8828ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 726.6351

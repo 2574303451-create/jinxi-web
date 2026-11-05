@@ -1,0 +1,28 @@
+
+> my-v0-project@0.1.0 test:api
+> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs
+
+✔ legacy full detail normalizes malformed comments/media at the actual read boundary (10.9078ms)
+▶ frontend readonly contracts and bounded cache (network fixtures only)
+  ✔ feeds are sent to server, coalesced and cached separately (74.9841ms)
+  ✔ old backend cannot masquerade as working homepage filters (16.1596ms)
+  ✔ v2 acknowledgement, media fields and public status fail closed (58.5588ms)
+  ✔ success expires60s, failure drops stale cache; no polling (9.3273ms)
+  ✔ stats distinguishes real0 from errors, stale/unknown contracts and null (9.0644ms)
+  ✔ an unavailable stats endpoint never fabricates zero (13.9125ms)
+✔ frontend readonly contracts and bounded cache (network fixtures only) (182.8754ms)
+▶ read API safety without a database
+  ✔ old credentials and unapproved previews fail closed without identity policy (1.3315ms)
+  ✔ invalid public queries rejected before transaction (3.0084ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (0.9241ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.6602ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (18.6985ms)
+✔ read API safety without a database (26.8411ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 399.7676

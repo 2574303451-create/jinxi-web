@@ -1,0 +1,86 @@
+[
+  {
+    "file": "DESIGN.md",
+    "beforeBytes": 8238,
+    "afterBytes": 9877,
+    "deltaBytes": 1639
+  },
+  {
+    "file": "components/guild-time/archive-record.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 3621,
+    "deltaBytes": 3621
+  },
+  {
+    "file": "components/guild-time/runtime-clock.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 3834,
+    "deltaBytes": 3834
+  },
+  {
+    "file": "components/guild-uptime-terminal.module.css",
+    "beforeBytes": 9019,
+    "afterBytes": 6636,
+    "deltaBytes": -2383
+  },
+  {
+    "file": "components/guild-uptime-terminal.tsx",
+    "beforeBytes": 12013,
+    "afterBytes": 4883,
+    "deltaBytes": -7130
+  },
+  {
+    "file": "components/home/message-ribbon-row.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 3367,
+    "deltaBytes": 3367
+  },
+  {
+    "file": "components/home/message-showcase.tsx",
+    "beforeBytes": 8519,
+    "afterBytes": 5060,
+    "deltaBytes": -3459
+  },
+  {
+    "file": "components/home/ribbon-card.tsx",
+    "beforeBytes": 0,
+    "afterBytes": 1616,
+    "deltaBytes": 1616
+  },
+  {
+    "file": "components/home/use-ribbon-motion.ts",
+    "beforeBytes": 0,
+    "afterBytes": 3675,
+    "deltaBytes": 3675
+  },
+  {
+    "file": "hooks/use-element-activity.ts",
+    "beforeBytes": 0,
+    "afterBytes": 1546,
+    "deltaBytes": 1546
+  },
+  {
+    "file": "hooks/use-motion-preference.ts",
+    "beforeBytes": 0,
+    "afterBytes": 446,
+    "deltaBytes": 446
+  },
+  {
+    "file": "lib/guild-terminal-utils.ts",
+    "beforeBytes": 4896,
+    "afterBytes": 6139,
+    "deltaBytes": 1243
+  },
+  {
+    "file": "styles/community-components.css",
+    "beforeBytes": 24656,
+    "afterBytes": 24986,
+    "deltaBytes": 330
+  },
+  {
+    "file": "styles/guild-theme.css",
+    "beforeBytes": 31806,
+    "afterBytes": 31315,
+    "deltaBytes": -491
+  }
+]

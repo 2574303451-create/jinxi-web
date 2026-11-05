@@ -1,0 +1,61 @@
+{
+  "results": [
+    {
+      "name": "preview wrapper explicitly labels synthetic data",
+      "passed": true
+    },
+    {
+      "name": "local preview server rejects POST without forwarding",
+      "passed": true
+    },
+    {
+      "name": "actual browser accessibility tree contains 12 public card buttons, not 24 copies",
+      "passed": true,
+      "count": 12
+    },
+    {
+      "name": "review comparison ribbon-section 1440",
+      "passed": true
+    },
+    {
+      "name": "review comparison time-record 1440",
+      "passed": true
+    },
+    {
+      "name": "review comparison ribbon-section 768",
+      "passed": true
+    },
+    {
+      "name": "review comparison time-record 768",
+      "passed": true
+    },
+    {
+      "name": "review comparison ribbon-section 390",
+      "passed": true
+    },
+    {
+      "name": "review comparison time-record 390",
+      "passed": true
+    },
+    {
+      "name": "review comparison ribbon-section 320",
+      "passed": true
+    },
+    {
+      "name": "review comparison time-record 320",
+      "passed": true
+    }
+  ],
+  "hero390Diff": {
+    "width": 390,
+    "height": 600,
+    "count": 835,
+    "bounds": {
+      "minX": 16,
+      "minY": 16,
+      "maxX": 47,
+      "maxY": 47
+    }
+  },
+  "method": "Actual production static preview wrapper, local deny-write server, browser Accessibility domain and screenshot review page. No production request or write."
+}

@@ -1,127 +1,65 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
-import { ArrowRight, MessageCircle, Pause, Play } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMotionPreference } from "../../hooks/use-motion-preference";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import {
   PUBLIC_MESSAGES_CHANGED,
   usePublicMessages,
 } from "../../hooks/use-public-messages";
-import { PaperState, PublicAvatar, messageDate } from "../ui/paper";
-
-const SPEED = 32; // px/s, independent of record count or screen width.
+import { PaperState } from "../ui/paper";
+import { MessageRibbonRow } from "./message-ribbon-row";
+import type { PublicMessageSummary } from "./ribbon-card";
 
 export function MessageShowcase({ onOpen }: { onOpen: (id?: string) => void }) {
   const { messages, loading, error, reload } = usePublicMessages();
-  const reduced = useReducedMotion();
-  const [paused, setPaused] = useState(false),
-    [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false),
-    [hidden, setHidden] = useState(false);
-  const [distance, setDistance] = useState(0);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  const viewport = useRef<HTMLDivElement>(null),
-    group = useRef<HTMLUListElement>(null);
-  // Only fields already public in the existing API. Never use reaction user IDs or replies here.
-  const items = messages
-    .filter((item) => typeof item.content === "string" && item.content.trim())
-    .slice(0, 12);
-  const running =
-    !loading &&
-    !error &&
-    !paused &&
-    !hovered &&
-    !focused &&
-    !reduced &&
-    !hidden &&
-    items.length > 1 &&
-    distance > 0;
+  const reduced = useMotionPreference();
+  const [paused, setPaused] = useState(false);
+  const [loopable, setLoopable] = useState<Record<number, boolean>>({});
+  const onLoopChange = useCallback(
+    (index: number, loop: boolean) =>
+      setLoopable((previous) =>
+        previous[index] === loop ? previous : { ...previous, [index]: loop },
+      ),
+    [],
+  );
+  const items = useMemo(() => {
+    const seen = new Set<string>();
+    return messages
+      .flatMap((item) => {
+        if (typeof item.content !== "string") return [];
+        const key = item.content
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLocaleLowerCase();
+        if (!key || seen.has(key)) return [];
+        seen.add(key);
+        // Explicit public projection. Do not pass reactions, replies, account IDs or other API fields.
+        const summary: PublicMessageSummary = {
+          id: item.id,
+          name: item.name,
+          content: item.content,
+          timestamp: item.timestamp,
+          category: item.category,
+          isPinned: item.isPinned,
+        };
+        return [summary];
+      })
+      .slice(0, 12);
+  }, [messages]);
+  const twoRows = items.length >= 6;
+  const canAnimate = twoRows && !reduced && (loopable[0] || loopable[1]);
+  const rows = twoRows
+    ? [
+        items.filter((_, index) => index % 2 === 0),
+        items.filter((_, index) => index % 2 === 1),
+      ]
+    : [items];
   useEffect(() => {
     const changed = () => void reload();
-    const visibility = () => setHidden(document.hidden);
-    visibility();
     window.addEventListener(PUBLIC_MESSAGES_CHANGED, changed);
-    document.addEventListener("visibilitychange", visibility);
-    return () => {
-      window.removeEventListener(PUBLIC_MESSAGES_CHANGED, changed);
-      document.removeEventListener("visibilitychange", visibility);
-    };
+    return () => window.removeEventListener(PUBLIC_MESSAGES_CHANGED, changed);
   }, [reload]);
-  useEffect(() => {
-    const list = group.current;
-    if (!list) return;
-    const observer = new ResizeObserver(() => {
-      const gap =
-        Number.parseFloat(getComputedStyle(list.parentElement!).columnGap) ||
-        20;
-      setDistance(list.getBoundingClientRect().width + gap);
-      setViewportWidth(viewport.current?.clientWidth || 0);
-    });
-    observer.observe(list);
-    if (viewport.current) observer.observe(viewport.current);
-    return () => observer.disconnect();
-  }, [loading, error, messages]);
-  useEffect(() => {
-    if (!running) return;
-    let frame = 0,
-      previous = 0,
-      position = viewport.current?.scrollLeft || 0;
-    const step = (time: number) => {
-      if (previous && viewport.current) {
-        position += (Math.min(time - previous, 50) * SPEED) / 1000;
-        if (position >= distance) position -= distance;
-        viewport.current.scrollLeft = position;
-      }
-      previous = time;
-      frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [running, distance]);
-  function open(id: string) {
-    const original = viewport.current?.querySelector<HTMLButtonElement>(
-      `button[data-public-message="${id.replace(/[^\w-]/g, "")}"]`,
-    );
-    original?.focus({ preventScroll: true });
-    onOpen(id);
-  }
-  const cards = (duplicate: boolean) =>
-    items.map((item) => (
-      <li key={item.id}>
-        <button
-          className="message-ribbon-card"
-          data-public-message={duplicate ? undefined : item.id}
-          tabIndex={duplicate ? -1 : 0}
-          onMouseDown={
-            duplicate ? (event) => event.preventDefault() : undefined
-          }
-          onClick={() => open(item.id)}
-        >
-          <span className="ribbon-card-top">
-            <PublicAvatar name={item.name} />
-            <span>
-              <strong>{item.name}</strong>
-              <small>{messageDate(item.timestamp)}</small>
-            </span>
-            <MessageCircle size={17} aria-hidden="true" />
-          </span>
-          <span className="ribbon-excerpt">
-            {Array.from(item.content.replace(/\s+/g, " ").trim())
-              .slice(0, 100)
-              .join("")}
-            {Array.from(item.content.trim()).length > 100 ? "…" : ""}
-          </span>
-          <span className="ribbon-card-bottom">
-            <span className={`paper-tag${item.isPinned ? " yellow" : ""}`}>
-              {item.isPinned ? "置顶" : item.category}
-            </span>
-            <span>
-              查看留言 <ArrowRight size={14} />
-            </span>
-          </span>
-        </button>
-      </li>
-    ));
   return (
     <section className="message-showcase" aria-label="公会公开留言展播">
       <header>
@@ -131,15 +69,21 @@ export function MessageShowcase({ onOpen }: { onOpen: (id?: string) => void }) {
           <p className="paper-muted">公会的日常，就藏在这些小小的对话里。</p>
         </div>
         <div className="ribbon-actions">
-          {!loading && !error && items.length > 1 && (
+          {!loading && !error && twoRows && (
             <button
               className="paper-button"
               onClick={() => setPaused((value) => !value)}
-              disabled={Boolean(reduced)}
-              aria-pressed={paused || Boolean(reduced)}
+              disabled={!canAnimate}
+              aria-pressed={paused || reduced}
             >
-              {paused || reduced ? <Play size={16} /> : <Pause size={16} />}{" "}
-              {reduced ? "减少动态已开启" : paused ? "恢复滚动" : "暂停滚动"}
+              {paused || !canAnimate ? <Play size={16} /> : <Pause size={16} />}{" "}
+              {reduced
+                ? "减少动态已开启"
+                : !canAnimate
+                  ? "静态浏览"
+                  : paused
+                    ? "恢复滚动"
+                    : "暂停滚动"}
             </button>
           )}
           <button className="paper-text-button" onClick={() => onOpen()}>
@@ -175,64 +119,25 @@ export function MessageShowcase({ onOpen }: { onOpen: (id?: string) => void }) {
         </PaperState>
       ) : (
         <>
-          <div
-            ref={viewport}
-            className="message-ribbon"
-            tabIndex={0}
-            role="region"
-            aria-label="留言卡片，可左右滑动浏览"
-            data-running={running}
-            data-speed={SPEED}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            onFocusCapture={() => setFocused(true)}
-            onBlurCapture={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false);
-            }}
-            onTouchStart={() => setPaused(true)}
-            onPointerDown={(e) => {
-              if (e.pointerType === "touch") setPaused(true);
-            }}
-            onKeyDown={(e) => {
-              if (
-                e.target === e.currentTarget &&
-                (e.key === "ArrowLeft" || e.key === "ArrowRight")
-              ) {
-                e.preventDefault();
-                e.currentTarget.scrollBy({
-                  left: e.key === "ArrowLeft" ? -320 : 320,
-                  behavior: reduced ? "instant" : "smooth",
-                });
-              }
-            }}
-          >
-            <div className="message-ribbon-track">
-              <ul ref={group} className="message-ribbon-group">
-                {cards(false)}
-              </ul>
-              {!reduced &&
-                items.length > 1 &&
-                Array.from(
-                  {
-                    length: Math.max(
-                      1,
-                      Math.ceil(viewportWidth / (distance || 1)),
-                    ),
-                  },
-                  (_, index) => (
-                    <ul
-                      key={index}
-                      className="message-ribbon-group"
-                      aria-hidden="true"
-                    >
-                      {cards(true)}
-                    </ul>
-                  ),
-                )}
-            </div>
+          <div className="message-ribbon-rows" data-rows={rows.length}>
+            {rows.map((row, index) => (
+              <MessageRibbonRow
+                key={index}
+                rowIndex={index}
+                onLoopChange={onLoopChange}
+                items={row}
+                direction={index === 0 ? "left" : "right"}
+                paused={paused}
+                reduced={reduced}
+                allowLoop={twoRows}
+                onPause={() => setPaused(true)}
+                onOpen={onOpen}
+              />
+            ))}
           </div>
           <p className="ribbon-hint">
-            左右滑动浏览 · 点击查看原留言{!reduced && " · 悬停或键盘聚焦时暂停"}
+            左右滑动浏览 · 点击查看原留言
+            {canAnimate ? " · 悬停或键盘聚焦时暂停" : " · 当前为静态浏览"}
           </p>
         </>
       )}

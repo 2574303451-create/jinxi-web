@@ -1,0 +1,22 @@
+{
+  "baseline": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+  "layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "width": 320,
+      "scrollWidth": 320
+    }
+  ],
+  "environment": "Actual fixed baseline production build. 12 synthetic API records; ribbon paused via its visible control and manually scrolled to start. Archive reads original local config. Hero comparison uses reduced motion."
+}

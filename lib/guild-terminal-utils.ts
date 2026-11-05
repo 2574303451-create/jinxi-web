@@ -175,3 +175,47 @@ export function findMemberByQuery(
 
   return null
 }
+
+export type GuildLookupResult =
+  | {
+      kind: "member";
+      memberId: string;
+      profile: MemberProfile;
+      matchedBy: "id" | "nickname";
+    }
+  | { kind: "date"; joinDate: string }
+  | {
+      kind: "error";
+      reason:
+        | "empty"
+        | "future"
+        | "invalid-record"
+        | "invalid-date"
+        | "not-found";
+    };
+
+/** Same local archive lookup rules, without the former artificial 500ms wait. */
+export function resolveGuildLookup(
+  query: string,
+  members: Record<string, MemberProfile>,
+  now = new Date(),
+): GuildLookupResult {
+  const input = query.trim();
+  if (!input) return { kind: "error", reason: "empty" };
+  const matched = findMemberByQuery(input, members);
+  if (matched) {
+    const date = parseDateStrict(matched.profile.joinDate);
+    if (!date || date.getTime() > now.getTime())
+      return { kind: "error", reason: "invalid-record" };
+    return { kind: "member", ...matched };
+  }
+  const date = parseDateStrict(input);
+  if (date)
+    return date.getTime() > now.getTime()
+      ? { kind: "error", reason: "future" }
+      : { kind: "date", joinDate: input };
+  return {
+    kind: "error",
+    reason: /^\d{4}-\d{2}-\d{2}$/.test(input) ? "invalid-date" : "not-found",
+  };
+}

@@ -1,0 +1,40 @@
+{
+  "base": "http://127.0.0.1:3015",
+  "stage": "before",
+  "method": "V8 precise function execution counts in actual development browser over 6.1 seconds per case. React development StrictMode may invoke twice. Coverage instrumentation affects timing, so these are execution counts only, not performance durations.",
+  "samples": [
+    {
+      "name": "collapsed-visible",
+      "elapsedMs": 6100,
+      "counts": [
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-uptime-terminal.tsx",
+          "name": "GuildUptimeTerminal",
+          "calls": 12
+        }
+      ]
+    },
+    {
+      "name": "expanded-visible",
+      "elapsedMs": 6100,
+      "counts": [
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-uptime-terminal.tsx",
+          "name": "GuildUptimeTerminal",
+          "calls": 12
+        }
+      ]
+    },
+    {
+      "name": "expanded-offscreen",
+      "elapsedMs": 6100,
+      "counts": [
+        {
+          "module": "webpack-internal:///(app-pages-browser)/./components/guild-uptime-terminal.tsx",
+          "name": "GuildUptimeTerminal",
+          "calls": 12
+        }
+      ]
+    }
+  ]
+}

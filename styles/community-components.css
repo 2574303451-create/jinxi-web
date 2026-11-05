@@ -669,7 +669,7 @@ textarea.paper-input {
   margin: 0;
 }
 
-/* Public homepage ribbon. Native horizontal scroll remains available. */
+/* Public homepage ribbon. Compositor transforms run only for overflowing, visible rows. */
 .message-showcase {
   margin-top: 44px;
 }
@@ -694,31 +694,40 @@ textarea.paper-input {
 }
 .message-ribbon {
   overflow-x: auto;
+  overflow-y: hidden;
+  height: 190px;
   padding: 6px 5px 14px 2px;
   scrollbar-width: thin;
   overscroll-behavior-x: contain;
   border-radius: 6px;
 }
+.message-ribbon-rows {
+  display: grid;
+  gap: 12px;
+}
+.message-ribbon:not([data-loop="true"]) .message-ribbon-track {
+  margin-inline: auto;
+}
 .message-ribbon-track {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   width: max-content;
 }
 .message-ribbon-group {
   display: flex;
   list-style: none;
-  gap: 20px;
+  gap: 16px;
   width: max-content;
   margin: 0;
   padding: 0;
 }
 .message-ribbon-card {
   width: 310px;
-  height: 224px;
+  height: 164px;
   display: flex;
   flex-direction: column;
   text-align: left;
-  padding: 18px;
+  padding: 14px;
   border: 2px solid var(--line);
   border-radius: 14px;
   background: var(--surface);
@@ -739,32 +748,34 @@ textarea.paper-input {
 .ribbon-card-top strong {
   display: block;
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.5;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   font-weight: 800;
 }
 .ribbon-card-top small {
+  display: block;
   font-size: 10px;
-  line-height: 1.8;
+  line-height: 1.4;
   color: var(--muted);
 }
 .ribbon-card-top .paper-avatar {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   font-size: 13px;
   border-radius: 9px;
 }
 .ribbon-excerpt {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   overflow-wrap: anywhere;
+  flex-shrink: 0;
   font-size: 14px;
-  line-height: 1.8;
-  margin-block: 16px;
+  line-height: 1.7;
+  margin-block: 8px;
 }
 .ribbon-card-bottom {
   display: flex;
@@ -779,6 +790,11 @@ textarea.paper-input {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.ribbon-card-bottom .paper-tag {
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 3px 8px;
 }
 .ribbon-hint {
   margin-top: 10px;
@@ -1165,7 +1181,7 @@ textarea.paper-input {
   }
   .message-ribbon-group,
   .message-ribbon-track {
-    gap: 20px;
+    gap: 16px;
   }
   .member-directory-grid {
     gap: 18px;

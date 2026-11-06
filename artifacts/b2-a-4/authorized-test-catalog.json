@@ -1,0 +1,216 @@
+{
+  "scope": "Only synthetic local TEST; public formal member tables absent. No authorized real-member TEST, migration history or backup evidence supplied.",
+  "identity": {
+    "database": "jinxi_005s_b1_test",
+    "server": "127.0.0.1",
+    "port": 55433
+  },
+  "objects": [
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "owner": "jinxi_b2_owner"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_profiles",
+      "owner": "jinxi_b2_owner"
+    }
+  ],
+  "columns": [
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "employee_no",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "login_account",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "hash_algorithm",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "force_reset_password",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "is_locked",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "auth_version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "password_updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "last_login_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_accounts",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "employee_no",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "member_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "display_name",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "nickname",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "is_active",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "lock_version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "b2_lab",
+      "table_name": "guild_member_profiles",
+      "column_name": "source",
+      "data_type": "text",
+      "is_nullable": "NO"
+    }
+  ],
+  "constraints": [
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "conname": "guild_member_accounts_employee_no_fkey",
+      "definition": "FOREIGN KEY (employee_no) REFERENCES b2_lab.guild_member_profiles(employee_no)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "conname": "guild_member_accounts_employee_no_key",
+      "definition": "UNIQUE (employee_no)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "conname": "guild_member_accounts_login_account_check",
+      "definition": "CHECK ((login_account = ANY (ARRAY['b2-lab-a'::text, 'b2-lab-b'::text])))"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "conname": "guild_member_accounts_login_account_key",
+      "definition": "UNIQUE (login_account)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_accounts",
+      "conname": "guild_member_accounts_pkey",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_profiles",
+      "conname": "guild_member_profiles_employee_no_check",
+      "definition": "CHECK ((employee_no ~~ 'B2-LAB-%'::text))"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_profiles",
+      "conname": "guild_member_profiles_member_id_key",
+      "definition": "UNIQUE (member_id)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_profiles",
+      "conname": "guild_member_profiles_pkey",
+      "definition": "PRIMARY KEY (employee_no)"
+    },
+    {
+      "schema": "b2_lab",
+      "relname": "guild_member_profiles",
+      "conname": "guild_member_profiles_source_check",
+      "definition": "CHECK ((source = 'synthetic-b2-lab'::text))"
+    }
+  ],
+  "counts": {
+    "accounts": 2,
+    "profiles": 2,
+    "mapped": 2
+  },
+  "aggregateHashFormats": [
+    {
+      "algorithm": "pbkdf2_sha256",
+      "iterations": "600000",
+      "count": 2
+    }
+  ]
+}

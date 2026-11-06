@@ -1,0 +1,7 @@
+{
+  "scope": "Only local HTTPS + synthetic member + dedicated PostgreSQL",
+  "passed": false,
+  "balance": 16,
+  "debits": 2,
+  "error": "AssertionError: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   balance: 16,\n+   debits: 2\n-   balance: 23,\n-   debits: 1\n  }\n"
+}

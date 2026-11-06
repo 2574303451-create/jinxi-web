@@ -1,0 +1,125 @@
+{
+  "checkedAt": "2026-11-06 Asia/Shanghai",
+  "pullRequests": [
+    {
+      "number": 1,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-rea-002",
+      "sha": "328819a57c671b33b743d1ad3f969c0fb7917048",
+      "base": "codex/planning-handoff-2026-11-04",
+      "baseSha": "7dfbf69c2e2b61be7c08d4fd65d884c2b371b244"
+    },
+    {
+      "number": 2,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-rea-003-batch-1",
+      "sha": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+      "base": "codex/jinxi-rea-002",
+      "baseSha": "328819a57c671b33b743d1ad3f969c0fb7917048"
+    },
+    {
+      "number": 3,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-ui-004-a",
+      "sha": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+      "base": "codex/jinxi-rea-003-batch-1",
+      "baseSha": "0182518277831ba0d03df3a3e1973f1a7ae06efe"
+    },
+    {
+      "number": 4,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005",
+      "sha": "80737413d3bb981b3a3287c603893eb6c09decf2",
+      "base": "codex/jinxi-ui-004-a",
+      "baseSha": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1"
+    },
+    {
+      "number": 5,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005r",
+      "sha": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+      "base": "codex/jinxi-arch-005",
+      "baseSha": "80737413d3bb981b3a3287c603893eb6c09decf2"
+    },
+    {
+      "number": 6,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-arch-005s-a",
+      "sha": "04ca4ef972636ef7ac8169d80db2dbf4af9d8b00",
+      "base": "codex/jinxi-arch-005r",
+      "baseSha": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d"
+    },
+    {
+      "number": 7,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-005s-next-a-plus",
+      "sha": "d4769e719b2dd486b82cd2867f066d6c4dfa3e19",
+      "base": "codex/jinxi-arch-005s-a",
+      "baseSha": "04ca4ef972636ef7ac8169d80db2dbf4af9d8b00"
+    },
+    {
+      "number": 8,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-005s-b1",
+      "sha": "115bf854a7977a3e582a89af13459115178a1e31",
+      "base": "codex/jinxi-005s-next-a-plus",
+      "baseSha": "d4769e719b2dd486b82cd2867f066d6c4dfa3e19"
+    },
+    {
+      "number": 9,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-b2-0-b1-review",
+      "sha": "1be49379a771a2a3f23692260e438c2368841150",
+      "base": "codex/jinxi-005s-b1",
+      "baseSha": "115bf854a7977a3e582a89af13459115178a1e31"
+    },
+    {
+      "number": 10,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-b2-0-isolation",
+      "sha": "6abd039e898b9970d8d2ec4e7092e3e5b8f3aaf0",
+      "base": "codex/jinxi-b2-0-b1-review",
+      "baseSha": "1be49379a771a2a3f23692260e438c2368841150"
+    },
+    {
+      "number": 11,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-b2-0-security-plan",
+      "sha": "d516b8643c73797ddfbd8109d46a7dba58f6016c",
+      "base": "codex/jinxi-b2-0-isolation",
+      "baseSha": "6abd039e898b9970d8d2ec4e7092e3e5b8f3aaf0"
+    },
+    {
+      "number": 12,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "codex/jinxi-b2-a-session-lab",
+      "sha": "483495aefcd75316731efce76372748a0f00c8c7",
+      "base": "codex/jinxi-b2-0-security-plan",
+      "baseSha": "d516b8643c73797ddfbd8109d46a7dba58f6016c"
+    }
+  ]
+}

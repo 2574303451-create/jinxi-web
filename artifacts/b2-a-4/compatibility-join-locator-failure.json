@@ -1,0 +1,10 @@
+{
+  "results": [
+    {
+      "name": "plain clipboard, actual raster file, safe URL insertion and blocked HTML drop",
+      "passed": true
+    }
+  ],
+  "error": "locator.click: Error: strict mode violation: getByRole('button', { name: '加入今夕', exact: true }) resolved to 2 elements:\n    1) <button class=\"guild-button dark\">…</button> aka locator('#top').getByRole('button', { name: '加入今夕' })\n    2) <button class=\"guild-button dark\">…</button> aka locator('#join').getByRole('button', { name: '加入今夕' })\n\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '加入今夕', exact: true })\u001b[22m\n",
+  "stack": "locator.click: Error: strict mode violation: getByRole('button', { name: '加入今夕', exact: true }) resolved to 2 elements:\n    1) <button class=\"guild-button dark\">…</button> aka locator('#top').getByRole('button', { name: '加入今夕' })\n    2) <button class=\"guild-button dark\">…</button> aka locator('#join').getByRole('button', { name: '加入今夕' })\n\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '加入今夕', exact: true })\u001b[22m\n\n    at E:\\Recovery\\jinxi-web\\artifacts\\b2-a-4\\compatibility-browser.cjs:7:887"
+}

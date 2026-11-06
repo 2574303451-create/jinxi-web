@@ -1,0 +1,4 @@
+A pasted/loaded protocol control character must not execute
+
+1 !== 0
+

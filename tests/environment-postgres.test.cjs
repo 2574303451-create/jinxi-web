@@ -5,6 +5,27 @@ const {guardedDatabase,POLICIES}=require('../netlify/functions/_shared/function-
 test('actual local environment identity and effective least privilege',async t=>{
  await b2.setup();await require('./support/b2-public-fixtures.cjs').seedPublic();const admin=await adminConnect('admin'),reader=await b2.connect(),session=await b2.connect('session');
  try{
+  await t.test('user schema beginning with pg letters is not a system schema',async()=>{
+   const {databaseConfig,validateProof,ATTESTATION_SQL}=require('../netlify/functions/_shared/function-security');
+   await admin.query('CREATE SCHEMA pgsynthetic_a4_permissions');
+   try{
+    await admin.query('CREATE TABLE pgsynthetic_a4_permissions.canary(id int); GRANT USAGE ON SCHEMA pgsynthetic_a4_permissions TO jinxi_b2_session; GRANT SELECT ON pgsynthetic_a4_permissions.canary TO jinxi_b2_session');
+    const proof=(await session.query(ATTESTATION_SQL,['b2_lab'])).rows;
+    assert.throws(()=>validateProof(databaseConfig(b2.environment('session-lab'),'session-lab'),proof),e=>e.code==='DATABASE_PERMISSION_UNSAFE');
+   }finally{await admin.query('DROP TABLE IF EXISTS pgsynthetic_a4_permissions.canary; DROP SCHEMA pgsynthetic_a4_permissions');}
+  });
+  await t.test('misgranted table/column SELECT outside each role read scope rejects',async()=>{
+   const {databaseConfig,validateProof,ATTESTATION_SQL}=require('../netlify/functions/_shared/function-security');
+   for(const role of['session','reader']){const user=role==='session'?'jinxi_b2_session':'jinxi_b2_reader',mode=role==='session'?'session-lab':'public-read',client=role==='session'?session:reader,scope=role==='session'?'b2_lab':'';
+    await admin.query('GRANT USAGE ON SCHEMA b2_forbidden TO '+user);
+    try{for(const grant of['SELECT','SELECT(content)']){
+     await admin.query('GRANT '+grant+' ON b2_forbidden.production_like_canary TO '+user);
+     const proof=(await client.query(ATTESTATION_SQL,[scope])).rows;
+     assert.throws(()=>validateProof(databaseConfig(b2.environment(mode),mode),proof),e=>e.code==='DATABASE_PERMISSION_UNSAFE');
+     await admin.query('REVOKE '+grant+' ON b2_forbidden.production_like_canary FROM '+user);
+    }}finally{await admin.query('REVOKE SELECT,SELECT(content) ON b2_forbidden.production_like_canary FROM '+user+';REVOKE USAGE ON SCHEMA b2_forbidden FROM '+user);}
+   }
+  });
   await t.test('effective column, view and sequence grants outside the lab are unsafe',async()=>{
    const {databaseConfig,validateProof,ATTESTATION_SQL}=require('../netlify/functions/_shared/function-security'),config=databaseConfig(b2.environment('session-lab'),'session-lab');
    await admin.query('GRANT USAGE ON SCHEMA b2_forbidden TO jinxi_b2_session');

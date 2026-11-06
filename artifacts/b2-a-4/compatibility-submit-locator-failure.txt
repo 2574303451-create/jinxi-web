@@ -1,0 +1,8 @@
+locator.isDisabled: Error: strict mode violation: locator('dialog[open]').getByRole('button', { name: '登录', exact: true }) resolved to 2 elements:
+    1) <button type="button" class="flex-1 py-2 rounded-lg text-sm transition-all bg-emerald-600 text-white">登录</button> aka getByRole('button', { name: '登录' }).first()
+    2) <button disabled type="submit" class="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed">登录</button> aka locator('form').getByRole('button', { name: '登录' })
+
+Call log:
+  - waiting for locator('dialog[open]').getByRole('button', { name: '登录', exact: true })
+
+    at E:\Recovery\jinxi-web\artifacts\b2-a-4\compatibility-browser.cjs:8:542

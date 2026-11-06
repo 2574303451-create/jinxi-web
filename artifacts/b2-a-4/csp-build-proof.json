@@ -1,0 +1,77 @@
+{
+  "source": "Trusted static export scripts only; no runtime user HTML",
+  "policy": "default-src 'self'; script-src 'self' 'sha256-4WOv42jUMx6wuQzoTsBtY1at8czSD9S7YqUldBd6NIM=' 'sha256-7xAiX3SOmVHk7g2p2THeFjb6+Mlw7/t8RXSXjB7jJEs=' 'sha256-87V3vIPlJ/1LlPqIa/wruWseVJRRsDBykMI37zTKUWs=' 'sha256-AmiBdQnejYJCr7YGqukmnh/UumFk68OJfIKBxRo6JVM=' 'sha256-DtJuCa5+HW3gHLaUFYjuFLhG5b/2sDyHwxBn05OIy5I=' 'sha256-NcG1tN8BE2H0Ut++rygYvReizSeMnq0sfBLHnAxrjbM=' 'sha256-PQUnp17E0s2XTF3pvjOYVE08uh6nWFctiqRi3dTq6K0=' 'sha256-Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=' 'sha256-Sip+gzQj98mRe8C/bDaKMnyrfA/fH+y4ZHar+eN4IyU=' 'sha256-WGS+vfIjrjFmB/ezOEBc+qSXhmt61sxdrQiJK3u6ysY=' 'sha256-Z7XHr9S+Y034jWcA1zeIlDmtb/RZ8TkN7uAYqiLbR+E=' 'sha256-d2YhHiwp/bWFXp5nme88oGNFXN4GoiJpGFh9VZJU55I=' 'sha256-n0vTPlZ5f74vExaKsrzEqgZPCSdMVmS8xhQWrvBN0Sw=' 'sha256-oQRqK87yy2nuGCaG4GyZtMAUqaKInrDlIl07L/uPbFA=' 'sha256-oRi0E9SWrFtrTj/2rYHAygJOEWcM97ZladCmKEK+bMM=' 'sha256-ooj5fxk6zWJ6gnm92q9wt/+hfQB+s/1N0xvspcL7tRY=' 'sha256-tWqEsXPTL9dOeKj43WZaoq1gPmU4bX3/jAbeugdX8dA=' 'sha256-wTM5df47WZqxBmooeRNtqwB4cQh6cDsuX8pdZHGOsX0=' 'sha256-z/NIAJ7o3egHQ3sMJ5iFfSxh+sWU444ljqj6zqH9I9g=' 'sha256-zYJmQcAGEYgzwLzGUiZdsd5MLdL5FBo2lekaMyQeHmY=' https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: blob: https:; media-src 'self' https://interactive-examples.mdn.mozilla.net; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https://api.emailjs.com https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; frame-ancestors 'none'",
+  "policyBytes": 1639,
+  "pages": [
+    {
+      "file": "404/index.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "wTM5df47WZqxBmooeRNtqwB4cQh6cDsuX8pdZHGOsX0=",
+        "oQRqK87yy2nuGCaG4GyZtMAUqaKInrDlIl07L/uPbFA=",
+        "Z7XHr9S+Y034jWcA1zeIlDmtb/RZ8TkN7uAYqiLbR+E=",
+        "zYJmQcAGEYgzwLzGUiZdsd5MLdL5FBo2lekaMyQeHmY="
+      ]
+    },
+    {
+      "file": "404.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "wTM5df47WZqxBmooeRNtqwB4cQh6cDsuX8pdZHGOsX0=",
+        "oQRqK87yy2nuGCaG4GyZtMAUqaKInrDlIl07L/uPbFA=",
+        "Z7XHr9S+Y034jWcA1zeIlDmtb/RZ8TkN7uAYqiLbR+E=",
+        "zYJmQcAGEYgzwLzGUiZdsd5MLdL5FBo2lekaMyQeHmY="
+      ]
+    },
+    {
+      "file": "guides/index.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "oRi0E9SWrFtrTj/2rYHAygJOEWcM97ZladCmKEK+bMM=",
+        "NcG1tN8BE2H0Ut++rygYvReizSeMnq0sfBLHnAxrjbM=",
+        "87V3vIPlJ/1LlPqIa/wruWseVJRRsDBykMI37zTKUWs=",
+        "z/NIAJ7o3egHQ3sMJ5iFfSxh+sWU444ljqj6zqH9I9g="
+      ]
+    },
+    {
+      "file": "index.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "tWqEsXPTL9dOeKj43WZaoq1gPmU4bX3/jAbeugdX8dA=",
+        "AmiBdQnejYJCr7YGqukmnh/UumFk68OJfIKBxRo6JVM=",
+        "d2YhHiwp/bWFXp5nme88oGNFXN4GoiJpGFh9VZJU55I=",
+        "n0vTPlZ5f74vExaKsrzEqgZPCSdMVmS8xhQWrvBN0Sw="
+      ]
+    },
+    {
+      "file": "profile-lab/index.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "4WOv42jUMx6wuQzoTsBtY1at8czSD9S7YqUldBd6NIM=",
+        "PQUnp17E0s2XTF3pvjOYVE08uh6nWFctiqRi3dTq6K0=",
+        "Sip+gzQj98mRe8C/bDaKMnyrfA/fH+y4ZHar+eN4IyU=",
+        "ooj5fxk6zWJ6gnm92q9wt/+hfQB+s/1N0xvspcL7tRY="
+      ]
+    },
+    {
+      "file": "session-lab/index.html",
+      "inlineScriptHashes": [
+        "Q+8tPsjVtiDsjF/Cv8FMOpg2Yg91oKFKDAJat1PPb2g=",
+        "WGS+vfIjrjFmB/ezOEBc+qSXhmt61sxdrQiJK3u6ysY=",
+        "7xAiX3SOmVHk7g2p2THeFjb6+Mlw7/t8RXSXjB7jJEs=",
+        "DtJuCa5+HW3gHLaUFYjuFLhG5b/2sDyHwxBn05OIy5I=",
+        "n0vTPlZ5f74vExaKsrzEqgZPCSdMVmS8xhQWrvBN0Sw="
+      ]
+    }
+  ],
+  "parser": "Installed @netlify/headers-parser, offline only",
+  "routes": [
+    "/",
+    "/guides/",
+    "/profile-lab/",
+    "/session-lab/",
+    "/404.html",
+    "/_next/static/a.js"
+  ],
+  "singlePolicy": true
+}

@@ -1,0 +1,26 @@
+PASS initial no API/media 1440
+PASS archive/date preserved, true read count4, online—, no height change 1440
+PASS database filters, few results, cover success/failure, no videos, keyed cache 1440
+PASS keyboard reaches independent detail without writes 1440
+PASS initial no API/media 1024
+PASS archive/date preserved, true read count4, online—, no height change 1024
+PASS database filters, few results, cover success/failure, no videos, keyed cache 1024
+PASS keyboard reaches independent detail without writes 1024
+PASS initial no API/media 768
+PASS archive/date preserved, true read count4, online—, no height change 768
+PASS database filters, few results, cover success/failure, no videos, keyed cache 768
+PASS keyboard reaches independent detail without writes 768
+PASS initial no API/media 390
+PASS archive/date preserved, true read count4, online—, no height change 390
+PASS database filters, few results, cover success/failure, no videos, keyed cache 390
+PASS keyboard reaches independent detail without writes 390
+PASS initial no API/media 320
+PASS archive/date preserved, true read count4, online—, no height change 320
+PASS database filters, few results, cover success/failure, no videos, keyed cache 320
+PASS keyboard reaches independent detail without writes 320
+PASS actual empty PostgreSQL reaches UI0 and no fake cards
+PASS stats HTTP503 shows— and recovers with retry
+PASS late video response cannot overwrite pinned selection
+PASS old backend: home fails closed, independent guide list still works
+PASS list HTTP503 has no stale cards and explicit retry recovers
+PASS browser cache reuses at59s, expires at62s, no polling

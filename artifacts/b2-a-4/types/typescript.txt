@@ -1,0 +1,56 @@
+components/strategy-wall.tsx(485,12): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean | undefined'.
+  Type '""' is not assignable to type 'boolean | undefined'.
+components/strategy-wall.tsx(498,11): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean | undefined'.
+  Type '""' is not assignable to type 'boolean | undefined'.
+components/ui/media-gallery.tsx(159,56): error TS2322: Type '"large"' is not assignable to type '"lg" | "md" | "sm" | "xl" | "2xl" | "full" | undefined'.
+components/ui/sidebar.tsx(8,29): error TS2307: Cannot find module '@/hooks/use-mobile' or its corresponding type declarations.
+components/ui/toaster.tsx(3,26): error TS2307: Cannot find module '@/hooks/use-toast' or its corresponding type declarations.
+components/ui/toaster.tsx(5,3): error TS2459: Module '"@/components/ui/toast"' declares 'Toast' locally, but it is not exported.
+components/ui/toaster.tsx(6,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastClose'.
+components/ui/toaster.tsx(7,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastDescription'.
+components/ui/toaster.tsx(9,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastTitle'.
+components/ui/toaster.tsx(10,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastViewport'.
+components/ui/toaster.tsx(18,31): error TS7031: Binding element 'id' implicitly has an 'any' type.
+components/ui/toaster.tsx(18,35): error TS7031: Binding element 'title' implicitly has an 'any' type.
+components/ui/toaster.tsx(18,42): error TS7031: Binding element 'description' implicitly has an 'any' type.
+components/ui/toaster.tsx(18,55): error TS7031: Binding element 'action' implicitly has an 'any' type.
+components/ui/use-toast.ts(7,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastActionElement'.
+components/ui/use-toast.ts(8,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastProps'.
+components/ui/use-toast.ts(161,22): error TS7006: Parameter 'open' implicitly has an 'any' type.
+hooks/use-toast.ts(7,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastActionElement'.
+hooks/use-toast.ts(8,3): error TS2305: Module '"@/components/ui/toast"' has no exported member 'ToastProps'.
+hooks/use-toast.ts(161,22): error TS7006: Parameter 'open' implicitly has an 'any' type.
+lib/guild-terminal-config.ts(133,29): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'readonly [string, MemberProfile]' is not assignable to type 'readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      The types of 'role' are incompatible between these types.
+        Type '"member" | "founder" | undefined' is not assignable to type '"member" | "founder"'.
+          Type 'undefined' is not assignable to type '"member" | "founder"'.
+lib/guild-terminal-config.ts(139,29): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(entries: Iterable<readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]>): { [k: string]: { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }; }', gave the following error.
+    Argument of type '(readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null)[]' is not assignable to parameter of type 'Iterable<readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]>'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null, undefined>' is not assignable to type 'IteratorResult<readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }], any>'.
+          Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorResult<readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }], any>'.
+            Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorYieldResult<readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]>'.
+              Type 'readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null' is not assignable to type 'readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]'.
+                Type 'null' is not assignable to type 'readonly [PropertyKey, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }]'.
+  Overload 2 of 2, '(entries: Iterable<readonly any[]>): any', gave the following error.
+    Argument of type '(readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null)[]' is not assignable to parameter of type 'Iterable<readonly any[]>'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null, undefined>' is not assignable to type 'IteratorResult<readonly any[], any>'.
+          Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorResult<readonly any[], any>'.
+            Type 'IteratorYieldResult<readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null>' is not assignable to type 'IteratorYieldResult<readonly any[]>'.
+              Type 'readonly [string, { name: string; joinDate: string; role: "member" | "founder"; badges: string[] | undefined; }] | null' is not assignable to type 'readonly any[]'.
+                Type 'null' is not assignable to type 'readonly any[]'.
+lib/guild-terminal-config.ts(175,29): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'SecurityClearanceRule' is not assignable to type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; }'.
+    Property 'maxYearsExclusive' is optional in type 'SecurityClearanceRule' but required in type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; }'.
+lib/guild-terminal-config.ts(176,21): error TS18047: 'a' is possibly 'null'.
+lib/guild-terminal-config.ts(176,34): error TS18047: 'b' is possibly 'null'.
+lib/guild-terminal-config.ts(217,5): error TS2322: Type 'SecurityClearanceRule[] | ({ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null)[]' is not assignable to type 'SecurityClearanceRule[]'.
+  Type '({ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null)[]' is not assignable to type 'SecurityClearanceRule[]'.
+    Type '{ code: string; title: string; minYears: number; maxYearsExclusive: number | undefined; tone: ClearanceTone; } | null' is not assignable to type 'SecurityClearanceRule'.
+      Type 'null' is not assignable to type 'SecurityClearanceRule'.
+services/strategy-wall-service.ts(223,30): error TS1501: This regular expression flag is only available when targeting 'es2018' or later.
+services/strategy-wall-service.ts(225,30): error TS1501: This regular expression flag is only available when targeting 'es2018' or later.

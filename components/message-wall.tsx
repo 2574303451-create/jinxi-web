@@ -126,13 +126,16 @@ export const MessageWall = memo(function MessageWall({
   loggedInAccount = "",
   loggedInNickname = "",
   initialMessageId,
+  writesPaused = false,
 }: {
   className?: string;
   loggedInAccount?: string;
   loggedInNickname?: string;
   initialMessageId?: string | null;
+  writesPaused?: boolean;
 }) {
   const { messages, loading, error, reload, readOnly } = usePublicMessages();
+  const canWrite = !writesPaused && !readOnly;
   const [name, setName] = useState(""),
     [content, setContent] = useState("");
   const [category, setCategory] = useState("闲聊"),
@@ -196,7 +199,7 @@ export const MessageWall = memo(function MessageWall({
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (readOnly) { setNotice({error:true,text:"隔离头像原型只读，未发布留言。"}); return; }
+    if (!canWrite) { setNotice({error:true,text:"留言发布暂未开放，草稿仍可复制。"}); return; }
     if (!content.trim() || submitting) return;
     setSubmitting(true);
     setNotice(null);
@@ -223,7 +226,7 @@ export const MessageWall = memo(function MessageWall({
   }
   async function sendReply(event: FormEvent, id: string) {
     event.preventDefault();
-    if (readOnly) { setNotice({error:true,text:"隔离头像原型只读，未发布回复。"}); return; }
+    if (!canWrite) { setNotice({error:true,text:"留言回复暂未开放，草稿仍可复制。"}); return; }
     if (!reply.trim() || busy) return;
     setBusy(id);
     setNotice(null);
@@ -246,7 +249,7 @@ export const MessageWall = memo(function MessageWall({
     }
   }
   async function react(id: string, type: string) {
-    if (readOnly) { setNotice({error:true,text:"隔离头像原型不提交表情操作。"}); return; }
+    if (!canWrite) return;
     if (busy) return;
     setBusy(id);
     setNotice(null);
@@ -260,7 +263,7 @@ export const MessageWall = memo(function MessageWall({
     }
   }
   async function adminAction(password: string) {
-    if (readOnly) throw new Error("隔离头像原型不执行管理操作。");
+    if (!canWrite) throw new Error("留言管理正在安全升级。");
     if (!pending) throw new Error("请重新选择需要管理的留言。");
     if (!password.trim()) throw new Error("请输入管理密码。");
     if (pending.type === "pin")
@@ -303,6 +306,7 @@ export const MessageWall = memo(function MessageWall({
           刷新留言
         </button>
       </header>
+      {writesPaused && <p className="paper-notice" role="status">留言、回复和表情回应暂未开放。可以阅读旧留言，或在表单内编辑并复制草稿。</p>}
       <div className="message-wall-layout">
         <details
           className="message-composer-disclosure"
@@ -393,10 +397,10 @@ export const MessageWall = memo(function MessageWall({
             <button
               type="submit"
               className="paper-button yellow"
-              disabled={submitting || !content.trim()}
+              disabled={!canWrite || submitting || !content.trim()}
             >
               <Send size={17} />
-              {submitting ? "正在发布…" : "发布留言"}
+              {canWrite ? (submitting ? "正在发布…" : "发布留言") : "发布暂未开放"}
             </button>
           </form>
         </details>
@@ -520,7 +524,7 @@ export const MessageWall = memo(function MessageWall({
                           className="message-reaction"
                           aria-label={`回应 ${type}`}
                           aria-pressed={Boolean(data?.users.includes(userId))}
-                          disabled={busy === message.id}
+                          disabled={!canWrite || busy === message.id}
                           onClick={() => void react(message.id, type)}
                         >
                           {type}
@@ -550,7 +554,9 @@ export const MessageWall = memo(function MessageWall({
                     <details className="message-admin-menu">
                       <summary>管理留言</summary>
                       <div>
+                        {!canWrite && <p className="paper-muted">管理权限正在安全升级。</p>}
                         <button
+                          disabled={!canWrite}
                           onClick={() =>
                             setPending({ type: "pin", id: message.id })
                           }
@@ -559,6 +565,7 @@ export const MessageWall = memo(function MessageWall({
                           {message.isPinned ? "取消置顶" : "置顶留言"}
                         </button>
                         <button
+                          disabled={!canWrite}
                           onClick={() => {
                             if (
                               window.confirm(
@@ -603,9 +610,9 @@ export const MessageWall = memo(function MessageWall({
                         <button
                           className="paper-button yellow"
                           type="submit"
-                          disabled={busy === message.id || !reply.trim()}
+                          disabled={!canWrite || busy === message.id || !reply.trim()}
                         >
-                          {busy === message.id ? "发送中…" : "发送回复"}
+                          {canWrite ? (busy === message.id ? "发送中…" : "发送回复") : "回复暂未开放"}
                         </button>
                       </div>
                     </form>

@@ -209,7 +209,10 @@ export const deleteStrategy = async (strategyId: string, password: string): Prom
 // 格式化攻略内容（Markdown支持）
 export const formatStrategyContent = (content: string): string => {
   // 简单的Markdown格式化
-  return content
+  // This legacy Markdown renderer produces only its own fixed tags. Author HTML
+  // is text; escaping before substitutions prevents the two old HTML sinks from
+  // interpreting pasted/stored markup as executable DOM.
+  return content.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')
     .replace(/^### (.*$)/gm, '<h3 class="text-lg font-semibold text-white mb-2 mt-4">$1</h3>')
     .replace(/^## (.*$)/gm, '<h2 class="text-xl font-bold text-white mb-3 mt-6">$1</h2>')
     .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold text-white mb-4 mt-8">$1</h1>')

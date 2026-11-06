@@ -1,0 +1,20 @@
+▶ actual local environment identity and effective least privilege
+  ✔ misgranted table/column SELECT outside each role read scope rejects (30.198ms)
+  ✔ effective column, view and sequence grants outside the lab are unsafe (17.1041ms)
+  ✔ real fingerprint and read-only role permit B1 public reads (16.453ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.6361ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (6.4951ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.1564ms)
+  ✔ session role cannot read/write the separate protected resources (1.7573ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (21.276ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (2.437ms)
+  ✔ all5 public read handlers use real restricted PG, never mutate on GET (33.1142ms)
+✔ actual local environment identity and effective least privilege (555.6878ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 653.7453

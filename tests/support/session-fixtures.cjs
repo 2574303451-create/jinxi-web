@@ -21,7 +21,9 @@ async function seedSessionLab(){
    GRANT SELECT ON b2_lab.guild_member_accounts,b2_lab.guild_member_profiles,b2_lab.point_rule,b2_lab.point_catalog TO jinxi_b2_session;
    GRANT UPDATE(lock_version) ON b2_lab.guild_member_profiles TO jinxi_b2_session;
    GRANT UPDATE(password_hash,hash_algorithm,force_reset_password,auth_version,password_updated_at,last_login_at) ON b2_lab.guild_member_accounts TO jinxi_b2_session;
-   GRANT SELECT,INSERT,UPDATE,DELETE ON b2_lab.sessions,b2_lab.rate_limits,b2_lab.point_account,b2_lab.point_ledger TO jinxi_b2_session;
+   REVOKE ALL ON b2_lab.sessions,b2_lab.rate_limits,b2_lab.point_account,b2_lab.point_ledger FROM jinxi_b2_session;
+   GRANT SELECT,INSERT,UPDATE ON b2_lab.sessions,b2_lab.rate_limits,b2_lab.point_account TO jinxi_b2_session;
+   GRANT SELECT,INSERT ON b2_lab.point_ledger TO jinxi_b2_session;
    GRANT USAGE ON SEQUENCE b2_lab.point_ledger_id_seq TO jinxi_b2_session;
    CREATE OR REPLACE FUNCTION b2_lab.revoke_account_state() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $f$
     BEGIN IF (NEW.is_locked AND NOT OLD.is_locked) OR NEW.password_hash IS DISTINCT FROM OLD.password_hash THEN

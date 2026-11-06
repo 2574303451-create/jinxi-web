@@ -1,0 +1,58 @@
+▶ actual local environment identity and effective least privilege
+  ✔ misgranted table/column SELECT outside each role read scope rejects (28.7479ms)
+  ✔ effective column, view and sequence grants outside the lab are unsafe (14.3073ms)
+  ✖ real fingerprint and read-only role permit B1 public reads (3.6032ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.6588ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (6.0624ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.5077ms)
+  ✔ session role cannot read/write the separate protected resources (1.8439ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (22.4527ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (1.8046ms)
+  ✖ all5 public read handlers use real restricted PG, never mutate on GET (5.9477ms)
+✖ actual local environment identity and effective least privilege (547.9304ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 8
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 645.3157
+
+✖ failing tests:
+
+test at tests\environment-postgres.test.cjs:34:11
+✖ real fingerprint and read-only role permit B1 public reads (3.6032ms)
+  Error [IsolationError]: Database isolation unavailable
+      at reject (E:\Recovery\jinxi-web\netlify\functions\_shared\function-security.js:15:27)
+      at validateProof (E:\Recovery\jinxi-web\netlify\functions\_shared\function-security.js:54:251)
+      at E:\Recovery\jinxi-web\netlify\functions\_shared\function-security.js:63:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async sql.query (E:\Recovery\jinxi-web\netlify\functions\_shared\function-security.js:72:18)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:34:168)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:34:3)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    code: 'DATABASE_PERMISSION_UNSAFE'
+  }
+
+test at tests\environment-postgres.test.cjs:41:11
+✖ all5 public read handlers use real restricted PG, never mutate on GET (5.9477ms)
+  AssertionError [ERR_ASSERTION]: strategies
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:41:453)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:41:3)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,7 @@
+PASS safe stored HTML, normal text/image and modal layout 1440
+PASS safe stored HTML, normal text/image and modal layout 768
+PASS safe stored HTML, normal text/image and modal layout 390
+PASS safe stored HTML, normal text/image and modal layout 320
+PASS rich/plain paste cleaned before DOM, local images/draft restored, no publishing POST
+PASS sanitizer download failure refuses raw HTML and presents accurate error
+PASS CSP independently blocks unknown inline script and event attributes

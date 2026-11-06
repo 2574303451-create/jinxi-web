@@ -501,3 +501,42 @@
     max-height: 260px;
   }
 }
+
+/* The reader already uses the paper dialog. Give its newly available local
+   editor the same surfaces so legacy dark backgrounds cannot hide dark text. */
+.cyberAnnPanel .cyberAnnEditorWrap {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+}
+.cyberAnnPanel :is(.cyberAnnToolbar, .cyberAnnEmojiPopover, .cyberAnnImageRow) {
+  background: var(--surface-strong);
+  border-color: var(--line);
+}
+.cyberAnnPanel :is(.cyberAnnEditorSurface, .cyberAnnUrlInput) {
+  background: var(--surface);
+  color: var(--ink);
+}
+.cyberAnnPanel :is(.cyberAnnToolBtn, .cyberAnnEmojiBtn, .cyberAnnAdminToggle, .cyberAnnSubmit) {
+  background: var(--surface);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  box-shadow: 2px 2px 0 var(--line);
+  min-height: 44px;
+  font-size: 14px;
+}
+.cyberAnnPanel :is(.cyberAnnAdminToggle, .cyberAnnSubmit) {
+  background: var(--accent);
+}
+.cyberAnnPanel .cyberAnnSubmit:disabled {
+  background: var(--surface-strong);
+  box-shadow: none;
+}
+.cyberAnnPanel .cyberAnnToolBtn {
+  min-width: 36px;
+  height: 44px;
+}
+.cyberAnnPanel .cyberAnnUrlInput {
+  border: 2px solid var(--line);
+  min-height: 44px;
+}

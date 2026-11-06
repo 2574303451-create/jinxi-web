@@ -12,3 +12,8 @@ test('legacy Markdown sinks escape stored and preview HTML but retain ordinary f
  const text=renderer('# 合成标题\n**加粗**\n<img src=x onerror="globalThis.__harmlessMarker=1">\n<svg><script>marker=1</script></svg>');
  assert(text.includes('<h1'));assert(text.includes('<strong'));assert(!/<(?:img|svg|script)\b/i.test(text));assert(text.includes('&lt;img'));assert(text.includes('合成标题'));
 });
+test('legacy Markdown list wrappers retain multiline content with the current TypeScript target',()=>{
+ const render=load(path.join(__dirname,'../services/strategy-wall-service.ts')).formatStrategyContent;
+ const markup=render('- 合成第一项\n- 合成第二项');
+ assert.match(markup, /<ul [^>]*>.*<li [^>]*>合成第一项<\/li><br><li [^>]*>合成第二项<\/li>.*<\/ul>/);
+});

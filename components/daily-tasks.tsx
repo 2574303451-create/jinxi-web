@@ -138,7 +138,7 @@ function DailyTasks() {
                               : 'bg-blue-500/20 text-blue-300'
                         }`}
                       >
-                        {task.status === 'claimed' ? '已完成' : task.status === 'completed' ? '待领取' : '进行中'}
+                        {task.status === 'claimed' ? '本机历史完成' : task.status === 'completed' ? '本机进度完成' : '进行中'}
                       </span>
                     </div>
 
@@ -160,10 +160,10 @@ function DailyTasks() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 text-sm">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                         <span className="text-yellow-300">💰 规则参考 {task.reward.points} 积分</span>
-                        {task.reward.badge && <span className="text-purple-300">🎖️ {task.reward.badge}</span>}
-                        {task.reward.title && <span className="text-cyan-300">👑 {task.reward.title}</span>}
+                        {task.reward.badge && <span className="text-purple-300">🎖️ 参考徽章 {task.reward.badge}</span>}
+                        {task.reward.title && <span className="text-cyan-300">👑 参考称号 {task.reward.title}</span>}
                       </div>
 
                       {task.status === 'completed' && (

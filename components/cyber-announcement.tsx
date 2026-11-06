@@ -7,6 +7,9 @@ import { useToast } from "./ui/toast"
 import { Modal } from "./ui/modal"
 import styles from "./cyber-announcement.module.css"
 
+// JSON.stringify can expand one code unit to six characters (\u0000).
+const MAX_STORED_ANNOUNCEMENT_DRAFT = 6 * MAX_ANNOUNCEMENT_HTML + 1024
+
 interface CyberAnnouncementProps {
   isAdmin?: boolean
   adminTokenStorageKey?: string
@@ -341,7 +344,7 @@ export function CyberAnnouncement(_props: CyberAnnouncementProps = {}) {
     try {
       const raw = localStorage.getItem('jinxi-announcement-draft-v1')
       if (!raw) return
-      if (raw.length > 1_001_000) throw Error('Draft too large')
+      if (raw.length > MAX_STORED_ANNOUNCEMENT_DRAFT) throw Error('Draft too large')
       const draft = JSON.parse(raw)
       if (typeof draft.title !== 'string' || typeof draft.html !== 'string') throw Error('Invalid draft')
       if (draft.html.length > MAX_ANNOUNCEMENT_HTML) throw Error('Draft too large')
@@ -353,8 +356,11 @@ export function CyberAnnouncement(_props: CyberAnnouncementProps = {}) {
   const saveDraft = () => {
     if (!sanitize) return
     try {
+      if (contentHtml.length > MAX_ANNOUNCEMENT_HTML) throw Error('Draft too large')
       const html = sanitize(contentHtml)
-      localStorage.setItem('jinxi-announcement-draft-v1',JSON.stringify({title:titleInput,html}))
+      const encoded = JSON.stringify({title:titleInput.slice(0,120),html})
+      if (html.length > MAX_ANNOUNCEMENT_HTML || encoded.length > MAX_STORED_ANNOUNCEMENT_DRAFT) throw Error('Draft too large')
+      localStorage.setItem('jinxi-announcement-draft-v1',encoded)
       setDraftMessage("草稿已保存在此浏览器，尚未发布。")
     } catch { setDraftMessage("草稿保存失败，请保留编辑内容后重试。") }
   }

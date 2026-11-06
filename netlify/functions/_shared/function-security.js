@@ -37,21 +37,38 @@ function databaseConfig(env,mode='public-read'){
 // Actual cluster/database identity comes from a fixed, read-only SECURITY DEFINER
 // function owned by the test administrator; runtime roles cannot relabel it.
 const ATTESTATION_SQL=`/* jinxi database identity and effective permissions */
+WITH relation_scope AS (
+ SELECT c.oid,c.relkind,
+   (c.relkind='r' AND NOT EXISTS(SELECT 1 FROM pg_inherits h WHERE h.inhparent=c.oid OR h.inhrelid=c.oid)
+      AND (CASE WHEN $1='b2_lab' THEN n.nspname='b2_lab' AND c.relname IN(
+        'guild_member_accounts','guild_member_profiles','sessions','rate_limits','point_account','point_catalog','point_rule','point_ledger')
+        ELSE n.nspname='public' AND c.relname IN('strategies','messages','announcements','guild_sponsorship_entries') END))
+    OR ($1='b2_lab' AND n.nspname='b2_lab' AND c.relkind='S' AND c.relname='point_ledger_id_seq') AS in_scope
+ FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+ WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema'
+)
 SELECT i.*,current_user AS role,r.rolsuper,r.rolcreatedb,r.rolcreaterole,r.rolreplication,r.rolbypassrls,
  current_setting('default_transaction_read_only') AS default_read_only,
  EXISTS(SELECT 1 FROM pg_auth_members WHERE member=r.oid) AS role_memberships,
  has_database_privilege(r.oid,(SELECT oid FROM pg_database WHERE datname=current_database()),'CREATE') AS database_create,
  EXISTS(SELECT 1 FROM pg_namespace n WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND has_schema_privilege(r.oid,n.oid,'CREATE')) AS schema_create,
  (EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND c.relowner=r.oid) OR EXISTS(SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND p.proowner=r.oid)) AS owns_objects,
- EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND (n.nspname<>$1 OR $1='') AND CASE WHEN c.relkind IN('r','p','v','m','f') THEN has_table_privilege(r.oid,c.oid,'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') OR has_any_column_privilege(r.oid,c.oid,'INSERT,UPDATE,REFERENCES') WHEN c.relkind='S' THEN has_sequence_privilege(r.oid,c.oid,'USAGE,UPDATE') ELSE false END) AS writes_outside_schema,
- EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND NOT(CASE WHEN $1='b2_lab' THEN n.nspname='b2_lab' ELSE n.nspname='public' AND c.relkind IN('r','p') AND c.relname IN('strategies','messages','announcements','guild_sponsorship_entries') END) AND CASE WHEN c.relkind IN('r','p','v','m','f') THEN has_table_privilege(r.oid,c.oid,'SELECT') OR has_any_column_privilege(r.oid,c.oid,'SELECT') WHEN c.relkind='S' THEN has_sequence_privilege(r.oid,c.oid,'SELECT') ELSE false END) AS reads_outside_scope,
+ EXISTS(SELECT 1 FROM relation_scope c WHERE CASE
+   WHEN c.relkind IN('r','p','v','m','f') THEN
+     (NOT ($1='b2_lab' AND c.in_scope) AND (has_table_privilege(r.oid,c.oid,'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') OR has_any_column_privilege(r.oid,c.oid,'INSERT,UPDATE,REFERENCES')))
+     OR (CASE WHEN current_setting('server_version_num')::int>=170000 THEN has_table_privilege(r.oid,c.oid,'MAINTAIN') ELSE false END)
+   WHEN c.relkind='S' THEN NOT c.in_scope AND has_sequence_privilege(r.oid,c.oid,'USAGE,UPDATE')
+   ELSE false END) AS writes_outside_scope,
+ EXISTS(SELECT 1 FROM relation_scope c WHERE NOT c.in_scope AND CASE
+   WHEN c.relkind IN('r','p','v','m','f') THEN has_table_privilege(r.oid,c.oid,'SELECT') OR has_any_column_privilege(r.oid,c.oid,'SELECT')
+   WHEN c.relkind='S' THEN has_sequence_privilege(r.oid,c.oid,'SELECT') ELSE false END) AS reads_outside_scope,
  EXISTS(SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE p.prosecdef AND left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND p.oid<>'jinxi_guard.environment_identity()'::regprocedure AND has_function_privilege(r.oid,p.oid,'EXECUTE')) AS unsafe_definer_access
 FROM jinxi_guard.environment_identity() i JOIN pg_roles r ON r.rolname=current_user`;
 function validateProof(config,rows){
   if(!Array.isArray(rows)||rows.length!==1)reject('IDENTITY_PROOF_MISSING');
   const p=rows[0],expected=config.policy;
   if(p.environment_id!==expected.environmentId||p.classification!==expected.classification||p.role!==expected.role||fingerprint(p.cluster_id,p.database_oid,p.database_name)!==expected.fingerprint)reject('ACTUAL_DATABASE_IDENTITY_MISMATCH');
-  for(const key of ['rolsuper','rolcreatedb','rolcreaterole','rolreplication','rolbypassrls','role_memberships','database_create','schema_create','owns_objects','writes_outside_schema','reads_outside_scope','unsafe_definer_access'])if(p[key]!==false)reject('DATABASE_PERMISSION_UNSAFE');
+  for(const key of ['rolsuper','rolcreatedb','rolcreaterole','rolreplication','rolbypassrls','role_memberships','database_create','schema_create','owns_objects','writes_outside_scope','reads_outside_scope','unsafe_definer_access'])if(p[key]!==false)reject('DATABASE_PERMISSION_UNSAFE');
   if(config.mode==='public-read'&&p.default_read_only!=='on')reject('READ_ROLE_NOT_READ_ONLY');
 }
 function guardedDatabase(env,factory,mode='public-read'){

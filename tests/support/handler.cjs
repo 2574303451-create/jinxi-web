@@ -3,7 +3,7 @@ const fs = require("node:fs"),
   vm = require("node:vm"),
   { createRequire } = require("node:module");
 const {fingerprint}=require('../../netlify/functions/_shared/function-security');
-const proof={environment_id:'contract-only',classification:'synthetic-local',cluster_id:'contract-cluster',database_oid:'1',database_name:'contract-db',role:'contract-reader',default_read_only:'on',rolsuper:false,rolcreatedb:false,rolcreaterole:false,rolreplication:false,rolbypassrls:false,role_memberships:false,database_create:false,schema_create:false,owns_objects:false,writes_outside_schema:false,reads_outside_scope:false,unsafe_definer_access:false};
+const proof={environment_id:'contract-only',classification:'synthetic-local',cluster_id:'contract-cluster',database_oid:'1',database_name:'contract-db',role:'contract-reader',default_read_only:'on',rolsuper:false,rolcreatedb:false,rolcreaterole:false,rolreplication:false,rolbypassrls:false,role_memberships:false,database_create:false,schema_create:false,owns_objects:false,writes_outside_scope:false,reads_outside_scope:false,unsafe_definer_access:false};
 function contractEnvironment(){return {JINXI_RUNTIME_CONTEXT:'local',JINXI_LOCAL_READ_DATABASE_URL:'postgresql://contract-reader@127.0.0.1:55433/jinxi_005s_b1_test',JINXI_LOCAL_READ_POLICY:JSON.stringify({context:'local',classification:proof.classification,environmentId:proof.environment_id,role:proof.role,fingerprint:fingerprint(proof.cluster_id,proof.database_oid,proof.database_name)})};}
 // B1 data-contract tests substitute transport plus environment proof only. They do
 // not claim to test the guard. environment-postgres.test.cjs executes the real

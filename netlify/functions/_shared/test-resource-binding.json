@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "status": "pending-approval",
+  "classification": "synthetic-test",
+  "siteId": null,
+  "projectId": null,
+  "branchId": null,
+  "endpointId": null,
+  "databaseName": "neondb",
+  "hosts": [],
+  "port": "5432",
+  "readerRole": "jinxi_test_reader",
+  "environmentId": null,
+  "fingerprint": null,
+  "allowedContexts": ["production"]
+}

@@ -34,3 +34,8 @@ next-env.d.ts
 /scripts/member_profile_map.csv
 **/accounts_for_import.csv
 **/password_dispatch.csv
+
+# Non-secret build proof is generated only for an approved TEST deployment.
+/netlify/functions/_generated/
+/artifacts/f03-f05/*.approval.local.sql
+/test-environment/sql/*.local.sql

@@ -1,14 +1,19 @@
 [build]
-  # Review freeze. Skip Git-triggered builds and refuse execution if a hook
-  # bypasses the ignore rule. Local verification still uses npm run build.
-  ignore = "exit 0"
-  command = "node deploy.js"
+  # Default freeze remains. Only a reviewed independent TEST site + exact
+  # approved commit can pass both gates; the protected old site always fails.
+  ignore = "node scripts/test-build-gate.cjs"
+  command = "node scripts/build-test.cjs"
   publish = "out"
 
 [build.environment]
   NODE_VERSION = "24.22.2"
   NPM_VERSION = "11.19.1"
   NODE_ENV = "production"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "zisi"
+  included_files = ["netlify/functions/_shared/test-resource-binding.json", "netlify/functions/_generated/test-deploy.json"]
 
 # Preserve the script bytes used by the generated static CSP.
 [build.processing]

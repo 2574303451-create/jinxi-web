@@ -7,17 +7,27 @@ const { createRequire } = require('node:module');
 
 const root = path.resolve(__dirname, '..');
 
-test('freeze config skips Git builds and points any forced build to the refusal', () => {
+test('freeze config allows only the separately bound and approved TEST gate', () => {
   const fromCli = createRequire(require.resolve('netlify-cli/package.json'));
   const { parse } = fromCli('@iarna/toml');
   const config = parse(fs.readFileSync(path.join(root, 'netlify.toml'), 'utf8'));
-  assert.equal(config.build.ignore, 'exit 0');
-  assert.equal(config.build.command, 'node deploy.js');
+  assert.equal(config.build.ignore, 'node scripts/test-build-gate.cjs');
+  assert.equal(config.build.command, 'node scripts/build-test.cjs');
   assert.equal(config.build.publish, 'out');
   assert.equal(config.build.environment.NODE_VERSION, '24.22.2');
   for (const override of Object.values(config.context || {})) {
     assert.equal(override.command, undefined);
     assert.equal(override.ignore, undefined);
+  }
+  const env = { SystemRoot: process.env.SystemRoot, PATH: process.env.PATH, TEMP: process.env.TEMP };
+  for (const site of [undefined, '613b5b7c-45b1-494f-9328-dd0625a57963', '00000000-0000-4000-8000-000000000123']) {
+    const candidate = {...env,...(site?{SITE_ID:site}:{}),CONTEXT:'production'};
+    const gate=spawnSync(process.execPath,['scripts/test-build-gate.cjs'],{cwd:root,env:candidate,encoding:'utf8',timeout:5000});
+    assert.equal(gate.status,0,'Unapproved/protected site must SKIP, never unlock');
+    const forced=spawnSync(process.execPath,['scripts/build-test.cjs','--check'],{cwd:root,env:candidate,encoding:'utf8',timeout:5000});
+    assert.equal(forced.status,1,'Forced TEST build must refuse');
+    assert.equal(forced.stdout,'');
+    assert(!forced.stderr.includes('postgres'));
   }
 });
 

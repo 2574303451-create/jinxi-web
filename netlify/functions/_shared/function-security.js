@@ -1,5 +1,6 @@
 const {AsyncLocalStorage}=require('node:async_hooks');
 const crypto=require('node:crypto');
+const {testDatabaseConfig,ResourceError,PROTECTED_SITE_ID}=require('./test-resource');
 const requestScope=new AsyncLocalStorage();
 const POLICIES=Object.freeze({
   'strategies':'public-read','guide-video-stats':'public-read','messages':'public-read',
@@ -14,9 +15,13 @@ class IsolationError extends Error {
 }
 const reject=code=>{throw new IsolationError(code)};
 const fingerprint=(clusterId,databaseOid,database)=>crypto.createHash('sha256').update([clusterId,databaseOid,database].join('\0')).digest('hex');
-function databaseConfig(env,mode='public-read'){
+function databaseConfig(env,mode='public-read',resources){
+  if(env.JINXI_RESOURCE_ENVIRONMENT==='synthetic-test')return testDatabaseConfig(env,mode,resources);
+  // A hosted non-production site cannot opt into the legacy production path.
+  if(env.SITE_ID&&env.SITE_ID!==PROTECTED_SITE_ID)reject('HOSTED_RESOURCE_BINDING_REQUIRED');
   const context=env.JINXI_RUNTIME_CONTEXT;
   if(!['production','deploy-preview','branch-deploy','local'].includes(context))reject('CONTEXT_MISSING_OR_UNKNOWN');
+  if(context!=='local'&&(context!=='production'||env.SITE_ID!==PROTECTED_SITE_ID||env.JINXI_RESOURCE_ENVIRONMENT!=='production'))reject('HOSTED_RESOURCE_BINDING_REQUIRED');
   if(env.CONTEXT&&env.CONTEXT!==context)reject('CONTEXT_CONFLICT');
   if(mode==='session-lab'&&context!=='local')reject('LAB_IS_LOCAL_ONLY');
   const prefix=context==='production'?'PRODUCTION':context==='local'?'LOCAL':'PREVIEW';
@@ -47,10 +52,11 @@ WITH relation_scope AS (
  FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
  WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema'
 )
-SELECT i.*,current_user AS role,r.rolsuper,r.rolcreatedb,r.rolcreaterole,r.rolreplication,r.rolbypassrls,
+SELECT i.*,current_user AS role,session_user AS session_role,r.rolsuper,r.rolcreatedb,r.rolcreaterole,r.rolreplication,r.rolbypassrls,
  current_setting('default_transaction_read_only') AS default_read_only,
  EXISTS(SELECT 1 FROM pg_auth_members WHERE member=r.oid) AS role_memberships,
  has_database_privilege(r.oid,(SELECT oid FROM pg_database WHERE datname=current_database()),'CREATE') AS database_create,
+ has_database_privilege(r.oid,(SELECT oid FROM pg_database WHERE datname=current_database()),'TEMP') AS database_temp,
  EXISTS(SELECT 1 FROM pg_namespace n WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND has_schema_privilege(r.oid,n.oid,'CREATE')) AS schema_create,
  (EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND c.relowner=r.oid) OR EXISTS(SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema' AND p.proowner=r.oid)) AS owns_objects,
  EXISTS(SELECT 1 FROM relation_scope c WHERE CASE
@@ -68,11 +74,12 @@ function validateProof(config,rows){
   if(!Array.isArray(rows)||rows.length!==1)reject('IDENTITY_PROOF_MISSING');
   const p=rows[0],expected=config.policy;
   if(p.environment_id!==expected.environmentId||p.classification!==expected.classification||p.role!==expected.role||fingerprint(p.cluster_id,p.database_oid,p.database_name)!==expected.fingerprint)reject('ACTUAL_DATABASE_IDENTITY_MISMATCH');
+  if(config.resourceEnvironment==='synthetic-test'&&(p.session_role!==expected.role||p.database_temp!==false))reject('TEST_SESSION_OR_TEMP_PERMISSION_UNSAFE');
   for(const key of ['rolsuper','rolcreatedb','rolcreaterole','rolreplication','rolbypassrls','role_memberships','database_create','schema_create','owns_objects','writes_outside_scope','reads_outside_scope','unsafe_definer_access'])if(p[key]!==false)reject('DATABASE_PERMISSION_UNSAFE');
   if(config.mode==='public-read'&&p.default_read_only!=='on')reject('READ_ROLE_NOT_READ_ONLY');
 }
-function guardedDatabase(env,factory,mode='public-read'){
-  const config=databaseConfig(env,mode);let pending,raw;
+function guardedDatabase(env,factory,mode='public-read',resources){
+  const config=databaseConfig(env,mode,resources);let pending,raw;
   async function verified(){
     if(!pending)pending=(async()=>{
       raw=factory(config.url);
@@ -97,7 +104,7 @@ function guardedDatabase(env,factory,mode='public-read'){
   return sql;
 }
 function response(statusCode,error,code){return{statusCode,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'},body:JSON.stringify({error,code})};}
-function withFunctionSecurity(name,factory,env,handler){
+function withFunctionSecurity(name,factory,env,handler,resources){
   if(!Object.hasOwn(POLICIES,name))throw Error('Unregistered Function');
   return async(event)=>{
     const policy=POLICIES[name];
@@ -105,7 +112,7 @@ function withFunctionSecurity(name,factory,env,handler){
     if(policy!=='public-read')return response(policy==='closed-identity'?401:403,'此接口正在进行服务器身份安全升级，暂不接受旧身份或写入。','LEGACY_ENDPOINT_DISABLED');
     if(event.httpMethod!=='GET')return response(name==='guide-video-stats'?405:403,'内容写入正在安全升级，原有草稿请保留。','LEGACY_WRITE_DISABLED');
     try{
-      const sql=guardedDatabase(env,factory);
+      const sql=guardedDatabase(env,factory,'public-read',resources);
       const result=await requestScope.run(sql,()=>handler(event));
       const headers={...result.headers,'Cache-Control':'no-store'};
       for(const key of Object.keys(headers))if(key.toLowerCase().startsWith('access-control-'))delete headers[key];
@@ -113,7 +120,7 @@ function withFunctionSecurity(name,factory,env,handler){
       return {...result,headers};
     }catch(error){
       if(name==='guide-video-stats')return{statusCode:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'},body:JSON.stringify({contract:'jinxi.guides.video-stats.v1',count:null,countType:'published-valid-url-video-attachments-v1',calculatedAt:null,status:'unavailable',playabilityVerified:false,error:'统计暂不可用'})};
-      return response(503,'环境隔离未通过，服务暂不可用。',error instanceof IsolationError?error.code:'DATABASE_UNAVAILABLE');
+      return response(503,'环境隔离未通过，服务暂不可用。',error instanceof IsolationError||error instanceof ResourceError?error.code:'DATABASE_UNAVAILABLE');
     }
   };
 }

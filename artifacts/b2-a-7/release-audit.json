@@ -1,0 +1,14 @@
+{
+  "commit": "d0131fbbcc128b421e1e826194189df076ed4335",
+  "scope": "Tracked source blobs at the code candidate. Pattern findings and npm option counts only.",
+  "workflows": [
+    ".github/workflows/security-checks.yml"
+  ],
+  "authOptionCount": 0,
+  "credentialedLockUrls": 0,
+  "matchedPaths": [],
+  "registeredAccountCsvTemplates": [
+    "scripts/employee_ids_template.csv",
+    "scripts/member_profile_map_template.csv"
+  ]
+}

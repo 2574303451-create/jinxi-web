@@ -1,0 +1,46 @@
+{
+  "scope": "Local Edge, synthetic browser state and authorized synthetic PG read fixtures",
+  "browser": "140.0.3485.66",
+  "results": [
+    {
+      "width": 1440,
+      "withOldCache": true,
+      "guestNavigation": true,
+      "passwordAccountEditable": true,
+      "localGameAccessible": true,
+      "historyPreserved": true,
+      "noCachedAuthor": true,
+      "noMutations": true
+    },
+    {
+      "width": 390,
+      "withOldCache": true,
+      "guestNavigation": true,
+      "passwordAccountEditable": true,
+      "localGameAccessible": true,
+      "historyPreserved": true,
+      "noCachedAuthor": true,
+      "noMutations": true
+    },
+    {
+      "width": 390,
+      "withOldCache": false,
+      "guestNavigation": true,
+      "passwordAccountEditable": true,
+      "localGameAccessible": true,
+      "historyPreserved": true,
+      "noCachedAuthor": true,
+      "noMutations": true
+    },
+    {
+      "width": 320,
+      "withOldCache": false,
+      "guestNavigation": true,
+      "passwordAccountEditable": true,
+      "localGameAccessible": true,
+      "historyPreserved": true,
+      "noCachedAuthor": true,
+      "noMutations": true
+    }
+  ]
+}

@@ -3,6 +3,8 @@
 > **2026-11-06 B2接管更新（优先于下方历史快照）**：用户已授权B2-0检查点0–3及GitHub独立草稿PR。本机当前分支codex/jinxi-b2-a-session-lab，base为PR11/d516b8643c73797ddfbd8109d46a7dba58f6016c；最新SHA请核对该分支HEAD及GitHub PR，不以旧正文ca0723e为准。B1审核基线115bf854a7977a3e582a89af13459115178a1e31/PR8；新增检查点PR9、10、11均draft/open/unmerged，当前检查点3独立提交。完整入口：[B2状态](artifacts/b2-0/STATUS.md)、[会话原型](artifacts/b2-0/SESSION_LAB.md)、[工程/集成/阻断](artifacts/b2-0/ENGINEERING_AND_INTEGRATION.md)。原始tsc仍28项/exit2，只设新增诊断失败的历史基线，未假称完整类型通过。新证据含本机真实PG44、HTTPS会话7组、B1保护回归；GitHub CI必须看当前head的实际Checks。云变量继承及真实PROD权限未证明，旧写/旧登录暂停；正式会话、头像、在线心跳与名单均不启用。没有生产连接/密钥读取/迁移/上传、合并或部署。B2-C+新增要求只归档后续计划，不能据此提前开始B2-C。原B1截图已恢复原Git字节，新截图另存，主out不改；3044仍固定B1快照，3048/3049为本机合成隔离验证。
 # 今夕公会官网｜Codex 项目交接
 
+> **2026-11-06 B2-A-7 更新**。基于 PR #16 `a37786ce68ec8223ff0e512b86be1c81b3a3e777` 建立 `codex/jinxi-b2-a-7-integration-freeze`。已核对 #1–#16 和当前 main 祖先关系。候选关闭旧发布/导入入口，保留本机游戏与任务历史，旧登录缓存无法认证。实际 TEST 仍需负责人授权与管理员填写验收表。当前完整 SHA 与 CI 以 GitHub 草稿 PR 为准。 [A7 交付](artifacts/b2-a-7/DELIVERY.md)
+
 > **2026-11-06 B2-A-6 更新**：基于PR15 f9ff27874beaf3388502f29360ebaa86c5a64c13，独立分支codex/jinxi-b2-a-6-runtime-acceptance。原始tsc为0，固定Node24.22.2/npm11.19.1。Next16增加的45990B中45950B归于框架路由与内置React DOM；motion拆分试验增4302B已撤回。公告鼠标关闭和旧缓存身份提示已修补。最新GitHub SHA/CI见草稿PR；真实TEST待授权、托管与成员接入待证。完整性能、trace、管理员清单、订单恢复和十五PR集成候选见[B2-A-6交付](artifacts/b2-a-6/DELIVERY.md)。
 
 > **2026-11-06 B2-A-5 更新**：从 PR #13 / f443144a912abf5869d42f4758c86caaf6031525 新建安全准备草稿分支，运行时验证另设分支和工作树。真实 tsc 为 0。托管 TEST、正式会话与业务恢复等待授权及独立证据。最新 SHA、PR、CI 以 GitHub 为准，复核、性能、截图和管理员清单见 [B2-A-5 交付](artifacts/b2-a-5/DELIVERY.md)。

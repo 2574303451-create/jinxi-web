@@ -1,0 +1,35 @@
+✔ paused daily reward never invents points or claimed status after local progress (2.2205ms)
+✖ opening tasks preserves pre-upgrade browser history and other local records (1.2069ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 256.5806
+
+✖ failing tests:
+
+test at ..\worktree\tests\legacy-reward.test.cjs:43:1
+✖ opening tasks preserves pre-upgrade browser history and other local records (1.2069ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'available'
+  - 'claimed'
+
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\b2-a-7\worktree\tests\legacy-reward.test.cjs:56:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'available',
+    expected: 'claimed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

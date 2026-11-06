@@ -540,7 +540,4 @@ async function run() {
   }
 }
 
-run().catch((error) => {
-  console.error(`ERROR: ${error.message}`)
-  process.exit(1)
-})
+require('../deploy.js')

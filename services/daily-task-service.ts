@@ -9,8 +9,6 @@ import { getUserId } from '../lib/user-utils'
 const STORAGE_KEY_PREFIX = 'jinxi-tasks-'
 const STORAGE_KEY_STATS = 'jinxi-task-stats-'
 const STORAGE_KEY_LAST_RESET = 'jinxi-task-last-reset'
-const STORAGE_KEY_SCHEMA_VERSION = 'jinxi-task-schema-version'
-const TASK_SCHEMA_VERSION = '20260305-reset-all-v3'
 
 const DEFAULT_TASKS: Omit<DailyTask, 'progress' | 'status' | 'completedAt'>[] = [
   {
@@ -138,33 +136,6 @@ function resetDailyTasks(): void {
   localStorage.setItem(STORAGE_KEY_LAST_RESET, new Date().toISOString())
 }
 
-function clearAllTaskState(): void {
-  if (typeof window === 'undefined') return
-
-  const keysToDelete: string[] = []
-  for (let i = 0; i < localStorage.length; i += 1) {
-    const key = localStorage.key(i)
-    if (!key) continue
-    if (key.startsWith(STORAGE_KEY_PREFIX) || key.startsWith(STORAGE_KEY_STATS) || key === STORAGE_KEY_LAST_RESET) {
-      keysToDelete.push(key)
-    }
-  }
-
-  for (const key of keysToDelete) {
-    localStorage.removeItem(key)
-  }
-}
-
-function ensureTaskSchemaVersion(): void {
-  if (typeof window === 'undefined') return
-
-  const currentVersion = localStorage.getItem(STORAGE_KEY_SCHEMA_VERSION)
-  if (currentVersion === TASK_SCHEMA_VERSION) return
-
-  clearAllTaskState()
-  localStorage.setItem(STORAGE_KEY_SCHEMA_VERSION, TASK_SCHEMA_VERSION)
-}
-
 function parseSavedProgress(raw: string): UserTaskProgress | null {
   try {
     const parsed = JSON.parse(raw) as Partial<UserTaskProgress> & { lastUpdated?: string | Date }
@@ -191,8 +162,6 @@ function saveTaskStats(stats: TaskStats): void {
 
 export function getAllTasks(): DailyTask[] {
   if (typeof window === 'undefined') return []
-
-  ensureTaskSchemaVersion()
 
   if (shouldResetDailyTasks()) {
     resetDailyTasks()
@@ -265,8 +234,6 @@ export function claimReward(_taskId: string): boolean {
 
 export function getTaskStats(): TaskStats {
   if (typeof window === 'undefined') return getDefaultStats()
-
-  ensureTaskSchemaVersion()
 
   const userId = getUserId()
   const key = `${STORAGE_KEY_STATS}${userId}`

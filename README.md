@@ -24,18 +24,14 @@ npm run build
 ## 🌐 Netlify 部署
 
 ### 自动部署
-当前分支供草稿审核，正式发布需完成 TEST 验收和发布审批。审批后的构建参数如下。
+当前集成分支在 GitHub 审核和本机运行。Netlify Git 构建跳过，发布命令与旧账号导入入口返回拒绝。云 TEST 资源由管理员完成核验和授权后，另建部署候选。已审核的托管构建参数如下。
 
    - 构建命令: `npm ci --include=dev && npm run build`
    - 发布目录: `out`
    - Node.js 版本: 24.22.2
    - NPM 版本: 11.19.1
 
-Functions 的实际运行时、托管 CSP 和环境隔离单独核验。 [管理员清单](artifacts/b2-a-6/PLATFORM_ACCEPTANCE.md)
-
-### 手动部署
-1. 运行 `npm run build`
-2. 将 `out/` 目录的内容上传到 Netlify
+管理员填写实际站点、Functions 运行时、隔离及托管 CSP 证据。 [TEST 验收表](artifacts/b2-a-7/TEST_SIGNOFF.md)
 
 ## 🔧 问题修复
 

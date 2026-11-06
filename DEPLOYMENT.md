@@ -26,14 +26,14 @@ npm start
 
 ## 部署到 Netlify
 
-当前审核分支需要先通过隔离 TEST 与发布审批。托管构建参数供管理员核对。
+本分支冻结发布。Git 触发的 Netlify 构建使用 `ignore = "exit 0"`，进入构建命令时运行拒绝脚本。管理员完成 TEST 资源授权后，在单独部署候选复核以下参数。
 
    - 构建命令: `npm ci --include=dev && npm run build`
    - 发布目录: `out`
    - Node.js 版本: 24.22.2
    - NPM 版本: 11.19.1
 
-Functions 运行时和 CSP 的托管响应取证见 [验收清单](artifacts/b2-a-6/PLATFORM_ACCEPTANCE.md)。旧专项部署文档属于历史快照，版本与权限以当前配置及审批证据为准。
+Functions 运行时、自动发布来源和托管 CSP 的证据在 [TEST 验收表](artifacts/b2-a-7/TEST_SIGNOFF.md) 登记。旧专项部署文档保留作历史记录。
 
 ## 构建输出
 

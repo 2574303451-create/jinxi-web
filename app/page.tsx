@@ -781,8 +781,8 @@ function PageContent() {
   }, [])
 
   useEffect(() => {
+    if (!LEGACY_MEMBER_AUTH_READY || typeof window === "undefined") return
     syncLoginState()
-    if (typeof window === "undefined") return
 
     const handleStorage = (event: StorageEvent) => {
       if (event.key === AUTH_ACCOUNT_KEY || event.key === AUTH_PROFILE_KEY) {
@@ -835,7 +835,12 @@ function PageContent() {
             {activePanel === "points" && <p className="paper-notice" role="status">积分余额、兑换和排行榜正在安全升级。暂不可查询，已有积分以服务器记录为准。</p>}
             {activePanel === "tasks" && <DailyTasks />}
             {activePanel === "teams" && <TeamSystem />}
-            {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
+            {activePanel === "game" && (
+              <>
+                <p className="module-notice" role="status">本机游戏记录与默认示例供参考。操作只保存在此浏览器。</p>
+                <GameDataPanel />
+              </>
+            )}
             {activePanel === "members" && <MemberGrid members={allMembers} />}
             {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
             {activePanel === "messages" && <MessageWall writesPaused loggedInAccount={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}

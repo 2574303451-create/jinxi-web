@@ -11,8 +11,8 @@
     "dev:netlify": "netlify dev",
     "lint": "eslint app components hooks lib services types netlify/functions tests scripts --no-warn-ignored --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental false",
-    "start": "next start",
-    "export": "next export",
+    "start": "node scripts/preview-static.cjs",
+    "export": "npm run build",
     "test:api": "node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs",
     "test": "npm run test:api && npm run test:security",
     "test:security": "node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs",
@@ -98,8 +98,8 @@
     "typescript-eslint": "8.72.1"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=24.22.2 <25",
+    "npm": ">=11.19.1 <12"
   },
   "packageManager": "npm@11.19.1"
 }

@@ -811,7 +811,7 @@ function PageContent() {
         <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
         <GuildManagement members={managementTeam} onJoin={handleJoinClick} />
         <GuildMembers members={allMembers} onAll={() => setActivePanel("members")} onShowcase={() => setActivePanel("showcase")} />
-        <MemberActions account={loginAccount} onOpen={setActivePanel} />
+        <MemberActions account={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} onOpen={setActivePanel} />
         <FeaturedGuides />
         <section id="community" className="guild-shell guild-section">
           <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
@@ -838,7 +838,7 @@ function PageContent() {
             {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
             {activePanel === "members" && <MemberGrid members={allMembers} />}
             {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
-            {activePanel === "messages" && <MessageWall writesPaused loggedInAccount={loginAccount} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
+            {activePanel === "messages" && <MessageWall writesPaused loggedInAccount={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
           </ComponentLoader>
         </div>
       </Modal>

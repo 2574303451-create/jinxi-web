@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion"
 
 interface Toast {
   id: string
@@ -62,32 +62,34 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      <div className="guild-toasts fixed top-4 right-4 z-[100] space-y-2">
-        <AnimatePresence>
-          {toasts.map((toast) => {
-            const styles = getToastStyles(toast.type)
-            return (
-              <motion.div
-                key={toast.id}
-                initial={{ opacity: 0, x: 100, scale: 0.8 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 100, scale: 0.8 }}
-                role="status" className="guild-toast flex items-center gap-3 px-4 py-3 rounded-xl max-w-sm"
-                style={{ background: `${styles.bg}dd` }}
-              >
-                <i className={`${styles.icon} text-lg`}></i>
-                <span className="flex-1 text-sm font-medium">{toast.message}</span>
-                <button
-                  aria-label="关闭提示" onClick={() => removeToast(toast.id)}
-                  className="text-white/80 hover:text-white transition-colors"
+      <LazyMotion features={domAnimation}>
+        <div className="guild-toasts fixed top-4 right-4 z-[100] space-y-2">
+          <AnimatePresence>
+            {toasts.map((toast) => {
+              const styles = getToastStyles(toast.type)
+              return (
+                <m.div
+                  key={toast.id}
+                  initial={{ opacity: 0, x: 100, scale: 0.8 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: 100, scale: 0.8 }}
+                  role="status" className="guild-toast flex items-center gap-3 px-4 py-3 rounded-xl max-w-sm"
+                  style={{ background: `${styles.bg}dd` }}
                 >
-                  <i className="ri-close-line"></i>
-                </button>
-              </motion.div>
-            )
-          })}
-        </AnimatePresence>
-      </div>
+                  <i className={`${styles.icon} text-lg`}></i>
+                  <span className="flex-1 text-sm font-medium">{toast.message}</span>
+                  <button
+                    aria-label="关闭提示" onClick={() => removeToast(toast.id)}
+                    className="text-white/80 hover:text-white transition-colors"
+                  >
+                    <i className="ri-close-line"></i>
+                  </button>
+                </m.div>
+              )
+            })}
+          </AnimatePresence>
+        </div>
+      </LazyMotion>
     </>
   )
 }

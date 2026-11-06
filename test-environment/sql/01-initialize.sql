@@ -82,7 +82,7 @@ CREATE TABLE public.messages(
 CREATE TABLE public.announcements(id bigint PRIMARY KEY,title text NOT NULL,content_html text NOT NULL,author text NOT NULL,created_at timestamptz NOT NULL,updated_at timestamptz NOT NULL);
 CREATE TABLE public.guild_sponsorship_entries(id bigint PRIMARY KEY,sponsor_name text NOT NULL,sponsor_time timestamptz NOT NULL,created_at timestamptz NOT NULL);
 CREATE TABLE b2_lab.guild_member_profiles(
-  employee_no text PRIMARY KEY CHECK(employee_no LIKE 'B2-LAB-%'),member_id uuid NOT NULL UNIQUE,
+  employee_no text PRIMARY KEY CHECK(employee_no LIKE 'B2-LAB-%'),member_id uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   display_name text NOT NULL,nickname text NOT NULL,is_active bool NOT NULL DEFAULT true,
   lock_version int NOT NULL DEFAULT 0,source text NOT NULL CHECK(source='synthetic-b2-lab')
 );
@@ -91,7 +91,7 @@ CREATE TABLE b2_lab.guild_member_accounts(
   login_account text NOT NULL UNIQUE CHECK(login_account LIKE 'b2-lab-%'),
   password_hash text NOT NULL DEFAULT 'disabled:synthetic-fixture',hash_algorithm text NOT NULL DEFAULT 'pbkdf2_sha256',
   force_reset_password bool NOT NULL DEFAULT true,is_locked bool NOT NULL DEFAULT false,
-  auth_version int NOT NULL DEFAULT 1 CHECK(auth_version>0),password_updated_at timestamptz,last_login_at timestamptz,created_at timestamptz NOT NULL
+  auth_version int NOT NULL DEFAULT 1 CHECK(auth_version>0),password_updated_at timestamptz,last_login_at timestamptz,created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE TABLE b2_lab.sessions(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),account_id bigint NOT NULL REFERENCES b2_lab.guild_member_accounts(id),
@@ -102,10 +102,10 @@ CREATE TABLE b2_lab.sessions(
 );
 CREATE INDEX sessions_account_id ON b2_lab.sessions(account_id);
 CREATE TABLE b2_lab.rate_limits(bucket text PRIMARY KEY,hits int NOT NULL CHECK(hits>0),reset_at timestamptz NOT NULL);
-CREATE TABLE b2_lab.point_account(member_id uuid PRIMARY KEY REFERENCES b2_lab.guild_member_profiles(member_id),balance bigint NOT NULL CHECK(balance>=0),total_earned bigint NOT NULL CHECK(total_earned>=0),total_spent bigint NOT NULL CHECK(total_spent>=0),CHECK(balance=total_earned-total_spent));
+CREATE TABLE b2_lab.point_account(member_id uuid PRIMARY KEY REFERENCES b2_lab.guild_member_profiles(member_id),balance bigint NOT NULL DEFAULT 0 CHECK(balance>=0),total_earned bigint NOT NULL DEFAULT 0 CHECK(total_earned>=0),total_spent bigint NOT NULL DEFAULT 0 CHECK(total_spent>=0),CHECK(balance=total_earned-total_spent));
 CREATE TABLE b2_lab.point_rule(code text PRIMARY KEY,reward int NOT NULL CHECK(reward>0),active bool NOT NULL);
 CREATE TABLE b2_lab.point_catalog(code text PRIMARY KEY,price int NOT NULL CHECK(price>0),active bool NOT NULL);
-CREATE TABLE b2_lab.point_ledger(id bigserial PRIMARY KEY,member_id uuid NOT NULL REFERENCES b2_lab.guild_member_profiles(member_id),biz_key text NOT NULL,kind text NOT NULL CHECK(kind IN('checkin','redeem')),item_code text REFERENCES b2_lab.point_catalog(code),amount bigint NOT NULL CHECK(amount>0),balance_after bigint NOT NULL CHECK(balance_after>=0),created_at timestamptz NOT NULL,UNIQUE(member_id,biz_key));
+CREATE TABLE b2_lab.point_ledger(id bigserial PRIMARY KEY,member_id uuid NOT NULL REFERENCES b2_lab.guild_member_profiles(member_id),biz_key text NOT NULL,kind text NOT NULL CHECK(kind IN('checkin','redeem')),item_code text REFERENCES b2_lab.point_catalog(code),amount bigint NOT NULL CHECK(amount>0),balance_after bigint NOT NULL CHECK(balance_after>=0),created_at timestamptz NOT NULL DEFAULT now(),UNIQUE(member_id,biz_key));
 CREATE TABLE b2_lab.checkin_records(member_id uuid NOT NULL REFERENCES b2_lab.guild_member_profiles(member_id),checkin_day date NOT NULL,created_at timestamptz NOT NULL,PRIMARY KEY(member_id,checkin_day));
 
 DO $owners$

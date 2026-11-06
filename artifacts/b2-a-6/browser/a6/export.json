@@ -1,0 +1,16 @@
+{
+  "stage": "a6",
+  "scope": "Local static bytes and installed Netlify header parser",
+  "routes": [
+    "/",
+    "/guides/",
+    "/profile-lab/",
+    "/session-lab/",
+    "/404.html",
+    "/_next/static/a.js"
+  ],
+  "pages": 7,
+  "hashes": 8,
+  "policyBytes": 991,
+  "onePolicyPerRoute": true
+}

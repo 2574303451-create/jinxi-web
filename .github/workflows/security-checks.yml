@@ -45,6 +45,10 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: npm
+      - name: Record tested toolchain
+        run: |
+          node --version
+          npm --version
       - run: npm ci
       - name: Raw TypeScript check
         shell: bash

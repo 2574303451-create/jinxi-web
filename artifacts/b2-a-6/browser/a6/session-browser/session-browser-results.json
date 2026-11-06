@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "320/390/768/1440 layouts, labels, keyboard and reduced motion",
+      "passed": true
+    },
+    {
+      "name": "old localStorage cannot authenticate; Secure HttpOnly host cookie stays out of JS/storage/URL",
+      "passed": true
+    },
+    {
+      "name": "first login gates points; password change revokes session and requires new login",
+      "passed": true
+    },
+    {
+      "name": "same-cookie tabs restore CSRF, concurrent claim credits once, logout clears both on validation",
+      "passed": true
+    },
+    {
+      "name": "two browser devices survive single logout; idle expiry preserves draft",
+      "passed": true
+    },
+    {
+      "name": "offline/reconnect preserves draft and restores server session",
+      "passed": true
+    },
+    {
+      "name": "lost successful redemption response retries same nonce without a second debit",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "scope": "Local self-signed HTTPS + Edge; actual restricted-role PostgreSQL; synthetic-only. ignoreHTTPSErrors used solely for local certificate. No production acceptance.",
+  "automatedAccessibility": "Labels, status live region, actual Tab focus and reduced-motion inspected. No human screen-reader certification."
+}

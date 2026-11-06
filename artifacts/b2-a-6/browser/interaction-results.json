@@ -1,0 +1,49 @@
+{
+  "edge": "140.0.3485.66",
+  "results": [
+    {
+      "width": 1440,
+      "dialogCases": 14,
+      "keyboard": true,
+      "backdrop": true,
+      "bodyLock": true,
+      "stableAvatarAndArchiveEntry": true,
+      "legacyCacheDoesNotAuthenticate": true,
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "dialogCases": 14,
+      "keyboard": true,
+      "backdrop": true,
+      "bodyLock": true,
+      "stableAvatarAndArchiveEntry": true,
+      "legacyCacheDoesNotAuthenticate": true,
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "dialogCases": 14,
+      "keyboard": true,
+      "backdrop": true,
+      "bodyLock": true,
+      "stableAvatarAndArchiveEntry": true,
+      "legacyCacheDoesNotAuthenticate": true,
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "dialogCases": 14,
+      "keyboard": true,
+      "backdrop": true,
+      "bodyLock": true,
+      "stableAvatarAndArchiveEntry": true,
+      "legacyCacheDoesNotAuthenticate": true,
+      "writes": 0,
+      "errors": []
+    }
+  ]
+}

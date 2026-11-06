@@ -1,0 +1,71 @@
+
+> my-v0-project@0.1.0 test:integration
+> node --test --test-concurrency=1 tests/strategy-postgres.test.cjs tests/guide-thumbnail-postgres.test.cjs tests/environment-postgres.test.cjs tests/member-migration-postgres.test.cjs tests/session-postgres.test.cjs
+
+▶ actual local environment identity and effective least privilege
+  ✔ user schema beginning with pg letters is not a system schema (22.4821ms)
+  ✔ misgranted table/column SELECT outside each role read scope rejects (20.0687ms)
+  ✔ effective column, view and sequence grants outside the lab are unsafe (18.5208ms)
+  ✔ real fingerprint and read-only role permit B1 public reads (22.4334ms)
+  ✔ owner-rights view in the allowed schema cannot bridge the protected resource (5.9911ms)
+  ✔ PostgreSQL 17 MAINTAIN permission on a protected materialized view is unsafe (11.2229ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.4798ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (5.6562ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.6216ms)
+  ✔ session role cannot read/write the separate protected resources (2.6602ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (21.4916ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (1.8932ms)
+  ✔ all5 public read handlers use real restricted PG, never mutate on GET (38.3698ms)
+✔ actual local environment identity and effective least privilege (566.9846ms)
+✔ actual PG: thumbnail-only video cover is real, safe and lower priority than images (146.8409ms)
+▶ reviewable session DDL rehearses only synthetic mappings and rolls back completely
+  ✔ mapping uses verified account/profile join, never nickname (2.0468ms)
+  ✔ new session accepts digests and stores no raw token column (9.2317ms)
+  ✔ duplicate digest, wrong hash length and invalid expiry reject (2.8008ms)
+  ✔ unknown account and duplicate member identity reject (1.4989ms)
+  ✔ rehearsal leaves no proposed tables or real-member data changes (1.0429ms)
+✔ reviewable session DDL rehearses only synthetic mappings and rolls back completely (448.7139ms)
+▶ actual local synthetic session, access and points security
+  ✔ cloud/missing config and cross-origin requests cannot connect (2.0603ms)
+  ✔ cookie attributes and DB-only token/CSRF digests (642.663ms)
+  ✔ first reset restricts access and password change revokes old sessions (1341.7664ms)
+  ✔ untrusted identity, reward and price fields never choose another member (678.4829ms)
+  ✔ two devices and concurrent tabs claim server reward once (987.9639ms)
+  ✔ trusted catalog, idempotent redemption and concurrent nonnegative balance (911.4769ms)
+  ✔ logout invalidates this device without killing another valid session (868.5507ms)
+  ✔ runtime cannot edit/delete committed ledger or delete sessions/wallets/rate history (612.6105ms)
+  ✔ lost-response redemption retry survives catalog removal, conflicting SKU rejects (844.073ms)
+  ✔ unsafe numeric balances fail closed instead of rounding (791.3046ms)
+  ✔ same nickname cannot merge identities or balances (976.0606ms)
+  ✔ normal password change revokes every device (1032.1392ms)
+  ✔ lock/deactivate revoke permanently, including after reactivation (1002.0472ms)
+  ✔ absolute and idle expiration reject replay (841.4738ms)
+  ✔ CSRF and content/origin limits reject before writes (618.5702ms)
+  ✔ unknown/wrong/locked accounts do not enumerate, failed attempts persist (1196.8151ms)
+  ✔ data failure rolls back reward and retry remains exactly once (700.231ms)
+✔ actual local synthetic session, access and points security (14147.204ms)
+▶ actual isolated PostgreSQL read path
+  ✔ published video attachments are4, duplicateURLs counted, not playability (6.0872ms)
+  ✔ null/object/scalar JSONB and invalid array elements are safe (5.0612ms)
+  ✔ URL policy SQL/JS parity: supported URI, unsafe schemes, promos, malformed values (7.6675ms)
+  ✔ server filters before LIMIT3, latest ignores old pinned priority (8.015ms)
+  ✔ summary has genuine covers/counts and no full/private author arrays (3.2844ms)
+  ✔ old full list and ID detail are retained, published only (2.4053ms)
+  ✔ draft/archived/forgedadmin never grant public reads (4.1623ms)
+  ✔ pagination/sort/category rejected before SQL; search remains parameterized (3.0707ms)
+  ✔ normal category/search/sorts and stable pages (11.3259ms)
+  ✔ read-only database role cannot write (0.7779ms)
+  ✔ stats rejects nonGET/identity parameters before DB factory (0.8773ms)
+  ✔ DB failure is503, countnull, no internal connection leakage (1.3165ms)
+  ✔ actual PG statement timeout returns504 and connection recovers (3005.786ms)
+  ✔ concurrent readers have consistent counts and no mutation (171.2609ms)
+  ✔ actual EXPLAIN ANALYZE BUFFERS and empty table0, not unknown (27.7724ms)
+✔ actual isolated PostgreSQL read path (3424.7155ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 55
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19402.7051

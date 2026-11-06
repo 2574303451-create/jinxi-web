@@ -1,0 +1,46 @@
+{
+  "results": [
+    {
+      "stage": "pr15",
+      "width": 1440,
+      "pointerEvents": "none",
+      "hitButton": false,
+      "physicalCloseSucceeded": false
+    },
+    {
+      "stage": "pr15",
+      "width": 390,
+      "pointerEvents": "none",
+      "hitButton": false,
+      "physicalCloseSucceeded": false
+    },
+    {
+      "stage": "pr15",
+      "width": 320,
+      "pointerEvents": "none",
+      "hitButton": false,
+      "physicalCloseSucceeded": false
+    },
+    {
+      "stage": "a6",
+      "width": 1440,
+      "pointerEvents": "auto",
+      "hitButton": true,
+      "physicalCloseSucceeded": true
+    },
+    {
+      "stage": "a6",
+      "width": 390,
+      "pointerEvents": "auto",
+      "hitButton": true,
+      "physicalCloseSucceeded": true
+    },
+    {
+      "stage": "a6",
+      "width": 320,
+      "pointerEvents": "auto",
+      "hitButton": true,
+      "physicalCloseSucceeded": true
+    }
+  ]
+}

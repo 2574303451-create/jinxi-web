@@ -1,0 +1,405 @@
+{
+  "rows": [
+    {
+      "width": 1440,
+      "normal": {
+        "summary": {
+          "x": 420,
+          "y": 1132,
+          "width": 600,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 1440,
+          "height": 1169
+        },
+        "facts": {
+          "x": 96,
+          "y": 1238,
+          "width": 1248,
+          "height": 414.375
+        },
+        "tip": {
+          "x": 810,
+          "y": 1152
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": true,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false
+      },
+      "keyboardOutline": "3px",
+      "video": {
+        "currentTime": 0.516583,
+        "readyState": 4,
+        "source": "/1.mp4",
+        "width": 1136,
+        "height": 544
+      },
+      "reducedMotionStatic": true,
+      "zoomEquivalent": {
+        "summary": {
+          "x": 60,
+          "y": 1222,
+          "width": 600,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 720,
+          "height": 1259
+        },
+        "facts": {
+          "x": 16,
+          "y": 1328,
+          "width": 688,
+          "height": 607.265625
+        },
+        "tip": {
+          "x": 450,
+          "y": 1242
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": false,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false,
+        "scope": "Full-page overflow at CSS195/160 matches the fixed baseline; separately verified in zoom-results.json."
+      },
+      "failedFallback": true,
+      "touch": "not touch emulation",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "normal": {
+        "summary": {
+          "x": 212,
+          "y": 1132,
+          "width": 600,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 1024,
+          "height": 1169
+        },
+        "facts": {
+          "x": 16,
+          "y": 1238,
+          "width": 992,
+          "height": 414.375
+        },
+        "tip": {
+          "x": 602,
+          "y": 1152
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": true,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false
+      },
+      "keyboardOutline": "3px",
+      "video": {
+        "currentTime": 0.520273,
+        "readyState": 4,
+        "source": "/1.mp4",
+        "width": 1136,
+        "height": 544
+      },
+      "reducedMotionStatic": true,
+      "zoomEquivalent": {
+        "summary": {
+          "x": 16,
+          "y": 1320.5,
+          "width": 480,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 512,
+          "height": 1337.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1402.5,
+          "width": 480,
+          "height": 535.359375
+        },
+        "tip": {
+          "x": 175,
+          "y": 1338.5
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": false,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false,
+        "scope": "Full-page overflow at CSS195/160 matches the fixed baseline; separately verified in zoom-results.json."
+      },
+      "failedFallback": true,
+      "touch": "not touch emulation",
+      "passed": true
+    },
+    {
+      "width": 768,
+      "normal": {
+        "summary": {
+          "x": 84,
+          "y": 1222,
+          "width": 600,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 69,
+          "width": 768,
+          "height": 1259
+        },
+        "facts": {
+          "x": 16,
+          "y": 1328,
+          "width": 736,
+          "height": 607.265625
+        },
+        "tip": {
+          "x": 474,
+          "y": 1242
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": true,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false
+      },
+      "keyboardOutline": "3px",
+      "video": {
+        "currentTime": 0.523398,
+        "readyState": 4,
+        "source": "/1.mp4",
+        "width": 1136,
+        "height": 544
+      },
+      "reducedMotionStatic": true,
+      "zoomEquivalent": {
+        "summary": {
+          "x": 16,
+          "y": 1320.5,
+          "width": 352,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 384,
+          "height": 1337.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1402.5,
+          "width": 352,
+          "height": 535.359375
+        },
+        "tip": {
+          "x": 111,
+          "y": 1338.5
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": false,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false,
+        "scope": "Full-page overflow at CSS195/160 matches the fixed baseline; separately verified in zoom-results.json."
+      },
+      "failedFallback": true,
+      "touch": "not touch emulation",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "normal": {
+        "summary": {
+          "x": 16,
+          "y": 1320.5,
+          "width": 358,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 390,
+          "height": 1337.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1402.5,
+          "width": 358,
+          "height": 535.359375
+        },
+        "tip": {
+          "x": 114,
+          "y": 1338.5
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": true,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false
+      },
+      "keyboardOutline": "3px",
+      "video": {
+        "currentTime": 0.513643,
+        "readyState": 4,
+        "source": "/1.mp4",
+        "width": 1136,
+        "height": 544
+      },
+      "reducedMotionStatic": true,
+      "zoomEquivalent": {
+        "summary": {
+          "x": 16,
+          "y": 1858,
+          "width": 163,
+          "height": 60
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 195,
+          "height": 1893
+        },
+        "facts": {
+          "x": 16,
+          "y": 1958,
+          "width": 163,
+          "height": 744.578125
+        },
+        "tip": {
+          "x": 153,
+          "y": 1876
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": false,
+        "pointerEvents": "none",
+        "overflow": true,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false,
+        "scope": "Full-page overflow at CSS195/160 matches the fixed baseline; separately verified in zoom-results.json."
+      },
+      "failedFallback": true,
+      "touch": "tap open/close passed",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "normal": {
+        "summary": {
+          "x": 16,
+          "y": 1388.5,
+          "width": 288,
+          "height": 42
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 320,
+          "height": 1405.5
+        },
+        "facts": {
+          "x": 16,
+          "y": 1470.5,
+          "width": 288,
+          "height": 586.234375
+        },
+        "tip": {
+          "x": 79,
+          "y": 1406.5
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": true,
+        "pointerEvents": "none",
+        "overflow": false,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false
+      },
+      "keyboardOutline": "3px",
+      "video": {
+        "currentTime": 0.506876,
+        "readyState": 4,
+        "source": "/1.mp4",
+        "width": 1136,
+        "height": 544
+      },
+      "reducedMotionStatic": true,
+      "zoomEquivalent": {
+        "summary": {
+          "x": 16,
+          "y": 2184.5625,
+          "width": 128,
+          "height": 60
+        },
+        "hero": {
+          "x": 0,
+          "y": 65,
+          "width": 160,
+          "height": 2219.5625
+        },
+        "facts": {
+          "x": 16,
+          "y": 2284.5625,
+          "width": 128,
+          "height": 849.859375
+        },
+        "tip": {
+          "x": 118,
+          "y": 2202.5625
+        },
+        "tipInsideSummary": true,
+        "decorationsInsideHero": true,
+        "hitIsSummary": false,
+        "pointerEvents": "none",
+        "overflow": true,
+        "animation": "none",
+        "videoPreload": "none",
+        "videoAutoplay": false,
+        "scope": "Full-page overflow at CSS195/160 matches the fixed baseline; separately verified in zoom-results.json."
+      },
+      "failedFallback": true,
+      "touch": "tap open/close passed",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,23 @@
+{
+  "entry": "npm start -- 3064",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/guides/",
+      "status": 200
+    },
+    {
+      "path": "/profile-lab/",
+      "status": 200
+    },
+    {
+      "path": "/session-lab/",
+      "status": 200
+    }
+  ],
+  "staticApiStatus": 503,
+  "postStatus": 405
+}

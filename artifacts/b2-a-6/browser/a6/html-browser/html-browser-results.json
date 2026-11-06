@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "safe stored HTML, normal text/image and modal layout 1440",
+      "passed": true
+    },
+    {
+      "name": "safe stored HTML, normal text/image and modal layout 768",
+      "passed": true
+    },
+    {
+      "name": "safe stored HTML, normal text/image and modal layout 390",
+      "passed": true
+    },
+    {
+      "name": "safe stored HTML, normal text/image and modal layout 320",
+      "passed": true
+    },
+    {
+      "name": "rich/plain paste cleaned before DOM, local images/draft restored, no publishing POST",
+      "passed": true
+    },
+    {
+      "name": "sanitizer download failure refuses raw HTML and presents accurate error",
+      "passed": true
+    },
+    {
+      "name": "CSP independently blocks unknown inline script and event attributes",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "scope": "Actual Edge and static CSP header on isolated local build. Synthetic API fixtures/paste/file input only; no production announcements, uploads, or message sending. CSP negative probes are explicitly intentional."
+}

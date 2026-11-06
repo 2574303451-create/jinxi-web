@@ -1,0 +1,16 @@
+{
+  "scope": "Authorized local static export only; synthetic context metadata, no hosted acceptance",
+  "routes": [
+    "/",
+    "/guides/",
+    "/profile-lab/",
+    "/session-lab/"
+  ],
+  "originalExit": 0,
+  "tamperedExit": 1,
+  "tampered": "inline route-0.html",
+  "recordedHeaders": [
+    "Content-Security-Policy",
+    "X-Content-Type-Options"
+  ]
+}

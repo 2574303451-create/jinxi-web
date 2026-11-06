@@ -1,0 +1,51 @@
+const fs=require('node:fs'),path=require('node:path');
+const data=require('./performance-pr14-pr15-a6.json'),traces=require('./trace-summary.json');
+const n=value=>Math.round(value*10)/10;
+const pick=(stage,mobile,cache)=>data.summary.find(row=>row.stage===stage&&row.mobile===mobile&&row.cache===cache);
+const lines=[
+ '# 浏览器 Performance 与已知限制',
+ '',
+ '本轮最终 36 份无 trace 样本，三个产物 × 两宽度 × 冷/热缓存 × 三次轮换。Edge '+data.edge+'，Node 编排 '+data.node+'。1440px CPU1；390px CPU6，150ms，200000/93750Bps。使用相同 gzip 和静态 immutable 缓存，HTML/API no-store。外部 HTTPS 由 CDP 阻断，避免 Playwright route 关闭 HTTP 缓存。',
+ '',
+ 'PR14 冻结构建实际源提交为 935209e29a617a9455164d5d2921ab81d7beea60，后续审核 HEAD 7f850e 只增加文档/证据，功能源一致。PR15 为 f9ff278；最终候选构建为 7a30f921a957066c3044943dcbee6a231d040a25。完整输入、HTML/CSP 指纹与每次请求在 JSON 中。CI 另核对每个最新完整审核 SHA。 [原始样本](performance-pr14-pr15-a6.json)',
+ '',
+ '| 冷加载资源 | PR14 | PR15 | A6 最终 |',
+ '| --- | ---: | ---: | ---: |',
+ ...[
+  ['解压 JS B','decodedJs'],['gzip JS B','jsGzip'],['解压 CSS B','decodedCss'],['gzip CSS B','cssGzip'],
+  ['实际 HTTP Script bytes','scriptNetworkBytes'],['实际 HTTP Stylesheet bytes','styleNetworkBytes'],['实际 Script 请求数','scriptRequests'],
+ ].map(([name,key])=>'| '+name+' | '+['pr14','pr15','a6'].map(stage=>pick(stage,false,'cold')[key]).join(' | ')+' |'),
+ '',
+ '热导航九个脚本由浏览器缓存命中，Script/Stylesheet 网络 bytes 为 0。文档与 API 仍发请求。这里的 bytes 包含本机 HTTP/1 响应头，PR14 和 PR15 的 CSP 长度也不同；未测 Netlify 的 TLS、HTTP/2 头压缩或 CDN。',
+ '',
+ '| 视口/缓存 | 产物 | LCP ms | Script ms | Task ms | 超50ms部分合计 ms | 点击至绘制 ms | EventTiming最大值 ms | CLS最大 |',
+ '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
+ ...data.summary.map(row=>'| '+(row.mobile?'390':'1440')+'/'+row.cache+' | '+row.stage+' | '+[
+  row.lcp,row.ScriptDurationMs,row.TaskDurationMs,row.totalBlockingMs,row.interactionPaintMedianMs,row.eventTimingMaxMs,row.clsMax,
+ ].map(n).join(' | ')+' |'),
+ '',
+ '各列为三次样本的中位数，CLS 取最大值。“超50ms部分”在导航到稳定窗口求和，窗口与 Lighthouse TBT 不同。Script/Task/Layout 来自 CDP。点击至第二帧与 EventTiming 是本机响应代理，不能作为真实用户 INP。原始记录另含布局/样式耗时、长任务条数和持续时间、堆、DOM 节点、监听器及完整请求列表。',
+ '',
+ '桌面冷加载 Script 中位 PR14 53.6ms、PR15 68.4ms，增加约28%。慢手机为464.1ms与499.0ms。LCP相近的样本不能证明执行成本相同。A6 的同框架脚本 payload 只比 PR15 多3B，仍测到计时波动，三次实验不用于宣称这些微小变更造成CPU变化。',
+ '',
+ '热缓存改善资源传输，但图片和文档仍重新获取，部分热样本 LCP 高于冷样本。保持原始结果，未用全量缓存、禁用检查或删除功能美化指标。',
+ '',
+ '早期反馈环先用 DOMContentLoaded 后立即点击作为水合结束标记，该点击在慢速环境未可靠产生状态变化。最终协议在 networkidle 后操作并验证真实 DOM 状态。functionalReady 包含这一等待，不能隔离为纯 React 水合耗时。React 初始化、水合和运行代码的成本由 Script/Task/长任务与 trace 辅助观察。',
+ '',
+ '| 补充 trace，单次慢手机冷加载 | PR14 | PR15 | A6 |',
+ '| --- | ---: | ---: | ---: |',
+ '| 强制 GC 后 JS heap B | '+traces.reports.map(row=>row.postGcHeapUsedBytes).join(' | ')+' |',
+ '| EvaluateScript事件合计 ms | '+traces.reports.map(row=>n(row.evaluateScripts.reduce((sum,x)=>sum+x.ms,0))).join(' | ')+' |',
+ '| V8.CompileCode事件合计 ms | '+traces.reports.map(row=>n(row.compileAndParse.find(e=>e.name==='V8.CompileCode').ms)).join(' | ')+' |',
+ '',
+ 'Trace 有额外开销、采样仅一次，不能与无 trace 样本混算。后台 streaming parse 的持续时间包含等待且有嵌套，未把它们相加当作 CPU。PR15 强制 GC 后比 PR14 多保留约393KB。普通样本中的 warm heap 含此前文档与缓存的保留状态，不能直接解释为单页泄漏。',
+ '',
+ '[PR14 原始 trace](pr14-mobile.trace.json.gz) · [PR15 原始 trace](pr15-mobile.trace.json.gz) · [A6 原始 trace](a6-mobile.trace.json.gz) · [trace 汇总](trace-summary.json)',
+ '',
+ '初始请求和字节扫描持续断言无视频、完整攻略阅读器、头像编辑器、会话实验或公告清理器预载。完整 chunk 与所属模块另列。 [包体来源](BUNDLE.md)',
+ '',
+ '轻量 motion 试验使 gzip JS 增加4302B，已撤回。该探索阶段恰有独立编译核对活动，计时列只保留作诊断；稳定且重复的字节回归是撤回依据。正式比较采用所有其他测试结束后的这36份样本。',
+ '',
+ '继续真实 TEST 的建议组合为 Next16.4.5 / React19.3.1 / Node24.22.2 / npm11.19.1。接受框架成本作为待审核事实，托管环境还需实际缓存/压缩、HTTP头、LCP、交互和错误恢复验收。当前指标不构成生产性能批准。',
+];
+fs.writeFileSync(path.join(__dirname,'PERFORMANCE.md'),lines.join('\n')+'\n');

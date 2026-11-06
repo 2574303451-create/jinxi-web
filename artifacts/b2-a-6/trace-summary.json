@@ -1,0 +1,1543 @@
+{
+  "method": "Cold mobile390, CPU6,150ms,200000Bps, gzip loopback transport and no-store HTML/API. Public synthetic read pages only. Trace instrumentation has overhead; durations are supplementary, not merged into the untraced repeated measurements. V8 categories include nested/background events and their duration totals must not be added.",
+  "reports": [
+    {
+      "stage": "pr14",
+      "file": "pr14-mobile.trace.json.gz",
+      "bytes": 1946508,
+      "compressed": 177799,
+      "evaluateScripts": [
+        {
+          "file": "/_next/static/chunks/fd9d1056-b9b6863d0f5432b1.js",
+          "count": 1,
+          "ms": 69.831
+        },
+        {
+          "file": "/_next/static/chunks/493-c2f7f58c1ad75203.js",
+          "count": 1,
+          "ms": 22.911
+        },
+        {
+          "file": "/_next/static/chunks/571.289d8ae1146664ad.js",
+          "count": 1,
+          "ms": 3.284
+        },
+        {
+          "file": "/",
+          "count": 5,
+          "ms": 2.2
+        },
+        {
+          "file": "/_next/static/chunks/117-7e475faf501989ee.js",
+          "count": 1,
+          "ms": 1.924
+        },
+        {
+          "file": "/_next/static/chunks/app/page-5a66da0bca513829.js",
+          "count": 1,
+          "ms": 1.918
+        },
+        {
+          "file": "/_next/static/chunks/596.c06a9bbffdd1c17f.js",
+          "count": 1,
+          "ms": 1.634
+        },
+        {
+          "file": "/_next/static/chunks/main-app-cefedaf7a84f4311.js",
+          "count": 1,
+          "ms": 1.26
+        },
+        {
+          "file": "/_next/static/chunks/962-a343d024099659f3.js",
+          "count": 1,
+          "ms": 0.99
+        },
+        {
+          "file": "/_next/static/chunks/webpack-f5f3684d821c30bc.js",
+          "count": 1,
+          "ms": 0.582
+        }
+      ],
+      "compileAndParse": [
+        {
+          "name": "v8.parseOnBackgroundParsing",
+          "count": 124,
+          "ms": 4214.225000000005
+        },
+        {
+          "name": "BackgroundProcessor::RunScriptStreamingTask",
+          "count": 9,
+          "ms": 4182.988
+        },
+        {
+          "name": "v8.parseOnBackground",
+          "count": 9,
+          "ms": 4182.845000000001
+        },
+        {
+          "name": "BackgroundCompileTask::Run",
+          "count": 9,
+          "ms": 4181.688999999999
+        },
+        {
+          "name": "v8.parseOnBackgroundWaiting",
+          "count": 115,
+          "ms": 4141.521
+        },
+        {
+          "name": "v8.callFunction",
+          "count": 104,
+          "ms": 299.281
+        },
+        {
+          "name": "V8.CompileCode",
+          "count": 1251,
+          "ms": 130.8300000000003
+        },
+        {
+          "name": "v8.run",
+          "count": 14,
+          "ms": 100.802
+        },
+        {
+          "name": "V8.ParseFunction",
+          "count": 1302,
+          "ms": 85.60500000000026
+        },
+        {
+          "name": "V8.CompileIgnition",
+          "count": 1309,
+          "ms": 45.35400000000007
+        },
+        {
+          "name": "V8.CollectSourcePositions",
+          "count": 63,
+          "ms": 43.648999999999994
+        },
+        {
+          "name": "V8.PreParse",
+          "count": 1249,
+          "ms": 30.288000000000103
+        },
+        {
+          "name": "V8.MaglevTask",
+          "count": 62,
+          "ms": 26.276999999999997
+        },
+        {
+          "name": "ParseHTML",
+          "count": 6,
+          "ms": 24.474
+        },
+        {
+          "name": "V8.MaglevBackground",
+          "count": 47,
+          "ms": 22.510999999999992
+        },
+        {
+          "name": "LocalWindowProxy::Initialize",
+          "count": 2,
+          "ms": 13.61
+        },
+        {
+          "name": "V8.Maglev.GraphBuilding",
+          "count": 47,
+          "ms": 11.407000000000004
+        },
+        {
+          "name": "HTMLDocumentParser::MaybeFetchQueuedPreloads",
+          "count": 2,
+          "ms": 10.802
+        },
+        {
+          "name": "V8.CompileIgnitionFinalization",
+          "count": 1244,
+          "ms": 8.224999999999973
+        },
+        {
+          "name": "ParseAuthorStyleSheet",
+          "count": 5,
+          "ms": 7.604
+        },
+        {
+          "name": "V8.Maglev.CodeAssembly",
+          "count": 47,
+          "ms": 7.354999999999997
+        },
+        {
+          "name": "V8.ParseProgram",
+          "count": 7,
+          "ms": 6.9270000000000005
+        },
+        {
+          "name": "MinorGC",
+          "count": 2,
+          "ms": 6.5440000000000005
+        },
+        {
+          "name": "V8.GCScavenger",
+          "count": 2,
+          "ms": 5.941
+        },
+        {
+          "name": "LocalWindowProxy::CreateContext",
+          "count": 2,
+          "ms": 5.593
+        },
+        {
+          "name": "V8.GC_SCAVENGER",
+          "count": 2,
+          "ms": 5.589
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE",
+          "count": 2,
+          "ms": 5.333
+        },
+        {
+          "name": "V8.DeserializeContext",
+          "count": 2,
+          "ms": 3.207
+        },
+        {
+          "name": "V8.FinalizeMaglevConcurrentCompilation",
+          "count": 38,
+          "ms": 2.918
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL_PHASE",
+          "count": 2,
+          "ms": 2.88
+        },
+        {
+          "name": "V8.MaglevConcurrentFinalize",
+          "count": 47,
+          "ms": 2.8
+        },
+        {
+          "name": "V8.GC_SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL",
+          "count": 2,
+          "ms": 2.673
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL",
+          "count": 2,
+          "ms": 2.593
+        },
+        {
+          "name": "V8.GC_BACKGROUND_SAFEPOINT",
+          "count": 1,
+          "ms": 2.56
+        },
+        {
+          "name": "v8.compile",
+          "count": 14,
+          "ms": 2.4069999999999996
+        },
+        {
+          "name": "v8.produceCache",
+          "count": 12,
+          "ms": 1.9629999999999999
+        },
+        {
+          "name": "ContextCreatedNotification",
+          "count": 2,
+          "ms": 1.7930000000000001
+        },
+        {
+          "name": "V8.Maglev.CommittingDependencies",
+          "count": 47,
+          "ms": 1.4100000000000001
+        },
+        {
+          "name": "InstallConditionalFeatures",
+          "count": 2,
+          "ms": 1.393
+        },
+        {
+          "name": "V8.Maglev.RegisterAllocation",
+          "count": 47,
+          "ms": 1.3840000000000006
+        },
+        {
+          "name": "FlushInstructionCache",
+          "count": 440,
+          "ms": 1.2679999999999914
+        },
+        {
+          "name": "V8.Maglev.NodeProcessing",
+          "count": 47,
+          "ms": 1.1930000000000003
+        },
+        {
+          "name": "V8.CompileCodeBackground",
+          "count": 9,
+          "ms": 1.1589999999999998
+        },
+        {
+          "name": "V8.CompileScript",
+          "count": 5,
+          "ms": 1.002
+        },
+        {
+          "name": "v8.newInstance",
+          "count": 59,
+          "ms": 0.9540000000000003
+        },
+        {
+          "name": "V8.DeoptimizeCode",
+          "count": 104,
+          "ms": 0.9210000000000002
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_ROOTS",
+          "count": 2,
+          "ms": 0.748
+        },
+        {
+          "name": "V8.MaglevDestructBackground",
+          "count": 47,
+          "ms": 0.6790000000000002
+        },
+        {
+          "name": "V8.Maglev.PhiUntagging",
+          "count": 47,
+          "ms": 0.5460000000000003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY",
+          "count": 2,
+          "ms": 0.48100000000000004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_FINALIZE",
+          "count": 2,
+          "ms": 0.474
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_COMPUTE_WEAKNESS_PARALLEL",
+          "count": 2,
+          "ms": 0.431
+        },
+        {
+          "name": "V8.FinalizeBaselineConcurrentCompilation",
+          "count": 54,
+          "ms": 0.41000000000000014
+        },
+        {
+          "name": "BackgroundProcessor::OnDataPipeReadable",
+          "count": 9,
+          "ms": 0.35300000000000004
+        },
+        {
+          "name": "ClassicPendingScript::NotifyFinished",
+          "count": 9,
+          "ms": 0.32500000000000007
+        },
+        {
+          "name": "BackgroundProcessor::TryStartStreamingTask",
+          "count": 9,
+          "ms": 0.31099999999999994
+        },
+        {
+          "name": "V8.CompileStreamedScript",
+          "count": 9,
+          "ms": 0.30100000000000005
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS",
+          "count": 2,
+          "ms": 0.246
+        },
+        {
+          "name": "V8.Maglev.DeadCodeMarking",
+          "count": 46,
+          "ms": 0.2380000000000001
+        },
+        {
+          "name": "V8.Compile",
+          "count": 6,
+          "ms": 0.23800000000000004
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE_SAFEPOINT",
+          "count": 2,
+          "ms": 0.213
+        },
+        {
+          "name": "BackgroundProcessor::MaybeStartProcessingResponse",
+          "count": 9,
+          "ms": 0.20800000000000002
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_RESET_PARALLEL",
+          "count": 2,
+          "ms": 0.20199999999999999
+        },
+        {
+          "name": "V8.GC_SCAVENGER_COMPLETE_SWEEP_ARRAY_BUFFERS",
+          "count": 1,
+          "ms": 0.182
+        },
+        {
+          "name": "BackgroundProcessor::OnFinishStreaming",
+          "count": 9,
+          "ms": 0.139
+        },
+        {
+          "name": "V8.MaglevConcurrentPrepare",
+          "count": 47,
+          "ms": 0.10700000000000007
+        },
+        {
+          "name": "V8.MarkCandidatesForOptimization",
+          "count": 45,
+          "ms": 0.09400000000000006
+        },
+        {
+          "name": "ClassicPendingScript::GetSource",
+          "count": 9,
+          "ms": 0.07800000000000001
+        },
+        {
+          "name": "V8.OffThreadFinalization.Publish",
+          "count": 9,
+          "ms": 0.077
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE",
+          "count": 2,
+          "ms": 0.061
+        },
+        {
+          "name": "V8.GC_TIME_TO_SAFEPOINT",
+          "count": 1,
+          "ms": 0.046
+        },
+        {
+          "name": "V8.StreamingFinalization.CheckCache",
+          "count": 9,
+          "ms": 0.03900000000000001
+        },
+        {
+          "name": "V8.Maglev.CodeGeneration",
+          "count": 34,
+          "ms": 0.037000000000000026
+        },
+        {
+          "name": "V8.GC_SCAVENGER_FREE_REMEMBERED_SET",
+          "count": 2,
+          "ms": 0.03
+        },
+        {
+          "name": "V8.StreamingFinalization.AddToCache",
+          "count": 9,
+          "ms": 0.023000000000000003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SWEEP_ARRAY_BUFFERS",
+          "count": 2,
+          "ms": 0.023
+        },
+        {
+          "name": "V8.StreamingFinalization.Release",
+          "count": 9,
+          "ms": 0.019000000000000003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_RESIZE_NEW_SPACE",
+          "count": 2,
+          "ms": 0.013000000000000001
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_PROLOGUE",
+          "count": 2,
+          "ms": 0.009000000000000001
+        },
+        {
+          "name": "V8.GC_MINOR_MS_BACKGROUND_SWEEPING",
+          "count": 2,
+          "ms": 0.009000000000000001
+        },
+        {
+          "name": "LocalWindowProxy::SetupWindowPrototypeChain",
+          "count": 2,
+          "ms": 0.008
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_EPILOGUE",
+          "count": 2,
+          "ms": 0.006
+        },
+        {
+          "name": "V8.GC_BACKGROUND_YOUNG_ARRAY_BUFFER_SWEEP",
+          "count": 2,
+          "ms": 0.005
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE_SAFEPOINT",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "ComputeWeaknessProcessor start",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "Parallel scavenge started",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_UPDATE_REFS",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "ClearWeaknessProcessor start",
+          "count": 2,
+          "ms": 0.003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_RESTORE_AND_QUARANTINE_PINNED",
+          "count": 2,
+          "ms": 0.003
+        },
+        {
+          "name": "LocalWindowProxy::UpdateDocumentProperty",
+          "count": 1,
+          "ms": 0.002
+        }
+      ],
+      "postGcHeapUsedBytes": 3496664
+    },
+    {
+      "stage": "pr15",
+      "file": "pr15-mobile.trace.json.gz",
+      "bytes": 2091983,
+      "compressed": 189276,
+      "evaluateScripts": [
+        {
+          "file": "/_next/static/chunks/794-8d371aeb1948ae36.js",
+          "count": 1,
+          "ms": 122.059
+        },
+        {
+          "file": "/_next/static/chunks/928-fa42644f46bcebc2.js",
+          "count": 1,
+          "ms": 45.117
+        },
+        {
+          "file": "/",
+          "count": 4,
+          "ms": 5.631
+        },
+        {
+          "file": "/_next/static/chunks/23.3d24349b74946b8e.js",
+          "count": 1,
+          "ms": 4.014
+        },
+        {
+          "file": "/_next/static/chunks/main-app-7736007997126d7f.js",
+          "count": 1,
+          "ms": 2.18
+        },
+        {
+          "file": "/_next/static/chunks/156.ca8e7647969a9cb7.js",
+          "count": 1,
+          "ms": 1.913
+        },
+        {
+          "file": "/_next/static/chunks/913-9dc10111a512cf18.js",
+          "count": 1,
+          "ms": 0.672
+        },
+        {
+          "file": "/_next/static/chunks/app/page-44b07e22c2697089.js",
+          "count": 1,
+          "ms": 0.572
+        },
+        {
+          "file": "/_next/static/chunks/webpack-c5daf6ef5b4ff7b9.js",
+          "count": 1,
+          "ms": 0.496
+        },
+        {
+          "file": "/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+          "count": 1,
+          "ms": 0.322
+        }
+      ],
+      "compileAndParse": [
+        {
+          "name": "v8.parseOnBackgroundParsing",
+          "count": 156,
+          "ms": 7260.634999999999
+        },
+        {
+          "name": "BackgroundProcessor::RunScriptStreamingTask",
+          "count": 9,
+          "ms": 6049.373999999999
+        },
+        {
+          "name": "v8.parseOnBackground",
+          "count": 9,
+          "ms": 6049.206000000001
+        },
+        {
+          "name": "v8.parseOnBackgroundWaiting",
+          "count": 147,
+          "ms": 5993.8700000000035
+        },
+        {
+          "name": "BackgroundCompileTask::Run",
+          "count": 9,
+          "ms": 4783.586
+        },
+        {
+          "name": "v8.callFunction",
+          "count": 124,
+          "ms": 463.077
+        },
+        {
+          "name": "V8.CompileCode",
+          "count": 1450,
+          "ms": 262.66100000000006
+        },
+        {
+          "name": "V8.ParseFunction",
+          "count": 1503,
+          "ms": 174.8629999999994
+        },
+        {
+          "name": "v8.run",
+          "count": 13,
+          "ms": 173.419
+        },
+        {
+          "name": "V8.CompileIgnition",
+          "count": 1549,
+          "ms": 79.4710000000001
+        },
+        {
+          "name": "V8.CollectSourcePositions",
+          "count": 59,
+          "ms": 60.89600000000001
+        },
+        {
+          "name": "V8.PreParse",
+          "count": 1123,
+          "ms": 41.36600000000008
+        },
+        {
+          "name": "ParseHTML",
+          "count": 5,
+          "ms": 29.088
+        },
+        {
+          "name": "V8.MaglevTask",
+          "count": 52,
+          "ms": 15.483999999999996
+        },
+        {
+          "name": "LocalWindowProxy::Initialize",
+          "count": 2,
+          "ms": 14.83
+        },
+        {
+          "name": "V8.MaglevBackground",
+          "count": 46,
+          "ms": 14.627999999999995
+        },
+        {
+          "name": "V8.CompileIgnitionFinalization",
+          "count": 1507,
+          "ms": 10.706999999999962
+        },
+        {
+          "name": "V8.ParseProgram",
+          "count": 6,
+          "ms": 10.585999999999999
+        },
+        {
+          "name": "HTMLDocumentParser::MaybeFetchQueuedPreloads",
+          "count": 2,
+          "ms": 8.63
+        },
+        {
+          "name": "V8.Maglev.GraphBuilding",
+          "count": 46,
+          "ms": 8.047999999999998
+        },
+        {
+          "name": "ParseAuthorStyleSheet",
+          "count": 5,
+          "ms": 7.631
+        },
+        {
+          "name": "LocalWindowProxy::CreateContext",
+          "count": 2,
+          "ms": 6.194
+        },
+        {
+          "name": "v8.compile",
+          "count": 13,
+          "ms": 4.997999999999999
+        },
+        {
+          "name": "V8.FinalizeMaglevConcurrentCompilation",
+          "count": 42,
+          "ms": 3.854999999999999
+        },
+        {
+          "name": "V8.DeserializeContext",
+          "count": 2,
+          "ms": 3.612
+        },
+        {
+          "name": "V8.Maglev.CodeAssembly",
+          "count": 46,
+          "ms": 3.0839999999999996
+        },
+        {
+          "name": "V8.MaglevConcurrentFinalize",
+          "count": 46,
+          "ms": 2.8659999999999997
+        },
+        {
+          "name": "v8.newInstance",
+          "count": 61,
+          "ms": 2.335999999999998
+        },
+        {
+          "name": "v8.produceCache",
+          "count": 10,
+          "ms": 2.226
+        },
+        {
+          "name": "V8.CompileStreamedScript",
+          "count": 9,
+          "ms": 2.0829999999999997
+        },
+        {
+          "name": "V8.CompileScript",
+          "count": 4,
+          "ms": 1.968
+        },
+        {
+          "name": "MinorGC",
+          "count": 1,
+          "ms": 1.849
+        },
+        {
+          "name": "V8.GC_SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL",
+          "count": 3,
+          "ms": 1.833
+        },
+        {
+          "name": "ContextCreatedNotification",
+          "count": 2,
+          "ms": 1.617
+        },
+        {
+          "name": "V8.DeoptimizeCode",
+          "count": 153,
+          "ms": 1.428999999999995
+        },
+        {
+          "name": "InstallConditionalFeatures",
+          "count": 2,
+          "ms": 1.3940000000000001
+        },
+        {
+          "name": "V8.GCScavenger",
+          "count": 1,
+          "ms": 1.303
+        },
+        {
+          "name": "V8.GC_SCAVENGER",
+          "count": 1,
+          "ms": 1.244
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE",
+          "count": 1,
+          "ms": 1.177
+        },
+        {
+          "name": "FlushInstructionCache",
+          "count": 399,
+          "ms": 1.1749999999999943
+        },
+        {
+          "name": "V8.Maglev.RegisterAllocation",
+          "count": 46,
+          "ms": 1.0890000000000002
+        },
+        {
+          "name": "V8.CompileCodeBackground",
+          "count": 9,
+          "ms": 1.015
+        },
+        {
+          "name": "V8.Maglev.NodeProcessing",
+          "count": 46,
+          "ms": 0.9650000000000004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL_PHASE",
+          "count": 1,
+          "ms": 0.948
+        },
+        {
+          "name": "ClassicPendingScript::GetSource",
+          "count": 9,
+          "ms": 0.8650000000000001
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL",
+          "count": 1,
+          "ms": 0.757
+        },
+        {
+          "name": "V8.Maglev.CommittingDependencies",
+          "count": 46,
+          "ms": 0.5390000000000001
+        },
+        {
+          "name": "V8.MaglevDestructBackground",
+          "count": 46,
+          "ms": 0.43900000000000017
+        },
+        {
+          "name": "V8.Maglev.PhiUntagging",
+          "count": 46,
+          "ms": 0.4380000000000002
+        },
+        {
+          "name": "BackgroundProcessor::OnDataPipeReadable",
+          "count": 8,
+          "ms": 0.38100000000000006
+        },
+        {
+          "name": "BackgroundProcessor::TryStartStreamingTask",
+          "count": 9,
+          "ms": 0.328
+        },
+        {
+          "name": "BackgroundProcessor::MaybeStartProcessingResponse",
+          "count": 9,
+          "ms": 0.24500000000000002
+        },
+        {
+          "name": "V8.FinalizeBaselineConcurrentCompilation",
+          "count": 61,
+          "ms": 0.24000000000000016
+        },
+        {
+          "name": "V8.Maglev.DeadCodeMarking",
+          "count": 46,
+          "ms": 0.1610000000000001
+        },
+        {
+          "name": "BackgroundProcessor::OnFinishStreaming",
+          "count": 9,
+          "ms": 0.15400000000000003
+        },
+        {
+          "name": "ClassicPendingScript::NotifyFinished",
+          "count": 9,
+          "ms": 0.14600000000000002
+        },
+        {
+          "name": "V8.MaglevConcurrentPrepare",
+          "count": 44,
+          "ms": 0.11000000000000006
+        },
+        {
+          "name": "V8.MarkCandidatesForOptimization",
+          "count": 45,
+          "ms": 0.09400000000000004
+        },
+        {
+          "name": "V8.OffThreadFinalization.Publish",
+          "count": 9,
+          "ms": 0.084
+        },
+        {
+          "name": "V8.Compile",
+          "count": 5,
+          "ms": 0.06399999999999999
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_ROOTS",
+          "count": 1,
+          "ms": 0.062
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE_SAFEPOINT",
+          "count": 1,
+          "ms": 0.052
+        },
+        {
+          "name": "V8.StreamingFinalization.CheckCache",
+          "count": 9,
+          "ms": 0.04300000000000001
+        },
+        {
+          "name": "V8.Maglev.CodeGeneration",
+          "count": 34,
+          "ms": 0.03900000000000003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_FINALIZE",
+          "count": 1,
+          "ms": 0.037
+        },
+        {
+          "name": "V8.StreamingFinalization.Release",
+          "count": 9,
+          "ms": 0.031000000000000007
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SWEEP_ARRAY_BUFFERS",
+          "count": 1,
+          "ms": 0.031
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY",
+          "count": 1,
+          "ms": 0.029
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE",
+          "count": 1,
+          "ms": 0.025
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS",
+          "count": 1,
+          "ms": 0.022
+        },
+        {
+          "name": "V8.StreamingFinalization.AddToCache",
+          "count": 9,
+          "ms": 0.020000000000000004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_COMPUTE_WEAKNESS_PARALLEL",
+          "count": 1,
+          "ms": 0.01
+        },
+        {
+          "name": "LocalWindowProxy::SetupWindowPrototypeChain",
+          "count": 2,
+          "ms": 0.009000000000000001
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_RESET_PARALLEL",
+          "count": 1,
+          "ms": 0.009
+        },
+        {
+          "name": "V8.GC_SCAVENGER_RESIZE_NEW_SPACE",
+          "count": 1,
+          "ms": 0.007
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_EPILOGUE",
+          "count": 1,
+          "ms": 0.006
+        },
+        {
+          "name": "V8.GC_MINOR_MS_BACKGROUND_SWEEPING",
+          "count": 2,
+          "ms": 0.005
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_PROLOGUE",
+          "count": 1,
+          "ms": 0.004
+        },
+        {
+          "name": "V8.GC_BACKGROUND_YOUNG_ARRAY_BUFFER_SWEEP",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "Parallel scavenge started",
+          "count": 1,
+          "ms": 0.003
+        },
+        {
+          "name": "V8.GC_SCAVENGER_FREE_REMEMBERED_SET",
+          "count": 1,
+          "ms": 0.003
+        },
+        {
+          "name": "LocalWindowProxy::UpdateDocumentProperty",
+          "count": 1,
+          "ms": 0.002
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE",
+          "count": 1,
+          "ms": 0.002
+        },
+        {
+          "name": "V8.GC_TIME_TO_SAFEPOINT",
+          "count": 1,
+          "ms": 0.001
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE_SAFEPOINT",
+          "count": 1,
+          "ms": 0.001
+        },
+        {
+          "name": "ComputeWeaknessProcessor start",
+          "count": 1,
+          "ms": 0.001
+        },
+        {
+          "name": "ClearWeaknessProcessor start",
+          "count": 1,
+          "ms": 0.001
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_UPDATE_REFS",
+          "count": 1,
+          "ms": 0.001
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_RESTORE_AND_QUARANTINE_PINNED",
+          "count": 1,
+          "ms": 0.001
+        }
+      ],
+      "postGcHeapUsedBytes": 3889360
+    },
+    {
+      "stage": "a6",
+      "file": "a6-mobile.trace.json.gz",
+      "bytes": 2083610,
+      "compressed": 191189,
+      "evaluateScripts": [
+        {
+          "file": "/_next/static/chunks/794-8d371aeb1948ae36.js",
+          "count": 1,
+          "ms": 97.572
+        },
+        {
+          "file": "/_next/static/chunks/928-fa42644f46bcebc2.js",
+          "count": 1,
+          "ms": 40.27
+        },
+        {
+          "file": "/",
+          "count": 4,
+          "ms": 5.595
+        },
+        {
+          "file": "/_next/static/chunks/23.3d24349b74946b8e.js",
+          "count": 1,
+          "ms": 4.151
+        },
+        {
+          "file": "/_next/static/chunks/app/page-2a96991a299fd260.js",
+          "count": 1,
+          "ms": 3.508
+        },
+        {
+          "file": "/_next/static/chunks/main-app-296b5c394eeb0540.js",
+          "count": 1,
+          "ms": 1.526
+        },
+        {
+          "file": "/_next/static/chunks/913-9dc10111a512cf18.js",
+          "count": 1,
+          "ms": 1.048
+        },
+        {
+          "file": "/_next/static/chunks/156.ca8e7647969a9cb7.js",
+          "count": 1,
+          "ms": 0.92
+        },
+        {
+          "file": "/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+          "count": 1,
+          "ms": 0.875
+        },
+        {
+          "file": "/_next/static/chunks/webpack-8c8827b46fc09430.js",
+          "count": 1,
+          "ms": 0.28
+        }
+      ],
+      "compileAndParse": [
+        {
+          "name": "v8.parseOnBackgroundParsing",
+          "count": 158,
+          "ms": 7203.273000000004
+        },
+        {
+          "name": "BackgroundProcessor::RunScriptStreamingTask",
+          "count": 9,
+          "ms": 6008.029
+        },
+        {
+          "name": "v8.parseOnBackground",
+          "count": 9,
+          "ms": 6007.748999999999
+        },
+        {
+          "name": "v8.parseOnBackgroundWaiting",
+          "count": 149,
+          "ms": 5952.256
+        },
+        {
+          "name": "BackgroundCompileTask::Run",
+          "count": 9,
+          "ms": 4755.554
+        },
+        {
+          "name": "v8.callFunction",
+          "count": 124,
+          "ms": 402.4419999999999
+        },
+        {
+          "name": "V8.CompileCode",
+          "count": 1451,
+          "ms": 218.74399999999997
+        },
+        {
+          "name": "v8.run",
+          "count": 13,
+          "ms": 148.39200000000002
+        },
+        {
+          "name": "V8.ParseFunction",
+          "count": 1498,
+          "ms": 142.375
+        },
+        {
+          "name": "V8.CompileIgnition",
+          "count": 1529,
+          "ms": 63.06500000000023
+        },
+        {
+          "name": "V8.CollectSourcePositions",
+          "count": 59,
+          "ms": 47.27300000000001
+        },
+        {
+          "name": "V8.PreParse",
+          "count": 1122,
+          "ms": 35.09600000000002
+        },
+        {
+          "name": "ParseHTML",
+          "count": 6,
+          "ms": 28.087000000000003
+        },
+        {
+          "name": "V8.MaglevTask",
+          "count": 57,
+          "ms": 19.423999999999992
+        },
+        {
+          "name": "V8.MaglevBackground",
+          "count": 48,
+          "ms": 17.699999999999996
+        },
+        {
+          "name": "LocalWindowProxy::Initialize",
+          "count": 2,
+          "ms": 12.879999999999999
+        },
+        {
+          "name": "V8.CompileIgnitionFinalization",
+          "count": 1482,
+          "ms": 10.423999999999946
+        },
+        {
+          "name": "MinorGC",
+          "count": 2,
+          "ms": 9.647
+        },
+        {
+          "name": "V8.Maglev.GraphBuilding",
+          "count": 48,
+          "ms": 9.213000000000003
+        },
+        {
+          "name": "V8.ParseProgram",
+          "count": 6,
+          "ms": 9.169
+        },
+        {
+          "name": "V8.GCScavenger",
+          "count": 2,
+          "ms": 8.97
+        },
+        {
+          "name": "HTMLDocumentParser::MaybeFetchQueuedPreloads",
+          "count": 2,
+          "ms": 8.794
+        },
+        {
+          "name": "ParseAuthorStyleSheet",
+          "count": 5,
+          "ms": 8.472999999999999
+        },
+        {
+          "name": "V8.GC_SCAVENGER",
+          "count": 2,
+          "ms": 7.816
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE",
+          "count": 2,
+          "ms": 7.719
+        },
+        {
+          "name": "LocalWindowProxy::CreateContext",
+          "count": 2,
+          "ms": 5.395
+        },
+        {
+          "name": "V8.Maglev.CodeAssembly",
+          "count": 48,
+          "ms": 4.852
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL_PHASE",
+          "count": 2,
+          "ms": 4.495
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_PARALLEL",
+          "count": 2,
+          "ms": 3.985
+        },
+        {
+          "name": "v8.compile",
+          "count": 13,
+          "ms": 3.952
+        },
+        {
+          "name": "V8.GC_SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL",
+          "count": 3,
+          "ms": 3.5869999999999997
+        },
+        {
+          "name": "V8.DeserializeContext",
+          "count": 2,
+          "ms": 3.3920000000000003
+        },
+        {
+          "name": "V8.FinalizeMaglevConcurrentCompilation",
+          "count": 40,
+          "ms": 2.4130000000000007
+        },
+        {
+          "name": "V8.MaglevConcurrentFinalize",
+          "count": 48,
+          "ms": 2.2419999999999995
+        },
+        {
+          "name": "v8.produceCache",
+          "count": 10,
+          "ms": 1.6159999999999999
+        },
+        {
+          "name": "ContextCreatedNotification",
+          "count": 2,
+          "ms": 1.612
+        },
+        {
+          "name": "V8.CompileStreamedScript",
+          "count": 9,
+          "ms": 1.569
+        },
+        {
+          "name": "V8.CompileScript",
+          "count": 4,
+          "ms": 1.429
+        },
+        {
+          "name": "V8.Maglev.RegisterAllocation",
+          "count": 48,
+          "ms": 1.3540000000000003
+        },
+        {
+          "name": "FlushInstructionCache",
+          "count": 489,
+          "ms": 1.2299999999999938
+        },
+        {
+          "name": "InstallConditionalFeatures",
+          "count": 2,
+          "ms": 1.219
+        },
+        {
+          "name": "V8.Maglev.NodeProcessing",
+          "count": 48,
+          "ms": 1.1150000000000002
+        },
+        {
+          "name": "V8.CompileCodeBackground",
+          "count": 9,
+          "ms": 1.059
+        },
+        {
+          "name": "V8.MaglevDestructBackground",
+          "count": 48,
+          "ms": 0.9520000000000002
+        },
+        {
+          "name": "V8.DeoptimizeCode",
+          "count": 191,
+          "ms": 0.9090000000000004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_FINALIZE",
+          "count": 2,
+          "ms": 0.855
+        },
+        {
+          "name": "BackgroundProcessor::OnDataPipeReadable",
+          "count": 8,
+          "ms": 0.758
+        },
+        {
+          "name": "BackgroundProcessor::TryStartStreamingTask",
+          "count": 9,
+          "ms": 0.7240000000000001
+        },
+        {
+          "name": "V8.Compile",
+          "count": 5,
+          "ms": 0.6100000000000001
+        },
+        {
+          "name": "V8.Maglev.CommittingDependencies",
+          "count": 48,
+          "ms": 0.5410000000000003
+        },
+        {
+          "name": "V8.Maglev.PhiUntagging",
+          "count": 48,
+          "ms": 0.4920000000000002
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_ROOTS",
+          "count": 2,
+          "ms": 0.492
+        },
+        {
+          "name": "V8.FinalizeBaselineConcurrentCompilation",
+          "count": 63,
+          "ms": 0.4850000000000002
+        },
+        {
+          "name": "V8.OffThreadFinalization.Publish",
+          "count": 9,
+          "ms": 0.4580000000000001
+        },
+        {
+          "name": "V8.GC_SCAVENGER_FREE_REMEMBERED_SET",
+          "count": 2,
+          "ms": 0.45699999999999996
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS",
+          "count": 2,
+          "ms": 0.447
+        },
+        {
+          "name": "V8.StreamingFinalization.AddToCache",
+          "count": 9,
+          "ms": 0.404
+        },
+        {
+          "name": "v8.newInstance",
+          "count": 61,
+          "ms": 0.3550000000000002
+        },
+        {
+          "name": "V8.StreamingFinalization.CheckCache",
+          "count": 9,
+          "ms": 0.321
+        },
+        {
+          "name": "BackgroundProcessor::MaybeStartProcessingResponse",
+          "count": 9,
+          "ms": 0.278
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY",
+          "count": 2,
+          "ms": 0.262
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE",
+          "count": 2,
+          "ms": 0.242
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_RESET_PARALLEL",
+          "count": 2,
+          "ms": 0.222
+        },
+        {
+          "name": "V8.Maglev.DeadCodeMarking",
+          "count": 48,
+          "ms": 0.2080000000000001
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_EPILOGUE",
+          "count": 2,
+          "ms": 0.194
+        },
+        {
+          "name": "V8.GC_HEAP_EXTERNAL_PROLOGUE",
+          "count": 2,
+          "ms": 0.19
+        },
+        {
+          "name": "BackgroundProcessor::OnFinishStreaming",
+          "count": 9,
+          "ms": 0.16199999999999998
+        },
+        {
+          "name": "ClassicPendingScript::NotifyFinished",
+          "count": 9,
+          "ms": 0.138
+        },
+        {
+          "name": "V8.MaglevConcurrentPrepare",
+          "count": 48,
+          "ms": 0.1320000000000001
+        },
+        {
+          "name": "V8.MarkCandidatesForOptimization",
+          "count": 48,
+          "ms": 0.12400000000000008
+        },
+        {
+          "name": "V8.GC_SCAVENGER_BACKGROUND_TRACED_HANDLES_COMPUTE_WEAKNESS_PARALLEL",
+          "count": 1,
+          "ms": 0.066
+        },
+        {
+          "name": "ClassicPendingScript::GetSource",
+          "count": 9,
+          "ms": 0.062
+        },
+        {
+          "name": "V8.Maglev.CodeGeneration",
+          "count": 41,
+          "ms": 0.046000000000000034
+        },
+        {
+          "name": "V8.GC_HEAP_EPILOGUE_SAFEPOINT",
+          "count": 2,
+          "ms": 0.046
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SWEEP_ARRAY_BUFFERS",
+          "count": 2,
+          "ms": 0.025
+        },
+        {
+          "name": "V8.GC_SCAVENGER_TRACED_HANDLES_COMPUTE_WEAKNESS_PARALLEL",
+          "count": 1,
+          "ms": 0.022
+        },
+        {
+          "name": "V8.GC_SCAVENGER_COMPLETE_SWEEP_ARRAY_BUFFERS",
+          "count": 1,
+          "ms": 0.02
+        },
+        {
+          "name": "V8.StreamingFinalization.Release",
+          "count": 9,
+          "ms": 0.019999999999999997
+        },
+        {
+          "name": "V8.GC_SCAVENGER_RESIZE_NEW_SPACE",
+          "count": 2,
+          "ms": 0.017
+        },
+        {
+          "name": "V8.GC_MINOR_MS_BACKGROUND_SWEEPING",
+          "count": 2,
+          "ms": 0.014
+        },
+        {
+          "name": "LocalWindowProxy::SetupWindowPrototypeChain",
+          "count": 2,
+          "ms": 0.007
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE",
+          "count": 2,
+          "ms": 0.007
+        },
+        {
+          "name": "V8.GC_TIME_TO_SAFEPOINT",
+          "count": 2,
+          "ms": 0.007
+        },
+        {
+          "name": "ComputeWeaknessProcessor start",
+          "count": 2,
+          "ms": 0.006
+        },
+        {
+          "name": "ClearWeaknessProcessor start",
+          "count": 2,
+          "ms": 0.006
+        },
+        {
+          "name": "V8.GC_BACKGROUND_YOUNG_ARRAY_BUFFER_SWEEP",
+          "count": 2,
+          "ms": 0.005
+        },
+        {
+          "name": "V8.GC_HEAP_PROLOGUE_SAFEPOINT",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "Parallel scavenge started",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_UPDATE_REFS",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "V8.GC_SCAVENGER_SCAVENGE_RESTORE_AND_QUARANTINE_PINNED",
+          "count": 2,
+          "ms": 0.004
+        },
+        {
+          "name": "LocalWindowProxy::UpdateDocumentProperty",
+          "count": 1,
+          "ms": 0.002
+        }
+      ],
+      "postGcHeapUsedBytes": 3892968
+    }
+  ]
+}

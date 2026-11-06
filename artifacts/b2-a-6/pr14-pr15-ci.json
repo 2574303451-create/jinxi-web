@@ -1,0 +1,48 @@
+{
+  "runs": [
+    {
+      "pr": 14,
+      "id": 42148549024,
+      "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42148549024",
+      "result": "success"
+    },
+    {
+      "pr": 15,
+      "id": 42148866527,
+      "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42148866527",
+      "result": "success"
+    }
+  ],
+  "verifiedJobs": [
+    {
+      "jobId": 127666181225,
+      "sha": "7f850e188c750e147181fcba193a8106892b4afc",
+      "available": true,
+      "revisionSectionMatches": true,
+      "rawTsc": true,
+      "pg55": true,
+      "api14": true,
+      "security10": true
+    },
+    {
+      "jobId": 127666181586,
+      "sha": "7f850e188c750e147181fcba193a8106892b4afc",
+      "available": true,
+      "revisionSectionMatches": true,
+      "rawTsc": true,
+      "pg55": true,
+      "api14": true,
+      "security10": true
+    },
+    {
+      "jobId": 127667234421,
+      "sha": "f9ff27874beaf3388502f29360ebaa86c5a64c13",
+      "available": true,
+      "revisionSectionMatches": true,
+      "rawTsc": true,
+      "pg55": true,
+      "api14": true,
+      "security10": true
+    }
+  ]
+}

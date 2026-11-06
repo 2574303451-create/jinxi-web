@@ -1,6 +1,6 @@
 {
   "baseline": "be9513f37251d08661a3f6c1d5240ed059c59f2e",
-  "testedGitHead": "4ef1966146643a6ea6525c529b5364ae4cdea28e",
+  "testedGitHead": "297834e167f36c24f7e31d31d074f439bcef52f2",
   "workingTree": "verify source diff separately; evidence files may be untracked",
   "node": "v24.22.2",
   "npm": "11.19.1",
@@ -13,7 +13,7 @@
       "name": "typecheck",
       "command": "node npm-cli.js run typecheck",
       "exitCode": 0,
-      "elapsedMs": 3522,
+      "elapsedMs": 3753,
       "testCounts": [],
       "log": "typecheck.log"
     },
@@ -21,7 +21,7 @@
       "name": "lint",
       "command": "node npm-cli.js run lint",
       "exitCode": 0,
-      "elapsedMs": 1390,
+      "elapsedMs": 1374,
       "testCounts": [],
       "log": "lint.log"
     },
@@ -29,7 +29,7 @@
       "name": "unit-api-security",
       "command": "node npm-cli.js test",
       "exitCode": 0,
-      "elapsedMs": 2384,
+      "elapsedMs": 2442,
       "testCounts": [
         14,
         48
@@ -40,9 +40,9 @@
       "name": "disposable-postgres",
       "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN>",
       "exitCode": 0,
-      "elapsedMs": 63019,
+      "elapsedMs": 62851,
       "testCounts": [
-        44
+        46
       ],
       "log": "disposable-postgres.log"
     },
@@ -50,7 +50,7 @@
       "name": "static-build",
       "command": "node npm-cli.js run build",
       "exitCode": 0,
-      "elapsedMs": 22021,
+      "elapsedMs": 22149,
       "testCounts": [],
       "log": "static-build.log"
     }

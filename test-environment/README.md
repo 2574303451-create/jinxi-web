@@ -57,3 +57,7 @@ PG runner 新建随机临时目录与只监听 `127.0.0.1:55435` 的集群；端
 脚本核对真实 cluster/数据库、environment UUID、提供方 ID、initializer、登记对象 OID、列签名和 ACL；未知对象、额外依赖、结构或 ACL 漂移会拒绝。仅显式删除本次新建的 TEST 对象和角色，恢复本次修改的 PUBLIC 权限。无 CASCADE、DROP OWNED、TRUNCATE、DROP DATABASE 或分支重置；所有动作在一笔事务内。角色若已在别处产生依赖，依赖检查使整个回滚失败并保留对象供审核。
 
 停止 TEST 与撤销 TEST 授权即可止损，不修改旧站、不轮换生产密码、不删除生产数据或 pr17-validation。
+
+初始化主体须能管理目标数据库、创建角色并执行只读 cluster 身份函数。脚本仅将新 NOLOGIN owner 的 SET/INHERIT 授予这个私有初始化主体，并给 owner public 的 CREATE/USAGE；reader 不继承 owner。回滚同时移除 owner 的 schema 授权。另有本机非 superuser 初始化全生命周期演练，真实 Neon 权限仍以预检结果为准。
+
+私有 approval 与初始化脚本必须在同一实际数据库连接中执行。若 Web 编辑器不能保证多次执行复用同一会话，不要分次运行后假定 GUC 仍有效；使用管理员私有的持久、非池化会话执行审核批次。没有目标参数时必须拒绝，不能删除检查。

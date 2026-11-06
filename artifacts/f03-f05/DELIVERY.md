@@ -4,7 +4,7 @@
 
 远端基线 PR #18 / `be9513f37251d08661a3f6c1d5240ed059c59f2e`；开始时只读核实 open/draft/unmerged，base 为 PR #17 分支，main 仍 `2ce600a79955cd5e5a7bd798f266f8e17b0c283e`。
 
-新本地工作树 `E:/Recovery/.jinxi-research/f03-f05/worktree`，分支 `codex/jinxi-f03-f05-test-foundation`。实现提交 `d5d6e6bc6a8edad2d2a2613d27255094873b18c9`；报告范围措辞更正提交及最终受测 HEAD `4ef1966146643a6ea6525c529b5364ae4cdea28e`。后续证据提交不改变功能代码。没有 push、新 PR、合并或部署。
+新本地工作树 `E:/Recovery/.jinxi-research/f03-f05/worktree`，分支 `codex/jinxi-f03-f05-test-foundation`。实现提交 `d5d6e6bc6a8edad2d2a2613d27255094873b18c9`；报告范围措辞更正 `4ef1966146643a6ea6525c529b5364ae4cdea28e`；默认值契约修复 `0d8e74162d8230d0628e314d82a385c84e889928`；非 superuser 初始化修复及最终受测 HEAD `297834e167f36c24f7e31d31d074f439bcef52f2`。后续证据提交不改变功能代码。没有 push、新 PR、合并或部署。
 
 | 文件组 | 实际作用 |
 | --- | --- |
@@ -38,7 +38,7 @@ Free 不强制升级套餐：可使用只含专用合成 reader 的站点级 all
 
 ## D. 实际测试
 
-受测 HEAD：`4ef1966146643a6ea6525c529b5364ae4cdea28e`；Windows/PowerShell，Node 24.22.2、npm 11.19.1、独立 PostgreSQL 17.11。本地 `npm ci` 已成功安装 1539 包。统一命令：
+受测 HEAD：`297834e167f36c24f7e31d31d074f439bcef52f2`；Windows/PowerShell，Node 24.22.2、npm 11.19.1、独立 PostgreSQL 17.11。本地 `npm ci` 已成功安装 1539 包。统一命令：
 
 ```powershell
 node scripts/check-test-foundation.cjs --pg-bin '<PostgreSQL bin 绝对路径>'
@@ -50,12 +50,12 @@ node scripts/check-test-foundation.cjs --pg-bin '<PostgreSQL bin 绝对路径>'
 | ESLint（保留原规则） | 0 |
 | API | 14 / 14；0 |
 | 安全、模拟配置、真实 Netlify ZIP/运行时路径 | 48 / 48；0 |
-| 一次性 PG 实际 SQL/ACL/Functions/回滚 | 44 / 44；0 |
+| 一次性 PG 实际 SQL/ACL/Functions/回滚 | 46 / 46；0 |
 | Next 静态构建与 CSP | 0；原路由导出，7 页 / 8 哈希 |
 
 [机器结果](results.json) · [API/安全日志](unit-api-security.log) · [PG 日志](disposable-postgres.log) · [构建日志](static-build.log) · [保留失败与修正](FAILURES.md)。日志中的本机用户目录做脱敏，命令 PG_BIN 用占位符；未隐去失败条件或放宽断言。
 
-没有真实云端验收、Neon 密码认证或新 GitHub CI 结果。旧 PR #18 的 CI 不能冒充本次 HEAD；新安全测试已接入 npm test，推送后才会由现有工作流执行。新 44 项 PG 使用独立 runner，本轮仅在本机运行。数据库传输范围不是测量得到的云连接计数。
+没有真实云端验收、Neon 密码认证或新 GitHub CI 结果。旧 PR #18 的 CI 不能冒充本次 HEAD；新安全测试已接入 npm test，推送后才会由现有工作流执行。新 46 项 PG 使用独立 runner，本轮仅在本机运行。数据库传输范围不是测量得到的云连接计数。
 
 ## E. 管理员清单
 
@@ -67,7 +67,7 @@ node scripts/check-test-foundation.cjs --pg-bin '<PostgreSQL bin 绝对路径>'
 
 | 状态 | 项目 |
 | --- | --- |
-| 已实现、本地已验证 | SQL、合成夹具、最小角色、绑定/连接守卫、构建门禁、打包和负向自动验收、回滚 |
+| 已实现、本地已验证 | SQL、合成夹具、最小角色（含非 superuser 初始化全流程）、绑定/连接守卫、构建门禁、打包和负向自动验收、回滚 |
 | 已准备 | Neon 只读补查 SQL、Netlify Free 配置流程、集中审批表 |
 | 云端待授权 | TEST DDL/DML、真实角色/凭据、建站、TEST 分支 push、变量、部署 |
 | 未通过云端签核 | F03/F05 真实继承、提供方资源映射、Neon 权限/身份函数兼容、实际托管运行；尚缺证据，不是假称本地失败 |

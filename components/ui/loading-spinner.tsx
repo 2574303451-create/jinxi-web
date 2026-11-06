@@ -1,6 +1,6 @@
 "use client"
 
-import { m, LazyMotion, domAnimation } from "framer-motion"
+import { motion } from "framer-motion"
 
 interface LoadingSpinnerProps {
   size?: "sm" | "md" | "lg"
@@ -15,28 +15,24 @@ export function LoadingSpinner({ size = "md", color = "#60a5fa" }: LoadingSpinne
   }
 
   return (
-    <LazyMotion features={domAnimation}>
-      <m.div
-        className={`${sizeClasses[size]} border-2 border-transparent rounded-full`}
-        style={{
-          borderTopColor: color,
-          borderRightColor: `${color}40`,
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-      />
-    </LazyMotion>
+    <motion.div
+      className={`${sizeClasses[size]} border-2 border-transparent rounded-full`}
+      style={{
+        borderTopColor: color,
+        borderRightColor: `${color}40`,
+      }}
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+    />
   )
 }
 
 export function LoadingSkeleton({ className }: { className?: string }) {
   return (
-    <LazyMotion features={domAnimation}>
-      <m.div
-        className={`bg-white/10 rounded-lg ${className}`}
-        animate={{ opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-    </LazyMotion>
+    <motion.div
+      className={`bg-white/10 rounded-lg ${className}`}
+      animate={{ opacity: [0.5, 1, 0.5] }}
+      transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+    />
   )
 }

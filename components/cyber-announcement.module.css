@@ -8,6 +8,10 @@
   font-family: var(--font-mono), "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+.cyberAnnRoot :global(.jinxi-dialog) {
+  pointer-events: auto;
+}
+
 .cyberAnnFab {
   pointer-events: auto;
   margin-left: auto;

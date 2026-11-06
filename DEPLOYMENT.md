@@ -12,26 +12,28 @@
 
 ## 本地构建测试
 
-### Windows
+Node.js 24.22.2、npm 11.19.1。Windows 与 Linux 使用相同 npm 命令。
 ```bash
-build.bat
+npm ci --include=dev
+npm run typecheck
+npm run build
 ```
 
-### Linux/Mac
+本地静态预览
 ```bash
-chmod +x build.sh
-./build.sh
+npm start
 ```
 
 ## 部署到 Netlify
 
-1. 将代码推送到 Git 仓库
-2. 在 Netlify 中连接仓库
-3. 构建设置：
-   - 构建命令: `npm run build`
+当前审核分支需要先通过隔离 TEST 与发布审批。托管构建参数供管理员核对。
+
+   - 构建命令: `npm ci --include=dev && npm run build`
    - 发布目录: `out`
-   - Node.js 版本: 18
-   - NPM 版本: 9
+   - Node.js 版本: 24.22.2
+   - NPM 版本: 11.19.1
+
+Functions 运行时和 CSP 的托管响应取证见 [验收清单](artifacts/b2-a-6/PLATFORM_ACCEPTANCE.md)。旧专项部署文档属于历史快照，版本与权限以当前配置及审批证据为准。
 
 ## 构建输出
 

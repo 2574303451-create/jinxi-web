@@ -1,0 +1,21 @@
+{
+  "scope": "Local real readonly Function and synthetic PG",
+  "results": [
+    {
+      "width": 1440,
+      "serverSearch": true,
+      "matched": 1,
+      "detailId": "14",
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "serverSearch": true,
+      "matched": 1,
+      "detailId": "14",
+      "writes": 0,
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '写一条留言', exact: true })\u001b[22m\n",
+  "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '写一条留言', exact: true })\u001b[22m\n\n    at main (E:\\Recovery\\.jinxi-research\\b2-a-6\\runtime-worktree\\artifacts\\b2-a-6\\interactions.cjs:60:58)"
+}

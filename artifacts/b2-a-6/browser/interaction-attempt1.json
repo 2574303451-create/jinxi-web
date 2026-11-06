@@ -1,0 +1,4 @@
+{
+  "error": "false == true",
+  "stack": "AssertionError [ERR_ASSERTION]: false == true\n    at main (E:\\Recovery\\.jinxi-research\\b2-a-6\\runtime-worktree\\artifacts\\b2-a-6\\interactions.cjs:45:6)"
+}

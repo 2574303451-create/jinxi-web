@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "name": "mobile navigation open/navigate/close and Escape focus",
+      "passed": true
+    },
+    {
+      "name": "retained entry 每日签到",
+      "passed": true
+    },
+    {
+      "name": "retained entry 每日任务",
+      "passed": true
+    },
+    {
+      "name": "retained entry 积分与排行",
+      "passed": true
+    },
+    {
+      "name": "retained entry 寻找队伍",
+      "passed": true
+    },
+    {
+      "name": "retained entry 游戏数据",
+      "passed": true
+    },
+    {
+      "name": "retained entry 公会动态",
+      "passed": true
+    },
+    {
+      "name": "retained entry 公会赞助",
+      "passed": true
+    },
+    {
+      "name": "strategy entry is a real guide URL without prefetch",
+      "passed": true
+    },
+    {
+      "name": "join/login/change-password and FAQ retained",
+      "passed": true
+    },
+    {
+      "name": "stale showcase ID reports unavailable rather than inventing record",
+      "passed": true
+    },
+    {
+      "name": "single public message is static",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 1440",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 768",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 390",
+      "passed": true
+    },
+    {
+      "name": "message image unavailable has explicit fallback 320",
+      "passed": true
+    }
+  ],
+  "writes": [],
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'' !== '界面测试昵称'\n"
+}

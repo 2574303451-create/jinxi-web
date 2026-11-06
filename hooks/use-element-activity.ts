@@ -3,7 +3,7 @@
 import { useEffect, useState, type RefObject } from "react";
 
 /** A component is active only while its own surface and the document are visible. */
-export function useElementActivity(ref: RefObject<HTMLElement>) {
+export function useElementActivity(ref: RefObject<HTMLElement | null>) {
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
   useEffect(() => {

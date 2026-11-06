@@ -6,9 +6,9 @@ import { useElementActivity } from "../../hooks/use-element-activity";
 export const RIBBON_SPEED = 32;
 
 export function useRibbonMotion(
-  viewport: RefObject<HTMLDivElement>,
-  track: RefObject<HTMLDivElement>,
-  group: RefObject<HTMLUListElement>,
+  viewport: RefObject<HTMLDivElement | null>,
+  track: RefObject<HTMLDivElement | null>,
+  group: RefObject<HTMLUListElement | null>,
   options: {
     direction: "left" | "right";
     paused: boolean;

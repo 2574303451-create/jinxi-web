@@ -58,6 +58,8 @@ jobs:
           npm run typecheck | tee artifacts-ci/typescript.txt
       - run: npm run build
       - run: npm run test
+      - name: Verify isolated video demo policy and loopback assets
+        run: node --test artifacts/b2-a-8/video-demo/policy.test.cjs
       - run: npm run lint
       - name: Initialize isolated ephemeral PostgreSQL
         run: node scripts/ci-postgres.cjs

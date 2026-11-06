@@ -1,0 +1,51 @@
+{
+  "scope": "loopback synthetic fixtures; external navigation intercepted",
+  "browser": "140.0.3485.66",
+  "cases": [
+    {
+      "width": 1440,
+      "legacyFallback": true,
+      "lazyNative": true,
+      "decodedAfterKeyboard": true,
+      "focusRing": true,
+      "externalStubNavigation": true
+    },
+    {
+      "width": 1024,
+      "legacyFallback": true,
+      "lazyNative": true,
+      "decodedAfterKeyboard": true,
+      "focusRing": true,
+      "externalStubNavigation": false
+    },
+    {
+      "width": 768,
+      "legacyFallback": true,
+      "lazyNative": true,
+      "decodedAfterKeyboard": true,
+      "focusRing": true,
+      "externalStubNavigation": false
+    },
+    {
+      "width": 390,
+      "legacyFallback": true,
+      "lazyNative": true,
+      "decodedAfterKeyboard": true,
+      "focusRing": true,
+      "externalStubNavigation": false
+    },
+    {
+      "width": 320,
+      "legacyFallback": true,
+      "lazyNative": true,
+      "decodedAfterKeyboard": true,
+      "focusRing": true,
+      "externalStubNavigation": false
+    }
+  ],
+  "failure": {
+    "media404RestoredFocus": true,
+    "retryPlayed": true,
+    "fixtures503Notice": true
+  }
+}

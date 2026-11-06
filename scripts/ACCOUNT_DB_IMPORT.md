@@ -1,5 +1,7 @@
 # Account Import to Database
 
+> Historical reference. The importer overwrites existing security state. Keep it blocked and use the approved [incremental migration plan](../artifacts/b2-a-8/INCREMENTAL_MIGRATION.md) for future work.
+
 The A7 integration freeze rejects this legacy entry before it reads input or connects. The commands below describe the historical importer. Real member intake needs an approved TEST candidate, verified table mappings, and a separate authorization record.
 
 This guide wires generated guild accounts into your existing PostgreSQL database.

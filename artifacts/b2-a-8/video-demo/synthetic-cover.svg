@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="#ffe528"/>
+  <path d="M0 240 360 0h280v120L280 360H0Z" fill="#2360f5"/>
+  <rect x="147" y="119" width="346" height="122" rx="5" fill="#fffdf5" stroke="#151515" stroke-width="4"/>
+  <path d="m195 147 52 33-52 33Z" fill="#2360f5" stroke="#151515" stroke-width="4"/>
+  <text x="269" y="188" font-family="system-ui,sans-serif" font-size="26" font-weight="700" fill="#151515">SYNTHETIC</text>
+</svg>

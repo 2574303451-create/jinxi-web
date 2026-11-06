@@ -7,7 +7,8 @@ const { Client } = require('pg');
 const { cleanEnv } = require('./run-clean.cjs');
 async function run() {
   const args = process.argv.slice(2);
-  if (args.length !== 2 || args[0] !== '--pg-bin' || !path.isAbsolute(args[1])) throw Error('EXPLICIT_LOCAL_POSTGRES_BIN_REQUIRED');
+  const preflightOnly = args.length === 3 && args[2] === '--preflight-only';
+  if ((!preflightOnly && args.length !== 2) || args[0] !== '--pg-bin' || !path.isAbsolute(args[1])) throw Error('EXPLICIT_LOCAL_POSTGRES_BIN_REQUIRED');
   const bin = path.resolve(args[1]), ext = process.platform === 'win32' ? '.exe' : '';
   for (const name of ['initdb','pg_ctl','postgres']) if (!fs.existsSync(path.join(bin,name+ext))) throw Error('POSTGRES_TOOLS_MISSING');
   const folder = fs.mkdtempSync(path.join(os.tmpdir(), 'jinxi-f03-f05-'));
@@ -27,7 +28,8 @@ async function run() {
     try { await admin.query('CREATE DATABASE neondb'); } finally { await admin.end(); }
     const manifest = path.join(folder,'local-manifest.json');
     fs.writeFileSync(manifest,JSON.stringify({kind:'jinxi-f03-disposable-v1',folder,host:'127.0.0.1',port,user,database:'neondb'}),{mode:0o600,flag:'wx'});
-    const result = spawnSync(process.execPath,['--test','--test-concurrency=1','tests/test-environment-postgres.test.cjs'],{
+    const testFile=preflightOnly?'tests/preflight-postgres.test.cjs':'tests/test-environment-postgres.test.cjs';
+    const result = spawnSync(process.execPath,['--test','--test-concurrency=1',testFile],{
       cwd:path.resolve(__dirname,'..'),env:cleanEnv({JINXI_F03_LOCAL_MANIFEST:manifest}),encoding:'utf8',timeout:180000,
     });
     const output = (result.stdout || '') + (result.stderr || '');

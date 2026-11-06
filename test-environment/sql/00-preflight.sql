@@ -34,8 +34,10 @@ SELECT pg_get_userbyid(d.defaclrole) AS owner,COALESCE(n.nspname,'all-schemas') 
   FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace CROSS JOIN LATERAL aclexplode(d.defaclacl) a;
 SELECT rolname,rolsuper,rolinherit,rolcreaterole,rolcreatedb,rolcanlogin,rolreplication,rolbypassrls
   FROM pg_roles ORDER BY rolname;
-SELECT pg_get_userbyid(roleid) AS granted_role,pg_get_userbyid(member) AS member,admin_option
-  FROM pg_auth_members ORDER BY 1,2;
+SELECT pg_get_userbyid(m.roleid) AS granted_role,pg_get_userbyid(m.member) AS member,m.admin_option,
+  (to_jsonb(m)->>'inherit_option')::boolean AS inherit_option,
+  (to_jsonb(m)->>'set_option')::boolean AS set_option
+  FROM pg_auth_members m ORDER BY 1,2;
 SELECT CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END AS grantee,
   a.privilege_type,a.is_grantable
   FROM pg_namespace n CROSS JOIN LATERAL aclexplode(COALESCE(n.nspacl,acldefault('n',n.nspowner))) a

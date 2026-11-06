@@ -1,0 +1,58 @@
+{
+  "baseline": "be9513f37251d08661a3f6c1d5240ed059c59f2e",
+  "testedGitHead": "4ef1966146643a6ea6525c529b5364ae4cdea28e",
+  "workingTree": "verify source diff separately; evidence files may be untracked",
+  "node": "v24.22.2",
+  "npm": "11.19.1",
+  "platform": "win32",
+  "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
+  "networkTelemetry": "not collected; scope is not a measured cloud connection counter",
+  "cloudAcceptance": "not run; pending authorization and evidence",
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": "node npm-cli.js run typecheck",
+      "exitCode": 0,
+      "elapsedMs": 3522,
+      "testCounts": [],
+      "log": "typecheck.log"
+    },
+    {
+      "name": "lint",
+      "command": "node npm-cli.js run lint",
+      "exitCode": 0,
+      "elapsedMs": 1390,
+      "testCounts": [],
+      "log": "lint.log"
+    },
+    {
+      "name": "unit-api-security",
+      "command": "node npm-cli.js test",
+      "exitCode": 0,
+      "elapsedMs": 2384,
+      "testCounts": [
+        14,
+        48
+      ],
+      "log": "unit-api-security.log"
+    },
+    {
+      "name": "disposable-postgres",
+      "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN>",
+      "exitCode": 0,
+      "elapsedMs": 63019,
+      "testCounts": [
+        44
+      ],
+      "log": "disposable-postgres.log"
+    },
+    {
+      "name": "static-build",
+      "command": "node npm-cli.js run build",
+      "exitCode": 0,
+      "elapsedMs": 22021,
+      "testCounts": [],
+      "log": "static-build.log"
+    }
+  ]
+}

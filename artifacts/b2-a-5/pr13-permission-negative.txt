@@ -1,0 +1,61 @@
+
+> my-v0-project@0.1.0 test:environment
+> node --test tests/environment-postgres.test.cjs
+
+▶ actual local environment identity and effective least privilege
+  ✔ user schema beginning with pg letters is not a system schema (13.2404ms)
+  ✔ misgranted table/column SELECT outside each role read scope rejects (17.3177ms)
+  ✔ effective column, view and sequence grants outside the lab are unsafe (10.526ms)
+  ✔ real fingerprint and read-only role permit B1 public reads (16.4684ms)
+  ✖ owner-rights view in the allowed schema cannot bridge the protected resource (5.1614ms)
+  ✖ PostgreSQL 17 MAINTAIN permission on a protected materialized view is unsafe (10.5199ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.7134ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (5.1696ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.5196ms)
+  ✔ session role cannot read/write the separate protected resources (2.2627ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (19.9023ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (1.6974ms)
+  ✔ all5 public read handlers use real restricted PG, never mutate on GET (47.3208ms)
+✖ actual local environment identity and effective least privilege (714.0523ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 11
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 813.9281
+
+✖ failing tests:
+
+test at tests\environment-postgres.test.cjs:44:11
+✖ owner-rights view in the allowed schema cannot bridge the protected resource (5.1614ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:59:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:44:3)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests\environment-postgres.test.cjs:64:11
+✖ PostgreSQL 17 MAINTAIN permission on a protected materialized view is unsafe (10.5199ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:80:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:64:3)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

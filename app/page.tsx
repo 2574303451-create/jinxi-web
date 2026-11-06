@@ -802,7 +802,7 @@ function PageContent() {
       className="jinxi-site min-h-screen relative"
     >
       <a className="skip-link" href="#main-content">跳到主要内容</a>
-      <GuildNavigation account={loginAccount} nickname={loginNickname} onLogin={openLoginModal}
+      <GuildNavigation account={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} nickname={loginNickname} onLogin={openLoginModal}
         onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
         onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
       <main id="main-content">
@@ -1071,7 +1071,6 @@ function PageContent() {
           ) : (
             <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
               <p className="text-white/80 text-sm" role="status">密码变更正在安全升级。正式成员会话开放后，可在这里修改密码。</p>
-              <p className="text-white/80 text-sm">修改后将立即写入后端数据库，彻底替换初始密码。</p>
               {changePasswordError && (
                 <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
                   {changePasswordError}

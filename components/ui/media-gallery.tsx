@@ -156,7 +156,7 @@ export function MediaGallery({ mediaFiles, className }: MediaGalleryProps) {
       )}
 
       {/* 媒体预览弹窗 */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} size="large">
+      <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
         {selectedMedia && (
           <div className="bg-black/90 p-6 max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between mb-4">

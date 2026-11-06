@@ -1,0 +1,16 @@
+{
+  "scope": "PR #13 frozen static build, actual local HTTPS and synthetic PostgreSQL",
+  "afterLostResponse": {
+    "balance": 23,
+    "debits": 1
+  },
+  "afterSameRequest": {
+    "balance": 23,
+    "debits": 1
+  },
+  "afterFreshClick": {
+    "balance": 16,
+    "debits": 2
+  },
+  "finding": "The server recognizes the same request after refresh. A fresh UI click creates a new intent. Receipt recovery remains required for real orders."
+}

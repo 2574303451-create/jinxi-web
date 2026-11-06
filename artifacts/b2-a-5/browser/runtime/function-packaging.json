@@ -1,0 +1,105 @@
+{
+  "scope": "Local Netlify ZISI 14.1.4 packaged wrappers under Node 24 with no DB environment",
+  "node": "v24.22.2",
+  "requestedRuntime": "nodejs24.x",
+  "wrappers": [
+    {
+      "name": "announcements",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "auth-change-password",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 401
+    },
+    {
+      "name": "auth-login",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 401
+    },
+    {
+      "name": "checkin",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 401
+    },
+    {
+      "name": "guide-video-stats",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 405
+    },
+    {
+      "name": "leaderboard",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "message-actions",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "messages",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "points-board",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "points",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 401
+    },
+    {
+      "name": "session-lab",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 503
+    },
+    {
+      "name": "sponsorship",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "strategies",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    },
+    {
+      "name": "strategy-actions",
+      "bundler": "zisi",
+      "api": 1,
+      "packageRuntime": null,
+      "noConfigPostStatus": 403
+    }
+  ]
+}

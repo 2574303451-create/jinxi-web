@@ -1,0 +1,23 @@
+{
+  "stage": "runtime",
+  "edge": "140.0.3485.66",
+  "negativeControl": false,
+  "results": [
+    {
+      "width": 1440,
+      "legacyLooksAuthenticated": false,
+      "encoded": 1050022,
+      "restored": 525000,
+      "writes": 0,
+      "profileLab": true
+    },
+    {
+      "width": 390,
+      "legacyLooksAuthenticated": false,
+      "encoded": 1050022,
+      "restored": 525000,
+      "writes": 0,
+      "profileLab": true
+    }
+  ]
+}

@@ -41,6 +41,47 @@ test('actual local environment identity and effective least privilege',async t=>
    }finally{await admin.query('REVOKE UPDATE(content) ON b2_forbidden.production_like_canary FROM jinxi_b2_session;DROP VIEW IF EXISTS b2_forbidden.test_canary_view;DROP SEQUENCE IF EXISTS b2_forbidden.test_canary_sequence;REVOKE USAGE ON SCHEMA b2_forbidden FROM jinxi_b2_session');}
   });
   await t.test('real fingerprint and read-only role permit B1 public reads',async()=>{const sql=guardedDatabase(b2.environment(),()=>b2.adapter(reader));assert.equal((await sql.query('SELECT count(*)::int AS n FROM strategies'))[0].n,16);const api=handler('strategies',b2.environment(),()=>b2.adapter(reader));const result=await api({httpMethod:'GET',queryStringParameters:{summary:'1',feed:'video',limit:'3'}});assert.equal(result.statusCode,200);assert.deepEqual(JSON.parse(result.body).strategies.map(x=>x.id),['11','2','1']);});
+  await t.test('owner-rights view in the allowed schema cannot bridge the protected resource', async () => {
+    const {databaseConfig, validateProof, ATTESTATION_SQL} = require('../netlify/functions/_shared/function-security');
+    const config = databaseConfig(b2.environment('session-lab'), 'session-lab');
+    await admin.query(`CREATE VIEW b2_lab.test_canary_view AS SELECT * FROM b2_forbidden.production_like_canary;
+      ALTER VIEW b2_lab.test_canary_view OWNER TO jinxi_b2_owner;
+      GRANT SELECT, UPDATE ON b2_lab.test_canary_view TO jinxi_b2_session`);
+    try {
+      await session.query('BEGIN');
+      try {
+        const probe = await session.query("UPDATE b2_lab.test_canary_view SET content='Synthetic rollback probe' WHERE id=1 RETURNING content");
+        assert.equal(probe.rows[0]?.content, 'Synthetic rollback probe');
+      } finally {
+        await session.query('ROLLBACK');
+      }
+      const proof = (await session.query(ATTESTATION_SQL, ['b2_lab'])).rows;
+      assert.throws(() => validateProof(config, proof), error => error.code === 'DATABASE_PERMISSION_UNSAFE');
+    } finally {
+      await admin.query('DROP VIEW b2_lab.test_canary_view');
+    }
+  });
+  await t.test('PostgreSQL 17 MAINTAIN permission on a protected materialized view is unsafe', async t => {
+    const version = Number((await admin.query('SHOW server_version_num')).rows[0].server_version_num);
+    if (version < 170000) return t.skip('MAINTAIN ACL was added in PostgreSQL 17');
+    const {databaseConfig, validateProof, ATTESTATION_SQL} = require('../netlify/functions/_shared/function-security');
+    const config = databaseConfig(b2.environment('session-lab'), 'session-lab');
+    await admin.query(`CREATE MATERIALIZED VIEW b2_forbidden.test_canary_materialized AS SELECT 1 AS n;
+      GRANT USAGE ON SCHEMA b2_forbidden TO jinxi_b2_session;
+      GRANT MAINTAIN ON b2_forbidden.test_canary_materialized TO jinxi_b2_session`);
+    try {
+      await session.query('BEGIN');
+      try {
+        await session.query('REFRESH MATERIALIZED VIEW b2_forbidden.test_canary_materialized');
+      } finally {
+        await session.query('ROLLBACK');
+      }
+      const proof = (await session.query(ATTESTATION_SQL, ['b2_lab'])).rows;
+      assert.throws(() => validateProof(config, proof), error => error.code === 'DATABASE_PERMISSION_UNSAFE');
+    } finally {
+      await admin.query('DROP MATERIALIZED VIEW b2_forbidden.test_canary_materialized; REVOKE USAGE ON SCHEMA b2_forbidden FROM jinxi_b2_session');
+    }
+  });
   await t.test('wrong actual fingerprint rejects before data mutation',async()=>{const env=b2.environment(),p=JSON.parse(env.JINXI_LOCAL_READ_POLICY);p.fingerprint='a'.repeat(64);env.JINXI_LOCAL_READ_POLICY=JSON.stringify(p);await assert.rejects(guardedDatabase(env,()=>b2.adapter(reader)).query('SELECT * FROM strategies'),e=>e.code==='ACTUAL_DATABASE_IDENTITY_MISMATCH');});
   await t.test('actual privileged credential is rejected, not accepted by matching URL',async()=>{const env=b2.environment(),local=settings('admin'),p=JSON.parse(env.JINXI_LOCAL_READ_POLICY);p.role=local.user;env.JINXI_LOCAL_READ_POLICY=JSON.stringify(p);env.JINXI_LOCAL_READ_DATABASE_URL=`postgresql://${local.user}@127.0.0.1:55433/jinxi_005s_b1_test`;await assert.rejects(guardedDatabase(env,()=>b2.adapter(admin)).query('SELECT 1'),e=>e.code==='DATABASE_PERMISSION_UNSAFE');});
   await t.test('reader cannot write, relabel identity, create schema or elevate',async()=>{for(const text of ["UPDATE public.strategies SET view_count=0","UPDATE jinxi_guard.environment_registration SET classification='production'","CREATE SCHEMA unauthorized_b2","SET ROLE jinxi_005sb1_admin","SELECT * FROM b2_forbidden.production_like_canary"])await assert.rejects(reader.query(text),e=>['25006','42501'].includes(e.code));});

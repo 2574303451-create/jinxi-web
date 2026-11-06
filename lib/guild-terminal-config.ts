@@ -102,7 +102,7 @@ function normalizeMembers(value: unknown, fallback: Record<string, MemberProfile
 
   const entries = Object.entries(value as Record<string, unknown>)
   const normalizedEntries = entries
-    .map(([memberId, rawMember]) => {
+    .map(([memberId, rawMember]): readonly [string, MemberProfile] | null => {
       if (!rawMember || typeof rawMember !== "object" || Array.isArray(rawMember)) {
         return null
       }
@@ -127,8 +127,8 @@ function normalizeMembers(value: unknown, fallback: Record<string, MemberProfile
           joinDate,
           role: role === "founder" ? "founder" : "member",
           badges,
-        } satisfies MemberProfile,
-      ] as const
+        },
+      ]
     })
     .filter((item): item is readonly [string, MemberProfile] => item !== null)
 
@@ -145,7 +145,7 @@ function normalizeRules(value: unknown, fallback: SecurityClearanceRule[]) {
   }
 
   const normalized = value
-    .map((item) => {
+    .map((item): SecurityClearanceRule | null => {
       if (!item || typeof item !== "object") {
         return null
       }
@@ -170,7 +170,7 @@ function normalizeRules(value: unknown, fallback: SecurityClearanceRule[]) {
         minYears,
         maxYearsExclusive,
         tone,
-      } satisfies SecurityClearanceRule
+      }
     })
     .filter((item): item is SecurityClearanceRule => item !== null)
     .sort((a, b) => a.minYears - b.minYears)

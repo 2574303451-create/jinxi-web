@@ -220,9 +220,9 @@ export const formatStrategyContent = (content: string): string => {
     .replace(/\*(.*?)\*/g, '<em class="italic text-blue-200">$1</em>')
     .replace(/`(.*?)`/g, '<code class="bg-white/10 px-1 rounded text-yellow-200 text-sm">$1</code>')
     .replace(/^- (.*$)/gm, '<li class="text-white/80 mb-1">$1</li>')
-    .replace(/(<li.*<\/li>)/gs, '<ul class="list-disc list-inside ml-4 mb-4">$1</ul>')
+    .replace(/(<li[\s\S]*<\/li>)/g, '<ul class="list-disc list-inside ml-4 mb-4">$1</ul>')
     .replace(/^\d+\. (.*$)/gm, '<li class="text-white/80 mb-1">$1</li>')
-    .replace(/(<li.*<\/li>)/gs, '<ol class="list-decimal list-inside ml-4 mb-4">$1</ol>')
+    .replace(/(<li[\s\S]*<\/li>)/g, '<ol class="list-decimal list-inside ml-4 mb-4">$1</ol>')
     .replace(/\n/g, '<br>');
 };
 

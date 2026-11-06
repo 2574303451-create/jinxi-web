@@ -43,6 +43,7 @@ DROP SCHEMA b2_lab;
 DROP SCHEMA jinxi_guard;
 REVOKE CONNECT ON DATABASE neondb FROM jinxi_test_reader;
 REVOKE USAGE ON SCHEMA public FROM jinxi_test_reader;
+REVOKE USAGE,CREATE ON SCHEMA public FROM jinxi_test_owner;
 DO $restore$ BEGIN
   IF current_setting('jinxi_test.restore_public_create')::bool THEN GRANT CREATE ON SCHEMA public TO PUBLIC; END IF;
   IF current_setting('jinxi_test.restore_public_connect')::bool THEN GRANT CONNECT ON DATABASE neondb TO PUBLIC; END IF;

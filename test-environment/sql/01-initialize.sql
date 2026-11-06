@@ -38,6 +38,9 @@ END $guard$;
 CREATE ROLE jinxi_test_owner NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
 CREATE ROLE jinxi_test_reader NOLOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
 CREATE ROLE jinxi_test_writer NOLOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+-- PostgreSQL 17 CREATEROLE alone does not imply SET/INHERIT on a newly
+-- created role. Only the private initializer receives ownership management.
+GRANT jinxi_test_owner TO CURRENT_USER WITH INHERIT TRUE, SET TRUE;
 ALTER ROLE jinxi_test_reader SET default_transaction_read_only=on;
 ALTER ROLE jinxi_test_reader SET search_path=pg_catalog,public;
 CREATE SCHEMA jinxi_guard AUTHORIZATION jinxi_test_owner;
@@ -63,6 +66,7 @@ SELECT 1,current_setting('jinxi_test.environment_id')::uuid,'synthetic-test',
   NULL,NULL,NULL,NULL,0;
 ALTER TABLE jinxi_guard.environment_registration OWNER TO jinxi_test_owner;
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+GRANT USAGE,CREATE ON SCHEMA public TO jinxi_test_owner;
 REVOKE CONNECT,TEMPORARY ON DATABASE neondb FROM PUBLIC;
 
 CREATE TABLE public.strategies(

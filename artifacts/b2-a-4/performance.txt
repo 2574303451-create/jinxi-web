@@ -1,0 +1,12 @@
+{"stage":"PR12","slow":false,"run":1,"vitals":{"lcp":312,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":false,"run":1,"vitals":{"lcp":188,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":false,"run":2,"vitals":{"lcp":220,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"PR12","slow":false,"run":2,"vitals":{"lcp":192,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"PR12","slow":false,"run":3,"vitals":{"lcp":204,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":false,"run":3,"vitals":{"lcp":220,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"PR12","slow":true,"run":1,"vitals":{"lcp":3144,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":true,"run":1,"vitals":{"lcp":3008,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":true,"run":2,"vitals":{"lcp":2888,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"PR12","slow":true,"run":2,"vitals":{"lcp":2932,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"PR12","slow":true,"run":3,"vitals":{"lcp":2948,"cls":0},"js":606866,"jsGzip":183043,"css":142073,"cssGzip":28310,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}
+{"stage":"A4","slow":true,"run":3,"vitals":{"lcp":2884,"cls":0},"js":602562,"jsGzip":182585,"css":143220,"cssGzip":28399,"initialMedia":0,"initialGuideOrSessionRequests":0,"initialReaderLabOrSanitizerCode":0}

@@ -1,7 +1,8 @@
 "use client"
 
 import { ChangeEvent, ClipboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { type Announcement, fetchAnnouncements, postAnnouncement, verifyAnnouncementAdminToken } from "../services/announcement-service"
+import { type Announcement, fetchAnnouncements } from "../services/announcement-service"
+import { loadAnnouncementSanitizer, safeAnnouncementUrl, MAX_ANNOUNCEMENT_HTML, type AnnouncementSanitizer } from "../lib/announcement-html"
 import { useToast } from "./ui/toast"
 import { Modal } from "./ui/modal"
 import styles from "./cyber-announcement.module.css"
@@ -14,12 +15,13 @@ interface CyberAnnouncementProps {
 interface RichEditorProps {
   value: string
   onChange: (value: string) => void
+  sanitize: AnnouncementSanitizer
 }
 
 const CYBER_EMOJIS = ["😀", "😎", "🤖", "🚀", "✨", "🔥", "🎯", "📢", "📌", "✅", "⚡", "🎉", "🧠", "🛰️", "🛠️", "💡"]
 
 function isSafeImageSource(source: string) {
-  return /^https?:\/\/\S+/i.test(source) || /^data:image\/[a-zA-Z0-9.+-]+;base64,/i.test(source)
+  return safeAnnouncementUrl(source, true)
 }
 
 function escapeHtmlAttribute(value: string) {
@@ -39,34 +41,6 @@ function hasMeaningfulContent(contentHtml: string) {
   return compact.length > 0 || /<img[\s>]/i.test(contentHtml)
 }
 
-function sanitizeAnnouncementHtml(inputHtml: string) {
-  if (typeof window === "undefined") {
-    return inputHtml
-  }
-
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(inputHtml, "text/html")
-
-  doc.querySelectorAll("script, style, iframe, object, embed, link, meta").forEach((node) => node.remove())
-
-  doc.body.querySelectorAll("*").forEach((node) => {
-    for (const attr of [...node.attributes]) {
-      const key = attr.name.toLowerCase()
-      const value = attr.value.trim().toLowerCase()
-
-      if (key.startsWith("on")) {
-        node.removeAttribute(attr.name)
-      }
-
-      if ((key === "href" || key === "src") && value.startsWith("javascript:")) {
-        node.removeAttribute(attr.name)
-      }
-    }
-  })
-
-  return doc.body.innerHTML
-}
-
 function formatAnnouncementTime(isoDate: string) {
   const date = new Date(isoDate)
   if (Number.isNaN(date.getTime())) {
@@ -82,11 +56,12 @@ function formatAnnouncementTime(isoDate: string) {
   }).format(date)
 }
 
-function CyberRichEditor({ value, onChange }: RichEditorProps) {
+export function CyberRichEditor({ value, onChange, sanitize }: RichEditorProps) {
   const toast = useToast()
   const editorRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const savedRangeRef = useRef<Range | null>(null)
+  const lastSafeHtml = useRef("")
 
   const [isEmpty, setIsEmpty] = useState(true)
   const [showEmojiPanel, setShowEmojiPanel] = useState(false)
@@ -102,12 +77,14 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
       return
     }
 
-    if (editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value
+    const safeValue = sanitize(value)
+    lastSafeHtml.current = safeValue
+    if (editorRef.current.innerHTML !== safeValue) {
+      editorRef.current.innerHTML = safeValue
     }
 
-    syncEmptyState(value)
-  }, [value, syncEmptyState])
+    syncEmptyState(safeValue)
+  }, [value, sanitize, syncEmptyState])
 
   const saveSelection = useCallback(() => {
     const selection = window.getSelection()
@@ -133,14 +110,23 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
 
   const emitChange = useCallback(() => {
     const currentHtml = editorRef.current?.innerHTML ?? ""
-    onChange(currentHtml)
-    syncEmptyState(currentHtml)
-  }, [onChange, syncEmptyState])
+    if (currentHtml.length > MAX_ANNOUNCEMENT_HTML) {
+      if (editorRef.current) editorRef.current.innerHTML = lastSafeHtml.current
+      toast.addToast("内容过大，原草稿已保留。", "warning")
+      return
+    }
+    const safeHtml = sanitize(currentHtml)
+    lastSafeHtml.current = safeHtml
+    if (editorRef.current && safeHtml !== currentHtml) editorRef.current.innerHTML = safeHtml
+    onChange(safeHtml)
+    syncEmptyState(safeHtml)
+  }, [onChange, sanitize, syncEmptyState, toast])
 
   const executeCommand = useCallback(
     (command: string, commandValue?: string) => {
       editorRef.current?.focus()
       restoreSelection()
+      document.execCommand("styleWithCSS", false, "false")
       document.execCommand(command, false, commandValue)
       emitChange()
       saveSelection()
@@ -150,26 +136,29 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
 
   const insertHtml = useCallback(
     (html: string) => {
+      if (html.length > MAX_ANNOUNCEMENT_HTML) { toast.addToast("内容过大，原草稿已保留。", "warning"); return }
+      const safe = sanitize(html)
+      if ((editorRef.current?.innerHTML.length || 0) + safe.length > MAX_ANNOUNCEMENT_HTML) { toast.addToast("内容过大，原草稿已保留。", "warning"); return }
       editorRef.current?.focus()
       restoreSelection()
-      document.execCommand("insertHTML", false, html)
+      document.execCommand("insertHTML", false, safe)
       emitChange()
       saveSelection()
     },
-    [emitChange, restoreSelection, saveSelection],
+    [emitChange, restoreSelection, saveSelection, sanitize, toast],
   )
 
   const insertImage = useCallback(
     (src: string, alt: string) => {
       if (!isSafeImageSource(src)) {
-        toast.addToast("图片地址不合法，仅支持 http(s) 或 data:image", "warning")
+        toast.addToast("图片仅支持 HTTPS、站内路径或受限的 PNG/JPEG/WebP/GIF 数据。", "warning")
         return
       }
 
       const safeSrc = escapeHtmlAttribute(src)
       const safeAlt = escapeHtmlAttribute(alt || "announcement-image")
       insertHtml(
-        `<p><img src="${safeSrc}" alt="${safeAlt}" style="max-width:100%;height:auto;border-radius:10px;border:1px solid rgba(0,243,255,.35);margin:8px 0;" /></p><p><br></p>`,
+        `<p><img src="${safeSrc}" alt="${safeAlt}" /></p><p><br></p>`,
       )
     },
     [insertHtml, toast],
@@ -180,38 +169,31 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
     saveSelection()
   }, [emitChange, saveSelection])
 
+  const readImageFile = useCallback((file: File) => {
+    if (!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type) || file.size > 512 * 1024) {
+      toast.addToast("请选择不超过512KiB的 PNG/JPEG/WebP/GIF 图片。", "warning")
+      return
+    }
+    const reader = new FileReader()
+    reader.onerror = () => toast.addToast("图片读取失败，原草稿保留。", "error")
+    reader.onload = () => { if (typeof reader.result === 'string') insertImage(reader.result, file.name || 'clipboard-image') }
+    reader.readAsDataURL(file)
+  }, [insertImage, toast])
+
   const handlePaste = useCallback(
     (event: ClipboardEvent<HTMLDivElement>) => {
-      const clipboardItems = event.clipboardData?.items
-      if (!clipboardItems?.length) {
-        return
-      }
-
-      const imageItem = Array.from(clipboardItems).find((item) => item.type.startsWith("image/"))
-      if (!imageItem) {
-        return
-      }
-
-      const file = imageItem.getAsFile()
-      if (!file) {
-        return
-      }
-
+      // Prevent native HTML insertion: cleaning after insertion is too late.
       event.preventDefault()
-      const reader = new FileReader()
-      reader.onload = () => {
-        const base64 = typeof reader.result === "string" ? reader.result : ""
-        if (!base64) {
-          toast.addToast("剪贴板图片读取失败", "error")
-          return
-        }
-
-        // TODO: Replace Base64 storage with real OSS/S3 upload API and keep only returned URL.
-        insertImage(base64, file.name || "clipboard-image")
-      }
-      reader.readAsDataURL(file)
+      const image = Array.from(event.clipboardData.items).find(item => item.type.startsWith('image/'))?.getAsFile()
+      if (image) { readImageFile(image); return }
+      const html = event.clipboardData.getData('text/html')
+      if (html) { insertHtml(html); return }
+      const text = event.clipboardData.getData('text/plain')
+      const node = document.createElement('div')
+      node.textContent = text
+      insertHtml(node.innerHTML.replace(/\r\n|\r|\n/g, '<br>'))
     },
-    [insertImage, toast],
+    [insertHtml, readImageFile],
   )
 
   const handleLocalFileChange = useCallback(
@@ -222,25 +204,9 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
         return
       }
 
-      if (!file.type.startsWith("image/")) {
-        toast.addToast("仅支持图片文件", "warning")
-        return
-      }
-
-      const reader = new FileReader()
-      reader.onload = () => {
-        const base64 = typeof reader.result === "string" ? reader.result : ""
-        if (!base64) {
-          toast.addToast("图片读取失败", "error")
-          return
-        }
-
-        // TODO: Replace Base64 storage with real OSS/S3 upload API and keep only returned URL.
-        insertImage(base64, file.name)
-      }
-      reader.readAsDataURL(file)
+      readImageFile(file)
     },
-    [insertImage, toast],
+    [readImageFile],
   )
 
   const handleInsertImageUrl = useCallback(() => {
@@ -310,18 +276,22 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
         </div>
       ) : null}
 
-      <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleLocalFileChange} />
+      <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={handleLocalFileChange} />
 
       <div
         ref={editorRef}
         className={styles.cyberAnnEditorSurface}
         contentEditable
+        role="textbox"
+        aria-label="公告草稿内容"
+        aria-multiline="true"
         suppressContentEditableWarning
         spellCheck={false}
         data-empty={isEmpty}
         data-placeholder="输入公告内容，支持基础排版、Emoji、图片 URL、本地图片（Base64）..."
         onInput={handleInput}
         onPaste={handlePaste}
+        onDrop={(event) => { event.preventDefault(); toast.addToast("请使用IMG或URL插入图片。", "info") }}
         onMouseUp={saveSelection}
         onKeyUp={saveSelection}
         onBlur={saveSelection}
@@ -330,309 +300,103 @@ function CyberRichEditor({ value, onChange }: RichEditorProps) {
   )
 }
 
-export function CyberAnnouncement({ isAdmin = false, adminTokenStorageKey = "jinxi_admin_token" }: CyberAnnouncementProps) {
+export function CyberAnnouncement(_props: CyberAnnouncementProps = {}) {
   const toast = useToast()
-
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState("")
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
-
-  const [tokenValidated, setTokenValidated] = useState(false)
-  const [verifyingToken, setVerifyingToken] = useState(false)
-  const [adminTokenInput, setAdminTokenInput] = useState("")
-  const [adminToken, setAdminToken] = useState("")
-
-  const [isAdminFormOpen, setIsAdminFormOpen] = useState(false)
-  const [publishing, setPublishing] = useState(false)
+  const [sanitize, setSanitize] = useState<AnnouncementSanitizer | null>(null)
+  const [sanitizerError, setSanitizerError] = useState("")
+  const [draftOpen, setDraftOpen] = useState(false)
   const [titleInput, setTitleInput] = useState("")
   const [contentHtml, setContentHtml] = useState("")
-
-  const canManage = isAdmin || tokenValidated
+  const [draftMessage, setDraftMessage] = useState("")
+  const loadedDraft = useRef(false)
 
   const loadAnnouncements = useCallback(async () => {
     setIsLoading(true)
     setLoadError("")
-    try {
-      const data = await fetchAnnouncements()
-      setAnnouncements(data)
-    } catch (error) {
-      console.error("Failed to fetch announcements:", error)
-      setLoadError(error instanceof Error ? error.message : "公告加载失败，请稍后重试。")
-    } finally {
-      setIsLoading(false)
-    }
+    try { setAnnouncements(await fetchAnnouncements()) }
+    catch { setLoadError("公告加载失败，请稍后重试。") }
+    finally { setIsLoading(false) }
   }, [])
-
+  useEffect(() => { void loadAnnouncements() }, [loadAnnouncements])
   useEffect(() => {
-    void loadAnnouncements()
-  }, [loadAnnouncements])
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return
-    }
-
-    const handleOpenPanel = () => setIsOpen(true)
-    window.addEventListener("cyber-announcement:open", handleOpenPanel)
-
-    return () => {
-      window.removeEventListener("cyber-announcement:open", handleOpenPanel)
-    }
+    const open = () => setIsOpen(true)
+    window.addEventListener("cyber-announcement:open", open)
+    return () => window.removeEventListener("cyber-announcement:open", open)
   }, [])
-
   useEffect(() => {
+    if (!isOpen || sanitize) return
     let active = true
-
-    const run = async () => {
-      if (isAdmin) {
-        setTokenValidated(true)
-        return
-      }
-
-      if (typeof window === "undefined") {
-        return
-      }
-
-      const token = window.localStorage.getItem(adminTokenStorageKey) || ""
-      if (!token) {
-        if (active) {
-          setTokenValidated(false)
-          setAdminToken("")
-        }
-        return
-      }
-
-      try {
-        const valid = await verifyAnnouncementAdminToken(token)
-        if (active) {
-          setTokenValidated(valid)
-          setAdminToken(valid ? token : "")
-        }
-
-        if (!valid) {
-          window.localStorage.removeItem(adminTokenStorageKey)
-        }
-      } catch (error) {
-        console.error("Failed to verify announcement admin token:", error)
-        if (active) {
-          setTokenValidated(false)
-          setAdminToken("")
-        }
-      }
-    }
-
-    void run()
-
-    return () => {
-      active = false
-    }
-  }, [isAdmin, adminTokenStorageKey])
-
-  const displayAnnouncements = useMemo(
-    () =>
-      announcements.map((item) => ({
-        ...item,
-        safeHtml: sanitizeAnnouncementHtml(item.contentHtml),
-      })),
-    [announcements],
-  )
-
-  const handleVerifyAdmin = useCallback(async () => {
-    const token = adminTokenInput.trim()
-    if (!token) {
-      toast.addToast("请输入管理员密码", "warning")
-      return
-    }
-
-    setVerifyingToken(true)
+    setSanitizerError("")
+    loadAnnouncementSanitizer().then(fn => { if (active) setSanitize(() => fn) })
+      .catch(() => { if (active) setSanitizerError("安全显示组件暂不可用，请关闭公告后重试。") })
+    return () => { active = false }
+  }, [isOpen, sanitize])
+  useEffect(() => {
+    if (!isOpen || !sanitize || loadedDraft.current) return
+    loadedDraft.current = true
     try {
-      const valid = await verifyAnnouncementAdminToken(token)
-      if (!valid) {
-        toast.addToast("管理员认证失败", "error")
-        return
-      }
-
-      setTokenValidated(true)
-      setAdminToken(token)
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(adminTokenStorageKey, token)
-      }
-      setAdminTokenInput("")
-      toast.addToast("管理员认证成功", "success")
-    } catch (error) {
-      console.error("Failed to verify admin token:", error)
-      toast.addToast("认证失败，请稍后再试", "error")
-    } finally {
-      setVerifyingToken(false)
-    }
-  }, [adminTokenInput, adminTokenStorageKey, toast])
-
-  const handleLogoutAdmin = useCallback(() => {
-    setTokenValidated(false)
-    setAdminToken("")
-    setIsAdminFormOpen(false)
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(adminTokenStorageKey)
-    }
-    toast.addToast("已退出管理员模式", "info")
-  }, [adminTokenStorageKey, toast])
-
-  const handlePublish = useCallback(async () => {
-    const normalizedTitle = titleInput.trim()
-    const normalizedContent = sanitizeAnnouncementHtml(contentHtml)
-
-    if (!canManage && !isAdmin) {
-      toast.addToast("请先完成管理员认证", "warning")
-      return
-    }
-
-    if (!normalizedTitle) {
-      toast.addToast("请先输入公告标题", "warning")
-      return
-    }
-
-    if (!hasMeaningfulContent(normalizedContent)) {
-      toast.addToast("请先输入公告内容", "warning")
-      return
-    }
-
-    const tokenForPublish = isAdmin ? adminToken || adminTokenInput.trim() : adminToken
-    if (!tokenForPublish && !isAdmin) {
-      toast.addToast("管理员凭证缺失，请重新登录", "error")
-      return
-    }
-
-    setPublishing(true)
+      const raw = localStorage.getItem('jinxi-announcement-draft-v1')
+      if (!raw) return
+      if (raw.length > 1_001_000) throw Error('Draft too large')
+      const draft = JSON.parse(raw)
+      if (typeof draft.title !== 'string' || typeof draft.html !== 'string') throw Error('Invalid draft')
+      if (draft.html.length > MAX_ANNOUNCEMENT_HTML) throw Error('Draft too large')
+      setTitleInput(draft.title.slice(0,120))
+      setContentHtml(sanitize(draft.html))
+    } catch { setDraftMessage("草稿暂无法恢复；原存储未改写。") }
+  }, [isOpen, sanitize])
+  const displayAnnouncements = useMemo(() => sanitize ? announcements.map(item => ({...item,safeHtml:sanitize(item.contentHtml)})) : [], [announcements,sanitize])
+  const saveDraft = () => {
+    if (!sanitize) return
     try {
-      const created = await postAnnouncement(
-        {
-          title: normalizedTitle,
-          contentHtml: normalizedContent,
-          author: "执手",
-        },
-        tokenForPublish,
-      )
-
-      setAnnouncements((prev) => [created, ...prev.filter((item) => item.id !== created.id)])
-      setTitleInput("")
-      setContentHtml("")
-      setIsAdminFormOpen(false)
-      toast.addToast("公告发布成功，所有访客现在都可见", "success")
-    } catch (error) {
-      console.error("Failed to post announcement:", error)
-      toast.addToast(error instanceof Error ? error.message : "公告发布失败，请稍后重试", "error")
-    } finally {
-      setPublishing(false)
-    }
-  }, [adminToken, adminTokenInput, canManage, contentHtml, isAdmin, titleInput, toast])
-
+      const html = sanitize(contentHtml)
+      localStorage.setItem('jinxi-announcement-draft-v1',JSON.stringify({title:titleInput,html}))
+      setDraftMessage("草稿已保存在此浏览器，尚未发布。")
+    } catch { setDraftMessage("草稿保存失败，请保留编辑内容后重试。") }
+  }
   return (
     <aside className={styles.cyberAnnRoot} aria-label="公告栏">
-      <button type="button" className={`${styles.cyberAnnFab} ${isOpen ? styles.cyberAnnFabActive : ""}`} onClick={() => setIsOpen((prev) => !prev)} aria-expanded={isOpen}>
-        <span>{isOpen ? "ONLINE" : "NOTICE"}</span>
-        <span>{isOpen ? "关闭公告" : "查看公告"}</span>
+      <button type="button" className={`${styles.cyberAnnFab} ${isOpen ? styles.cyberAnnFabActive : ""}`} onClick={() => setIsOpen(prev => !prev)} aria-expanded={isOpen}>
+        <span>{isOpen ? "ONLINE" : "NOTICE"}</span><span>{isOpen ? "关闭公告" : "查看公告"}</span>
       </button>
-
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="公会动态" size="lg">
-      <div className={styles.cyberAnnPanel}>
-        <div className={styles.cyberAnnHeader}>
-          <div>
-            <h3 className={styles.cyberAnnTitle}>公会公告</h3>
-            <div className={styles.cyberAnnSubtitle}>以公会实际发布内容为准</div>
+        <div className={styles.cyberAnnPanel}>
+          <div className={styles.cyberAnnHeader}>
+            <div><h3 className={styles.cyberAnnTitle}>公会公告</h3><div className={styles.cyberAnnSubtitle}>以公会实际发布内容为准</div></div>
+            <button type="button" className={styles.cyberAnnClose} onClick={() => setIsOpen(false)} aria-label="关闭公告面板">×</button>
           </div>
-          <button type="button" className={styles.cyberAnnClose} onClick={() => setIsOpen(false)} aria-label="关闭公告面板">
-            ×
-          </button>
-        </div>
-
-        <div className={styles.cyberAnnBody}>
-          {isLoading ? <div className={styles.cyberAnnStatus}>正在同步公告数据...</div> : null}
-          {!isLoading && loadError ? (
-            <div className={`${styles.cyberAnnStatus} ${styles.cyberAnnStatusError}`}>
-              {loadError}
-              <button type="button" className={styles.cyberAnnInlineBtn} onClick={() => void loadAnnouncements()}>
-                重试
-              </button>
-            </div>
-          ) : null}
-
-          {!isLoading && !loadError ? (
-            <div className={styles.cyberAnnList}>
-              {displayAnnouncements.length === 0 ? (
-                <div className={styles.cyberAnnStatus}>暂无公告</div>
-              ) : (
-                displayAnnouncements.map((item) => (
-                  <article key={item.id} className={styles.cyberAnnItem}>
-                    <div className={styles.cyberAnnItemHeader}>
-                      <h4 className={styles.cyberAnnItemTitle}>{item.title}</h4>
-                      <span className={styles.cyberAnnMeta}>{formatAnnouncementTime(item.createdAt)}</span>
-                    </div>
-                    <div className={styles.cyberAnnMeta}>By 执手</div>
-                    <div className={styles.cyberAnnContent} dangerouslySetInnerHTML={{ __html: item.safeHtml }} />
-                  </article>
-                ))
-              )}
-            </div>
-          ) : null}
-
-          {canManage ? (
+          <div className={styles.cyberAnnBody}>
+            {isLoading ? <div className={styles.cyberAnnStatus} role="status">正在同步公告数据...</div> : null}
+            {loadError ? <div className={`${styles.cyberAnnStatus} ${styles.cyberAnnStatusError}`} role="alert">{loadError}<button type="button" className={styles.cyberAnnInlineBtn} onClick={() => void loadAnnouncements()}>重试</button></div> : null}
+            {sanitizerError ? <div className={styles.cyberAnnStatusError} role="alert">{sanitizerError}</div> : null}
+            {!sanitize && !sanitizerError ? <p role="status">正在准备安全公告显示...</p> : null}
+            {!isLoading && !loadError && sanitize ? <div className={styles.cyberAnnList}>
+              {displayAnnouncements.length === 0 ? <div className={styles.cyberAnnStatus}>暂无公告</div> : displayAnnouncements.map(item => (
+                <article key={item.id} className={styles.cyberAnnItem}>
+                  <div className={styles.cyberAnnItemHeader}><h4 className={styles.cyberAnnItemTitle}>{item.title}</h4><span className={styles.cyberAnnMeta}>{formatAnnouncementTime(item.createdAt)}</span></div>
+                  <div className={styles.cyberAnnMeta}>By 执手</div>
+                  <div className={styles.cyberAnnContent} data-announcement-content dangerouslySetInnerHTML={{__html:item.safeHtml}} />
+                </article>
+              ))}
+            </div> : null}
             <section>
-              <div className={styles.cyberAnnAdminHeadRow}>
-                <button type="button" className={styles.cyberAnnAdminToggle} onClick={() => setIsAdminFormOpen((prev) => !prev)}>
-                  {isAdminFormOpen ? "收起管理员发布面板" : "管理员发布公告"}
-                </button>
-                {!isAdmin ? (
-                  <button type="button" className={styles.cyberAnnGhostBtn} onClick={handleLogoutAdmin}>
-                    退出
-                  </button>
-                ) : null}
-              </div>
-
-              <div className={`${styles.cyberAnnAdminPanel} ${isAdminFormOpen ? styles.cyberAnnAdminPanelOpen : styles.cyberAnnAdminPanelClosed}`}>
-                <div className={styles.cyberAnnField}>
-                  <label className={styles.cyberAnnLabel} htmlFor="cyber-ann-title">
-                    标题
-                  </label>
-                  <input id="cyber-ann-title" className={styles.cyberAnnInput} placeholder="输入公告标题" value={titleInput} onChange={(event) => setTitleInput(event.target.value)} maxLength={120} />
-                </div>
-
-                <div className={styles.cyberAnnField}>
-                  <span className={styles.cyberAnnLabel}>内容编辑器</span>
-                  <CyberRichEditor value={contentHtml} onChange={setContentHtml} />
-                </div>
-
-                <button type="button" className={styles.cyberAnnSubmit} onClick={handlePublish} disabled={publishing}>
-                  {publishing ? "发布中..." : "发布公告"}
-                </button>
-                <p className={styles.cyberAnnFootnote}>本地上传图片当前走 Base64 预览与 Mock 存储流程。后续接入 OSS/S3 时请替换为真实上传接口并保存返回 URL。</p>
-              </div>
+              <p className={styles.cyberAnnStatus}>公告认证与发布正在安全升级。可以先编辑并保留本机草稿，暂不接受旧管理口令。</p>
+              <button type="button" className={styles.cyberAnnAdminToggle} onClick={() => setDraftOpen(prev => !prev)} disabled={!sanitize}>{draftOpen ? "收起本机草稿" : "编辑本机草稿"}</button>
+              {draftOpen && sanitize ? <div className={`${styles.cyberAnnAdminPanel} ${styles.cyberAnnAdminPanelOpen}`}>
+                <div className={styles.cyberAnnField}><label className={styles.cyberAnnLabel} htmlFor="cyber-ann-title">草稿标题</label><input id="cyber-ann-title" className={styles.cyberAnnInput} value={titleInput} onChange={e => setTitleInput(e.target.value)} maxLength={120} /></div>
+                <div className={styles.cyberAnnField}><span className={styles.cyberAnnLabel}>草稿内容</span><CyberRichEditor value={contentHtml} onChange={setContentHtml} sanitize={sanitize} /></div>
+                <button type="button" className={styles.cyberAnnSubmit} onClick={saveDraft}>保存本机草稿</button>
+                <button type="button" className={styles.cyberAnnSubmit} disabled title="服务器成员及管理员权限验收后恢复">发布暂未开放</button>
+                <p className={styles.cyberAnnFootnote}>图片仅随草稿保存在此浏览器，未上传。草稿保存不代表公会发布。</p>
+                {draftMessage ? <p role={draftMessage.includes('失败') || draftMessage.includes('无法') ? 'alert' : 'status'}>{draftMessage}</p> : null}
+              </div> : null}
             </section>
-          ) : (
-            <section className={styles.cyberAnnLoginBox}>
-              <div className={styles.cyberAnnLabel}>管理员登录后可发布公告</div>
-              <div className={styles.cyberAnnLoginRow}>
-                <input
-                  type="password"
-                  className={styles.cyberAnnInput}
-                  placeholder="输入管理员密码"
-                  value={adminTokenInput}
-                  onChange={(event) => setAdminTokenInput(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      event.preventDefault()
-                      void handleVerifyAdmin()
-                    }
-                  }}
-                />
-                <button type="button" className={styles.cyberAnnInlineBtn} onClick={() => void handleVerifyAdmin()} disabled={verifyingToken}>
-                  {verifyingToken ? "验证中..." : "登录"}
-                </button>
-              </div>
-            </section>
-          )}
+          </div>
         </div>
-      </div>
       </Modal>
     </aside>
   )

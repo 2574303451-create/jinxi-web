@@ -1,0 +1,34 @@
+✖ paused daily reward never invents points or claimed status after local progress (50.677ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 232.5927
+
+✖ failing tests:
+
+test at tests\legacy-reward.test.cjs:2:1
+✖ paused daily reward never invents points or claimed status after local progress (50.677ms)
+  node:internal/modules/cjs/loader:1413
+    throw err;
+    ^
+  
+  Error: Cannot find module '../lib/user-utils'
+  Require stack:
+  - E:\Recovery\jinxi-web\tests\legacy-reward.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1410:15)
+      at defaultResolveImpl (node:internal/modules/cjs/loader:1051:19)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1056:22)
+      at Module._load (node:internal/modules/cjs/loader:1219:37)
+      at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:238:24)
+      at Module.require (node:internal/modules/cjs/loader:1493:12)
+      at require (node:internal/modules/helpers:152:16)
+      at evalmachine.<anonymous>:14:22
+      at Script.runInContext (node:vm:149:12) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ 'E:\\Recovery\\jinxi-web\\tests\\legacy-reward.test.cjs' ]
+  }

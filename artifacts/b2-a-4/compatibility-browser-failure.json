@@ -1,0 +1,15 @@
+{
+  "results": [
+    {
+      "name": "plain clipboard, actual raster file, safe URL insertion and blocked HTML drop",
+      "passed": true
+    },
+    {
+      "name": "real pinned EmailJS bytes and SRI work under no-eval CSP; all email API traffic intercepted",
+      "passed": true,
+      "actualMessagesSent": 0
+    }
+  ],
+  "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('任务进度仅保存在此浏览器。正式奖励领取暂停；本机历史记录不作为服务器积分余额。', { exact: true }) to be visible\u001b[22m\n",
+  "stack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('任务进度仅保存在此浏览器。正式奖励领取暂停；本机历史记录不作为服务器积分余额。', { exact: true }) to be visible\u001b[22m\n\n    at E:\\Recovery\\jinxi-web\\artifacts\\b2-a-4\\compatibility-browser.cjs:8:729"
+}

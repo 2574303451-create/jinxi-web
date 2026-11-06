@@ -297,14 +297,7 @@ export function GuideCenter() {
         <Suspense
           fallback={<PaperState kind="loading" title="正在打开投稿表单…" />}
         >
-          <GuideSubmission
-            onClose={() => setPosting(false)}
-            onSaved={() => {
-              setPosting(false);
-              navigate({ page: 1 }, "list");
-              setReload((n) => n + 1);
-            }}
-          />
+          <GuideSubmission onClose={() => setPosting(false)} />
         </Suspense>
       )}
     </>

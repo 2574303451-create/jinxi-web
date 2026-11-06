@@ -1,7 +1,6 @@
 name: B2 security checks
 on:
   push:
-    branches: [codex/jinxi-b2-a-session-lab]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -13,6 +12,7 @@ jobs:
   verify:
     name: Security / Node ${{ matrix.node }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -37,8 +37,11 @@ jobs:
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
+      - name: Record tested Git revision
+        run: git rev-parse HEAD
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: ${{ matrix.node }}

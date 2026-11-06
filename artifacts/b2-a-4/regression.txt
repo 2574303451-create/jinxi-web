@@ -1,0 +1,17 @@
+PASS mobile navigation open/navigate/close and Escape focus
+PASS retained entry 每日签到
+PASS retained entry 每日任务
+PASS retained entry 积分与排行
+PASS retained entry 寻找队伍
+PASS retained entry 游戏数据
+PASS retained entry 公会动态
+PASS retained entry 公会赞助
+PASS strategy entry is a real guide URL without prefetch
+PASS join/login/change-password and FAQ retained
+PASS stale showcase ID reports unavailable rather than inventing record
+PASS single public message is static
+PASS message image unavailable has explicit fallback 1440
+PASS message image unavailable has explicit fallback 768
+PASS message image unavailable has explicit fallback 390
+PASS message image unavailable has explicit fallback 320
+PASS local identity is only used as existing display nickname

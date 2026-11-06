@@ -48,7 +48,7 @@ function TeamSystem() {
 
     const success = applyToTeam(selectedTeam.id, applyMessage)
     if (success) {
-      alert('申请成功！已自动加入战队')
+      alert('本机组队选择已保存，未向公会提交申请。')
       setShowApplyDialog(false)
       setApplyMessage('')
       loadData()
@@ -59,7 +59,7 @@ function TeamSystem() {
     if (confirm('确定要退出当前战队吗？')) {
       const success = leaveTeam()
       if (success) {
-        alert('已退出战队')
+        alert('已退出本机演示队伍，未变动公会成员关系。')
         loadData()
       }
     }
@@ -78,6 +78,7 @@ function TeamSystem() {
 
   return (
     <div className="relative">
+      <p className="paper-notice" role="status">本机组队演示：申请和退出仅影响此浏览器，不会通知其他成员，也不代表正式加入战队。</p>
       {/* 用户当前战队 */}
       {userTeam && (
         <div

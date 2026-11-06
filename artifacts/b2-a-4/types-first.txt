@@ -1,0 +1,15 @@
+
+> my-v0-project@0.1.0 typecheck:baseline
+> node scripts/check-types.cjs
+
+{
+  "compilerExit": 2,
+  "baseline": 28,
+  "current": 28,
+  "unparsedDiagnosticHeaders": 0,
+  "added": [],
+  "resolved": [],
+  "rawCompilerPassed": false,
+  "ratchetPassed": true
+}
+Compiler remains RED with historical diagnostics; ratchet only forbids new diagnostics.

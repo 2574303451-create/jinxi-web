@@ -1,0 +1,15 @@
+▶ reviewable session DDL rehearses only synthetic mappings and rolls back completely
+  ✔ mapping uses verified account/profile join, never nickname (1.934ms)
+  ✔ new session accepts digests and stores no raw token column (6.1509ms)
+  ✔ duplicate digest, wrong hash length and invalid expiry reject (2.0896ms)
+  ✔ unknown account and duplicate member identity reject (1.0056ms)
+  ✔ rehearsal leaves no proposed tables or real-member data changes (0.8007ms)
+✔ reviewable session DDL rehearses only synthetic mappings and rolls back completely (504.8952ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 597.6218

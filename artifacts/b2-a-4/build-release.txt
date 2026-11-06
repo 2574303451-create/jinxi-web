@@ -1,0 +1,51 @@
+
+> my-v0-project@0.1.0 prebuild
+> node scripts/generate-guild-summary.cjs
+
+Archive facts: 208 unique records; no active/online inference.
+Archive date from checked-in hash-bound provenance (Git history unavailable or shallow).
+
+> my-v0-project@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+Browserslist: browsers data (caniuse-lite) is 15 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/7) ...
+   Generating static pages (1/7) 
+   Generating static pages (3/7) 
+   Generating static pages (5/7) 
+ ✓ Generating static pages (7/7)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    78.8 kB         173 kB
+├ ○ /_not-found                          873 B          88.8 kB
+├ ○ /guides                              6.13 kB          94 kB
+├ ○ /profile-lab                         13.7 kB         108 kB
+└ ○ /session-lab                         4.58 kB        92.5 kB
++ First Load JS shared by all            87.9 kB
+  ├ chunks/117-7e475faf501989ee.js       31.7 kB
+  ├ chunks/fd9d1056-b9b6863d0f5432b1.js  53.6 kB
+  └ other shared chunks (total)          2.55 kB
+
+
+○  (Static)  prerendered as static content
+
+
+> my-v0-project@0.1.0 postbuild
+> node scripts/generate-export-csp.cjs
+
+Generated strict static CSP: {"pages":6,"hashes":20,"policyBytes":1639}

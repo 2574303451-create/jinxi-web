@@ -2,57 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { DailyTask, TaskStats } from '../types/daily-task'
-import { claimReward, getAllTasks, getTaskStats } from '../services/daily-task-service'
-import { getPointsSummary } from '../services/points-service'
+import { getAllTasks, getTaskStats } from '../services/daily-task-service'
 
-interface DailyTasksProps {
-  onTaskComplete?: (taskId: string) => void
-  loggedInAccount?: string
-}
-
-function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
+function DailyTasks() {
   const [tasks, setTasks] = useState<DailyTask[]>([])
   const [stats, setStats] = useState<TaskStats | null>(null)
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'achievement'>('daily')
   const [isExpanded, setIsExpanded] = useState(true)
-  const [backendTotalPoints, setBackendTotalPoints] = useState<number | null>(null)
-  const [isLoadingBackendPoints, setIsLoadingBackendPoints] = useState(false)
-
   useEffect(() => {
     loadTasks()
     loadStats()
   }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
-    const loadBackendPoints = async () => {
-      if (!loggedInAccount) {
-        setBackendTotalPoints(null)
-        return
-      }
-
-      setIsLoadingBackendPoints(true)
-      try {
-        const summary = await getPointsSummary(loggedInAccount, 10)
-        if (cancelled) return
-        setBackendTotalPoints(Number(summary.account?.totalEarned || 0))
-      } catch {
-        if (cancelled) return
-        setBackendTotalPoints(null)
-      } finally {
-        if (!cancelled) {
-          setIsLoadingBackendPoints(false)
-        }
-      }
-    }
-
-    loadBackendPoints()
-
-    return () => {
-      cancelled = true
-    }
-  }, [loggedInAccount])
 
   const loadTasks = () => {
     const allTasks = getAllTasks()
@@ -64,24 +24,7 @@ function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
     setStats(taskStats)
   }
 
-  const handleClaimReward = (taskId: string) => {
-    const success = claimReward(taskId)
-    if (!success) return
-
-    loadTasks()
-    loadStats()
-    onTaskComplete?.(taskId)
-  }
-
   const filteredTasks = useMemo(() => tasks.filter((task) => task.type === activeTab), [tasks, activeTab])
-
-  const totalPointsDisplay = useMemo(() => {
-    if (loggedInAccount) {
-      if (isLoadingBackendPoints && backendTotalPoints === null) return '--'
-      return backendTotalPoints ?? 0
-    }
-    return stats?.totalPoints ?? 0
-  }, [loggedInAccount, isLoadingBackendPoints, backendTotalPoints, stats?.totalPoints])
 
   const getProgressPercentage = (task: DailyTask) => Math.min((task.progress / task.target) * 100, 100)
 
@@ -100,6 +43,7 @@ function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
 
   return (
     <div className="relative">
+      <p className="paper-notice" role="status">任务进度仅保存在此浏览器。正式奖励领取暂停；本机历史记录不作为服务器积分余额。</p>
       <div
         className="p-6 rounded-2xl border mb-6 cartoon-card cartoon-card-pink animate-slide-in-up"
         style={{
@@ -119,8 +63,8 @@ function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 rounded-xl bg-white/5">
-              <div className="text-2xl font-bold gradient-text-candy">{totalPointsDisplay}</div>
-              <div className="text-sm text-white/60 mt-1">{loggedInAccount ? '活动总积分' : '总积分'}</div>
+              <div className="text-2xl font-bold gradient-text-candy">{stats.totalPoints}</div>
+              <div className="text-sm text-white/60 mt-1">本机历史积分</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/5">
               <div className="text-2xl font-bold gradient-text-sky">{stats.completedToday}</div>
@@ -224,10 +168,10 @@ function DailyTasks({ onTaskComplete, loggedInAccount = '' }: DailyTasksProps) {
 
                       {task.status === 'completed' && (
                         <button
-                          onClick={() => handleClaimReward(task.id)}
-                          className="cartoon-btn cartoon-btn-fresh px-4 py-2 text-sm animate-pulse-glow"
+                          disabled
+                          className="cartoon-btn cartoon-btn-fresh px-4 py-2 text-sm"
                         >
-                          领取奖励
+                          领取暂未开放
                         </button>
                       )}
                     </div>

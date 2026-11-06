@@ -1,0 +1,4 @@
+PASS protected member components 1440
+PASS protected member components 768
+PASS protected member components 390
+PASS protected member components 320

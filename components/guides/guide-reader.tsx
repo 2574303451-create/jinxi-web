@@ -2,10 +2,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import type { Strategy } from "../../types/strategy-wall";
 import { readGuide } from "../../services/guide-service";
-import * as api from "../../services/strategy-wall-service";
-import { getUserId } from "../../lib/user-utils";
 import { PaperState, PublicAvatar } from "../ui/paper";
-import { AdminPasswordDialog } from "../ui/admin-password-dialog";
 import { GuideBody } from "./guide-body";
 import { GuideMedia } from "./guide-media";
 export default function GuideReader({
@@ -23,15 +20,11 @@ export default function GuideReader({
     [error, setError] = useState(""),
     [loading, setLoading] = useState(true),
     [revision, setRevision] = useState(0),
-    [busy, setBusy] = useState(false),
     [notice, setNotice] = useState(""),
     [name, setName] = useState(""),
-    [comment, setComment] = useState(""),
-    [admin, setAdmin] = useState<"pin" | "delete" | null>(null),
-    [userId, setUserId] = useState("");
+    [comment, setComment] = useState("");
   const [loadedId, setLoadedId] = useState<string | null>(null);
   useEffect(() => {
-    setUserId(getUserId());
     const controller = new AbortController();
     setLoading(true);
     setError("");
@@ -51,22 +44,6 @@ export default function GuideReader({
   useEffect(() => {
     if (!loading && loadedId === id) onReady();
   }, [loading, loadedId, id, onReady]);
-  async function action(kind: "like" | "favorite") {
-    if (busy || !guide) return;
-    setBusy(true);
-    try {
-      await (kind === "like" ? api.likeStrategy : api.favoriteStrategy)(
-        id,
-        userId,
-      );
-      setGuide(await readGuide(id));
-      setNotice("操作已保存。");
-    } catch {
-      setNotice("操作失败，请重试。");
-    } finally {
-      setBusy(false);
-    }
-  }
   if (loading) return <PaperState kind="loading" title="正在读取攻略正文…" />;
   if (error || !guide)
     return (
@@ -117,24 +94,10 @@ export default function GuideReader({
       </header>
       <GuideBody content={guide.content} />
       <GuideMedia items={guide.mediaFiles} cover={guide.imageUrl} />
+      <p className="paper-notice" role="status">点赞、收藏和评论暂未开放。攻略与历史评论仍可阅读。</p>
       <div className="guide-reader-actions">
-        <button
-          className="paper-button"
-          disabled={busy}
-          aria-pressed={guide.likes.includes(userId)}
-          onClick={() => action("like")}
-        >
-          {guide.likes.includes(userId) ? "已点赞" : "点赞"}{" "}
-          {guide.likes.length}
-        </button>
-        <button
-          className="paper-button"
-          disabled={busy}
-          aria-pressed={guide.favorites.includes(userId)}
-          onClick={() => action("favorite")}
-        >
-          {guide.favorites.includes(userId) ? "已收藏" : "收藏"}
-        </button>
+        <button className="paper-button" disabled>点赞 {guide.likes.length}</button>
+        <button className="paper-button" disabled>收藏</button>
         <button
           className="paper-button"
           onClick={async () => {
@@ -156,29 +119,8 @@ export default function GuideReader({
         <h2>
           一起讨论 <small>{guide.comments.length}</small>
         </h2>
-        <p className="paper-muted">当前署名尚未认证，请勿填写私密资料。</p>
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault();
-            if (busy || !comment.trim()) return;
-            setBusy(true);
-            try {
-              await api.commentStrategy(
-                id,
-                userId,
-                comment.trim(),
-                name.trim() || "匿名游客",
-              );
-              setGuide(await readGuide(id));
-              setComment("");
-              setNotice("评论已保存。");
-            } catch {
-              setNotice("评论失败，草稿已保留。");
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
+        <p className="paper-muted">可以先编辑并复制评论草稿。</p>
+        <form onSubmit={(event) => event.preventDefault()}>
           <label className="paper-label" htmlFor="comment-name">
             你的署名
           </label>
@@ -201,9 +143,7 @@ export default function GuideReader({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          <button className="paper-button yellow" disabled={busy}>
-            {busy ? "正在保存…" : "发布评论"}
-          </button>
+          <button className="paper-button yellow" disabled>发布评论暂未开放</button>
         </form>
         {!guide.comments.length ? (
           <p className="paper-muted">暂无评论，期待你的交流。</p>
@@ -229,30 +169,14 @@ export default function GuideReader({
       </section>
       <details className="guide-admin">
         <summary>管理操作</summary>
-        <p className="paper-muted">继续由原管理员验证接口检查权限。</p>
-        <button className="paper-button" onClick={() => setAdmin("pin")}>
+        <p className="paper-muted">管理权限正在安全升级。</p>
+        <button className="paper-button" disabled>
           {guide.isPinned ? "取消置顶" : "置顶"}
         </button>
-        <button className="paper-button" onClick={() => setAdmin("delete")}>
+        <button className="paper-button" disabled>
           删除攻略
         </button>
       </details>
-      <AdminPasswordDialog
-        isOpen={admin !== null}
-        onClose={() => setAdmin(null)}
-        description="该操作由原服务器管理员接口验证。"
-        title={admin === "delete" ? "删除攻略" : "更新置顶"}
-        onConfirm={async (password) => {
-          if (admin === "delete") {
-            await api.deleteStrategy(id, password);
-            location.assign(listHref);
-          } else {
-            await api.pinStrategy(id, password);
-            setGuide(await readGuide(id));
-          }
-          setAdmin(null);
-        }}
-      />
     </article>
   );
 }

@@ -92,8 +92,6 @@ const DEFAULT_TASKS: Omit<DailyTask, 'progress' | 'status' | 'completedAt'>[] = 
   },
 ]
 
-type AwardScene = 'daily_behavior' | 'growth' | 'contribution'
-
 function getDefaultStats(): TaskStats {
   return {
     totalPoints: 0,
@@ -185,80 +183,6 @@ function parseSavedProgress(raw: string): UserTaskProgress | null {
   }
 }
 
-function getLoggedInAccount(): string {
-  if (typeof window === 'undefined') return ''
-  return String(localStorage.getItem('jinxi-auth-account') || '').trim()
-}
-
-function getDateToken(now: Date): string {
-  const pad = (value: number) => String(value).padStart(2, '0')
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
-}
-
-function getIsoWeekToken(date: Date): string {
-  const target = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  const dayNr = (target.getUTCDay() + 6) % 7
-  target.setUTCDate(target.getUTCDate() - dayNr + 3)
-  const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4))
-  const diff = target.getTime() - firstThursday.getTime()
-  const week = 1 + Math.round(diff / (7 * 24 * 60 * 60 * 1000))
-  return `${target.getUTCFullYear()}-W${String(week).padStart(2, '0')}`
-}
-
-function resolveTaskAwardScene(task: DailyTask): AwardScene {
-  if (task.type === 'weekly') return 'growth'
-  if (task.type === 'achievement') return 'contribution'
-  return 'daily_behavior'
-}
-
-function resolveTaskAwardEvent(task: DailyTask): string {
-  if (task.type === 'weekly') return 'task_claim_weekly'
-  if (task.type === 'achievement') return 'task_claim_achievement'
-  return 'task_claim_daily'
-}
-
-function buildTaskBizId(userId: string, task: DailyTask): string {
-  const now = new Date()
-  if (task.type === 'daily') {
-    return `task-claim:${userId}:${task.id}:${getDateToken(now)}`
-  }
-  if (task.type === 'weekly') {
-    return `task-claim:${userId}:${task.id}:${getIsoWeekToken(now)}`
-  }
-  return `task-claim:${userId}:${task.id}:once`
-}
-
-function syncTaskRewardToBackend(task: DailyTask): void {
-  const account = getLoggedInAccount()
-  if (!account) return
-
-  const bizId = buildTaskBizId(account, task)
-  const scene = resolveTaskAwardScene(task)
-  const eventType = resolveTaskAwardEvent(task)
-
-  void fetch('/.netlify/functions/points', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      userId: account,
-      action: 'award',
-      scene,
-      eventType,
-      bizId,
-      pointDelta: task.reward.points,
-      ext: {
-        source: 'daily-task-service',
-        taskId: task.id,
-        taskType: task.type,
-      },
-    }),
-  }).catch(() => {
-    // keep local reward flow available even if backend write fails
-  })
-}
-
 function saveTaskStats(stats: TaskStats): void {
   if (typeof window === 'undefined') return
   const key = `${STORAGE_KEY_STATS}${getUserId()}`
@@ -325,10 +249,6 @@ export function updateTaskProgress(taskId: string, increment: number = 1): Daily
   }
   localStorage.setItem(key, JSON.stringify(progress))
 
-  if (nextStatus === 'completed' && task.status !== 'completed') {
-    claimReward(taskId)
-  }
-
   return {
     ...task,
     progress: newProgress,
@@ -337,40 +257,10 @@ export function updateTaskProgress(taskId: string, increment: number = 1): Daily
   }
 }
 
-export function claimReward(taskId: string): boolean {
-  if (typeof window === 'undefined') return false
-
-  const userId = getUserId()
-  const task = getAllTasks().find((item) => item.id === taskId)
-  if (!task || task.status !== 'completed') return false
-
-  const key = `${STORAGE_KEY_PREFIX}${userId}-${taskId}`
-  const progress: UserTaskProgress = {
-    userId,
-    taskId,
-    progress: task.progress,
-    status: 'claimed',
-    lastUpdated: new Date(),
-  }
-  localStorage.setItem(key, JSON.stringify(progress))
-
-  const stats = getTaskStats()
-  stats.totalPoints += task.reward.points
-  stats.totalCompleted += 1
-
-  if (task.type === 'daily') stats.completedToday += 1
-  if (task.type === 'weekly') stats.completedWeek += 1
-
-  if (task.reward.badge && !stats.badges.includes(task.reward.badge)) {
-    stats.badges.push(task.reward.badge)
-  }
-  if (task.reward.title && !stats.titles.includes(task.reward.title)) {
-    stats.titles.push(task.reward.title)
-  }
-
-  saveTaskStats(stats)
-  syncTaskRewardToBackend(task)
-  return true
+export function claimReward(_taskId: string): boolean {
+  // Completion stored in this browser is not a server-verified reward event.
+  // Preserve progress/drafts, but never mint points or pretend a claim succeeded.
+  return false
 }
 
 export function getTaskStats(): TaskStats {

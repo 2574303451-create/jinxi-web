@@ -1,3 +1,5 @@
+> **2026-11-06 B2-A-4 审核更新**：基线为 PR #12 / 483495aefcd75316731efce76372748a0f00c8c7。候选分支 codex/jinxi-b2-a-4-security 独立承接，最新 SHA 与真实 CI 见其 GitHub 草稿 PR。A–E 的安全复核、隔离清单、公告 HTML/CSP、旧功能恢复矩阵和真实成员迁移草案见 [A-4 交付](artifacts/b2-a-4/DELIVERY.md)。本机合成 PG 53 项通过，原始 tsc 仍为 28 项历史错误且无新增。实际云隔离、真实成员 TEST、托管 CSP 与受支持运行时是正式接入前置。首页在线继续显示—，抽屉按 B2-C+ 后续检查点处理。独立构建为 E:/Recovery/.jinxi-research/b2-a-4/source/out，合成 HTTPS 3048 与公开回归 3050，3049 冻结 PR12。
+
 > **2026-11-06 B2接管更新（优先于下方历史快照）**：用户已授权B2-0检查点0–3及GitHub独立草稿PR。本机当前分支codex/jinxi-b2-a-session-lab，base为PR11/d516b8643c73797ddfbd8109d46a7dba58f6016c；最新SHA请核对该分支HEAD及GitHub PR，不以旧正文ca0723e为准。B1审核基线115bf854a7977a3e582a89af13459115178a1e31/PR8；新增检查点PR9、10、11均draft/open/unmerged，当前检查点3独立提交。完整入口：[B2状态](artifacts/b2-0/STATUS.md)、[会话原型](artifacts/b2-0/SESSION_LAB.md)、[工程/集成/阻断](artifacts/b2-0/ENGINEERING_AND_INTEGRATION.md)。原始tsc仍28项/exit2，只设新增诊断失败的历史基线，未假称完整类型通过。新证据含本机真实PG44、HTTPS会话7组、B1保护回归；GitHub CI必须看当前head的实际Checks。云变量继承及真实PROD权限未证明，旧写/旧登录暂停；正式会话、头像、在线心跳与名单均不启用。没有生产连接/密钥读取/迁移/上传、合并或部署。B2-C+新增要求只归档后续计划，不能据此提前开始B2-C。原B1截图已恢复原Git字节，新截图另存，主out不改；3044仍固定B1快照，3048/3049为本机合成隔离验证。
 # 今夕公会官网｜Codex 项目交接
 

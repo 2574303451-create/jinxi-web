@@ -26,10 +26,7 @@ const MessageWall = lazy(() => import("../components/message-wall").then(m => ({
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
 const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
-const CheckinWidget = lazy(() => import("../components/checkin-widget").then(m => ({ default: m.CheckinWidget })))
-const LeaderboardWidget = lazy(() => import("../components/leaderboard-widget").then(m => ({ default: m.LeaderboardWidget })))
 const DailyTasks = lazy(() => import("../components/daily-tasks"))
-const PointsRankingWidget = lazy(() => import("../components/points-ranking-widget"))
 const TeamSystem = lazy(() => import("../components/team-system"))
 const GameDataPanel = lazy(() => import("../components/game-data-panel"))
 
@@ -45,6 +42,7 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
   </Suspense>
 )
 
+const LEGACY_MEMBER_AUTH_READY = false
 function PageContent() {
   const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
@@ -185,6 +183,7 @@ function PageContent() {
   const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoginError("")
+    if (!LEGACY_MEMBER_AUTH_READY) { setLoginError("正式登录正在安全升级，旧入口暂不接受密码。"); return }
 
     if (!loginForm.account.trim() || !loginForm.password.trim()) {
       setLoginError("请输入账号和密码")
@@ -249,6 +248,7 @@ function PageContent() {
   const handleChangePasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setChangePasswordError("")
+    if (!LEGACY_MEMBER_AUTH_READY) { setChangePasswordError("正式密码变更暂未开放，请保留现有资料。"); return }
 
     const account = loginAccount || changePasswordForm.account
     if (!account) {
@@ -831,14 +831,14 @@ function PageContent() {
       <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl" legacy={legacyPanel}>
         <div className={legacyPanel ? "legacy-module" : undefined}>
           <ComponentLoader>
-            {activePanel === "checkin" && <CheckinWidget loggedInAccount={loginAccount} />}
-            {activePanel === "points" && <div className="business-grid"><LeaderboardWidget /><PointsRankingWidget loggedInAccount={loginAccount} /></div>}
-            {activePanel === "tasks" && (loginAccount ? <DailyTasks loggedInAccount={loginAccount} /> : <div className="guild-empty"><h3>你的任务，从登录开始</h3><p>登录后查看你的个人任务与积分。</p><button className="guild-button yellow" onClick={openLoginModal}>登录账号</button></div>)}
-            {activePanel === "teams" && (loginAccount ? <><p className="module-notice">当前浏览器的本地记录与默认示例，供个人管理参考。</p><TeamSystem /></> : <div className="guild-empty"><h3>寻找下一局的伙伴</h3><p>登录后打开浏览器本地组队面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后组队</button></div>)}
+            {activePanel === "checkin" && <p className="paper-notice" role="status">签到和历史记录查询正在安全升级。恢复后以服务器记录为准。</p>}
+            {activePanel === "points" && <p className="paper-notice" role="status">积分余额、兑换和排行榜正在安全升级。暂不可查询，已有积分以服务器记录为准。</p>}
+            {activePanel === "tasks" && <DailyTasks />}
+            {activePanel === "teams" && <TeamSystem />}
             {activePanel === "game" && (loginAccount ? <><p className="module-notice">当前浏览器的本地游戏记录与默认示例，供个人参考。</p><GameDataPanel /></> : <div className="guild-empty"><h3>你的游戏记录</h3><p>登录后打开本地游戏数据面板。</p><button className="guild-button yellow" onClick={openLoginModal}>登录后查看</button></div>)}
             {activePanel === "members" && <MemberGrid members={allMembers} />}
             {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
-            {activePanel === "messages" && <MessageWall loggedInAccount={loginAccount} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
+            {activePanel === "messages" && <MessageWall writesPaused loggedInAccount={loginAccount} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
           </ComponentLoader>
         </div>
       </Modal>
@@ -991,7 +991,7 @@ function PageContent() {
 
           {authMode === "login" ? (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <p className="text-white/80 text-sm">输入账号和密码后即可登录，签到和积分会自动绑定账号身份。</p>
+              <p className="text-white/80 text-sm" role="status">正式登录与改密正在安全升级，旧入口暂未开放。阅读与本机草稿仍可使用。</p>
               {loginError && (
                 <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
                   {loginError}
@@ -1046,7 +1046,7 @@ function PageContent() {
               <div className="flex gap-3 pt-1">
                 <button
                   type="submit"
-                  disabled={isLoginSubmitting}
+                  disabled={isLoginSubmitting || !LEGACY_MEMBER_AUTH_READY}
                   className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     background: "linear-gradient(180deg,#22c55e,#15803d)",
@@ -1070,6 +1070,7 @@ function PageContent() {
             </form>
           ) : (
             <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
+              <p className="text-white/80 text-sm" role="status">密码变更正在安全升级。正式成员会话开放后，可在这里修改密码。</p>
               <p className="text-white/80 text-sm">修改后将立即写入后端数据库，彻底替换初始密码。</p>
               {changePasswordError && (
                 <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
@@ -1148,7 +1149,7 @@ function PageContent() {
               <div className="flex gap-3 pt-1">
                 <button
                   type="submit"
-                  disabled={isChangingPassword}
+                  disabled={isChangingPassword || !LEGACY_MEMBER_AUTH_READY}
                   className="flex-1 px-6 py-3 rounded-xl border-none text-white font-medium hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     background: "linear-gradient(180deg,#2563eb,#1d4ed8)",

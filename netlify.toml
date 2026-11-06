@@ -7,23 +7,9 @@
   NPM_VERSION = "10"
   NODE_ENV = "production"
 
-# 启用性能优化
+# Preserve the script bytes used by the generated static CSP.
 [build.processing]
-  skip_processing = false
-
-[build.processing.css]
-  bundle = true
-  minify = true
-
-[build.processing.js]
-  bundle = true
-  minify = true
-
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.images]
-  compress = true
+  skip_processing = true
 
 # 增强安全头部
 [[headers]]
@@ -35,7 +21,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-DNS-Prefetch-Control = "on"
     # 内容安全策略
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://busuanzi.ibruce.info http://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: blob: https:; media-src 'self' https://interactive-examples.mdn.mozilla.net; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https: http://busuanzi.ibruce.info https://busuanzi.ibruce.info; frame-ancestors 'none'"
+    # CSP is generated once in out/_headers after static export; TOML would override it.
     # 严格传输安全
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     # 权限策略

@@ -1,0 +1,7 @@
+{
+  "scope": "Frozen PR12 build, synthetic HTTP announcement, harmless in-memory marker",
+  "passed": false,
+  "href": "java\tscript:globalThis.__jinxiAuditMarker=1",
+  "marker": 1,
+  "error": "A pasted/loaded protocol control character must not execute\n\n1 !== 0\n"
+}

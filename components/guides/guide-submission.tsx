@@ -6,18 +6,12 @@ import {
   type StrategySubmission,
   type StrategyCategory,
 } from "../../types/strategy-wall";
-import {
-  submitStrategy,
-  validateStrategySubmission,
-} from "../../services/strategy-wall-service";
 import { GuideBody } from "./guide-body";
 import { safeMediaUrl } from "../../lib/guide-media-policy";
 export default function GuideSubmission({
   onClose,
-  onSaved,
 }: {
   onClose: () => void;
-  onSaved: () => void;
 }) {
   const [form, setForm] = useState<StrategySubmission>({
       title: "",
@@ -29,7 +23,6 @@ export default function GuideSubmission({
       mediaFiles: [],
     }),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false),
     [preview, setPreview] = useState(false),
     [mediaUrl, setMediaUrl] = useState(""),
     [mediaType, setMediaType] = useState<"image" | "video">("image");
@@ -42,16 +35,14 @@ export default function GuideSubmission({
   return (
     <Modal
       isOpen
-      onClose={() => {
-        if (!busy) onClose();
-      }}
+      onClose={onClose}
       title="投稿攻略"
       size="xl"
       legacy={false}
     >
       <div className="guide-submission">
-        <p className="paper-muted">
-          分享实战心得。当前为游客署名，尚不代表已认证成员身份。
+        <p className="paper-notice" role="status">
+          投稿正在安全升级。可以编辑、预览并复制本次草稿。
         </p>
         <button
           className="paper-button"
@@ -71,26 +62,7 @@ export default function GuideSubmission({
             <GuideBody content={form.content || "尚未填写正文"} />
           </section>
         ) : (
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault();
-              const errors = validateStrategySubmission(form);
-              if (errors.length) {
-                setError(errors.join("；"));
-                return;
-              }
-              setBusy(true);
-              setError("");
-              try {
-                await submitStrategy(form);
-                onSaved();
-              } catch {
-                setError("投稿失败，内容已保留，请稍后重试。");
-              } finally {
-                setBusy(false);
-              }
-            }}
-          >
+          <form onSubmit={(event) => event.preventDefault()}>
             <label className="paper-label" htmlFor="guide-title">
               攻略标题
             </label>
@@ -245,9 +217,7 @@ export default function GuideSubmission({
                 ))}
               </ul>
             </fieldset>
-            <button className="paper-button yellow" disabled={busy}>
-              {busy ? "正在投稿…" : "提交攻略"}
-            </button>
+            <button className="paper-button yellow" disabled>投稿暂未开放</button>
           </form>
         )}
       </div>

@@ -1,0 +1,39 @@
+▶ actual local environment identity and effective least privilege
+  ✖ user schema beginning with pg letters is not a system schema (14.4412ms)
+  ✔ misgranted table/column SELECT outside each role read scope rejects (19.3835ms)
+  ✔ effective column, view and sequence grants outside the lab are unsafe (12.8408ms)
+  ✔ real fingerprint and read-only role permit B1 public reads (20.4407ms)
+  ✔ wrong actual fingerprint rejects before data mutation (3.9222ms)
+  ✔ actual privileged credential is rejected, not accepted by matching URL (4.7072ms)
+  ✔ reader cannot write, relabel identity, create schema or elevate (1.336ms)
+  ✔ session role cannot read/write the separate protected resources (1.9465ms)
+  ✔ all endpoints deny every legacy mutation even with a valid local proof configuration (22.6978ms)
+  ✔ missing cloud approval and mismatched contexts never create transport (2.2618ms)
+  ✔ all5 public read handlers use real restricted PG, never mutate on GET (46.0682ms)
+✖ actual local environment identity and effective least privilege (774.0227ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 892.3209
+
+✖ failing tests:
+
+test at tests\environment-postgres.test.cjs:8:11
+✖ user schema beginning with pg letters is not a system schema (14.4412ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:14:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async TestContext.<anonymous> (E:\Recovery\jinxi-web\tests\environment-postgres.test.cjs:8:3)
+      at async Test.run (node:internal/test_runner/test:1088:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

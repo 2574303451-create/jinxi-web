@@ -1,0 +1,7 @@
+locator.click: Error: strict mode violation: getByRole('button', { name: /查看公告/ }) resolved to 2 elements:
+    1) <button class="guild-button compact">…</button> aka getByRole('button', { name: '查看公告', exact: true })
+    2) <button type="button" aria-expanded="false" class="cyber-announcement_cyberAnnFab__MK26P ">…</button> aka getByRole('button', { name: 'NOTICE 查看公告' })
+
+Call log:
+  - waiting for getByRole('button', { name: /查看公告/ })
+

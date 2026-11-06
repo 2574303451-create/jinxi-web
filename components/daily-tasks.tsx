@@ -43,7 +43,7 @@ function DailyTasks() {
 
   return (
     <div className="relative">
-      <p className="paper-notice" role="status">任务进度仅保存在此浏览器。正式奖励领取暂停；本机历史记录不作为服务器积分余额。</p>
+      <p className="paper-notice" role="status">任务进度仅保存在此浏览器。奖励栏显示规则参考值，当前不可领取。本机历史积分不计入服务器余额。</p>
       <div
         className="p-6 rounded-2xl border mb-6 cartoon-card cartoon-card-pink animate-slide-in-up"
         style={{
@@ -161,7 +161,7 @@ function DailyTasks() {
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 text-sm">
-                        <span className="text-yellow-300">💰 {task.reward.points} 积分</span>
+                        <span className="text-yellow-300">💰 规则参考 {task.reward.points} 积分</span>
                         {task.reward.badge && <span className="text-purple-300">🎖️ {task.reward.badge}</span>}
                         {task.reward.title && <span className="text-cyan-300">👑 {task.reward.title}</span>}
                       </div>

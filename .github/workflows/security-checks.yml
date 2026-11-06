@@ -32,7 +32,6 @@ jobs:
       CI: 'true'
       JINXI_CI_PG: synthetic-55433
       JINXI_CI_PG_PASSWORD: ci-synthetic-only
-      JINXI_CHECK_OUTPUT: artifacts-ci
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -47,11 +46,15 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
       - run: npm ci
+      - name: Raw TypeScript check
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts-ci
+          npm run typecheck | tee artifacts-ci/typescript.txt
       - run: npm run build
       - run: npm run test
       - run: npm run lint
-      - name: Historical TypeScript ratchet (raw compiler still red until legacy cleanup)
-        run: npm run typecheck:baseline
       - name: Initialize isolated ephemeral PostgreSQL
         run: node scripts/ci-postgres.cjs
       - name: Actual SQL, identity, session and tampering regressions
@@ -61,9 +64,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: typescript-${{ matrix.node }}
-          path: |
-            artifacts-ci/typescript.txt
-            artifacts-ci/typescript-report.json
+          path: artifacts-ci/typescript.txt
           include-hidden-files: false
           if-no-files-found: warn
           retention-days: 7

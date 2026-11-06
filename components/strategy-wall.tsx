@@ -361,8 +361,8 @@ export function StrategyWall({ isOpen, onClose }: StrategyWallProps) {
                     {strategies.map((strategy) => {
                       const categoryConfig = getCategoryConfig(strategy.category)
                       const difficultyConfig = getDifficultyConfig(strategy.difficulty)
-                      const isLiked = userId && strategy.likes.includes(userId)
-                      const isFavorited = userId && strategy.favorites.includes(userId)
+                      const isLiked = !!userId && strategy.likes.includes(userId)
+                      const isFavorited = !!userId && strategy.favorites.includes(userId)
 
                       return (
                         <motion.div

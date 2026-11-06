@@ -1,5 +1,7 @@
 # 后端数据库设置指南
 
+> 历史资料，仅供代码审计。当前冻结分支禁止执行下文的 SQL、环境覆盖和部署命令。旧站连接及历史数据须按 [A8 资源核验](artifacts/b2-a-8/TEST_RESOURCES.md) 与 [备份恢复](artifacts/b2-a-8/BACKUP_RESTORE.md) 先行核验。
+
 ## 第一步：数据库设置（已完成）
 您已经完成了 Netlify DB 的初始化。
 

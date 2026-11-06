@@ -1,0 +1,16 @@
+▶ Gate 1 preflight is metadata-only, describes effective membership and fails closed
+  ✔ original transaction exposes only the intended metadata columns (10.5765ms)
+  ✔ unknown views and side-effect functions are listed but never evaluated (7.0678ms)
+  ✔ per-grant INHERIT and SET are distinguishable from role defaults (4.6672ms)
+  ✔ denied control metadata aborts the transaction until explicit rollback (3.0049ms)
+✔ Gate 1 preflight is metadata-only, describes effective membership and fails closed (136.2954ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 245.7805
+Disposable synthetic PostgreSQL passed; no cloud connection was used.
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-uRF8k2

@@ -54,5 +54,24 @@
       "testCounts": [],
       "log": "static-build.log"
     }
-  ]
+  ],
+  "gate1Review": {
+    "date": "2026-11-07",
+    "baselineHead": "43121af3e7920a280480c2dae2e35db8e71f5003",
+    "testedSourceHead": "77059806b4894dfb5038695caa4c5cce2410f2d8",
+    "sqlPath": "test-environment/sql/00-preflight.sql",
+    "originalSqlBlob": "7a91cdd34c15b36d372604a8b383b0c12c51e177",
+    "testedSqlBlob": "28ee36f578904304e2a21747dc6f4232ee89c2e3",
+    "change": "Only the existing membership SELECT adds per-grant INHERIT and SET metadata; JSON extraction returns NULL rather than assuming false on older catalogs.",
+    "localCommand": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --preflight-only",
+    "localExitCode": 0,
+    "scenarioCount": 4,
+    "nodeReportedTests": 5,
+    "localLog": "preflight-review.log",
+    "beforeFixLog": "preflight-before-fix.log",
+    "scopedEslintExitCode": 0,
+    "priorFullSuiteHead": "297834e167f36c24f7e31d31d074f439bcef52f2",
+    "cloudResult": "not collected; Gate 1 awaits user control-plane IDs and actual read-only results",
+    "cloudWrites": "not authorized or performed"
+  }
 }

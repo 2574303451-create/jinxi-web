@@ -8,6 +8,8 @@
 
 ## 第一关：只读资料，一次回传
 
+2026-11-07 状态：**SQL 安全审查及本机预检专测已完成；真实 Neon 结果与提供方资源 ID 待核实，第一关尚未签核通过。** 此前两次空表/视图/序列证据已登记，不重跑原查询。仅修正成员关系查询缺少的逐项 INHERIT/SET ROLE 标志；受测 SQL 与复核记录见 results.json 的 gate1Review，日志为 preflight-review.log。未改初始化/授权/回滚/网站身份代码，未执行云操作。
+
 在 Neon 明确选中上述 TEST 目标，运行 `test-environment/sql/00-preflight.sql`。提交脱敏结果和以下元数据。**未知对象不清除，权限报错不跳过；本轮不授权远程 DDL/DML。**
 
 | 资料 | 管理员填写 |
@@ -20,6 +22,8 @@
 | 独立 TEST 站点是否已有、Site ID/所属 Team、套餐/额度/超额规则 | ___ |
 
 不提供密码、完整连接串、账号行、散列、Token、SQL 活动正文或连接选项。不要执行 env:list/env 导出，也不要先读取原始值再截断。无需再提供旧站基础设置截图。
+
+SQL Editor 整批执行后，保存每个 SELECT 的结果标签页，包括空结果；不能只回传最后的 ROLLBACK 提示。任一 SQL 错误都停止签核；若事务仍处于失败状态，只做 ROLLBACK 结束，不跳过失败项或自行补权。SQL 不能认证 Neon project/branch，必须一起登记控制台非秘密 project/branch/endpoint IDs。角色和标准扩展有结果不等于失败，未知来源或与初始化前置条件不一致的对象/权限须集中解释；逐项标志为 NULL 不能当作 false。
 
 ## 第二关：集中批准云建设（当前待授权）
 

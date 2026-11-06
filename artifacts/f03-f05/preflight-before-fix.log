@@ -1,0 +1,40 @@
+▶ Gate 1 preflight is metadata-only, describes effective membership and fails closed
+  ✔ original transaction exposes only the intended metadata columns (10.0356ms)
+  ✔ unknown views and side-effect functions are listed but never evaluated (7.9487ms)
+  ✖ per-grant INHERIT and SET are distinguishable from role defaults (5.3349ms)
+  ✔ denied control metadata aborts the transaction until explicit rollback (2.8214ms)
+✖ Gate 1 preflight is metadata-only, describes effective membership and fails closed (166.2014ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 282.0175
+
+✖ failing tests:
+
+test at tests\preflight-postgres.test.cjs:24:11
+✖ per-grant INHERIT and SET are distinguishable from role defaults (5.3349ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + undefined
+  - false
+
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\f03-f05\worktree\tests\preflight-postgres.test.cjs:29:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\f03-f05\worktree\tests\preflight-postgres.test.cjs:24:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-1PtS8v
+DISPOSABLE_POSTGRES_TEST_FAILED

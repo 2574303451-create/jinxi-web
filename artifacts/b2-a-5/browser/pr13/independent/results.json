@@ -1,0 +1,23 @@
+{
+  "stage": "pr13",
+  "edge": "140.0.3485.66",
+  "negativeControl": true,
+  "results": [
+    {
+      "width": 1440,
+      "legacyLooksAuthenticated": true,
+      "encoded": 1050022,
+      "restored": 0,
+      "writes": 0,
+      "profileLab": true
+    },
+    {
+      "width": 390,
+      "legacyLooksAuthenticated": true,
+      "encoded": 1050022,
+      "restored": 0,
+      "writes": 0,
+      "profileLab": true
+    }
+  ]
+}

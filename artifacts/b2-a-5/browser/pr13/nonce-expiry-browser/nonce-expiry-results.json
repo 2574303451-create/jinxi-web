@@ -1,0 +1,6 @@
+{
+  "scope": "Only local HTTPS + synthetic member + dedicated PostgreSQL",
+  "passed": true,
+  "balance": 23,
+  "debits": 1
+}

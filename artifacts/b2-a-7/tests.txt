@@ -1,0 +1,57 @@
+
+> my-v0-project@0.1.0 test
+> npm run test:api && npm run test:security
+
+
+> my-v0-project@0.1.0 test:api
+> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs
+
+✔ legacy full detail normalizes malformed comments/media at the actual read boundary (15.3446ms)
+▶ frontend readonly contracts and bounded cache (network fixtures only)
+  ✔ feeds are sent to server, coalesced and cached separately (83.5577ms)
+  ✔ old backend cannot masquerade as working homepage filters (18.489ms)
+  ✔ v2 acknowledgement, media fields and public status fail closed (61.3358ms)
+  ✔ success expires60s, failure drops stale cache; no polling (11.0928ms)
+  ✔ stats distinguishes real0 from errors, stale/unknown contracts and null (9.8358ms)
+  ✔ an unavailable stats endpoint never fabricates zero (14.5534ms)
+✔ frontend readonly contracts and bounded cache (network fixtures only) (199.9021ms)
+▶ read API safety without a database
+  ✔ old credentials and unapproved previews fail closed without identity policy (1.6299ms)
+  ✔ invalid public queries rejected before transaction (3.8155ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (1.0551ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.7958ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (32.3321ms)
+✔ read API safety without a database (41.6107ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 430.1057
+
+> my-v0-project@0.1.0 test:security
+> node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs
+
+✔ announcement URL policy rejects active/ambiguous media and server path never returns raw HTML (49.3942ms)
+✔ legacy Markdown sinks escape stored and preview HTML but retain ordinary formatting (21.3749ms)
+✔ legacy Markdown list wrappers retain multiline content with the current TypeScript target (10.1453ms)
+✔ static CSP hashes exact hydration bytes and has one header source without unsafe script execution (7.861ms)
+✔ freeze config skips Git builds and points any forced build to the refusal (9.8268ms)
+✔ legacy publish and account-import entry points exit before any release work (190.2462ms)
+✔ all legacy identity/mutations are denied without a database transport (27.1528ms)
+✔ missing runtime context never reads an inherited DATABASE_URL (8.2219ms)
+✔ contexts and least-privilege policy are explicit; no old URL fallback (0.3465ms)
+✔ every deployed Function has an explicit security registration or local-only session boundary (1.6905ms)
+✔ paused daily reward never invents points or claimed status after local progress (2.539ms)
+✔ opening tasks preserves pre-upgrade browser history and other local records (1.2323ms)
+✔ password hashing is bounded, async and salted; malformed records never bypass verification (704.8565ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 978.6979

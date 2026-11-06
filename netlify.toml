@@ -1,5 +1,8 @@
 [build]
-  command = "npm ci --include=dev && npm run build"
+  # Review freeze. Skip Git-triggered builds and refuse execution if a hook
+  # bypasses the ignore rule. Local verification still uses npm run build.
+  ignore = "exit 0"
+  command = "node deploy.js"
   publish = "out"
 
 [build.environment]

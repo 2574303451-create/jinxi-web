@@ -1,0 +1,146 @@
+▶ one administrator batch atomically initializes and verifies only its approved TEST
+  ✔ cloud-bound file rejects another cluster before creating any TEST object or role (4.4314ms)
+  ✔ wrong database OID is rejected even when its name and cluster match (2.4221ms)
+  ✔ wrong initializer and unexpected server version refuse before DDL (3.1681ms)
+  ✔ existing unknown object is preserved and blocks the whole batch (6.995ms)
+  ✔ late verification-stage failure rolls back seeded rows, roles and ACL changes together (47.9168ms)
+  ✔ non-superuser owner executes initialization, seed and original verification in one commit (47.1356ms)
+  ✔ repeat whole batch refuses without overwriting committed synthetic records (3.6595ms)
+  ✖ reader activation refuses mismatched registration, effective column writes and role inheritance (7.0313ms)
+  ✖ only the existing least-privilege reader is enabled; administrator cannot impersonate its proof (1.6133ms)
+  ✖ new reader connection proves real session, exact identity, ACL and four permitted reads (39.9958ms)
+  ✖ original rollback restores identical effective grants and preserves platform default ACL metadata (1.2456ms)
+✖ one administrator batch atomically initializes and verifies only its approved TEST (342.3328ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 7
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 445.8669
+
+✖ failing tests:
+
+test at tests\bootstrap-postgres.test.cjs:105:13
+✖ reader activation refuses mismatched registration, effective column writes and role inheritance (7.0313ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+
+  Caught error:
+
+  error: record "p" is not assigned yet
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async rejected (<WORKTREE>\tests\bootstrap-postgres.test.cjs:31:5)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:108:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:105:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: error: record "p" is not assigned yet
+        at <WORKTREE>\node_modules\pg\lib\client.js:545:17
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async rejected (<WORKTREE>\tests\bootstrap-postgres.test.cjs:31:5)
+        at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:108:7)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:105:5)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests\bootstrap-postgres.test.cjs:115:13
+✖ only the existing least-privilege reader is enabled; administrator cannot impersonate its proof (1.6133ms)
+  error: current transaction is aborted, commands ignored until end of transaction block
+      at <WORKTREE>\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:116:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:115:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 144,
+    severity: 'ERROR',
+    code: '25P02',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1145',
+    routine: 'exec_simple_query'
+  }
+
+test at tests\bootstrap-postgres.test.cjs:123:13
+✖ new reader connection proves real session, exact identity, ACL and four permitted reads (39.9958ms)
+  error: role "jinxi_test_reader" is not permitted to log in
+      at Parser.parseErrorMessage (<WORKTREE>\node_modules\pg-protocol\dist\parser.js:285:98)
+      at Parser.handlePacket (<WORKTREE>\node_modules\pg-protocol\dist\parser.js:122:29)
+      at Parser.parse (<WORKTREE>\node_modules\pg-protocol\dist\parser.js:35:38)
+      at Socket.<anonymous> (<WORKTREE>\node_modules\pg-protocol\dist\index.js:11:42)
+      at Socket.emit (node:events:514:28)
+      at addChunk (node:internal/streams/readable:569:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+      at Readable.push (node:internal/streams/readable:400:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:194:23) {
+    length: 121,
+    severity: 'FATAL',
+    code: '28000',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'miscinit.c',
+    line: '854',
+    routine: 'InitializeSessionUserId'
+  }
+
+test at tests\bootstrap-postgres.test.cjs:137:13
+✖ original rollback restores identical effective grants and preserves platform default ACL metadata (1.2456ms)
+  error: current transaction is aborted, commands ignored until end of transaction block
+      at <WORKTREE>\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.approval (<WORKTREE>\tests\support\test-environment-postgres.cjs:16:11)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:138:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:137:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 144,
+    severity: 'ERROR',
+    code: '25P02',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1145',
+    routine: 'exec_simple_query'
+  }
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-SZVoBh
+DISPOSABLE_POSTGRES_TEST_FAILED

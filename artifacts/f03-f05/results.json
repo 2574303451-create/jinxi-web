@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "not collected; scope is not a measured cloud connection counter",
-  "cloudAcceptance": "Limited Gate 2 authorized. User bootstrap screenshot received; final counts/resource receipts and COMMIT pending. Actual reader authentication/permissions and hosted Gate 3 acceptance have not run.",
+  "cloudAcceptance": "Gate 2 synthetic initialization accepted from user console evidence. Real reader authentication/effective permissions and Netlify construction/hosted isolation remain pending.",
   "checks": [
     {
       "name": "typecheck",
@@ -186,7 +186,7 @@
       "codex-clipboard-b34d8234-fda0-4554-98c6-a8ce9c297a66.png"
     ],
     "sourceRetention": "Original files remain in user Downloads/Temp; no raw CSV or screenshot copied into Git.",
-    "remaining": "Gate 2 authorization received and user bootstrap-run screenshot reviewed; final commit/count/resource receipts, actual reader proof and hosted acceptance remain pending."
+    "remaining": "Gate 2 initialization accepted; actual reader authentication/effective ACL, Netlify construction/configuration and Gate 3 hosted isolation remain pending."
   },
   "platformDefaultAclCompatibility": {
     "testedSourceHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
@@ -289,8 +289,8 @@
         "tests/bootstrap-postgres.test.cjs": "389dc643ba11b60d159c0442271e4419faeaec272386e4cbec09b6aa3828563e"
       }
     },
-    "databaseInitialization": "User supplied a screenshot of the bootstrap run; visible synthetic INSERT counts match. Commit and final two result sets are not visible, so initialization sign-off remains pending. Do not rerun bootstrap.",
-    "roleAuthentication": "not run; credentials not requested/handled; no actual reader proof yet",
+    "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
+    "roleAuthentication": "Pending user activation/private credential provisioning and new actual reader connection; local trust-role tests do not prove Neon password authentication.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "View existing results only: move result-tabs scrollbar fully right, return tabs 67 SELECT and 68 SELECT plus tab 69 COMMIT. Do not click Run, regenerate bootstrap, configure passwords or change permissions yet.",
+    "nextAdministratorAction": "Execute prepared cloud-enable-reader.local.sql once on approved TEST; require only reader LOGIN=true and final COMMIT. Privately reset only existing jinxi_test_reader password; then run the prepared native proof launcher in local PowerShell and return only its non-secret proof JSON. No initializer rerun or new authorization needed.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -371,9 +371,9 @@
       ],
       "statusText": "Statement executed successfully; selected result tab is off-screen, so this is not attributed to COMMIT.",
       "historyNotice": "UI says the last 15427 characters will be truncated from query history, not from execution. Original local bootstrap remains preserved.",
-      "commitConfirmed": false,
-      "countsReceiptReviewed": false,
-      "resourceReceiptReviewed": false,
+      "commitConfirmed": true,
+      "countsReceiptReviewed": true,
+      "resourceReceiptReviewed": true,
       "finalTabsRequired": [
         {
           "index": 67,
@@ -390,6 +390,163 @@
       ],
       "scope": "No new SQL/DDL was executed by Codex. Only current submitted evidence is reviewed; earlier no-cloud-operation statements refer to Codex actions before this user run."
     },
-    "cloudResourceScope": "newCloudResources=0 covers project/site/bucket creation by Codex. Synthetic DB object changes by the user are evidenced by the screenshot and await final receipt confirmation."
+    "cloudResourceScope": "newCloudResources=0 covers project/site/bucket creation by Codex. User synthetic DB initialization is accepted from receipts; reader activation and Netlify site are not executed by Codex.",
+    "initializationAccepted": true,
+    "bootstrapCompletion": {
+      "csvEvidence": [
+        {
+          "file": "restless-salad-74668264_production_neondb_2026-11-07_09-13-46.csv",
+          "sha256": "e0f32be15814132492fd150bd8e77e932870d8a313404767865029a12a38fec1",
+          "header": [
+            "fixture",
+            "strategies",
+            "messages",
+            "synthetic_accounts",
+            "cloud_sessions"
+          ],
+          "rowCount": 1
+        },
+        {
+          "file": "restless-salad-74668264_production_neondb_2026-11-07_09-13-46 (1).csv",
+          "sha256": "e4aaf606427f961422b5f2b027bfe11d6c6fd13d279fb3609a7d691e1a54af21",
+          "header": [
+            "status",
+            "environment_id",
+            "classification",
+            "project_id",
+            "branch_id",
+            "endpoint_id",
+            "database_name",
+            "database_oid",
+            "cluster_id",
+            "initializer",
+            "server_version_num",
+            "seed_version",
+            "roles"
+          ],
+          "rowCount": 1
+        }
+      ],
+      "counts": {
+        "fixture": "synthetic-test-v1",
+        "strategies": "5",
+        "messages": "2",
+        "synthetic_accounts": "4",
+        "cloud_sessions": "0"
+      },
+      "receipt": {
+        "status": "READY_TO_COMMIT",
+        "environment_id": "0fdb5a68-436e-4a80-b01d-5b0207637eac",
+        "classification": "synthetic-test",
+        "project_id": "restless-salad-74668264",
+        "branch_id": "br-red-pond-bdtrjpmy",
+        "endpoint_id": "ep-dry-queen-bd6q46s6",
+        "database_name": "neondb",
+        "database_oid": "16397",
+        "cluster_id": "7704950029723409949",
+        "initializer": "neondb_owner",
+        "server_version_num": "180006",
+        "seed_version": "1",
+        "roles": [
+          {
+            "role": "jinxi_test_owner",
+            "can_login": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false,
+            "replication": false
+          },
+          {
+            "role": "jinxi_test_reader",
+            "can_login": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false,
+            "replication": false
+          },
+          {
+            "role": "jinxi_test_writer",
+            "can_login": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false,
+            "replication": false
+          }
+        ]
+      },
+      "commitScreenshot": {
+        "file": "codex-clipboard-0ff9d7d1-eab5-4476-8546-3405640610b6.png",
+        "sha256": "9b825a3486ef45e54049d8e2e6828b1b23a50ced99f9ca5076ea4d2c445b5061",
+        "tab": 69,
+        "command": "COMMIT",
+        "visibleStatus": "Statement executed successfully",
+        "elapsedMsShown": 453
+      },
+      "accepted": true,
+      "scope": "Only synthetic database initialization and recorded admin role flags. Actual reader authentication/effective ACL and Netlify hosted isolation remain pending."
+    },
+    "credentialIncident": {
+      "kind": "TEST administrator credential supplied in chat",
+      "target": "jinxi-test / production / neondb_owner only",
+      "status": "user-confirmed-rotated",
+      "confirmationSource": "User explicitly confirmed resetting jinxi-test neondb_owner password in this chat",
+      "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
+    },
+    "readerHandoff": {
+      "status": "prepared locally; not executed in cloud",
+      "endpoint": {
+        "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
+        "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
+        "source": "Only non-secret hostname retained. Direct hostname derived by documented Neon removal of -pooler suffix; live TLS/reader identity still pending.",
+        "reference": "https://neon.com/docs/connect/connection-pooling"
+      },
+      "files": {
+        "activate": {
+          "file": "test-environment/sql/cloud-enable-reader.local.sql",
+          "sha256": "5cccb0b46723ef80d5b72b8b037b2f056a78b22010e2faba5f4be9a859da8c0f"
+        },
+        "proof": {
+          "file": "test-environment/sql/cloud-reader-proof.local.sql",
+          "sha256": "cd41c85a278c5aeb51e6e56db1009210207c436a471995c7a6541bd90a4814f6"
+        }
+      },
+      "runtimeBindingUnchanged": true,
+      "sourceHead": "aa398b506271e9fcbd55b610e981c92cfc6973f1",
+      "validation": {
+        "scope": "Only local disposable PostgreSQL17.11 SQL/role behavior; actual Neon TLS/SCRAM/reader acceptance pending",
+        "sourceAttribution": "Tested working-tree snapshot was committed unchanged as sourceHead; post-run committed-content/hash comparison passed.",
+        "sourceSha256": {
+          "scripts/prepare-test-reader.cjs": "2ba5e6ecca3d7d3aaed49a5bf7931b26150d5a2d8ac66ebeab3447040195c698",
+          "scripts/run-test-reader-proof.cjs": "c2c9003a4e284bd8094f2ce3fce14eb0844be80474d81540c0e1488a9ad29b12",
+          "tests/bootstrap-postgres.test.cjs": "f41acba87c16368473be4eea8db957d1576089c1d7cc933ef12d220e6f5fd160"
+        },
+        "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --bootstrap-only",
+        "exitCode": 0,
+        "nodeReportedTests": 12,
+        "scenarioCount": 11,
+        "log": "reader-review.log",
+        "scopedEslintExitCode": 0,
+        "noninteractiveLauncherRejectedBeforeConnection": true,
+        "originalRuntimePolicyUnchanged": true,
+        "beforeFix": {
+          "exitCode": 1,
+          "nodeReportedTests": 12,
+          "pass": 7,
+          "fail": 5,
+          "log": "reader-before-fix.log",
+          "cause": "PL/pgSQL record p collided with the original query alias p; wrapper renamed to checked_proof. Original query, policy and failure assertions unchanged. Test cleanup always rolls back."
+        }
+      },
+      "launcher": {
+        "file": "scripts/run-test-reader-proof.cjs",
+        "input": "Native psql -W prompt for existing jinxi_test_reader password only; password is never read by Node or supplied in command arguments.",
+        "transport": "Fixed approved direct TEST hostname/5432/neondb/reader, TLS require plus channel binding require, clean child environment, psql -X/ON_ERROR_STOP. No DSN, .env or connection fallback.",
+        "output": "artifacts/f03-f05/cloud-reader.proof.local.json",
+        "acceptance": "Same original validateProof policy is used for database proof before a Netlify Site ID exists; not hosted-site approval."
+      }
+    }
   }
 }

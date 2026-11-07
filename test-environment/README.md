@@ -11,6 +11,8 @@
 5. 所有新角色初始 `NOLOGIN`。本关初始化核验通过后，由管理员私下为 reader 配置凭据并启用 LOGIN，再验证其真实身份和权限。`jinxi_test_writer` 保持 NOLOGIN 且无业务授权；管理员凭据不进入 Functions。通过 SQL 创建角色，不能拿 Neon 控制台默认高权限角色替代 reader。
 6. 管理员以 reader 运行 `node scripts/verify-test-role.cjs --sql` 生成的只读证明脚本（psql 模式；参数是批准的库名、角色和环境 UUID）。保存非敏感 proof JSON，再在本机运行 `node scripts/verify-test-role.cjs --verify <proof.json> <approved-binding.json>`。这验证真实身份和直接权限；跨资源、共享变量及间接路径仍须管理员签核。
 
+2026-11-07 实施状态：用户已通过两份结果 CSV 和明确 COMMIT 完成 Neon18.6 合成初始化。当前专用 reader 由 `prepare-test-reader.cjs` 生成的限定目标文件启用，随后 `run-test-reader-proof.cjs` 让管理员在原生 psql -W 私密提示输入该 reader 密码。后者先验证 SQL 摘要，固定 TEST 直连主机/角色和 TLS/通道绑定，剥离连接环境和 psql 启动脚本，仅执行原 ATTESTATION_SQL、实际会话检查及公共合成数量读取。它沿用同一 validateProof 在建 Netlify 站点前验证数据库部分，不需要伪造 Site ID；原 --verify 和运行时绑定门禁保持不变。文件、命令、回传及停止条件集中见原 ADMIN_SIGNOFF.md，不在此另立清单。
+
 合成数据：4 个账号/资料（普通 2、锁定 1、停用 1）、同昵称不同 member ID、留言/回复、5 篇攻略（4 published / 1 draft，含 thumbnail-only 与 null 附件）、1 公告、1 合成赞助、1 签到、2 钱包、2 流水、规则和商品。会话表初始为空。视频仅为明确标注的故意失败本站路径，公开视频有效 URL 统计为 1，不代表可播放、播放次数或生产数量。
 
 种子账号使用不可登录标记，不包含可用密码或 PBKDF2 散列。只有本地测试在内存生成随机密码，参数化写入新一次性数据库的合成散列；明文不写文件、不输出。云端登录/会话保持关闭，不能将这些数据库结构验收写成正式登录通过。

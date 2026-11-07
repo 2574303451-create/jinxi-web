@@ -1,0 +1,27 @@
+{
+  "origin": "https://jinxi-web-test.netlify.app",
+  "classification": "synthetic-test",
+  "startedAtUtc": "2026-11-07T06:01:33.112Z",
+  "passed": false,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": false,
+      "pageErrors": [
+        {
+          "name": "SecurityError",
+          "stage": "home navigation",
+          "message": "BROWSER_ERROR_DETAILS_WITHHELD"
+        }
+      ],
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": [],
+      "cspViolations": [],
+      "stage": "home navigation",
+      "error": "BROWSER_ASSERTION_OR_NETWORK_FAILURE",
+      "failureType": "Error"
+    }
+  ],
+  "edge": "140.0.3485.66",
+  "completedAtUtc": "2026-11-07T06:01:43.592Z"
+}

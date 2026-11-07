@@ -377,6 +377,200 @@
       ],
       "passed": true,
       "completedAtUtc": "2026-11-07T05:36:21.448Z"
+    },
+    {
+      "origin": "https://jinxi-web-test.netlify.app",
+      "classification": "synthetic-test",
+      "startedAtUtc": "2026-11-07T06:01:32.955Z",
+      "checks": [
+        {
+          "name": "static /",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "86971c691747749abcf335d1045b4a2080a327116f615b38cef242a5859f9ba7",
+          "cspPresent": true
+        },
+        {
+          "name": "static /guides/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "64aba8185280117840da89108710e2ef3bfd269512f1d5d248e7b870ce2db69f",
+          "cspPresent": true
+        },
+        {
+          "name": "static /profile-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "6e2b987a1d4ef23b723c9fd52d5ee5dca116763cacd337dcde3e5b9bf9023c5d",
+          "cspPresent": true
+        },
+        {
+          "name": "static /session-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "221268328d8f8601bf74f3a565684b216a52768dd957174638da4f624b6b9411",
+          "cspPresent": true
+        },
+        {
+          "name": "actual published synthetic strategies",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103",
+            "101",
+            "102",
+            "105"
+          ]
+        },
+        {
+          "name": "server filter latest",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "101",
+            "102",
+            "103"
+          ]
+        },
+        {
+          "name": "server filter video",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "102"
+          ]
+        },
+        {
+          "name": "server filter pinned",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103"
+          ]
+        },
+        {
+          "name": "synthetic video aggregate",
+          "passed": true,
+          "status": 200,
+          "count": 1,
+          "playabilityVerified": false
+        },
+        {
+          "name": "synthetic read messages",
+          "passed": true,
+          "status": 200,
+          "count": 2
+        },
+        {
+          "name": "synthetic read announcements",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "synthetic read sponsorship",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "invalid public query strategies?status=draft",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "invalid public query strategies?id=104",
+          "passed": true,
+          "status": 404
+        },
+        {
+          "name": "invalid public query guide-video-stats?userId=synthetic-forged",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "invalid public query strategies?summary=1&feed=video&limit=50",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "closed write strategies",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write guide-video-stats",
+          "passed": true,
+          "status": 405
+        },
+        {
+          "name": "closed write messages",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write announcements",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write sponsorship",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write auth-login",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write auth-change-password",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write points",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write checkin",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write message-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write strategy-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write leaderboard",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write points-board",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "local session lab disabled on cloud GET",
+          "passed": true,
+          "status": 503
+        },
+        {
+          "name": "local session lab disabled on cloud POST",
+          "passed": true,
+          "status": 503
+        }
+      ],
+      "passed": true,
+      "completedAtUtc": "2026-11-07T06:01:56.781Z"
     }
   ]
 }

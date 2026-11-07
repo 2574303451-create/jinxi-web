@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "Actual independent TEST deployment7a65e7d is ready. All31 real HTTP checks passed and14 Functions runtime nodejs24.x confirmed. Browser exposed React418 head hydration failure; evidence and minimal compatibility fix are under verification, so Gate3 is not signed off.",
+  "cloudAcceptance": "Approved synthetic read-only TEST construction and defined acceptance passed. Actual Site/Deploy/SHA/Functions runtime, guarded synthetic reads, real reader ACL evidence, cloud context rejection, closed writes and browser checks are documented separately. No production migration, member login or network-firewall certification.",
   "checks": [
     {
       "name": "typecheck",
@@ -292,8 +292,8 @@
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
     "roleAuthentication": "PASSED: actual jinxi_test_reader session, approved registered database fingerprint, direct/effective permission attestation and four synthetic reads verified from the local proof receipt.",
     "netlifySiteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
-    "deployId": "6aeeb1036cbf2581ed017071",
-    "deployedSha": null,
+    "deployId": "6aeebe4ceae178c10e4199e8",
+    "deployedSha": "13de96d7531dde3222fdf513e711447a1df3e425",
     "runtimeBinding": "approved resource binding with the actual TEST Site ID; hosted deploy proof not yet generated",
     "gitPushes": "Only codex/jinxi-f03-f05-test-foundation, latest pushed source f370e6d59926e6bf56388b9b62be6dc0133e0411. No new PR or original PR/base/main change.",
     "newPrs": 0,
@@ -1072,6 +1072,12 @@
           "conclusion": "success",
           "linuxCleanNpmLauncher": "success",
           "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42342651206"
+        },
+        {
+          "sha": "13de96d7531dde3222fdf513e711447a1df3e425",
+          "id": 42344725850,
+          "conclusion": "success",
+          "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42344725850"
         }
       ],
       "privateEnvironmentTool": {
@@ -1333,6 +1339,70 @@
           },
           "browserAcceptance": false,
           "browserIssue": "React418 root head hydration mismatch after platform HTML comment/newline injection. Full, original-response failure evidence retained."
+        },
+        {
+          "kind": "Actual cloud build-context rejection exercise",
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "buildId": "6aeebe05a62c299df1f90bac",
+          "deployId": "6aeebe05a62c299df1f90bae",
+          "approvedCommit": "13de96d7531dde3222fdf513e711447a1df3e425",
+          "injectedNonSecretVariable": "JINXI_RUNTIME_CONTEXT",
+          "actualSiteContext": "production",
+          "incorrectValue": "branch-deploy",
+          "status": 200,
+          "startedAt": "2026-11-07T05:58:29.592Z",
+          "realDatabaseCredentialChanged": false,
+          "restored": {
+            "atUtc": "2026-11-07T05:59:34.447Z",
+            "publicVariableStatus": 200,
+            "value": "production",
+            "testBuildsPaused": true,
+            "publishedDeployId": "6aeeb6eca7db8a290681d599"
+          },
+          "state": "error",
+          "result": "Expected configuration rejection before Next build and deploy proof generation",
+          "published": false,
+          "availableFunctions": 0,
+          "log": "cloud-context-rejection.log",
+          "restoredKnownPublicContext": {
+            "atUtc": "2026-11-07T05:59:34.447Z",
+            "publicVariableStatus": 200,
+            "value": "production",
+            "testBuildsPaused": true,
+            "publishedDeployId": "6aeeb6eca7db8a290681d599"
+          }
+        },
+        {
+          "operation": "start-reviewed-head-resource-TEST-build",
+          "status": 200,
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "buildId": "6aeebe4ceae178c10e4199e6",
+          "deployId": "6aeebe4ceae178c10e4199e8",
+          "approvedCommit": "13de96d7531dde3222fdf513e711447a1df3e425",
+          "installationId": 80952013,
+          "createdAt": "2026-11-07T05:59:40.094Z",
+          "state": "ready",
+          "actualCheckedOutSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+          "buildNode": "24.22.2",
+          "npm": "11.19.1",
+          "functionsRuntime": "nodejs24.x",
+          "publishedAt": "2026-11-07T06:00:27.504Z",
+          "log": "cloud-head-build-success.log",
+          "hostedHttp": {
+            "file": "cloud-http.json",
+            "attemptIndex": 2,
+            "checks": 31,
+            "passed": true
+          },
+          "browser": {
+            "file": "cloud-browser/2026-11-07T06-02-57-657Z/results.json",
+            "viewports": [
+              1440,
+              390,
+              320
+            ],
+            "passed": true
+          }
         }
       ],
       "npmLayoutFix": {
@@ -1370,8 +1440,8 @@
         }
       },
       "functionsRuntimeEvidence": {
-        "source": "Actual TEST deployment available_functions metadata",
-        "deployId": "6aeeb6eca7db8a290681d599",
+        "source": "Actual accepted TEST deploy available_functions metadata",
+        "deployId": "6aeebe4ceae178c10e4199e8",
         "functions": [
           {
             "name": "announcements",
@@ -1461,7 +1531,7 @@
           "https://react.dev/reference/react-dom/components/link",
           "https://react.dev/reference/react-dom/components/style"
         ],
-        "status": "Local checks passed; exact new SHA Linux CI and unmodified cloud browser acceptance pending",
+        "status": "accepted against unmodified actual hosted responses on source 13de96d7531dde3222fdf513e711447a1df3e425",
         "localChecks": {
           "apiTests": 14,
           "securityTests": 67,
@@ -1478,8 +1548,127 @@
             "hydration-css-first-check.log",
             "hydration-css-after.json"
           ]
-        }
+        },
+        "acceptedBrowser": "cloud-browser/2026-11-07T06-02-57-657Z/results.json"
+      },
+      "freeze": {
+        "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "accountId": "689e1405e8627000726e883c",
+        "name": "jinxi-web-test",
+        "stopBuilds": true,
+        "skipPrs": true,
+        "installationId": 80952013,
+        "publishedDeployId": "6aeebe4ceae178c10e4199e8",
+        "publishedSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+        "source": "Actual TEST-only API readback; old production settings were not changed",
+        "collectedAtUtc": "2026-11-07T06:05:57.466Z"
       }
-    }
+    },
+    "status": "completed-for-authorized-synthetic-only-resources"
+  },
+  "acceptedHostedSource": "13de96d7531dde3222fdf513e711447a1df3e425",
+  "gate3Execution": {
+    "status": "passed-for-approved-synthetic-read-only-TEST-scope",
+    "completedAtUtc": "2026-11-07T06:05:57.466Z",
+    "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+    "deployId": "6aeebe4ceae178c10e4199e8",
+    "sourceSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+    "origin": "https://jinxi-web-test.netlify.app",
+    "classification": "synthetic-test",
+    "netlifyContext": "production",
+    "buildNode": "24.22.2",
+    "npm": "11.19.1",
+    "functionsRuntime": "nodejs24.x",
+    "http": {
+      "file": "cloud-http.json",
+      "attemptDeploymentMapping": [
+        {
+          "indices": [
+            0,
+            1
+          ],
+          "sourceSha": "7a65e7df15d04e9f5b0859e647d57932ee98d465",
+          "deployId": "6aeeb6eca7db8a290681d599"
+        },
+        {
+          "indices": [
+            2
+          ],
+          "sourceSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+          "deployId": "6aeebe4ceae178c10e4199e8"
+        }
+      ],
+      "acceptedChecks": 31
+    },
+    "browser": {
+      "file": "cloud-browser/2026-11-07T06-02-57-657Z/results.json",
+      "edge": "140.0.3485.66",
+      "viewports": [
+        1440,
+        390,
+        320
+      ],
+      "pageErrors": 0,
+      "cspViolations": 0,
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": 0,
+      "archiveCount": 208,
+      "online": "—",
+      "failuresPreserved": [
+        "cloud-browser/2026-11-07T05-33-21-019Z",
+        "cloud-browser/2026-11-07T05-35-07-513Z",
+        "cloud-browser/2026-11-07T06-01-33-111Z"
+      ],
+      "lastFailure": "One ERR_CONNECTION_CLOSED browser navigation produced an internal error-page SecurityError; retry used unchanged assertions and source, then all three widths passed."
+    },
+    "identityAndPermissionEvidence": {
+      "nativeReaderProof": "gate2Execution.cloudReaderAcceptance (actual native psql authentication/metadata, not a mock)",
+      "hostedRead": "Each accepted public DB read executes unchanged ATTESTATION_SQL and validateProof before business queries. Successful known synthetic results attest actual approved environment/cluster/database/role and effective permissions; private accounts are not exposed.",
+      "forbiddenVariableEvidence": "Dedicated site created from approved settings, team shared-variable absence from user console, known five-key provisioning receipts, and successful build/runtime presence checks; no secret values were fetched."
+    },
+    "negativeEvidence": {
+      "actualCloudContext": {
+        "deployId": "6aeebe05a62c299df1f90bae",
+        "sourceSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+        "result": "Rejected before Next build and proof; bad deploy never Published",
+        "publicContextRestored": "production",
+        "realCredentialsChanged": false,
+        "oldApprovedTestResponseDuringExercise": {
+          "status": 200,
+          "syntheticMessages": 2,
+          "explanation": "Earlier deploy retains its valid snapshot; changing future build configuration does not revoke an existing deployment."
+        },
+        "log": "cloud-context-rejection.log"
+      },
+      "actualHttp": "Invalid draft/parameters, all13 legacy POST routes, and local-only session-lab GET/POST were rejected by real hosted endpoints.",
+      "simulatedAndLocalOnly": "Wrong/fictitious production host, role, missing configuration, permission drift and related transport assertions are local/CI test evidence. Real SQL/ACL attacks and rollback use disposable loopback PostgreSQL. These are not described as live production or live wrong-DSN cloud tests."
+    },
+    "protectedProduct": {
+      "pr18IsAncestor": true,
+      "sourceDiffForAppComponentsHooksLibServicesPublicStyles": [
+        "app/layout.tsx"
+      ],
+      "change": "Only original head CSS resource declarations. Both original CSS segments retain exact ordered bytes/hashes; no interface redesign.",
+      "cssEvidence": "hydration-css-after.json"
+    },
+    "controls": {
+      "testFutureBuildsPaused": true,
+      "testPrPreviewsSkipped": true,
+      "onlyApprovedBranch": true,
+      "approvedCommitRemains": "13de96d7531dde3222fdf513e711447a1df3e425",
+      "oldProductionActions": 0,
+      "newPullRequests": 0,
+      "paidResourcesCreated": 0,
+      "realAccountsUsed": 0,
+      "productionDatabaseConnections": 0
+    },
+    "limits": [
+      "No independent network egress firewall claim. Actual production credentials, production ACL and production endpoints were not used or tested.",
+      "Functions platform runtime reports nodejs24.x; build patch version24.22.2 is separately verified. No public diagnostic endpoint was added.",
+      "Zero additional paid resources or upgrades; Legacy Free team allowances are shared.",
+      "Real member authentication, restored business writes, avatars and presence remain closed and require later authorized stages."
+    ],
+    "rollback": "Pause only TEST builds (already done); stop public TEST serving if necessary and have administrator revoke only TEST reader credentials. Deleting env values alone does not revoke earlier deployments. Roll back TEST SQL only with reviewed04 identity/object/ACL checks; never change protected old resources.",
+    "administratorNextAction": "None required for this completed scope. Review synthetic TEST and existing signoff; stop here pending next-stage instruction."
   }
 }

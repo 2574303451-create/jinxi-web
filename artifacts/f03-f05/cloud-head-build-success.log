@@ -1,0 +1,160 @@
+Build ready to start
+build-image version: ea8920232ffbe23506ef69aa99aa2258559fbd91 (noble-new-builds)
+buildbot version: 9a2525faca99c3204fc325320d669aaebc53d376
+Building with cache
+Starting to prepare the repo for build
+Preparing Git Reference refs/heads/codex/jinxi-f03-f05-test-foundation
+Custom ignore command detected. Proceeding with the specified command: 'node scripts/test-build-gate.cjs'
+Installing dependencies
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mpython[0m@3.14.3  3ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 4ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mpython[0m@3.14.3
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mruby[0m@3.4.8  1ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 2ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mruby[0m@3.4.8
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mgo[0m@1.26.2  1ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 2ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mgo[0m@1.26.2
+v24.22.2 is already installed.
+Now using node v24.22.2 (npm v11.19.1)
+Enabling Node.js Corepack
+WARNING: The environment variable 'NODE_ENV' is set to 'production'. Any 'devDependencies' in package.json will not be installed
+No npm workspaces detected
+Installing npm packages using npm version 11.19.1
+up to date in 1s
+npm packages installed
+Successfully installed dependencies
+Detected 1 framework(s)
+"next" at version "16.4.5"
+Starting build script
+Section completed: initializing
+[96m[1m​[22m[39m
+[96m[1mNetlify Build                                                 [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+[36m[1m​[22m[39m
+[36m[1m❯ Version[22m[39m
+  @netlify/build 37.7.6
+[36m[1m​[22m[39m
+[36m[1m❯ Flags[22m[39m
+  accountId: 689e1405e8627000726e883c
+  baseRelDir: true
+  buildId: 6aeebe4ceae178c10e4199e6
+  deployId: 6aeebe4ceae178c10e4199e8
+[36m[1m​[22m[39m
+[36m[1m❯ Current directory[22m[39m
+  /opt/build/repo
+[36m[1m​[22m[39m
+[36m[1m❯ Config file[22m[39m
+  /opt/build/repo/netlify.toml
+[36m[1m​[22m[39m
+[36m[1m❯ Context[22m[39m
+  production
+[36m[1m​[22m[39m
+[36m[1m❯ Installing extensions[22m[39m
+   - neon
+[36m[1m​[22m[39m
+[36m[1m❯ Loading extensions[22m[39m
+   - neon
+[96m[1m​[22m[39m
+[96m[1mbuild.command from netlify.toml                               [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+[36m$ node scripts/build-test.cjs[39m
+> my-v0-project@0.1.0 prebuild
+> node scripts/generate-guild-summary.cjs
+Archive facts: 208 unique records; no active/online inference.
+Archive date verified against full Git history.
+> my-v0-project@0.1.0 build
+> next build --webpack
+▲ Next.js 16.4.5 (webpack)
+✓ Running next.config.mjs took 46ms
+  Creating an optimized production build ...
+  Using tsconfig file: ./tsconfig.json
+Browserslist: browsers data (caniuse-lite) is 15 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ Compiled successfully in 9.2s
+  Running TypeScript ...
+  Finished TypeScript in 7.4s ...
+  Collecting page data using 2 workers ...
+  Generating static pages using 2 workers (0/6) ...
+  Generating static pages using 2 workers (1/6)
+  Generating static pages using 2 workers (2/6)
+  Generating static pages using 2 workers (4/6)
+✓ Generating static pages using 2 workers (6/6) in 253ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /guides
+├ ○ /profile-lab
+└ ○ /session-lab
+○  (Static)  prerendered as static content
+> my-v0-project@0.1.0 postbuild
+> node scripts/generate-export-csp.cjs
+Generated strict static CSP: {"pages":7,"hashes":8,"policyBytes":991}
+Approved TEST build completed; non-secret deploy proof generated.
+​
+[90m(build.command completed in 26.5s)[39m
+[96m[1m​[22m[39m
+[96m[1mFunctions bundling                                            [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+Packaging Functions from [36mnetlify/functions[39m directory:
+ - announcements.js
+ - auth-change-password.js
+ - auth-login.js
+ - checkin.js
+ - guide-video-stats.js
+ - leaderboard.js
+ - message-actions.js
+ - messages.js
+ - points-board.js
+ - points.js
+ - session-lab.js
+ - sponsorship.js
+ - strategies.js
+ - strategy-actions.js
+​
+​
+[90m(Functions bundling completed in 787ms)[39m
+[96m[1m​[22m[39m
+[96m[1mScanning for secrets in code and build output.                [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+[36mSecrets scanning complete. 2563 file(s) scanned. No secrets detected in build output or repo code![39m
+​
+[90m(Secrets scanning completed in 4.1s)[39m
+[96m[1m​[22m[39m
+[96m[1mDeploy site                                                   [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+Starting to deploy site from 'out'
+Calculating files to upload
+23 new file(s) to upload
+14 new function(s) to upload
+Starting post processing
+Skipping form detection
+Post processing - header rules
+Section completed: deploying
+Site deploy was successfully initiated
+​
+[90m(Deploy site completed in 4.7s)[39m
+Post processing - redirect rules
+Post processing done
+Section completed: postprocessing
+[96m[1m​[22m[39m
+[96m[1mNetlify Build Complete                                        [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+[90m(Netlify Build completed in 38.2s)[39m
+Caching artifacts
+Section completed: building
+Site is live ✨
+Uploading cache of size 467.7MB
+Section completed: cleanup
+Finished processing build request in 54.786s

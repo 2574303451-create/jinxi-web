@@ -1,6 +1,25 @@
 # 管理员一次性清单与审批边界
 
-> **当前执行更新**：App80952013已绑定，7a65e7df15d04e9f5b0859e647d57932ee98d465的Linux CI全部成功，TEST部署6aeeb6eca7db8a290681d599实际ready。31项真实HTTP检查成功，14个Functions托管运行时均nodejs24.x。浏览器发现平台head注释/换行导致React418，最小样式资源兼容修复已通过本地API14/安全67、原始tsc/lint/build及CSS字节不变性检查；当前等待其精确SHA的CI与真实云端复验，第三关仍未签核。TEST构建已暂停，当前无管理员待办；旧生产未操作。下方此前状态保留为逐步执行记录，以本更新及results.json最新项为准。
+> **本轮最终签核，2026-11-07**：第二关独立合成TEST建设完成；第三关在获批的合成只读范围验收通过。接受源提交 **13de96d7531dde3222fdf513e711447a1df3e425**，实际Deploy **6aeebe4ceae178c10e4199e8**，https://jinxi-web-test.netlify.app 。该SHA的Linux CI成功；真实HTTP31项、1440/390/320px原始云响应浏览器检查全部通过，14个Functions托管运行时均nodejs24.x。旧业务写入和云端session-lab关闭。TEST后续构建已暂停且PR预览关闭，批准SHA保持上述值。**管理员无需再提供凭据或截图；本轮停止，不进入业务恢复或正式上线。** 下方此前状态为逐步执行记录，以本签核和results.json的gate3Execution为准。
+
+### 本轮验收证据与边界
+
+| 项目 | 实际执行及证据 |
+| --- | --- |
+| 指定资源与身份 | TEST Site 17885134-a57c-4589-83d3-39e30be9e0cf，production只是该独立站点Context；实际Neon为已批准jinxi-test / restless-salad-74668264 / br-red-pond-bdtrjpmy / ep-dry-queen-bd6q46s6 / neondb。原生reader认证/ACL回执已通过；托管公共读取在业务SQL之前执行同一实际cluster/DB/注册身份/角色/有效权限校验并成功返回已知合成内容。没有读取私有账号行 |
+| 凭据来源 | 沿用用户已确认无团队共享变量及TEST专用五项配置回执；实际build与Functions均通过旧变量名称存在即拒绝的门禁。没有调用返回原始变量值的接口。owner/writer未改为网站账号 |
+| 云端正向及写入阻断 | cloud-http.json最新31项：四个静态路由、published/筛选/统计、合成公共读取、草稿/参数拒绝、13个旧POST及session-lab GET/POST拒绝；无伪造成功或会话Cookie |
+| 真实错误上下文 | 仅暂设TEST的非秘密JINXI_RUNTIME_CONTEXT=branch-deploy，实际Context仍production；6aeebe05a62c299df1f90bae在build-test门禁拒绝，没有新proof/Next构建/Functions或Published替换。随后恢复已知production值，正常重建13de96d通过；日志cloud-context-rejection.log。既有正确部署保留自己的有效快照，配置变更不能替代撤销它 |
+| 其他负向证据分类 | 错误/虚构生产目标、角色、缺配置及权限漂移的连接前拒绝来自本地/CI自动化；真实SQL/ACL攻击与回滚来自一次性本机PG，不冒充云端错误DSN或生产试连。实际云端正常调用已验证运行reader没有越界权限。生产负向只用虚构目标，不使用真实生产凭据 |
+| 浏览器与既有产品 | cloud-browser/2026-11-07T06-02-57-657Z：1440/390/320px首页及攻略、手机导航、登录禁用、Escape、无横向溢出；pageErrors/CSP违规/写请求/提前视频请求均0，208档案、在线—保留。PR18仍为祖先；受保护app/components/hooks/lib/services/public/styles的唯一源码差异为layout的样式资源声明，原两段CSS按顺序的840+277字节和SHA完全不变 |
+| 构建与运行时 | Build Node24.22.2/npm11.19.1；Functions实际部署元数据为nodejs24.x，不把build补丁号冒充Functions进程补丁号。CI：[对应接受SHA](https://github.com/2574303451-create/jinxi-web/actions/runs/42344725850)，原始tsc/lint/build/API/安全/PG集成成功；本机受影响复验API14/安全67及tsc/lint/build退出0 |
+| 保护与费用 | 本轮未对旧生产站点/数据库/pr17-validation、main及原18PR执行更改；旧锁定采用已签核用户证据。未创建PR19、升级套餐、购买存储或其他付费资源。Legacy Free团队用量仍共享，不声称TEST具有独立计费额度 |
+
+Linux npm路径错误及平台head注释/换行导致的React418均已修复，失败、诊断对照和真实成功截图完整保留。样式修复依照React正式的[link资源声明](https://react.dev/reference/react-dom/components/link)与[style资源声明](https://react.dev/reference/react-dom/components/style)；没有忽略水合错误或放宽CSP。一次浏览器ERR_CONNECTION_CLOSED的错误页也保留，随后同一源码、同一断言原样重跑三宽度成功。仅真实未修改响应计为托管验收。
+
+本签核不证明生产网络地址在出口层不可达，未执行真实生产凭据/ACL测试，也不等于真实成员登录或旧业务恢复验收。正式账号、积分写入、头像、心跳与在线名单继续关闭。
+
+回退只针对TEST：构建已暂停；需要停服时停止TEST对外提供，并由管理员撤销专用reader凭据、处理既有TEST部署。只删除环境变量不能撤销旧部署快照。数据库清理仅允许原04在身份/对象/ACL核验无漂移后执行；不因TEST异常操作旧站或生产数据。当前保留TEST供审核，没有执行回滚或删除资源。
 
 ## 已登记，结束旧站基础调查
 
@@ -170,7 +189,7 @@ Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，
 
 不要自行设置/伪造 Netlify 保留 SITE_ID/CONTEXT；它们由平台产生。不要创建旧 DATABASE_URL、NETLIFY_DATABASE_URL、NETLIFY_DATABASE_URL_UNPOOLED、ADMIN_PASSWORD、PG 连接环境、JINXI_PRODUCTION/PREVIEW/LOCAL/SESSION 前缀或管理 Token；代码检查这些名称存在即拒绝，不读取值。
 
-## 云端验收，当前未执行
+## 云端验收规则（实际结果见上方签核）
 
 登记 Site/Deploy ID、完整 SHA、真实 Build/Functions Node、绑定文件 digest、角色证明和采集时间。用 reader 的只读 proof 在本地 verifier 校验；公开合成内容正常，错误上下文/站点/目标/角色在传输前拒绝，实际 TEST 身份或超权失败不执行业务查询，旧写保持关闭。
 

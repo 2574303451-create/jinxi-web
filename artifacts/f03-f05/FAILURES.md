@@ -1,5 +1,7 @@
 # 保留的开发失败与修正
 
+2026-11-07收尾：13de96d7531dde3222fdf513e711447a1df3e425已真实部署为6aeebe4ceae178c10e4199e8，31项HTTP和1440/390/320px原响应浏览器检查全部通过。首次重验遇ERR_CONNECTION_CLOSED，初始化脚本在浏览器错误页访问localStorage又抛SecurityError；错误页截图保留在cloud-browser/2026-11-07T06-01-33-111Z。未改源码或断言，随后原样重跑三宽度成功，记录cloud-browser/2026-11-07T06-02-57-657Z。另6aeebe05a62c299df1f90bae是有意设置非秘密错误Context的实际云端负向，build-test拒绝且未替换既有Published；日志cloud-context-rejection.log，已恢复正确值，不将预期拒绝当成部署事故或隐藏失败。
+
 补充：同precedence样式被React合并为一个style，首个“每段CSS各对应一个标签”假设失败，输出见hydration-css-first-check.log；改为严格核对合并后的总长度和每段按原顺序的字节SHA，840+277=1117字节均一致，不放过CSS增删。另一次本地受控注入使用networkidle等待，首页本地API503重试导致30秒导航超时；该辅助运行未计通过，实际托管验收仍使用真实成功的TEST接口。
 
 2026-11-07 TEST部署6aeeb6eca7db8a290681d599 / 7a65e7df已实际ready，31项HTTP检查通过、14个Functions均为nodejs24.x；真实浏览器首页和攻略页仍报React418，原响应失败截图/记录在cloud-browser/。本机相同浏览器无该错误。CDP断点定位RootLayout的非资源样式链接；Netlify响应在head的charset后插入注释及前置换行。保留换行的去注释、字体预加载/meta和CDN对照均失败；只在诊断响应中去除完整注入或使所有原head样式成为React正式资源，错误消失。这些修改响应的诊断不算云端验收。最小修复只给原link增加precedence、原两段style增加href/precedence并使用字符串children；样式字节前后SHA完全一致，未改CSP、UI组件或任何数据库权限。API14/安全67、原始tsc/lint/build通过；须在新的真实部署上保留原no-pageerror断言重验，不忽略hydration错误。

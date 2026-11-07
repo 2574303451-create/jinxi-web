@@ -1,0 +1,46 @@
+{
+  "origin": "https://jinxi-web-test.netlify.app",
+  "classification": "synthetic-test",
+  "startedAtUtc": "2026-11-07T06:02:57.658Z",
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true,
+      "pageErrors": [],
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": [],
+      "cspViolations": [],
+      "stage": "guides state and layout",
+      "online": "—",
+      "archiveCount": 208,
+      "legacyLoginDisabled": true
+    },
+    {
+      "width": 390,
+      "passed": true,
+      "pageErrors": [],
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": [],
+      "cspViolations": [],
+      "stage": "guides state and layout",
+      "online": "—",
+      "archiveCount": 208,
+      "legacyLoginDisabled": true
+    },
+    {
+      "width": 320,
+      "passed": true,
+      "pageErrors": [],
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": [],
+      "cspViolations": [],
+      "stage": "guides state and layout",
+      "online": "—",
+      "archiveCount": 208,
+      "legacyLoginDisabled": true
+    }
+  ],
+  "edge": "140.0.3485.66",
+  "completedAtUtc": "2026-11-07T06:03:37.235Z"
+}

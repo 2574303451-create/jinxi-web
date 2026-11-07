@@ -38,4 +38,5 @@ next-env.d.ts
 # Non-secret build proof is generated only for an approved TEST deployment.
 /netlify/functions/_generated/
 /artifacts/f03-f05/*.approval.local.sql
+/artifacts/f03-f05/*.proof.local.json
 /test-environment/sql/*.local.sql

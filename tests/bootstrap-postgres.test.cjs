@@ -3,6 +3,9 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const pg = require('./support/test-environment-postgres.cjs');
 const { buildBootstrap, APPROVED_TARGET } = require('../scripts/prepare-test-bootstrap.cjs');
+const { readerFiles } = require('../scripts/prepare-test-reader.cjs');
+const { validateProof, fingerprint } = require('../netlify/functions/_shared/function-security');
+const { parseOutput } = require('../scripts/run-test-reader-proof.cjs');
 
 test('one administrator batch atomically initializes and verifies only its approved TEST', async t => {
   const c = await pg.connect();
@@ -26,8 +29,8 @@ test('one administrator batch atomically initializes and verifies only its appro
     assert.equal((await c.query("SELECT to_regclass('public.messages') IS NULL AS absent")).rows[0].absent, true);
   }
   async function rejected(sql, pattern) {
-    await assert.rejects(c.query(sql), e => pattern.test(e.message));
-    await c.query('ROLLBACK');
+    try { await assert.rejects(c.query(sql), e => pattern.test(e.message)); }
+    finally { await c.query('ROLLBACK'); }
   }
   try {
     // Provider names below are synthetic roles in this fresh local cluster.
@@ -99,6 +102,42 @@ test('one administrator batch atomically initializes and verifies only its appro
       await rejected(batch, /TEST_NOT_EMPTY_OR_ALREADY_INITIALIZED/);
       assert.equal((await c.query('SELECT count(*)::int n FROM public.strategies')).rows[0].n, 5);
       assert.equal((await c.query('SELECT environment_id::text FROM jinxi_guard.environment_registration')).rows[0].environment_id, target.environmentId);
+    });
+    await t.test('reader activation refuses mismatched registration, effective column writes and role inheritance', async () => {
+      await rejected(readerFiles({...target,environmentId:crypto.randomUUID()}).activate,/TEST_VERIFICATION_TARGET_REJECTED/);
+      await c.query('GRANT UPDATE(content) ON public.messages TO jinxi_test_reader');
+      try { await rejected(readerFiles(target).activate,/TEST_READER_PERMISSIONS_UNSAFE/); }
+      finally { await c.query('REVOKE UPDATE(content) ON public.messages FROM jinxi_test_reader'); }
+      await c.query('GRANT jinxi_test_writer TO jinxi_test_reader');
+      try { await rejected(readerFiles(target).activate,/TEST_READER_PERMISSIONS_UNSAFE/); }
+      finally { await c.query('REVOKE jinxi_test_writer FROM jinxi_test_reader'); }
+      assert.equal((await c.query("SELECT rolcanlogin FROM pg_roles WHERE rolname='jinxi_test_reader'")).rows[0].rolcanlogin,false);
+    });
+    await t.test('only the existing least-privilege reader is enabled; administrator cannot impersonate its proof', async () => {
+      const result=await c.query(readerFiles(target).activate);
+      assert.equal(result.at(-1).command,'COMMIT');
+      const roles=result.find(x=>x.rows?.[0]?.status==='READER_LOGIN_READY_TO_COMMIT').rows;
+      for(const role of roles)assert.equal(role.rolcanlogin,role.rolname==='jinxi_test_reader');
+      await rejected(readerFiles(target).activate,/TEST_READER_ACTIVATION_STATE_UNSAFE/);
+      await rejected(readerFiles(target).proof,/TEST_READER_SESSION_MISMATCH/);
+    });
+    await t.test('new reader connection proves real session, exact identity, ACL and four permitted reads', async () => {
+      const reader=await pg.connect('jinxi_test_reader');
+      try{
+        const result=await reader.query(readerFiles(target).proof);
+        assert.equal(result.at(-1).command,'ROLLBACK');
+        const proof=result.find(x=>x.rows?.[0]?.proof).rows[0].proof;
+        validateProof({mode:'public-read',resourceEnvironment:'synthetic-test',policy:{classification:'synthetic-test',environmentId:target.environmentId,role:'jinxi_test_reader',fingerprint:fingerprint(target.clusterId,target.databaseOid,'neondb')}},proof);
+        assert.equal(proof[0].session_role,'jinxi_test_reader');
+        const text=JSON.stringify(proof)+'\nSYNTHETIC_PUBLIC_READS|5|2|1|1\n';
+        assert.equal(parseOutput(text,target,target.environmentId).proof[0].role,'jinxi_test_reader');
+        const tampered=structuredClone(proof);tampered[0].session_role='neondb_owner';
+        assert.throws(()=>parseOutput(JSON.stringify(tampered)+'\nSYNTHETIC_PUBLIC_READS|5|2|1|1',target,target.environmentId));
+        assert.deepEqual(result.find(x=>x.rows?.[0]?.fixture==='SYNTHETIC_PUBLIC_READS').rows[0],{fixture:'SYNTHETIC_PUBLIC_READS',strategies:'5',messages:'2',announcements:'1',sponsorship:'1'});
+        await reader.query('SET default_transaction_read_only=off');
+        await assert.rejects(reader.query("UPDATE public.messages SET content=content WHERE false"),e=>e.code==='42501');
+        await reader.query('SET default_transaction_read_only=on');
+      }finally{await reader.end();}
     });
     await t.test('original rollback restores identical effective grants and preserves platform default ACL metadata', async () => {
       await pg.approval(c, target.environmentId);

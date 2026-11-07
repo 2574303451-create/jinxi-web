@@ -1,0 +1,144 @@
+✖ online during login waits for the new cookie, coalesces recovery events, and keeps the successful identity (5.044ms)
+✔ a delayed old401 before login cannot erase the newer successful login (1.8697ms)
+✔ online during an uncertain login is replayed after failure and recovers only the server-confirmed identity (1.1142ms)
+✖ recovery after a profile request preserves the already-read data when identity is unchanged (0.8843ms)
+✖ a cross-tab revocation during a profile request is not lost (0.9852ms)
+✖ logout plus pending recovery keeps confirmed sign-out and ignores an older successful check (1.0843ms)
+✖ change-password plus pending recovery keeps confirmed sign-out and ignores an older successful check (0.9894ms)
+✔ out-of-order verification results cannot resurrect a session rejected by the latest check (0.9208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 3
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.3009
+
+✖ failing tests:
+
+test at tests\member-local-ui.test.cjs:48:1
+✖ online during login waits for the new cookie, coalesces recovery events, and keeps the successful identity (5.044ms)
+  AssertionError [ERR_ASSERTION]: Recovery must not send a pre-login check while login is pending
+  + actual - expected
+  
+    [
+      'me',
+      'login',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me',
+  +   'me'
+    ]
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-ui.test.cjs:51:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [
+      'me', 'login', 'me',
+      'me', 'me',    'me',
+      'me', 'me',    'me',
+      'me', 'me',    'me'
+    ],
+    expected: [ 'me', 'login' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\member-local-ui.test.cjs:78:1
+✖ recovery after a profile request preserves the already-read data when identity is unchanged (0.8843ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'me',
+      'profile',
+  +   'me'
+    ]
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-ui.test.cjs:80:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'me', 'profile', 'me' ],
+    expected: [ 'me', 'profile' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\member-local-ui.test.cjs:88:1
+✖ a cross-tab revocation during a profile request is not lost (0.9852ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'me',
+      'profile',
+  -   'me'
+    ]
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-ui.test.cjs:91:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'me', 'profile' ],
+    expected: [ 'me', 'profile', 'me' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\member-local-ui.test.cjs:99:3
+✖ logout plus pending recovery keeps confirmed sign-out and ignores an older successful check (1.0843ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'me',
+      'me',
+      'logout',
+  +   'me'
+    ]
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-ui.test.cjs:104:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'me', 'me', 'logout', 'me' ],
+    expected: [ 'me', 'me', 'logout' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\member-local-ui.test.cjs:99:3
+✖ change-password plus pending recovery keeps confirmed sign-out and ignores an older successful check (0.9894ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'me',
+      'me',
+      'change-password',
+  +   'me'
+    ]
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-ui.test.cjs:104:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'me', 'me', 'change-password', 'me' ],
+    expected: [ 'me', 'me', 'change-password' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

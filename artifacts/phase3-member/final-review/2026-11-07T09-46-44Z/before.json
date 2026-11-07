@@ -1,0 +1,169 @@
+{
+  "head": "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+  "files": [
+    {
+      "sha256": "6F2071A6224BF3FDE3552AD5EE674F3822B335C79180E59D5AEDE71849B2EB1A",
+      "path": "CODEX_HANDOFF.md"
+    },
+    {
+      "sha256": "D099AD478E107FC370CAD2F14AED69C450921CE1977417C9B9425E2B08B400E6",
+      "path": "member-local/README.md"
+    },
+    {
+      "sha256": "E44035176975840B27773653DFB0989A2DFB1AE381DF026B1CBE61447B34FB2E",
+      "path": "member-local/demo.js"
+    },
+    {
+      "sha256": "5D813599B55D7B82394A2D9A4182F885812BCE5CAEBB6AD8D72F38B4965A0602",
+      "path": "package.json"
+    },
+    {
+      "sha256": "0436E5171831F2A609DEAD9DBA155109D32EAF39E58D0796DB4E5A2A9775E8E1",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/CODEX_HANDOFF.before.md"
+    },
+    {
+      "sha256": "3200D1CE98B97E79792191893601DB10FF6653A512AA1BFCC3EBDBDFD967D73A",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/handoff-verification.json"
+    },
+    {
+      "sha256": "A6D546FA9ED3FE73BB237D6350FDCD3C5C69AE3AA9E17467BB4AD73DE57804A4",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/lint.log"
+    },
+    {
+      "sha256": "204F8E7FBDDFE4B8FE3A0D25EFC7806EEF511A7320CCE1CBFB2B5C988EA2765C",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/pr-chain.json"
+    },
+    {
+      "sha256": "C85C2FFD66C46BEB1CBE927FCCA9352F1674080D664C21058D9C36A4923018E4",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/quality-check.json"
+    },
+    {
+      "sha256": "DFDB0496FF15C844E7AEF944847BB52821222BF79FBC153752E3B600BD8532F4",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/remote-state.json"
+    },
+    {
+      "sha256": "9907A11DAE246F4ED08450AE4B0FBA3CC3C727F0A638F8E8D9704788A68B5DEF",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/typecheck.log"
+    },
+    {
+      "sha256": "85E62ED4BC09462D8E750A5850346D8A76BCF962C12B26F1A9FC4BC9AFE45BFB",
+      "path": "artifacts/handoff/2026-11-07T09-00-53Z/unit.log"
+    },
+    {
+      "sha256": "EB7329FC12A77B8C020AB605D19652E944BEDF4647F42D9A190FFEA03F45223D",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/guest-1024.png"
+    },
+    {
+      "sha256": "24F385CCB398054F7F74340B3D511A9F41DEA07BB01FF8D74EA468A15F84C42B",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/guest-1440.png"
+    },
+    {
+      "sha256": "78DF49FE0BC353570263A3BF969CB25E1719E30731A191C43493E36E12FD844E",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/guest-320.png"
+    },
+    {
+      "sha256": "BF85FFC8F6CAA1AACE70CBCA51A98F755513849DBEEF4058952E9407FB63E077",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/guest-390.png"
+    },
+    {
+      "sha256": "FDC1988C07B7DEC90635C257B4BA2C411ECBE417AFABD247D9224ADB5154D71B",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/guest-768.png"
+    },
+    {
+      "sha256": "F83FACD96A4E6948FFA02F9E8977308F19B81E81B61235ACB4D24901140E60B3",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/profile-1024.png"
+    },
+    {
+      "sha256": "08D62500BEDED3FAC98C5064135F23B17EBAC9A0FAFCBB42A41C74E7B12F9CA4",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/profile-1440.png"
+    },
+    {
+      "sha256": "460A9263204B0F8B5141A6DF90D6A1AC53D63CC93AF63C697EAD45269E8AE58E",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/profile-320.png"
+    },
+    {
+      "sha256": "992AD4C69ACFAD21DBB09091797AAFD1F3912D6925F74F60A7CCFBCD2A145C85",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/profile-390.png"
+    },
+    {
+      "sha256": "3B867530903C9635309C65CA7CE9173BE313E4B24B5FA8C4117736AFB78C242A",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/profile-768.png"
+    },
+    {
+      "sha256": "71FD8B567CC74F4F36DBF893E8497A06FDB051C8DD926A08BF2CBAA9D1532F91",
+      "path": "artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/results.json"
+    },
+    {
+      "sha256": "71DF1744CAA214281AEE6F98144123C35F7648C0ED8BC63C59C751C2CC87532B",
+      "path": "artifacts/phase3-member/restore-race/2026-11-07T09-35-27-660Z/online-during-login-390.png"
+    },
+    {
+      "sha256": "C7A7DDA8E4CC5B22D5A3115BB0DBF12BD2E7C462D361C1FF8FFFD08E5D485A18",
+      "path": "artifacts/phase3-member/restore-race/2026-11-07T09-35-27-660Z/results.json"
+    },
+    {
+      "sha256": "65EFCF4FA1B8DC4AA9BCE1FCEC1A553F6800180F996B34848523021920A564B2",
+      "path": "artifacts/phase3-member/restore-race/DELIVERY.md"
+    },
+    {
+      "sha256": "30E710F3E1C90E7B2BA00C5B088A639DC366B3C4D964F69BFF7301A2728D4653",
+      "path": "artifacts/phase3-member/restore-race/browser-five-widths.log"
+    },
+    {
+      "sha256": "389DA5D11B2F7370270C3685D89C7C2B8B04198C9B8B6F5C22BB89378A54ED09",
+      "path": "artifacts/phase3-member/restore-race/final-verification.json"
+    },
+    {
+      "sha256": "2984559155E886A7057F468D0FC1C6821AD3D1DB7B92DE012DA27B4B3B5B6984",
+      "path": "artifacts/phase3-member/restore-race/https-browser.log"
+    },
+    {
+      "sha256": "098902AB0523AD90D6B9050EFA05AB0C9D8EA4B70A3B9971B1D733CEF98FAFDF",
+      "path": "artifacts/phase3-member/restore-race/lint-first.log"
+    },
+    {
+      "sha256": "A6D546FA9ED3FE73BB237D6350FDCD3C5C69AE3AA9E17467BB4AD73DE57804A4",
+      "path": "artifacts/phase3-member/restore-race/lint.log"
+    },
+    {
+      "sha256": "FD8AABB73310AA8140438E766FAD202BFC807E81B4C92765D7346D40295136B0",
+      "path": "artifacts/phase3-member/restore-race/test.log"
+    },
+    {
+      "sha256": "9907A11DAE246F4ED08450AE4B0FBA3CC3C727F0A638F8E8D9704788A68B5DEF",
+      "path": "artifacts/phase3-member/restore-race/typecheck.log"
+    },
+    {
+      "sha256": "BD541345E2A8B3D167A5D3B6D9A26A0FC16E9104993207EA2615A5A452EE7679",
+      "path": "artifacts/phase3-member/restore-race/ui-before.log"
+    },
+    {
+      "sha256": "4461886CD043AF526FAC646F9DC320FEB09AA91FBAFDE6696313EA229E850132",
+      "path": "artifacts/phase3-member/restore-race/ui-final.log"
+    },
+    {
+      "sha256": "69914B4388A5CEFC93267FC3909B85AA055D91784BE300785901F251AB84FA8D",
+      "path": "tests/member-local-recovery-browser.cjs"
+    },
+    {
+      "sha256": "4F5BC2A32558FCE8D757DA200B42F4BBD6C8A4DB6913C938172F5A2D81FF8A4C",
+      "path": "tests/member-local-ui.test.cjs"
+    }
+  ],
+  "remote": "https://github.com/2574303451-create/jinxi-web.git",
+  "commonGitDirectory": "E:/Recovery/jinxi-web/.git",
+  "root": "E:/Recovery/.jinxi-research/phase3-member/worktree",
+  "status": [
+    " M CODEX_HANDOFF.md",
+    " M member-local/README.md",
+    " M member-local/demo.js",
+    " M package.json",
+    "?? artifacts/handoff/",
+    "?? artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/",
+    "?? artifacts/phase3-member/restore-race/",
+    "?? tests/member-local-recovery-browser.cjs",
+    "?? tests/member-local-ui.test.cjs"
+  ],
+  "branch": "codex/jinxi-phase3-member-local",
+  "checkedAtUtc": "2026-11-07T09:46:44.8995227Z"
+}

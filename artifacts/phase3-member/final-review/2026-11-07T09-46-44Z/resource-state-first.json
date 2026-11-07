@@ -1,0 +1,206 @@
+{
+  "checkedAtUtc": "2026-11-07T09:48:18.916Z",
+  "cloudWrites": 0,
+  "environmentValueEndpoints": 0,
+  "databaseConnections": 0,
+  "pullRequests": [
+    {
+      "number": 1,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "328819a57c671b33b743d1ad3f969c0fb7917048",
+      "base": "7dfbf69c2e2b61be7c08d4fd65d884c2b371b244",
+      "unchanged": true
+    },
+    {
+      "number": 2,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+      "base": "328819a57c671b33b743d1ad3f969c0fb7917048",
+      "unchanged": true
+    },
+    {
+      "number": 3,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+      "base": "0182518277831ba0d03df3a3e1973f1a7ae06efe",
+      "unchanged": true
+    },
+    {
+      "number": 4,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "80737413d3bb981b3a3287c603893eb6c09decf2",
+      "base": "ffa71f8313d3f9895d1b664404c29fa8dbb2dda1",
+      "unchanged": true
+    },
+    {
+      "number": 5,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+      "base": "80737413d3bb981b3a3287c603893eb6c09decf2",
+      "unchanged": true
+    },
+    {
+      "number": 6,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "04ca4ef972636ef7ac8169d80db2dbf4af9d8b00",
+      "base": "2836ed13cc5f7da7ffcbce52755063dfbe80b55d",
+      "unchanged": true
+    },
+    {
+      "number": 7,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "d4769e719b2dd486b82cd2867f066d6c4dfa3e19",
+      "base": "04ca4ef972636ef7ac8169d80db2dbf4af9d8b00",
+      "unchanged": true
+    },
+    {
+      "number": 8,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "115bf854a7977a3e582a89af13459115178a1e31",
+      "base": "d4769e719b2dd486b82cd2867f066d6c4dfa3e19",
+      "unchanged": true
+    },
+    {
+      "number": 9,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "1be49379a771a2a3f23692260e438c2368841150",
+      "base": "115bf854a7977a3e582a89af13459115178a1e31",
+      "unchanged": true
+    },
+    {
+      "number": 10,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "6abd039e898b9970d8d2ec4e7092e3e5b8f3aaf0",
+      "base": "1be49379a771a2a3f23692260e438c2368841150",
+      "unchanged": true
+    },
+    {
+      "number": 11,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "d516b8643c73797ddfbd8109d46a7dba58f6016c",
+      "base": "6abd039e898b9970d8d2ec4e7092e3e5b8f3aaf0",
+      "unchanged": true
+    },
+    {
+      "number": 12,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "483495aefcd75316731efce76372748a0f00c8c7",
+      "base": "d516b8643c73797ddfbd8109d46a7dba58f6016c",
+      "unchanged": true
+    },
+    {
+      "number": 13,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "f443144a912abf5869d42f4758c86caaf6031525",
+      "base": "483495aefcd75316731efce76372748a0f00c8c7",
+      "unchanged": true
+    },
+    {
+      "number": 14,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "7f850e188c750e147181fcba193a8106892b4afc",
+      "base": "f443144a912abf5869d42f4758c86caaf6031525",
+      "unchanged": true
+    },
+    {
+      "number": 15,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "f9ff27874beaf3388502f29360ebaa86c5a64c13",
+      "base": "7f850e188c750e147181fcba193a8106892b4afc",
+      "unchanged": true
+    },
+    {
+      "number": 16,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "a37786ce68ec8223ff0e512b86be1c81b3a3e777",
+      "base": "f9ff27874beaf3388502f29360ebaa86c5a64c13",
+      "unchanged": true
+    },
+    {
+      "number": 17,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "9f53e1428d29a56f459e9c29ce79e0969ef1294e",
+      "base": "a37786ce68ec8223ff0e512b86be1c81b3a3e777",
+      "unchanged": true
+    },
+    {
+      "number": 18,
+      "present": true,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "be9513f37251d08661a3f6c1d5240ed059c59f2e",
+      "base": "9f53e1428d29a56f459e9c29ce79e0969ef1294e",
+      "unchanged": true
+    }
+  ],
+  "additionalPullRequests": [],
+  "testSite": {
+    "id": "17885134-a57c-4589-83d3-39e30be9e0cf",
+    "name": "jinxi-web-test",
+    "publishedDeployId": "6aeebe4ceae178c10e4199e8",
+    "publishedSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+    "publishedLocked": null,
+    "stopBuilds": true,
+    "skipPrs": true,
+    "branch": "codex/jinxi-f03-f05-test-foundation",
+    "allowedBranches": [
+      "codex/jinxi-f03-f05-test-foundation"
+    ]
+  },
+  "netlifyUnavailable": {
+    "code": "READ_ONLY_METADATA_UNAVAILABLE",
+    "status": null
+  }
+}

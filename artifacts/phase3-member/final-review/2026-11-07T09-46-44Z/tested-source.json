@@ -1,0 +1,56 @@
+{
+  "checkedAtUtc": "2026-11-07T10:05:05.497Z",
+  "sourceNormalization": "UTF8 LF SHA256",
+  "root": "E:\\Recovery\\.jinxi-research\\phase3-member\\worktree",
+  "branch": "codex/jinxi-phase3-member-local",
+  "sourceParent": "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+  "previousLocalIdentityHead": "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+  "finalHashes": {
+    "member-local/demo.js": "e44035176975840b27773653dfb0989a2dfb1ae381df026b1cbe61447b34fb2e",
+    "member-local/identity.cjs": "5fdd6b1ad4b4c2d1d6546452164671a0ef9b25a9a479bee758ebb574b105c0d9",
+    "member-local/database.cjs": "79e39ecefb5e9c0ac60fd4de4410505d4f887480b50112e94044ee748c241f44",
+    "member-local/schema.sql": "f23ba0cd01020e256f07a2ff89bbdc7967873d0bda04c930ceeb52dcb975e50d",
+    "member-local/server.cjs": "0814e4765a26c361ebfa6169eb0ace1313c8f05de28678c9a903c6effe87526e",
+    "member-local/README.md": "2a1ec3acd451e92857c4ef884b0cf320426d1951256fca234b61fb2e0de8d96e",
+    "tests/member-local-ui.test.cjs": "f06800799800fdc82d5dcfb66635f25ac0bb5a96f8033de5aa0239494fcfaf62",
+    "tests/member-local-recovery-browser.cjs": "da0220bd78087f6212968658f5f9924f6718c4017e09f163f272dfc4487f6375",
+    "package.json": "5d813599b55d7b82394a2d9a4182f885812bce5caebb6ad8d72f38b4965a0602",
+    "package-lock.json": "16aca0ef1aa0b6d96227c26c7064a0c75520f7d021dbede74347fb0af38cb8b8",
+    "artifacts/phase3-member/browser.cjs": "cb10c3238e179b076ee1e75f672a9ee5b94836d5bcd0c24d6caca590d2911f3c",
+    "artifacts/rea-003/UI_AUDIT.md": "1382d4790d9c6d5cd492894200dff819af00c1dec2245ac349981a69ef02129c",
+    "netlify/functions/_shared/function-security.js": "00d365e431da58de523db57cf07a520ae35f459d6c99b1588ef93bd90c67d483",
+    "netlify/functions/_shared/test-resource.js": "9bcfca78a1c0c263048125f9bcb04410321161e77e3e9bd6991b9a595f8dc660",
+    "netlify/functions/_shared/test-resource-binding.json": "f3fcbb18889712fb3439ee97d4b29de19c22c6033bc57312d6e1196f3bca86db",
+    "netlify.toml": "d5aed52d4e3dcfcc4449e1497a22ae00d5a95142a9afd82789903c3e10a017c7"
+  },
+  "protectedDiffEmpty": true,
+  "existingArtifactsChecked": 33,
+  "existingArtifactsUnchanged": true,
+  "checks": {
+    "rawTypeScriptExit": 0,
+    "eslintExit": 0,
+    "api": 14,
+    "security": 83,
+    "eventRegression": 12,
+    "httpsScenarios": 5,
+    "fiveWidths": [
+      1440,
+      1024,
+      768,
+      390,
+      320
+    ]
+  },
+  "resourceSummary": {
+    "pullRequestsUnchanged": 18,
+    "testPublished": "6aeebe4ceae178c10e4199e8",
+    "productionPublished": "69a92f4f7be620c834490be1",
+    "productionLocked": true
+  },
+  "limits": [
+    "Synthetic local identity only",
+    "No new cloud CI run",
+    "No cloud database connection or role query in this review",
+    "Source parent is precommit snapshot; use the commit containing this manifest to identify the resulting local commit"
+  ]
+}

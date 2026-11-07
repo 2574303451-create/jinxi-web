@@ -1,0 +1,15 @@
+{
+  "script": "artifacts/phase3-member/browser.cjs",
+  "sha256": "cb10c3238e179b076ee1e75f672a9ee5b94836d5bcd0c24d6caca590d2911f3c",
+  "onlyReplacement": {
+    "from": "C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright",
+    "to": "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright"
+  },
+  "arguments": [
+    "--pg-bin",
+    "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+    "--openssl",
+    "D:/Program Files/Git/usr/bin/openssl.exe"
+  ],
+  "assertionsChanged": false
+}

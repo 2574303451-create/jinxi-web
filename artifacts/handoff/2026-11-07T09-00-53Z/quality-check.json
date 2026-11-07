@@ -1,0 +1,26 @@
+{
+  "checkedAtUtc": "2026-11-07T09:10:40.240Z",
+  "head": "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+  "branch": "codex/jinxi-phase3-member-local",
+  "localLinks": 54,
+  "missingLinks": [],
+  "fencesBalanced": true,
+  "secretPatternMatchedFiles": [],
+  "backupMatches": true,
+  "changedTrackedFiles": [
+    "CODEX_HANDOFF.md"
+  ],
+  "stagedFiles": [],
+  "unmergedFiles": [],
+  "untracked": [
+    "artifacts/handoff/2026-11-07T09-00-53Z/CODEX_HANDOFF.before.md",
+    "artifacts/handoff/2026-11-07T09-00-53Z/handoff-verification.json",
+    "artifacts/handoff/2026-11-07T09-00-53Z/lint.log",
+    "artifacts/handoff/2026-11-07T09-00-53Z/pr-chain.json",
+    "artifacts/handoff/2026-11-07T09-00-53Z/quality-check.json",
+    "artifacts/handoff/2026-11-07T09-00-53Z/remote-state.json",
+    "artifacts/handoff/2026-11-07T09-00-53Z/typecheck.log",
+    "artifacts/handoff/2026-11-07T09-00-53Z/unit.log"
+  ],
+  "documentSha256": "954308D7DF4338DB5F88B6A7227EB9AD86CAEE714511AA0838B1ACB3949B99D6"
+}

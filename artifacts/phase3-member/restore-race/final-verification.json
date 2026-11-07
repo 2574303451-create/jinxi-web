@@ -1,0 +1,107 @@
+{
+  "checkedAtUtc": "2026-11-07T09:40:32.308Z",
+  "branch": "codex/jinxi-phase3-member-local",
+  "head": "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+  "committed": false,
+  "staged": "",
+  "protectedSourceDiffEmpty": true,
+  "existingFilesChecked": 73,
+  "existingFilesUnchanged": true,
+  "changedHistoricalFiles": [],
+  "originalHandoffBodyPreserved": true,
+  "sourceHashes": {
+    "member-local/demo.js": "e44035176975840b27773653dfb0989a2dfb1ae381df026b1cbe61447b34fb2e",
+    "member-local/README.md": "d099ad478e107fc370cad2f14aed69c450921ce1977417c9b9425e2b08b400e6",
+    "tests/member-local-ui.test.cjs": "4f5bc2a32558fce8d757da200b42f4bbd6c8a4db6913c938172f5a2d81ff8a4c",
+    "tests/member-local-recovery-browser.cjs": "69914b4388a5cefc93267fc3909b85aa055d91784be300785901f251ab84fa8d",
+    "package.json": "5d813599b55d7b82394a2d9a4182f885812bce5caebb6ad8d72f38b4965a0602",
+    "CODEX_HANDOFF.md": "597621852aff5dd28b0ae0cbddb417113c48c54ce8dbce4f984d86a1f1286619",
+    "artifacts/phase3-member/browser.cjs": "cb10c3238e179b076ee1e75f672a9ee5b94836d5bcd0c24d6caca590d2911f3c",
+    "artifacts/phase3-member/restore-race/DELIVERY.md": "65efcf4fa1b8dc4aa9bce1fcec1a553f6800180f996b34848523021920a564b2"
+  },
+  "checks": {
+    "rawTypeScript": 0,
+    "eslint": 0,
+    "apiPassed": 14,
+    "securityPassed": 79,
+    "uiBefore": {
+      "passed": 3,
+      "failed": 5
+    },
+    "uiAfter": {
+      "passed": 8,
+      "failed": 0
+    },
+    "realHttpsPassed": true,
+    "scenarios": [
+      {
+        "name": "old401-before-new-login",
+        "passed": true,
+        "heldStatus": 401
+      },
+      {
+        "name": "online-and-focus-during-login",
+        "passed": true,
+        "prematureChecks": 0,
+        "queuedChecks": 1,
+        "recoveryStatus": 200
+      },
+      {
+        "name": "queued-recovery-after-logout-and-delayed-old200",
+        "passed": true,
+        "prematureChecks": 0,
+        "recoveryStatus": 401
+      }
+    ],
+    "fiveWidthPassed": true,
+    "widths": [
+      {
+        "width": 1440,
+        "passed": true,
+        "pageErrors": 0,
+        "cspViolations": 0
+      },
+      {
+        "width": 1024,
+        "passed": true,
+        "pageErrors": 0,
+        "cspViolations": 0
+      },
+      {
+        "width": 768,
+        "passed": true,
+        "pageErrors": 0,
+        "cspViolations": 0
+      },
+      {
+        "width": 390,
+        "passed": true,
+        "pageErrors": 0,
+        "cspViolations": 0
+      },
+      {
+        "width": 320,
+        "passed": true,
+        "pageErrors": 0,
+        "cspViolations": 0
+      }
+    ]
+  },
+  "status": [
+    "M CODEX_HANDOFF.md",
+    " M member-local/README.md",
+    " M member-local/demo.js",
+    " M package.json",
+    "?? artifacts/handoff/",
+    "?? artifacts/phase3-member/browser/2026-11-07T09-36-56-716Z/",
+    "?? artifacts/phase3-member/restore-race/",
+    "?? tests/member-local-recovery-browser.cjs",
+    "?? tests/member-local-ui.test.cjs"
+  ],
+  "sourceNormalization": "UTF8 LF SHA256",
+  "pending": [
+    "Separate review-branch push authorization",
+    "Cloud identity design and TEST authorization"
+  ],
+  "remainingTestListeners": []
+}

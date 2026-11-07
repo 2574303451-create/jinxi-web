@@ -1,0 +1,46 @@
+{
+  "source": "Read-only GitHub public REST and Netlify TEST control-plane metadata during this handoff; no environment-value endpoint or database connection",
+  "repository": "2574303451-create/jinxi-web",
+  "main": "2ce600a79955cd5e5a7bd798f266f8e17b0c283e",
+  "remoteCumulative": "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+  "localBranchRemoteLookup": {
+    "branch": "codex/jinxi-phase3-member-local",
+    "http": 404
+  },
+  "pullRequests": {
+    "count": 18,
+    "allOpen": true,
+    "allDraft": true,
+    "merged": 0,
+    "localAncestryVerified": true,
+    "details": "pr-chain.json"
+  },
+  "releases": [],
+  "tags": [],
+  "ci": [
+    {
+      "id": 42347156554,
+      "sha": "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 42344725850,
+      "sha": "13de96d7531dde3222fdf513e711447a1df3e425",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "testSite": {
+    "id": "17885134-a57c-4589-83d3-39e30be9e0cf",
+    "name": "jinxi-web-test",
+    "deployId": "6aeebe4ceae178c10e4199e8",
+    "sourceSha": "13de96d7531dde3222fdf513e711447a1df3e425",
+    "state": "ready",
+    "context": "production",
+    "stopBuilds": true,
+    "skipPrs": true,
+    "branch": "codex/jinxi-f03-f05-test-foundation"
+  },
+  "productionEvidenceSource": "Inherited accepted user/control-plane evidence, not re-queried in this handoff"
+}

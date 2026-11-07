@@ -1,0 +1,48 @@
+{
+  "classification": "synthetic-local",
+  "startedAtUtc": "2026-11-07T09:54:20.687Z",
+  "passed": true,
+  "scenarios": [
+    {
+      "name": "old401-before-new-login",
+      "passed": true,
+      "heldStatus": 401
+    },
+    {
+      "name": "online-and-focus-during-login",
+      "passed": true,
+      "prematureChecks": 0,
+      "queuedChecks": 1,
+      "recoveryStatus": 200
+    },
+    {
+      "name": "queued-recovery-after-logout-and-delayed-old200",
+      "passed": true,
+      "prematureChecks": 0,
+      "recoveryStatus": 401
+    },
+    {
+      "name": "rapid-A-to-B-duplicate-submits-and-late-responses",
+      "passed": true,
+      "loginPosts": 2,
+      "logoutPosts": 1,
+      "sameNicknameDifferentIds": true,
+      "uiAndServerRemainB": true
+    },
+    {
+      "name": "failed-operations-duplicate-submit-and-retry",
+      "passed": true,
+      "logoutPosts": 2,
+      "passwordPosts": 2,
+      "rejectedPasswordStatus": 403,
+      "abortedLogoutRemainsUnknown": true,
+      "retriesVerified": true
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": 0,
+  "cspViolations": [],
+  "demoSha256": "e44035176975840b27773653dfb0989a2dfb1ae381df026b1cbe61447b34fb2e",
+  "edge": "140.0.3485.66",
+  "completedAtUtc": "2026-11-07T09:55:14.105Z"
+}

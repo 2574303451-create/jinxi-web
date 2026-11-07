@@ -1,0 +1,24 @@
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../../../..');process.chdir(root);
+const sha=(file)=>crypto.createHash('sha256').update(fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n')).digest('hex');
+const git=args=>cp.execFileSync('git',args,{encoding:'utf8'}).trim();
+const sourceFiles=['member-local/demo.js','member-local/identity.cjs','member-local/database.cjs','member-local/schema.sql','member-local/server.cjs','member-local/README.md','tests/member-local-ui.test.cjs','tests/member-local-recovery-browser.cjs','package.json','package-lock.json','artifacts/phase3-member/browser.cjs','artifacts/rea-003/UI_AUDIT.md','netlify/functions/_shared/function-security.js','netlify/functions/_shared/test-resource.js','netlify/functions/_shared/test-resource-binding.json','netlify.toml'];
+const finalHashes=Object.fromEntries(sourceFiles.map(f=>[f,sha(f)]));
+const browser=JSON.parse(fs.readFileSync('artifacts/phase3-member/restore-race/2026-11-07T09-54-20-686Z/results.json','utf8'));
+const five=JSON.parse(fs.readFileSync('artifacts/phase3-member/browser/2026-11-07T09-59-51-544Z/results.json','utf8'));
+const resources=JSON.parse(fs.readFileSync(path.join(__dirname,'resource-state.json'),'utf8'));
+const before=JSON.parse(fs.readFileSync(path.join(__dirname,'before.json'),'utf8').replace(/^\uFEFF/,''));
+const allowedChanges=new Set(['tests/member-local-ui.test.cjs','tests/member-local-recovery-browser.cjs','member-local/README.md','CODEX_HANDOFF.md']);
+const previousFiles=before.files.filter(x=>!allowedChanges.has(x.path));
+const existingUnchanged=previousFiles.every(x=>crypto.createHash('sha256').update(fs.readFileSync(x.path)).digest('hex').toUpperCase()===x.sha256.toUpperCase());
+const protectedDiff=git(['diff','6f71de9','--','app','components','hooks','lib','services','public','styles','netlify/functions','test-environment','netlify.toml','.github/workflows','package-lock.json','artifacts/rea-003/UI_AUDIT.md','member-local/identity.cjs','member-local/schema.sql','member-local/database.cjs','member-local/server.cjs']);
+assert(protectedDiff==='');assert(existingUnchanged);assert.equal(browser.demoSha256,finalHashes['member-local/demo.js']);
+assert(browser.passed&&browser.scenarios.length===5&&browser.scenarios.every(x=>x.passed));assert(five.passed&&five.viewports.length===5&&five.viewports.every(x=>x.passed));
+assert.equal(resources.pullRequests.length,18);assert(resources.pullRequests.every(x=>x.unchanged));assert.equal(resources.additionalPullRequests.length,0);
+assert.equal(resources.testSite.publishedDeployId,'6aeebe4ceae178c10e4199e8');assert.equal(resources.testSite.stopBuilds,true);assert.equal(resources.testSite.skipPrs,true);
+assert.equal(resources.productionDeploy.id,'69a92f4f7be620c834490be1');assert.equal(resources.productionDeploy.locked,true);
+assert.deepEqual(resources.productionSite.allowedBranches,['main']);assert.equal(resources.productionSite.skipPrs,true);
+const record={checkedAtUtc:new Date().toISOString(),sourceNormalization:'UTF8 LF SHA256',root,branch:git(['branch','--show-current']),sourceParent:git(['rev-parse','HEAD']),previousLocalIdentityHead:'6f71de9eec8093e3d139b3201fe4249c6b0e52ff',finalHashes,protectedDiffEmpty:true,existingArtifactsChecked:previousFiles.length,existingArtifactsUnchanged:existingUnchanged,checks:{rawTypeScriptExit:0,eslintExit:0,api:14,security:83,eventRegression:12,httpsScenarios:5,fiveWidths:[1440,1024,768,390,320]},resourceSummary:{pullRequestsUnchanged:18,testPublished:resources.testSite.publishedDeployId,productionPublished:resources.productionSite.publishedDeployId,productionLocked:resources.productionDeploy.locked},limits:['Synthetic local identity only','No new cloud CI run','No cloud database connection or role query in this review','Source parent is precommit snapshot; use the commit containing this manifest to identify the resulting local commit']};
+fs.writeFileSync(path.join(__dirname,'tested-source.json'),JSON.stringify(record,null,2)+'\n');
+console.log(JSON.stringify({protectedDiffEmpty:true,existingArtifactsChecked:record.existingArtifactsChecked,existingArtifactsUnchanged:existingUnchanged,sourceFiles:sourceFiles.length,checks:record.checks}));
+

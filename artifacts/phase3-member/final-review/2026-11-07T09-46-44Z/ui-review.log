@@ -1,0 +1,20 @@
+✔ online during login waits for the new cookie, coalesces recovery events, and keeps the successful identity (3.9667ms)
+✔ a delayed old401 before login cannot erase the newer successful login (1.2569ms)
+✔ online during an uncertain login is replayed after failure and recovers only the server-confirmed identity (0.8881ms)
+✔ recovery after a profile request preserves the already-read data when identity is unchanged (0.9615ms)
+✔ a cross-tab revocation during a profile request is not lost (0.7397ms)
+✔ logout plus pending recovery keeps confirmed sign-out and ignores an older successful check (0.8379ms)
+✔ change-password plus pending recovery keeps confirmed sign-out and ignores an older successful check (0.7236ms)
+✔ out-of-order verification results cannot resurrect a session rejected by the latest check (0.6334ms)
+✔ duplicate login, logout and password submissions send only one operation while busy (1.5616ms)
+✔ rapid A logout and B login ignore both a delayed A200 and the queued signed-out401 (1.0343ms)
+✔ logout failure never claims success and permits one subsequent retry (0.7626ms)
+✔ change-password failure never claims success and permits one subsequent retry (0.6827ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.6824

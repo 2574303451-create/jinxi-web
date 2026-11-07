@@ -1,388 +1,353 @@
-> **2026-11-07 第三阶段本地身份检查点1（优先于下方历史记录）**：从d43ee24cfde1277eedabc8c8856de697b702dc0f建立独立本地分支codex/jinxi-phase3-member-local，工作树E:/Recovery/.jinxi-research/phase3-member/worktree。实际完成本机合成登录、会话/本人资料、改密与退出，复用F03身份/有效权限证明；新临时PG17.11仅127.0.0.1:55436，真实数据库/HTTPS18项报告、API14/安全71、原只读回归46、tsc/lint/build及5宽度浏览器均通过。精确最终提交以本地Git HEAD/本轮答复为准，受测源码指纹见 [本轮结果](artifacts/phase3-member/results.json)，运行见member-local/README.md。UI-DEFER-001/002只在原UI_AUDIT登记，待第四阶段修复，FAQ/公告及其他受保护视觉/云Functions无内容差异。云TEST仍Deploy6aeebe4ceae178c10e4199e8 / 源码13de96d7531dde3222fdf513e711447a1df3e425，构建暂停/PR预览关闭；没有push/新PR/合并/云端部署/真实数据库操作或业务恢复。云端会话写入仍未授权；完整证据与限制见 [交付](artifacts/phase3-member/DELIVERY.md)。本轮完成后停止，下一步须独立审查并另获推送审核分支授权，不扩大为云端部署。
+> **2026-11-07 第三阶段身份独立审查收尾**：本次本地收尾提交保留竞态修复，追加快速切换、重复提交及失败重试验证。当前为12项事件回归、5组实际HTTPS专项、五宽度复验及API14/安全83通过，原始tsc/ESLint退出0。原18PR、TEST13de部署和旧站锁定的只读元数据未变。已获本地提交整理授权，未获推送/部署授权；本条随最终本地提交保存，完整提交SHA以本文件所属提交及最终答复为准。[最终审查与可复现命令](artifacts/phase3-member/final-review/2026-11-07T09-46-44Z/FINAL_REVIEW.md)。下方为此前未提交状态的历史快照，原文保留。
 
-> **2026-11-07 F03/F05 云端验收更新（优先于所有历史快照）**：独立 TEST 已在用户限定授权内建成。接受源提交 13de96d7531dde3222fdf513e711447a1df3e425，Netlify TEST Deploy 6aeebe4ceae178c10e4199e8，https://jinxi-web-test.netlify.app 。对应真实 CI、HTTP31项和1440/390/320px浏览器检查成功；实际reader身份/ACL和错误Context拒绝证据分项登记。原npm/Linux及平台注入水合问题已修复，失败记录保留。第二关完成，第三关在获批合成只读范围通过；不宣称生产或网络出口验收。TEST后续构建暂停、PR预览关闭、批准SHA冻结。没有新PR/合并/生产数据库或旧站修改/付费升级。原18PR和PR18祖先完整保留；真实成员登录、积分写入、头像和在线系统继续关闭。本轮停止，管理员无凭据或截图待办。唯一管理员清单和完整边界见 [ADMIN_SIGNOFF](artifacts/f03-f05/ADMIN_SIGNOFF.md) 与 results.json 的 gate3Execution。下方“待授权/未部署”等是保留的历史记录。
 
-> **2026-11-06 F03/F05 本地实施更新（优先于下方历史快照）**：独立本地分支 `codex/jinxi-f03-f05-test-foundation`，基线 PR18 / `be9513f37251d08661a3f6c1d5240ed059c59f2e`。已实现 TEST 合成初始化/最小权限/限定回滚、独立资源身份与 Netlify context 分离、获批 Site/commit 构建门禁及连接前目标检查。实际受测 SHA、日志和停止点见 [F03/F05交付](artifacts/f03-f05/DELIVERY.md) 与 results.json。所有真实云操作和 TEST 分支 push 均待授权；无新 PR、合并、部署、生产连接或生产变量修改。旧站锁定、main-only、关闭预览采用用户控制台证据，基础调查结束。jinxi-test/production/neondb 的 public 表/视图/序列均0同样为用户 SQL 证据；补查 SQL 尚待管理员执行，不能宣称 F03/F05 云端通过。原 55433 测试库未改，新一次性集群用55435并停止。首页/头像/档案/攻略源码保持基线。
+> **2026-11-07 本机恢复竞态修复续验**：在用户继续授权后，修复了登录中联网恢复核验覆盖新显示的问题；通知合并为操作后一次服务器重验。8项新增事件回归、3组实际HTTPS专项及1440/1024/768/390/320五宽度通过；原始tsc、ESLint、API14/安全79通过。当前HEAD仍为6f71de9，修复尚在工作区，未提交/推送/部署。新结果与源码指纹见 [恢复竞态交付](artifacts/phase3-member/restore-race/DELIVERY.md)。下文为此前交接快照，已有成果和失败记录保留。
 
-> **2026-11-06 B2-A-4 审核更新**：基线为 PR #12 / 483495aefcd75316731efce76372748a0f00c8c7。候选分支 codex/jinxi-b2-a-4-security 独立承接，最新 SHA 与真实 CI 见其 GitHub 草稿 PR。A–E 的安全复核、隔离清单、公告 HTML/CSP、旧功能恢复矩阵和真实成员迁移草案见 [A-4 交付](artifacts/b2-a-4/DELIVERY.md)。本机合成 PG 53 项通过，原始 tsc 仍为 28 项历史错误且无新增。实际云隔离、真实成员 TEST、托管 CSP 与受支持运行时是正式接入前置。首页在线继续显示—，抽屉按 B2-C+ 后续检查点处理。独立构建为 E:/Recovery/.jinxi-research/b2-a-4/source/out，合成 HTTPS 3048 与公开回归 3050，3049 冻结 PR12。
+# 今夕公会官网 CODEX 交接文档
 
-> **2026-11-06 B2接管更新（优先于下方历史快照）**：用户已授权B2-0检查点0–3及GitHub独立草稿PR。本机当前分支codex/jinxi-b2-a-session-lab，base为PR11/d516b8643c73797ddfbd8109d46a7dba58f6016c；最新SHA请核对该分支HEAD及GitHub PR，不以旧正文ca0723e为准。B1审核基线115bf854a7977a3e582a89af13459115178a1e31/PR8；新增检查点PR9、10、11均draft/open/unmerged，当前检查点3独立提交。完整入口：[B2状态](artifacts/b2-0/STATUS.md)、[会话原型](artifacts/b2-0/SESSION_LAB.md)、[工程/集成/阻断](artifacts/b2-0/ENGINEERING_AND_INTEGRATION.md)。原始tsc仍28项/exit2，只设新增诊断失败的历史基线，未假称完整类型通过。新证据含本机真实PG44、HTTPS会话7组、B1保护回归；GitHub CI必须看当前head的实际Checks。云变量继承及真实PROD权限未证明，旧写/旧登录暂停；正式会话、头像、在线心跳与名单均不启用。没有生产连接/密钥读取/迁移/上传、合并或部署。B2-C+新增要求只归档后续计划，不能据此提前开始B2-C。原B1截图已恢复原Git字节，新截图另存，主out不改；3044仍固定B1快照，3048/3049为本机合成隔离验证。
-# 今夕公会官网｜Codex 项目交接
+更新日期：2026-11-07（北京时间）。适用源码：`6f71de9eec8093e3d139b3201fe4249c6b0e52ff`。本次是交接整理，未继续开发、提交、推送或部署。
 
-> **2026-11-06 B2-A-8 更新**。基于 PR #17 `9f53e1428d29a56f459e9c29ce79e0969ef1294e` 建立 `codex/jinxi-b2-a-8-data-protection`。`jinxi-web` 按疑似旧生产保护，旧站连接与真实表结构待证。`jinxi-test` 仅用于获批合成 TEST。A8 交付历史资产、旧导入风险、无损迁移与备份恢复方案，以及独立合成视频演示。实际数据库、部署、导入和发布继续等待相应授权。完整 SHA 与实际 CI 以草稿 PR 为准。 [A8 交付](artifacts/b2-a-8/DELIVERY.md)
+**先看结论：F03/F05 合成只读云 TEST 已验收；第三阶段第一个“本机合成成员身份”检查点已实现并完成本地测试，但只有本地提交，尚未推送、未接入云端或首页。正式成员、社区写入、头像与在线系统仍未恢复。**
 
-> **2026-11-06 B2-A-7 更新**。基于 PR #16 `a37786ce68ec8223ff0e512b86be1c81b3a3e777` 建立 `codex/jinxi-b2-a-7-integration-freeze`。已核对 #1–#16 和当前 main 祖先关系。候选关闭旧发布/导入入口，保留本机游戏与任务历史，旧登录缓存无法认证。实际 TEST 仍需负责人授权与管理员填写验收表。当前完整 SHA 与 CI 以 GitHub 草稿 PR 为准。 [A7 交付](artifacts/b2-a-7/DELIVERY.md)
+本文件重整此前多轮快照，不再将旧 B1 快照当作当前任务。原交接全文已逐字节保留在 [交接前备份](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/CODEX_HANDOFF.before.md)，SHA256 和本轮核验见 [交接核验记录](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/handoff-verification.json)。备份中的“当前”均指相应历史时点，不能覆盖本文件最新状态。
 
-> **2026-11-06 B2-A-6 更新**：基于PR15 f9ff27874beaf3388502f29360ebaa86c5a64c13，独立分支codex/jinxi-b2-a-6-runtime-acceptance。原始tsc为0，固定Node24.22.2/npm11.19.1。Next16增加的45990B中45950B归于框架路由与内置React DOM；motion拆分试验增4302B已撤回。公告鼠标关闭和旧缓存身份提示已修补。最新GitHub SHA/CI见草稿PR；真实TEST待授权、托管与成员接入待证。完整性能、trace、管理员清单、订单恢复和十五PR集成候选见[B2-A-6交付](artifacts/b2-a-6/DELIVERY.md)。
+事实分级：**本轮复核**＝此次实际命令/API结果；**既有实测**＝已保存的日志、截图、提交及受测源码指纹；**用户控制台证据**＝用户提供，非此次亲连数据库；**计划/待核实**＝未实施或证据不足。代码存在、测试通过、云端部署、生产验收是不同事实。
 
-> **2026-11-06 B2-A-5 更新**：从 PR #13 / f443144a912abf5869d42f4758c86caaf6031525 新建安全准备草稿分支，运行时验证另设分支和工作树。真实 tsc 为 0。托管 TEST、正式会话与业务恢复等待授权及独立证据。最新 SHA、PR、CI 以 GitHub 为准，复核、性能、截图和管理员清单见 [B2-A-5 交付](artifacts/b2-a-5/DELIVERY.md)。
+## 1. 项目概况与接管位置
 
-> **GitHub审核版更新**：用户已明确授权将完整B1本地提交、原暂存工作、本轮修补和证据提交GitHub。审核入口为 [B1 REVIEW_GUIDE](artifacts/005s-b1/REVIEW_GUIDE.md)，分支codex/jinxi-005s-b1，base仍为A+ d4769e719b2dd486b82cd2867f066d6c4dfa3e19。检查点2代码提交为55825f1a8146d0418bfa6380d7fa5254f093d6cc；完整最终SHA见草稿PR/分支。
->
-> 下方“未提交/未推送/HEAD=ca0723e/原9份index未变”与验证JSON中的committed=false，是发布前的原始快照。保留其历史，不代表GitHub审核版当前状态。B2、生产写入、合并和部署仍未授权执行。
+项目为今夕公会官网，服务访客与成员：公会介绍、成员档案、留言互动、攻略视频、签到积分、公告赞助及后续个人头像和在线伙伴。当前优先级是保住旧站和历史数据，在独立合成环境逐批恢复可信业务，不能为了新版 UI 发布而倒退旧业务能力。
 
-> **2026-11-05 本轮续验更新**：下面原正文保留接管前快照；最新状态以 [B1续验交付](artifacts/005s-b1/checkpoint2-recheck/DELIVERY.md)、[安全](artifacts/005s-b1/checkpoint2-recheck/SECURITY.md)、[性能](artifacts/005s-b1/checkpoint2-recheck/PERFORMANCE.md) 为准。
->
-> B1检查点2五宽度/边界26项已通过。真实Tab/Shift+Tab的3px焦点通过，原失败是鼠标后程序focus的输入模态。综合检查另修复旧详情对null附件/缺署名的崩溃，12篇实际合成攻略及1个坏DTO注入通过。API现14/14；原生PG16/16及1k/10k规模验证通过并恢复夹具；独立tsc仍exit2/相同28项。受保护组件、生命周期、真实后台、五宽度200%通过；慢手机LCP中位A+2904/B12916ms，2.5秒目标仍未达。
->
-> HEAD/分支仍ca0723e/codex/jinxi-005s-b1，无新提交/推送/PR。原9个index内容未变，原19个证据字节未变；新修补另有未暂存差异和新增测试，不能只提交旧index。根交接原件和index备份在E:/Recovery/.jinxi-research/b1-takeover-20261105。
->
-> 最终新产物为E:/Recovery/.jinxi-research/b1-takeover-20261105/build-source/out；临时只读合成预览3044。原checkpoint2产物不含新详情修补。主out/1.mp4当前ENOENT，历史EPERM根因未证实。PG仍为授权本机专用实例；视频4不是生产数。生产P0与B2未处理，未合并/部署。
+仓库：[2574303451-create/jinxi-web](https://github.com/2574303451-create/jinxi-web)。Windows / PowerShell。**最新开发根目录不是最初的 E:/Recovery/jinxi-web。**
 
-核验日期：2026-11-05，Asia/Shanghai。远端状态查询约20:20，本机只读数据库复核约20:26；接管时须再次核对。
-
-本文依据本次对话的需求与授权、当前源码、Git记录、GitHub只读查询及实际测试日志编写。历史报告保留原貌；下文明确说明哪些结论已被后续阶段替代。未将截图、fixture、构建或工具可见性当作生产功能通过。
-
-**本次只编写交接文档，不继续开发；未提交、推送、切换分支、合并、部署、重建数据库或修改业务代码。此前已暂存和未跟踪的B1工作必须保留。** 原来没有根目录CODEX_HANDOFF.md，本文件为新增，交接本身未提交。
-
-## 1. 接管时先掌握的实际状态
-
-| 项目 | 已核实状态 |
-| --- | --- |
-| 本机项目根目录 | `E:/Recovery/jinxi-web`；聊天的初始cwd可能是上一级 `E:/Recovery` |
-| 仓库 | https://github.com/2574303451-create/jinxi-web ，origin为该仓库HTTPS地址 |
-| 当前本地分支 | `codex/jinxi-005s-b1` |
-| 当前本地HEAD | **`ca0723eea3e1874c7dc3ddb76a7b52f074fac4b3`**，B1检查点1，只在本地 |
-| 最新远端认可基线 | `codex/jinxi-005s-next-a-plus`，**`d4769e719b2dd486b82cd2867f066d6c4dfa3e19`**，[草稿PR #7](https://github.com/2574303451-create/jinxi-web/pull/7) |
-| B1是否已上传 | 查询远端B1分支返回404；本地无B1上游；GitHub没有B1 PR。不能让新会话仅从GitHub恢复时假定已取得B1代码 |
-| 工作区 | **不是干净状态**：9个B1检查点2文件已暂存，另19个未跟踪证据/运行器文件；无未合并冲突文件。新文档在此基础上新增，不能用reset/clean/checkout覆盖 |
-| 当前主要任务断点 | B1检查点1提交完成；检查点2代码已写、构建成功副本存在，但浏览器验收中途失败；检查点3尚未完整完成 |
-| 最新浏览器失败 | `browser-checks.cjs:22`，程序聚焦攻略卡后读到outline `0px`，预期 `3px`；仅前3项桌面检查通过，尚未进入后续尺寸及边界用例。原因待核实，不已认定是产品缺陷或测试脚本问题 |
-| 生产状态 | 所列PR均未合并；本轮没有生产发布、生产数据库操作、正式会话或真实头像上传。既有线上站点存在，不等于这些开发分支已部署 |
-
-**最建议的下一项工作：保护并核对现有暂存改动，恢复B1隔离预览，定位上述焦点检查失败，然后完成检查点2的浏览器矩阵。不要重新制作首页，也不要先启动B2。**
-
-## 2. 项目概况与协作约定
-
-### 2.1 产品目标
-
-这是弹弹堂「今夕公会」官网。首次访问者要快速认识公会、成员与加入方式；已有成员要容易找到账号、签到、任务、积分排行、组队、游戏数据、留言和攻略；手机访问必须保持导航、弹窗、阅读与原有入口可用。
-
-角色分工：用户决定产品方向、视觉与最终验收；网页版ChatGPT负责策划、文案、规则与验收标准；Codex负责源码核查、实现、测试和提交。**同账号不代表网页版自动读到了本机文件、该会话或最新分支**，交接必须携带分支/SHA/实际资料。
-
-用户偏好：按已授权范围持续完成工作，减少重复确认；需要真实权限或环境授权时说明依据；用中文报告具体结果、失败样本和限制。审美由用户决定，不能用build成功代替。每个阶段有独立检查点、截图和可回退基线，不进行无计划的全站重构。
-
-### 2.2 架构与环境
-
-- Next.js **14.2.16** App Router、React **18.3.1**、TypeScript **5.9.2**、Tailwind **3.4.17**；版本从当前lockfile核实。已有framer-motion、lucide、Geist等依赖，未为B1新增动画库。
-- npm管理，package-lock.json为lockfileVersion3；package.json标记private、version0.1.0、packageManager npm@10.0.0。这不是正式Release版本。
-- 静态导出：`output:'export'`、`trailingSlash:true`，当前Next的distDir和Netlify发布目录均为`out`。Functions独立在Netlify运行；普通静态服务器不会自动运行Functions。
-- Netlify配置：Node20/npm10，命令`npm ci && npm run build`。项目Next与生产Node不得因REA工具要求而随意升级。
-- 本机为Windows/PowerShell；默认Node24.6.0/npm11.5.1，Git2.50.1.windows.1。另有隔离便携Node20.20.2/npm10.8.2用于构建验证，不替换系统安装。
-- 数据：Neon/PostgreSQL后端；成员档案是仓库静态JSON；组队/游戏数据包含浏览器localStorage与默认示例；头像实验是隔离IndexedDB。
-
-入口与布局：[app/page.tsx](E:/Recovery/jinxi-web/app/page.tsx)、[app/layout.tsx](E:/Recovery/jinxi-web/app/layout.tsx)、[next.config.mjs](E:/Recovery/jinxi-web/next.config.mjs)、[netlify.toml](E:/Recovery/jinxi-web/netlify.toml)、[package.json](E:/Recovery/jinxi-web/package.json)。
-
-## 3. 历史开发进程与远端事实
-
-GitHub只读查询确认PR #1–#7全部为 **open、draft、未合并**，依赖如下：
-
-`B1本地工作 → #7 → #6 → #5 → #4 → #3 → #2 → #1 → codex/planning-handoff-2026-11-04`
-
-远端main仍是`2ce600a79955cd5e5a7bd798f266f8e17b0c283e`；GitHub Releases和Tags查询均为空，本地也没有tag。不要把用户认可、分支提交、PR创建、合并、生产发布混为一谈。
-
-| 阶段 | 实际进展与决策 | 分支最终/当前SHA、PR | 主要证据 |
-| --- | --- | --- | --- |
-| 最初探索/协作基线 | 上传已有工程、源码探索、职责与风险说明。40项TypeScript为当时历史记录，不是现基线 | `codex/planning-handoff-2026-11-04` / `7dfbf69c2e2b61be7c08d4fd65d884c2b371b244` | [协作](E:/Recovery/jinxi-web/COLLABORATION.md)、[旧探索](E:/Recovery/jinxi-web/WEB_EXPLORATION.md) |
-| PLAN-001「星夜集结」 | 曾做深色视觉探索，用户不满意，后来被REA证据驱动方向替换。旧工作已保存在独立提交，不应恢复成现设计 | `codex/plan-001-star-night` / `a95ed1ba63cf6bd38a1321f11e017039056d679e`；无单独交付PR | [旧截图/日志目录](E:/Recovery/jinxi-web/artifacts/plan-001) |
-| REA-001工具 | 用户批准安装REA，要求可清理卸载。后续实际MCP取证成功，不只是配置存在。工具在用户环境，不在今夕生产依赖 | 后续核实REA6.8.0；本阶段无独立业务PR | 见本节工具说明及REA报告 |
-| JINXI-REA-002 | 真实参考mdldm.club截图/DOM/CSS与公开设计系统，建立纸张、蓝黄、深描边、硬阴影视觉；用户基本认可 | `codex/jinxi-rea-002` / `328819a57c671b33b743d1ad3f969c0fb7917048`；[#1](https://github.com/2574303451-create/jinxi-web/pull/1) | [调查](E:/Recovery/jinxi-web/artifacts/rea-002/REA_REPORT.md)、[交付](E:/Recovery/jinxi-web/artifacts/rea-002/DELIVERY.md) |
-| JINXI-REA-003第一批 | 审计全站UI，真正重写留言墙、成员网格/详情/轮播、共享Modal与展播基础；不是全站内部UI已统一。38→28项TS诊断，解决10项 | `codex/jinxi-rea-003-batch-1` / `0182518277831ba0d03df3a3e1973f1a7ae06efe`；[#2](https://github.com/2574303451-create/jinxi-web/pull/2) | [交付](E:/Recovery/jinxi-web/artifacts/rea-003/DELIVERY.md)、[UI审计](E:/Recovery/jinxi-web/artifacts/rea-003/UI_AUDIT.md) |
-| JINXI-UI-004 A | 双行反向留言展播与「今夕·同行时光」，WAAPI/离屏暂停、叶时钟、本地档案查询；B/C未按原计划全部实施 | `codex/jinxi-ui-004-a` / `ffa71f8313d3f9895d1b664404c29fa8dbb2dda1`；[#3](https://github.com/2574303451-create/jinxi-web/pull/3) | [交付](E:/Recovery/jinxi-web/artifacts/ui-004-a/DELIVERY.md)、[性能](E:/Recovery/jinxi-web/artifacts/ui-004-a/PERFORMANCE.md) |
-| JINXI-ARCH-005第一阶段 | 比较弹窗与独立路由，实施/guides/及/profile-lab/隔离原型；提出正式身份/头像设计。用户基本认可，未实施真实会话/对象存储 | `codex/jinxi-arch-005` / `80737413d3bb981b3a3287c603893eb6c09decf2`；[#4](https://github.com/2574303451-create/jinxi-web/pull/4) | [交付](E:/Recovery/jinxi-web/artifacts/arch-005/DELIVERY.md)、[攻略评估](E:/Recovery/jinxi-web/artifacts/arch-005/GUIDE_ASSESSMENT.md)、[身份设计](E:/Recovery/jinxi-web/artifacts/arch-005/IDENTITY_ARCHITECTURE.md) |
-| JINXI-ARCH-005R | 保护原头像外框，公开攻略强制published，移除管理默认密码，修正URL/正文/媒体CSP；有原生PG与管理隔离测试 | `codex/jinxi-arch-005r` / `2836ed13cc5f7da7ffcbce52755063dfbe80b55d`；[#5](https://github.com/2574303451-create/jinxi-web/pull/5) | [交付](E:/Recovery/jinxi-web/artifacts/arch-005r/DELIVERY.md)、[安全](E:/Recovery/jinxi-web/artifacts/arch-005r/SECURITY.md)、[SQL](E:/Recovery/jinxi-web/artifacts/arch-005r/SQL_REPORT.md) |
-| JINXI-ARCH-005S A | REA定向统计/推荐调查，独立复算208档案，四项统计与最多3篇真实公开攻略；在线/视频总数当时仍占位，筛选只是当批原型 | `codex/jinxi-arch-005s-a` / `04ca4ef972636ef7ac8169d80db2dbf4af9d8b00`；[#6](https://github.com/2574303451-create/jinxi-web/pull/6) | [交付](E:/Recovery/jinxi-web/artifacts/arch-005s/DELIVERY.md)、[数据方案](E:/Recovery/jinxi-web/artifacts/arch-005s/DATA_AND_ARCHITECTURE.md)、[参考证据](E:/Recovery/jinxi-web/artifacts/arch-005s/reference/REPORT.md) |
-| JINXI-005S-NEXT A+ | 加静态弧形视频提示，五宽度实测；修prebuild浅克隆/无Git时间依据；回归与图片缓存诊断。用户已准许继续B1 | `codex/jinxi-005s-next-a-plus` / `d4769e719b2dd486b82cd2867f066d6c4dfa3e19`；[#7](https://github.com/2574303451-create/jinxi-web/pull/7) | [交付](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/DELIVERY.md)、[剩余](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/REMAINING.md) |
-| JINXI-005S-B1检查点1 | 真实视频聚合、轻量摘要/SQL筛选、只读超时、预览连接保护、手机箭头。已本地提交，未上传/独立验收 | `codex/jinxi-005s-b1` / `ca0723eea3e1874c7dc3ddb76a7b52f074fac4b3`；无PR | [检查点1](E:/Recovery/jinxi-web/artifacts/005s-b1/CHECKPOINT1.md)、[SQL/API样本](E:/Recovery/jinxi-web/artifacts/005s-b1/checkpoint1-api.json) |
-| B1检查点2/3 | 前端接入与缓存等9文件已暂存；新API单测通过。浏览器只跑到1440px第3项后失败；全尺寸/兼容/性能/综合验收未完成 | 未提交，无新的最终SHA | [当前浏览器结果](E:/Recovery/jinxi-web/artifacts/005s-b1/browser-results.json)、[构建](E:/Recovery/jinxi-web/artifacts/005s-b1/build-after.txt) |
-
-实现提交与后补交付提交在部分阶段分开，例如005S实现为`305c4b78476370ea4d0ddad66d5bcce5c9f74a5f`，后续04ca4ef为交付记录。表中SHA对应阶段实际分支头，不应把文档提交误当另一套实现。
-
-### REA与技能环境
-
-- 当前安装包版本6.8.0，package.engines为`^22.23.4 || ^24.22.1 || >=26.12.1`。REA历史实际用Codex自带Node24.22.1，独立于生产Node20与系统Node24.6。
-- 包位于 `C:/Users/lilei/AppData/Local/npm-cache/_npx/af752b90495482d7/node_modules/rea-agents`。REA MCP仍出现在可用工具中；本交接没有重做浏览器取证或声称本轮新调用成功。以历史Evidence ID、原始截图/DOM的完整性说明为准。
-- 参考调查始终分A实际测量、B公开原作者文档、C原创/未证实推断。部分REA网络事件incomplete，不能宣布原站所有请求成功。公开项目源码仅参考，未整站合并/复制品牌资产。
-- 用户此前要求使用Matt Pocock技能；现用户技能目录确有handoff、diagnose、review、frontend-ui-engineering等。不要推断仓库已完成全部技能工作流配置；AGENTS.md没有完整Agent skills上下文块。
-- 若后续卸载REA，先核对MCP条目、技能位置和安装备份，只处理REA，不覆盖其他客户端配置。本交接不卸载或更改工具；正式源码架构分析不必为使用REA而对仓库做逆向。
-
-## 4. 当前功能清单与关键位置
-
-本表的“已验证”均带本地/历史范围；**不代表真实生产账号、资金/积分或数据库写入已完整验收。**
-
-| 模块 | 现状、验证边界 | 核心文件 |
+| 位置 | 分支 / 完整 HEAD | 用途 |
 | --- | --- | --- |
-| 首页/导航/加入入口 | 纸张蓝黄视觉已认可；手机菜单、账号/公告等入口有历史浏览器回归；入会表单仍原流程，真实提交/邮件未验 | [guild-hero](E:/Recovery/jinxi-web/components/home/guild-hero.tsx)、[guild-navigation](E:/Recovery/jinxi-web/components/home/guild-navigation.tsx)、[app/page](E:/Recovery/jinxi-web/app/page.tsx) |
-| 宣传影像 | 原生details/summary、/1.mp4、/bg.png封面、preload=none、主动播放/失败回退；A+五宽度已测，B1只改手机短箭头且两宽度实测 | [Hero](E:/Recovery/jinxi-web/components/home/guild-hero.tsx)、[主题](E:/Recovery/jinxi-web/styles/guild-theme.css) |
-| 留言墙 | 内部结构真正重构；发布/回复/表情/置顶/删除原调用保留；旧测试写操作为拦截内存API，不是真实生产写入验收 | [message-wall](E:/Recovery/jinxi-web/components/message-wall.tsx)、[message service](E:/Recovery/jinxi-web/services/message-wall-backend.ts)、[messages](E:/Recovery/jinxi-web/netlify/functions/messages.js)、[actions](E:/Recovery/jinxi-web/netlify/functions/message-actions.js) |
-| 双行留言展播 | 原公开最近100条范围内投影，最多12条；足量两行，上左下右，少量降级；32px/s按实测宽度；暂停/触摸/焦点/reduced/离屏/后台有历史真实浏览器验证 | [showcase](E:/Recovery/jinxi-web/components/home/message-showcase.tsx)、[motion](E:/Recovery/jinxi-web/components/home/use-ribbon-motion.ts)、[row](E:/Recovery/jinxi-web/components/home/message-ribbon-row.tsx)、[public hook](E:/Recovery/jinxi-web/hooks/use-public-messages.ts) |
-| 成员网格/画廊/详情 | 结构重写、筛选/更多/明确详情按钮/轮播/自动播放暂停/嵌套Modal焦点已验；仍原静态成员素材，不是在线人数 | [member-grid](E:/Recovery/jinxi-web/components/magicui/member-grid.tsx)、[carousel](E:/Recovery/jinxi-web/components/magicui/3d-carousel.tsx)、[detail](E:/Recovery/jinxi-web/components/member-detail-modal.tsx) |
-| 同行时光/档案查询 | 原2018-02-10和UTC年/天算法；收起简卡、展开检索/历史/勋章。秒计时隔离到可见叶组件，折叠不挂载内部控件；历史事件仍需公会确认 | [terminal](E:/Recovery/jinxi-web/components/guild-uptime-terminal.tsx)、[clock](E:/Recovery/jinxi-web/components/guild-time/runtime-clock.tsx)、[utils](E:/Recovery/jinxi-web/lib/guild-terminal-utils.ts)、[config](E:/Recovery/jinxi-web/config/guild-terminal.config.json) |
-| 首页数字 | 档案208/创始1/普通207，时长复用原逻辑，在线仍—。视频由A+占位过渡到B1未提交前端接入，隔离样本4不等于生产4 | [guild-facts](E:/Recovery/jinxi-web/components/home/guild-facts.tsx)、[facts JSON](E:/Recovery/jinxi-web/lib/guild-home-facts.json) |
-| 首页推荐 | A+真实公开数据原型已验；B1现为服务端latest/video/pinned最多3篇、明确契约检查、共享缓存，但浏览器完整验收中断 | [featured-guides](E:/Recovery/jinxi-web/components/home/featured-guides.tsx)、[card](E:/Recovery/jinxi-web/components/home/home-guide-card.tsx)、[home service](E:/Recovery/jinxi-web/services/home-guides.ts) |
-| 独立攻略中心 | /guides/静态路由、搜索/分类/难度/排序/页码、?id详情/分享/返回、Markdown子集/评论/投稿/媒体/原管理入口；历史本地静态路由已测，真实Netlify托管联调未验 | [route](E:/Recovery/jinxi-web/app/guides/page.tsx)、[center](E:/Recovery/jinxi-web/components/guides/guide-center.tsx)、[reader](E:/Recovery/jinxi-web/components/guides/guide-reader.tsx)、[service](E:/Recovery/jinxi-web/services/guide-service.ts)、[location](E:/Recovery/jinxi-web/lib/guide-location.ts) |
-| 攻略公开读取 | R后仅published；B1摘要含cover/hasVideo/videoCount及真正SQL筛选，完整旧DTO与ID详情保持；小型原生PG已验，Neon生产网络未验 | [strategy-read](E:/Recovery/jinxi-web/netlify/functions/_shared/strategy-read.js)、[strategies](E:/Recovery/jinxi-web/netlify/functions/strategies.js)、[stats](E:/Recovery/jinxi-web/netlify/functions/guide-video-stats.js) |
-| 头像实验 | /profile-lab/用合成账号、裁剪、128px WebP、隔离IndexedDB、成功/失败/重置/联动。没有正式服务器登录/上传/对象存储 | [profile route](E:/Recovery/jinxi-web/app/profile-lab/page.tsx)、[editor](E:/Recovery/jinxi-web/components/profile/avatar-editor.tsx)、[store](E:/Recovery/jinxi-web/lib/avatar-lab-store.ts)、[PublicAvatar](E:/Recovery/jinxi-web/components/ui/paper.tsx) |
-| 登录/改密 | 既有PBKDF2验证、锁定与资料返回；首页localStorage恢复UI。没有HttpOnly可验证服务器会话；不要把账号显示当权限 | [auth-login](E:/Recovery/jinxi-web/netlify/functions/auth-login.js)、[auth-change-password](E:/Recovery/jinxi-web/netlify/functions/auth-change-password.js)、[page](E:/Recovery/jinxi-web/app/page.tsx) |
-| 签到/任务/积分排行 | 入口保留，旧UI兼容规则仍在；真实奖励/兑换/签到安全链路未完整验证，积分P0未修 | [checkin](E:/Recovery/jinxi-web/components/checkin-widget.tsx)、[tasks](E:/Recovery/jinxi-web/components/daily-tasks.tsx)、[points](E:/Recovery/jinxi-web/netlify/functions/points.js) |
-| 组队/游戏数据 | localStorage及默认示例；不是云同步/实时战绩。内部仍待组件级统一 | [team service](E:/Recovery/jinxi-web/services/team-service.ts)、[game service](E:/Recovery/jinxi-web/services/game-data-service.ts) |
-| 公告/赞助/FAQ/Toast等 | 既有入口、数据路径保留；部分外层换肤，仍有旧样式/legacy，不得宣称全站统一 | [公告](E:/Recovery/jinxi-web/components/cyber-announcement.tsx)、[赞助](E:/Recovery/jinxi-web/components/guild-sponsorship.tsx)、[原UI审计](E:/Recovery/jinxi-web/artifacts/rea-003/UI_AUDIT.md) |
+| `E:/Recovery/.jinxi-research/phase3-member/worktree` | `codex/jinxi-phase3-member-local` / `6f71de9eec8093e3d139b3201fe4249c6b0e52ff` | 本轮交接根目录，最新本地身份成果，未上传 |
+| `E:/Recovery/.jinxi-research/f03-f05/worktree` | `codex/jinxi-f03-f05-test-foundation` / `d43ee24cfde1277eedabc8c8856de697b702dc0f` | GitHub 累计基准及云 TEST 验收资料 |
+| `E:/Recovery/jinxi-web` | `codex/jinxi-b2-a-5-test-prep` / `7f850e188c750e147181fcba193a8106892b4afc` | 原目录，停在 PR14，不得误作最新 |
+| GitHub `main` | `2ce600a79955cd5e5a7bd798f266f8e17b0c283e` | 历史主分支；不是新版候选，也未证明等于旧 Published 产物 |
 
-旧 `components/strategy-wall.tsx`、旧详情/投稿Modal和strategy-wall-service仍存在，不能因文件名就认定首页仍挂载它们。实际入口已转/guides/；它们的历史类型错误及维护负担仍在。
+技术栈实际锁定：Next.js **16.4.5**、React/ReactDOM **19.3.1**、Node **24.22.2**、npm **11.19.1**、TypeScript **5.9.2**、Tailwind **3.4.17**；保留现有 Framer Motion、Radix、Vaul、Recharts。DOMPurify **3.4.17**。npm + package-lock v3；当前身份阶段未改依赖或 lock。
 
-## 5. 必须保留的技术规则与用户限制
+前端为 Next 静态导出，`output: export`、`trailingSlash: true`、`out`；独立 Netlify Functions 使用 PostgreSQL/Neon。本机新身份实验是独立 HTTPS + PostgreSQL 适配器，不是新 Netlify 路由。架构分层：页面/组件 → services → Functions → 资源身份与有效 ACL 守卫 → 数据库；当前公开云 TEST 仅运行合成只读入口。
 
-### 5.1 视觉、交互与内容
+## 2. 历史开发进程与实际版本
 
-1. 保留已认可首页主构图、双行展播、成员画廊、同行时光与攻略路由。依据[DESIGN.md](E:/Recovery/jinxi-web/DESIGN.md)增量修改，不再选新审美或生成整个首页。
-2. 浅纸/点阵、黄色`#ffe528`、蓝色`#2360f5`、深描边`#151515`、2px边与硬阴影。只在真实有意图的控件上加短交互反馈，不持续发光/跳动/粒子，不添大型库。
-3. 不用大范围!important/legacy覆盖冒充内部重构。现有兼容规则不能盲删造成旧组件不可读；按模块替换并验收。
-4. 头像外框尺寸、圆角、阴影、角标完全不变：留言42×42/12px角，回复30×30/8px角，展播30×30/9px角，2px描边；照片仅填充内部。静态成员昵称/描述/工号资料不得擅改。
-5. 影像保持/1.mp4大小写、preload=none、用户主动播放、失败封面；箭头aria-hidden、pointer-events:none、展开隐藏、静态，不遮挡summary和焦点，不改变Hero高度。
-6. 自动动效需要手动暂停、hover/focus暂停、触摸浏览、reduced-motion、离屏/后台暂停；复制轨道不进入重复Tab顺序/辅助树。计时只更新必要叶组件，不能每秒播报屏幕阅读器。
-7. 参考mdldm.club只能学习A实测/B公开设计规则；禁止复制品牌、人物、课程封面、留言/经营数字或付费资源。标注红框不是UI边框。
+### 2.1 PR1–18：累计历史保留，全部未合并
 
-### 5.2 数据与权限
+本轮通过 GitHub 公开只读 API 重新确认：以下 **18 个 PR 均 open、draft、未合并**。#1 的 base 是 planning 分支，不是 main；#2–18 的 base 依次是前一 PR 的 head。以下所有 HEAD 均经本地 `git merge-base --is-ancestor` 验证包含于当前候选。原始全量表见 [PR 链核验](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/pr-chain.json)。
 
-- 208是唯一档案编号数，包含创始1/普通207；不按昵称去重，不等于在线、活跃或当前在会。真实profiles.is_active及导入覆盖没有核验。交接本轮语法树独立复算仍是208个唯一ID；档案无is_active字段。
-- 创立日保持2018-02-10；复用严格日期与UTC算法。首页年/天只做可见按日更新，不建第二套每秒计时器，不改历史事件当作已确认。
-- 档案prebuild用哈希绑定来源记录；[guild-archive-source.json](E:/Recovery/jinxi-web/config/guild-archive-source.json)与原JSON LF归一化SHA-256配套。完整Git核对时间；浅克隆/无Git用可信记录；不符应失败，不以现在/mtime伪造更新时间。
-- B1视频口径为**B：published攻略中符合规则的非空URL视频附件条目**，重复URL按附件计，不计本站/1.mp4、/2.mp4；A登记条目与C已验可播数量另行区分。真实空结果0，失败/旧接口/未验证—。
-- B1成功响应契约：`jinxi.guides.video-stats.v1`，countType=`published-valid-url-video-attachments-v1`，含count/calculatedAt/status/playabilityVerified:false。SQL不读全文、不在浏览器数全表；URL规则不代表可达或播放成功。
-- 摘要契约`jinxi.guides.summary.v2`并返回appliedFeed；feed=latest/video/pinned先SQL筛选，再LIMIT3。摘要不返回正文/评论正文/点赞收藏ID数组/私有账户字段。原完整公开读取保留；草稿/归档/all拒绝。
-- 首页不能把旧后端忽略新参数当成功全站筛选。当前未提交前端会明确拒绝不支持的契约，独立攻略中心可归一化旧完整DTO继续阅读。该浏览器兼容用例尚未跑到，单测通过不等于浏览器通过。
-- 新只读路径：RepeatableRead/READ ONLY、3秒statement timeout、5秒HTTP终止；统计1个数据查询，列表2个，另有事务内set_config控制查询。客户端60秒成功缓存/并发合并、12秒请求终止，无自动轮询；错误不回退陈旧值冒充真实统计。
-- B1新只读预览连接需专用`JINXI_PREVIEW_DATABASE_URL`；不回退生产连接，拒绝与已知生产host/port/database相同。**配置比较不证明底层物理环境已隔离**；必须由环境负责人确认。此保护没有覆盖旧写接口，不能宣布全站预览已安全。
-- localStorage账号、前端memberId/作者昵称均不是服务端认证。历史留言不能按昵称自动认领；生产头像/session/在线心跳未启用。
-- 原POST、评论、积分奖励/兑换规则及数据库结构不得在本只读阶段顺改。不修改生产内容、环境或数据库，不以测试数据替换真实文章。
+#1 base：`7dfbf69c2e2b61be7c08d4fd65d884c2b371b244`，分支 `codex/planning-handoff-2026-11-04`。其后每行 base SHA 为上一行 HEAD。
 
-### 5.3 操作边界
-
-当前交接只允许只读/非破坏性验证和文档。以后恢复B1时仍禁止自动合并PR、生产部署、生产写入、生产会话或真实头像上传；B2需独立明确授权及隔离环境。用户已明确授权的**仅本机一次性合成PG测试实例**可在相同边界内继续使用，不含生产权限。
-
-不要读出或提交.env、数据库串、Cookie、Token、真实账号/初始密码/导入资料。不要`git add .`吞入未知文件；先看暂存列表。遇到自动审批拒绝清理/停进程，不换方法绕过，记录原因与实际留下的状态。
-
-## 6. 历史问题与修复依据
-
-| 问题/原因 | 已做修正与验证 | 仍需记住的限制 |
+| PR | 阶段 / 主要成果及边界 | 完整 HEAD |
 | --- | --- | --- |
-| 初版视觉不符合用户期望 | 星夜方案保存到a95ed1b，REA-002改用真实参考的纸张蓝黄语言 | 不恢复旧审美；用户认可不是全站内部都统一 |
-| 内部组件仍卡通/玻璃/渐变，外层覆盖不足 | REA-003真正重写留言与成员组件，建立R/W/M/U审计分类 | 签到/任务等剩余模块仍未重构；旧审计中“仅首页一路由”已过时 |
-| 视频按钮hover transform覆盖居中位置 | REA-002改独立translate并保留超时/错误封面，后续主动播放实测 | B1修改后仍需完整视频回归，不改源/自动播放 |
-| 双行滚动和时钟离屏仍工作；IO一次批量事件取旧状态 | UI-004改实测宽度WAAPI、可见性生命周期、最新IO事件、叶时钟；历史后台/恢复/键盘测试通过 | 不以理论transform更快替代Performance实测，不混用整页加载与轨道性能结论 |
-| 嵌套成员/图片弹窗焦点和滚动 | 共享原生dialog、明确详情入口，历史成员四宽度及焦点返回通过 | B1未重跑全部保护组件，不可借历史全绿盖住新失败 |
-| 头像裁剪影响原外框/角标 | 005R只增加内部图片层，恢复42/30/30与原圆角/描边，像素外框0差异 | 上传仍只是浏览器原型，不能关联真实账号/历史昵称 |
-| 全量攻略读取/首页重模块/未知路由伪首页 | 005独立/guides/、按ID/摘要SQL、懒加载、真404；R修URL状态/分享/历史/正文/媒体 | 静态可导出与本机测试不证明Netlify托管/CDN/Neon已集成 |
-| 匿名公开读取草稿/默认管理密码 | 005R强制published、ID404，移除默认口令、缺配置拒绝，原生隔离PG/管理测试 | 仍是共享管理密码，不是会话/限流/CSRF完整系统；旧匿名投稿/自报作者仍有风险 |
-| 005S骨架/状态引起布局偏移 | 预留相同封面/正文尺度，状态sr-only，正常三条最终CLS0 | 空/失败/文章数量切换需另测，不能把一个正常态当全部状态无偏移 |
-| prebuild浅克隆错误更新时间、无Git失败 | A+哈希绑定真实来源日期，正常/浅克隆/无Git输出一致，错误来源fail closed | 更改档案后须审核并更新来源记录，不能手填当前时间绕过 |
-| logo/14重复下载 | A+完整导出对照证明旧预览no-store条件会重复；按现有生产缓存头后3/3不重复；现网只读HEAD曾核对相同缓存头 | 小型HTML未复现；不宣称已解释Chrome全部内部机制，也不能把预览服务器修正算作产品提速 |
-| B1两次主目录构建EPERM | 主out/1.mp4访问异常，独立源码副本Node20构建成功 | 根因未定。lstat在Node20/24表现不同、read open均有EPERM；不直接认定ACL或预览占用已定位/修好 |
-| B1 fixture/初始化脚本失败 | PG子进程stdio阻塞后改为文件stdio；合成Neon batch响应改results对象；修复测试中错误的feed期望 | 这是环境/测试修正，不是生产数据库故障证据。原失败日志保留 |
-| B1桌面卡片focus断言失败 | **未修复、未完成诊断**，浏览器当前仅前3项通过 | 脚本在鼠标交互后直接focus而没有先Tab，可能涉及:focus-visible输入模态；这是待验证假设，禁止直接放宽断言假绿 |
+| [#1](https://github.com/2574303451-create/jinxi-web/pull/1) | REA-002：依据实际参考重建认可首页，取代最初未获认可的星夜视觉方案 | `328819a57c671b33b743d1ad3f969c0fb7917048` |
+| [#2](https://github.com/2574303451-create/jinxi-web/pull/2) | REA-003：留言墙、成员展示及必要共享控件；剩余 UI 未全部统一 | `0182518277831ba0d03df3a3e1973f1a7ae06efe` |
+| [#3](https://github.com/2574303451-create/jinxi-web/pull/3) | UI-004A：双行留言展播、公会同行时光及暂停机制 | `ffa71f8313d3f9895d1b664404c29fa8dbb2dda1` |
+| [#4](https://github.com/2574303451-create/jinxi-web/pull/4) | ARCH-005：独立 /guides/、隔离 /profile-lab/ 头像原型及身份架构设计 | `80737413d3bb981b3a3287c603893eb6c09decf2` |
+| [#5](https://github.com/2574303451-create/jinxi-web/pull/5) | ARCH-005R：原头像外框保护、公开攻略读取、安全审查修正 | `2836ed13cc5f7da7ffcbce52755063dfbe80b55d` |
+| [#6](https://github.com/2574303451-create/jinxi-web/pull/6) | ARCH-005S-A：208 份档案统计、首页公开攻略补给 | `04ca4ef972636ef7ac8169d80db2dbf4af9d8b00` |
+| [#7](https://github.com/2574303451-create/jinxi-web/pull/7) | 005S A+：宣传视频手绘弧形箭头、首页保护回归、prebuild 可靠性 | `d4769e719b2dd486b82cd2867f066d6c4dfa3e19` |
+| [#8](https://github.com/2574303451-create/jinxi-web/pull/8) | B1：published 视频附件统计、摘要及服务端筛选，本机完整验收 | `115bf854a7977a3e582a89af13459115178a1e31` |
+| [#9](https://github.com/2574303451-create/jinxi-web/pull/9) | B1 最终复核，仅视频 thumbnail 无独立封面的合法回退 | `1be49379a771a2a3f23692260e438c2368841150` |
+| [#10](https://github.com/2574303451-create/jinxi-web/pull/10) | B2-0：所有 Functions 的环境边界、旧不安全写入口阻断 | `6abd039e898b9970d8d2ec4e7092e3e5b8f3aaf0` |
+| [#11](https://github.com/2574303451-create/jinxi-web/pull/11) | 身份、积分、内容安全整改方案；方案不等于已恢复业务 | `d516b8643c73797ddfbd8109d46a7dba58f6016c` |
+| [#12](https://github.com/2574303451-create/jinxi-web/pull/12) | B2-A：合成本机会话、服务器积分/幂等实验、数据库权限与 CI | `483495aefcd75316731efce76372748a0f00c8c7` |
+| [#13](https://github.com/2574303451-create/jinxi-web/pull/13) | B2-A4：公告 HTML/CSP、ACL 补查、同页重登兑换幂等、旧功能状态提示 | `f443144a912abf5869d42f4758c86caaf6031525` |
+| [#14](https://github.com/2574303451-create/jinxi-web/pull/14) | B2-A5：28 项历史 TS 全部修复，严格 tsc 真正 exit0；TEST 接入准备 | `7f850e188c750e147181fcba193a8106892b4afc` |
+| [#15](https://github.com/2574303451-create/jinxi-web/pull/15) | 独立运行时实验：Next16 / React19 / Node24，静态导出及交互兼容 | `f9ff27874beaf3388502f29360ebaa86c5a64c13` |
+| [#16](https://github.com/2574303451-create/jinxi-web/pull/16) | B2-A6：框架开销归因、浏览器兼容、TEST 与兑换收据恢复准备 | `a37786ce68ec8223ff0e512b86be1c81b3a3e777` |
+| [#17](https://github.com/2574303451-create/jinxi-web/pull/17) | 集成冻结、完整 main 差异与平台签核清单 | `9f53e1428d29a56f459e9c29ce79e0969ef1294e` |
+| [#18](https://github.com/2574303451-create/jinxi-web/pull/18) | 历史数据保护、备份/增量迁移设计、双模式视频隔离演示 | `be9513f37251d08661a3f6c1d5240ed059c59f2e` |
 
-参考：[REA-003交付](E:/Recovery/jinxi-web/artifacts/rea-003/DELIVERY.md)、[UI-004交付](E:/Recovery/jinxi-web/artifacts/ui-004-a/DELIVERY.md)、[R安全](E:/Recovery/jinxi-web/artifacts/arch-005r/SECURITY.md)、[A+构建可靠性](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/BUILD_RELIABILITY.md)、[A+图片诊断](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/IMAGE_DIAGNOSIS.md)。
+旧逐阶段报告、失败和截图保留在对应 artifacts 目录。入口见 [集成冻结](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-7/INTEGRATION.md)、[PR18交付](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-8/DELIVERY.md)。不要重复做全链审计、改原 PR 的 base/head、强推、关闭或自动合并。GitHub Releases 和 Tags 本轮 API 均返回空数组；没有新版正式 Release，旧 Netlify Published 是独立的部署事实。
 
-### 被替换/未采用的方案
+### 2.2 PR18 之后：F03/F05 独立合成 TEST
 
-- 星夜深色视觉已被用户否决并由REA方向替代，旧提交仅回看，不作为新起点。
-- 原攻略首页弹窗不再是主入口；暂停售卖/课程/VIP/AI助手从未是今夕业务，不导入参考站业务。
-- 客户端只筛前三条是005S-A明确标注的原型，B1用SQL筛选替代，不应保留为静默fallback。
-- 固定复制参考站28秒动画、假在线/假播放量、首页自动视频、用Base64长期保存头像、按昵称认领身份均不采用。
-- Netlify Blobs与其他对象存储曾作设计比较，**没有确定并实施生产存储**；历史价格只是当时方案，需要实施时重新核实。
-- 曾提出的会话时限、60秒心跳/120–180秒宽限等属于待验证设计，不是已上线规则。不能因本文记录它们就启动B2。
+基于 PR18 累计历史继续，不新建 PR19。先实现只读预检、合成初始化、角色/有效权限、实际数据库身份指纹、限定回滚和 Netlify 站点/SHA 构建门禁。预检用户回传结果集中核查后，用户另行明确批准限定云资源写入与零费用建设，最终完成合成只读云端验收。
 
-## 7. 当前仓库、环境与验证的精确快照
+重要节点：本地方案 `43121af3e7920a280480c2dae2e35db8e71f5003`；实际平台 ACL 兼容受测 `316ae73c9de885ad4ec08c7a70c5a3cd0650d374`；Linux npm 启动器修复 `7a65e7df15d04e9f5b0859e647d57932ee98d465`；最终接受部署源码 **`13de96d7531dde3222fdf513e711447a1df3e425`**；最后验收资料 **`d43ee24cfde1277eedabc8c8856de697b702dc0f`**。
 
-### 7.1 暂存与未跟踪工作
+唯一管理员清单仍是 [ADMIN_SIGNOFF.md](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/f03-f05/ADMIN_SIGNOFF.md)。三关已在获准范围完成，不要求重复空表查询、截图或新建平行清单。该文件下方仍含“第三关未过/等待 Linux CI”的过程快照，应以顶部最终验收和 results.json 的 gate3Execution 为准。
 
-以下9个文件均在index中，已暂存但未提交；`git diff`（不带--cached）为空不代表没有改动：
+### 2.3 第三阶段：本机合成成员身份，尚未上传
 
-```text
-E:/Recovery/jinxi-web/DESIGN.md
-E:/Recovery/jinxi-web/components/home/featured-guides.tsx
-E:/Recovery/jinxi-web/components/home/guild-facts.tsx
-E:/Recovery/jinxi-web/package.json
-E:/Recovery/jinxi-web/services/guide-service.ts
-E:/Recovery/jinxi-web/services/guide-video-stats.ts              [新增]
-E:/Recovery/jinxi-web/services/home-guides.ts
-E:/Recovery/jinxi-web/services/public-read-cache.ts              [新增]
-E:/Recovery/jinxi-web/tests/home-guides.test.cjs                 [新增]
-```
+从 d43 建独立本地 worktree，固定只做身份五项，不开放留言/攻略/签到/积分等业务：
 
-原有19个未跟踪文件均在 `E:/Recovery/jinxi-web/artifacts/005s-b1/`：
+- `03f20a11cd1ec57ff779a10988fb7039cbf0ba05`：本机合成登录、会话、本人资料、改密、退出；受限角色/HTTPS/浏览器验证；在既有 UI 审计登记两个待修项。
+- `6f71de9eec8093e3d139b3201fe4249c6b0e52ff`：修复延迟旧 401 响应覆盖新登录的显示与 Cookie，补真实 HTTPS 失败/通过复现。
 
-```text
-api-all.txt                       api-unit.txt
-browser-checks.cjs                 browser-results.json
-browser-run.txt                    build-after.txt
-build-before.txt                   build-file-probe.json
-build-main-EPERM.txt               build-open-probe.json
-checkpoint2-source.json            home-unit-first-failure.txt
-home-unit.txt                      postgres-final.txt
-postgres-second.txt                preview.cjs
-synthetic-guides-compare-1440.png   synthetic-statistics-1440.png
-types-initial.txt
-```
+本轮核实：相对 d43 恰好 ahead2；远端身份分支查询 404。没有对应新 GitHub CI，不能将 d43 的成功 CI 冒充当前本地提交通过 CI。该源码受测内容与提交逐项相符，见第 6 节。
 
-B1检查点1代码和16份初步证据已在本地ca0723e提交中。未跟踪文件对新会话尤其重要；它们不在HEAD、PR #7或远端，不能靠clone恢复。当前没有冲突文件，也没有新GitHub CI workflow。
+## 3. 当前功能清单与旧业务能力边界
 
-### 7.2 本机构建副本与worktree
-
-| 目录 | 用途/实际基线 |
-| --- | --- |
-| `E:/Recovery/jinxi-005s-b1-baseline` | Git detached worktree，d4769e7，即B1的A+基线；node_modules是指向主目录的junction |
-| `E:/Recovery/jinxi-005s-next-baseline` | 04ca4ef，即A+之前的005S-A，不要因目录名误当最新A+ |
-| `E:/Recovery/.jinxi-research/005s-b1-checkpoint1/source` | 暂存源文件解包的检查点1构建副本，不是正常Git工作分支 |
-| `E:/Recovery/.jinxi-research/005s-b1-checkpoint2/source` | B1检查点2暂存源码副本；当前成功Node20静态导出在该目录的out内；node_modules junction复用主目录 |
-| 其余baseline worktree | 005=ffa71f8，005R=8073741，005S=2836ed1，REA-003=328819a，UI-004=0182518；用git worktree list重新核对，保留回退 |
-
-本轮只读比较了检查点2副本与当前工作区204个app/components/config/hooks/lib/netlify/services/styles/types/tests/scripts及构建文件的LF归一化内容：缺失0、差异0。成功导出存在首页、guides、profile-lab三页。这支持“该源码副本build成功”，**不表示主out已可用、执行了全新npm ci或Netlify Linux构建**。
-
-当前主目录out曾在失败构建中改变，不能拿它当完整可用产物。不得为省事删除整个主out、覆盖用户文件或强杀不明预览进程。先诊断文件访问，或继续用独立目录构建。
-
-### 7.3 当前安全验证结果
-
-| 检查 | 本次交接实际运行/核实的结果 | 边界 |
+| 模块 | 当前候选实现及证据 | 状态 / 未完成范围 |
 | --- | --- | --- |
-| Git/GitHub | 本地ca0723e，暂存9/未跟踪19；PR1–7均未合并；远端A+仍d4769e7，B1分支404，Release/Tags为空 | 只读查询，没有fetch更新/推送/创建PR |
-| `npm run test:api` | **13/13通过，exit0**，包括两个父test；测试为API/Neon序列化/前端合约/缓存的合成网络样本 | 新脚本在暂存package.json，HEAD本身尚没有这个脚本修正；不包含真实SQL或生产API调用 |
-| 独立TypeScript | **exit2，28→28，新增0/消除0**；完整文件/TS编号/诊断文本对比，只忽略行列 | 仍未通过类型检查，不能只汇报“无回归”而省略失败 |
-| 六个B1产品Functions/共享JS语法 | `node --check`全部通过 | 语法不证明Netlify函数部署/Neon服务成功 |
-| 隔离PG只读复核 | PostgreSQL17.11、专用reader、transaction_read_only=on；published14/draft1/archived1；SELECT聚合4 | 全部为已授权本机合成数据，本交接没有reset/seed/写表 |
-| 原生PG集成历史日志 | 最新检查点1日志22/22通过：API6含父项，PG16含父项；实际SQL、锁超时、EXPLAIN、4并发、旧DTO/私有状态隔离 | 发生在B1开发期间；本次未重跑会DROP/TRUNCATE的集成测试。仅16行样本，不证明生产规模 |
-| B1构建记录 | 独立Node20副本成功；首页78.9kB/First Load173kB，guides5.93/93.9kB，profile14.3/108kB | 是Next报告值，不等于CDP实际总下载；主目录两次EPERM失败不可抹掉 |
-| B1浏览器 | **未通过**，仅1440px前3项PASS，随后focus outline0≠3失败，results.metrics为空 | 后续移动宽度、真实空库UI/失败重试/乱序/旧后端等代码虽已写，尚未执行到 |
-| 手机箭头 | 检查点1的390/320通过：尖端距Play图标4.5px、无线条碰字、原布局矩形一致、Tab/Enter/tap/open隐藏通过 | 不能扩展成整个B1五宽度或200%已通过 |
-| Lint | 仓库仍无有效ESLint配置；历史命令进入初始化退出1 | 本次未运行交互初始化，更没有关闭检查或添加新配置 |
-| GitHub CI | `.github/workflows`不存在；最小CI仅待评估方案 | 没有CI运行结论，不把便携Node构建叫GitHub/Netlify CI通过 |
+| 首页、Hero、宣传片 | [首页](E:/Recovery/.jinxi-research/phase3-member/worktree/app/page.tsx)、[home组件](E:/Recovery/.jinxi-research/phase3-member/worktree/components/home)；保留纸张 UI、/1.mp4、弧形箭头 | 已有本机/云 TEST 回归；不得重新设计；非自动播放、首页不提前下载视频 |
+| 成员与公会事实 | 静态档案、成员轮播/画廊、[事实摘要](E:/Recovery/.jinxi-research/phase3-member/worktree/lib/guild-home-facts.json)、[同行时光](E:/Recovery/.jinxi-research/phase3-member/worktree/components/guild-uptime-terminal.tsx) | 208 份档案、创立日2018-02-10；不是208个在线/有效登录账号 |
+| 留言、回复、反应 | [留言服务](E:/Recovery/.jinxi-research/phase3-member/worktree/services/message-wall-backend.ts)、[messages](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/messages.js)、message-actions | 云 TEST 合成公开读取可用；发布/回复/删除/管理等旧写入关闭，正式可信作者绑定未实施 |
+| 双行留言展播 | [message-showcase](E:/Recovery/.jinxi-research/phase3-member/worktree/components/home/message-showcase.tsx)、ribbon 行及 motion hook | 已实现暂停、减少动态与生命周期保护；原 UI 保留 |
+| /guides/ 阅读及精选 | [独立页](E:/Recovery/.jinxi-research/phase3-member/worktree/app/guides/page.tsx)、[strategy-read](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/_shared/strategy-read.js)、services/home-guides.ts | published 读取、摘要、latest/video/pinned先筛选后LIMIT3；云 TEST 合成契约通过。投稿/评论/点赞/收藏/审核的真实写入未恢复 |
+| 视频统计和封面 | [统计函数](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/guide-video-stats.js)、[媒体SQL](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/_shared/strategy-media.js) | 合法URL的视频附件条目数；0与失败分开，URL合法不代表可播放。thumbnail合法回退；不造封面/播放量/时长 |
+| 外链/本站双模式视频 | [设计及演示](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-8/VIDEO_DESIGN.md)、其video-demo目录 | 已有隔离演示，未写真实攻略或接正式投稿；可选playbackMode兼容media_files，不重定义B1统计 |
+| 公告 | [cyber-announcement](E:/Recovery/.jinxi-research/phase3-member/worktree/components/cyber-announcement.tsx)、DOMPurify清理及导出CSP | 公开读/安全渲染已验；“编辑本机草稿”仅本地，不是管理员发布；内部UI待第四阶段 |
+| 赞助 | [sponsorship函数](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/sponsorship.js) | 合成公开只读可验；正式登记/管理写入未恢复 |
+| 旧登录/改密/资料 | [旧登录函数](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/auth-login.js)、旧页面入口 | 新候选旧身份入口安全关闭；localStorage不是身份。旧生产部署行为不能仅由当前main推断 |
+| 旧session-lab | [隔离页](E:/Recovery/.jinxi-research/phase3-member/worktree/app/session-lab/page.tsx)、_shared/session-lab.js | 历史本机合成会话/服务器积分和幂等实验；云端继续拒绝，不是正式登录/兑换已上线 |
+| 新成员身份五项 | [member-local说明](E:/Recovery/.jinxi-research/phase3-member/worktree/member-local/README.md)、identity.cjs、database.cjs、schema.sql、server.cjs、demo.* | 已实现且本机合成实测；不在app/public/Functions入口、不加载首页，不提供云身份功能 |
+| 签到、任务、积分、兑换、排行 | checkin/points/leaderboard/points-board及对应services；[恢复矩阵](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-4/RESTORATION_MATRIX.md) | 旧不安全写入/私有投影关闭；每日任务规则/历史参考值不等于当前可领取。跨刷新/设备未确认兑换恢复仅设计，不能宣称完成 |
+| 组队、游戏数据 | [team-service](E:/Recovery/.jinxi-research/phase3-member/worktree/services/team-service.ts)、[game-data-service](E:/Recovery/.jinxi-research/phase3-member/worktree/services/game-data-service.ts) | 多为设备localStorage/默认数据；无已验共享后端或实时游戏能力 |
+| 头像 | [profile-lab](E:/Recovery/.jinxi-research/phase3-member/worktree/app/profile-lab/page.tsx)、原PublicAvatar | 隔离本地裁剪/IndexedDB原型；正式安全上传/持久存储/全站作者头像未完成 |
+| 在线人数及右侧抽屉 | [B2C+规划](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-0/B2C_PLUS_PLAN.md) | 尚未实现真实心跳、名单API、隐私开关或正式抽屉；首页仍“—”，不得显示合成在线用户 |
 
-当前28项TS按文件分布：strategy-wall2、media-gallery1、sidebar1、toaster10、components/ui/use-toast3、hooks/use-toast3、guild-terminal-config6、strategy-wall-service2。确切文件及完整文字在[基线日志](E:/Recovery/jinxi-web/artifacts/005s-b1/types-before.txt)。
+完整旧功能到新版恢复条件见既有 RESTORATION_MATRIX、[RESTORE_SEQUENCE](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-5/RESTORE_SEQUENCE.md)、[IDENTITY_AUDIT](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-7/IDENTITY_AUDIT.md)。旧站是否实际部署某功能须另结合 Published 产物和已授权只读证据，不能把 GitHub schema 或函数列表直接当成上线事实。
 
-**历史文档差异必须纠正：**
+### 3.1 新本机身份的具体契约
 
-- AGENTS.md/COLLABORATION.md/WEB_EXPLORATION.md中的40项、攻略仍首页弹窗等是早期状态；现3路由、28诊断。没有在交接中擅自重写旧文件。
-- REA-003 UI_AUDIT写“只有首页路由”、原攻略/时光待统一，现已分别被005和UI-004部分取代；签到等剩余审计仍有效。
-- 005S-A称视频聚合/真SQL未实施，在其时点正确；B1检查点1现已实现并跑原生PG。在线和真实头像仍未实施，不能一起划掉。
-- A+报告称test:api缺test-api.js，是当时事实；**当前暂存package.json已改为node --test，本次13通过；本地HEAD版本的package.json仍旧**。旧api-all.txt记12是新增预览隔离子项之前的结果，不覆盖本次13。
-- A+末次13.88MB证据中，头像结果JSON有8组；其DELIVERY.md某处仍写4项，属旧汇总计数不一致，以JSON为准，不据此创造新测试。
-- 历史127.0.0.1预览URL都是临时服务地址；**本轮端口核验3026–3030、3040–3045均未监听**。不要给用户承诺现可打开旧链接。B1浏览器runner已结束，不在后台继续开发。
+旧源码 [database-member-auth-schema.sql](E:/Recovery/.jinxi-research/phase3-member/worktree/database-member-auth-schema.sql) 的关联是 accounts.id bigint PK；accounts.employee_no UNIQUE FK → profiles.employee_no PK。新实验通过独立不可变 account→随机member UUID映射实现稳定主体，不假定旧profiles已有UUID，不按昵称认领历史内容。真实库完整列/触发器/密码格式分布尚未亲连核查。
 
-### 7.4 隔离PostgreSQL与工具位置
+复用 [password.js](E:/Recovery/.jinxi-research/phase3-member/worktree/netlify/functions/_shared/password.js)：合成PBKDF2-SHA256 200000次旧格式与600000次新格式兼容；迭代有界并补足验证工作量。不接受明文/未知算法。真实208账号不能因这项合成兼容测试被宣称已可登录。
 
-- B1本机集群仍在运行，仅绑定 `127.0.0.1:55433`；库名`jinxi_005s_b1_test`，进程核验时主PID24760（后续会变，按端口/专用目录确认，不照抄PID停进程）。没有注册Windows服务。
-- 目录 `C:/Users/lilei/AppData/Local/Temp/jinxi-005s-b1-postgres`，含pgsql/bin、data及随机测试凭据文件。**不要复制/展示/提交runtime.json或pwfile，不放入交接包。** 本交接未关闭或清理集群。
-- 连接助手硬限定loopback/端口/库名/角色：[tests/support/postgres.cjs](E:/Recovery/jinxi-web/tests/support/postgres.cjs)。默认reader只读；admin仅测试seed、空表、锁等。原生PG来源/解压不在项目依赖；17.11二进制来源与hash有历史记录。
-- [tests/strategy-postgres.test.cjs](E:/Recovery/jinxi-web/tests/strategy-postgres.test.cjs)及[浏览器B1检查](E:/Recovery/jinxi-web/artifacts/005s-b1/browser-checks.cjs)包含专用库DROP/TRUNCATE/seed。**它们不是非破坏性只读检查**；只有恢复B1并确认该可丢弃实例后才运行，不能改成任意数据库地址，不能与预览/性能采样并发重置。
-- 便携Node20：`C:/Users/lilei/AppData/Local/Temp/jinxi-005s-next-runtime/node-v20.20.2-win-x64/node.exe`，其npm CLI在相邻node_modules/npm/bin/npm-cli.js。
-- 浏览器测试工具：`C:/Users/lilei/AppData/Local/Temp/jinxi-browser-tools/node_modules/playwright`，Edge为`C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe`。历史脚本多有本机绝对路径，迁机需适配，不代表工具包进项目依赖。
-- 项目外`.jinxi-research`存在历史GitHub发布辅助脚本，部分硬编码旧分支。不要直接复用后误更新旧PR；需先核对作用域。连接器/网络过去有间歇故障，官方Git Data API曾逐hash上传同SHA；不是授权强推或覆盖上游的理由。
+本机 `https://127.0.0.1:3069/api/member` 仅支持 login、me、本人profile、change-password、logout。首次改密前仅允许身份恢复/改密/退出，不开放资料。不存在、错密、锁定、停用、缺映射统一拒绝；客户端userId/memberId/账号主体等额外输入直接拒绝。
 
-## 8. 遗留风险、待确认事项与性能边界
+32字节随机不透明令牌，数据库只存摘要；`__Host-` Cookie，HttpOnly/Secure/SameSite=Lax/Path=/。POST要求精确Origin、JSON、体积限制，已登录写操作要求绑定会话的CSRF；无宽泛CORS，响应no-store。本人资料不返回登录账号、工号、密码散列、会话ID或IP。
 
-| 优先级 | 问题与下一验证 |
-| --- | --- |
-| **P0 / 生产阻断** | 积分接口仍信任客户端账号/奖励/兑换价格；localStorage不建立服务器身份。正式成员写能力前必须独立整改，服务器决定主体与规则，不能只加新会话而留下旧绕过路径 |
-| **P0 / 正式身份与内容写入阻断** | 匿名攻略POST/客户端自报作者、旧actions/自动view/反应身份、防滥用、限流、共享管理口令、CSRF/审计未完整解决。B1只读安全改善不覆盖这些接口 |
-| **P1 / B1验收阻断** | 浏览器卡片focus失败，需真实Tab键输入模态与A+对照定位；完整五宽度、乱序、错误/0/缓存/旧后端/独立页回归尚未完成 |
-| **P1 / 工程** | 主out/1.mp4 EPERM根因不明；隔离构建可继续但主目录仍有失败状态。不得靠删文件或关杀不明进程掩盖 |
-| **P1 / 质量门槛** | 28项TS历史诊断、Lint无配置；B1新test:api脚本尚未提交。CI最小方案未实现，不能忽略tsc退出码做绿灯 |
-| **P1 / B1综合** | 新摘要/统计体积、首页真实请求瀑布、切换耗时、B1 JS/CSS/图片/移动LCP/CLS与A+对照尚未录完；生产规模EXPLAIN/Neon实际批事务/超时传输与托管环境未验 |
-| **P1 / 数据事实** | 真实在会is_active/档案导入没有核验；最后一次实际公开攻略GET（A+）仅ID13/5/1，测试/模板内容且无封面/视频/置顶。本交接不再查询生产内容；隔离攻略16条/视频4绝不能写为线上数量 |
-| **P2 / 可访问性** | A+真实200%时390/320窗口对应195/160 CSS px，整页已有197px横宽；箭头未扩大。B1新手机箭头200%未复验；真实手机硬件/读屏人工检查未完成 |
-| **P2 / UI与内容** | 签到/任务/排行、组队/游戏数据、公告/赞助、登录/改密/入会、FAQ/Toast等仍需按模块统一，旧legacy规则仍存在；先完成B1，后续按验收顺序，不重做已认可组件 |
-| **P2 / 证据体积** | 当前HEAD的artifacts有1536个tracked文件、175199853字节（约175.20MB原始文件，不是Git pack或网页传输）。B1当前目录35文件约747522B。保留必要失败/trace/复现脚本，后续不持续堆叠重复PNG；本交接不删除既有证据 |
+会话过期、退出、改密、锁定/停用由服务端判定；改密撤销全部设备旧会话，重新启用不复活旧会话。7天绝对期限、30分钟空闲、最多5设备为**本地实验参数**，非正式产品批准标准。多标签共享Cookie；广播只触发服务器重验，不广播令牌。仍有效bearer Cookie可能被复用，不能声称窃取Cookie绝不造成会话盗用。
 
-A+最后一轮本地实验：JS601170→601994B、CSS140679→142010B；慢手机LCP中位2924→2884ms，CLS各次0，初始Media/完整攻略代码0。每条件仅3次，不能宣称线上达标或稳定提速；仍高于2.5s。**这是A+的实验，不是B1数据。** 详见[A+性能原始范围](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/PERFORMANCE.md)。
+新数据库仅fresh loopback `127.0.0.1:55436/jinxi_member_local`。`jinxi_member_owner` NOLOGIN；运行角色`jinxi_member_session` NOINHERIT，无管理能力、对象所有权、DDL/TEMP、解锁、档案/身份映射和业务写权限；仅认证五表所需读取、密码/登录元数据、会话/限流的最小列写权限。实际权限和数据库身份先验，再业务查询；不是只凭URL/环境变量自报隔离。
 
-正式会话/头像的会话期限、对象存储选型/费用、数据库迁移和在线心跳策略仍待用户在B2确定/批准；历史设计书不是自动实施许可。真实头像应服务端验证/重编码/去元数据，图片持久化到对象存储、数据库只留key；原型Base64/Blob的本地路径不能冒充生产。
+## 4. 已确定的技术、产品和操作规则
 
-## 9. 下一阶段具体执行顺序
+### 4.1 UI与数据事实
 
-1. **恢复上下文并保护未提交成果。** 先读本文与B1检查点1，再读index差异及失败日志。确认用户要求继续B1后再改代码；不要从旧005/005R或仅PR #7重新开工覆盖当前分支。若只能访问GitHub，先取得本机B1提交及暂存/未跟踪工作；不可假装远端有ca0723e。
-2. **恢复独立预览，定位focus失败。** 源码副本204文件与当前一致，可先使用它的out。按真实键盘Tab/Enter驱动，与A+在相同输入模态下比较`document.activeElement`、`:focus-visible`和outline；区分脚本问题与CSS问题，只修已证实原因，不削弱焦点标准。
-3. **完成检查点2。** 跑320/390/768/1024/1440；保持208/日期/在线占位，统计真实0与错误—、封面加载失败、视频标记/置顶/最新真正结果、切换竞态、60秒缓存/合并/强制重试、旧后端不误展示、无自动视频/详情代码、独立guides与返回。保留有清楚“隔离合成数据”标识的必要截图，不把UI fixture称作真实写入。
-4. **完成检查点3。** 在已授权本机合成PG重跑真实参数化SQL、异常JSONB/URL/草稿隔离、超时/故障、并发与数据不变、EXPLAIN；根据规模另行验证，不用16行暖查询代替增长评估。验证Neon传输契约与真实本机SQL各自边界，继续记录生产投稿/积分P0。
-5. **做真实性能与保护回归。** 同条件A+基线/B1交替样本，CDP保留缓存语义，统计真实初始JS/CSS/图片/Media、推荐首次/切换/详情响应、移动CPU降速LCP/CLS及失败样本；重测头像原框、双行/时光生命周期、原业务入口、宣传片、reduced和200%。不要把现隔离服务器建连开销或缓存头变化误归因于产品。
-6. **最小CI方案与工程门槛。** 建议Node20/npm10、npm ci、build、现有API契约测试、专用PG测试服务/受限配置、独立tsc结果与基线完整诊断差异。当前没有workflow，不虚构已执行。tsc失败必须显式保留，不能用`|| true`、减少include或关闭检查伪绿；Lint补配置是独立变更范围需说明。
-7. **独立提交检查点2/3并交付B1。** 完整SHA、文件清单、API/SQL样本、截图/性能/失败/回滚清楚区分。B1 PR应以`codex/jinxi-005s-next-a-plus`为base并依赖#7；发布分支/PR需依用户恢复开发指令，不在本次交接执行。审查前不得自动合并/生产部署。
-8. **B1通过后再B2，然后C。** B2须单独授权可信服务端会话、身份绑定/CSRF/Origin/失效、积分P0整改、心跳租约/多标签去重、锁屏断网、隔离存储头像。原外框不变。C再按审计拆剩余UI，不临时整站翻新。
+依据 [DESIGN.md](E:/Recovery/.jinxi-research/phase3-member/worktree/DESIGN.md)：白/浅纸底、`#ffe528`黄、`#2360f5`蓝、`#151515`深描边、2px边框、4/8px硬影、16px卡片、12px按钮。保留已认可Hero、弧形箭头、成员轮播、留言墙、双行展播、同行时光和独立攻略。不加动画库、持续闪烁/发光、旧玻璃霓虹；不以全局!important/legacy补丁替代组件修复。
 
-### 回滚原则
+头像只能替换原框内部：保留尺寸/圆角/边框/阴影/位置；留言42px、回复30px、展播30px及攻略作者各原框均保护。没有图片或加载失败回文字；上传失败不丢旧头像；不能按相同昵称认领旧留言。现有公会图像也不能任意替换。
 
-当前本地B1 HEAD基于d4769e7；没有生产迁移或数据回滚。若用户决定放弃B1，应先完整保存当前index与未跟踪成果，再在干净隔离分支按提交逆序revert；不要对这个脏工作区直接reset或checkout旧基线。撤回到005早期会丢R的头像/公开状态/默认密码/CSP修复，不是安全基线。
+208按静态档案稳定ID计，不按昵称去重；创立日2018-02-10；在线不可用显示“—”，不是假0。视频统计按published合格附件条目，排除宣传视频；重复URL不同旧附件沿原定义各计一次，不静默改成唯一视频数。首页不预取完整阅读器、清理器、头像编辑器、第三方播放器或视频。
 
-## 10. 新会话接管指引与命令
+暂停机制覆盖hover/focus/touch/手动/后台/离屏与prefers-reduced-motion；保持真实Tab下3px focus-visible，不放宽断言假绿。长文本、空态、失败、移动320/390及键盘均需验收；静态截图不能证明交互。
 
-### 优先阅读
+### 4.2 未来在线成员规格（后续B2-C+，本轮未实施）
 
-1. 本文；[AGENTS](E:/Recovery/jinxi-web/AGENTS.md)、[COLLABORATION](E:/Recovery/jinxi-web/COLLABORATION.md)、[WEB_EXPLORATION](E:/Recovery/jinxi-web/WEB_EXPLORATION.md)（注意上文列明的过时结论）。
-2. [DESIGN](E:/Recovery/jinxi-web/DESIGN.md)、[A+交付](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/DELIVERY.md)、[A+剩余](E:/Recovery/jinxi-web/artifacts/005s-next-a-plus/REMAINING.md)。
-3. [B1检查点1](E:/Recovery/jinxi-web/artifacts/005s-b1/CHECKPOINT1.md)、[当前失败日志](E:/Recovery/jinxi-web/artifacts/005s-b1/browser-run.txt)、[运行器](E:/Recovery/jinxi-web/artifacts/005s-b1/browser-checks.cjs)、[源码快照](E:/Recovery/jinxi-web/artifacts/005s-b1/checkpoint2-source.json)。
-4. [R安全边界](E:/Recovery/jinxi-web/artifacts/arch-005r/SECURITY.md)、[S数据设计](E:/Recovery/jinxi-web/artifacts/arch-005s/DATA_AND_ARCHITECTURE.md)、[身份方案](E:/Recovery/jinxi-web/artifacts/arch-005/IDENTITY_ARCHITECTURE.md)、[剩余UI](E:/Recovery/jinxi-web/artifacts/rea-003/REMAINING.md)。
+服务器有效会话 + 有效/未锁定成员 + 有效活动心跳，多标签/多设备按稳定member ID去重。60秒心跳、180秒超时、15秒聚合缓存仅待测初值。绿色静态点意为最近窗口有心跳，不证明此刻正在浏览。
 
-建议技能：handoff读取交接；frontend-ui-engineering用于局部UI与键盘检查；diagnose用于focus/EPERM/性能的复现与可证伪诊断；review用于B1最终规格和代码审查。REA仅在新的真实参考取证需要时使用，不重装、不重做首页调查。没有用户或适用规则授权时不自行启动多代理任务。
+首页可公开聚合总数X；具体名单只向已登录成员提供，个人在线可见性**默认关闭、主动开启**才进入Y人展示。不能先发私有全名单再前端过滤；不泄露账号/工号/IP/设备/会话/精确活动时间；同名匿名作者不被关联。
 
-以下只读/无业务写入命令可先执行：
+点击在线卡片右侧抽屉“在线公会伙伴”，原文字/真实头像、昵称、静态绿点、“X人在线·Y人公开展示”。保持纸张UI，约380–420px、手机不溢出、Escape/遮罩关闭、焦点陷阱与返回、背景滚动锁定、减少动态。仅打开且可见时有限轮询、合并请求/按需分页；不默认WebSocket，不重复造心跳。无人在线、无人公开、加载/过期/断网/服务器错误分开。名单逻辑路由要核实Netlify真实映射，不能假定嵌套路径天然可用。
+
+### 4.3 安全与授权纪律
+
+- 只在已批准资源及动作范围操作。生产数据库、真实账号、存储、正式部署必须另行明确批准；不读原始密钥，不输出完整DSN，不导出.env/Token/hash/账号私有资料。
+- 生产禁用DROP/TRUNCATE、不受控ALTER、重置/覆盖、重导账号、改旧密码/解锁/激活/覆盖积分留言。`scripts/import_accounts_to_db.js`旧ON CONFLICT会覆盖密码/is_locked/is_active，冻结不能直接解除运行。
+- 当前F03授权仅合成只读云TEST；不自动扩展为云身份写入。不得改变reader、启用writer LOGIN、把本机schema直接上云或替换已验部署。
+- 旧localStorage仅历史数据与草稿，不是认证；不能恢复客户端自报作者、账号、价格、奖励。服务端决定主体/规则、可信商品价、事务与幂等。
+- 不新建不必要PR19、不改main/原18PR、不强推、不自动合并/发布/解锁、不产生未批准费用；推送审核分支也须后续授权。代码集成、环境验收、真实数据迁移、发布分开。
+- 不删失败证据，不靠扩大any、ts-ignore、缩小include、关strict或放宽测试制造通过；不以测试数量增加代替行为和权限证据。
+- 用户已多次要求停止重复审计、重复截图/空表查询、空泛方案和额外关卡。复用现有文档；真实技术冲突才最小修正，说明原因。没有待办时不要索要新凭据。
+- Windows删除/移动/停进程必须核实绝对目标与专用实例；不因端口冲突杀不明服务。后台辅助进程隐藏窗口，不清理用户工作树/证据。
+
+## 5. 历史问题、修复与保留失败
+
+| 问题 | 原因及最终处理 | 验证/现状 |
+| --- | --- | --- |
+| 最初首页方案未认可 | 早期星夜视觉不符合目标，替换为REA-002依据实际参考的纸张视觉 | 旧方案仅历史，不再重做首页 |
+| B1卡片focus 0px≠3px | 必须区别鼠标/脚本聚焦与真实Tab的:focus-visible，完成真实输入模态复核 | PR8及后续完整回归；不是当前未通过项，不重启早期失败任务 |
+| 旧TS28、Lint/CI缺失 | Toast、Sidebar、攻略契约、档案配置、正则目标分批修；保留strict，建立非交互ESLint与CI | PR14及本轮raw tsc/lint exit0；旧“28项仍在”过时 |
+| 旧客户端身份/积分信任 | userId、奖励/价格/作者可自报，localStorage不建服务器认证 | 全旧入口先阻断；server规则在隔离session-lab演练，不等于正式恢复 |
+| 公告黑名单/脚本CSP过宽 | 受维护DOMPurify白名单、URL/粘贴/图片策略；静态导出生成脚本哈希 | PR13无害XSS样本与浏览器证据；不盲删必要style支持、不重开发布 |
+| Next16 JS增加 | gzip首页182556→228546B，+45990B；45950B来自主要框架/ReactDOM/路由块 | PR16来源及重复性能数据；不能仅凭LCP接近说等价 |
+| 动效拆分试验无收益 | m/LazyMotion与既有FAQ异步motion破坏共享，额外+4302B | 已撤回，保留原动效，不重复研究 |
+| TEST预检平台ACL兼容 | Neon cloud_admin默认模板不是任意用户越权，原脚本全拒绝误阻塞 | 精确识别已解释模板，未知/全局/权限变化仍拒绝；失败和专测保留 |
+| reader初始无法设密/登录 | 无密码角色平台Reset限制，且误用owner密码不能认证reader | 隐藏输入helper、SCRAM、原生psql真实reader证明；凭据不入Git |
+| TEST Git Host key verification | 缺Netlify GitHub App installation绑定 | 绑定现有80952013，未关闭SSH验证 |
+| Windows npm启动器到Linux失败 | 仅Windows相邻node_modules/npm路径假设 | 7a65修复POSIX lib布局，并实际Linux CI验证 |
+| TEST React418水合失败 | 平台head注释/前导换行与普通head资源声明顺序；只移注释的诊断不足 | 13de改为React管理link/style资源；840+277原CSS字节不变，真实未修改响应三宽度通过；不忽略水合、不降CSP |
+| 本机本人资料日期偏一天 | PG DATE经JS Date/UTC切日导致2018-02-10→09 | SQL直接to_char YYYY-MM-DD，严格回归原日期 |
+| SQL缺批准标记意外放行 | NULL比较在IF中为unknown | IS DISTINCT FROM，DDL前真实缺标记负向失败，再合法初始化 |
+| 最初PG/HTTPS用例失败 | idle用例误命中过期行；伪Host同时改SNI导致先被TLS正确拒绝 | 只改目标会话、用受信CA+正确SNI测Host；CHECK/TLS不放宽 |
+| 延迟401删新登录 | 旧恢复响应晚于新登录；前端代次只保UI不能阻止Set-Cookie删除新Cookie | 6f71：401不隐式清Cookie，仍拒绝；显式退出/改密照常撤销清除，前端只当前代次更新。延迟真实401的失败/成功浏览器证据及PG五宽度重跑保留 |
+| 旧out/1.mp4 EPERM | 历史原目录文件访问失败，隔离副本构建可用 | 后续Next16/新工作树构建成功；没有声称旧文件锁根因已修，不随意删out |
+
+证据入口：[B1复核](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/005s-b1/REVIEW_GUIDE.md)、[HTML/CSP](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-4/HTML_AND_CSP.md)、[包体归因](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-6/BUNDLE.md)、[性能](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/b2-a-6/PERFORMANCE.md)、[F03失败](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/f03-f05/FAILURES.md)、[本机身份交付/失败](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/DELIVERY.md)。性能数字是指定环境历史样本，非当前生产SLA；不再做无收益框架/动效拆分。
+
+历史原完整失败日志含合成摘要的片段和冗长证书对象，已私有保留及登记hash；公开证据保留错误码、失败位置与计数并脱敏，不索取私有原文或复制到交接。后续修复不抹掉这些失败。
+
+## 6. 当前仓库、环境与测试的真实快照
+
+### 6.1 Git与文件保护
+
+本轮开始最新工作树干净，无暂存/未暂存/未跟踪/冲突。原PR14目录和F03工作树本轮也未见未提交输出。未切分支、未fetch改引用、未提交/推送。**完成本次交接后预期只有根CODEX_HANDOFF.md修改、artifacts/handoff/新备份与核验资料未跟踪；这些文档尚未提交。** HEAD仍6f71。
+
+本地`HEAD`对`main`完整Git差异：2483文件，399348插入、9088删除（包含大量既有证据，非纯产品代码行）。采用本地Git对象比较，不受GitHub PR files API文件数量上限影响；不把本次祖先核验说成又完成一轮全源码安全审计。PR18后当前候选完整保留原18PR祖先，优先复用当前累计候选，避免从main重建或再做重复巨大PR。
+
+当前身份改动：member-local/、scripts/member-local.cjs、两项身份测试、package脚本/ESLint范围、artifacts/phase3-member、UI_AUDIT和交接提示。对d43的app/components/hooks/lib/services/public/styles、Netlify Functions、test-environment、netlify.toml、workflow、package-lock内容差异均为空。
+
+`node_modules`是指向F03工作树安装目录的junction。不要随意在此npm ci清空共享安装；需要干净重装时另建已批准独立目录并保留lock。本轮未npm ci、未重新build。原所有基线worktree、构建副本、工具和证据保留，运行`git worktree list`查看真实路径，不reset/clean/remove。
+
+### 6.2 本轮安全重验与既有实测分开
+
+| 范围 | 结果与证据 | 本轮是否重跑 |
+| --- | --- | --- |
+| 原始TypeScript | `tsc --noEmit --incremental false` exit0 | 是；[本轮typecheck](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/typecheck.log) |
+| ESLint非交互 | exit0，max-warnings0 | 是；[本轮lint](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/lint.log) |
+| API/安全单元 | 14/14 + 71/71，fail0 | 是；[本轮unit](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/handoff/2026-11-07T09-00-53Z/unit.log)，clean runner剥离数据库/云变量 |
+| 当前源码/提交绑定 | results.json的12项LF归一化SHA256，与工作树及HEAD blob均一致；保护源码无diff | 是；本轮核验记录 |
+| 原始构建 | exit0，静态CSP7页8哈希 | 既有本机build.log；此次不重写构建产物 |
+| 新本机PG/HTTPS | 17组子场景通过；Node报告18项含父项 | 既有postgres-cookie-race.log；此次未创建/重置DB |
+| F03只读回归 | 46/46，另一fresh loopback55435合成集群 | 既有read-only-regression.log，不是云SQL |
+| 身份浏览器 | 1440/1024/768/390/320、真实3px键盘焦点/reduced-motion、改密/退出/过期/草稿、多标签、断网恢复；页面错/CSP/外部请求均0 | 既有[最终结果](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/browser/2026-11-07T08-32-58-428Z/results.json)及同目录PNG；此次未启动浏览器 |
+| Cookie响应竞态 | 延迟实际401，登录后释放；新显示与服务器本人资料仍有效 | [先失败](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/session-race-failed.json)、[后通过](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/session-race-passed.json) |
+| 云TEST现状 | 指定Deploy/SHA保持ready，stop_builds=true、skip_prs=true | 本轮只读Netlify元数据复核；不读env值 |
+| GitHub CI | d43及13de均completed/success且head_sha匹配 | 本轮只读REST复核；不是6f71的CI |
+
+本机身份覆盖208条**完全合成**旧形状兼容记录（事务回滚）、正确/错误/不存在/锁定/停用账号、强制改密、跨账号拒绝、伪造/轮换/过期/退出重放、锁定再启用不复活、并发设备上限、SQL注入/输入校验/CSRF/Origin/限流、实际最小列权限/DDL/TEMP/definer/业务越权拒绝、指纹/权限漂移阻断、事务故障回滚。详见 [results.json](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/results.json)及引用日志，不能扩大为真实成员验收。
+
+真实已成功CI：[已验部署源码13de](https://github.com/2574303451-create/jinxi-web/actions/runs/42344725850)、[累计资料d43](https://github.com/2574303451-create/jinxi-web/actions/runs/42347156554)。现workflow [security-checks.yml](E:/Recovery/.jinxi-research/phase3-member/worktree/.github/workflows/security-checks.yml)在Ubuntu24/Node24执行npm ci、原始tsc/build/API安全/lint、PG17临时集成。它没有发布步骤；本地新member-local PG完整套件尚未加入云CI，不应以原CI包括老session-lab就声称覆盖新实现。
+
+此次GitHub连接器传输失败，公开REST个别EOF后curl HTTP1.1成功。只读元数据结果保留；不要将网络失败误报“PR数量0”。Releases/tags空数组与PowerShell外层数组Count=1的包装差异已经纠正。
+
+### 6.3 云端合成TEST与生产：严格分开
+
+| 资源 | 已知身份与状态 | 证据边界 |
+| --- | --- | --- |
+| Netlify TEST | `jinxi-web-test`；Site `17885134-a57c-4589-83d3-39e30be9e0cf`；Deploy `6aeebe4ceae178c10e4199e8`；源码`13de96d7531dde3222fdf513e711447a1df3e425`；https://jinxi-web-test.netlify.app/ | 本轮只读确认ready、构建暂停、PR预览关闭；不能替换为6f71 |
+| TEST上下文/团队 | TEST站点自己的`production`部署context，数据分类`synthetic-test`；XUST Legacy Free，团队`689e1405e8627000726e883c`，GitHub App installation80952013 | context叫production不代表生产资源；额度团队共享，不是独立计费保证 |
+| Neon TEST | 项目`jinxi-test / restless-salad-74668264`；分支`production / br-red-pond-bdtrjpmy`；endpoint`ep-dry-queen-bd6q46s6`；DB`neondb`；PG18.6 | 用户预检、初始化COMMIT、reader原生证明和托管合成读取的既有证据，此次不连Neon |
+| TEST实际注册 | cluster `7704950029723409949`、OID16397；环境UUID `0fdb5a68-436e-4a80-b01d-5b0207637eac`；指纹`c0d2a0fbc7baf4b680e8a9403052245636078e5cb41c3d51a4d27a3c3641ede1` | ID是非秘密元数据，仍须与实际DB/role/ACL证明联合，非自报开关 |
+| TEST运行权限 | `jinxi_test_reader` LOGIN/NOINHERIT且实际只读最小ACL；`jinxi_test_owner` / `jinxi_test_writer`保持NOLOGIN | 这里不指平台初始化主体neondb_owner；不能用管理员跑站点或把writer解锁作为新身份捷径 |
+| TEST数据 | 5攻略（4published）、2留言、4禁用合成账号、0会话；公共公告/赞助各1；视频附件合成统计1 | 不是真实公会数量；URL合法但不保证可播的样本是刻意测试 |
+| 旧生产Netlify | `jinxi-web`；Site `613b5b7c-45b1-494f-9328-dd0625a57963`；Published `69a92f4f7be620c834490be1`；https://jinxi-web.netlify.app/ | 锁定、main-only、Don't deploy pull requests来自已签核控制台/既有元数据；本轮未操作/重查旧站 |
+| 旧Published产物 | [独占部署链接](https://69a92f4f7be620c834490be1--jinxi-web.netlify.app/)，用户控制台2026-03-05 15:22、Production、12Functions/5redirect/17header | 完整源码SHA、所有Functions实际版本和连接仍有未确认项，不与Git main混同 |
+| 旧Neon生产 | `jinxi-web`：production、development、pr17-validation | 都受历史数据保护；pr17-validation为真实副本，绝不可公开TEST |
+| 旧数据基准 | public13基础表、131字段、494记录；账号/档案各208，孤立/缺资料0 | 用户控制台聚合证据，不是本轮亲连核验，也不是仓库静态208的推论 |
+| 生产备份 | 2026-11-06 09:58:43 UTC手动快照、Expires Never；pr17-validation各表数量匹配 | 用户证据；独立pg_dump/pg_restore及恢复可用性尚未实际验证 |
+| 旧未知项目 | snowy-bar-74188325 | 来源待核实，不清理、不挪用 |
+
+旧12Functions：announcements、auth-change-password、auth-login、checkin、leaderboard、message-actions、messages、points-board、points、sponsorship、strategies、strategy-actions。新版另有guide-video-stats及local-only session-lab，不能将两套数量/版本混为一谈。
+
+TEST变量只记录key：JINXI_RESOURCE_ENVIRONMENT、JINXI_RUNTIME_CONTEXT、JINXI_CLOUD_ISOLATION_APPROVAL、JINXI_TEST_APPROVED_COMMIT、JINXI_TEST_READ_DATABASE_URL。后者是秘密，不读值。Legacy Free下已验Build/Functions/Runtime作用域与clean子进程隔离，不让Next编译子进程继承DB密钥。团队“无共享变量”是用户确认事实。任何approved字符串都不能替代Site/SHA/DB/role/ACL实际校验。
+
+既有云验收：HTTP31项、云浏览器1440/390/320、Node构建24.22.2/npm11.19.1、Functions部署元数据nodejs24.x（并非已亲测其进程补丁号）；错误非秘密context实际构建被拒绝且未替换Published。生产地址/凭据负向只用虚构对象或本地模拟，**没有实际连生产证明拒绝，也没有网络出口防火墙认证**。正常reader实际ACL拒绝证据另列。锁定发布不能证明密钥隔离，也不能撤销已有部署的变量快照。
+
+早前误贴的TEST owner密码已由用户确认重置；不要复述、试用旧密码或再索要连接串。reader密码私下设置及配置已完成，当前无凭据/控制台截图待办。
+
+## 7. 遗留问题与风险（明确状态）
+
+| 优先级 | 项目 / 当前状态 | 前置与最终验收 |
+| --- | --- | --- |
+| P0 | 历史生产数据/旧站保护必须持续；旧Published来源部分未核实 | 保留锁、禁预览、账号/积分等原数据；不得为了测试试连或改生产 |
+| P0 | 云端真实成员会话未授权、未启用 | 本机候选独立审查；受限认证写角色/实际云schema适配与TEST授权，不能直接运行本地SQL/开启writer |
+| P1 | 正式账号真实结构、密码分布、映射及独立恢复备份待核实 | 未来单独授权的最小元数据审核及私有备份恢复演练；不导出成员凭据到CI |
+| P1 | 新候选旧业务关闭，直接发布会功能倒退 | 按固定顺序恢复并验收登录→留言攻略→签到→积分→其他；不能保留可点击但伪成功按钮 |
+| P1 | 本机6f71未推送/新CI，缺共享盘就无法完整接管 | 安全副本保留两提交和证据；独立审查后仅另获审核分支push许可，不自动部署 |
+| P1 | 积分完整恢复与未确认订单跨刷新/设备恢复未实现 | 主体/价格/规则由服务器，幂等凭据/收据查询、并发/余额/故障/跨账号回归；不得恢复旧接口 |
+| P1 | 全站统一服务器身份Provider未接入 | 导航、资料、作者和退出状态一致；旧localStorage只草稿/历史，不能直接授权 |
+| P2 | Next16实测框架体积代价仍存在 | 沿用Next16/React19/Node24候选；真正产品改动再测性能，勿重复无收益拆分/假等价结论 |
+| P2 | UI-DEFER-001：首页FAQ内层未统一 | 只登记，待第四阶段；组件源代码/展开/焦点/长文本/移动/减少动态实际验收 |
+| P2 | UI-DEFER-002：公告弹窗内层未统一 | 只登记，待第四阶段；0/1/多公告、加载失败/草稿/手机/键盘，不改变本机草稿权限 |
+| P2 | 原UI_AUDIT其他未完成模块仍待验收 | 保留原待办，不因首页或此登记而标全站统一 |
+| P2 | 正式头像、存储持久化、在线心跳/名单/抽屉未实施 | 可信身份及单独安全/隐私/存储授权，严格保原头像框与默认隐藏在线 |
+| P2 | 历史脚本绝对路径、证据量及旧文件锁 | 迁机先适配工具；关键报告/失败/PNG保留，重复大文件未来可建议CI Artifacts，不未经审查删除 |
+
+UI两项已在 [UI_AUDIT](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/rea-003/UI_AUDIT.md)明确编号、用户观察、代码线索、差异、待修复、未来验收和权限影响。当前按用户文字登记，原始当次截图未在身份开发回合取得，不能说已自动复验。身份代码没有改FAQ、公告JSX/CSS、文案、主题或通用组件。
+
+历史文本纠错：旧交接的“B1仅本地9暂存/19未跟踪”“B1焦点未过”“无CI/Lint”“28项仍失败”“无云TEST”均为过期快照；其失败/资产不删除。WEB_EXPLORATION日期2026-11-04，旧架构/40错/跳过构建类型检查等不代表当前。UI_AUDIT正文中的“只有首页/第二批未实施”为原审计时点；攻略独立页等已后续交付，但其未闭环UI项不自动完成。F03 results.json顶部testedGitHead等是早期运行快照，最终部署以gate3Execution/13de/d43为准。
+
+## 8. 下一阶段顺序、停止点与恢复原则
+
+**最近唯一建议任务：先对本地6f71身份候选进行独立源码与证据复核，尤其旧401响应、撤销/首次改密、最小权限与旧schema兼容；不继续开发业务，不重建F03。** 当前用户本轮仅授权交接，文档完成后停止。
+
+若独立审查通过，下一项需明确批准的动作仅为：将既有两本地提交推送至独立审核分支，供网页版GPT/用户审核；不创建不必要PR、不改当前TEST部署。没有新授权不push。
+
+未来已定顺序，不作为此次执行许可：
+
+1. 身份：在独立合成TEST审查云认证角色/权限、实际schema适配、会话撤销/密钥/清理，获批后只登录、本人资料、改密、退出；保留现有只读TEST可恢复路径。
+2. 留言/攻略：认证作者绑定、权限/审核/限流/失败回滚，游客能力单独设计，昵称不授认证。
+3. 签到：幂等重复防护、服务器规则、统计/奖励事务。
+4. 积分：可信余额/流水/排行/价格、并发幂等兑换及跨设备收据恢复。
+5. 头像、在线、公告、赞助、组队/媒体等分检查点；第四阶段完整UI一致性验收，不重做认可首页。
+
+集成优先复用PR18之后的累计线性历史；保留18PR追溯，不从main重做，不擅自新增汇总PR/改base。今后集成前必须保护旧Published、核实预览不获生产凭据、验收独立TEST、业务能力无不可接受倒退、明确回滚；代码集成不等于批准数据迁移或上线。
+
+回退：本机实验仅停止本次新服务/新临时集群，保留工作树与提交，不reset或清理旧资产。云TEST保持13de/Deploy6aeebe4c和d43资料可追溯；未来停止TEST须管理员按原签核撤销专用凭据/处理旧部署，删除变量并不能让旧部署快照失效。不得因TEST失败操作旧站/真实数据。真实数据迁移只做独立增量、备份恢复和不变性验证，历史schema含示例INSERT不得直接重跑。
+
+## 9. 新会话接管指引与安全命令
+
+### 9.1 按需阅读，避免重审全项目
+
+1. 本文 → [AGENTS](E:/Recovery/.jinxi-research/phase3-member/worktree/AGENTS.md)、[COLLABORATION](E:/Recovery/.jinxi-research/phase3-member/worktree/COLLABORATION.md)、[历史源码探索](E:/Recovery/.jinxi-research/phase3-member/worktree/WEB_EXPLORATION.md)，以实际代码和最新状态纠正历史快照。
+2. [member-local/README](E:/Recovery/.jinxi-research/phase3-member/worktree/member-local/README.md)、[身份DELIVERY](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/phase3-member/DELIVERY.md)、其results.json、session-race失败/成功及最终浏览器结果。
+3. [F03 ADMIN_SIGNOFF](E:/Recovery/.jinxi-research/phase3-member/worktree/artifacts/f03-f05/ADMIN_SIGNOFF.md)、其DELIVERY/results.json的最终gate3Execution；仅作既有保护基线，不重跑建设。
+4. 涉UI再读DESIGN/UI_AUDIT；正式schema兼容再读b2-a-4/MEMBER_SESSION_PLAN及b2-a-7/IDENTITY_AUDIT；数据保护再读b2-a-8/HISTORICAL_DATA、BACKUP_RESTORE、INCREMENTAL_MIGRATION。
+5. B1或运行时有真实回归才查对应历史报告，不重新审计18PR、抓旧站或进行无目标研究。
+
+建议技能：handoff用于交接；需要独立分支审查时用review（先遵守技能/代理授权规则）；真实错误用diagnose复现→定位→最小修复→回归；UI第四阶段才用frontend-ui-engineering。REA只在确有发布产物/真实参考取证需要时使用，不为普通源码再做环境普查。此交接未启动子代理。
+
+### 9.2 先核对；下列命令无业务数据库操作
 
 ```powershell
-Set-Location E:/Recovery/jinxi-web
-git status --short
-git branch --show-current
+Set-Location 'E:/Recovery/.jinxi-research/phase3-member/worktree'
+git status --short --branch
 git rev-parse HEAD
 git diff --cached --stat
-git diff --cached
 git diff --name-only --diff-filter=U
 git worktree list
-node --version
-npm --version
-node node_modules/typescript/bin/tsc --noEmit --incremental false
-npm run test:api
+
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' --version
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' --version
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' run typecheck
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' run lint
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' test
 ```
 
-独立tsc预期仍exit2/28项，必须完整对照；当前暂存的test:api预期13项通过。**不要在只剩远端A+代码时期待相同命令有同样脚本/结果。**
+期望Node24.22.2/npm11.19.1、raw tsc/lint exit0、API14/安全71；新增代码后不机械沿用旧数量。所有证据路径指向此根目录，迁机按同一仓库相对位置重定位。不要dump进程env、调用env:list或原始env GET。clean runner只继承OS/工具链，防止数据库/云变量注入；配置名校验也必须避免读值。
 
-用户恢复B1后，可在确认端口空闲、隔离PG仍为专用合成库时，分别启动两条本机预览（命令不会创建/重置表，所有HTTP写请求405）：
+构建流程：prebuild生成档案摘要 → next build --webpack → postbuild生成静态CSP；start为静态预览脚本，export为build别名，不用next start/旧next export部署。**build与tsc必须串行**，build会删除重建类型目录；历史并发TS6053不能误当业务错误。build可能改生成文件/行尾，先保工作区；此次未运行。
+
+### 9.3 仅在恢复本地验证任务获准后使用
+
+PostgreSQL17.11：`C:/Users/lilei/AppData/Local/Temp/jinxi-005s-b1-postgres/pgsql/bin`；OpenSSL：`D:/Program Files/Git/usr/bin/openssl.exe`。不得用其他应用（如MATLAB）自带PG。浏览器工具在独立TEMP/jinxi-browser-tools/node_modules/playwright，Edge在Program Files (x86)/Microsoft/Edge/Application/msedge.exe；不是应用新增依赖。
 
 ```powershell
-# A+基线静态页面与原A+只读处理器，连接同一个合成测试库
-node artifacts/005s-b1/preview.cjs E:/Recovery/jinxi-005s-b1-baseline/out 3041 E:/Recovery/jinxi-005s-b1-baseline
+# 新临时合成集群与HTTPS演示，不读.env/Neon，不接已有DB。
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' run member:local -- --pg-bin 'C:/Users/lilei/AppData/Local/Temp/jinxi-005s-b1-postgres/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'
 
-# B1已成功构建的静态副本 + 当前产品只读处理器 + 合成测试库
-node artifacts/005s-b1/preview.cjs E:/Recovery/.jinxi-research/005s-b1-checkpoint2/source/out 3044
+# 或单独运行实际本机PG/HTTPS套件；不要与上面的演示同时占用55436。
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'scripts/run-clean.cjs' run test:member-local -- --pg-bin 'C:/Users/lilei/AppData/Local/Temp/jinxi-005s-b1-postgres/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'
 ```
 
-然后才运行B1浏览器runner；该runner会在后段TRUNCATE/重新seed专用测试库，不能将其当只读检查或与其他测试/预览交互并发运行。`npm run test:postgres`当前也是这个明确可丢弃实例的写入型集成测试，不在本次交接运行。
+演示URL `https://127.0.0.1:3069`，只有本机自签证书，不改系统信任。仅输入新生成的合成账号；启动只输出私有凭据文件路径，不分享其内容。每次fresh集群不是持久成员库，Ctrl+C/finally停止本次服务，不删其他实例。本轮确认3069/55436/55435无监听，旧55433状态此次未重新认证，不能假定其仍运行。
 
-若需要重新构建，优先保留独立产物目录，按副本说明准备相同源文件，用Node20执行npm run build；主目录EPERM未解决前不要自动删除out。Windows后台启动辅助进程应隐藏窗口，确认专用进程/路径后才进行生命周期操作。跨机不能假设能连接用户电脑Chrome或127.0.0.1端口。
+测试副作用必须区分：`test:member-local`新建并停止55436；`test:test-environment`新建55435；旧`test:integration/test:postgres`涉及55433专用fixture的重置，必须先读说明和目标保护。`scripts/check-test-foundation.cjs`会改写原results，不作为只读交接命令。`database-b2-member-session-draft.sql`仍DRAFT_NOT_APPROVED，其他历史schema/导入/云包装也不直接执行。不要照旧文档盲跑SQL。
 
-### 无共享工作目录时的必要资料
+### 9.4 没有共享工作目录时
 
-仅clone仓库或读取PR #7只能得到d4769e7及以前，不能恢复本地ca0723e与暂存/未跟踪内容。需要用户提供本文件、B1本地提交的安全导出，以及上述9个文件和必要测试证据的安全副本；**不附带.env、账号资料、runtime/pwfile、node_modules或数据库数据目录**。导出/推送不在本次任务执行；新会话缺资料须明确说出缺口，不能从摘要凭空还原完整实现后声称无损接管。
+**GitHub clone只能取得d43及以前，不能取得两项本地身份提交或本次未提交交接。** 新会话应先拿到经用户授权的安全Git bundle/提交补丁与必要新文件/证据及此文档，校验两个完整SHA与12项源码指纹；缺安全副本时明确停止在资料接收，不凭摘要重写后声称无损接管。
 
-## 11. 本文质量审查与交接边界
+本轮没有制作/上传源码包。未来传递须排除.env、.netlify认证、owner/reader密码、runtime/pwfile/私有账户清单、数据库data目录、node_modules、临时证书私钥和真实成员资料。保留Git历史、已提交源/关键证据及这次文档；不能把最初PR14目录当最新副本。新机器路径不存在应先映射安全副本，不能假装能控制用户127.0.0.1服务。
 
-- 已核对远端PR/branch/main/release/tag，未仅沿用对话SHA；已区分本地检查点、远端认可版、暂存及未跟踪。
-- 已重新运行安全契约测试、独立tsc、JS语法，读取而未重建专用PG；历史SQL与浏览器结果保留时间/环境限制。
-- 已列明B1浏览器失败、主构建EPERM、历史TS/Lint与安全P0；没有把未执行到的测试、旧报告或合成数据写成完成。
-- 已区分旧路线替代与待审批设计，保留头像框、数据/动效/生产边界；对过时文档只在本文说明，未覆盖旧资料。
-- 本次未运行有重建副作用的PG/浏览器套件、未新建CI/功能、未清理工具/基线、未打开生产写入口。
-- 最终逐项复核已完成：HEAD与index内容摘要均未改变，原有28个改动文件（9个已暂存、19个未跟踪）的SHA-256全部与交接开始一致；唯一新增成果为本文件，未暂存。86个本机文档链接全部存在、代码围栏成对，敏感凭据模式检查未发现实际密钥或带凭据数据库串（该检查不替代完整安全审计）。
+## 10. 交接质量审查与本轮停止状态
 
-## 12. 可复制的新Codex会话启动摘要
+已核对实际Git/远端main与累计HEAD/18PR元数据和祖先/对应CI，复核TEST只读控制面，重新raw tsc/lint/API安全及源码指纹。数据库、浏览器和构建沿用已绑定源码的既有实测，不伪称本轮重跑或生产验收。未修改业务/视觉代码、原UI待办、数据库、env、云设置、Git引用或发布状态。
+
+旧交接完整备份、hash相符；新文件不是简单叠加过期“当前”快照。所有未完成/未验证项保留状态，关键本地未上传成果及迁机缺口明确。文档编写后再检查链接、围栏、敏感模式、HEAD/受保护代码/暂存状态，详细结果登记本次handoff-verification.json。该记录与备份仅此次文档成果，不产生新的管理员验收关卡。
+
+## 11. 可复制的新Codex会话启动摘要
 
 ```text
-继续今夕公会官网B1，但先读项目根CODEX_HANDOFF.md并复核实际Git，不重做首页。
+接管今夕公会官网，先读最新根CODEX_HANDOFF.md并核对实际Git。本次准备交接，不授权继续开发/推送/部署。
 仓库：https://github.com/2574303451-create/jinxi-web
-本机：E:/Recovery/jinxi-web，Windows/PowerShell。
-最新远端认可版：codex/jinxi-005s-next-a-plus，d4769e719b2dd486b82cd2867f066d6c4dfa3e19，PR#7；依赖7→6→5→4→3→2→1均草稿未合并。
-当前本地：codex/jinxi-005s-b1，HEAD ca0723eea3e1874c7dc3ddb76a7b52f074fac4b3，仅本地；另有9个已暂存B1前端/脚本文件及19个未跟踪证据，禁止覆盖。远端B1分支/PR尚无。
-已认可：首页纸张蓝黄/硬描边、留言墙、成员画廊、双行展播、同行时光、/guides/、头像隔离原型。原头像外框/尺寸/圆角/阴影不变。
-B1检查点1已实现：published有效URL视频附件聚合（重复URL按附件计，不代表可播放，排除宣传片）、v2轻量摘要、服务端latest/video/pinned筛选后LIMIT3、只读超时/预览连接保护；原生本机PG小样本集成日志22通过。
-检查点2未提交未验收：前端接入/有限缓存已写，Node20独立副本build成功；最新浏览器仅1440前3项通过，在browser-checks.cjs:22卡片focus outline0px≠3px失败。下一步先定位真实Tab/:focus-visible输入模态，再完成五宽度、乱序/错误/旧后端/保护与性能回归，不放宽断言假绿。
-本次交接重验：npm run test:api 13通过；独立tsc仍28项历史错误、新增0；Lint无配置，CI未建。主out/1.mp4有EPERM未解决，成功产物在E:/Recovery/.jinxi-research/005s-b1-checkpoint2/source/out；204个相关源文件已核对一致。
-用户已授权本机一次性合成PG，仅127.0.0.1:55433/jinxi_005s_b1_test，目前运行，视频4是合成数；凭据只在TEMP，不复制/提交。PG/浏览器集成脚本会重置该专用库，接管前读测试说明，不连接生产。
-先读：DESIGN.md、artifacts/005s-b1/CHECKPOINT1.md、browser-results.json、browser-run.txt、artifacts/005s-next-a-plus/DELIVERY.md、artifacts/arch-005r/SECURITY.md。
-保留档案208/创始1/普通207/创立2018-02-10，在线仍—。正式会话/心跳/头像持久化B2未实施，积分授权、匿名投稿/自报作者仍为生产阻断。禁止生产数据库操作、自动合并/部署、真实头像上传；B1验收后再独立批准B2。
-如果没有共享本机目录：GitHub没有B1的本地提交与未提交文件，先索取安全副本，不能假定clone已包含它们。
+最新本机根：E:/Recovery/.jinxi-research/phase3-member/worktree，Windows/PowerShell。
+本地分支codex/jinxi-phase3-member-local，HEAD6f71de9eec8093e3d139b3201fe4249c6b0e52ff；前一提交03f20a11cd1ec57ff779a10988fb7039cbf0ba05。两提交未上传，无PR19/新云CI；本次交接文档及备份未提交，禁止覆盖。
+GitHub累计分支codex/jinxi-f03-f05-test-foundation=d43ee24cfde1277eedabc8c8856de697b702dc0f。PR1–18全部草稿未合并，均为本地候选祖先，保留追溯。原E:/Recovery/jinxi-web停在PR14，不用它继续开发。
+Next16.4.5/React19.3.1/Node24.22.2/npm11.19.1，静态导出out；严格tsc已exit0。node_modules为共享junction，勿随意npm ci清空。
+F03/F05获准合成只读云TEST已过：jinxi-web-test，Site17885134-a57c-4589-83d3-39e30be9e0cf，Deploy6aeebe4ceae178c10e4199e8，接受源码13de96d7531dde3222fdf513e711447a1df3e425；构建暂停、PR预览关闭。Neon独立jinxi-test/restless-salad-74668264，branch br-red-pond-bdtrjpmy，endpoint ep-dry-queen-bd6q46s6，neondb；jinxi_test_reader只读，jinxi_test_owner/jinxi_test_writer NOLOGIN。不要重建F03或索要凭据。
+最新实现仅member-local/独立loopback HTTPS：合成登录、会话、本人资料、首次/普通改密、退出。旧账号id bigint/employee_no关联档案，新增稳定UUID映射；PBKDF2兼容、HttpOnly Secure Cookie、Origin/CSRF、撤销/限流/最小ACL。未接首页/Netlify，未启云写入。
+6f71修复延迟旧401删除新登录Cookie：401不隐式清Cookie，仍拒绝；主动退出/改密撤销清除。真实失败/成功、PG/浏览器证据在artifacts/phase3-member/。
+本轮交接重跑raw tsc/lint、API14/安全71均通过，12源码指纹匹配；既有实际PG17组子场景（Node18含父项）、只读回归46、build、五宽度浏览器通过，此次未重建数据库。d43/13de真实CI成功，不冒充6f71已过CI。
+UI-DEFER-001 FAQ/002公告内层已在artifacts/rea-003/UI_AUDIT.md登记，待第四阶段；没有改JSX/CSS/主题。保护Hero/箭头/双行留言/时光/208档案/2018-02-10/独立guides/原头像框，在线仍—。
+生产旧站jinxi-web Published69a92f4f7be620c834490be1锁定，main-only且禁PR预览；Neon jinxi-web production及pr17-validation真实历史数据严禁公开TEST/修改。手动快照用户已确认，但独立备份恢复未实测。禁止生产连接、迁移、真实账号导入、云writer LOGIN、旧不安全业务恢复、合并/发布/付费。
+建议下一任务仅独立审查本地6f71；审查通过后另获“推送审核分支”授权，不能扩展到部署。后续顺序身份→留言攻略→签到→积分→其他。
+若没有共享本机目录，clone没有两项本地提交和新交接，必须先取得安全副本；不附密钥/.env/真实账号/数据库目录，不凭摘要重写实现。
 ```
+

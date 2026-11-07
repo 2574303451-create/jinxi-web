@@ -53,19 +53,25 @@
 
 原先截图中 COMMIT 不可见的证据缺口已关闭，不再索要这三项，不重跑初始化。历史截断提示只影响 Neon 保存查询的长度，本地原稿与摘要保留；不得依赖截断历史重新执行。原 CSV/截图留在用户本机，文件名及 SHA256 登记在 results.json。
 
-### 当前管理员执行项：本机私密设置 reader 首次密码并验证
+### 当前管理员执行项：只读定位设置工具的实际失败阶段
+
+最新用户截图显示两次输入 TEST 管理员密码后均返回 TEST_READER_PASSWORD_SETUP_UNAVAILABLE，尚未进入新 reader 密码提示；这两次没有进入密码设置阶段，不能据此断言管理员密码错误。已修复工具丢失失败阶段的问题，先运行同一工具的只读诊断模式，不重跑初始化或变更角色。
+
+同一固定 Node/干净环境对批准 TEST 主机的 TLS-only 检查已返回 TLS_VERIFIED：只发送 PostgreSQL SSLRequest 并验证证书，未发送 Startup、用户名、密码或 SQL。这证明该次证书握手成功，不证明管理员认证、数据库身份或 reader 权限通过。
 
 真实平台问题：用户在控制台为 SQL 创建、无初始密码的角色执行 Reset password，收到 cannot update password for role without password。先前建议此入口未考虑这个限制，现予纠正，不再重复该操作。Neon 官方说明 SQL 设置密码需由服务器接收明文后加密保存，不支持预先哈希；psql 的反斜线 password 命令会在客户端加密，不能直接当作此平台的通用替代。依据：[Neon 角色](https://neon.com/docs/manage/roles)、[psql password](https://www.postgresql.org/docs/18/app-psql.html)。
 
 已取得的状态仍有效：初始化数量及 COMMIT 已通过，09-52-30 状态 CSV 显示三个角色均 NOLOGIN、五项管理标志及成员角色均 false，reader/writer NOINHERIT。若此后已经单独启用 reader，新工具也允许其 LOGIN 已为 true，但不放宽任何资源、注册、结构或有效权限检查。原一次性激活脚本和原 validateProof 均未修改。
 
-**唯一当前操作：在你本机 PowerShell 运行以下命令。** 不再在控制台点 Reset password，不将密码写进 SQL Editor、文件、命令参数或聊天，不重新初始化，也不需先运行旧激活文件。
+**唯一当前操作：在你本机 PowerShell 运行以下诊断命令。** 只在隐藏提示处输入当前 TEST neondb_owner 密码。不要在控制台重置密码，不将密码写进 SQL Editor、文件、命令参数或聊天，不重新初始化。
 
 ```powershell
-& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'E:/Recovery/.jinxi-research/f03-f05/worktree/scripts/setup-test-reader-password.cjs'
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'E:/Recovery/.jinxi-research/f03-f05/worktree/scripts/setup-test-reader-password.cjs' --diagnose
 ```
 
-运行前准备并私下保存一个新的 reader 专用随机密码：32至128位可见英文字符，大小写/数字/符号至少3类。不要用连接串、已有管理员密码或文档示例密码。所有密码输入均不回显字符，粘贴后回车。输入顺序：
+本模式只有一次管理员隐藏输入；连接后强制 BEGIN READ ONLY，复用既有目标/结构/有效权限及日志预检，最终 ROLLBACK。不会询问新 reader 密码、执行密码设置、生成设置回执或启动 reader 证明。将最后一行 JSON 集中回传即可：只有固定 stage、reason、SQLSTATE/网络错误码；日志策略失败时只列固定检查名称，不输出实际配置值、底层异常、SQL、参数或凭据。成功标志 READ_ONLY_PREFLIGHT_PASSED 也仅表示该预检成功，不是 reader 或第三关通过。
+
+以下是故障解决后正常模式的既定步骤，当前不执行，也不新增关卡。届时去掉 --diagnose，准备并私下保存新 reader 专用随机密码：32至128位可见英文字符，大小写/数字/符号至少3类。不要使用连接串、管理员密码或文档示例密码；输入顺序：
 
 1. 已经重置过的 TEST neondb_owner 管理员密码，仅用于本次获准的角色管理；程序不会再次重置它。
 2. 你准备好的新 jinxi_test_reader 密码。
@@ -78,7 +84,7 @@
 
 成功时生成两份被 Git 忽略的非秘密回执：cloud-reader.provisioning.local.json 只含角色标志和目标；cloud-reader.proof.local.json 含原 validateProof 校验后的实际 reader 会话/ACL 及公共合成读取 5/2/1/1。回传后者即可，不发送密码。若已存在成功设置或证明回执，工具在再次连接前拒绝覆盖。
 
-本机受测源码 eb90bda8c40dc967acd77152028d91bb2964ffbf：PG17.11 回归16/16，含真实 SCRAM 正确/错误密码、新建 reader 连接、NOLOGIN 起点、会话原先 MD5 设置下仍写入 SCRAM、日志拒绝、敏感阶段错误清理、设置后超权回滚及原回滚；隐藏输入在真实本机终端以合成值验证不回显，非交互调用在网络前拒绝，ESLint退出0。日志 reader-password-setup-final.log，较早15项结果保留于 reader-password-setup.log。**尚未在 Neon18.6 实际运行新设置工具；本机通过不等于云端首次密码、TLS或权限通过。**
+当前受测源码 9d6c496eb21085bbde59f2e3cbaa1ef43ac0bca3：安全单测59/59，其中诊断专测11项；本机PG17.11回归17/17，包含服务器实际只读状态、角色保持不变和原密码设置/有效权限/回滚用例；相关ESLint退出0。非交互调用在网络前拒绝。日志 password-diagnostic-security.log / password-diagnostic-postgres.log / password-diagnostic-lint.log；修复前4项失败保留在 password-diagnostic-before-fix.log。原 eb90bda 的16项和更早15项日志仍保留。**最新 Neon18.6 认证/预检故障尚未定位；未完成 reader 实际认证及云端权限验收，Netlify TEST 尚未建设。**
 
 先前聊天中的 TEST 管理员凭据未被使用或写入文件，用户已确认仅重置 jinxi-test 的 neondb_owner。此确认继续沿用，不再轮换它；工具仅由管理员本机私密输入当前密码。旧站、真实数据、生产角色、18个原PR和 Netlify 生产设置均不操作。该修复仍属于原第二关的凭据配置，不新增关卡；实际 reader 证明通过后才继续独立 TEST 建站。
 

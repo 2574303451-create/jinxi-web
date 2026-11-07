@@ -6,7 +6,7 @@
   "npm": "11.19.1",
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
-  "networkTelemetry": "not collected; scope is not a measured cloud connection counter",
+  "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
   "cloudAcceptance": "Gate 2 synthetic initialization accepted from user console evidence. Real reader authentication/effective permissions and Netlify construction/hosted isolation remain pending.",
   "checks": [
     {
@@ -290,7 +290,7 @@
       }
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
-    "roleAuthentication": "Still not passed on Neon. User-reported first-password Console error; use prepared private helper and unchanged real reader proof. Initialization remains accepted.",
+    "roleAuthentication": "Not passed on Neon. Two user attempts stopped before new reader password prompts with an opaque error; diagnostic correction is locally tested, actual administrator auth/preflight cause pending user feedback.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Run scripts/setup-test-reader-password.cjs interactively on the local computer once. No Console reset, plaintext SQL Editor password, connection string, initializer rerun or permission bypass. Return only resulting proof JSON or safe error code.",
+    "nextAdministratorAction": "Run scripts/setup-test-reader-password.cjs --diagnose once in local interactive PowerShell; privately enter only the current TEST neondb_owner password and return the last safe JSON line. No reader password prompt, role write, initializer rerun or automatic proof launch in this mode.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -496,11 +496,11 @@
       "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
     },
     "readerHandoff": {
-      "status": "Initial credential provisioning blocked by reported Neon Console reset limitation. Private setup helper is prepared/tested locally; no Neon setup success yet.",
+      "status": "Synthetic initialization remains accepted. Administrator auth/preflight failure is unresolved; use the same helper read-only diagnostic, with no role or TLS policy weakening.",
       "endpoint": {
         "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
         "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
-        "source": "Only non-secret hostname retained. Direct hostname derived by documented Neon removal of -pooler suffix; live TLS/reader identity still pending.",
+        "source": "Only non-secret hostnames retained; direct hostname uses documented removal of -pooler. One same-runtime verified TLS-only probe passed without PostgreSQL Startup/authentication/SQL; actual database and reader proof remain pending.",
         "reference": "https://neon.com/docs/connect/connection-pooling"
       },
       "files": {
@@ -616,7 +616,7 @@
         "conclusion": "Expected least-privilege initial role state; reader LOGIN has not been enabled. This is a confirmed prerequisite blocker, not evidence of weakened permissions or an initializer failure. Password provisioning is separate and is not inferred from pg_roles."
       },
       "passwordSetup": {
-        "status": "prepared and locally tested; not run on Neon",
+        "status": "User ran the former helper twice; both attempts returned an opaque error before any new reader password input. Safe diagnostic correction is locally tested; actual cloud cause unresolved.",
         "userReportedError": "cannot update password for role without password",
         "correction": "Console Reset password is not a working first-password method for this existing SQL role. Supersedes the prior Console reset instruction; no new gate.",
         "sources": [
@@ -663,7 +663,81 @@
           "artifacts/f03-f05/cloud-reader.provisioning.local.json",
           "artifacts/f03-f05/cloud-reader.proof.local.json"
         ],
-        "next": "User executes the private helper once in local PowerShell, privately enters TEST administrator/current password then new reader password twice; on success it automatically invokes the unchanged reader proof launcher. Only non-secret proof JSON or safe error code is returned."
+        "next": "Run scripts/setup-test-reader-password.cjs --diagnose once in local interactive PowerShell; privately enter only the current TEST neondb_owner password and return the last safe JSON line. No reader password prompt, role write, initializer rerun or automatic proof launch in this mode.",
+        "latestUserAttempt": {
+          "source": "User terminal screenshot",
+          "file": "codex-clipboard-cff1fe45-b654-4d14-bdcd-e479f00bff79.png",
+          "sha256": "10d6c3476e3d9b37ec7bc4994c72bde161433ba3d48e2356cf99fe487bc5b189",
+          "attempts": 2,
+          "error": "TEST_READER_PASSWORD_SETUP_UNAVAILABLE",
+          "reachedNewReaderPasswordPrompt": false,
+          "conclusion": "Failure can be in administrator connection or preflight; no assertion of an incorrect password. These attempts did not enter reader password mutation."
+        },
+        "diagnosticFix": {
+          "sourceHead": "9d6c496eb21085bbde59f2e3cbaa1ef43ac0bca3",
+          "sourceSha256": {
+            "scripts/setup-test-reader-password.cjs": "28bd1df14eb38cccce05ad3a8b86e6b4786ddb9fc0eec466813e36972a55f662",
+            "tests/password-setup-diagnostic.test.cjs": "b27e654171283a3ea982ab47d1411dc77fb4be41ca86b17f95cc371e134bb330",
+            "tests/bootstrap-postgres.test.cjs": "60304f5a2403a3c79032d905a6d8db9cd490dfea4d253b53e9a3c0388bf3d013",
+            "package.json": "a6c027093decf57340d56549e41b90ed3d2300212f2a640a6b6950f925f3da0e"
+          },
+          "committedSourceMatchesTestedSnapshot": true,
+          "scope": "Fixed stage plus exact safe reason/code allowlist; no backend message/detail/where/SQL/parameter reflection. Same helper --diagnose enforces BEGIN READ ONLY and ROLLBACK, returning before reader password prompts, writes, receipt or proof. Original identity/ACL/TLS/logging requirements retained.",
+          "validation": {
+            "security": {
+              "command": "node scripts/run-clean.cjs run test:security",
+              "exitCode": 0,
+              "tests": 59,
+              "pass": 59,
+              "fail": 0,
+              "diagnosticTests": 11
+            },
+            "localPostgres": {
+              "version": "17.11",
+              "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --bootstrap-only",
+              "exitCode": 0,
+              "tests": 17,
+              "pass": 17,
+              "fail": 0,
+              "folder": "C:/Users/lilei/AppData/Local/Temp/jinxi-f03-f05-rMkmtL",
+              "clusterStopped": true
+            },
+            "scopedEslintExitCode": 0,
+            "noninteractiveInvocation": {
+              "exitCode": 1,
+              "stage": "STARTUP",
+              "reason": "USER_INTERACTIVE_TERMINAL_REQUIRED",
+              "beforeNetwork": true
+            },
+            "beforeFix": {
+              "tests": 4,
+              "pass": 0,
+              "fail": 4,
+              "exitCode": 1
+            },
+            "evidenceSha256": {
+              "password-diagnostic-before-fix.log": "d2fedbad1878e3f71281cdae451b39406e3262272010604b055bf1eb96121a72",
+              "password-diagnostic-security.log": "b8ce026834dfe900ff116c735a8267b2013b12f37bf5c70a0e81a47834ffd765",
+              "password-diagnostic-postgres.log": "f668e2eae0df77307f8120f2524630de5ec44667ace477b5d838ee8659aebd75",
+              "password-diagnostic-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          "tlsOnlyProbe": {
+            "source": "Direct TEST SSLRequest/TLS probe from the same pinned Node and cleanEnv; real network metadata only",
+            "stage": "TLS_VERIFY",
+            "code": "TLS_VERIFIED",
+            "host": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
+            "certificateVerification": true,
+            "postgresStartupSent": false,
+            "usernameSent": false,
+            "passwordSent": false,
+            "authenticated": false,
+            "sqlSent": false,
+            "scope": "Single handshake success; not database auth, role, hosted-site or complete network isolation acceptance."
+          },
+          "cloudStatus": "Awaiting user private read-only diagnostic; no new administrator-authenticated connection by Codex, no cloud DDL/DML/site/deployment/push/PR.",
+          "rollback": "Local helper/test/package test-script changes only. Preserve original evidence; restore reviewed helper via a follow-up revert if necessary. No cloud mutation to roll back from diagnostic changes."
+        }
       }
     }
   }

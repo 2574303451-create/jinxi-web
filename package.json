@@ -15,7 +15,7 @@
     "export": "npm run build",
     "test:api": "node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs",
     "test": "npm run test:api && npm run test:security",
-    "test:security": "node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs",
+    "test:security": "node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs tests/password-setup-diagnostic.test.cjs",
     "test:test-environment": "node scripts/test-disposable-postgres.cjs",
     "test:environment": "node --test tests/environment-postgres.test.cjs",
     "test:session": "node --test tests/session-postgres.test.cjs",

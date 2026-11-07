@@ -143,6 +143,24 @@ test('one administrator batch atomically initializes and verifies only its appro
         await reader.query('SET default_transaction_read_only=on');
       }finally{await reader.end();}
     });
+    await t.test('diagnostic preflight really runs read-only and preserves all three role attributes', async () => {
+      const roleSql="SELECT rolname,rolcanlogin,rolinherit,rolsuper,rolcreatedb,rolcreaterole,rolreplication,rolbypassrls FROM pg_roles WHERE rolname LIKE 'jinxi_test_%' ORDER BY rolname";
+      const beforeRoles=(await c.query(roleSql)).rows;
+      let readOnlyObserved=false;
+      const client={query:async(sql,values)=>{
+        assert.equal(values,undefined);
+        const result=await c.query(sql);
+        if(sql.startsWith('BEGIN READ ONLY;\n')) {
+          assert.equal((await c.query('SHOW transaction_read_only')).rows[0].transaction_read_only,'on');
+          readOnlyObserved=true;
+        }
+        return result;
+      }};
+      await checkScope(client,target);
+      assert.equal(readOnlyObserved,true);
+      assert.deepEqual((await c.query(roleSql)).rows,beforeRoles);
+      assert.equal((await c.query('SELECT count(*)::int n FROM public.strategies')).rows[0].n,5);
+    });
     await t.test('first password setup refuses an unsafe logging policy before binding any secret', async () => {
       await c.query('ALTER ROLE jinxi_test_reader NOLOGIN');
       assert.equal(safeLogging({statements:'all',duration:'-1',sample:'-1',error_parameters:'0',stats:null,audit:null,audit_role:null,explain:null}),false);

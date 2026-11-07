@@ -1,5 +1,7 @@
 # 保留的开发失败与修正
 
+2026-11-07 云 TEST 候选 f1d98b4 首轮将原始 tsc 与 Next build 并行，构建重建 .next/types 后 tsc 报 TS6053。已保留 cloud-candidate-typecheck-concurrent-failure.log。等待构建完成后串行执行原始 tsc、ESLint、API14/安全59，全部通过，未修改类型配置或放宽断言。独立本机 PG46 和静态构建/CSP 同样通过。
+
 2026-11-07 用户截图 cff1fe45 显示私密设置工具两次在管理员输入后返回同一 TEST_READER_PASSWORD_SETUP_UNAVAILABLE，尚未出现 reader 新密码提示。旧顶层处理丢失了认证/预检阶段，不能据此认定密码错误。先保留4项失败复现（password-diagnostic-before-fix.log，0 pass/4 fail），再最小修复固定阶段/错误码白名单，避免按熟悉前缀输出任意异常文本；同一工具新增 --diagnose，强制只读预检并回滚，不进入新密码、角色写入、回执或 reader proof。9d6c496 源码安全单测59/59（诊断11项）、本机PG17.11回归17/17及相关ESLint通过，日志 password-diagnostic-security.log / password-diagnostic-postgres.log / password-diagnostic-lint.log。一次独立TEST TLS-only探测验证证书成功，未发送PostgreSQL Startup/认证/SQL；该事实与本机合成用例均不能替代实际云端认证。后续用户运行只读诊断已通过，见 results.json 的 cloudRun。先前两次通用错误缺少可回溯的细分原因。
 
 2026-11-07 真实平台失败（用户报告，非本机用例）：Neon Console 为无初始密码的 SQL reader 执行 Reset password 返回 cannot update password for role without password。先前管理员清单忽略首次密码限制，已在同一清单更正，未要求重建或提升角色。替代方案为管理员本机隐藏输入、固定 TEST/角色、绑定参数/事务内值和日志拒绝检查；只设置既有 reader PASSWORD/LOGIN，前后复核有效权限，再运行原 reader 证明。本机最终16/16（reader-password-setup-final.log）含真实 SCRAM 认证、无密码回显、日志拒绝及漂移回滚；原15项中间通过日志仍保留。尚未得到该替代方案的 Neon18.6 成功回执，不宣称云端问题已解决。

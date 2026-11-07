@@ -971,6 +971,63 @@
         "receiptFile": "artifacts/f03-f05/netlify-site.proof.local.json",
         "receiptSha256": "bcc0b2238537fa2a236919e39d5776d33e17777c76ed7eba080f2023a2f6d307",
         "scope": "Only an empty project on approved XUST Free team; no repository, variables, storage or deploy copied from production."
+      },
+      "candidateValidation": {
+        "sourceHead": "f1d98b4b65b8b79b7c40eb94077eeadaff38d90d",
+        "checks": [
+          {
+            "log": "cloud-candidate-typecheck.log",
+            "exitCode": 0,
+            "testCounts": [],
+            "sha256": "9907a11dae246f4ed08450ae4b0fba3cc3c727f0a638f8e8d9704788a68b5def"
+          },
+          {
+            "log": "cloud-candidate-lint.log",
+            "exitCode": 0,
+            "testCounts": [],
+            "sha256": "6788a30f5e11396b0ecb3db2d1e8e6807eb6b790aee82ec40593ac5d39464ca9"
+          },
+          {
+            "log": "cloud-candidate-unit.log",
+            "exitCode": 0,
+            "testCounts": [
+              14,
+              59
+            ],
+            "sha256": "b6c7301a2100b013169a7974b4ae0f65fa23b3f0a5b2f86414ee32d8bc32e997"
+          },
+          {
+            "log": "cloud-candidate-postgres.log",
+            "exitCode": 0,
+            "testCounts": [
+              46
+            ],
+            "sha256": "6a0a66f1e6c72a4a8140ccb1cd38f602879f7f11126f9a9e523801d2dcacd263"
+          },
+          {
+            "log": "cloud-candidate-build.log",
+            "exitCode": 0,
+            "testCounts": [],
+            "sha256": "5be21559cef228825867bd3ac5148289f7390302b2583da2a5de9ea6089ec99f"
+          }
+        ],
+        "scope": "Full raw TypeScript, full ESLint, API/security/packaging, fresh loopback PostgreSQL46 and static Next export. Actual resource binding checked against accepted reader proof. No hosted acceptance claim.",
+        "beforeFix": {
+          "log": "cloud-candidate-typecheck-concurrent-failure.log",
+          "exitCode": 2,
+          "reason": "Typecheck was incorrectly started in parallel with Next build, which regenerated the shared .next/types files. Retained the failure, waited for build completion and reran raw tsc serially without changing tsconfig or source."
+        },
+        "generatedCsp": {
+          "pages": 7,
+          "hashes": 8,
+          "policyBytes": 991
+        },
+        "gitHubRepository": {
+          "id": 1039379166,
+          "fullName": "2574303451-create/jinxi-web",
+          "private": false,
+          "defaultBranch": "main"
+        }
       }
     }
   }

@@ -1,0 +1,57 @@
+▶ fresh isolated PostgreSQL executes non-destructive initialization, ACL attacks, APIs and rollback
+  ✔ metadata preflight runs read-only without enumerating row contents (9.1755ms)
+  ✔ missing target approval refuses before creating any role (4.7848ms)
+  ✔ wrong cluster binding refuses without DDL (2.841ms)
+  ✔ unknown user object is preserved and blocks initialization (8.2132ms)
+  ✔ unknown domain is not mistaken for an empty database (4.1181ms)
+  ✔ first initialization is atomic; future writer remains NOLOGIN without grants (44.6044ms)
+  ✔ repeat initialization refuses and preserves existing registration (2.9222ms)
+  ✔ synthetic seed and structural/data verification succeed once (8.5154ms)
+  ✔ existing session SQL retains wallet and ledger insertion defaults without mutating fixtures (3.7521ms)
+  ✔ repeat seed rejects, keeps balances and records unchanged (1.0002ms)
+  ✔ same nickname uses distinct member IDs; nonexistent account has no row (0.5856ms)
+  ✔ constraints reject negative balances, duplicate receipts and orphan identity (1.4077ms)
+  ✔ synthetic plaintext stays in memory; only its generated hash reaches the fixture database (225.7426ms)
+  ✔ actual TEST cluster/database/role fingerprint and read ACL are accepted (9.1558ms)
+  ✔ reader insert is denied by PostgreSQL (0.3401ms)
+  ✔ reader update is denied by PostgreSQL (0.2715ms)
+  ✔ reader delete is denied by PostgreSQL (0.3436ms)
+  ✔ reader ddl is denied by PostgreSQL (0.3411ms)
+  ✔ reader temporaryDDL is denied by PostgreSQL (0.3351ms)
+  ✔ reader role is denied by PostgreSQL (0.3207ms)
+  ✔ reader private is denied by PostgreSQL (0.3797ms)
+  ✔ reader function is denied by PostgreSQL (0.336ms)
+  ✔ reader registration is denied by PostgreSQL (0.3678ms)
+  ✔ turning off default read-only still cannot bypass ACLs (3.5793ms)
+  ✔ actual strategies Function reads only synthetic public fixtures (11.9042ms)
+  ✔ actual messages Function reads only synthetic public fixtures (4.935ms)
+  ✔ actual announcements Function reads only synthetic public fixtures (4.2455ms)
+  ✔ actual sponsorship Function reads only synthetic public fixtures (15.563ms)
+  ✔ actual guide-video-stats Function reads only synthetic public fixtures (5.3456ms)
+  ✔ latest filtering precedes LIMIT and excludes drafts (6.8157ms)
+  ✔ video filtering precedes LIMIT and excludes drafts (6.3078ms)
+  ✔ pinned filtering precedes LIMIT and excludes drafts (5.3044ms)
+  ✔ thumbnail-only and null media rows remain readable (10.2368ms)
+  ✔ actual wrong fingerprint prevents business query (3.4394ms)
+  ✔ effective column write permission is rejected even with correct identity (3.7425ms)
+  ✔ unexpected TEMP privilege fails the hosted TEST permission proof (3.3938ms)
+  ✔ role membership, object ownership and external table read permissions are rejected (7.5391ms)
+  ✔ actual table ownership rejects before business queries (3.923ms)
+  ✔ security definer and out-of-scope sequence permissions reject (6.1955ms)
+  ✔ owner-rights view cannot bridge private member fixtures (3.4921ms)
+  ✔ missing required SELECT returns unavailable, never fake zero/success (5.255ms)
+  ✔ rollback stops on an unexpected object and preserves all fixtures (4.7195ms)
+  ✔ verification and rollback stop if existing object columns changed (4.6048ms)
+  ✔ explicit rollback removes only the registered fixtures and test roles (13.7609ms)
+  ✔ non-superuser database-owner initializer can perform the same complete lifecycle (68.4263ms)
+✔ fresh isolated PostgreSQL executes non-destructive initialization, ACL attacks, APIs and rollback (973.8634ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1079.2436
+Disposable synthetic PostgreSQL passed; no cloud connection was used.
+Local PostgreSQL evidence directory: C:\Users\lilei\AppData\Local\Temp\jinxi-f03-f05-1e3ctE

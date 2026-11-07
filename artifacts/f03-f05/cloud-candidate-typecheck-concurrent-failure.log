@@ -1,0 +1,19 @@
+
+> my-v0-project@0.1.0 typecheck
+> tsc --noEmit --incremental false
+
+error TS6053: File 'E:/Recovery/.jinxi-research/f03-f05/worktree/.next/types/app/guides/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in 'E:/Recovery/.jinxi-research/f03-f05/worktree/tsconfig.json'
+error TS6053: File 'E:/Recovery/.jinxi-research/f03-f05/worktree/.next/types/app/layout.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in 'E:/Recovery/.jinxi-research/f03-f05/worktree/tsconfig.json'
+error TS6053: File 'E:/Recovery/.jinxi-research/f03-f05/worktree/.next/types/app/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in 'E:/Recovery/.jinxi-research/f03-f05/worktree/tsconfig.json'
+error TS6053: File 'E:/Recovery/.jinxi-research/f03-f05/worktree/.next/types/app/profile-lab/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in 'E:/Recovery/.jinxi-research/f03-f05/worktree/tsconfig.json'
+error TS6053: File 'E:/Recovery/.jinxi-research/f03-f05/worktree/.next/types/app/session-lab/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in 'E:/Recovery/.jinxi-research/f03-f05/worktree/tsconfig.json'

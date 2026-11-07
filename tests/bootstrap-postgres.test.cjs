@@ -165,6 +165,17 @@ test('one administrator batch atomically initializes and verifies only its appro
       assert.equal((await c.query("SELECT COALESCE(current_setting('jinxi_test.reader_password_input',true),'') value")).rows[0].value,'');
       assert.equal((await c.query("SELECT rolcanlogin FROM pg_roles WHERE rolname='jinxi_test_reader'")).rows[0].rolcanlogin,false);
     });
+    await t.test('post-setting privilege drift is rejected and rolled back before commit', async () => {
+      const password=crypto.randomBytes(24).toString('hex')+'Aa!';
+      const client={query:async(sql,values)=>{
+        const result=await c.query(sql,values);
+        if(sql==='ALTER ROLE jinxi_test_reader LOGIN')await c.query('GRANT UPDATE(content) ON public.messages TO jinxi_test_reader');
+        return result;
+      }};
+      await assert.rejects(setReaderPassword(client,password,target),/TEST_READER_PASSWORD_SETUP_REJECTED/);
+      assert.equal((await c.query("SELECT rolcanlogin FROM pg_roles WHERE rolname='jinxi_test_reader'")).rows[0].rolcanlogin,false);
+      assert.equal((await c.query("SELECT has_any_column_privilege('jinxi_test_reader','public.messages','UPDATE') allowed")).rows[0].allowed,false);
+    });
     await t.test('first password setup rejects another registration and changes only reader authentication', async () => {
       const password=crypto.randomBytes(24).toString('hex')+'Aa!';
       await assert.rejects(setReaderPassword(c,password,{...target,environmentId:crypto.randomUUID()}),/TEST_READER_PASSWORD_SETUP_REJECTED/);

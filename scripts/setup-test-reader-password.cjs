@@ -75,6 +75,9 @@ BEGIN
 END $secret$`);
     await client.query("SELECT set_config('jinxi_test.reader_password_input','',true)");
     await client.query('ALTER ROLE jinxi_test_reader LOGIN');
+    // Recheck effective permissions before COMMIT, including any provider hook
+    // effects. This is still the same transaction; do not nest a new BEGIN.
+    await client.query(passwordGuard(target).replace(/^BEGIN;\n/,''));
     const roles = (await client.query(`SELECT rolname,rolcanlogin,rolinherit,rolsuper,
       rolcreatedb,rolcreaterole,rolreplication,rolbypassrls FROM pg_roles
       WHERE rolname IN('jinxi_test_owner','jinxi_test_reader','jinxi_test_writer') ORDER BY rolname`)).rows;

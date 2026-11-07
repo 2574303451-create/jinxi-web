@@ -111,7 +111,10 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
         if(!lookup)reject(401,'SESSION_INVALID');
         // Account lock first in every auth transaction, then session lock.
         const a=(await c.query(select+' WHERE a.id=$1 FOR UPDATE OF a',[lookup.account_id])).rows[0];
-        const session=(await c.query('SELECT *,expires_at>now() AND idle_expires_at>now() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 AND account_id=$2 FOR UPDATE',[hash(token),lookup.account_id])).rows[0];
+        // Lock first, then read the current wall clock in a new statement.
+        // Transaction time and a projection computed before a row-lock wait can revive an expired session.
+        await c.query('SELECT account_id FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 AND account_id=$2 FOR UPDATE',[hash(token),lookup.account_id]);
+        const session=(await c.query('SELECT *,expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 AND account_id=$2',[hash(token),lookup.account_id])).rows[0];
         if(!a||!session||a.is_locked||!a.is_active||a.disabled_at||session.revoked_at||!session.live||session.auth_version!==a.auth_version||session.csrf_key_id!=='local-v1')reject(401,'SESSION_INVALID');
         if(method==='POST'&&(!equal(header(event,'x-csrf-token'),csrf(token))||!crypto.timingSafeEqual(hash(header(event,'x-csrf-token')),session.csrf_hash)))reject(403,'CSRF_REJECTED');
         if(a.force_reset_password&&!['me','change-password','logout'].includes(op))reject(403,'PASSWORD_RESET_REQUIRED');
@@ -123,7 +126,7 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
           await c.query("UPDATE b2_lab.guild_member_accounts SET password_hash=$1,hash_algorithm='pbkdf2_sha256',force_reset_password=false,password_updated_at=now(),updated_at=now() WHERE id=$2",[await hashPassword(body.newPassword),a.id]);
           response=output(200,{success:true,reauthenticationRequired:true,syntheticOnly:true},cookie('',true));
         }else{
-          await c.query("UPDATE b2_lab.member_sessions_v2 SET idle_expires_at=LEAST(expires_at,now()+interval '30 minutes'),last_seen_at=now() WHERE id=$1",[session.id]);
+          await c.query("UPDATE b2_lab.member_sessions_v2 SET idle_expires_at=LEAST(expires_at,clock_timestamp()+interval '30 minutes'),last_seen_at=clock_timestamp() WHERE id=$1",[session.id]);
           response=output(200,{...dto(a),csrfToken:csrf(token),...(op==='profile'?{profile:{displayName:a.display_name,nickname:a.nickname,role:a.member_role,joinedOn:a.join_date||null}}:{})});
         }
       }

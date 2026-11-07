@@ -34,12 +34,16 @@ function createAttendanceHandler({settings,identity,connect,env=process.env}){
    // A separate statement is essential: joined profile/security rows from a
    // statement that waited for the account lock may retain its earlier snapshot.
    const a=(await c.query('SELECT a.id,a.is_locked,a.force_reset_password,p.is_active,s.member_id,s.auth_version,s.disabled_at FROM b2_lab.guild_member_accounts a JOIN b2_lab.guild_member_profiles p USING(employee_no) JOIN b2_lab.member_account_security_v2 s ON s.account_id=a.id WHERE a.id=$1',[lookup.account_id])).rows[0];
-   const s=(await c.query('SELECT account_id,csrf_hash,csrf_key_id,auth_version,revoked_at,expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 FOR UPDATE',[hash(token)])).rows[0];
+   await c.query('SELECT account_id FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 FOR UPDATE',[hash(token)]);
+   const s=(await c.query('SELECT account_id,csrf_hash,csrf_key_id,auth_version,revoked_at,expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(token)])).rows[0];
    if(!a||!s||a.member_id!==member.member.id||a.is_locked||!a.is_active||a.disabled_at||s.revoked_at||!s.live||s.auth_version!==a.auth_version||s.csrf_key_id!=='local-v1')fail(401,'SESSION_INVALID');
    if(a.force_reset_password)fail(403,'PASSWORD_RESET_REQUIRED');
    if(method==='POST'&&!crypto.timingSafeEqual(hash(header(event,'x-csrf-token')),s.csrf_hash))fail(403,'CSRF_REJECTED');
    await c.query("SELECT set_config('attendance.actor',$1,true)",[a.member_id]);
    const response=method==='POST'?await checkin(c,a.member_id,body.requestId):await state(c,a.member_id,await moment(c),readOptions);
+   // Account/session rows remain locked. Time may still pass during business SQL.
+   const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(token)])).rows[0];
+   if(!final?.live)fail(401,'SESSION_INVALID');
    await c.query('COMMIT');tx=false;return output(200,response);
   }catch(error){if(tx)await c.query('ROLLBACK').catch(()=>{});const known=error instanceof AttendanceError;return output(known?error.status:503,{error:'本机签到请求未完成或未获允许。',code:known?error.code:'ATTENDANCE_UNAVAILABLE'});}
   finally{await c?.end().catch(()=>{});}

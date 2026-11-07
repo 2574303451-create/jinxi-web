@@ -37,6 +37,7 @@
     "test:community-browser": "node tests/community-local-browser.cjs",
     "community:local": "node scripts/community-local.cjs",
     "test:attendance-local": "node tests/attendance-local-postgres.test.cjs",
+    "test:attendance-review": "node tests/attendance-local-review-postgres.test.cjs",
     "test:attendance-https": "node tests/attendance-local-https.test.cjs",
     "test:attendance-browser": "node tests/attendance-local-browser.cjs",
     "attendance:local": "node scripts/attendance-local.cjs"

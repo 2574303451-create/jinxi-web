@@ -1,6 +1,6 @@
 # 第三阶段检查点3：本地合成签到与统计
 
-基线f8175c4d22fc8b83c556a7dad943f1960ed1780e；独立分支codex/jinxi-phase3-attendance-local。本模块不接正式网站、云端TEST或积分账本。原身份、留言攻略及所有旧Functions保持原样；旧checkin入口仍冻结。
+基线f8175c4d22fc8b83c556a7dad943f1960ed1780e；独立分支codex/jinxi-phase3-attendance-local。本模块不接正式网站、云端TEST或积分账本。留言攻略及所有旧Functions保持原样；旧checkin入口仍冻结。独立审查发现签到预核验会受继承身份模块的等锁闲置到期影响，因此共享身份仅最小修正会话锁后读取与实际时钟续期语句，不新增身份流程或接口。
 
 ## 旧契约核对与尚待确认
 
@@ -12,7 +12,7 @@
 
 ## 本地明确规则
 
-1. 复用member-local原Cookie、稳定UUID、会话及CSRF，先身份核验，再在账号→会话锁内重查锁定、停用、改密、版本、撤销与实际到期。不接受user_id、昵称、日期、连续天数、奖励或前端权限字段。
+1. 复用member-local原Cookie、稳定UUID、会话及CSRF，先身份核验，再在账号→会话锁内分别用新语句重查锁定、停用、改密、版本、撤销与实际到期。提交前再次核验实际到期；慢查询期间过期则回滚事实、事件与回执。不接受user_id、昵称、日期、连续天数、奖励或前端权限字段。
 2. 本地新事实表attendance_lab.records的业务时区固定Asia/Shanghai；时间来自数据库，每日唯一(member_id,business_date)。日期与时间由数据库生成，运行角色无日期、时间或ID的插入/更新权限。此规则不自动解释或迁移旧记录。
 3. 日期以取得账号锁后、签到SQL语句开始的可信时钟为准。同一语句内日期/时间一致；会话到期独立用实际clock_timestamp校验。默认使用真实数据库statement_timestamp；边界测试使用仅初始化管理员能写的本地合成时钟，HTTP和运行角色不能改时钟。
 4. 连续天数从事实日期排序计算。今日未签但昨日有记录时，当前连续数保持截至昨日；最近一次早于昨日则当前0。中断后签到从1开始。累计、最长连续、月度计数与历史均从记录复算，无统计缓存写入口。回拨到已有未来事实之前或事实/事件不一致时报不可用，不返回假零或假成功。
@@ -32,3 +32,31 @@ RLS中的attendance.actor是服务端核验会话后设置的事务上下文，�
 - 响应明确区分checkedDate、today、hasCheckedToday、outcome(checked/already_checked/replayed)、stats与history；rewardStatus始终unsettled、rewardPoints=null，不提供余额。
 
 本轮用真实本机PostgreSQL、HTTPS、事件回归和浏览器验证，并在同轮完成独立规范/需求审查。最终命令、失败修复记录及证据在artifacts/phase3-attendance。FAQ/公告UI-DEFER-001/002继续留第四阶段；不开始积分、排行或兑换。
+
+## 在本机复现
+
+在本工作树的PowerShell终端使用现有Node24工具，无需安装新服务或依赖：
+
+```powershell
+$env:PATH='E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64;'+$env:PATH
+$attendancePgBin='E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin'
+$attendanceOpenSsl='D:/Program Files/Git/usr/bin/openssl.exe'
+$attendancePlaywright='E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright'
+node scripts/run-clean.cjs run test:attendance-local -- --pg-bin $attendancePgBin
+node scripts/run-clean.cjs run test:attendance-review -- --pg-bin $attendancePgBin
+node scripts/run-clean.cjs run test:attendance-https -- --pg-bin $attendancePgBin --openssl $attendanceOpenSsl
+node scripts/run-clean.cjs run test:attendance-browser -- --pg-bin $attendancePgBin --openssl $attendanceOpenSsl --playwright-module $attendancePlaywright
+node scripts/run-clean.cjs run test:member-local -- --pg-bin $attendancePgBin --openssl $attendanceOpenSsl
+node scripts/run-clean.cjs run test:community-local -- --pg-bin $attendancePgBin
+node scripts/run-clean.cjs run test:community-review -- --pg-bin $attendancePgBin
+node scripts/run-clean.cjs run test:test-environment -- --pg-bin $attendancePgBin
+node scripts/run-clean.cjs run test:api
+node scripts/run-clean.cjs run test:security
+node scripts/run-clean.cjs run typecheck
+node scripts/run-clean.cjs run lint
+node scripts/run-clean.cjs run build
+```
+
+PG/HTTPS/浏览器测试必须逐条运行，不能同时占用55436/3069；旧只读测试另用55435。每项测试自行创建新的临时合成数据库并关闭进程，清理启动器隔离所有继承云凭据。测试日志/截图在artifacts/phase3-attendance；运行凭据、私钥和PG数据目录在Git外，不能提交。
+
+人工查看独立演示：`node scripts/run-clean.cjs run attendance:local -- --pg-bin $attendancePgBin --openssl $attendanceOpenSsl`；打开打印的本机HTTPS地址，初次证书为本机自签名；合成登录资料只在打印的Git外.private.json路径中读取。Ctrl+C关闭服务和临时数据库。演示默认使用真实数据库时间，测试专用时钟不暴露HTTP入口。此命令不连接任何云站点。

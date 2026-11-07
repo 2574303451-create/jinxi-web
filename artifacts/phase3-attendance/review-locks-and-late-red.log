@@ -1,0 +1,79 @@
+
+> my-v0-project@0.1.0 test:attendance-review
+> node tests/attendance-local-review-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ attendance independent review lock-expiry regressions
+  ✖ idle expiry during original identity preflight account-lock wait cannot renew an expired session into a successful checkin (2428.0266ms)
+  ✖ session-row-only lock wait rechecks real idle expiry after the lock is acquired (2576.5734ms)
+  ✖ expiry during a delayed database business operation rolls back before commit (2410.7116ms)
+✖ attendance independent review lock-expiry regressions (42167.9361ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42170.2774
+
+✖ failing tests:
+
+test at tests\attendance-local-review-postgres.test.cjs:15:11
+✖ idle expiry during original identity preflight account-lock wait cannot renew an expired session into a successful checkin (2428.0266ms)
+  AssertionError [ERR_ASSERTION]: An idle deadline passed while original identity waited on the account
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:23:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:15:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\attendance-local-review-postgres.test.cjs:27:11
+✖ session-row-only lock wait rechecks real idle expiry after the lock is acquired (2576.5734ms)
+  AssertionError [ERR_ASSERTION]: Deadline passed during session-row-only lock wait
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:33:119)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:27:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\attendance-local-review-postgres.test.cjs:36:11
+✖ expiry during a delayed database business operation rolls back before commit (2410.7116ms)
+  AssertionError [ERR_ASSERTION]: A completed write must still have a live session at final validation
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:41:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-review-postgres.test.cjs:36:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

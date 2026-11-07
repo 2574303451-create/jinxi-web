@@ -40,6 +40,14 @@ test('trusted attendance facts on actual synthetic PostgreSQL',async t=>{
    await db.setClock('2026-12-31T16:00:00.000Z');let r=await sign(s,id);assert.equal(r.body.outcome,'replayed');assert.equal(r.body.checkedDate,'2026-12-31');assert.equal(r.body.today,'2027-01-01');assert.equal(r.body.hasCheckedToday,false);assert.equal(r.body.stats.totalDays,1);
    r=await sign(s);assert.equal(r.body.outcome,'checked');assert.equal(r.body.checkedDate,'2027-01-01');assert.equal(r.body.stats.currentStreak,2);assert.equal(r.body.stats.monthDays,1);
   });
+  await t.test('the first simultaneous batch on an empty day produces exactly one successful fact and event',async()=>{
+   await db.setClock('2024-02-29T04:00:00.000Z');const s=await login('normal'),shared=crypto.randomUUID();
+   const ids=Array.from({length:8},(_,i)=>i%2?crypto.randomUUID():shared),results=await Promise.all(ids.map(id=>sign(s,id)));
+   assert(results.every(r=>r.status===200));assert.equal(results.filter(r=>r.body.outcome==='checked').length,1);
+   assert(results.every(r=>['checked','already_checked','replayed'].includes(r.body.outcome)));assert.equal(new Set(results.map(r=>r.body.recordId)).size,1);
+   assert(results.every(r=>r.body.checkedDate==='2024-02-29'&&r.body.stats.totalDays===1&&r.body.stats.currentStreak===1));
+   assert.deepEqual((await admin(c=>c.query('SELECT (SELECT count(*)::int FROM attendance_lab.records) AS facts,(SELECT count(*)::int FROM attendance_lab.reward_events) AS events,(SELECT count(*)::int FROM attendance_lab.requests) AS receipts'))).rows[0],{facts:1,events:1,receipts:new Set(ids).size});
+  });
   await t.test('calendar boundaries use Shanghai dates independently of connection timezone',async()=>{
    const cases=[['month end','2026-04-30T15:59:59.999Z','2026-04-30T16:00:00.000Z','2026-04-30','2026-05-01'],['year end','2024-12-31T15:59:59.999Z','2024-12-31T16:00:00.000Z','2024-12-31','2025-01-01'],['century leap','2000-02-28T16:00:00.000Z','2000-02-29T16:00:00.000Z','2000-02-29','2000-03-01'],['century nonleap','2100-02-28T04:00:00.000Z','2100-03-01T04:00:00.000Z','2100-02-28','2100-03-01']];
    for(const [name,first,second,day1,day2]of cases){
@@ -77,20 +85,24 @@ test('trusted attendance facts on actual synthetic PostgreSQL',async t=>{
    assert.equal((await admin(c=>c.query('SELECT count(*)::int AS n FROM attendance_lab.records'))).rows[0].n,0);
   });
   await t.test('state changes and expiry committed during the actual account-lock wait are checked again',async()=>{
-   for(const mode of ['lock','profile','disabled','version','revoked','expiry']){
+   for(const mode of ['lock','profile','disabled','version','revoked','expiry','first-reset']){
     const s=await login('same'),block=await db.admin(),id=crypto.randomUUID();let enter;const entered=new Promise(r=>{enter=r;});let pending;
     const waited=createAttendanceHandler({settings:db.settings,env:{},identity:async e=>{const r=await identity(e);assert.equal(r.statusCode,200);await block.query('BEGIN');await block.query('SELECT id FROM b2_lab.guild_member_accounts WHERE id=$1 FOR UPDATE',[db.accounts.same.accountId]);return r;},connect:async()=>{const c=await db.connectAttendance(),query=c.query.bind(c);c.query=(sql,...values)=>{if(sql.includes('guild_member_accounts')&&sql.includes('FOR UPDATE'))enter();return query(sql,...values);};return c;}});
     try{
      pending=waited(event(s,{op:'checkin',requestId:id}));await entered;
      if(mode==='lock')await block.query('UPDATE b2_lab.guild_member_accounts SET is_locked=true WHERE id=$1',[db.accounts.same.accountId]);
+     if(mode==='first-reset')await block.query('UPDATE b2_lab.guild_member_accounts SET force_reset_password=true WHERE id=$1',[db.accounts.same.accountId]);
      if(mode==='profile')await block.query('UPDATE b2_lab.guild_member_profiles SET is_active=false WHERE employee_no=$1',[db.accounts.same.employeeNo]);
      if(mode==='disabled')await block.query('UPDATE b2_lab.member_account_security_v2 SET disabled_at=clock_timestamp() WHERE account_id=$1',[db.accounts.same.accountId]);
      if(mode==='version')await block.query('UPDATE b2_lab.member_account_security_v2 SET auth_version=auth_version+1 WHERE account_id=$1',[db.accounts.same.accountId]);
      if(mode==='revoked')await block.query('UPDATE b2_lab.member_sessions_v2 SET revoked_at=clock_timestamp() WHERE account_id=$1',[db.accounts.same.accountId]);
      if(mode==='expiry'){await block.query("UPDATE b2_lab.member_sessions_v2 SET idle_expires_at=clock_timestamp()+interval '400 milliseconds' WHERE token_hash=$1",[crypto.createHash('sha256').update(s.cookie.split('=')[1]).digest()]);await block.query('SELECT pg_sleep(0.6)');}
-     await block.query('COMMIT');assert.equal((await pending).statusCode,401,mode);assert.equal((await admin(c=>c.query('SELECT count(*)::int AS n FROM attendance_lab.requests WHERE request_id=$1',[id]))).rows[0].n,0);
-    }finally{await block.query('ROLLBACK').catch(()=>{});await pending?.catch(()=>{});await block.end();await admin(async c=>{await c.query('UPDATE b2_lab.guild_member_accounts SET is_locked=false WHERE id=$1',[db.accounts.same.accountId]);await c.query('UPDATE b2_lab.guild_member_profiles SET is_active=true WHERE employee_no=$1',[db.accounts.same.employeeNo]);await c.query('UPDATE b2_lab.member_account_security_v2 SET disabled_at=NULL WHERE account_id=$1',[db.accounts.same.accountId]);});}
-    assert.equal((await sign(s)).status,401,'Restoring account flags must not resurrect the old session');
+     await block.query('COMMIT');assert.equal((await pending).statusCode,mode==='first-reset'?403:401,mode);assert.equal((await admin(c=>c.query('SELECT count(*)::int AS n FROM attendance_lab.requests WHERE request_id=$1',[id]))).rows[0].n,0);
+     if(mode==='first-reset'){
+      const next=crypto.randomBytes(20).toString('hex')+'A9!';assert.equal((await identity(event(s,{op:'change-password',currentPassword:db.accounts.same.password,newPassword:next}))).statusCode,200);db.accounts.same.password=next;
+     }
+    }finally{await block.query('ROLLBACK').catch(()=>{});await pending?.catch(()=>{});await block.end();await admin(async c=>{await c.query('UPDATE b2_lab.guild_member_accounts SET is_locked=false,force_reset_password=false WHERE id=$1',[db.accounts.same.accountId]);await c.query('UPDATE b2_lab.guild_member_profiles SET is_active=true WHERE employee_no=$1',[db.accounts.same.employeeNo]);await c.query('UPDATE b2_lab.member_account_security_v2 SET disabled_at=NULL WHERE account_id=$1',[db.accounts.same.accountId]);});}
+    assert.equal((await sign(s)).status,401,'Restoring flags or completing the required password change must not resurrect the old session');
    }
   });
   await t.test('actual PostgreSQL failures after the fact or event roll back every write, and a retry succeeds once',async()=>{

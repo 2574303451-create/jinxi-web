@@ -1,0 +1,17 @@
+
+> my-v0-project@0.1.0 test:attendance-review
+> node tests/attendance-local-review-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ attendance independent review lock-expiry regressions
+  ✔ idle expiry during original identity preflight account-lock wait cannot renew an expired session into a successful checkin (2777.0836ms)
+  ✔ session-row-only lock wait rechecks real idle expiry after the lock is acquired (2674.8066ms)
+  ✔ expiry during a delayed database business operation rolls back before commit (2572.02ms)
+✔ attendance independent review lock-expiry regressions (42434.8177ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42437.3229

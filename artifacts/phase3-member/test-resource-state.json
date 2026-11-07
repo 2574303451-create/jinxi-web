@@ -1,0 +1,47 @@
+{
+  "source": "Read-only TEST metadata; no environment-value endpoint",
+  "checkedAtUtc": "2026-11-07T08:11:03.688Z",
+  "site": {
+    "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+    "accountId": "689e1405e8627000726e883c",
+    "name": "jinxi-web-test",
+    "stopBuilds": true,
+    "skipPrs": true,
+    "installationId": 80952013,
+    "publishedDeployId": "6aeebe4ceae178c10e4199e8",
+    "publishedSha": "13de96d7531dde3222fdf513e711447a1df3e425"
+  },
+  "deploy": {
+    "kind": "deploy",
+    "id": "6aeebe4ceae178c10e4199e8",
+    "state": "ready",
+    "commit": "13de96d7531dde3222fdf513e711447a1df3e425",
+    "context": "production",
+    "branch": "codex/jinxi-f03-f05-test-foundation",
+    "error": null,
+    "url": "https://codex-jinxi-f03-f05-test-foundation--jinxi-web-test.netlify.app",
+    "updatedAt": "2026-11-07T06:01:30.392Z",
+    "functions": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "protectedSourceDiff": [],
+  "remoteBaseline": "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+  "cloudWrites": 0,
+  "productionOperations": 0,
+  "cloudDatabaseConnections": 0,
+  "productionDatabaseConnections": 0
+}

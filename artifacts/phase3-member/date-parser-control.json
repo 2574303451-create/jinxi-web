@@ -1,0 +1,5 @@
+{
+  "databaseDate": "2018-02-10",
+  "oldJsISOStringDate": "2018-02-09",
+  "fix": "Database DATE rendered with to_char as YYYY-MM-DD; actual HTTP profile test requires original date."
+}

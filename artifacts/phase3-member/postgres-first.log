@@ -1,0 +1,73 @@
+▶ member identity on a fresh SCRAM-authenticated loopback PostgreSQL
+  ✔ legacy account/profile FK and opaque mapping; 208 fully synthetic legacy records preserve status (1030.9602ms)
+  ✔ valid login, opaque server identity, self-only profile and token digests (1740.7382ms)
+  ✔ unknown, wrong, locked, inactive, unsupported hashes and missing mappings have uniform denial (2864.8217ms)
+  ✔ same nicknames stay separate; self-reported identity is always rejected (1731.2722ms)
+  ✔ old 200000 PBKDF2 format, mandatory first change and all-device revocation (3725.4733ms)
+  ✔ normal password change invalidates every device, leaves other members intact (2920.8916ms)
+  ✔ logout, forged cookies, duplicate cookies and rotated-session replay (2118.6481ms)
+  ✖ absolute and idle expiry reject with cookie clearing (1947.1727ms)
+  ✔ locking, deactivation and security disable permanently revoke prior sessions (3696.8582ms)
+  ✔ multi-tab shares one session; concurrent devices stay capped without identity mixing (2949.0646ms)
+  ✔ SQL injection and bounded input cannot select or change another account (2064.3164ms)
+  ✔ Origin/CSRF reject cross-site writes, unsupported businesses never activate (2115.1246ms)
+  ✔ persistent login/password throttles do not reset on rejected attempts (5935.753ms)
+  ✔ actual restricted role cannot alter locks, profiles, mapping, business tables, DDL or TEMP (1353.1832ms)
+  ✔ actual excessive ACL or wrong identity stops before profile/session business work (2099.994ms)
+  ✔ login and password failures roll back partial security writes and suppress internals (2427.1292ms)
+  ✖ real HTTPS cookie, host binding and safe static page; no cloud route (1658.2052ms)
+✖ member identity on a fresh SCRAM-authenticated loopback PostgreSQL (74583.3881ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 15
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74588.4661
+
+✖ failing tests:
+
+test at tests\member-local-postgres.test.cjs:85:13
+✖ absolute and idle expiry reject with cookie clearing (1947.1727ms)
+  error: new row for relation "member_sessions_v2" violates check constraint "member_sessions_v2_check1"
+      at E:\Recovery\.jinxi-research\f03-f05\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async admin (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-postgres.test.cjs:20:66)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-postgres.test.cjs:89:39)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-member\worktree\tests\member-local-postgres.test.cjs:85:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 559,
+    severity: 'ERROR',
+    code: '23514',
+    detail: '[WITHHELD: synthetic session digest fragments; full original retained privately]',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: 'b2_lab',
+    table: 'member_sessions_v2',
+    column: undefined,
+    dataType: undefined,
+    constraint: 'member_sessions_v2_check1',
+    file: 'execMain.c',
+    line: '2079',
+    routine: 'ExecConstraints'
+  }
+
+test at tests\member-local-postgres.test.cjs:140:13
+✖ real HTTPS cookie, host binding and safe static page; no cloud route (1658.2052ms)
+  Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: production-like.invalid. is not in the cert's altnames: DNS:localhost, IP Address:127.0.0.1
+      at Object.checkServerIdentity (node:tls:507:12)
+      at TLSSocket.onConnectSecure (node:internal/tls/wrap:1794:27)
+      at TLSSocket.emit (node:events:514:28)
+      at TLSSocket._finishInit (node:internal/tls/wrap:1216:8)
+      at ssl.onhandshakedone (node:internal/tls/wrap:997:12) {
+    code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+    reason: "Host: production-like.invalid. is not in the cert's altnames: DNS:localhost, IP Address:127.0.0.1",
+    host: 'production-like.invalid',
+    cert: '[Public ephemeral certificate omitted; original retained privately]',
+  }

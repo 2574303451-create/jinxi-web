@@ -1,0 +1,199 @@
+{
+  "stage": "phase3-checkpoint1-local-members",
+  "baseline": "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+  "branch": "codex/jinxi-phase3-member-local",
+  "scope": "Fresh loopback-only synthetic identity; not hosted member acceptance",
+  "classification": "synthetic-local",
+  "node": "v24.22.2",
+  "postgres": "17.11",
+  "npm": "11.19.1",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 55436,
+    "name": "jinxi_member_local",
+    "scramAuthentication": true,
+    "proof": "local-database-proof.json",
+    "initializedFresh": true,
+    "realMemberDataUsed": false
+  },
+  "implementation": {
+    "operations": [
+      "login",
+      "me",
+      "profile-self-only",
+      "change-password",
+      "logout"
+    ],
+    "association": "accounts.id bigint PK; accounts.employee_no UNIQUE FK -> profiles.employee_no PK; additive immutable account->member UUID map",
+    "legacyPasswordCompatibility": "Synthetic pbkdf2_sha256 200000 and600000, bounded verify; actual production distribution not queried",
+    "firstChangeRequired": true,
+    "tokenStorage": "SHA256 digest only; opaque32-byte Cookie",
+    "cookie": [
+      "__Host-",
+      "HttpOnly",
+      "Secure",
+      "SameSite=Lax",
+      "Path=/"
+    ],
+    "profileIdentifier": "Opaque member UUID, no employee/login-account fields",
+    "otherBusinessesEnabled": false
+  },
+  "checks": {
+    "boundary": {
+      "passed": 4,
+      "failed": 0,
+      "log": "boundary.log"
+    },
+    "postgres": {
+      "reportedTests": 18,
+      "subtests": 17,
+      "failed": 0,
+      "log": "postgres-final.log",
+      "includes": [
+        "208 fully synthetic legacy shape/mapping/statuses",
+        "valid/unknown/wrong/locked/inactive/unsupported/missing-map login",
+        "first change and normal change",
+        "all-device revocation; account lock/profile disable/security disable cannot resurrect sessions",
+        "absolute/idle expiry, rotation/logout/forged and duplicate-cookie replay",
+        "same nickname separate stable member IDs; cross-account denial",
+        "multi-tab shared session and concurrent-device cap",
+        "SQL injection, typed/size validation, Origin and CSRF",
+        "actual column/role/DDL/TEMP/definer/business permission rejection",
+        "actual wrong identity and ACL drift before business; safe transaction rollback",
+        "strict missing-approval SQL guard before DDL; actual HTTPS CA+SNI/Host tests"
+      ]
+    },
+    "readOnlyRegression": {
+      "passed": 46,
+      "failed": 0,
+      "log": "read-only-regression.log",
+      "database": "Separate fresh loopback55435; never the cloud database"
+    },
+    "api": {
+      "passed": 14,
+      "failed": 0,
+      "log": "unit-final.log"
+    },
+    "security": {
+      "passed": 71,
+      "failed": 0,
+      "log": "unit-final.log"
+    },
+    "rawTypeScript": {
+      "exitCode": 0,
+      "log": "typecheck.log"
+    },
+    "eslint": {
+      "exitCode": 0,
+      "log": "lint-final.log",
+      "rulesDisabled": 0
+    },
+    "build": {
+      "exitCode": 0,
+      "log": "build.log",
+      "cspPages": 7,
+      "cspHashes": 8
+    },
+    "browser": {
+      "file": "browser/2026-11-07T08-11-19-466Z/results.json",
+      "passed": true,
+      "widths": [
+        1440,
+        1024,
+        768,
+        390,
+        320
+      ],
+      "pageErrors": 0,
+      "cspViolations": 0,
+      "externalRequests": 0,
+      "keyboardFocusOutline": "3px",
+      "reducedMotion": "reduce",
+      "multiTabLogoutSync": true,
+      "networkRecovery": true,
+      "firstPasswordChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    }
+  },
+  "sourceIntegrity": {
+    "normalization": "SHA256 over UTF8 source with LF; compare committed blobs",
+    "testedFiles": {
+      "member-local/database.cjs": "79e39ecefb5e9c0ac60fd4de4410505d4f887480b50112e94044ee748c241f44",
+      "member-local/demo.css": "609355829463781fa7a0eeee4c599e3f456077212e476eee695756b7ab781a60",
+      "member-local/demo.html": "db3e15f50469d7565ecb567e075d034e6676d3aac182b7f4ed8db8a50a0fb020",
+      "member-local/demo.js": "f653c4906b430505bdc07a7ad5ddfb3e06b63847097a8facac8499ccce7dd70c",
+      "member-local/identity.cjs": "ad64fd1d6b20fd2584b64ba68b79c37d6fd1fd3d42679cab7d9201562babd10f",
+      "member-local/schema.sql": "f23ba0cd01020e256f07a2ff89bbdc7967873d0bda04c930ceeb52dcb975e50d",
+      "member-local/server.cjs": "0814e4765a26c361ebfa6169eb0ace1313c8f05de28678c9a903c6effe87526e",
+      "scripts/member-local.cjs": "034f81b04f9d5a5f069dc4e40dbcbed8bc7ddd0fa277c1b04b6073e8494441c9",
+      "tests/member-local-boundary.test.cjs": "4126271069d4a24fb8ae94c5ccba692554a0d82b3c034d95148dbb7368dcfe6a",
+      "tests/member-local-postgres.test.cjs": "5284cee37d053c7a8899339d3040619f01e7893c441f9de1cd139be84426836e",
+      "eslint.config.mjs": "16e3eda8fb2422a9c47c9179bfc7fa13d206e537ae67f0517fb7e671f7c5f253",
+      "package.json": "e919bfadde02f4dd926626d5796c09d80bb5cfcd2ba7cc73f92bdfbbacbdfeff"
+    },
+    "protectedSourceDiff": [],
+    "cloudResourceState": "test-resource-state.json",
+    "originalF03WorktreeChanged": false
+  },
+  "uiDeferred": {
+    "file": "artifacts/rea-003/UI_AUDIT.md",
+    "issues": [
+      "UI-DEFER-001",
+      "UI-DEFER-002"
+    ],
+    "status": "pending-fix-stage4",
+    "evidence": "User text observation; original current screenshots unavailable in this turn",
+    "jsxCssInteractionsChanged": false,
+    "otherPriorTodosPreserved": true
+  },
+  "ci": {
+    "baseline": {
+      "sha": "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+      "runId": 42347156554,
+      "conclusion": "success",
+      "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42347156554"
+    },
+    "candidate": {
+      "pushed": false,
+      "newGitHubCiRun": null,
+      "localEquivalentChecks": "typecheck/lint/build/API/security; separate actual local member and F03 PG runs"
+    }
+  },
+  "failures": {
+    "implementationBefore": "boundary-before.log",
+    "firstPostgres": {
+      "log": "postgres-first.log",
+      "passed": 15,
+      "failed": 3,
+      "includesFailedParent": true,
+      "causes": [
+        "Idle-expiry fixture targeted a previous expired session, violated existing CHECK",
+        "Forged HTTP Host also altered TLS SNI, correct certificate verification rejected first"
+      ]
+    },
+    "privateOriginalReceipt": "private-evidence-receipt.json",
+    "dateBoundary": "date-parser-control.json",
+    "sqlGuard": "Source review changed SQL NULL comparisons to IS DISTINCT FROM; actual negative guard and final PG/browser passed"
+  },
+  "stoppedAt": {
+    "cloudMemberAuthEnabled": false,
+    "cloudReaderPermissionsChanged": false,
+    "cloudWriterLoginEnabled": false,
+    "cloudDeploys": 0,
+    "productionOperations": 0,
+    "newPullRequests": 0,
+    "pushes": 0,
+    "paidResourcesCreated": 0,
+    "nextApproval": "Only after independent review, push this local candidate to a separate review branch; do not deploy or alter current TEST.",
+    "cloudDatabaseConnections": 0,
+    "productionDatabaseConnections": 0,
+    "actualSyntheticLoopbackPostgresUsed": true
+  },
+  "completedAtUtc": "2026-11-07T08:17:14.249Z",
+  "evidenceFormatting": {
+    "receipt": "raw-log-format-receipt.json",
+    "originalsRetainedPrivately": true,
+    "onlyWhitespaceNormalized": true
+  }
+}

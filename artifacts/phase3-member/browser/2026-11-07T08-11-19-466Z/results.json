@@ -1,0 +1,61 @@
+{
+  "origin": "https://127.0.0.1:3069",
+  "classification": "synthetic-local",
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true,
+      "pageErrors": [],
+      "cspViolations": [],
+      "externalRequests": 0,
+      "sharedCookieAndLogoutBroadcast": true,
+      "firstChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    },
+    {
+      "width": 1024,
+      "passed": true,
+      "pageErrors": [],
+      "cspViolations": [],
+      "externalRequests": 0,
+      "firstChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    },
+    {
+      "width": 768,
+      "passed": true,
+      "pageErrors": [],
+      "cspViolations": [],
+      "externalRequests": 0,
+      "firstChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    },
+    {
+      "width": 390,
+      "passed": true,
+      "pageErrors": [],
+      "cspViolations": [],
+      "externalRequests": 0,
+      "networkRecovery": true,
+      "firstChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    },
+    {
+      "width": 320,
+      "passed": true,
+      "pageErrors": [],
+      "cspViolations": [],
+      "externalRequests": 0,
+      "firstChange": true,
+      "expiry": true,
+      "draftPreserved": true
+    }
+  ],
+  "edge": "140.0.3485.66",
+  "completedAtUtc": "2026-11-07T08:11:52.765Z"
+}

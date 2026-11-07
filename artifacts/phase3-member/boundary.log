@@ -1,0 +1,12 @@
+✔ local identity accepts only its separate loopback database and rejects cloud before connecting (1.331ms)
+✔ hosted context and inherited database/admin keys reject without reading their values (1.1271ms)
+✔ origin, CSRF shape, input authority and unsupported businesses reject without database work (0.4805ms)
+✔ pre-auth failures do not emit internal errors or permissive CORS (0.2189ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 80.2081

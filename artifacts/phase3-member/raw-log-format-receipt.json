@@ -1,0 +1,26 @@
+{
+  "scope": "Presentation only: tool-output trailing spaces/extra final blank lines normalized. Test outcomes and error conditions unchanged. Full originals retained privately.",
+  "originalPrivateDirectory": "jinxi-member-raw-logs-HX2Dps",
+  "records": [
+    {
+      "file": "build.log",
+      "originalSha256": "d313919a134be1894550f1b4e220ddc35684deb4377f717818760574d188ae1a",
+      "publishedSha256": "9d13cbfbbef809793eecdfc01780138606326690478534e3ec40a101c1d3b25c"
+    },
+    {
+      "file": "lint-final.log",
+      "originalSha256": "b83534be8044db537069da585fb15df6c31b2482a971600c60fafe4b50de1b4a",
+      "publishedSha256": "0091a5d68d67ffb2c59c3719dbf133db10eba6c367cb6c446d8247b436efa5a0"
+    },
+    {
+      "file": "lint-first.log",
+      "originalSha256": "b83534be8044db537069da585fb15df6c31b2482a971600c60fafe4b50de1b4a",
+      "publishedSha256": "0091a5d68d67ffb2c59c3719dbf133db10eba6c367cb6c446d8247b436efa5a0"
+    },
+    {
+      "file": "typecheck.log",
+      "originalSha256": "e6f97a22e09041947b70e82daa0a31d686c46840b496e74eaa9c1b060cf0b556",
+      "publishedSha256": "d7a7ef8e443f6680b91b3994d62f9bf0f05e528bdf0b9410984f52dd0dc442ce"
+    }
+  ]
+}

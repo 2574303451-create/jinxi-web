@@ -1,0 +1,7 @@
+{
+  "scope": "Synthetic-only failed test, not API response",
+  "file": "postgres-first.log",
+  "originalSha256": "ca4831ca207e8683c298c1f8858fb971e0a4a9f8074bc68ee42752b0f64a9869",
+  "originalPrivateDirectory": "jinxi-member-private-evidence-uO3n68",
+  "redactions": "PostgreSQL failing-row digest fragments and verbose public certificate object. Error codes, assertions, stack locations, outcomes retained."
+}

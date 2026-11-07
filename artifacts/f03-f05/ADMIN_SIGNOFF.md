@@ -8,7 +8,7 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。Netlify 独立站点、专用分支及五项变量已配置，最新 GitHub CI 成功。首次 TEST 构建在 preparing repo 阶段失败，已重新暂停构建，待核对现有 GitHub App installation ID。第三关未通过。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
+2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。Netlify 独立站点、专用分支及五项变量已配置，最新 GitHub CI 成功。GitHub App 已绑定并成功检出指定提交，随后发现 Linux npm 布局兼容错误。修复已本机复验，当前等待 Linux CI 和指定 TEST 重建，第三关未通过。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
 
@@ -112,13 +112,23 @@
 
 成功后仅确认完成，Codex 读取本机被忽略的非秘密配置回执。若失败或结果不明确，仅回传最后一行安全 JSON，保持停止，由 Codex 核对。配置不触发部署，后续由 Codex 核对候选 SHA、CI 和四项非秘密变量再执行指定 TEST 构建。工具的 API14/安全63 与相关 ESLint 已通过，百分号和保留字符由真实 pg 解析器验证。
 
-### 当前管理员执行项：现有 Netlify GitHub App 的非秘密 installation ID
+### 已完成：现有 Netlify GitHub App 安装编号绑定
 
 独立站点 https://jinxi-web-test.netlify.app 已创建，Site ID 为 17885134-a57c-4589-83d3-39e30be9e0cf。专用分支已推送至 f370e6d59926e6bf56388b9b62be6dc0133e0411，该 HEAD 的实际 CI 成功，记录见 results.json。四项非秘密变量和用户私密配置的 reader secret 均为该 TEST site 的 production context。
 
 首次指定 TEST 构建为 build 6aeeacb25e993fe946ca77bb / deploy 6aeeacb25e993fe946ca77bd，在 preparing repo 阶段失败，完整失败原因已保留于原 results.json。原因为 Host key verification failed，尚未安装依赖或执行构建脚本，实际 checkout SHA 和 Build/Functions Node 仍待证。实际站点元数据 installation_id=null、无 deploy key。分支确已存在，且 GitHub CI 已读取该提交成功。
 
 已将 TEST stop_builds=true、skip_prs=true 并回读确认。仅允许该 TEST 分支的限制继续有效。后续按正规 GitHub 集成修复仓库拉取，不降低 SSH 主机验证。当前唯一管理员操作为在 GitHub → Settings → Applications → Installed GitHub Apps → Netlify → Configure 查看该仓库的现有授权，并提供页面地址末尾 installation ID（数字）。保留现有权限和仓库选择；若没有 Netlify 应用，回复“未安装”。数据库、密码和 Netlify 基础截图均已取得。
+
+### 当前执行项：Linux npm 启动器兼容修复及托管复验
+
+用户已提供现有 installation ID 80952013，已绑定至独立 TEST 站点并恢复 skip_prs=true、唯一 TEST 分支及暂停构建设置。随后 Netlify build 6aeeb1036cbf2581ed01706f / deploy 6aeeb1036cbf2581ed017071 成功检出84397a0，证明原拉库阻断已关闭。实际 Build Node24.22.2、npm11.19.1 和 noble-new-builds 已由日志确认。
+
+该构建在 npm 子进程启动时失败。原 run-clean 只查 Windows 便携布局，Linux 的 npm 位于安装前缀 lib/node_modules。现只补齐这两种布局，保留原 cleanEnv 和所有资源/提交门禁。4项布局回归、API14/安全67、原始tsc、ESLint和静态构建通过。CI新增实际Linux clean launcher检查。原失败日志181行保留，未关闭类型或安全检查。
+
+日志另显示加载团队级 neon 扩展。按已安装官方CLI的 getSiteConfiguration 路径，仅查询本 TEST 的配置存在性，HTTP404，响应体未读取。未配置该扩展的站点级数据库连接。实际 build gate 已通过禁止变量名检查，Functions 运行时仍会逐请求复核。此项无需管理员补充截图。
+
+当前没有待管理员操作，Codex继续Linux CI和指定TEST构建。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 

@@ -1,0 +1,12 @@
+✔ portable Node resolves npm next to the executable (4.6306ms)
+✔ POSIX Node resolves npm under its installation prefix lib directory (3.3317ms)
+✔ missing npm fails closed without consulting an unrelated PATH installation (1.8028ms)
+✔ normal clean runner entry point executes the installed npm (192.8458ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 295.4515

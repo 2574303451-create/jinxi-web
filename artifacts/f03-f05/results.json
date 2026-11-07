@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "Actual synthetic TEST database/reader proof, independent site, dedicated variables and GitHub CI have passed their respective steps. Netlify deploy failed before checkout due to host-key verification. Gate 2 build and Gate 3 hosted isolation remain incomplete.",
+  "cloudAcceptance": "TEST DB/reader, dedicated site/variables and GitHub App linkage verified at their respective steps. Actual Netlify checkout84397a0 and Build Node24.22.2/npm11.19.1 confirmed. Build failed on npm layout; hosted deployment/runtime/HTTP acceptance remain pending.",
   "checks": [
     {
       "name": "typecheck",
@@ -292,14 +292,14 @@
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
     "roleAuthentication": "PASSED: actual jinxi_test_reader session, approved registered database fingerprint, direct/effective permission attestation and four synthetic reads verified from the local proof receipt.",
     "netlifySiteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
-    "deployId": "6aeeacb25e993fe946ca77bd",
+    "deployId": "6aeeb1036cbf2581ed017071",
     "deployedSha": null,
     "runtimeBinding": "approved resource binding with the actual TEST Site ID; hosted deploy proof not yet generated",
     "gitPushes": "Only codex/jinxi-f03-f05-test-foundation, latest pushed source f370e6d59926e6bf56388b9b62be6dc0133e0411. No new PR or original PR/base/main change.",
     "newPrs": 0,
     "newCloudResources": 1,
     "incrementalFeesIncurred": "Created one empty site under confirmed Legacy Free team without upgrades, purchases or paid add-ons. The creation response site plan is nf_team_dev.",
-    "nextAdministratorAction": "In GitHub Settings > Applications > Installed GitHub Apps > Netlify > Configure, confirm the repository is already authorized and provide only the numeric installation ID from the page URL. If absent, report not installed. Existing permissions and repository selections are preserved.",
+    "nextAdministratorAction": "No administrator action pending. Codex proceeds with the tested npm launcher fix, Linux CI, approved TEST build and hosted acceptance.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -850,7 +850,7 @@
       "scope": "Actual dedicated TEST reader authentication, exact registered database identity, direct/effective permission attestation and four synthetic reads. Cloud-hosted Functions and cross-resource configuration await independent Netlify site acceptance."
     },
     "netlifyPreparation": {
-      "status": "Site, branch, exact candidate, public variables and private reader secret configured. First TEST build failed during preparing repo with host-key verification error. TEST builds paused again; existing GitHub App repository-installation metadata is needed.",
+      "status": "Existing GitHub App bound and exact checkout84397a0 proved. Next build failed on the Windows-only npm path. Minimal cross-platform fix and regressions passed locally; Linux CI and a new TEST build are next. TEST builds paused.",
       "team": {
         "id": "689e1405e8627000726e883c",
         "name": "XUST",
@@ -911,9 +911,7 @@
         "productionSettingsChanged": false
       },
       "browserAccess": "The previous Computer Use turn was stopped by the tool because the current browser URL could not be determined reliably. This turn reused user screenshot and existing CLI metadata access.",
-      "pendingAdministratorEvidence": [
-        "Existing Netlify GitHub App installation ID for the already-authorized jinxi-web repository, or confirmation that no such app is installed. Preserve existing repository permissions."
-      ],
+      "pendingAdministratorEvidence": [],
       "sources": [
         "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/",
         "https://docs.netlify.com/build/environment-variables/overview/"
@@ -1206,6 +1204,136 @@
         "buildNodeVersion": null,
         "functionsNodeVersion": null,
         "published": false
+      },
+      "gitHubInstallation": {
+        "id": 80952013,
+        "source": "User confirmed existing installation ID",
+        "bound": {
+          "operation": "link-TEST-GitHub-App",
+          "status": 200,
+          "id": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "accountId": "689e1405e8627000726e883c",
+          "repoPath": "2574303451-create/jinxi-web",
+          "repoBranch": "codex/jinxi-f03-f05-test-foundation",
+          "repoUrl": "https://github.com/2574303451-create/jinxi-web",
+          "installationId": 80952013,
+          "stopBuilds": false,
+          "skipPrs": null,
+          "allowedBranches": [
+            "codex/jinxi-f03-f05-test-foundation"
+          ],
+          "collectedAtUtc": "2026-11-07T05:00:45.532Z"
+        },
+        "restoredRequiredSettings": {
+          "operation": "approve-TEST-App-candidate",
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "installationId": 80952013,
+          "stopBuilds": true,
+          "skipPrs": true,
+          "allowedBranches": [
+            "codex/jinxi-f03-f05-test-foundation"
+          ],
+          "approvedCommit": "84397a0b840b292a53b696bfb15c57296158c200",
+          "candidateVariableHttpStatus": 200,
+          "collectedAtUtc": "2026-11-07T05:01:28.661Z"
+        }
+      },
+      "neonExtensionPresence": {
+        "operation": "TEST-Neon-extension-config-presence",
+        "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "httpStatus": 404,
+        "responseBodyRead": false,
+        "configurationExists": false,
+        "testBuildsPaused": true,
+        "source": "Exact GET presence check from the installed official CLI getSiteConfiguration URL; response body never consumed.",
+        "explanation": "Team Neon extension is loaded by Netlify Build. The TEST site-specific configuration endpoint returns404, without reading its body. The build gate also reached the npm subprocess, proving its forbidden-variable presence checks passed at that phase. Functions must still pass the same checks at runtime."
+      },
+      "buildAttempts": [
+        {
+          "operation": "start-approved-TEST-build",
+          "status": 200,
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "buildId": "6aeeacb25e993fe946ca77bb",
+          "deployId": "6aeeacb25e993fe946ca77bd",
+          "approvedCommit": "f370e6d59926e6bf56388b9b62be6dc0133e0411",
+          "createdAt": "2026-11-07T04:44:34.559Z",
+          "prPreviewsSkipped": true,
+          "branchLimited": true,
+          "exactCommitBuildGate": true,
+          "optionalAutomaticBuildFlag": null,
+          "result": {
+            "operation": "inspect-TEST-clone-failure",
+            "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+            "stopBuilds": true,
+            "skipPrs": true,
+            "repoPath": "2574303451-create/jinxi-web",
+            "repoBranch": "codex/jinxi-f03-f05-test-foundation",
+            "repoUrl": "https://github.com/2574303451-create/jinxi-web",
+            "provider": "github",
+            "repoType": "git",
+            "installationId": null,
+            "hasDeployKey": false,
+            "deployId": "6aeeacb25e993fe946ca77bd",
+            "state": "error",
+            "error": "Failed during stage 'preparing repo': Unable to access repository. The repository may have been deleted, the branch may not exist, or permissions may have changed: Cloning into '/opt/build/repo'...\nHost key verification failed.\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n: exit status 128"
+          },
+          "actualCheckedOutSha": null,
+          "buildNodeVersion": null,
+          "functionsNodeVersion": null,
+          "published": false
+        },
+        {
+          "operation": "start-App-bound-TEST-build",
+          "status": 200,
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "buildId": "6aeeb1036cbf2581ed01706f",
+          "deployId": "6aeeb1036cbf2581ed017071",
+          "approvedCommit": "84397a0b840b292a53b696bfb15c57296158c200",
+          "installationId": 80952013,
+          "createdAt": "2026-11-07T05:02:59.744Z",
+          "state": "error",
+          "stage": "building site",
+          "actualCheckedOutSha": "84397a0b840b292a53b696bfb15c57296158c200",
+          "buildImage": "noble-new-builds",
+          "node": "24.22.2",
+          "npm": "11.19.1",
+          "error": "MODULE_NOT_FOUND: /opt/buildhome/.nvm/versions/node/v24.22.2/bin/node_modules/npm/bin/npm-cli.js",
+          "log": "cloud-app-build-failure.log"
+        }
+      ],
+      "npmLayoutFix": {
+        "files": [
+          "scripts/run-clean.cjs",
+          "scripts/check-test-foundation.cjs",
+          ".github/workflows/security-checks.yml",
+          "tests/clean-npm-runner.test.cjs"
+        ],
+        "scope": "Resolve npm from portable Node or POSIX prefix lib/node_modules; retain the existing clean child environment. CI now executes the actual clean launcher on Linux.",
+        "checks": {
+          "beforeFix": {
+            "tests": 4,
+            "pass": 1,
+            "fail": 3,
+            "log": "npm-layout-before-fix.log"
+          },
+          "layout": {
+            "tests": 4,
+            "pass": 4,
+            "fail": 0,
+            "log": "npm-layout-review.log"
+          },
+          "apiTests": 14,
+          "securityTests": 67,
+          "scopedAndFullEslintExitCode": 0,
+          "rawTypecheckExitCode": 0,
+          "staticBuildExitCode": 0,
+          "logs": [
+            "npm-layout-security.log",
+            "npm-layout-lint.log",
+            "npm-layout-build.log",
+            "npm-layout-typecheck.log"
+          ]
+        }
       }
     }
   }

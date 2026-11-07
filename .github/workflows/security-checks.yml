@@ -49,6 +49,8 @@ jobs:
         run: |
           node --version
           npm --version
+      - name: Verify clean npm launcher on Linux
+        run: node scripts/run-clean.cjs --version
       - run: npm ci
       - name: Raw TypeScript check
         shell: bash

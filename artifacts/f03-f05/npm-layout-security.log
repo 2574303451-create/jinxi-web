@@ -1,0 +1,111 @@
+
+> my-v0-project@0.1.0 test
+> npm run test:api && npm run test:security
+
+
+> my-v0-project@0.1.0 test:api
+> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs
+
+✔ legacy full detail normalizes malformed comments/media at the actual read boundary (16.6831ms)
+▶ frontend readonly contracts and bounded cache (network fixtures only)
+  ✔ feeds are sent to server, coalesced and cached separately (93.6408ms)
+  ✔ old backend cannot masquerade as working homepage filters (21.5901ms)
+  ✔ v2 acknowledgement, media fields and public status fail closed (67.4017ms)
+  ✔ success expires60s, failure drops stale cache; no polling (11.4383ms)
+  ✔ stats distinguishes real0 from errors, stale/unknown contracts and null (11.3714ms)
+  ✔ an unavailable stats endpoint never fabricates zero (18.1133ms)
+✔ frontend readonly contracts and bounded cache (network fixtures only) (224.7681ms)
+▶ read API safety without a database
+  ✔ old credentials and unapproved previews fail closed without identity policy (1.8356ms)
+  ✔ invalid public queries rejected before transaction (4.1174ms)
+  ✔ stats rejects POST and arbitrary identity/status input without factory (1.1272ms)
+  ✔ unavailable and timeout never become zero or leak raw errors (1.9134ms)
+  ✔ installed Neon driver really serializes bounded READ ONLY batch (27.3118ms)
+✔ read API safety without a database (37.4081ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 493.3101
+
+> my-v0-project@0.1.0 test:security
+> node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs tests/password-setup-diagnostic.test.cjs tests/test-env-provisioning.test.cjs tests/clean-npm-runner.test.cjs
+
+✔ announcement URL policy rejects active/ambiguous media and server path never returns raw HTML (52.5049ms)
+✔ legacy Markdown sinks escape stored and preview HTML but retain ordinary formatting (29.3891ms)
+✔ legacy Markdown list wrappers retain multiline content with the current TypeScript target (15.4167ms)
+✔ portable Node resolves npm next to the executable (3.7013ms)
+✔ POSIX Node resolves npm under its installation prefix lib directory (3.3948ms)
+✔ missing npm fails closed without consulting an unrelated PATH installation (2.6304ms)
+✔ normal clean runner entry point executes the installed npm (280.1104ms)
+✔ static CSP hashes exact hydration bytes and has one header source without unsafe script execution (7.5134ms)
+✔ freeze config allows only the separately bound and approved TEST gate (1192.4614ms)
+✔ legacy publish and account-import entry points exit before any release work (203.279ms)
+✔ all legacy identity/mutations are denied without a database transport (28.3027ms)
+✔ missing runtime context never reads an inherited DATABASE_URL (8.2198ms)
+✔ contexts and least-privilege policy are explicit; no old URL fallback (0.3956ms)
+✔ every deployed Function has an explicit security registration or local-only session boundary (2.0428ms)
+✔ paused daily reward never invents points or claimed status after local progress (2.6342ms)
+✔ opening tasks preserves pre-upgrade browser history and other local records (2.0706ms)
+✔ password hashing is bounded, async and salted; malformed records never bypass verification (775.3047ms)
+✔ administrator authentication failure exposes only stage and SQLSTATE (1.3199ms)
+✔ TLS validation failure is distinct and never requests disabling verification (0.1447ms)
+✔ known preflight guard messages survive without database query or parameters (0.1403ms)
+✔ a familiar-looking prefix cannot disclose arbitrary error content (0.2085ms)
+✔ unknown stage, message, details and code cannot appear in the diagnostic (0.1154ms)
+✔ logging-policy diagnostics contain only fixed names, never setting values (0.1956ms)
+✔ diagnostic mode accepts no password, connection or extra argument (0.4571ms)
+✔ diagnostic preflight has enforced read-only SQL and rolls back without secret parameters (2.6845ms)
+✔ failed diagnostic preflight still rolls back and does not expose the rejected setting value (1.0861ms)
+✔ actual diagnostic CLI stops after read-only preflight with no reader prompt, write or proof launch (3.4505ms)
+✔ actual diagnostic CLI identifies administrator auth failure and never submits SQL (1.381ms)
+✔ credential goes only to the approved reader URL and production secret context (3.3701ms)
+✔ wrong site, active builds, previews or inherited legacy names reject before private input (1.4623ms)
+✔ successful configuration returns a non-secret receipt without reflecting API values (1.8135ms)
+✔ a mismatched API response is rejected and no private input is accepted as a connection argument (0.5156ms)
+✔ installed Netlify bundler ships binding and generated proof at working runtime paths (975.4029ms)
+✔ TEST in its own production context remains synthetic-test (3.5544ms)
+✔ build-stamped context works without runtime CONTEXT; available CONTEXT must agree (0.6863ms)
+✔ explicit approved deploy-preview and branch-deploy preserve resource classification (0.4122ms)
+✔ missing binding refuses before transport (0.4186ms)
+✔ unapproved binding refuses before transport (0.1862ms)
+✔ missing resource identity refuses before transport (0.2061ms)
+✔ missing site refuses before transport (0.2067ms)
+✔ wrong site refuses before transport (0.1827ms)
+✔ protected production site refuses before transport (0.2385ms)
+✔ wrong context refuses before transport (0.249ms)
+✔ missing runtime policy refuses before transport (0.1953ms)
+✔ missing deploy proof refuses before transport (0.1464ms)
+✔ changed binding after build refuses before transport (0.1331ms)
+✔ missing approval refuses before transport (0.1785ms)
+✔ missing TEST URL refuses before transport (0.1163ms)
+✔ simulated production host refuses before transport (0.1477ms)
+✔ simulated production role refuses before transport (0.1353ms)
+✔ different database refuses before transport (0.1275ms)
+✔ TLS disabled refuses before transport (0.1667ms)
+✔ role injection options refuses before transport (0.2374ms)
+✔ wrong declared classification refuses before transport (0.1103ms)
+✔ forbidden inherited keys reject without reading even one value (0.7177ms)
+✔ actual fingerprint mismatch prevents business query (0.3575ms)
+✔ actual classification mismatch prevents business query (0.2417ms)
+✔ actual role mismatch prevents business query (0.2067ms)
+✔ actual membership mismatch prevents business query (0.2062ms)
+✔ actual ownership mismatch prevents business query (0.2147ms)
+✔ actual columnWrite mismatch prevents business query (0.1699ms)
+✔ actual definer mismatch prevents business query (0.4617ms)
+✔ transport failure returns sanitized unavailable and never logs connection data (0.5756ms)
+✔ all old write interfaces remain closed before any TEST transport (2.4697ms)
+✔ session-lab stays local-only; future writer has no cloud endpoint (0.1981ms)
+✔ Free-plan all-scope TEST build is pinned and rejects inherited production variables (0.3913ms)
+✔ Next build subprocess never inherits any database/admin/cloud variable (0.2025ms)
+ℹ tests 67
+ℹ suites 0
+ℹ pass 67
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1622.597

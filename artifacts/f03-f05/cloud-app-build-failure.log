@@ -1,0 +1,181 @@
+Build ready to start
+build-image version: ea8920232ffbe23506ef69aa99aa2258559fbd91 (noble-new-builds)
+buildbot version: 9a2525faca99c3204fc325320d669aaebc53d376
+Fetching cached dependencies
+Failed to fetch cache, continuing with build
+Starting to prepare the repo for build
+No cached dependencies found. Cloning fresh repo
+git clone --filter=blob:none https://github.com/2574303451-create/jinxi-web
+Preparing Git Reference refs/heads/codex/jinxi-f03-f05-test-foundation
+Custom ignore command detected. Proceeding with the specified command: 'node scripts/test-build-gate.cjs'
+Installing dependencies
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mpython[0m@3.14.3  697ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 699ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mpython[0m@3.14.3
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mruby[0m@3.4.8  45ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 46ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mruby[0m@3.4.8
+[2mmise[0m [2mby @jdx[0m – installing 1 tool
+[2mmise[0m [38;5;11m⇢[0m [34mgo[0m@1.26.2  30ms · already installed
+[2mmise[0m [36m████████████████[0m[31m[0m[2m[0m 1/1 · installed 0 tools · 1 already installed in 31ms
+mise [36m~/.config/mise/config.toml[0m tools: [34mgo[0m@1.26.2
+Downloading and installing node v24.22.2...
+Downloading https://nodejs.org/dist/v24.22.2/node-v24.22.2-linux-x64.tar.xz...
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v24.22.2 (npm v11.19.1)
+Enabling Node.js Corepack
+WARNING: The environment variable 'NODE_ENV' is set to 'production'. Any 'devDependencies' in package.json will not be installed
+No npm workspaces detected
+Installing npm packages using npm version 11.19.1
+added 291 packages in 8s
+npm packages installed
+Successfully installed dependencies
+Detected 1 framework(s)
+"next" at version "16.4.5"
+Starting build script
+Section completed: initializing
+[96m[1m​[22m[39m
+[96m[1mNetlify Build                                                 [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+[36m[1m​[22m[39m
+[36m[1m❯ Version[22m[39m
+  @netlify/build 37.7.6
+[36m[1m​[22m[39m
+[36m[1m❯ Flags[22m[39m
+  accountId: 689e1405e8627000726e883c
+  baseRelDir: true
+  buildId: 6aeeb1036cbf2581ed01706f
+  deployId: 6aeeb1036cbf2581ed017071
+[36m[1m​[22m[39m
+[36m[1m❯ Current directory[22m[39m
+  /opt/build/repo
+[36m[1m​[22m[39m
+[36m[1m❯ Config file[22m[39m
+  /opt/build/repo/netlify.toml
+[36m[1m​[22m[39m
+[36m[1m❯ Context[22m[39m
+  production
+[36m[1m​[22m[39m
+[36m[1m❯ Installing extensions[22m[39m
+   - neon
+[36m[1m​[22m[39m
+[36m[1m❯ Loading extensions[22m[39m
+   - neon
+[96m[1m​[22m[39m
+[96m[1mbuild.command from netlify.toml                               [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+[36m$ node scripts/build-test.cjs[39m
+Failed during stage 'building site': Build script returned non-zero exit code: 2
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+Error: Cannot find module '/opt/buildhome/.nvm/versions/node/v24.22.2/bin/node_modules/npm/bin/npm-cli.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+Node.js v24.22.2
+TEST build refused or failed; no deploy proof is available.
+[91m[1m​[22m[39m
+[91m[1m"build.command" failed                                        [22m[39m
+[91m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+  [31m[1mError message[22m[39m
+  Command failed with exit code 1: node scripts/build-test.cjs
+​
+  [31m[1mError location[22m[39m
+  In build.command from netlify.toml:
+  node scripts/build-test.cjs
+​
+  [31m[1mResolved config[22m[39m
+  build:
+    command: node scripts/build-test.cjs
+    commandOrigin: config
+    environment:
+      - JINXI_CLOUD_ISOLATION_APPROVAL
+      - JINXI_RESOURCE_ENVIRONMENT
+      - JINXI_RUNTIME_CONTEXT
+      - JINXI_TEST_APPROVED_COMMIT
+      - JINXI_TEST_READ_DATABASE_URL
+      - NODE_VERSION
+      - NPM_VERSION
+      - NODE_ENV
+    ignore: node scripts/test-build-gate.cjs
+    processing:
+      skip_processing: true
+    publish: /opt/build/repo/out
+    publishOrigin: config
+  functions:
+    "*":
+      included_files:
+        - netlify/functions/_shared/test-resource-binding.json
+        - netlify/functions/_generated/test-deploy.json
+      node_bundler: zisi
+  functionsDirectory: /opt/build/repo/netlify/functions
+  headers:
+    - for: /*
+      values:
+        Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(),
+          usb=(), magnetometer=(), gyroscope=(), accelerometer=()
+        Referrer-Policy: strict-origin-when-cross-origin
+        Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+        X-Content-Type-Options: nosniff
+        X-DNS-Prefetch-Control: on
+        X-Download-Options: noopen
+        X-Frame-Options: DENY
+        X-Robots-Tag: noindex, nofollow, noarchive, nosnippet
+        X-XSS-Protection: 1; mode=block
+    - for: /_next/static/*
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+        X-Content-Type-Options: nosniff
+    - for: /_next/image/*
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.png"
+      values:
+        Cache-Control: public, max-age=2592000
+    - for: "*.jpg"
+      values:
+        Cache-Control: public, max-age=2592000
+    - for: "*.gif"
+      values:
+        Cache-Control: public, max-age=2592000
+    - for: "*.mp4"
+      values:
+        Cache-Control: public, max-age=2592000
+    - for: "*.woff"
+      values:
+        Cache-Control: public, max-age=31536000
+    - for: "*.woff2"
+      values:
+        Cache-Control: public, max-age=31536000
+    - for: "*.html"
+      values:
+        Cache-Control: no-store, no-cache, must-revalidate
+        Pragma: no-cache
+        X-Robots-Tag: noindex, nofollow
+    - for: /.netlify/functions/*
+      values:
+        Cache-Control: no-store, no-cache, must-revalidate
+        X-Robots-Tag: noindex, nofollow
+  headersOrigin: config
+  redirects:
+    - from: /*
+      status: 404
+      to: /404.html
+  redirectsOrigin: config
+Build failed due to a user error: Build script returned non-zero exit code: 2
+Failing build: Failed to build site
+Finished processing build request in 43.495s

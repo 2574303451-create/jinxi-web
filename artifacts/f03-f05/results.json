@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "Gate 2 synthetic initialization and TEST administrator authentication/read-only preflight accepted from user evidence. Reader password provisioning, actual reader authentication and hosted isolation remain pending.",
+  "cloudAcceptance": "Gate 2 synthetic initialization and actual dedicated TEST reader authentication/permission proof accepted. Independent Netlify pre-creation usage/inheritance evidence remains pending.",
   "checks": [
     {
       "name": "typecheck",
@@ -290,7 +290,7 @@
       }
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
-    "roleAuthentication": "TEST administrator authentication and read-only preflight passed in the user-operated diagnostic. The actual jinxi_test_reader session proof is pending password provisioning.",
+    "roleAuthentication": "PASSED: actual jinxi_test_reader session, approved registered database fingerprint, direct/effective permission attestation and four synthetic reads verified from the local proof receipt.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Run scripts/setup-test-reader-password.cjs in local interactive PowerShell in normal mode. Enter the current TEST administrator password and the new reader password privately at the prompts, then enter the new reader password in the automatically launched psql proof. Report completion or the final safe error code. The proof receipt is available locally upon success.",
+    "nextAdministratorAction": "Provide the two outstanding masked console views in the existing ADMIN_SIGNOFF.md: current Usage & billing limits/usage and Team settings Environment variables state. Projects/team/Free badge and reader proof are already accepted.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -496,7 +496,7 @@
       "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
     },
     "readerHandoff": {
-      "status": "Synthetic initialization and the user-operated TEST administrator preflight are accepted. Run normal reader provisioning and the actual reader session proof next.",
+      "status": "Actual TEST reader authentication and effective role proof accepted. Continue Netlify pre-creation billing and inheritance checks.",
       "endpoint": {
         "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
         "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
@@ -616,7 +616,7 @@
         "conclusion": "Expected least-privilege initial role state; reader LOGIN has not been enabled. This is a confirmed prerequisite blocker, not evidence of weakened permissions or an initializer failure. Password provisioning is separate and is not inferred from pg_roles."
       },
       "passwordSetup": {
-        "status": "The user-operated diagnostic passed on the approved TEST database. The next action is normal-mode provisioning of the existing reader role followed by proof in a fresh reader session.",
+        "status": "Reader PASSWORD/LOGIN committed on the approved TEST target. Fresh native psql reader connection and original proof passed.",
         "userReportedError": "cannot update password for role without password",
         "correction": "Console Reset password is not a working first-password method for this existing SQL role. Supersedes the prior Console reset instruction; no new gate.",
         "sources": [
@@ -663,7 +663,7 @@
           "artifacts/f03-f05/cloud-reader.provisioning.local.json",
           "artifacts/f03-f05/cloud-reader.proof.local.json"
         ],
-        "next": "Use the normal-mode command and private prompt sequence in ADMIN_SIGNOFF.md.",
+        "next": "The successful provisioning and proof receipts are preserved locally. Continue the Netlify section of ADMIN_SIGNOFF.md.",
         "earlierFailedUserAttempts": {
           "source": "User terminal screenshot",
           "file": "codex-clipboard-cff1fe45-b654-4d14-bdcd-e479f00bff79.png",
@@ -735,7 +735,7 @@
             "sqlSent": false,
             "scope": "Single handshake success; not database auth, role, hosted-site or complete network isolation acceptance."
           },
-          "cloudStatus": "User-operated administrator preflight passed. Normal reader provisioning and actual reader authentication are pending.",
+          "cloudStatus": "User administrator diagnostic passed; a subsequent normal-mode run completed reader provisioning and proof.",
           "cloudRun": {
             "source": "User-supplied PowerShell screenshot of the local --diagnose run",
             "file": "codex-clipboard-f8c21af3-f92b-4818-b900-410eb4f5ddeb.png",
@@ -756,6 +756,154 @@
           "rollback": "Local helper/test/package test-script changes only. Preserve original evidence; restore reviewed helper via a follow-up revert if necessary. No cloud mutation to roll back from diagnostic changes."
         }
       }
+    },
+    "cloudReaderAcceptance": {
+      "source": "User-operated private password helper and native psql proof, then offline verification by Codex with the original validateProof",
+      "accepted": true,
+      "provisioning": {
+        "file": "artifacts/f03-f05/cloud-reader.provisioning.local.json",
+        "sha256": "c7da420208c22044f764c4352f8af9be1cd3d63d35b777a80ebdc94f2a4945d7",
+        "completedAtUtc": "2026-11-07T03:27:24.416Z",
+        "roles": [
+          {
+            "rolname": "jinxi_test_owner",
+            "rolcanlogin": false,
+            "rolinherit": true,
+            "rolsuper": false,
+            "rolcreatedb": false,
+            "rolcreaterole": false,
+            "rolreplication": false,
+            "rolbypassrls": false
+          },
+          {
+            "rolname": "jinxi_test_reader",
+            "rolcanlogin": true,
+            "rolinherit": false,
+            "rolsuper": false,
+            "rolcreatedb": false,
+            "rolcreaterole": false,
+            "rolreplication": false,
+            "rolbypassrls": false
+          },
+          {
+            "rolname": "jinxi_test_writer",
+            "rolcanlogin": false,
+            "rolinherit": false,
+            "rolsuper": false,
+            "rolcreatedb": false,
+            "rolcreaterole": false,
+            "rolreplication": false,
+            "rolbypassrls": false
+          }
+        ]
+      },
+      "reader": {
+        "file": "artifacts/f03-f05/cloud-reader.proof.local.json",
+        "sha256": "42f1070fcc0c7c2d2384b9284402f5292f6f0148b390f742336e000fe8ab1468",
+        "collectedAtUtc": "2026-11-07T03:27:47.562Z",
+        "projectId": "restless-salad-74668264",
+        "branchId": "br-red-pond-bdtrjpmy",
+        "endpointId": "ep-dry-queen-bd6q46s6",
+        "host": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
+        "proof": [
+          {
+            "role": "jinxi_test_reader",
+            "rolsuper": false,
+            "cluster_id": "7704950029723409949",
+            "rolcreatedb": false,
+            "database_oid": "16397",
+            "owns_objects": false,
+            "rolbypassrls": false,
+            "session_role": "jinxi_test_reader",
+            "database_name": "neondb",
+            "database_temp": false,
+            "rolcreaterole": false,
+            "schema_create": false,
+            "classification": "synthetic-test",
+            "environment_id": "0fdb5a68-436e-4a80-b01d-5b0207637eac",
+            "rolreplication": false,
+            "database_create": false,
+            "role_memberships": false,
+            "default_read_only": "on",
+            "reads_outside_scope": false,
+            "writes_outside_scope": false,
+            "unsafe_definer_access": false
+          }
+        ],
+        "counts": {
+          "strategies": 5,
+          "messages": 2,
+          "announcements": 1,
+          "sponsorship": 1
+        }
+      },
+      "screenshot": {
+        "file": "codex-clipboard-abc7832a-1506-4615-a101-861f9f679d70.png",
+        "sha256": "67adfc604903d396835b939c064977a9ce2c1351259be6ffe61b59aac262b5fb"
+      },
+      "precedingFailure": {
+        "stage": "ADMIN_CONNECT",
+        "reason": "ADMIN_AUTHENTICATION_FAILED",
+        "code": "28P01",
+        "observation": "First run in screenshot was rejected before reader password prompts. Second run reached commit and the successful reader proof."
+      },
+      "scope": "Actual dedicated TEST reader authentication, exact registered database identity, direct/effective permission attestation and four synthetic reads. Cloud-hosted Functions and cross-resource configuration await independent Netlify site acceptance."
+    },
+    "netlifyPreparation": {
+      "status": "Pre-creation metadata review in progress",
+      "team": {
+        "id": "689e1405e8627000726e883c",
+        "name": "XUST",
+        "slug": "2574303451",
+        "typeName": "Free",
+        "typeId": "6663100fe4bdd50e81fbaefd",
+        "source": "Authenticated read-only listAccountsForUser(minimal=true) and getAccount responses"
+      },
+      "observedCapabilities": {
+        "creditFeatures": false,
+        "accumulateOverages": false,
+        "blockBuildsWhenUsageExceeded": true,
+        "sharedEnvironmentVariables": false,
+        "environmentVariableScopes": false,
+        "subscribeToAddOns": false,
+        "buildMinutesIncluded": 300,
+        "bandwidthBytesIncluded": 107374182400,
+        "functionsInvocationsIncluded": 125000,
+        "sitesIncluded": 500
+      },
+      "usageInterpretation": "Capability included figures are plan allowances. Their used=0 fields are not accepted as current remaining usage, as the response also reports sites.used=0 while the console visibly has projects.",
+      "projectScreenshot": {
+        "file": "codex-clipboard-d6de07a6-dd91-4ecd-b673-3b10416c5cae.png",
+        "sha256": "276d0961fcb2c806d0fcf589e2f340de40aa3ae178e6c976e676c1afc60c1fb7",
+        "team": "XUST",
+        "planBadge": "Free",
+        "oldSiteAutoPublishing": "Locked",
+        "testSiteVisible": false,
+        "scope": "Visible project list only; no fresh broad site API read that could return legacy build_settings.env."
+      },
+      "environmentEvidence": {
+        "planCapability": "Shared environment variables capability disabled",
+        "actualTeamVariableList": "Pending masked console evidence",
+        "apiReview": "Installed @netlify/open-api getEnvVars includes unencrypted values and exposes no metadata-only option. This endpoint was not called."
+      },
+      "execution": {
+        "cliAccountMetadataRead": true,
+        "cloudWrites": false,
+        "siteCreated": false,
+        "gitPushed": false,
+        "deployStarted": false,
+        "productionSettingsChanged": false
+      },
+      "browserAccess": "The previous Computer Use turn was stopped by the tool because the current browser URL could not be determined reliably. This turn reused user screenshot and existing CLI metadata access.",
+      "pendingAdministratorEvidence": [
+        "Usage & billing current-period build minutes and bandwidth usage/limits plus Free plan details",
+        "Team settings Environment variables masked list or unavailable/upgrade state, including key/scope/context/source when any entries exist"
+      ],
+      "sources": [
+        "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/",
+        "https://docs.netlify.com/build/environment-variables/overview/"
+      ],
+      "hostingRisk": "Legacy Free metered limits are shared at team level. Official documentation says exhausted non-build limits can pause all team sites. Actual headroom is required before deploying TEST alongside the protected old site."
     }
   }
 }

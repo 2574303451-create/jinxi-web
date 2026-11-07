@@ -8,7 +8,7 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过。第二关的云端合成初始化已提交，TEST 管理员认证和只读预检已通过，reader 密码设置及实际连接待执行。第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
+2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。当前核对独立 Netlify TEST 创建前的用量与共享变量证据。第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
 
@@ -53,7 +53,11 @@
 
 原先截图中 COMMIT 不可见的证据缺口已关闭，不再索要这三项，不重跑初始化。历史截断提示只影响 Neon 保存查询的长度，本地原稿与摘要保留；不得依赖截断历史重新执行。原 CSV/截图留在用户本机，文件名及 SHA256 登记在 results.json。
 
-### 当前管理员执行项：设置 TEST reader 密码并验证
+### 已完成：TEST reader 密码设置及实际权限证明
+
+2026-11-07 03:27:24 UTC，设置回执记录 reader PASSWORD/LOGIN 提交。03:27:47 UTC，新建的原生 psql 连接以 `jinxi_test_reader` 通过原证明。Codex 已离线重用原 validateProof 复核回执，批准 project/branch/endpoint、注册 UUID、cluster/OID/库名及指纹一致。实际 session_role 为 reader，默认只读，管理、角色继承、数据库/Schema 创建、对象所有权、范围外读写和危险定义者函数权限均为 false。四项公共合成读取为 5/2/1/1，owner/writer 仍 NOLOGIN。完整非秘密证明及证据摘要登记在 results.json 的 cloudReaderAcceptance。
+
+用户截图还保留同一轮首次管理员认证被拒绝的 28P01，随后第二次成功完成设置与证明。现进入 Netlify 建站前核验，下方密码操作说明作为已执行记录保留。
 
 用户本机运行 `--diagnose` 后返回 `{"stage":"PREFLIGHT","reason":"READ_ONLY_PREFLIGHT_PASSED"}`。该结果在 `neondb_owner` 实际认证、批准 TEST 身份、结构与合成数据约束、reader 有效权限和所查 PostgreSQL 日志策略核验通过后输出。此次为只读操作，实际 reader 登录证明仍待执行。截图文件名及 SHA256 见 results.json，先前两次失败记录见 FAILURES.md。
 
@@ -61,7 +65,7 @@
 
 已取得的状态仍有效：初始化数量及 COMMIT 已通过，09-52-30 状态 CSV 显示三个角色均 NOLOGIN、五项管理标志及成员角色均 false，reader/writer NOINHERIT。若此后已经单独启用 reader，新工具也允许其 LOGIN 已为 true，但不放宽任何资源、注册、结构或有效权限检查。原一次性激活脚本和原 validateProof 均未修改。
 
-**唯一当前操作是在本机 PowerShell 运行以下设置命令。** 准备并私下保存新 reader 专用随机密码，使用 32 至 128 位可见 ASCII 字符，包含大小写字母、数字、符号中的至少三类。所有密码均在本机隐藏提示处输入。
+以下设置命令及私密输入顺序已由用户执行。新 reader 密码使用 32 至 128 位可见 ASCII 字符，包含大小写字母、数字、符号中的至少三类。所有密码均在本机隐藏提示处输入。
 
 ```powershell
 & 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'E:/Recovery/.jinxi-research/f03-f05/worktree/scripts/setup-test-reader-password.cjs'
@@ -80,9 +84,24 @@
 
 成功时本机生成两份被 Git 忽略的非秘密回执。`cloud-reader.provisioning.local.json` 记录角色标志及目标。`cloud-reader.proof.local.json` 记录经原 validateProof 校验的实际 reader 会话、有效权限及四项公共合成读取结果 5/2/1/1。告知运行完成即可，由 Codex 在本机核对回执。若已存在设置或证明回执，工具在再次连接前拒绝覆盖。
 
-受测源码为 `9d6c496eb21085bbde59f2e3cbaa1ef43ac0bca3`。安全单测 59/59，其中诊断专测 11 项。本机 PG17.11 回归 17/17，覆盖服务器实际只读状态及密码设置、权限和回滚，相关 ESLint 退出 0。日志与先前失败保留在 results.json 指定位置。已核对本机 Node、psql 及已审查 proof SQL 的 SHA256。**实际 reader 认证及有效权限证明是当前待完成步骤，通过后继续独立 Netlify TEST。**
+受测源码为 `9d6c496eb21085bbde59f2e3cbaa1ef43ac0bca3`。安全单测 59/59，其中诊断专测 11 项。本机 PG17.11 回归 17/17，覆盖服务器实际只读状态及密码设置、权限和回滚，相关 ESLint 退出 0。日志与先前失败保留在 results.json 指定位置。已核对本机 Node、psql 及已审查 proof SQL 的 SHA256。实际 Neon18.6 reader 认证及权限证明现由用户本机回执验收通过。
 
 先前聊天中的 TEST 管理员凭据未被使用或写入文件，用户已确认仅重置 jinxi-test 的 neondb_owner。此确认继续沿用，不再轮换它；工具仅由管理员本机私密输入当前密码。旧站、真实数据、生产角色、18个原PR和 Netlify 生产设置均不操作。该修复仍属于原第二关的凭据配置，不新增关卡；实际 reader 证明通过后才继续独立 TEST 建站。
+
+### 当前管理员执行项：补齐 Netlify 创建前两项控制台证据
+
+已取得项目列表截图，目标团队 XUST 标记 Free，旧站标记 Auto Publishing Locked。通过已登录 CLI 的只读 listAccountsForUser(minimal=true) 和 getAccount，确认唯一目标团队 ID 为 `689e1405e8627000726e883c`、slug 为 `2574303451`、套餐 Free。平台能力元数据为 credit_features=false、accumulate_overages=false、block_builds_when_usage_exceeded=true、shared_env_variables=false、env_var_scopes=false。
+
+这属于旧版 Free。API 返回的 capabilities.used 多项为 0，而 sites.used 同样为 0，与截图已有项目不符，因此不将它作为本周期实际用量。该套餐在超出部分额度时会暂停同团队全部站点，部署前需要确认余量，保护同团队旧站。依据 [Netlify 旧版套餐计费 FAQ](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/)。
+
+当前安装的官方 API 定义中，getEnvVars 返回未加密的 values，且无仅返回元数据的选项，本轮未调用。shared_env_variables=false 是当前套餐能力，实际共享变量状态仍由隐藏值的控制台证据确认。覆盖规则依据 [环境变量说明](https://docs.netlify.com/build/environment-variables/overview/)。
+
+请在同一 XUST 团队集中提供以下两项，无需再提供 Projects 页面或数据库结果。
+
+1. **Usage & billing → Plan details / Account usage insights**。显示当前 Free 套餐、本周期 build minutes 和 bandwidth 的已用/上限、超额或暂停提示。若页面还有 Functions 用量，保留对应汇总。付款资料避开截图。
+2. **Team settings → Environment variables**。显示空列表、功能不可用/升级提示或现有 key、Scope、Context。存在变量时保留来源说明，值持续隐藏。
+
+收到两项后按原第二关创建/复用 `jinxi-web-test`。目前没有新增站点、TEST 分支推送或部署。原运行时资源绑定仍 pending-approval，取得真实 TEST Site ID 后按既有步骤填写并复测。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 
@@ -92,7 +111,7 @@ Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，
 
 本文件仅将 01/02/03 的外层事务改为一个共同事务，保留原检查、DDL、权限、种子与核验语句。首个写入前核对 cluster、数据库 OID、neondb_owner、同一主体及 PG 180006；批准参数使用事务内 LOCAL 设置，无需多个 Run 复用会话。任一错误使整批事务失败，不能先提交结构、后留下失败种子；不会自动清除未知对象或提升 reader 权限。
 
-本机交付：生成文件 SHA256 `b3137364c865ae45f379ebbacd687c00ef613bcbe28e458234eb72a91d199419`；注册 UUID `0fdb5a68-436e-4a80-b01d-5b0207637eac`（非秘密身份标识）。整批脚本/生成器受测源码与提交 `8ce78a9f8a815159d8642dc3fc984c3e255aa0f4` 一致；当时 PG17.11 专测 9/9、ESLint 退出 0，日志 bootstrap-review.log。失败保留于 bootstrap-before-fix.log / FAILURES.md。现在 PostgreSQL18.6 初始化及合成数据已由上述真实回执验收，实际 reader 认证及托管权限仍待验证。
+本机交付：生成文件 SHA256 `b3137364c865ae45f379ebbacd687c00ef613bcbe28e458234eb72a91d199419`；注册 UUID `0fdb5a68-436e-4a80-b01d-5b0207637eac`（非秘密身份标识）。整批脚本/生成器受测源码与提交 `8ce78a9f8a815159d8642dc3fc984c3e255aa0f4` 一致；当时 PG17.11 专测 9/9、ESLint 退出 0，日志 bootstrap-review.log。失败保留于 bootstrap-before-fix.log / FAILURES.md。现在 PostgreSQL18.6 初始化、合成数据及实际 reader 认证均已由真实回执验收，Netlify 托管权限待验证。
 
 **已交付的执行步骤，仅作复核存档：** Neon 选中 `jinxi-test / production / neondb`，确认仍是以上获批项目/分支/endpoint、初始化角色为 neondb_owner；打开本地 `cloud-bootstrap.local.sql`，完整复制到 SQL Editor，清除选区后一次 Run 全文。用户已回传本次运行截图，当前不要重复该步骤。
 
@@ -101,11 +120,11 @@ Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，
 - 将上述两张结果表和最终 COMMIT 状态集中回传（CSV 或清晰截图均可）。允许分享资源/角色元数据与合成记录数量；不要分享账号行、密码、连接字符串或散列。
 - 任一错误、版本/目标不符、未知对象或异常权限：停止，只在必要时执行 `ROLLBACK;` 结束失败事务，回传错误文本；不要重复运行、修改参数、补权或删除对象。网络中断或提交结果不明确也停止，不自动重跑。
 
-该初始化步骤已完成，不等于 reader 真实认证或云端隔离通过。继续上方当前 reader 操作项，再进入独立 Netlify 建站；不新增关卡。
+该初始化步骤已完成，后续 reader 证明也已通过。当前继续上方 Netlify 创建前操作项，沿用原三关。
 
 ## 批准后的操作位置与配置
 
-1. **Neon TEST**：初始化已完成，不再执行 approval + 01/02/03；按上方当前项启用并验证 reader。不能运行历史 schema、旧导入器、本机 TRUNCATE 夹具。仅通过实际权限验证的 reader 凭据可私下进入 TEST 站点。
+1. **Neon TEST**：初始化与 reader 实连证明已完成。仅该专用 reader 凭据可由管理员私下配置到 TEST 站点。
 2. **Netlify → Add new project / 已有 TEST 项目**：使用明确批准的 TEST 分支作为该站点的 Production branch。Context 合法为 production，资源分类仍 synthetic-test；只部署这个分支，关闭任意 PR 预览。创建步骤不得复制旧站配置、连接生产数据库集成或导入旧 .env。
 3. **TEST Project configuration → Environment variables** 与 **Team settings → Environment variables**：核查 site/shared/分支来源、模板、Extensions、Build Plugins。确认不提供生产数据库、管理凭据、存储或外连能力。无法排除共享来源就停止，不修改生产共享变量来迁就 TEST。
 4. 仅在第二关集中授权内，将真实非秘密 Site ID、TEST 资源 IDs、cluster/DB 指纹、reader 和 contexts 填入源码 `netlify/functions/_shared/test-resource-binding.json`；核查差异后改为 approved、生成本地提交并登记最终 SHA，再推送批准的 TEST 分支。不得在运行环境用 JSON 变量替换该审核文件，或将授权扩展到其他源码变更。

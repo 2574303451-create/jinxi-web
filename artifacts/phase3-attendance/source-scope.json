@@ -1,0 +1,186 @@
+{
+  "checkedAtUtc": "2026-11-07T23:17:56.599Z",
+  "root": "E:/Recovery/.jinxi-research/phase3-attendance/worktree",
+  "branch": "codex/jinxi-phase3-attendance-local",
+  "remote": "https://github.com/2574303451-create/jinxi-web.git",
+  "candidate": "1eae1fab0ad228b925f5bc7d28fe14e55c210ade",
+  "base": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+  "ancestors": [
+    {
+      "sha": "13de96d7531dde3222fdf513e711447a1df3e425",
+      "isAncestor": true
+    },
+    {
+      "sha": "35ae9a676813249ae2beff9845251eb57a72855c",
+      "isAncestor": true
+    },
+    {
+      "sha": "c769400cf09c95b0085e2e9f93f0b00d2b3767bc",
+      "isAncestor": true
+    },
+    {
+      "sha": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+      "isAncestor": true
+    }
+  ],
+  "protectedDiff": [],
+  "modifiedExistingTests": [],
+  "skippedOrFocusedMarkers": [],
+  "requiredInheritedSourceChange": "5\t2\tmember-local/identity.cjs",
+  "remoteHeads": [
+    "f8175c4d22fc8b83c556a7dad943f1960ed1780e\trefs/heads/codex/jinxi-phase3-community-local"
+  ],
+  "changedFiles": [
+    "artifacts/phase3-attendance/ACCEPTANCE.md",
+    "artifacts/phase3-attendance/api-security-first.log",
+    "artifacts/phase3-attendance/baseline.json",
+    "artifacts/phase3-attendance/browser-first.log",
+    "artifacts/phase3-attendance/browser-wait-fix.log",
+    "artifacts/phase3-attendance/browser-wrap-fix.log",
+    "artifacts/phase3-attendance/browser/2026-11-07T13-34-41-736Z/failure.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T13-34-41-736Z/results.json",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/attendance-1024.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/attendance-1440.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/attendance-390.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/attendance-768.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/failure.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-01-11-721Z/results.json",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/attendance-1024.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/attendance-1440.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/attendance-320.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/attendance-390.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/attendance-768.png",
+    "artifacts/phase3-attendance/browser/2026-11-07T23-02-36-370Z/results.json",
+    "artifacts/phase3-attendance/build-first.log",
+    "artifacts/phase3-attendance/business-after-lock-fix.log",
+    "artifacts/phase3-attendance/business-first.log",
+    "artifacts/phase3-attendance/https-contract-corrected.log",
+    "artifacts/phase3-attendance/https-first-redaction.json",
+    "artifacts/phase3-attendance/https-first.log",
+    "artifacts/phase3-attendance/https-red.log",
+    "artifacts/phase3-attendance/lint-first.log",
+    "artifacts/phase3-attendance/lint-second.log",
+    "artifacts/phase3-attendance/readonly-regression.log",
+    "artifacts/phase3-attendance/review-locks-and-late-red.log",
+    "artifacts/phase3-attendance/review-locks-green.log",
+    "artifacts/phase3-attendance/review-locks-red.log",
+    "artifacts/phase3-attendance/staged-scan.json",
+    "artifacts/phase3-attendance/statistics-green.log",
+    "artifacts/phase3-attendance/statistics-red.log",
+    "artifacts/phase3-attendance/tracer-first.log",
+    "artifacts/phase3-attendance/tracer-red.log",
+    "artifacts/phase3-attendance/typecheck-first.log",
+    "artifacts/phase3-attendance/ui-caption-green.log",
+    "artifacts/phase3-attendance/ui-caption-red.log",
+    "artifacts/phase3-attendance/ui-first.log",
+    "attendance-local/README.md",
+    "attendance-local/database.cjs",
+    "attendance-local/demo.css",
+    "attendance-local/demo.html",
+    "attendance-local/demo.js",
+    "attendance-local/handler.cjs",
+    "attendance-local/proof.cjs",
+    "attendance-local/schema.sql",
+    "attendance-local/server.cjs",
+    "attendance-local/store.cjs",
+    "eslint.config.mjs",
+    "member-local/identity.cjs",
+    "package.json",
+    "scripts/attendance-local.cjs",
+    "tests/attendance-local-boundary.test.cjs",
+    "tests/attendance-local-browser.cjs",
+    "tests/attendance-local-https.test.cjs",
+    "tests/attendance-local-postgres.test.cjs",
+    "tests/attendance-local-review-postgres.test.cjs",
+    "tests/attendance-local-ui.test.cjs"
+  ],
+  "fingerprints": [
+    {
+      "path": "attendance-local/README.md",
+      "sha256LF": "04e28b6aae99233a57f1c48f86ab262513c5bfb218a1a57c06e24871e3d73a50"
+    },
+    {
+      "path": "attendance-local/database.cjs",
+      "sha256LF": "a133528dcbc36ac377b4ae220e73f556001980e399135af7882250e83517eb66"
+    },
+    {
+      "path": "attendance-local/demo.css",
+      "sha256LF": "6df618c893fcd71b417586d53374046f1b1bcc26ed5031f1be9a1a4cccbe38da"
+    },
+    {
+      "path": "attendance-local/demo.html",
+      "sha256LF": "c248eaf266e2ef9c62a3b50e1b78ae82731e4d4d305d8fb35be8488d6f3b35b2"
+    },
+    {
+      "path": "attendance-local/demo.js",
+      "sha256LF": "b9743f4525be9605d185c7f81904970d2c4a358a2135beae4abb8e46f62caa76"
+    },
+    {
+      "path": "attendance-local/handler.cjs",
+      "sha256LF": "20c47dff7870976f0e9628c54563781d05e898b15472226a19bf1e5c3832da3b"
+    },
+    {
+      "path": "attendance-local/proof.cjs",
+      "sha256LF": "2aed84ba87a7abb4f7f5ebd72f90d937a8ba2e2ee760fe992d50efc16295a42c"
+    },
+    {
+      "path": "attendance-local/schema.sql",
+      "sha256LF": "14bf4348de437d982ae0890614554b6556a1f4451991f26757950e8ad48857f3"
+    },
+    {
+      "path": "attendance-local/server.cjs",
+      "sha256LF": "10accff50c741894040e3cad8bc8d8ca5876be8a193b0d6c8a5e00c86a35d29a"
+    },
+    {
+      "path": "attendance-local/store.cjs",
+      "sha256LF": "c317fa1690aefa377b21cc764e1a249dc03de6d0bd709a889c1e6c7e5a7d4125"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256LF": "ccad0602c1c3727799b3319861dc9950e5087d1e1eddfb79d795ba80433b9e0b"
+    },
+    {
+      "path": "member-local/identity.cjs",
+      "sha256LF": "ebe3e8a6c824b079e2c72ead7101692f7465b0822b4906e8ba0bef00a2ce5af5"
+    },
+    {
+      "path": "package.json",
+      "sha256LF": "19b04bd3c04266b5fb2e14735a050e6b8ceb234fdb757132af6c92ce6f31d680"
+    },
+    {
+      "path": "scripts/attendance-local.cjs",
+      "sha256LF": "83d701b1e0ce051b4a7c37405a06368c94cfbbd99fc4d9e1804ee330c463faff"
+    },
+    {
+      "path": "tests/attendance-local-boundary.test.cjs",
+      "sha256LF": "fc42bae55eacce51ec0882ce2049cd7e306231686324ec5f4bbe9052f1a4337b"
+    },
+    {
+      "path": "tests/attendance-local-browser.cjs",
+      "sha256LF": "8fb5a58ae2c401e1fad5bbb61579904a145f645ff49f295692c0306b5b5fc4d4"
+    },
+    {
+      "path": "tests/attendance-local-https.test.cjs",
+      "sha256LF": "633e1a97f1d04fad0921252aafd0ecfdfb129e846f4b6aa26ad39c38589261c8"
+    },
+    {
+      "path": "tests/attendance-local-postgres.test.cjs",
+      "sha256LF": "3a303cf992f38729099f484af27e84d16fac41aa176594cd0a0c462cf3b6e9af"
+    },
+    {
+      "path": "tests/attendance-local-review-postgres.test.cjs",
+      "sha256LF": "28d8fadec26aceef3a61fa5df279316898e4882a8eb1c6f49e0aa947558bf2f0"
+    },
+    {
+      "path": "tests/attendance-local-ui.test.cjs",
+      "sha256LF": "bd925c18412ebde26e5b83e243f1f008f31d142a3b34a852aeb3f57652873253"
+    }
+  ],
+  "cloudActionsPerformed": false,
+  "note": "Fingerprint source after full PG/HTTPS/browser process start; final runtime results are recorded separately. No remote attendance branch exists. Cloud protection platform settings were not re-audited or changed this checkpoint.",
+  "historicalShaCorrection": {
+    "rejectedText": "c769400cf09c95b0085e2e9f93f0b0ed2b3767bc",
+    "reason": "Copied historical SHA spelling is not a Git object; resolve the real community parent from f8175c4^",
+    "actual": "c769400cf09c95b0085e2e9f93f0b00d2b3767bc"
+  }
+}

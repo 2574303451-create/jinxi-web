@@ -1,0 +1,37 @@
+[
+  {
+    "command": "node scripts/run-clean.cjs run typecheck",
+    "startedAtUtc": "2026-11-07T23:11:46.7513242Z",
+    "completedAtUtc": "2026-11-07T23:11:52.0804991Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-attendance/final-typecheck.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run lint",
+    "startedAtUtc": "2026-11-07T23:11:52.1803910Z",
+    "completedAtUtc": "2026-11-07T23:11:54.2903317Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-attendance/final-lint.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run test:api",
+    "startedAtUtc": "2026-11-07T23:11:54.2956560Z",
+    "completedAtUtc": "2026-11-07T23:11:55.0777711Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-attendance/final-test-api.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run test:security",
+    "startedAtUtc": "2026-11-07T23:11:55.0798576Z",
+    "completedAtUtc": "2026-11-07T23:11:56.9163880Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-attendance/final-test-security.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run build",
+    "startedAtUtc": "2026-11-07T23:11:56.9201286Z",
+    "completedAtUtc": "2026-11-07T23:12:04.0883380Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-attendance/final-build.log"
+  }
+]

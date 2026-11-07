@@ -1,0 +1,31 @@
+
+> my-v0-project@0.1.0 test:member-local
+> node tests/member-local-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin --openssl D:/Program Files/Git/usr/bin/openssl.exe
+
+▶ member identity on a fresh SCRAM-authenticated loopback PostgreSQL
+  ✔ legacy account/profile FK and opaque mapping; 208 fully synthetic legacy records preserve status (1648.737ms)
+  ✔ valid login, opaque server identity, self-only profile and token digests (2410.9762ms)
+  ✔ unknown, wrong, locked, inactive, unsupported hashes and missing mappings have uniform denial (3757.8256ms)
+  ✔ same nicknames stay separate; self-reported identity is always rejected (2595.1783ms)
+  ✔ old 200000 PBKDF2 format, mandatory first change and all-device revocation (4876.9082ms)
+  ✔ normal password change invalidates every device, leaves other members intact (3894.2933ms)
+  ✔ logout, forged cookies, duplicate cookies and rotated-session replay (3363.5217ms)
+  ✔ absolute and idle expiry reject without erasing a potentially newer cookie (2720.8523ms)
+  ✔ locking, deactivation and security disable permanently revoke prior sessions (4155.9773ms)
+  ✔ multi-tab shares one session; concurrent devices stay capped without identity mixing (4372.1956ms)
+  ✔ SQL injection and bounded input cannot select or change another account (2859.6697ms)
+  ✔ Origin/CSRF reject cross-site writes, unsupported businesses never activate (2388.7551ms)
+  ✔ persistent login/password throttles do not reset on rejected attempts (8120.0357ms)
+  ✔ actual restricted role cannot alter locks, profiles, mapping, business tables, DDL or TEMP (1931.4629ms)
+  ✔ actual excessive ACL or wrong identity stops before profile/session business work (2833.1952ms)
+  ✔ login and password failures roll back partial security writes and suppress internals (3162.2583ms)
+  ✔ real HTTPS cookie, host binding and safe static page; no cloud route (2452.531ms)
+✔ member identity on a fresh SCRAM-authenticated loopback PostgreSQL (89865.4613ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89868.6582

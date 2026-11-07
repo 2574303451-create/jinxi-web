@@ -1,0 +1,124 @@
+[
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-07T23:12:27.959Z",
+    "completedAtUtc": "2026-11-07T23:13:47.574Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-attendance-pg.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-https",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "startedAtUtc": "2026-11-07T23:13:47.575Z",
+    "completedAtUtc": "2026-11-07T23:14:25.606Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-attendance-https.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright"
+    ],
+    "startedAtUtc": "2026-11-07T23:14:25.607Z",
+    "completedAtUtc": "2026-11-07T23:15:28.136Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-attendance-browser.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:member-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "startedAtUtc": "2026-11-07T23:15:28.139Z",
+    "completedAtUtc": "2026-11-07T23:16:58.404Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-member-pg-https.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-07T23:16:58.406Z",
+    "completedAtUtc": "2026-11-07T23:18:14.925Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-community-pg.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-review",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-07T23:18:14.927Z",
+    "completedAtUtc": "2026-11-07T23:18:54.021Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-community-review.log"
+  },
+  {
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-https",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "startedAtUtc": "2026-11-07T23:18:54.025Z",
+    "completedAtUtc": "2026-11-07T23:19:31.410Z",
+    "exitCode": 0,
+    "errorCode": null,
+    "log": "artifacts/phase3-attendance/final-community-https.log"
+  }
+]

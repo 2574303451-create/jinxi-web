@@ -290,7 +290,7 @@
       }
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
-    "roleAuthentication": "FAILED before SQL; reader LOGIN and private reader credential must be confirmed. Initialization remains accepted; no permission or hosted acceptance claimed.",
+    "roleAuthentication": "Not passed. User CSV confirms reader NOLOGIN; activate existing role using reviewed script, privately provision only reader credential, then run actual native proof.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Run the prepared read-only reader status query on the approved TEST. If reader LOGIN=false, run existing guarded activation once; if true, skip activation. Require three expected roles, no admin capability/membership and owner/writer NOLOGIN. Then reset ONLY existing jinxi_test_reader password privately and retry unchanged native proof once using that password. Stop on unexpected state; never retry initializer or switch to administrator connection.",
+    "nextAdministratorAction": "Neon approved TEST SQL Editor: copy the entire existing cloud-enable-reader.local.sql into a new query and Run once; require final COMMIT and only reader rolcanlogin=true. Then reset ONLY existing jinxi_test_reader password privately and run unchanged native proof from local PowerShell. Return only proof JSON; stop on error. No repeat status query or initialization.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -496,7 +496,7 @@
       "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
     },
     "readerHandoff": {
-      "status": "User attempted native connection twice; authentication failed before proof SQL. Reader activation not yet confirmed.",
+      "status": "Reader remains NOLOGIN per user status CSV. Pending existing guarded activation and reader-only private credential provisioning; no successful reader authentication yet.",
       "endpoint": {
         "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
         "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
@@ -569,6 +569,51 @@
           "reusesTestedTargetGuard": true
         },
         "reproDecision": "The user clarified a role-configuration prerequisite while local SCRAM reproduction was being considered. No new reproduction or source changes were made; configuration-only diagnosis remains pending real reader success."
+      },
+      "roleStatus": {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_09-52-30.csv",
+        "sha256": "aef31eb79636802be82850d0166542808224015ca7e3bbf5be9c0f768cf09e02",
+        "source": "User returned the prepared read-only role status result; not a direct Codex database connection",
+        "rows": 3,
+        "roles": [
+          {
+            "role": "jinxi_test_owner",
+            "login": false,
+            "inherit": true,
+            "validUntil": null,
+            "superuser": false,
+            "createDb": false,
+            "createRole": false,
+            "replication": false,
+            "bypassRls": false,
+            "memberOfOtherRoles": false
+          },
+          {
+            "role": "jinxi_test_reader",
+            "login": false,
+            "inherit": false,
+            "validUntil": null,
+            "superuser": false,
+            "createDb": false,
+            "createRole": false,
+            "replication": false,
+            "bypassRls": false,
+            "memberOfOtherRoles": false
+          },
+          {
+            "role": "jinxi_test_writer",
+            "login": false,
+            "inherit": false,
+            "validUntil": null,
+            "superuser": false,
+            "createDb": false,
+            "createRole": false,
+            "replication": false,
+            "bypassRls": false,
+            "memberOfOtherRoles": false
+          }
+        ],
+        "conclusion": "Expected least-privilege initial role state; reader LOGIN has not been enabled. This is a confirmed prerequisite blocker, not evidence of weakened permissions or an initializer failure. Password provisioning is separate and is not inferred from pg_roles."
       }
     }
   }

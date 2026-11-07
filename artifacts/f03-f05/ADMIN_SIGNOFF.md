@@ -57,7 +57,9 @@
 
 最新排查：用户终端两次停在认证阶段，分别为 no password supplied 和 password authentication failed for jinxi_test_reader；未执行证明 SQL。用户确认目前重置的是 **neondb_owner**，不确定 reader 激活是否 COMMIT。管理员密码轮换仍算完成，但不代表 reader 凭据已配置。现有认证脚本没有改用管理员、放松 TLS/权限或读取用户密码；无需重跑初始化，也未据此声称故障已解决。
 
-**现在先运行只读 `test-environment/sql/cloud-reader-status.local.sql`**（仍在批准 TEST，以 neondb_owner 执行）。它复用已受测的 cluster/OID/角色/版本门禁并核对合成注册，仅返回三角色的 LOGIN、继承、到期及管理标志，不读取密码、散列或业务行。结果应恰有三角色，五项管理标志和 member_of_other_roles 均 false，owner/writer 的 rolcanlogin=false；reader 的 rolinherit=false，rolvaliduntil 通常为空（无限期）。状态不符或角色缺失则停止并回传该结果，不创建或提升角色。
+**只读状态已取得，不重复运行：** 用户回传 `restless-salad-74668264_production_neondb_2026-11-07_09-52-30.csv`，SHA256 aef31eb79636802be82850d0166542808224015ca7e3bbf5be9c0f768cf09e02，三角色均 rolcanlogin=false，五项管理标志及 member_of_other_roles 均 false，到期字段均空。reader/writer 的 rolinherit=false，owner 的 rolinherit=true 与原设计一致且没有成员角色。当前明确阻断是 **reader 尚未启用 LOGIN**；此结果不能证明其密码是否设置。
+
+状态查询由用户在 TEST 执行，Codex 只核对本地 CSV；未连接云库。角色状态符合初始化设计，无需改认证代码、补权或重新初始化。现在执行下方第 1→2→3 步，使用已审核的激活文件；原摘要已再次核对一致。
 
 - reader 的 **rolcanlogin=false**：继续下面第 1 步的既有激活 SQL，确认 COMMIT。
 - reader 的 **rolcanlogin=true**：跳过第 1 步，直接第 2 步；不要重复激活。

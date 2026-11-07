@@ -8,7 +8,7 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。Netlify Legacy Free 套餐及当前用量已核实，创建前实际共享变量状态也已由用户确认无共享变量。第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
+2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。Netlify 独立站点、专用分支及五项变量已配置，最新 GitHub CI 成功。首次 TEST 构建在 preparing repo 阶段失败，已重新暂停构建，待核对现有 GitHub App installation ID。第三关未通过。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
 
@@ -102,7 +102,7 @@
 
 已按原第二关创建独立空站 `jinxi-web-test`，Site ID 为 `17885134-a57c-4589-83d3-39e30be9e0cf`，位于已核验的 XUST Free 团队。创建返回 HTTP201，站点尚无 Published Deploy 或仓库，旧 build_settings.env 的变量名为空。运行时资源绑定现填写真实 Site ID、已核验数据库身份及同一 endpoint 的直连/池化主机，原离线 verify 校验通过。候选已通过原始 tsc、ESLint、API14/安全59、全新本机 PG46 和静态构建/CSP。TEST 分支已推送，8ecf492 的实际 GitHub CI 成功。仓库已连接至唯一 TEST 分支，实际回读确认 stop_builds=true、skip_prs=true。
 
-### 当前管理员执行项：私密配置 TEST reader 变量
+### 已完成：私密配置 TEST reader 变量
 
 在本机 PowerShell 运行以下命令，只输入已设置的 jinxi_test_reader 密码。工具沿用既有隐藏输入，核对真实 TEST Site ID、团队、唯一分支、暂停构建及关闭 PR 预览后，生成固定 reader URL，仅向该 TEST 站点提交 production context 的 JINXI_TEST_READ_DATABASE_URL。变量标记 secret，排除 Netlify 对 secret 禁止的 post-processing scope。管理员无需拼接 URL 或在聊天中提供凭据。
 
@@ -111,6 +111,14 @@
 ```
 
 成功后仅确认完成，Codex 读取本机被忽略的非秘密配置回执。若失败或结果不明确，仅回传最后一行安全 JSON，保持停止，由 Codex 核对。配置不触发部署，后续由 Codex 核对候选 SHA、CI 和四项非秘密变量再执行指定 TEST 构建。工具的 API14/安全63 与相关 ESLint 已通过，百分号和保留字符由真实 pg 解析器验证。
+
+### 当前管理员执行项：现有 Netlify GitHub App 的非秘密 installation ID
+
+独立站点 https://jinxi-web-test.netlify.app 已创建，Site ID 为 17885134-a57c-4589-83d3-39e30be9e0cf。专用分支已推送至 f370e6d59926e6bf56388b9b62be6dc0133e0411，该 HEAD 的实际 CI 成功，记录见 results.json。四项非秘密变量和用户私密配置的 reader secret 均为该 TEST site 的 production context。
+
+首次指定 TEST 构建为 build 6aeeacb25e993fe946ca77bb / deploy 6aeeacb25e993fe946ca77bd，在 preparing repo 阶段失败，完整失败原因已保留于原 results.json。原因为 Host key verification failed，尚未安装依赖或执行构建脚本，实际 checkout SHA 和 Build/Functions Node 仍待证。实际站点元数据 installation_id=null、无 deploy key。分支确已存在，且 GitHub CI 已读取该提交成功。
+
+已将 TEST stop_builds=true、skip_prs=true 并回读确认。仅允许该 TEST 分支的限制继续有效。后续按正规 GitHub 集成修复仓库拉取，不降低 SSH 主机验证。当前唯一管理员操作为在 GitHub → Settings → Applications → Installed GitHub Apps → Netlify → Configure 查看该仓库的现有授权，并提供页面地址末尾 installation ID（数字）。保留现有权限和仓库选择；若没有 Netlify 应用，回复“未安装”。数据库、密码和 Netlify 基础截图均已取得。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 

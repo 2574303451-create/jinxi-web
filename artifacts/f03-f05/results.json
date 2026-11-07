@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "Gate 2 synthetic database and actual reader proof accepted. Netlify team identity, Legacy Free plan and actual usage accepted. Shared-variable page state pending before independent TEST site construction.",
+  "cloudAcceptance": "Actual synthetic TEST database/reader proof, independent site, dedicated variables and GitHub CI have passed their respective steps. Netlify deploy failed before checkout due to host-key verification. Gate 2 build and Gate 3 hosted isolation remain incomplete.",
   "checks": [
     {
       "name": "typecheck",
@@ -292,14 +292,14 @@
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
     "roleAuthentication": "PASSED: actual jinxi_test_reader session, approved registered database fingerprint, direct/effective permission attestation and four synthetic reads verified from the local proof receipt.",
     "netlifySiteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
-    "deployId": null,
+    "deployId": "6aeeacb25e993fe946ca77bd",
     "deployedSha": null,
     "runtimeBinding": "approved resource binding with the actual TEST Site ID; hosted deploy proof not yet generated",
-    "gitPushes": "TEST branch only: codex/jinxi-f03-f05-test-foundation pushed at 8ecf49272233987feab2c4d723bde655517f4a6b; no PR created.",
+    "gitPushes": "Only codex/jinxi-f03-f05-test-foundation, latest pushed source f370e6d59926e6bf56388b9b62be6dc0133e0411. No new PR or original PR/base/main change.",
     "newPrs": 0,
     "newCloudResources": 1,
     "incrementalFeesIncurred": "Created one empty site under confirmed Legacy Free team without upgrades, purchases or paid add-ons. The creation response site plan is nf_team_dev.",
-    "nextAdministratorAction": "Run scripts/configure-test-reader-env.cjs locally and enter only the existing reader password at the hidden prompt. Report completion or the safe final error JSON. Codex handles non-secret settings and later approved build.",
+    "nextAdministratorAction": "In GitHub Settings > Applications > Installed GitHub Apps > Netlify > Configure, confirm the repository is already authorized and provide only the numeric installation ID from the page URL. If absent, report not installed. Existing permissions and repository selections are preserved.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -850,7 +850,7 @@
       "scope": "Actual dedicated TEST reader authentication, exact registered database identity, direct/effective permission attestation and four synthetic reads. Cloud-hosted Functions and cross-resource configuration await independent Netlify site acceptance."
     },
     "netlifyPreparation": {
-      "status": "Independent empty TEST site created. Resource binding filled from actual site and accepted reader proof; candidate checks and repository connection in progress.",
+      "status": "Site, branch, exact candidate, public variables and private reader secret configured. First TEST build failed during preparing repo with host-key verification error. TEST builds paused again; existing GitHub App repository-installation metadata is needed.",
       "team": {
         "id": "689e1405e8627000726e883c",
         "name": "XUST",
@@ -907,11 +907,13 @@
         "cloudWrites": true,
         "siteCreated": true,
         "gitPushed": true,
-        "deployStarted": false,
+        "deployStarted": true,
         "productionSettingsChanged": false
       },
       "browserAccess": "The previous Computer Use turn was stopped by the tool because the current browser URL could not be determined reliably. This turn reused user screenshot and existing CLI metadata access.",
-      "pendingAdministratorEvidence": [],
+      "pendingAdministratorEvidence": [
+        "Existing Netlify GitHub App installation ID for the already-authorized jinxi-web repository, or confirmation that no such app is installed. Preserve existing repository permissions."
+      ],
       "sources": [
         "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/",
         "https://docs.netlify.com/build/environment-variables/overview/"
@@ -1043,7 +1045,8 @@
         "functionsDirectory": "netlify/functions",
         "plugins": [],
         "initialRepoPayloadStopIgnored": true,
-        "correction": "Applied supported top-level build_settings.stop_builds and skip_prs, then verified both true."
+        "correction": "Applied supported top-level build_settings.stop_builds and skip_prs, then verified both true.",
+        "optionalSkipAutomaticBuildsFlag": "Server readback stays null; not used as an acceptance control. Required branch restriction, skip_prs and exact-commit gate remain in force."
       },
       "gitTransport": {
         "initialFailure": "Recv failure: Connection was reset",
@@ -1057,6 +1060,13 @@
           "status": "completed",
           "conclusion": "success",
           "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42339065729"
+        },
+        {
+          "head": "f370e6d59926e6bf56388b9b62be6dc0133e0411",
+          "id": 42339434152,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42339434152"
         }
       ],
       "privateEnvironmentTool": {
@@ -1081,7 +1091,121 @@
           "beforeFix": "cloud-env-unit-before-fix.log",
           "regression": "A synthetic password containing percent and reserved characters exposed URI encoding failure; fixed by encoding the password and verified with actual pg ConnectionParameters."
         },
-        "receipt": "artifacts/f03-f05/netlify-reader-env.provisioning.local.json"
+        "receipt": "artifacts/f03-f05/netlify-reader-env.provisioning.local.json",
+        "completed": {
+          "receipt": {
+            "kind": "jinxi-test-reader-environment-v1",
+            "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+            "accountId": "689e1405e8627000726e883c",
+            "key": "JINXI_TEST_READ_DATABASE_URL",
+            "isSecret": true,
+            "contexts": [
+              "production"
+            ],
+            "scopes": [
+              "builds",
+              "functions",
+              "runtime"
+            ],
+            "completedAtUtc": "2026-11-07T04:41:51.150Z"
+          },
+          "sha256": "e0b6884bb5ad56707b5002cd98646e17da4b29cf4a435d1766025267479daba4",
+          "source": "User local private run, validated non-secret receipt"
+        }
+      },
+      "publicEnvironmentConfiguration": {
+        "operation": "configure-TEST-public-variables",
+        "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "status": 201,
+        "variables": [
+          {
+            "key": "JINXI_CLOUD_ISOLATION_APPROVAL",
+            "isSecret": false,
+            "scopes": [
+              "builds",
+              "functions",
+              "post_processing",
+              "runtime"
+            ],
+            "contexts": [
+              "production"
+            ]
+          },
+          {
+            "key": "JINXI_TEST_APPROVED_COMMIT",
+            "isSecret": false,
+            "scopes": [
+              "builds",
+              "functions",
+              "post_processing",
+              "runtime"
+            ],
+            "contexts": [
+              "production"
+            ]
+          },
+          {
+            "key": "JINXI_RESOURCE_ENVIRONMENT",
+            "isSecret": false,
+            "scopes": [
+              "builds",
+              "functions",
+              "post_processing",
+              "runtime"
+            ],
+            "contexts": [
+              "production"
+            ]
+          },
+          {
+            "key": "JINXI_RUNTIME_CONTEXT",
+            "isSecret": false,
+            "scopes": [
+              "builds",
+              "functions",
+              "post_processing",
+              "runtime"
+            ],
+            "contexts": [
+              "production"
+            ]
+          }
+        ],
+        "approvedCommit": "f370e6d59926e6bf56388b9b62be6dc0133e0411",
+        "collectedAtUtc": "2026-11-07T04:41:19.277Z"
+      },
+      "cloudBuildAttempt": {
+        "operation": "start-approved-TEST-build",
+        "status": 200,
+        "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "buildId": "6aeeacb25e993fe946ca77bb",
+        "deployId": "6aeeacb25e993fe946ca77bd",
+        "approvedCommit": "f370e6d59926e6bf56388b9b62be6dc0133e0411",
+        "createdAt": "2026-11-07T04:44:34.559Z",
+        "prPreviewsSkipped": true,
+        "branchLimited": true,
+        "exactCommitBuildGate": true,
+        "optionalAutomaticBuildFlag": null,
+        "result": {
+          "operation": "inspect-TEST-clone-failure",
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "stopBuilds": true,
+          "skipPrs": true,
+          "repoPath": "2574303451-create/jinxi-web",
+          "repoBranch": "codex/jinxi-f03-f05-test-foundation",
+          "repoUrl": "https://github.com/2574303451-create/jinxi-web",
+          "provider": "github",
+          "repoType": "git",
+          "installationId": null,
+          "hasDeployKey": false,
+          "deployId": "6aeeacb25e993fe946ca77bd",
+          "state": "error",
+          "error": "Failed during stage 'preparing repo': Unable to access repository. The repository may have been deleted, the branch may not exist, or permissions may have changed: Cloning into '/opt/build/repo'...\nHost key verification failed.\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n: exit status 128"
+        },
+        "actualCheckedOutSha": null,
+        "buildNodeVersion": null,
+        "functionsNodeVersion": null,
+        "published": false
       }
     }
   }

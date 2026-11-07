@@ -1,5 +1,7 @@
 # 保留的开发失败与修正
 
+2026-11-07 实际 Netlify TEST deploy 6aeeacb25e993fe946ca77bd 在 preparing repo 阶段失败，错误为 Host key verification failed，尚未进入安装或业务构建。站点 installation_id=null、无 deploy key；同一 TEST Git 分支已存在且 f370e6d 的 CI 成功。已重新暂停 TEST builds 并关闭 PR 预览，等待正规 GitHub App installation 元数据，不禁用 SSH 主机验证。原部署错误全文和创建/变量/CI结果统一保留在 results.json。
+
 2026-11-07 私密 Netlify 配置工具的合成密码包含百分号及 URL 保留字符，首轮暴露 URL.password setter 不会替输入转义百分号。失败保留于 cloud-env-unit-before-fix.log。改为先 encodeURIComponent，再用真实 pg ConnectionParameters 验证还原，API14/安全63通过。所有密码样例为本机合成值，尚未向 Netlify 发送真实 reader 密码。仓库连接时 repo 内的 stop_builds/skip_prs 未生效，已用支持的顶层 build_settings 最小修正并实际回读两项均true。
 
 2026-11-07 云 TEST 候选 f1d98b4 首轮将原始 tsc 与 Next build 并行，构建重建 .next/types 后 tsc 报 TS6053。已保留 cloud-candidate-typecheck-concurrent-failure.log。等待构建完成后串行执行原始 tsc、ESLint、API14/安全59，全部通过，未修改类型配置或放宽断言。独立本机 PG46 和静态构建/CSP 同样通过。

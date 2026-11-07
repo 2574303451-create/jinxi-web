@@ -1,16 +1,21 @@
 {
   "version": 1,
-  "status": "pending-approval",
+  "status": "approved",
   "classification": "synthetic-test",
-  "siteId": null,
-  "projectId": null,
-  "branchId": null,
-  "endpointId": null,
+  "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+  "projectId": "restless-salad-74668264",
+  "branchId": "br-red-pond-bdtrjpmy",
+  "endpointId": "ep-dry-queen-bd6q46s6",
   "databaseName": "neondb",
-  "hosts": [],
+  "hosts": [
+    "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
+    "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech"
+  ],
   "port": "5432",
   "readerRole": "jinxi_test_reader",
-  "environmentId": null,
-  "fingerprint": null,
-  "allowedContexts": ["production"]
+  "environmentId": "0fdb5a68-436e-4a80-b01d-5b0207637eac",
+  "fingerprint": "c0d2a0fbc7baf4b680e8a9403052245636078e5cb41c3d51a4d27a3c3641ede1",
+  "allowedContexts": [
+    "production"
+  ]
 }

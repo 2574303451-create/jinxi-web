@@ -100,7 +100,7 @@
 
 用户点击该入口后已明确回复“没有共享变量”。现接受实际共享变量状态，该项完成。Projects、Billing、General、实际共享变量及数据库证据均已取得。
 
-按原第二关继续创建/复用 `jinxi-web-test`。此签核时点尚未新增站点、TEST 分支推送或部署。原运行时资源绑定仍 pending-approval，取得真实 TEST Site ID 后按既有步骤填写并复测。
+已按原第二关创建独立空站 `jinxi-web-test`，Site ID 为 `17885134-a57c-4589-83d3-39e30be9e0cf`，位于已核验的 XUST Free 团队。创建返回 HTTP201，站点尚无 Published Deploy 或仓库，旧 build_settings.env 的变量名为空。运行时资源绑定现填写真实 Site ID、已核验数据库身份及同一 endpoint 的直连/池化主机，原离线 verify 校验通过。当前执行候选回归与仓库配置，随后由管理员私下配置唯一 reader 凭据。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 

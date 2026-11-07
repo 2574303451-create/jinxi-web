@@ -291,15 +291,15 @@
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
     "roleAuthentication": "PASSED: actual jinxi_test_reader session, approved registered database fingerprint, direct/effective permission attestation and four synthetic reads verified from the local proof receipt.",
-    "netlifySiteId": null,
+    "netlifySiteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
     "deployId": null,
     "deployedSha": null,
-    "runtimeBinding": "pending-approval, unchanged",
+    "runtimeBinding": "approved resource binding with the actual TEST Site ID; hosted deploy proof not yet generated",
     "gitPushes": "none",
     "newPrs": 0,
-    "newCloudResources": 0,
-    "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "No additional pre-creation administrator evidence required. Codex continues the authorized empty TEST site creation. Reader credential will be entered privately by the administrator during TEST variable configuration.",
+    "newCloudResources": 1,
+    "incrementalFeesIncurred": "Created one empty site under confirmed Legacy Free team without upgrades, purchases or paid add-ons. The creation response site plan is nf_team_dev.",
+    "nextAdministratorAction": "Codex prepares the exact TEST candidate and repository settings. The administrator will then enter only the reader credential privately in the TEST site environment variable.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -850,7 +850,7 @@
       "scope": "Actual dedicated TEST reader authentication, exact registered database identity, direct/effective permission attestation and four synthetic reads. Cloud-hosted Functions and cross-resource configuration await independent Netlify site acceptance."
     },
     "netlifyPreparation": {
-      "status": "Pre-creation billing, actual usage, team identity and absence of shared variables accepted. Proceed with the authorized empty TEST site.",
+      "status": "Independent empty TEST site created. Resource binding filled from actual site and accepted reader proof; candidate checks and repository connection in progress.",
       "team": {
         "id": "689e1405e8627000726e883c",
         "name": "XUST",
@@ -904,8 +904,8 @@
       },
       "execution": {
         "cliAccountMetadataRead": true,
-        "cloudWrites": false,
-        "siteCreated": false,
+        "cloudWrites": true,
+        "siteCreated": true,
         "gitPushed": false,
         "deployStarted": false,
         "productionSettingsChanged": false
@@ -951,6 +951,26 @@
         "page": "General team settings",
         "environmentVariablesEntryVisible": true,
         "environmentVariablesPageContentsVisible": false
+      },
+      "siteCreation": {
+        "kind": "jinxi-f03-netlify-site-v1",
+        "operation": "create-independent-test-site",
+        "status": 201,
+        "id": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "name": "jinxi-web-test",
+        "accountId": "689e1405e8627000726e883c",
+        "accountSlug": "2574303451",
+        "plan": "nf_team_dev",
+        "url": "https://jinxi-web-test.netlify.app",
+        "adminUrl": "https://app.netlify.com/projects/jinxi-web-test",
+        "createdAt": "2026-11-07T04:22:09.415Z",
+        "publishedDeployId": null,
+        "repoPath": null,
+        "legacyVariableKeys": [],
+        "collectedAtUtc": "2026-11-07T04:22:09.776Z",
+        "receiptFile": "artifacts/f03-f05/netlify-site.proof.local.json",
+        "receiptSha256": "bcc0b2238537fa2a236919e39d5776d33e17777c76ed7eba080f2023a2f6d307",
+        "scope": "Only an empty project on approved XUST Free team; no repository, variables, storage or deploy copied from production."
       }
     }
   }

@@ -39,4 +39,5 @@ next-env.d.ts
 /netlify/functions/_generated/
 /artifacts/f03-f05/*.approval.local.sql
 /artifacts/f03-f05/*.proof.local.json
+/artifacts/f03-f05/*.provisioning.local.json
 /test-environment/sql/*.local.sql

@@ -6,6 +6,10 @@ const { buildBootstrap, APPROVED_TARGET } = require('../scripts/prepare-test-boo
 const { readerFiles } = require('../scripts/prepare-test-reader.cjs');
 const { validateProof, fingerprint } = require('../netlify/functions/_shared/function-security');
 const { parseOutput } = require('../scripts/run-test-reader-proof.cjs');
+const { setReaderPassword,checkScope,safeLogging } = require('../scripts/setup-test-reader-password.cjs');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client } = require('pg');
 
 test('one administrator batch atomically initializes and verifies only its approved TEST', async t => {
   const c = await pg.connect();
@@ -138,6 +142,58 @@ test('one administrator batch atomically initializes and verifies only its appro
         await assert.rejects(reader.query("UPDATE public.messages SET content=content WHERE false"),e=>e.code==='42501');
         await reader.query('SET default_transaction_read_only=on');
       }finally{await reader.end();}
+    });
+    await t.test('first password setup refuses an unsafe logging policy before binding any secret', async () => {
+      await c.query('ALTER ROLE jinxi_test_reader NOLOGIN');
+      assert.equal(safeLogging({statements:'all',duration:'-1',sample:'-1',error_parameters:'0',stats:null,audit:null,audit_role:null,explain:null}),false);
+      let bound=false;
+      const client={query:async(sql,values)=>{
+        if(values)bound=true;
+        if(sql.includes('jinxi secret-setting logging policy'))return {rows:[{statements:'all'}]};
+        return c.query(sql,values);
+      }};
+      await assert.rejects(setReaderPassword(client,crypto.randomBytes(24).toString('hex')+'Aa!',target),/TEST_PASSWORD_LOGGING_POLICY_UNPROVEN/);
+      assert.equal(bound,false);
+    });
+    await t.test('sensitive-stage failure returns no secret and clears the transient parameter', async () => {
+      const password=crypto.randomBytes(24).toString('hex')+'Aa!';
+      const client={query:(sql,values)=>{
+        if(sql.includes('DO $secret$'))throw Error(password);
+        return c.query(sql,values);
+      }};
+      await assert.rejects(setReaderPassword(client,password,target),e=>e.message==='TEST_READER_PASSWORD_SETUP_REJECTED');
+      assert.equal((await c.query("SELECT COALESCE(current_setting('jinxi_test.reader_password_input',true),'') value")).rows[0].value,'');
+      assert.equal((await c.query("SELECT rolcanlogin FROM pg_roles WHERE rolname='jinxi_test_reader'")).rows[0].rolcanlogin,false);
+    });
+    await t.test('first password setup rejects another registration and changes only reader authentication', async () => {
+      const password=crypto.randomBytes(24).toString('hex')+'Aa!';
+      await assert.rejects(setReaderPassword(c,password,{...target,environmentId:crypto.randomUUID()}),/TEST_READER_PASSWORD_SETUP_REJECTED/);
+      await checkScope(c,target);
+      const submitted=[];
+      const client={query:(sql,values)=>{submitted.push(sql);return c.query(sql,values);}};
+      await c.query("SET password_encryption='md5'");
+      const roles=await setReaderPassword(client,password,target);
+      await c.query("SET password_encryption='scram-sha-256'");
+      assert(!submitted.some(sql=>sql.includes(password)));
+      for(const role of roles)assert.equal(role.rolcanlogin,role.rolname==='jinxi_test_reader');
+      assert.equal((await c.query("SELECT COALESCE(current_setting('jinxi_test.reader_password_input',true),'') value")).rows[0].value,'');
+      // Require SCRAM in this fresh loopback cluster for the real new connection.
+      const m=pg.settings(),hba=path.join(m.folder,'data/pg_hba.conf'),original=fs.readFileSync(hba,'utf8');
+      const root=await pg.connect();let authenticated;
+      try{
+        fs.writeFileSync(hba,'host neondb jinxi_test_reader 127.0.0.1/32 scram-sha-256\n'+original);
+        await root.query('SELECT pg_reload_conf()');
+        authenticated=new Client({host:m.host,port:m.port,database:m.database,user:'jinxi_test_reader',password,ssl:false,connectionTimeoutMillis:2000});
+        await authenticated.connect();
+        assert.equal((await authenticated.query('SELECT current_user AS role,session_user AS session_role')).rows[0].session_role,'jinxi_test_reader');
+        await authenticated.query(readerFiles(target).proof);
+        const wrong=new Client({host:m.host,port:m.port,database:m.database,user:'jinxi_test_reader',password:crypto.randomBytes(32).toString('hex'),ssl:false,connectionTimeoutMillis:2000});
+        try{await assert.rejects(wrong.connect(),e=>e.code==='28P01');}finally{await wrong.end().catch(()=>{});}
+        assert(!fs.readFileSync(path.join(m.folder,'postgres.log'),'utf8').includes(password));
+      }finally{
+        await authenticated?.end().catch(()=>{});
+        fs.writeFileSync(hba,original);await root.query('SELECT pg_reload_conf()');await root.end();
+      }
     });
     await t.test('original rollback restores identical effective grants and preserves platform default ACL metadata', async () => {
       await pg.approval(c, target.environmentId);

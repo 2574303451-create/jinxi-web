@@ -1,0 +1,22 @@
+▶ observed Neon platform defaults remain unchanged across TEST lifecycle
+  ✔ unexpected grantee is rejected before any TEST role exists (6.9084ms)
+  ✔ global default grant is not mistaken for the reviewed public template (3.1482ms)
+  ✔ defaults of the actual initializer still reject (3.554ms)
+  ✔ changed grantability still rejects (3.1135ms)
+  ✔ incomplete platform privilege set still rejects (2.8479ms)
+  ✔ initialization leaves provider defaults byte-for-byte equivalent as metadata (0.7166ms)
+  ✔ foreign creator defaults do not become grants on new application tables (0.5348ms)
+  ✔ reader identity and authorized reads pass; writes remain denied (6.374ms)
+  ✔ platform template recognition never permits reader role inheritance (2.7486ms)
+  ✔ rollback removes only TEST resources and preserves provider grants/roles (13.8083ms)
+✔ observed Neon platform defaults remain unchanged across TEST lifecycle (261.1486ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 357.9606
+Disposable synthetic PostgreSQL passed; no cloud connection was used.
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-gRt0zw

@@ -1,0 +1,46 @@
+▶ observed Neon platform defaults remain unchanged across TEST lifecycle
+  ✔ unexpected grantee is rejected before any TEST role exists (6.285ms)
+  ✔ global default grant is not mistaken for the reviewed public template (3.043ms)
+  ✔ defaults of the actual initializer still reject (3.4436ms)
+  ✔ changed grantability still rejects (3.0493ms)
+  ✔ incomplete platform privilege set still rejects (2.7832ms)
+✖ observed Neon platform defaults remain unchanged across TEST lifecycle (129.3115ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 222.4537
+
+✖ failing tests:
+
+test at tests\neon-default-acl-postgres.test.cjs:8:1
+✖ observed Neon platform defaults remain unchanged across TEST lifecycle (129.3115ms)
+  error: TEST_NOT_EMPTY_OR_ALREADY_INITIALIZED
+      at E:\Recovery\.jinxi-research\f03-f05\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\f03-f05\worktree\tests\neon-default-acl-postgres.test.cjs:22:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 153,
+    severity: 'ERROR',
+    code: 'P0001',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: 'PL/pgSQL function inline_code_block line 28 at RAISE',
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'pl_exec.c',
+    line: '3911',
+    routine: 'exec_stmt_raise'
+  }
+DISPOSABLE_POSTGRES_TEST_FAILED
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-tpkH2w

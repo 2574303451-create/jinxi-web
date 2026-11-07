@@ -17,6 +17,7 @@
 
 ## 权限和身份
 
+- 2026-11-07 已审查的 Neon 空库具有 cloud_admin 在 public 授予 neon_superuser 的默认模板（表 6 项、序列 3 项，含 grant option）。初始化仅兼容这一精确组合且其所有者必须不同于当前初始化主体，不修改这些平台授权；其他默认 ACL 仍拒绝。默认权限按实际创建角色生效，不沿成员关系继承，依据 [PostgreSQL 18 默认权限](https://www.postgresql.org/docs/18/sql-alterdefaultprivileges.html)。真实证据、资源 IDs、兼容修复与本机失败/通过日志统一登记在原 ADMIN_SIGNOFF.md 和 artifacts/f03-f05/results.json；这不是云端初始化授权。
 - 初始化管理员只用于批准的 TEST；内容/注册表归 NOLOGIN owner 管理，独立 reader 仅 SELECT 四张公共内容表及 EXECUTE 固定、无参数的身份函数。
 - 身份函数由初始化管理员拥有，固定 `search_path=pg_catalog`，返回实际 cluster ID、当前数据库/OID 和受保护的合成注册身份；reader 不获得监控或管理员角色。Neon 对此函数的实际托管权限兼容性待授权 TEST 核验，失败不得通过提升 reader 权限解决。
 - reader 无角色继承、对象所有权、管理权限、私有账号读取或写入权限。新 TEST 内撤销 PUBLIC 的 schema CREATE、数据库 CONNECT/TEMP，再单独给 reader CONNECT；不修改其他数据库或项目。

@@ -71,7 +71,153 @@
     "beforeFixLog": "preflight-before-fix.log",
     "scopedEslintExitCode": 0,
     "priorFullSuiteHead": "297834e167f36c24f7e31d31d074f439bcef52f2",
-    "cloudResult": "not collected; Gate 1 awaits user control-plane IDs and actual read-only results",
+    "cloudResult": "User-returned read-only results and control-plane IDs reviewed; Gate 1 passed for metadata and initialization readiness only. Gate 2 is not authorized; cloud initialization, role provisioning and deployment have not run.",
     "cloudWrites": "not authorized or performed"
+  },
+  "gate1Evidence": {
+    "date": "2026-11-07",
+    "status": "passed-readonly-preflight",
+    "source": "User-operated Neon SQL Editor CSV exports/screenshots and explicit user confirmation of provider IDs; no direct Neon connection by Codex.",
+    "resource": {
+      "projectName": "jinxi-test",
+      "projectId": "restless-salad-74668264",
+      "branchName": "production",
+      "branchId": "br-red-pond-bdtrjpmy",
+      "endpointId": "ep-dry-queen-bd6q46s6",
+      "databaseName": "neondb",
+      "databaseOid": "16397",
+      "clusterId": "7704950029723409949",
+      "initializerRole": "neondb_owner",
+      "serverVersionNum": "180006",
+      "postgresVersion": "18.6",
+      "databaseFingerprint": "c0d2a0fbc7baf4b680e8a9403052245636078e5cb41c3d51a4d27a3c3641ede1"
+    },
+    "resultCoverage": {
+      "commandResults": 21,
+      "selects": 17,
+      "nonemptySelects": 8,
+      "emptySelects": 9,
+      "errorShown": false,
+      "finalRollbackVisible": true,
+      "emptyResultEvidence": "Screenshots of individual SELECT tabs showing no row-count suffix; eight CSV exports cover the eight nonempty result sets."
+    },
+    "counts": {
+      "userSchemas": 1,
+      "userRelations": 0,
+      "userFunctions": 0,
+      "userTriggers": 0,
+      "userTypes": 0,
+      "extensions": 1,
+      "expandedDefaultAclRows": 9,
+      "roles": 21,
+      "membershipRows": 12,
+      "publicSchemaAclRows": 3,
+      "foreignServers": 0,
+      "subscriptions": 0,
+      "eventTriggers": 0,
+      "publications": 0,
+      "otherConnections": 0
+    },
+    "explanations": {
+      "databases": [
+        "neondb owned by neondb_owner",
+        "postgres maintenance database owned by cloud_admin"
+      ],
+      "schemas": "Only public; owner pg_database_owner; initializer USAGE and CREATE are true.",
+      "extension": "Only standard plpgsql 1.0 in pg_catalog, owned by cloud_admin.",
+      "defaultAcl": "Only cloud_admin public defaults to neon_superuser, all grantable: relation DELETE/INSERT/MAINTAIN/SELECT/TRUNCATE/UPDATE and sequence SELECT/UPDATE/USAGE.",
+      "roles": "Five provider/reserved roles cloud_admin, neon_service, neon_superuser, neondb_owner and token_roles, plus 16 PostgreSQL predefined roles. No jinxi_test_* role exists. neondb_owner inherits the administrator neon_superuser; it must never be used as website reader.",
+      "memberships": "All 12 per-grant INHERIT/SET flags are present, not NULL. Provider memberships remain untouched; future reader must have no membership.",
+      "publicAcl": "PUBLIC USAGE only; no PUBLIC CREATE. pg_database_owner CREATE and USAGE.",
+      "dataScope": "No user business objects in the inspected neondb. This does not attest to contents of other databases or all provider resources; pr17-validation is excluded."
+    },
+    "csvEvidence": [
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-30.csv",
+        "statement": 4,
+        "rows": 1,
+        "sha256": "5bc926681c2a25c633f85380899282f9a9eb0322477164d5f75685d0594163b5"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-30 (1).csv",
+        "statement": 5,
+        "rows": 2,
+        "sha256": "6d14acc710b7cc5992e8f5c6a00df00a1b7b093ea7110e3bcf6893f99aeec103"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-31.csv",
+        "statement": 6,
+        "rows": 1,
+        "sha256": "1e5907ff97c9d422da9b3ef07ab3f45601a09515ad061b4bf04f1137d3090439"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-33.csv",
+        "statement": 10,
+        "rows": 1,
+        "sha256": "b3a070cdac1a6f0055d7e15af3f2253c8f63f875aea0cd16e96537130db62b57"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-34.csv",
+        "statement": 12,
+        "rows": 9,
+        "sha256": "ab2a50b3f185fe09e041879e52014ecd00ee8041a64ccd59cc1ff0800b1dec0d"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-34 (1).csv",
+        "statement": 13,
+        "rows": 21,
+        "sha256": "bf2fd7da49ff8abc3d75086a97a1353e48c869b8de30d0f215fa79e9d9fddf99"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-34 (2).csv",
+        "statement": 14,
+        "rows": 12,
+        "sha256": "0ae089e3c7b91541c6d2ea4fc02bb43b5ca499df21ef61311ee935d6cd6f2c64"
+      },
+      {
+        "file": "restless-salad-74668264_production_neondb_2026-11-07_08-24-35.csv",
+        "statement": 15,
+        "rows": 3,
+        "sha256": "163eda84089f20eb8aaa2d608489e3d3f554aae92a2189e7b768a0a87b5152e0"
+      }
+    ],
+    "screenshots": [
+      "codex-clipboard-fe95e5fa-f90f-4bbc-9331-a20ff33b6853.png",
+      "codex-clipboard-b34d8234-fda0-4554-98c6-a8ce9c297a66.png"
+    ],
+    "sourceRetention": "Original files remain in user Downloads/Temp; no raw CSV or screenshot copied into Git.",
+    "remaining": "Gate 2 requires explicit authorization, TEST-only credentials, site identity and actual cloud initialization. Gate 3 hosted identity/permissions/isolation acceptance has not run."
+  },
+  "platformDefaultAclCompatibility": {
+    "testedSourceHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
+    "actualConflict": "Original initializer rejected any pg_default_acl, including the nine reviewed provider grants; a disposable local reproduction failed with TEST_NOT_EMPTY_OR_ALREADY_INITIALIZED.",
+    "minimalChange": "Recognize only exact public cloud_admin templates when cloud_admin is not the initializer. No provider ACL or role is modified; unknown/global/initializer defaults and privilege or grantability drift reject.",
+    "unchangedChecks": "Website reader identity, effective privileges, no memberships, forbidden writes and rollback drift checks remain required.",
+    "localPostgresVersion": "17.11",
+    "targetPostgresVersionObservedOnly": "18.6",
+    "transport": "New disposable loopback-only 127.0.0.1:55435 cluster; no environment DSN or cloud target is accepted.",
+    "beforeFix": {
+      "exitCode": 1,
+      "nodeReportedTests": 6,
+      "pass": 5,
+      "fail": 1,
+      "log": "neon-default-acl-before-fix.log"
+    },
+    "targeted": {
+      "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --neon-defaults-only",
+      "exitCode": 0,
+      "nodeReportedTests": 11,
+      "scenarios": 10,
+      "log": "neon-default-acl-review.log"
+    },
+    "existingLifecycle": {
+      "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN>",
+      "exitCode": 0,
+      "nodeReportedTests": 46,
+      "scenarios": 45,
+      "log": "neon-default-acl-baseline.log"
+    },
+    "scopedEslintExitCode": 0,
+    "scopeLimit": "Local SQL compatibility and regression only. Original full project checks above retain their actual historical source SHA. No new framework/build/typecheck claim; no cloud writes, role changes or deployments authorized/performed."
   }
 }

@@ -1,5 +1,7 @@
 # 保留的开发失败与修正
 
+2026-11-07 真实平台失败（用户报告，非本机用例）：Neon Console 为无初始密码的 SQL reader 执行 Reset password 返回 cannot update password for role without password。先前管理员清单忽略首次密码限制，已在同一清单更正，未要求重建或提升角色。替代方案为管理员本机隐藏输入、固定 TEST/角色、绑定参数/事务内值和日志拒绝检查；只设置既有 reader PASSWORD/LOGIN，前后复核有效权限，再运行原 reader 证明。本机最终16/16（reader-password-setup-final.log）含真实 SCRAM 认证、无密码回显、日志拒绝及漂移回滚；原15项中间通过日志仍保留。尚未得到该替代方案的 Neon18.6 成功回执，不宣称云端问题已解决。
+
 2026-11-07 reader 辅助文件首轮 12 个报告测试为 7 pass / 5 fail（含父项及后续事务失败的连带失败），原输出 reader-before-fix.log。PL/pgSQL RECORD 名 p 与原 ATTESTATION_SQL 的内部 pg_proc 别名 p 冲突，在赋值前被解析为未赋值记录。仅将包装器记录名改为 checked_proof，原 ATTESTATION_SQL、validateProof 与权限断言保持不变；测试清理改为 finally ROLLBACK 并恢复攻击夹具授权，避免一个断言失败污染后续场景。复测12/12（reader-review.log），有效列写权限/角色继承拒绝、只启用 reader、管理员不能冒用实际会话、实际本机 reader 连接及原回滚均通过。本机 trust 连接只验证代码与角色权限，不替代真实 Neon TLS/密码认证。
 
 2026-11-07 第二关管理员整批文件：首轮 9 个报告测试中 7 pass / 2 fail（包含父项），仅末项回滚原始 ACL 编码比较失败，原输出见 bootstrap-before-fix.log。原 04 正确恢复了授权，但 PostgreSQL 将 database datacl 的 NULL（隐式默认权限）物化为显式默认 ACL。最终回滚比较改为逐项核对展开后的 grantor、grantee、privilege_type、is_grantable，仍精确比较平台默认 ACL；故障撤销用例继续严格比较原始 ACL，不允许实际变化。没有修改 01/02/03/04 或删去权限断言。复测 9/9，含错误 cluster/OID/主体/版本、未知对象、种子后故障整批撤销、非 superuser 正常提交、重复拒绝及原回滚兼容，日志 bootstrap-review.log。所有 SQL 测试仅在新建本机 PG17.11，不能代替 Neon18.6 云端结果。

@@ -290,7 +290,7 @@
       }
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
-    "roleAuthentication": "Not passed. User CSV confirms reader NOLOGIN; activate existing role using reviewed script, privately provision only reader credential, then run actual native proof.",
+    "roleAuthentication": "Still not passed on Neon. User-reported first-password Console error; use prepared private helper and unchanged real reader proof. Initialization remains accepted.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Neon approved TEST SQL Editor: copy the entire existing cloud-enable-reader.local.sql into a new query and Run once; require final COMMIT and only reader rolcanlogin=true. Then reset ONLY existing jinxi_test_reader password privately and run unchanged native proof from local PowerShell. Return only proof JSON; stop on error. No repeat status query or initialization.",
+    "nextAdministratorAction": "Run scripts/setup-test-reader-password.cjs interactively on the local computer once. No Console reset, plaintext SQL Editor password, connection string, initializer rerun or permission bypass. Return only resulting proof JSON or safe error code.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -496,7 +496,7 @@
       "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
     },
     "readerHandoff": {
-      "status": "Reader remains NOLOGIN per user status CSV. Pending existing guarded activation and reader-only private credential provisioning; no successful reader authentication yet.",
+      "status": "Initial credential provisioning blocked by reported Neon Console reset limitation. Private setup helper is prepared/tested locally; no Neon setup success yet.",
       "endpoint": {
         "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
         "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
@@ -614,6 +614,56 @@
           }
         ],
         "conclusion": "Expected least-privilege initial role state; reader LOGIN has not been enabled. This is a confirmed prerequisite blocker, not evidence of weakened permissions or an initializer failure. Password provisioning is separate and is not inferred from pg_roles."
+      },
+      "passwordSetup": {
+        "status": "prepared and locally tested; not run on Neon",
+        "userReportedError": "cannot update password for role without password",
+        "correction": "Console Reset password is not a working first-password method for this existing SQL role. Supersedes the prior Console reset instruction; no new gate.",
+        "sources": [
+          "https://neon.com/docs/manage/roles",
+          "https://www.postgresql.org/docs/18/app-psql.html",
+          "https://www.postgresql.org/docs/18/runtime-config-logging.html"
+        ],
+        "file": "scripts/setup-test-reader-password.cjs",
+        "sourceHead": "eb90bda8c40dc967acd77152028d91bb2964ffbf",
+        "sourceSha256": {
+          "scripts/setup-test-reader-password.cjs": "81b5517407c1d53d5241ba1299b2d96c52425fd3a8ee710903ada4e3f17ffc69",
+          "tests/bootstrap-postgres.test.cjs": "93b58cdce5726749ff74bf348aa6043bfac88d835c4eee08b12250351c014551"
+        },
+        "target": "Only the already-approved jinxi-test endpoint/neondb and existing jinxi_test_reader. Administrator actor remains the approved neondb_owner.",
+        "secretHandling": "Local hidden prompts, clean child environment, verified TLS, no password argument/file/console output. Reader secret uses a bind parameter/LOCAL value, never submitted query text; known unsafe/unproven logging modes reject before binding. No claim of complete visibility into provider-internal telemetry.",
+        "scope": "Same role permissions before and after; only reader PASSWORD and LOGIN mutate. Accepts reader LOGIN=false or true for this provisioning purpose; original one-shot activation repeat rejection and validateProof unchanged. No role recreation, new grants, schema mutation or production access.",
+        "atomicity": "PostgreSQL mutation is one transaction with pre/post effective-ACL validation; no automatic retry or assertion about unseen control-plane side effects.",
+        "validation": {
+          "localPostgres": "17.11",
+          "targetNeonVersion": "18.6, not exercised by this helper",
+          "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --bootstrap-only",
+          "exitCode": 0,
+          "nodeReportedTests": 16,
+          "scenarios": 15,
+          "log": "reader-password-setup-final.log",
+          "earlierLog": "reader-password-setup.log",
+          "earlierSourceHead": "1a57c11fa3f7e5de9d0a9b28eb8fa2cbb8a20f1a",
+          "scopedEslintExitCode": 0,
+          "syntheticInteractivePrompt": {
+            "passed": true,
+            "inputEchoed": false,
+            "networkUsed": false
+          },
+          "noninteractiveInvocationRejectedBeforeNetwork": true,
+          "realLocalScramCorrectPasswordAccepted": true,
+          "wrongPasswordRejected": true,
+          "unsafeLoggingRejectedBeforeSecretBind": true,
+          "sensitiveExceptionRedactedAndTransactionRolledBack": true,
+          "postMutationPrivilegeDriftRolledBack": true,
+          "noSyntheticPasswordInSubmittedSqlOrPostgresLog": true,
+          "sourceAttribution": "Tested worktree snapshot committed unchanged as sourceHead; committed-content comparison verified."
+        },
+        "outputs": [
+          "artifacts/f03-f05/cloud-reader.provisioning.local.json",
+          "artifacts/f03-f05/cloud-reader.proof.local.json"
+        ],
+        "next": "User executes the private helper once in local PowerShell, privately enters TEST administrator/current password then new reader password twice; on success it automatically invokes the unchanged reader proof launcher. Only non-secret proof JSON or safe error code is returned."
       }
     }
   }

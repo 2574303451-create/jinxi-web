@@ -100,7 +100,17 @@
 
 用户点击该入口后已明确回复“没有共享变量”。现接受实际共享变量状态，该项完成。Projects、Billing、General、实际共享变量及数据库证据均已取得。
 
-已按原第二关创建独立空站 `jinxi-web-test`，Site ID 为 `17885134-a57c-4589-83d3-39e30be9e0cf`，位于已核验的 XUST Free 团队。创建返回 HTTP201，站点尚无 Published Deploy 或仓库，旧 build_settings.env 的变量名为空。运行时资源绑定现填写真实 Site ID、已核验数据库身份及同一 endpoint 的直连/池化主机，原离线 verify 校验通过。当前执行候选回归与仓库配置，随后由管理员私下配置唯一 reader 凭据。
+已按原第二关创建独立空站 `jinxi-web-test`，Site ID 为 `17885134-a57c-4589-83d3-39e30be9e0cf`，位于已核验的 XUST Free 团队。创建返回 HTTP201，站点尚无 Published Deploy 或仓库，旧 build_settings.env 的变量名为空。运行时资源绑定现填写真实 Site ID、已核验数据库身份及同一 endpoint 的直连/池化主机，原离线 verify 校验通过。候选已通过原始 tsc、ESLint、API14/安全59、全新本机 PG46 和静态构建/CSP。TEST 分支已推送，8ecf492 的实际 GitHub CI 成功。仓库已连接至唯一 TEST 分支，实际回读确认 stop_builds=true、skip_prs=true。
+
+### 当前管理员执行项：私密配置 TEST reader 变量
+
+在本机 PowerShell 运行以下命令，只输入已设置的 jinxi_test_reader 密码。工具沿用既有隐藏输入，核对真实 TEST Site ID、团队、唯一分支、暂停构建及关闭 PR 预览后，生成固定 reader URL，仅向该 TEST 站点提交 production context 的 JINXI_TEST_READ_DATABASE_URL。变量标记 secret，排除 Netlify 对 secret 禁止的 post-processing scope。管理员无需拼接 URL 或在聊天中提供凭据。
+
+```powershell
+& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' 'E:/Recovery/.jinxi-research/f03-f05/worktree/scripts/configure-test-reader-env.cjs'
+```
+
+成功后仅确认完成，Codex 读取本机被忽略的非秘密配置回执。若失败或结果不明确，仅回传最后一行安全 JSON，保持停止，由 Codex 核对。配置不触发部署，后续由 Codex 核对候选 SHA、CI 和四项非秘密变量再执行指定 TEST 构建。工具的 API14/安全63 与相关 ESLint 已通过，百分号和保留字符由真实 pg 解析器验证。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 

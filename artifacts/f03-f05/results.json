@@ -295,11 +295,11 @@
     "deployId": null,
     "deployedSha": null,
     "runtimeBinding": "approved resource binding with the actual TEST Site ID; hosted deploy proof not yet generated",
-    "gitPushes": "none",
+    "gitPushes": "TEST branch only: codex/jinxi-f03-f05-test-foundation pushed at 8ecf49272233987feab2c4d723bde655517f4a6b; no PR created.",
     "newPrs": 0,
     "newCloudResources": 1,
     "incrementalFeesIncurred": "Created one empty site under confirmed Legacy Free team without upgrades, purchases or paid add-ons. The creation response site plan is nf_team_dev.",
-    "nextAdministratorAction": "Codex prepares the exact TEST candidate and repository settings. The administrator will then enter only the reader credential privately in the TEST site environment variable.",
+    "nextAdministratorAction": "Run scripts/configure-test-reader-env.cjs locally and enter only the existing reader password at the hidden prompt. Report completion or the safe final error JSON. Codex handles non-secret settings and later approved build.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -906,7 +906,7 @@
         "cliAccountMetadataRead": true,
         "cloudWrites": true,
         "siteCreated": true,
-        "gitPushed": false,
+        "gitPushed": true,
         "deployStarted": false,
         "productionSettingsChanged": false
       },
@@ -1028,6 +1028,60 @@
           "private": false,
           "defaultBranch": "main"
         }
+      },
+      "repositoryConfiguration": {
+        "source": "Actual TEST-site PATCH responses and readback",
+        "repoPath": "2574303451-create/jinxi-web",
+        "repoBranch": "codex/jinxi-f03-f05-test-foundation",
+        "allowedBranches": [
+          "codex/jinxi-f03-f05-test-foundation"
+        ],
+        "stopBuilds": true,
+        "skipPrs": true,
+        "buildCommand": "node scripts/build-test.cjs",
+        "publishDirectory": "out",
+        "functionsDirectory": "netlify/functions",
+        "plugins": [],
+        "initialRepoPayloadStopIgnored": true,
+        "correction": "Applied supported top-level build_settings.stop_builds and skip_prs, then verified both true."
+      },
+      "gitTransport": {
+        "initialFailure": "Recv failure: Connection was reset",
+        "secondFailure": "Timed out before confirmed push",
+        "recovery": "Checked remote TEST ref, used HTTP/1.1 with noninteractive credential mode, normal push succeeded. No TLS verification was disabled."
+      },
+      "gitHubCi": [
+        {
+          "head": "8ecf49272233987feab2c4d723bde655517f4a6b",
+          "id": 42339065729,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42339065729"
+        }
+      ],
+      "privateEnvironmentTool": {
+        "file": "scripts/configure-test-reader-env.cjs",
+        "input": "Only the existing jinxi_test_reader password in a local hidden prompt",
+        "targetSiteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+        "key": "JINXI_TEST_READ_DATABASE_URL",
+        "isSecret": true,
+        "context": "production",
+        "scopes": [
+          "builds",
+          "functions",
+          "runtime"
+        ],
+        "scopeReason": "Netlify secret variables exclude post-processing, as the installed official CLI also does. This Free team supports secret variables.",
+        "validation": {
+          "unitLog": "cloud-env-unit.log",
+          "apiTests": 14,
+          "securityTests": 63,
+          "exitCode": 0,
+          "scopedEslintExitCode": 0,
+          "beforeFix": "cloud-env-unit-before-fix.log",
+          "regression": "A synthetic password containing percent and reserved characters exposed URI encoding failure; fixed by encoding the password and verified with actual pg ConnectionParameters."
+        },
+        "receipt": "artifacts/f03-f05/netlify-reader-env.provisioning.local.json"
       }
     }
   }

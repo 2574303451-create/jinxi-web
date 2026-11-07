@@ -290,7 +290,7 @@
       }
     },
     "databaseInitialization": "PASSED: user-supplied SELECT 67/68 CSVs match approved resource and synthetic counts; screenshot explicitly selects successful 69 COMMIT. Acceptance is based on user console evidence, not a Codex database connection.",
-    "roleAuthentication": "Pending user activation/private credential provisioning and new actual reader connection; local trust-role tests do not prove Neon password authentication.",
+    "roleAuthentication": "FAILED before SQL; reader LOGIN and private reader credential must be confirmed. Initialization remains accepted; no permission or hosted acceptance claimed.",
     "netlifySiteId": null,
     "deployId": null,
     "deployedSha": null,
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Execute prepared cloud-enable-reader.local.sql once on approved TEST; require only reader LOGIN=true and final COMMIT. Privately reset only existing jinxi_test_reader password; then run the prepared native proof launcher in local PowerShell and return only its non-secret proof JSON. No initializer rerun or new authorization needed.",
+    "nextAdministratorAction": "Run the prepared read-only reader status query on the approved TEST. If reader LOGIN=false, run existing guarded activation once; if true, skip activation. Require three expected roles, no admin capability/membership and owner/writer NOLOGIN. Then reset ONLY existing jinxi_test_reader password privately and retry unchanged native proof once using that password. Stop on unexpected state; never retry initializer or switch to administrator connection.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -496,7 +496,7 @@
       "handling": "Credential was not used for a connection or copied to files, commands or logs. No credential value/hash or full connection string recorded. No production credential change requested."
     },
     "readerHandoff": {
-      "status": "prepared locally; not executed in cloud",
+      "status": "User attempted native connection twice; authentication failed before proof SQL. Reader activation not yet confirmed.",
       "endpoint": {
         "pooledHost": "ep-dry-queen-bd6q46s6-pooler.c-8.us-east-2.aws.neon.tech",
         "directHost": "ep-dry-queen-bd6q46s6.c-8.us-east-2.aws.neon.tech",
@@ -546,6 +546,29 @@
         "transport": "Fixed approved direct TEST hostname/5432/neondb/reader, TLS require plus channel binding require, clean child environment, psql -X/ON_ERROR_STOP. No DSN, .env or connection fallback.",
         "output": "artifacts/f03-f05/cloud-reader.proof.local.json",
         "acceptance": "Same original validateProof policy is used for database proof before a Netlify Site ID exists; not hosted-site approval."
+      },
+      "authenticationFailure": {
+        "screenshot": "codex-clipboard-6ffdf147-cf77-4643-9b04-e92ba03f9dc5.png",
+        "sha256": "3cb22613d568c5335a022af0a41e0fa9498c902c98abb7acb4bb8c36cca68b14",
+        "observations": [
+          "First attempt: fe_sendauth: no password supplied",
+          "Second attempt: password authentication failed for jinxi_test_reader",
+          "No reader proof SQL or validated output was reached"
+        ],
+        "userClarification": {
+          "passwordRoleReset": "neondb_owner",
+          "readerActivation": "User uncertain; no COMMIT/rolcanlogin=true receipt supplied"
+        },
+        "conclusion": "Reader credential provisioning and LOGIN state are unconfirmed. Administrator password rotation is a separate completed incident action and is not a reader credential. No authentication-policy or code weakening justified.",
+        "scope": "No claim that missing role/LOGIN/password state can be distinguished from this error alone. No actual password values, raw connection string or address copied.",
+        "diagnostic": {
+          "file": "test-environment/sql/cloud-reader-status.local.sql",
+          "sha256": "fd1e921f52bb552d47bd6c8407dd5dcae7132c65fcb32a4da482cd4b284e7032",
+          "readOnly": true,
+          "queriesPasswordOrHash": false,
+          "reusesTestedTargetGuard": true
+        },
+        "reproDecision": "The user clarified a role-configuration prerequisite while local SCRAM reproduction was being considered. No new reproduction or source changes were made; configuration-only diagnosis remains pending real reader success."
       }
     }
   }

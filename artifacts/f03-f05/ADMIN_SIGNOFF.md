@@ -55,11 +55,19 @@
 
 ### 当前管理员执行项：配置专用 reader 并取实际连接证明
 
+最新排查：用户终端两次停在认证阶段，分别为 no password supplied 和 password authentication failed for jinxi_test_reader；未执行证明 SQL。用户确认目前重置的是 **neondb_owner**，不确定 reader 激活是否 COMMIT。管理员密码轮换仍算完成，但不代表 reader 凭据已配置。现有认证脚本没有改用管理员、放松 TLS/权限或读取用户密码；无需重跑初始化，也未据此声称故障已解决。
+
+**现在先运行只读 `test-environment/sql/cloud-reader-status.local.sql`**（仍在批准 TEST，以 neondb_owner 执行）。它复用已受测的 cluster/OID/角色/版本门禁并核对合成注册，仅返回三角色的 LOGIN、继承、到期及管理标志，不读取密码、散列或业务行。结果应恰有三角色，五项管理标志和 member_of_other_roles 均 false，owner/writer 的 rolcanlogin=false；reader 的 rolinherit=false，rolvaliduntil 通常为空（无限期）。状态不符或角色缺失则停止并回传该结果，不创建或提升角色。
+
+- reader 的 **rolcanlogin=false**：继续下面第 1 步的既有激活 SQL，确认 COMMIT。
+- reader 的 **rolcanlogin=true**：跳过第 1 步，直接第 2 步；不要重复激活。
+- 第 2 步必须选择 **jinxi_test_reader**。本次不再重置 neondb_owner。第 3 步“口令”输入不回显是正常行为；粘贴该 reader 的密码本身后再按回车，不输入用户名、命令或连接串。只做一次受控重试，失败回传错误及角色状态，绝不发送密码。
+
 用户曾在聊天提供含 TEST 管理员凭据的内容。未使用该凭据连接，也未复制、散列或写入文件/日志；只保留非秘密主机名。用户已明确确认重置 **jinxi-test / production 的 neondb_owner** 密码。该实际问题已按用户确认处理，不涉及旧站或生产凭据，不新增验收关卡。
 
 以下文件已离线生成，原 01/02/03/04 与运行时门禁均未修改。本机 PG17.11 受测源码 aa398b506271e9fcbd55b610e981c92cfc6973f1：12/12，ESLint 退出 0，日志 reader-review.log；非交互调用客户端在网络前拒绝。首轮变量名冲突及失败保留在 reader-before-fix.log / FAILURES.md。**这些不是 Neon18.6 的 reader 认证结果。**
 
-1. **Neon → jinxi-test / production / neondb → SQL Editor**：以初始化主体打开 `test-environment/sql/cloud-enable-reader.local.sql`，新建查询后一次 Run 全文。它复用已审查目标门禁和 03 核验，先检查登记、结构、数据及 reader 的有效权限，再仅执行 `ALTER ROLE jinxi_test_reader LOGIN`。不设密码、不授予新业务权限。预期最后角色表仅 reader 的 rolcanlogin=true，owner/writer 为 false；所有管理标志 false、最终 COMMIT。任何错误停止，不补权或重跑初始化。
+1. **仅在状态查询确认 reader 的 rolcanlogin=false 时**：Neon → jinxi-test / production / neondb → SQL Editor，以初始化主体打开 `test-environment/sql/cloud-enable-reader.local.sql`，新建查询后一次 Run 全文；若当前已经 true 则跳过。它复用已审查目标门禁和 03 核验，先检查登记、结构、数据及 reader 的有效权限，再仅执行 `ALTER ROLE jinxi_test_reader LOGIN`。不设密码、不授予新业务权限。预期最后角色表仅 reader 的 rolcanlogin=true，owner/writer 为 false；所有管理标志 false、最终 COMMIT。任何错误停止，不补权或重跑初始化。
 2. **同一 TEST → Roles → 现有 jinxi_test_reader → Reset password**：仅私下保存该专用角色的密码。不要 Add role、重建角色、使用 neondb_owner 密码或发送密码/连接串/重置窗口截图。遇缺少此角色或重置入口则停止并只说明界面状态。此步不轮换或修改任何生产角色。
 3. **本机 PowerShell**：执行下方现成命令。原生 psql -W 会提示输入 **jinxi_test_reader** 密码且不回显；Node 不读取密码、不使用 .env/默认 PG 连接设置或启动脚本。真实新连接仅执行 `cloud-reader-proof.local.sql` 的只读事务，核对 current_user=session_user、实际身份和有效 ACL，再读取四张公共合成表的数量，最终 ROLLBACK。
 

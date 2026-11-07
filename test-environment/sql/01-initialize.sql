@@ -21,7 +21,23 @@ BEGIN
     OR EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema')
     OR EXISTS(SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema')
     OR EXISTS(SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE left(n.nspname,3)<>'pg_' AND n.nspname<>'information_schema')
-    OR EXISTS(SELECT 1 FROM pg_default_acl)
+    -- User-console evidence 2026-11-07: Neon owns two public defaults for
+    -- cloud_admin -> neon_superuser. They do not apply to a different creator.
+    -- Recognize ONLY the exact reviewed privileges/grantability, leave them
+    -- untouched, and still refuse defaults belonging to this initializer.
+    OR EXISTS(SELECT 1 FROM pg_default_acl d WHERE
+      pg_get_userbyid(d.defaclrole)<>'cloud_admin'
+      OR d.defaclrole=(SELECT oid FROM pg_roles WHERE rolname=current_user)
+      OR d.defaclnamespace<>'public'::regnamespace
+      OR d.defaclobjtype NOT IN('r','S')
+      OR (SELECT array_agg((CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee)::text END)
+           ||':'||a.privilege_type||':'||a.is_grantable::text
+           ORDER BY a.privilege_type COLLATE "C",a.grantee,a.is_grantable)
+          FROM aclexplode(d.defaclacl) a)
+        IS DISTINCT FROM CASE d.defaclobjtype WHEN 'r' THEN ARRAY[
+          'neon_superuser:DELETE:true','neon_superuser:INSERT:true','neon_superuser:MAINTAIN:true',
+          'neon_superuser:SELECT:true','neon_superuser:TRUNCATE:true','neon_superuser:UPDATE:true']
+        ELSE ARRAY['neon_superuser:SELECT:true','neon_superuser:UPDATE:true','neon_superuser:USAGE:true'] END)
     OR EXISTS(SELECT 1 FROM pg_publication)
     OR EXISTS(SELECT 1 FROM pg_extension WHERE extname<>'plpgsql')
     OR EXISTS(SELECT 1 FROM pg_foreign_server)

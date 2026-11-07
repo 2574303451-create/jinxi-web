@@ -8,7 +8,7 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。当前核对独立 Netlify TEST 创建前的用量与共享变量证据。第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
+2026-11-07 状态：**第一关通过。第二关的云端合成初始化、reader 密码设置及实际连接/权限证明已通过。Netlify Legacy Free 套餐及当前用量已核实，创建前实际共享变量状态也已由用户确认无共享变量。第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，末项 ROLLBACK 可见。第一关证据来自用户控制台。此前两次空表/视图/序列检查已登记。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
 
@@ -88,20 +88,19 @@
 
 先前聊天中的 TEST 管理员凭据未被使用或写入文件，用户已确认仅重置 jinxi-test 的 neondb_owner。此确认继续沿用，不再轮换它；工具仅由管理员本机私密输入当前密码。旧站、真实数据、生产角色、18个原PR和 Netlify 生产设置均不操作。该修复仍属于原第二关的凭据配置，不新增关卡；实际 reader 证明通过后才继续独立 TEST 建站。
 
-### 当前管理员执行项：补齐 Netlify 创建前两项控制台证据
+### 已完成：Netlify 创建前套餐、用量与共享变量核验
 
 已取得项目列表截图，目标团队 XUST 标记 Free，旧站标记 Auto Publishing Locked。通过已登录 CLI 的只读 listAccountsForUser(minimal=true) 和 getAccount，确认唯一目标团队 ID 为 `689e1405e8627000726e883c`、slug 为 `2574303451`、套餐 Free。平台能力元数据为 credit_features=false、accumulate_overages=false、block_builds_when_usage_exceeded=true、shared_env_variables=false、env_var_scopes=false。
 
-这属于旧版 Free。API 返回的 capabilities.used 多项为 0，而 sites.used 同样为 0，与截图已有项目不符，因此不将它作为本周期实际用量。该套餐在超出部分额度时会暂停同团队全部站点，部署前需要确认余量，保护同团队旧站。依据 [Netlify 旧版套餐计费 FAQ](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/)。
+用户后续 Usage & billing 截图已确认 Legacy Free、月费 $0.00、本周期构建分钟 0/300、流量 23 MB/100 GB、并发构建 0/1，按月第一日重置。当前用量有余量，该项验收完成。API capabilities.used 仍仅作能力元数据，实际用量采用该截图。套餐在超出部分额度时可能暂停同团队站点，沿用有限次数部署/验收。依据 [Netlify 旧版套餐计费 FAQ](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/)。
 
-当前安装的官方 API 定义中，getEnvVars 返回未加密的 values，且无仅返回元数据的选项，本轮未调用。shared_env_variables=false 是当前套餐能力，实际共享变量状态仍由隐藏值的控制台证据确认。覆盖规则依据 [环境变量说明](https://docs.netlify.com/build/environment-variables/overview/)。
+当前安装的官方 API 定义中，getEnvVars 返回未加密的 values，且无仅返回元数据的选项，本轮未调用 GET。一次仅 HEAD 请求返回 HTTP200，但没有 content-length 或 x-total-count，无法由响应头判断变量数量，全程未读取响应体。shared_env_variables=false 是当前套餐能力，实际共享变量状态仍需控制台确认。覆盖规则依据 [环境变量说明](https://docs.netlify.com/build/environment-variables/overview/)。
 
-请在同一 XUST 团队集中提供以下两项，无需再提供 Projects 页面或数据库结果。
+用户的第二张截图已确认 General 页中的团队 ID/slug、Legacy Free 及创建时间 Aug 15, 2025，当前显示 General team settings，左栏 Environment variables 入口可见。截图没有显示该入口内的实际共享变量状态。
 
-1. **Usage & billing → Plan details / Account usage insights**。显示当前 Free 套餐、本周期 build minutes 和 bandwidth 的已用/上限、超额或暂停提示。若页面还有 Functions 用量，保留对应汇总。付款资料避开截图。
-2. **Team settings → Environment variables**。显示空列表、功能不可用/升级提示或现有 key、Scope、Context。存在变量时保留来源说明，值持续隐藏。
+用户点击该入口后已明确回复“没有共享变量”。现接受实际共享变量状态，该项完成。Projects、Billing、General、实际共享变量及数据库证据均已取得。
 
-收到两项后按原第二关创建/复用 `jinxi-web-test`。目前没有新增站点、TEST 分支推送或部署。原运行时资源绑定仍 pending-approval，取得真实 TEST Site ID 后按既有步骤填写并复测。
+按原第二关继续创建/复用 `jinxi-web-test`。此签核时点尚未新增站点、TEST 分支推送或部署。原运行时资源绑定仍 pending-approval，取得真实 TEST Site ID 后按既有步骤填写并复测。
 
 ### 初始化执行说明（已运行，保留复核，不重复执行）
 

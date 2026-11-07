@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "Gate 2 synthetic initialization and actual dedicated TEST reader authentication/permission proof accepted. Independent Netlify pre-creation usage/inheritance evidence remains pending.",
+  "cloudAcceptance": "Gate 2 synthetic database and actual reader proof accepted. Netlify team identity, Legacy Free plan and actual usage accepted. Shared-variable page state pending before independent TEST site construction.",
   "checks": [
     {
       "name": "typecheck",
@@ -299,7 +299,7 @@
     "newPrs": 0,
     "newCloudResources": 0,
     "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
-    "nextAdministratorAction": "Provide the two outstanding masked console views in the existing ADMIN_SIGNOFF.md: current Usage & billing limits/usage and Team settings Environment variables state. Projects/team/Free badge and reader proof are already accepted.",
+    "nextAdministratorAction": "No additional pre-creation administrator evidence required. Codex continues the authorized empty TEST site creation. Reader credential will be entered privately by the administrator during TEST variable configuration.",
     "userBootstrapRun": {
       "source": "User-supplied screenshot, not a direct Codex database connection",
       "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
@@ -850,7 +850,7 @@
       "scope": "Actual dedicated TEST reader authentication, exact registered database identity, direct/effective permission attestation and four synthetic reads. Cloud-hosted Functions and cross-resource configuration await independent Netlify site acceptance."
     },
     "netlifyPreparation": {
-      "status": "Pre-creation metadata review in progress",
+      "status": "Pre-creation billing, actual usage, team identity and absence of shared variables accepted. Proceed with the authorized empty TEST site.",
       "team": {
         "id": "689e1405e8627000726e883c",
         "name": "XUST",
@@ -883,8 +883,24 @@
       },
       "environmentEvidence": {
         "planCapability": "Shared environment variables capability disabled",
-        "actualTeamVariableList": "Pending masked console evidence",
-        "apiReview": "Installed @netlify/open-api getEnvVars includes unencrypted values and exposes no metadata-only option. This endpoint was not called."
+        "actualTeamVariableList": "Accepted from user console confirmation: no shared variables.",
+        "apiReview": "Installed @netlify/open-api getEnvVars includes unencrypted values and exposes no metadata-only option. This endpoint was not called.",
+        "headOnlyCheck": {
+          "method": "HEAD",
+          "endpoint": "/accounts/689e1405e8627000726e883c/env",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": null,
+          "totalCount": null,
+          "bodyConsumed": false,
+          "secretValuesRead": false,
+          "conclusion": "No variable count in response headers; cannot infer an empty list. No GET fallback was made."
+        },
+        "userConfirmation": {
+          "source": "User reply after opening Team settings Environment variables",
+          "answer": "没有共享变量",
+          "accepted": true
+        }
       },
       "execution": {
         "cliAccountMetadataRead": true,
@@ -895,15 +911,47 @@
         "productionSettingsChanged": false
       },
       "browserAccess": "The previous Computer Use turn was stopped by the tool because the current browser URL could not be determined reliably. This turn reused user screenshot and existing CLI metadata access.",
-      "pendingAdministratorEvidence": [
-        "Usage & billing current-period build minutes and bandwidth usage/limits plus Free plan details",
-        "Team settings Environment variables masked list or unavailable/upgrade state, including key/scope/context/source when any entries exist"
-      ],
+      "pendingAdministratorEvidence": [],
       "sources": [
         "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/",
         "https://docs.netlify.com/build/environment-variables/overview/"
       ],
-      "hostingRisk": "Legacy Free metered limits are shared at team level. Official documentation says exhausted non-build limits can pause all team sites. Actual headroom is required before deploying TEST alongside the protected old site."
+      "hostingRisk": "Legacy Free metered limits are shared at team level. Official documentation says exhausted non-build limits can pause all team sites. Actual headroom is required before deploying TEST alongside the protected old site.",
+      "billingEvidence": {
+        "source": "User-provided Usage & billing screenshot",
+        "file": "codex-clipboard-cded7464-7a3b-4098-bd49-f3c4a62c22ff.png",
+        "sha256": "3d494bd997f12e511f13af2f6ec566b8e33a1ea501dfa63a96dcfbe0c5f7cde7",
+        "team": "XUST",
+        "plan": "Legacy Free",
+        "monthlyPriceShown": "$0.00",
+        "buildMinutes": {
+          "used": 0,
+          "limit": 300
+        },
+        "bandwidth": {
+          "usedShown": "23 MB",
+          "limitShown": "100 GB"
+        },
+        "concurrentBuilds": {
+          "used": 0,
+          "limit": 1
+        },
+        "resetShown": "First day of each month",
+        "accepted": true
+      },
+      "generalSettingsEvidence": {
+        "source": "User-provided General team settings screenshot",
+        "file": "codex-clipboard-9924a821-f207-4794-b3bc-11baa76c6781.png",
+        "sha256": "1e8d471117819e20b9c9a591972b27228bd0f72d0718a031e1deb47d6e023504",
+        "teamId": "689e1405e8627000726e883c",
+        "slug": "2574303451",
+        "name": "XUST",
+        "plan": "Legacy Free",
+        "createdDateShown": "Aug 15, 2025",
+        "page": "General team settings",
+        "environmentVariablesEntryVisible": true,
+        "environmentVariablesPageContentsVisible": false
+      }
     }
   }
 }

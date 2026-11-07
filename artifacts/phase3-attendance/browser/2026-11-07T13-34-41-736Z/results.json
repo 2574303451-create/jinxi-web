@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "startedAtUtc": "2026-11-07T13:34:41.736Z",
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [],
+  "stage": "lost-response-double-click-and-day-replay",
+  "errorType": "AssertionError",
+  "testLocation": [
+    "attendance-local-browser.cjs:33:78"
+  ],
+  "completedAtUtc": "2026-11-07T13:35:33.339Z"
+}

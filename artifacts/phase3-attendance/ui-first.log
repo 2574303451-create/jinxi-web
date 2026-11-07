@@ -1,0 +1,16 @@
+✔ identity invalidation clears even the previous signed-in button caption before the next response (3.7134ms)
+✔ discovering B during an A click sends no attendance POST or private A read (1.9525ms)
+✔ broadcasts and online events discard an old private read and clear failed authentication (1.5444ms)
+✔ a lost POST response retries the original UUID and does not falsely sign the next day (1.1308ms)
+✔ an old write response cannot render A statistics after B was verified (0.8513ms)
+✔ a delayed A identity response cannot start a write after B notification (0.7316ms)
+✔ mismatched private responses and forced password reset never render statistics (1.0611ms)
+✔ a failed pre-submit identity check neither sends nor marks a submitted request as pending (0.8654ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90.5628

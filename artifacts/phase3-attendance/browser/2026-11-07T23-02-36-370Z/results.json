@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "startedAtUtc": "2026-11-07T23:02:36.371Z",
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "stage": "five-widths",
+  "retry": {
+    "sameRequestId": true,
+    "noAutomaticPost": true,
+    "oldDateNotMisreportedAsToday": true,
+    "newDayRequiresNewId": true,
+    "rapidRepeatIgnored": true
+  },
+  "sameNicknameIsolated": true,
+  "changedActorClickRejected": true,
+  "broadcasts": {
+    "login": true,
+    "logout": true,
+    "passwordChange": true,
+    "oldPrivateResponseDiscarded": true
+  },
+  "nicknameRenderedAsText": true,
+  "completedAtUtc": "2026-11-07T23:03:36.981Z"
+}

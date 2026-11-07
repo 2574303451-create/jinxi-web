@@ -1,0 +1,6 @@
+{
+  "reason": "A new test incorrectly expected SameSite=Strict; the existing reviewed contract is Lax. Preserve the assertion failure and attributes, redact only the generated local session token. The fresh local cluster has stopped.",
+  "beforeSha256": "5445b730331e058c5812296167f1d5e96119833f48a9e39f795f42355af91231",
+  "afterSha256": "01a711f7b8aa7325dbe3ccccc666854037fe3c38fe6f4b07cb0e615427f21e51",
+  "privateOriginalOutsideGit": true
+}

@@ -1,0 +1,33 @@
+{
+  "checkedAtUtc": "2026-11-07 13:07:49 UTC",
+  "base": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+  "remote": [
+    {
+      "ref": "refs/heads/codex/jinxi-phase3-community-local",
+      "sha": "f8175c4d22fc8b83c556a7dad943f1960ed1780e"
+    }
+  ],
+  "ci": {
+    "id": 42373547288,
+    "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42373547288",
+    "sha": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+    "status": "completed",
+    "conclusion": "success",
+    "coverage": {
+      "api": 14,
+      "security": 93,
+      "videoPolicy": 6,
+      "existingPostgresIntegration": 55
+    },
+    "notCovered": [
+      "community PG13/PG4",
+      "disposable readonly PG46",
+      "actual HTTPS/browser",
+      "all new checkpoint3 code: local only and unpushed"
+    ]
+  },
+  "newBranch": "codex/jinxi-phase3-attendance-local",
+  "root": "E:/Recovery/.jinxi-research/phase3-attendance/worktree",
+  "initialWorkspaceClean": true,
+  "noNewCloudOrPrOperations": true
+}

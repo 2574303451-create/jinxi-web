@@ -1,0 +1,48 @@
+
+> my-v0-project@0.1.0 test:attendance-local
+> node tests/attendance-local-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ trusted attendance facts on actual synthetic PostgreSQL
+  ✔ a verified member records a database-dated fact and an unsettled event without crediting points (1743.2834ms)
+  ✔ streaks, leap day, month statistics and paginated history are recomputed from dated facts (3262.9509ms)
+  ✔ duplicate IDs, new IDs and concurrent requests produce one fact/event per day and never sign the next day by replay (3641.282ms)
+  ✔ calendar boundaries use Shanghai dates independently of connection timezone (6601.1523ms)
+  ✔ concurrent requests straddling midnight are dated at the locked insert and create exactly two dated facts (1548.4452ms)
+  ✔ same-nickname members, including reviewers, cannot read or attribute another member history (2892.9322ms)
+  ✔ guest, first-reset, logout, password change and expired sessions cannot write (4371.5913ms)
+  ✖ state changes and expiry committed during the actual account-lock wait are checked again (4937.6877ms)
+  ✔ actual PostgreSQL failures after the fact or event roll back every write, and a retry succeeds once (4202.5159ms)
+  ✔ runtime ACLs forbid date, streak, reward, legacy and ledger tampering and fail closed on grant drift (2101.5456ms)
+  ✔ invalid periods, future fact anomalies and missing events never become fake success or zero (3190.0336ms)
+  ✔ unowned legacy checkins are excluded and original identity/community handlers coexist unchanged (2113.5531ms)
+✖ trusted attendance facts on actual synthetic PostgreSQL (75121.0445ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 75123.4641
+
+✖ failing tests:
+
+test at tests\attendance-local-postgres.test.cjs:79:11
+✖ state changes and expiry committed during the actual account-lock wait are checked again (4937.6877ms)
+  AssertionError [ERR_ASSERTION]: version
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-postgres.test.cjs:91:41)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-postgres.test.cjs:79:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

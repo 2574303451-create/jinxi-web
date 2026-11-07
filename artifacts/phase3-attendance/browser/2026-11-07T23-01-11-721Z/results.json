@@ -1,0 +1,47 @@
+{
+  "passed": false,
+  "startedAtUtc": "2026-11-07T23:01:11.722Z",
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    }
+  ],
+  "stage": "five-widths",
+  "retry": {
+    "sameRequestId": true,
+    "noAutomaticPost": true,
+    "oldDateNotMisreportedAsToday": true,
+    "newDayRequiresNewId": true,
+    "rapidRepeatIgnored": true
+  },
+  "sameNicknameIsolated": true,
+  "changedActorClickRejected": true,
+  "broadcasts": {
+    "login": true,
+    "logout": true,
+    "passwordChange": true,
+    "oldPrivateResponseDiscarded": true
+  },
+  "nicknameRenderedAsText": true,
+  "errorType": "AssertionError",
+  "testLocation": [
+    "attendance-local-browser.cjs:61:169"
+  ],
+  "completedAtUtc": "2026-11-07T23:02:12.952Z"
+}

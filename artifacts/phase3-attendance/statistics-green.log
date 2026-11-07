@@ -1,0 +1,16 @@
+
+> my-v0-project@0.1.0 test:attendance-local
+> node tests/attendance-local-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ trusted attendance facts on actual synthetic PostgreSQL
+  ✔ a verified member records a database-dated fact and an unsettled event without crediting points (1007.1272ms)
+  ✔ streaks, leap day, month statistics and paginated history are recomputed from dated facts (2354.9098ms)
+✔ trusted attendance facts on actual synthetic PostgreSQL (36139.6979ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36141.9693

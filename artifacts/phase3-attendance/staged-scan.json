@@ -1,0 +1,7 @@
+{
+  "candidateBase": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+  "files": 57,
+  "findings": [],
+  "scope": "All staged new or modified blobs; generated local credentials/key/database files excluded; screenshots synthetic only",
+  "note": "Pattern scan plus manual source/scope review; not a guarantee against unknown secrets"
+}

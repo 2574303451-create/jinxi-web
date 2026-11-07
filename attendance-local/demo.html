@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>本机合成签到与统计 · 今夕</title><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/attendance.css"><script src="/attendance.js" defer></script></head>
+<body class="jinxi-site"><main class="guild-shell att-shell">
+<header><span class="guild-badge">第三阶段检查点3 · 仅本机合成</span><h1>签到与统计验证</h1><p>本页按服务器的上海业务日期记录本人签到。</p><a href="/">登录、改密与退出</a><p id="session" aria-live="polite">正在核验身份…</p></header>
+<p id="notice" role="status" aria-live="polite">正在读取本人状态…</p>
+<section class="guild-panel"><h2>每日签到</h2><p id="today"></p><p id="state">请先核验身份。</p><div class="actions"><button id="checkin" class="paper-button yellow" type="button" disabled>签到</button><button id="reload" type="button">重新核验</button></div><p class="note">奖励未结算，不计入账户余额。重试原请求只确认原签到日期，不自动补签。</p></section>
+<section class="guild-panel" id="private" hidden><h2>本人统计</h2><label for="month">统计月份</label><input id="month" type="month" min="1900-01" max="2199-12"><dl id="stats"></dl><h2>本人签到历史</h2><div id="history" aria-live="polite"></div><div class="actions"><button id="older" type="button" disabled>更早记录</button><button id="latest" type="button">返回最新</button></div></section>
+</main></body></html>

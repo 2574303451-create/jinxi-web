@@ -9,13 +9,13 @@
     "build:optimized": "node optimize-images.js && NODE_ENV=production next build --webpack",
     "dev": "next dev --webpack",
     "dev:netlify": "netlify dev",
-    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local --no-warn-ignored --max-warnings 0",
+    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local --no-warn-ignored --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental false",
     "start": "node scripts/preview-static.cjs",
     "export": "npm run build",
     "test:api": "node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs",
     "test": "npm run test:api && npm run test:security",
-    "test:security": "node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs tests/password-setup-diagnostic.test.cjs tests/test-env-provisioning.test.cjs tests/clean-npm-runner.test.cjs tests/member-local-boundary.test.cjs tests/member-local-ui.test.cjs tests/community-local-boundary.test.cjs tests/community-local-ui.test.cjs",
+    "test:security": "node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs tests/password-setup-diagnostic.test.cjs tests/test-env-provisioning.test.cjs tests/clean-npm-runner.test.cjs tests/member-local-boundary.test.cjs tests/member-local-ui.test.cjs tests/community-local-boundary.test.cjs tests/community-local-ui.test.cjs tests/attendance-local-boundary.test.cjs tests/attendance-local-ui.test.cjs",
     "test:test-environment": "node scripts/test-disposable-postgres.cjs",
     "test:environment": "node --test tests/environment-postgres.test.cjs",
     "test:session": "node --test tests/session-postgres.test.cjs",
@@ -35,7 +35,11 @@
     "test:community-review": "node tests/community-local-review-postgres.test.cjs",
     "test:community-https": "node tests/community-local-https.test.cjs",
     "test:community-browser": "node tests/community-local-browser.cjs",
-    "community:local": "node scripts/community-local.cjs"
+    "community:local": "node scripts/community-local.cjs",
+    "test:attendance-local": "node tests/attendance-local-postgres.test.cjs",
+    "test:attendance-https": "node tests/attendance-local-https.test.cjs",
+    "test:attendance-browser": "node tests/attendance-local-browser.cjs",
+    "attendance:local": "node scripts/attendance-local.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

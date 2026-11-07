@@ -1,0 +1,11 @@
+▶ trusted attendance facts on actual synthetic PostgreSQL
+  ✔ a verified member records a database-dated fact and an unsettled event without crediting points (1025.0274ms)
+✔ trusted attendance facts on actual synthetic PostgreSQL (34805.7015ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34808.3945

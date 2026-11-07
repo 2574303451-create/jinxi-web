@@ -1,0 +1,25 @@
+✖ identity invalidation clears even the previous signed-in button caption before the next response (3.014ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.3271
+
+✖ failing tests:
+
+test at tests\attendance-local-ui.test.cjs:14:1
+✖ identity invalidation clears even the previous signed-in button caption before the next response (3.014ms)
+  AssertionError [ERR_ASSERTION]: No A status may remain visible during identity revalidation
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-attendance\worktree\tests\attendance-local-ui.test.cjs:16:142)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

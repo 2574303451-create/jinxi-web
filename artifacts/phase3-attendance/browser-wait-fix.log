@@ -1,0 +1,5 @@
+
+> my-v0-project@0.1.0 test:attendance-browser
+> node tests/attendance-local-browser.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin --openssl D:/Program Files/Git/usr/bin/openssl.exe --playwright-module E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright
+
+{"passed":false,"directory":"E:\\Recovery\\.jinxi-research\\phase3-attendance\\worktree\\artifacts\\phase3-attendance\\browser\\2026-11-07T23-01-11-721Z","stage":"five-widths","viewports":[{"width":1440,"passed":true},{"width":1024,"passed":true},{"width":768,"passed":true},{"width":390,"passed":true}]}

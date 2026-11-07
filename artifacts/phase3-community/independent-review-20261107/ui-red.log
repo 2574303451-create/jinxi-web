@@ -1,0 +1,98 @@
+✖ failed identity revalidation removes server-loaded private editor text (3.8538ms)
+✖ discovering B during submit must not send an earlier snapshot of A private text (2.1887ms)
+✖ identity-page broadcasts invalidate an in-flight A private read (1.1183ms)
+✖ an unsent member draft is cleared when another member is verified (1.0049ms)
+✖ online revalidation rejects an old private response and fails closed on auth failure (4.4949ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.5999
+
+✖ failing tests:
+
+test at tests\community-local-ui.test.cjs:53:1
+✖ failed identity revalidation removes server-loaded private editor text (3.8538ms)
+  AssertionError [ERR_ASSERTION]: A private editor text must not survive failed identity verification
+  + actual - expected
+  
+  + 'A PRIVATE CONTENT'
+  - ''
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs:58:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'A PRIVATE CONTENT',
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\community-local-ui.test.cjs:62:1
+✖ discovering B during submit must not send an earlier snapshot of A private text (2.1887ms)
+  AssertionError [ERR_ASSERTION]: An A-bound private snapshot must never be POSTed after B verification
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs:72:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\community-local-ui.test.cjs:75:1
+✖ identity-page broadcasts invalidate an in-flight A private read (1.1183ms)
+  AssertionError [ERR_ASSERTION]: An obsolete A private response must not render after an identity change notification
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs:80:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\community-local-ui.test.cjs:83:1
+✖ an unsent member draft is cleared when another member is verified (1.0049ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'A unsent member draft'
+  - ''
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs:87:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'A unsent member draft',
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\community-local-ui.test.cjs:90:1
+✖ online revalidation rejects an old private response and fails closed on auth failure (4.4949ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(!readableText(p.elements.items).includes(secret.content))
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs:93:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

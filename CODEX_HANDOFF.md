@@ -1,3 +1,5 @@
+> **2026-11-07 检查点2独立代码安全验收**：实际受审候选为 c769400cf09c95b0085e2e9f93f0b00d2b3767bc，继承35ae9a6；发现切号旧正文提交、身份失败残留、跨窗口延迟回包、UUID大小写锁及等锁到期5项问题，均已最小修复。原PG13/13、新专项4/4、HTTPS、真实浏览器与五宽度、只读隔离46/46、API14/安全93、tsc/ESLint/Build通过。只保存在原本地独立分支的新提交，未推送/部署/迁移，不开始检查点3；最终完整SHA见本条所属提交及最终答复。[独立审查与复现证据](artifacts/phase3-community/independent-review-20261107/REVIEW.md)。以下为原交付历史快照，不能替代本次审查结论。
+
 > **2026-11-07 第三阶段检查点2，本地合成留言与攻略**：本轮工作树为`E:/Recovery/.jinxi-research/phase3-community/worktree`，分支`codex/jinxi-phase3-community-local`，从已推送身份提交`35ae9a676813249ae2beff9845251eb57a72855c`继承；原身份工作树不改。实现可信UUID归属、留言/攻略状态、服务端审核/管理授权、回复与互动、幂等/版本/回滚。真实PG13/13、实际HTTPS、浏览器完整流程及五宽度通过；旧公开读取/TEST模型PG46、API14/安全86、原始tsc/ESLint/Build通过。旧入口仍冻结，全部业务数据合成，主站UI/FAQ/公告不改。仅本地提交，未推送/部署/迁移/更改平台，最终SHA以本条所属提交及最终答复为准。[本轮最终审查与证据](artifacts/phase3-community/FINAL_REVIEW.md)。下方均为保留的历史快照，其“当前/未推送”等措辞只对应当时。
 
 > **身份检查点已推送记录**：身份分支`codex/jinxi-phase3-member-local`已在此前单独授权下推送35ae9a6；上轮真实[GitHub Actions](https://github.com/2574303451-create/jinxi-web/actions/runs/42363078349)对应完整SHA35ae9a676813249ae2beff9845251eb57a72855c，completed/success，本轮只读复核原运行。这个CI不覆盖本轮未推送的留言与攻略代码。

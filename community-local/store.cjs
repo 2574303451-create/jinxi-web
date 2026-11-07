@@ -13,7 +13,7 @@ async function mutate(c,body,member){
  let item;
  if(['reply.create','reply.delete','reaction.set'].includes(body.op)){
   if(!uuid(body.id))fail(400,'INVALID_ID');
-  await c.query('SELECT pg_advisory_xact_lock_shared(hashtextextended($1,73))',[body.id]);
+  await c.query('SELECT pg_advisory_xact_lock_shared(hashtextextended($1,73))',[body.id.toLowerCase()]);
   item=(await c.query('SELECT * FROM community_lab.items WHERE id=$1',[body.id])).rows[0];
   if(!item||item.status!=='published')fail(404,'NOT_FOUND');
   if(item.legacy)fail(403,'LEGACY_OWNERSHIP_UNVERIFIED');
@@ -43,7 +43,7 @@ async function mutate(c,body,member){
   if(body.op==='item.review'){if(!['reviewer','admin'].includes(staff)||existing.owner_id===actor)fail(403,'REVIEWER_REQUIRED');}
   else if(body.op==='item.pin'){if(staff!=='admin')fail(403,'ADMIN_REQUIRED');}
   else if(existing.owner_id!==actor&&!(body.op==='item.delete'&&staff==='admin'))fail(403,'NOT_OWNER');
-  await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,73))',[body.id]);
+  await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,73))',[body.id.toLowerCase()]);
   item=(await c.query('SELECT * FROM community_lab.items WHERE id=$1 FOR UPDATE',[body.id])).rows[0];if(!item)fail(404,'NOT_FOUND');
   if(item.version!==body.version)fail(409,'VERSION_CONFLICT');
   let data=item.payload,status=item.status,pinned=item.is_pinned;

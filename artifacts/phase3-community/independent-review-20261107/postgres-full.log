@@ -1,0 +1,26 @@
+
+> my-v0-project@0.1.0 test:community-local
+> node tests/community-local-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (1699.6214ms)
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (5368.0281ms)
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (4691.7349ms)
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (8085.6779ms)
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (2711.5097ms)
+  ✔ interaction and unpublishing serialize without a partially visible reply (2640.269ms)
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (5061.784ms)
+  ✔ logout, a lock and expiry between identity lookup and business transaction still refuse the write (3440.256ms)
+  ✔ untrusted author flags, malformed text and media references never enter content storage (5518.1122ms)
+  ✔ the actual business role cannot grant authority, read password hashes or forge ownership/audit (1035.1075ms)
+  ✔ database policies also forbid staff self-review and changing somebody else's body (1858.3529ms)
+  ✔ every role leaves legacy content and all its interaction rows read-only (7390.2201ms)
+✔ trusted local community operations on actual PostgreSQL (83460.3769ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83463.3847

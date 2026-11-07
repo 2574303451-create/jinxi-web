@@ -1,0 +1,55 @@
+▶ independent community concurrency and revocation regressions on PostgreSQL
+  ✖ different UUID letter case cannot split the lock for one item (1305.7829ms)
+  ✖ expiry while waiting for the account lock is evaluated at actual validation time (1243.1774ms)
+  ✔ changing the password after identity lookup invalidates the business request and receipt (1284.3413ms)
+✖ independent community concurrency and revocation regressions on PostgreSQL (37410.444ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37413.1496
+
+✖ failing tests:
+
+test at tests\community-local-review-postgres.test.cjs:14:11
+✖ different UUID letter case cannot split the lock for one item (1305.7829ms)
+  AssertionError [ERR_ASSERTION]: Canonical and upper-case UUIDs must share the same content lock
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-review-postgres.test.cjs:23:62)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-review-postgres.test.cjs:14:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\community-local-review-postgres.test.cjs:25:11
+✖ expiry while waiting for the account lock is evaluated at actual validation time (1243.1774ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-review-postgres.test.cjs:32:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-review-postgres.test.cjs:25:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

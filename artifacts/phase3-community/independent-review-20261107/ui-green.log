@@ -1,0 +1,15 @@
+✔ failed identity revalidation removes server-loaded private editor text (3.6557ms)
+✔ discovering B during submit must not send an earlier snapshot of A private text (1.8809ms)
+✔ identity-page broadcasts invalidate an in-flight A private read (0.887ms)
+✔ an unsent member draft is cleared when another member is verified (0.8029ms)
+✔ online revalidation rejects an old private response and fails closed on auth failure (0.8131ms)
+✔ a late A write response cannot clear a newly verified B draft or publish A content (0.9529ms)
+✔ a delayed A identity lookup cannot start a write after a B identity broadcast (0.7476ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 84.2793

@@ -1,0 +1,162 @@
+{
+  "capturedAt": "2026-11-07T12:17:00.935Z",
+  "root": "E:/Recovery/.jinxi-research/phase3-community/worktree",
+  "remote": "https://github.com/2574303451-create/jinxi-web.git",
+  "branch": "codex/jinxi-phase3-community-local",
+  "initialHead": "c769400cf09c95b0085e2e9f93f0b00d2b3767bc",
+  "initialWorkspaceClean": true,
+  "suppliedCandidate": "c769400cf09c95b0085e2e9f93f0b0ed2b3767bc",
+  "canonicalCandidate": "c769400cf09c95b0085e2e9f93f0b00d2b3767bc",
+  "base": "35ae9a676813249ae2beff9845251eb57a72855c",
+  "ancestorsVerified": [
+    "13de96d7531dde3222fdf513e711447a1df3e425",
+    "d43ee24cfde1277eedabc8c8856de697b702dc0f",
+    "03f20a11cd1ec57ff779a10988fb7039cbf0ba05",
+    "6f71de9eec8093e3d139b3201fe4249c6b0e52ff",
+    "35ae9a676813249ae2beff9845251eb57a72855c",
+    "c769400cf09c95b0085e2e9f93f0b00d2b3767bc"
+  ],
+  "protectedPaths": [
+    "app",
+    "components",
+    "hooks",
+    "lib",
+    "services",
+    "types",
+    "styles",
+    "public",
+    "member-local",
+    "netlify",
+    "test-environment",
+    ".github",
+    "netlify.toml",
+    "package-lock.json",
+    "UI_AUDIT.md"
+  ],
+  "protectedDiff": [],
+  "changedSinceCandidate": [
+    "CODEX_HANDOFF.md",
+    "community-local/README.md",
+    "community-local/demo.js",
+    "community-local/handler.cjs",
+    "community-local/store.cjs",
+    "package.json",
+    "tests/community-local-browser.cjs"
+  ],
+  "newFiles": [
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/community-1024.png",
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/community-1440.png",
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/community-320.png",
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/community-390.png",
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/community-768.png",
+    "artifacts/phase3-community/browser/2026-11-07T12-08-21-604Z/results.json",
+    "artifacts/phase3-community/independent-review-20261107/REVIEW.md",
+    "artifacts/phase3-community/independent-review-20261107/api-security-final.log",
+    "artifacts/phase3-community/independent-review-20261107/api-security.log",
+    "artifacts/phase3-community/independent-review-20261107/browser-first.log",
+    "artifacts/phase3-community/independent-review-20261107/build.log",
+    "artifacts/phase3-community/independent-review-20261107/https.log",
+    "artifacts/phase3-community/independent-review-20261107/lint-fixed.log",
+    "artifacts/phase3-community/independent-review-20261107/lint.log",
+    "artifacts/phase3-community/independent-review-20261107/postgres-fixed.log",
+    "artifacts/phase3-community/independent-review-20261107/postgres-full.log",
+    "artifacts/phase3-community/independent-review-20261107/postgres-red.log",
+    "artifacts/phase3-community/independent-review-20261107/readonly-postgres.log",
+    "artifacts/phase3-community/independent-review-20261107/typecheck.log",
+    "artifacts/phase3-community/independent-review-20261107/ui-first-green.log",
+    "artifacts/phase3-community/independent-review-20261107/ui-green.log",
+    "artifacts/phase3-community/independent-review-20261107/ui-red.log",
+    "tests/community-local-review-postgres.test.cjs",
+    "tests/community-local-ui.test.cjs"
+  ],
+  "testIntegrity": [
+    {
+      "file": "tests/community-local-postgres.test.cjs",
+      "unchanged": true,
+      "beforeAssertions": 94,
+      "afterAssertions": 94,
+      "originalAssertionLinesRetained": true,
+      "skipTodoOnly": false
+    },
+    {
+      "file": "tests/community-local-https.test.cjs",
+      "unchanged": true,
+      "beforeAssertions": 23,
+      "afterAssertions": 23,
+      "originalAssertionLinesRetained": true,
+      "skipTodoOnly": false
+    },
+    {
+      "file": "tests/community-local-boundary.test.cjs",
+      "unchanged": true,
+      "beforeAssertions": 12,
+      "afterAssertions": 12,
+      "originalAssertionLinesRetained": true,
+      "skipTodoOnly": false
+    },
+    {
+      "file": "tests/community-local-browser.cjs",
+      "unchanged": false,
+      "beforeAssertions": 33,
+      "afterAssertions": 49,
+      "originalAssertionLinesRetained": true,
+      "skipTodoOnly": false
+    }
+  ],
+  "node": "v24.22.2",
+  "postgres": "postgres (PostgreSQL) 17.11",
+  "playwright": "1.64.1",
+  "tests": {
+    "originalPostgres": {
+      "pass": 13,
+      "fail": 0,
+      "skip": 0
+    },
+    "reviewPostgres": {
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    },
+    "https": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "publicReadonly": {
+      "pass": 46,
+      "fail": 0,
+      "skip": 0
+    },
+    "api": {
+      "pass": 14,
+      "fail": 0,
+      "skip": 0
+    },
+    "security": {
+      "pass": 93,
+      "fail": 0,
+      "skip": 0,
+      "includesUiEvents": 7
+    },
+    "browser": true,
+    "typecheckExit": 0,
+    "lintExit": 0,
+    "buildExit": 0
+  },
+  "secretScan": {
+    "filesScanned": 26,
+    "ruleNames": [
+      "private-key",
+      "database-dsn",
+      "github-token",
+      "jwt",
+      "session-cookie"
+    ],
+    "findings": [],
+    "manualScopeReview": "Only synthetic fixtures; no private credentials, TLS keys, dumps, temporary tools or real member data. Patterns alone are not an exhaustive detector."
+  },
+  "push": false,
+  "deploy": false,
+  "cloudReadOrWrite": false,
+  "finalState": "Before local fix commit; immutable final SHA is in Git commit metadata and the final reply."
+}

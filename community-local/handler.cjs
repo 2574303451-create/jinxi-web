@@ -44,7 +44,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     const token=tokenFrom(event);if(!token)fail(401,'SESSION_INVALID');
     const lookup=(await c.query('SELECT account_id FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(token)])).rows[0];if(!lookup)fail(401,'SESSION_INVALID');
     const a=(await c.query('SELECT a.id,a.is_locked,a.force_reset_password,p.is_active,p.nickname,s.member_id,s.auth_version,s.disabled_at FROM b2_lab.guild_member_accounts a JOIN b2_lab.guild_member_profiles p USING(employee_no) JOIN b2_lab.member_account_security_v2 s ON s.account_id=a.id WHERE a.id=$1 FOR UPDATE OF a',[lookup.account_id])).rows[0];
-    const s=(await c.query('SELECT account_id,csrf_hash,csrf_key_id,auth_version,revoked_at,expires_at>now() AND idle_expires_at>now() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 FOR UPDATE',[hash(token)])).rows[0];
+    const s=(await c.query('SELECT account_id,csrf_hash,csrf_key_id,auth_version,revoked_at,expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 FOR UPDATE',[hash(token)])).rows[0];
     if(!a||!s||a.member_id!==member.member.id||a.is_locked||!a.is_active||a.disabled_at||s.revoked_at||!s.live||s.auth_version!==a.auth_version||s.csrf_key_id!=='local-v1')fail(401,'SESSION_INVALID');
     if(a.force_reset_password)fail(403,'PASSWORD_RESET_REQUIRED');
     if(method==='POST'&&!crypto.timingSafeEqual(hash(header(event,'x-csrf-token')),s.csrf_hash))fail(403,'CSRF_REJECTED');

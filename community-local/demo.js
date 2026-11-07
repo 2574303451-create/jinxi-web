@@ -1,5 +1,6 @@
 const el=id=>document.getElementById(id);
-let member=null,busy=false,pending=null,editing=null,editorFromServer=false,generation=0;
+let member=null,busy=false,verifying=false,pending=null,editing=null,editorFromServer=false,generation=0;
+const channel=typeof BroadcastChannel==='function'?new BroadcastChannel('jinxi-member-local-refresh'):null;
 const statusName={draft:'草稿',submitted:'待审核',published:'已公开',rejected:'已退回',archived:'已归档',deleted:'已删除'};
 function notice(text,error=false){el('notice').textContent=text;el('notice').setAttribute('role',error?'alert':'status');}
 async function request(url,options={}){
@@ -8,8 +9,9 @@ async function request(url,options={}){
  return data;
 }
 function controls(){
- for(const b of document.querySelectorAll('button'))b.disabled=busy;
- el('compose').querySelector('button[type=submit]').disabled=busy||!member||member.needsPasswordChange||!!pending;
+ for(const b of document.querySelectorAll('button'))b.disabled=busy||verifying;
+ el('compose').hidden=verifying;
+ el('compose').querySelector('button[type=submit]').disabled=busy||verifying||!member||member.needsPasswordChange||!!pending;
  el('retry').hidden=!pending;el('cancel').hidden=!pending;
  el('session').textContent=member?member.member.displayName+(member.needsPasswordChange?' · 需要先改密':' · 已由服务器核验'):'游客 · 仅公开读取';
 }
@@ -18,7 +20,7 @@ async function identity(){
 }
 function setIdentity(current){
  if(member?.member.id!==current?.member.id){
-  if(editorFromServer)clearEditor();
+  clearEditor();
   el('items').replaceChildren();editing=null;
   el('editing').textContent='作者来自当前服务器会话，不填写昵称或成员ID。';
  }
@@ -60,33 +62,37 @@ function render(items){
  }
 }
 async function reload(){
- if(busy)return;
- const ticket=++generation;el('loading').hidden=false;el('items').replaceChildren();
+ const ticket=++generation;let verified=false;
+ verifying=true;controls();el('loading').hidden=false;el('items').replaceChildren();
  try{
   const current=await identity();if(ticket!==generation)return;setIdentity(current);
+  verified=true;verifying=false;controls();
   const data=await request('/api/community?'+new URLSearchParams({kind:el('kind').value,scope:el('scope').value}));
   if(ticket===generation)render(data.items);
- }catch(e){if(ticket===generation){el('items').replaceChildren();notice(e instanceof TypeError?'网络不可用；正文保留，可重新读取。':'读取被拒绝：'+e.message,true);}}
- finally{if(ticket===generation)el('loading').hidden=true;}
+ }catch(e){if(ticket===generation){if(!verified||e.status===401||e.status===403)setIdentity(null);el('items').replaceChildren();notice(e instanceof TypeError?'网络不可用；身份未确认时清除私有草稿，请重新核验。':'读取被拒绝：'+e.message,true);}}
+ finally{if(ticket===generation){verifying=false;controls();el('loading').hidden=true;}}
 }
 async function operate(body,retry=false){
- if(busy)return;
+ if(busy||verifying)return;
  if(pending&&!retry){notice('原请求结果尚未确认，请先重试原请求。',true);return;}
- busy=true;generation++;el('loading').hidden=true;controls();
- let submitted=false;
+ const expectedMemberId=retry?pending.memberId:member?.member.id,ticket=++generation;
+ busy=true;verifying=true;el('loading').hidden=true;el('items').replaceChildren();controls();
+ let submitted=false,identityVerified=false;
  try{
-  setIdentity(await identity());if(!member||member.needsPasswordChange)throw Object.assign(Error('SIGN_IN_REQUIRED'),{status:401});
-  if(retry&&pending.memberId!==member.member.id)throw Object.assign(Error('ACCOUNT_CHANGED_REQUEST_NOT_REPLAYED'),{status:403});
+  const current=await identity();if(ticket!==generation)return;
+  setIdentity(current);identityVerified=true;verifying=false;controls();if(!member||member.needsPasswordChange)throw Object.assign(Error('SIGN_IN_REQUIRED'),{status:401});
+  if(expectedMemberId!==member.member.id)throw Object.assign(Error('ACCOUNT_CHANGED_REQUEST_NOT_REPLAYED'),{status:403});
   if(!retry)pending={memberId:member.member.id,body:{...body,requestId:crypto.randomUUID()}};
   submitted=true;
   const result=await request('/api/community',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':member.csrfToken},body:JSON.stringify(pending.body)});
+  if(verifying||member?.member.id!==expectedMemberId)return;
   pending=null;editing=null;el('editing').textContent='作者来自当前服务器会话，不填写昵称或成员ID。';
   notice('操作成功：'+(statusName[result.item?.status]||'已保存'));
   if(body.op.endsWith('.create')&&body.op!=='reply.create'){el('scope').value='mine';el('body').value='';}
  }catch(e){
   if(submitted&&!(e instanceof TypeError)&&e.status<500)pending=null;
-  notice(e instanceof TypeError?'网络中断，结果待确认；请重试原请求。':'操作被拒绝：'+e.message,true);
- }finally{busy=false;controls();await reload();}
+  if(ticket===generation){if(!identityVerified)setIdentity(null);notice(e instanceof TypeError?'网络中断，结果待确认；请重试原请求。':'操作被拒绝：'+e.message,true);}
+ }finally{busy=false;if(ticket===generation)verifying=false;controls();await reload();}
 }
 el('compose').addEventListener('submit',event=>{
  event.preventDefault();
@@ -102,5 +108,6 @@ el('cancel').addEventListener('click',()=>{if(busy)return;pending=null;controls(
 el('new').addEventListener('click',()=>{if(editorFromServer)clearEditor();editing=null;el('editing').textContent='作者来自当前服务器会话，不填写昵称或成员ID。';});
 el('kind').addEventListener('change',()=>{editing=null;el('guide-fields').hidden=el('kind').value!=='guide';el('body').maxLength=el('kind').value==='guide'?10000:1000;void reload();});
 el('scope').addEventListener('change',()=>void reload());el('reload').addEventListener('click',()=>void reload());
-window.addEventListener('focus',()=>void reload());
+channel?.addEventListener('message',()=>void reload());
+window.addEventListener('online',()=>void reload());window.addEventListener('focus',()=>void reload());
 controls();void reload();

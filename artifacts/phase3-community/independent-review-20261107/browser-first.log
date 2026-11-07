@@ -1,0 +1,5 @@
+
+> my-v0-project@0.1.0 test:community-browser
+> node tests/community-local-browser.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin --openssl D:/Program Files/Git/usr/bin/openssl.exe --playwright-module E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright
+
+{"passed":true,"directory":"E:\\Recovery\\.jinxi-research\\phase3-community\\worktree\\artifacts\\phase3-community\\browser\\2026-11-07T12-08-21-604Z","viewports":[{"width":1440,"passed":true},{"width":1024,"passed":true},{"width":768,"passed":true},{"width":390,"passed":true},{"width":320,"passed":true}]}

@@ -1,0 +1,10 @@
+
+> my-v0-project@0.1.0 lint
+> eslint app components hooks lib services types netlify/functions tests scripts member-local community-local --no-warn-ignored --max-warnings 0
+
+
+E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-ui.test.cjs
+  7:38  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+✖ 1 problem (1 error, 0 warnings)
+

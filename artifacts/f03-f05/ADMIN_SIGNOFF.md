@@ -8,9 +8,11 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过，范围为当前目标的只读目录审查及初始化准备；第二关已获用户限定授权，云端初始化待执行；第三关未执行。** 用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，未见执行错误，末项 ROLLBACK 可见。证据来自用户控制台操作，本机没有连接 Neon。此前两次空表/视图/序列检查不重复执行。
+2026-11-07 状态：**第一关通过；第二关已获用户限定授权，用户已回传整批初始化运行截图，最后回执及 COMMIT 待核对；第三关未执行。** 第一关用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，未见执行错误，末项 ROLLBACK 可见。证据来自用户控制台操作，本机没有连接 Neon。此前两次空表/视图/序列检查不重复执行。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
+
+下表是第一关预检快照，不代表初始化后的当前对象或角色数量。
 
 | 资料 | 已核查结果 / 后续负责动作 |
 | --- | --- |
@@ -45,7 +47,15 @@
 
 批准人：用户，本会话附件授权及继续指令；资源为以上唯一 TEST 目标，独立站点名 jinxi-web-test（可用性待核实）；有效窗口：本次建设及验收；费用上限：0，不升级套餐、不接受付费附加项；实施与 TEST 回滚：Codex 在此次授权范围内执行，需控制台权限的私密凭据操作由管理员完成。
 
-### 当前管理员执行项：一次整批初始化
+### 当前管理员执行项：查看本次最后三个结果，不重跑
+
+用户已回传 `codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png`：界面为 jinxi-test / production / neondb，标注 Connected (69 queries)、433ms；第 53/54 项各 INSERT 4 行，第 63 项 INSERT 5 行、第 64 项 UPDATE 1 行等与已交付合成种子一致。当前画面显示 Statement executed successfully，但选中的结果标签在画面之外，不能将其直接认作最终 COMMIT。第 67/68/69 项尚未显示，初始化签核暂不通过，也不认定失败。
+
+“last 15427 characters ... truncated from query history”提示的是历史保存长度，界面明确说明 query will still run OK；不要求缩短、拆分或重跑 SQL。本地原稿及 SHA256 保持不变，不能依赖被截断的历史记录重新执行。
+
+**现在只做一次结果回传：** 将结果标签正下方的灰色横向滚动条拖到最右，依次查看 **67 SELECT**（合成数量）、**68 SELECT**（资源及角色回执）、**69 COMMIT**。前两项可导出 CSV，最后一项提供能看见标签及成功状态的截图；也可一次集中提供清晰结果截图。不要点击 Run，不重新生成文件，不回滚，不开始配置角色或部署。结果内容要求及预期值见下方原执行说明。
+
+### 初始化执行说明（已运行，保留复核，不重复执行）
 
 Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，未输入或运行云端 SQL。该工具故障不代表资源授权缺失；按用户已批准的管理员代执行路径推进，不再重复同一浏览器重试。
 
@@ -55,7 +65,7 @@ Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，
 
 本机交付：生成文件 SHA256 `b3137364c865ae45f379ebbacd687c00ef613bcbe28e458234eb72a91d199419`；注册 UUID `0fdb5a68-436e-4a80-b01d-5b0207637eac`（非秘密身份标识）。整批脚本/生成器受测源码与提交 `8ce78a9f8a815159d8642dc3fc984c3e255aa0f4` 一致；PG17.11 专测 9/9、变更范围 ESLint 退出 0，日志见 bootstrap-review.log。失败结果及原因保留于 bootstrap-before-fix.log / FAILURES.md。云端 PostgreSQL18.6 只读身份已有证据，但 DDL、实际角色认证及托管权限仍未验收。
 
-**管理员现在唯一操作：** Neon 选中 `jinxi-test / production / neondb`，确认仍是以上获批项目/分支/endpoint、初始化角色为 neondb_owner；打开本地 `cloud-bootstrap.local.sql`，完整复制到 SQL Editor，清除选区后一次 Run 全文。不要另跑 00、历史 schema、导入器、01/02/03 单文件或回滚脚本，不分段执行。
+**已交付的执行步骤，仅作复核存档：** Neon 选中 `jinxi-test / production / neondb`，确认仍是以上获批项目/分支/endpoint、初始化角色为 neondb_owner；打开本地 `cloud-bootstrap.local.sql`，完整复制到 SQL Editor，清除选区后一次 Run 全文。用户已回传本次运行截图，当前不要重复该步骤。
 
 - 预期原核验结果：fixture=synthetic-test-v1，strategies=5，messages=2，synthetic_accounts=4，cloud_sessions=0。
 - 最后资源回执应为 READY_TO_COMMIT、seed_version=1，资源 IDs 与本表一致；三角色 can_login/superuser/create_db/create_role/replication/bypass_rls 均为 false。**回执仍在事务内，必须同时看到无错误及最终 COMMIT 才算初始化成功。**

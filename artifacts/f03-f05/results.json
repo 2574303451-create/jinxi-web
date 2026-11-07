@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "not collected; scope is not a measured cloud connection counter",
-  "cloudAcceptance": "Not run; limited Gate 2 authorization received. Administrator execution of prepared atomic TEST bootstrap is pending after browser-control URL-policy failure. Gate 3 has not started.",
+  "cloudAcceptance": "Limited Gate 2 authorized. User bootstrap screenshot received; final counts/resource receipts and COMMIT pending. Actual reader authentication/permissions and hosted Gate 3 acceptance have not run.",
   "checks": [
     {
       "name": "typecheck",
@@ -72,7 +72,7 @@
     "scopedEslintExitCode": 0,
     "priorFullSuiteHead": "297834e167f36c24f7e31d31d074f439bcef52f2",
     "cloudResult": "User-returned read-only results and provider IDs reviewed. Gate 1 passed for metadata/initialization readiness only; current Gate 2 authorization and execution status are recorded below.",
-    "cloudWrites": "Gate 1 was read-only. Later limited Gate 2 authorization is recorded below; no cloud writes have been performed."
+    "cloudWrites": "Gate 1 was read-only. Later user bootstrap-run evidence is recorded under gate2Execution; Codex has not executed cloud SQL."
   },
   "gate1Evidence": {
     "date": "2026-11-07",
@@ -186,7 +186,7 @@
       "codex-clipboard-b34d8234-fda0-4554-98c6-a8ce9c297a66.png"
     ],
     "sourceRetention": "Original files remain in user Downloads/Temp; no raw CSV or screenshot copied into Git.",
-    "remaining": "Gate 2 authorization received; initialization and actual reader authentication/permissions await administrator execution. Gate 3 hosted/isolation acceptance has not run."
+    "remaining": "Gate 2 authorization received and user bootstrap-run screenshot reviewed; final commit/count/resource receipts, actual reader proof and hosted acceptance remain pending."
   },
   "platformDefaultAclCompatibility": {
     "testedSourceHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
@@ -218,7 +218,7 @@
       "log": "neon-default-acl-baseline.log"
     },
     "scopedEslintExitCode": 0,
-    "scopeLimit": "Local SQL compatibility/regression at Gate 1 only. Original full project checks above retain their historical source SHA. Later limited cloud authorization is recorded under gate2Execution; no cloud writes, role changes or deployments have run."
+    "scopeLimit": "Local SQL compatibility/regression at Gate 1 only. Original full project checks above retain their historical source SHA. Later limited authorization and user bootstrap screenshot are recorded under gate2Execution; no Codex cloud SQL or site operation."
   },
   "gate2Execution": {
     "date": "2026-11-07",
@@ -289,7 +289,7 @@
         "tests/bootstrap-postgres.test.cjs": "389dc643ba11b60d159c0442271e4419faeaec272386e4cbec09b6aa3828563e"
       }
     },
-    "databaseInitialization": "pending administrator whole-file execution",
+    "databaseInitialization": "User supplied a screenshot of the bootstrap run; visible synthetic INSERT counts match. Commit and final two result sets are not visible, so initialization sign-off remains pending. Do not rerun bootstrap.",
     "roleAuthentication": "not run; credentials not requested/handled; no actual reader proof yet",
     "netlifySiteId": null,
     "deployId": null,
@@ -298,7 +298,98 @@
     "gitPushes": "none",
     "newPrs": 0,
     "newCloudResources": 0,
-    "incrementalFeesIncurred": 0,
-    "nextAdministratorAction": "Select the approved jinxi-test / production / neondb as neondb_owner and execute cloud-bootstrap.local.sql in one Run; return original count result, resource receipt and final COMMIT, or the error after ending a failed transaction with ROLLBACK. No repeated preflight or credentials requested."
+    "incrementalFeesIncurred": "No paid resource creation or plan-upgrade action by Codex; provider billing not queried.",
+    "nextAdministratorAction": "View existing results only: move result-tabs scrollbar fully right, return tabs 67 SELECT and 68 SELECT plus tab 69 COMMIT. Do not click Run, regenerate bootstrap, configure passwords or change permissions yet.",
+    "userBootstrapRun": {
+      "source": "User-supplied screenshot, not a direct Codex database connection",
+      "screenshot": "codex-clipboard-ac626c1d-6bf0-44d3-8aff-6e233da1e391.png",
+      "sha256": "f1993ccb1913db2295d83b9d74bdfca0c791221ed48ca8b915b671410f761bfe",
+      "visibleResource": "Neon jinxi-test / production / neondb",
+      "editorQueryCount": 69,
+      "elapsedMsShown": 433,
+      "visibleStatements": [
+        {
+          "index": 53,
+          "command": "INSERT",
+          "affectedRows": 4
+        },
+        {
+          "index": 54,
+          "command": "INSERT",
+          "affectedRows": 4
+        },
+        {
+          "index": 55,
+          "command": "INSERT",
+          "affectedRows": 1
+        },
+        {
+          "index": 56,
+          "command": "INSERT",
+          "affectedRows": 1
+        },
+        {
+          "index": 57,
+          "command": "INSERT",
+          "affectedRows": 2
+        },
+        {
+          "index": 58,
+          "command": "INSERT",
+          "affectedRows": 2
+        },
+        {
+          "index": 59,
+          "command": "INSERT",
+          "affectedRows": 1
+        },
+        {
+          "index": 60,
+          "command": "INSERT",
+          "affectedRows": 2
+        },
+        {
+          "index": 61,
+          "command": "INSERT",
+          "affectedRows": 1
+        },
+        {
+          "index": 62,
+          "command": "INSERT",
+          "affectedRows": 1
+        },
+        {
+          "index": 63,
+          "command": "INSERT",
+          "affectedRows": 5
+        },
+        {
+          "index": 64,
+          "command": "UPDATE",
+          "affectedRows": 1
+        }
+      ],
+      "statusText": "Statement executed successfully; selected result tab is off-screen, so this is not attributed to COMMIT.",
+      "historyNotice": "UI says the last 15427 characters will be truncated from query history, not from execution. Original local bootstrap remains preserved.",
+      "commitConfirmed": false,
+      "countsReceiptReviewed": false,
+      "resourceReceiptReviewed": false,
+      "finalTabsRequired": [
+        {
+          "index": 67,
+          "expected": "SELECT: fixture and synthetic counts"
+        },
+        {
+          "index": 68,
+          "expected": "SELECT: resource identity, seed_version and three role flags"
+        },
+        {
+          "index": 69,
+          "expected": "COMMIT, no execution error"
+        }
+      ],
+      "scope": "No new SQL/DDL was executed by Codex. Only current submitted evidence is reviewed; earlier no-cloud-operation statements refer to Codex actions before this user run."
+    },
+    "cloudResourceScope": "newCloudResources=0 covers project/site/bucket creation by Codex. Synthetic DB object changes by the user are evidenced by the screenshot and await final receipt confirmation."
   }
 }

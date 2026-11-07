@@ -8,7 +8,7 @@
 
 ## 第一关：只读资料，已集中审查
 
-2026-11-07 状态：**第一关通过，范围为当前目标的只读目录审查及初始化准备；第二关待明确授权，第三关未执行。** 用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，未见执行错误，末项 ROLLBACK 可见。证据来自用户控制台操作，本机没有连接 Neon。此前两次空表/视图/序列检查不重复执行。
+2026-11-07 状态：**第一关通过，范围为当前目标的只读目录审查及初始化准备；第二关已获用户限定授权，云端初始化待执行；第三关未执行。** 用户回传 8 份 CSV、2 张 SQL Editor 截图，并补齐 project/branch/endpoint IDs。截图中的 17 个 SELECT 对应 8 个非空结果、9 个空结果，未见执行错误，末项 ROLLBACK 可见。证据来自用户控制台操作，本机没有连接 Neon。此前两次空表/视图/序列检查不重复执行。
 
 `00-preflight.sql` 保持已审查版本，只有只读目录查询及事务设置，不返回凭据或业务行。成员关系逐项 INHERIT/SET 标志均有值；复核记录及原 SQL 专测见 results.json 的 gate1Review。**未知对象不清除，权限报错不跳过；第一关不授权远程 DDL/DML。**
 
@@ -32,9 +32,9 @@
 
 此次结果及资源 IDs 已齐，不再要求补跑同一预检或重复截图。若批准建设前目标身份或结构实际变化，停止对应动作并核对差异；SQL 失败只做 ROLLBACK，不跳过失败项或自行补权。SQL 不能认证 Neon project/branch，已结合上述用户控制台与文字证据确认提供方身份。
 
-## 第二关：集中批准云建设（当前待授权）
+## 第二关：集中批准云建设（已授权，执行中）
 
-第一关已通过，以下仍是**拟授权范围，尚未获得云写入许可**。一次批准明确资源与动作，不用泛化的 approved 标记替代：
+第一关已通过。用户已通过本会话《F03/F05 第二关正式授权与云端 TEST 建设执行指令》批准以下限定资源及动作，随后两次明确继续。**授权已取得，不再重复申请；执行前置条件仍须满足。** 不用泛化的 approved 标记替代实际资源和权限证明：
 
 - 仅在上述 project restless-salad-74668264、branch br-red-pond-bdtrjpmy、endpoint ep-dry-queen-bd6q46s6、neondb 执行 01/02/03、创建 TEST 专属角色和凭据；writer 保持 NOLOGIN。不得连接 jinxi-web / production 或 pr17-validation。
 - 创建/复用一个独立 `jinxi-web-test` 站点（名称以可用为准），不新增付费规格、项目或存储。创建前确认免费额度与超额行为，遇付费要求停止。
@@ -43,7 +43,26 @@
 - 实现基线为已受测提交 316ae73c9de885ad4ec08c7a70c5a3cd0650d374，其后本次提交只登记审查证据。建站后允许的代码变化仅为将该批准资源、实际 TEST Site ID、私有初始化产生的非秘密注册 UUID/身份指纹填入既有绑定文件；检查差异并记录最终完整 SHA 后才推送、部署。其他功能改动不在本关授权内。
 - 失败仅停止 TEST、撤销 TEST 角色凭据、按批准脚本回滚 TEST 对象。
 
-批准人：待用户明确确认；资源为以上唯一 TEST 目标，独立站点名 jinxi-web-test（可用性待核实）；有效窗口：本次建设及验收；费用上限：0，不升级套餐、不接受付费附加项；实施与 TEST 回滚：Codex 在此次授权范围内执行，需控制台权限的私密凭据操作由管理员完成。未确认前不执行。
+批准人：用户，本会话附件授权及继续指令；资源为以上唯一 TEST 目标，独立站点名 jinxi-web-test（可用性待核实）；有效窗口：本次建设及验收；费用上限：0，不升级套餐、不接受付费附加项；实施与 TEST 回滚：Codex 在此次授权范围内执行，需控制台权限的私密凭据操作由管理员完成。
+
+### 当前管理员执行项：一次整批初始化
+
+Windows Computer Use 两次因无法可靠识别当前浏览器 URL 而停止，未输入或运行云端 SQL。该工具故障不代表资源授权缺失；按用户已批准的管理员代执行路径推进，不再重复同一浏览器重试。
+
+在本机运行 `node scripts/prepare-test-bootstrap.cjs`，离线生成已填参数的 `test-environment/sql/cloud-bootstrap.local.sql`。文件已由本轮执行生成，不需要管理员运行生成命令或自行拼接 SQL。它不联网、不读取 .env、不接受连接字符串；固定核对已审核 01/02/03 的 SHA256，不覆盖已生成文件。生成文件被 Git 忽略，摘要记录于原 results.json；原 01/02/03/04 均未改变。
+
+本文件仅将 01/02/03 的外层事务改为一个共同事务，保留原检查、DDL、权限、种子与核验语句。首个写入前核对 cluster、数据库 OID、neondb_owner、同一主体及 PG 180006；批准参数使用事务内 LOCAL 设置，无需多个 Run 复用会话。任一错误使整批事务失败，不能先提交结构、后留下失败种子；不会自动清除未知对象或提升 reader 权限。
+
+本机交付：生成文件 SHA256 `b3137364c865ae45f379ebbacd687c00ef613bcbe28e458234eb72a91d199419`；注册 UUID `0fdb5a68-436e-4a80-b01d-5b0207637eac`（非秘密身份标识）。整批脚本/生成器受测源码与提交 `8ce78a9f8a815159d8642dc3fc984c3e255aa0f4` 一致；PG17.11 专测 9/9、变更范围 ESLint 退出 0，日志见 bootstrap-review.log。失败结果及原因保留于 bootstrap-before-fix.log / FAILURES.md。云端 PostgreSQL18.6 只读身份已有证据，但 DDL、实际角色认证及托管权限仍未验收。
+
+**管理员现在唯一操作：** Neon 选中 `jinxi-test / production / neondb`，确认仍是以上获批项目/分支/endpoint、初始化角色为 neondb_owner；打开本地 `cloud-bootstrap.local.sql`，完整复制到 SQL Editor，清除选区后一次 Run 全文。不要另跑 00、历史 schema、导入器、01/02/03 单文件或回滚脚本，不分段执行。
+
+- 预期原核验结果：fixture=synthetic-test-v1，strategies=5，messages=2，synthetic_accounts=4，cloud_sessions=0。
+- 最后资源回执应为 READY_TO_COMMIT、seed_version=1，资源 IDs 与本表一致；三角色 can_login/superuser/create_db/create_role/replication/bypass_rls 均为 false。**回执仍在事务内，必须同时看到无错误及最终 COMMIT 才算初始化成功。**
+- 将上述两张结果表和最终 COMMIT 状态集中回传（CSV 或清晰截图均可）。允许分享资源/角色元数据与合成记录数量；不要分享账号行、密码、连接字符串或散列。
+- 任一错误、版本/目标不符、未知对象或异常权限：停止，只在必要时执行 `ROLLBACK;` 结束失败事务，回传错误文本；不要重复运行、修改参数、补权或删除对象。网络中断或提交结果不明确也停止，不自动重跑。
+
+该步骤只完成初始化与管理员核验，不等于 reader 真实认证或云端隔离通过。返回结果通过集中核对后，在同一第二关内继续私密配置 reader、执行真实角色证明，再进入独立 Netlify 建站；不新增关卡。
 
 ## 批准后的操作位置与配置
 

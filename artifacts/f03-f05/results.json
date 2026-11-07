@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "not collected; scope is not a measured cloud connection counter",
-  "cloudAcceptance": "not run; pending authorization and evidence",
+  "cloudAcceptance": "Not run; limited Gate 2 authorization received. Administrator execution of prepared atomic TEST bootstrap is pending after browser-control URL-policy failure. Gate 3 has not started.",
   "checks": [
     {
       "name": "typecheck",
@@ -71,8 +71,8 @@
     "beforeFixLog": "preflight-before-fix.log",
     "scopedEslintExitCode": 0,
     "priorFullSuiteHead": "297834e167f36c24f7e31d31d074f439bcef52f2",
-    "cloudResult": "User-returned read-only results and control-plane IDs reviewed; Gate 1 passed for metadata and initialization readiness only. Gate 2 is not authorized; cloud initialization, role provisioning and deployment have not run.",
-    "cloudWrites": "not authorized or performed"
+    "cloudResult": "User-returned read-only results and provider IDs reviewed. Gate 1 passed for metadata/initialization readiness only; current Gate 2 authorization and execution status are recorded below.",
+    "cloudWrites": "Gate 1 was read-only. Later limited Gate 2 authorization is recorded below; no cloud writes have been performed."
   },
   "gate1Evidence": {
     "date": "2026-11-07",
@@ -186,7 +186,7 @@
       "codex-clipboard-b34d8234-fda0-4554-98c6-a8ce9c297a66.png"
     ],
     "sourceRetention": "Original files remain in user Downloads/Temp; no raw CSV or screenshot copied into Git.",
-    "remaining": "Gate 2 requires explicit authorization, TEST-only credentials, site identity and actual cloud initialization. Gate 3 hosted identity/permissions/isolation acceptance has not run."
+    "remaining": "Gate 2 authorization received; initialization and actual reader authentication/permissions await administrator execution. Gate 3 hosted/isolation acceptance has not run."
   },
   "platformDefaultAclCompatibility": {
     "testedSourceHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
@@ -218,6 +218,87 @@
       "log": "neon-default-acl-baseline.log"
     },
     "scopedEslintExitCode": 0,
-    "scopeLimit": "Local SQL compatibility and regression only. Original full project checks above retain their actual historical source SHA. No new framework/build/typecheck claim; no cloud writes, role changes or deployments authorized/performed."
+    "scopeLimit": "Local SQL compatibility/regression at Gate 1 only. Original full project checks above retain their historical source SHA. Later limited cloud authorization is recorded under gate2Execution; no cloud writes, role changes or deployments have run."
+  },
+  "gate2Execution": {
+    "date": "2026-11-07",
+    "authorization": "User-authored F03/F05 Gate 2 execution directive attachment 76f376a3-5d8d-4f3e-aa7f-587cd1bd0b90, followed by explicit continue instructions; exact TEST resource only, incremental fee limit 0.",
+    "approvedCoreSourceHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
+    "handoffSourceHead": "8ce78a9f8a815159d8642dc3fc984c3e255aa0f4",
+    "sourceAttribution": "Passing SQL tests used the working-tree source snapshot committed unchanged as handoffSourceHead while the run was in flight; exact source/diff check completed after the run. Original SQL files and runtime code remain unchanged.",
+    "browserBlock": "Computer Use stopped twice because it could not confidently determine the current browser URL. No cloud SQL or site operation was entered; use the administrator execution path already authorized.",
+    "bootstrap": {
+      "file": "test-environment/sql/cloud-bootstrap.local.sql",
+      "gitIgnored": true,
+      "sha256": "b3137364c865ae45f379ebbacd687c00ef613bcbe28e458234eb72a91d199419",
+      "bytes": 25009,
+      "environmentId": "0fdb5a68-436e-4a80-b01d-5b0207637eac",
+      "sourceSqlHead": "316ae73c9de885ad4ec08c7a70c5a3cd0650d374",
+      "sourceSha256": {
+        "01-initialize": "63bde599cb6d7d403fa70f7077439cb21c6a44fffbb0c15fa5c35ce3597a7dfc",
+        "02-seed": "4af8dd665d0ae46e463c7781b21ae91b796517cc5aa1b987b1cadf320d1f5dbf",
+        "03-verify": "c0a60a1247a1365d7d0e590ff427932343294e6296fcfebe533919b7c6bc75e3"
+      },
+      "target": {
+        "projectId": "restless-salad-74668264",
+        "branchId": "br-red-pond-bdtrjpmy",
+        "endpointId": "ep-dry-queen-bd6q46s6",
+        "databaseName": "neondb",
+        "clusterId": "7704950029723409949",
+        "databaseOid": "16397",
+        "initializerRole": "neondb_owner",
+        "serverVersionNum": "180006"
+      },
+      "changes": "Only outer transaction boundaries are replaced by one transaction. Original guards, grants, fixtures and verification statements preserved. Target guard and transaction-local metadata added before DDL; no credential or LOGIN activation.",
+      "receipt": "Original synthetic count row plus resource/role metadata with READY_TO_COMMIT; require no error AND final COMMIT. Provisional result rows alone do not establish success."
+    },
+    "localValidation": {
+      "postgres": "17.11",
+      "targetObservedPostgres": "18.6; cloud DDL has not run",
+      "command": "node scripts/test-disposable-postgres.cjs --pg-bin <PG_BIN> --bootstrap-only",
+      "exitCode": 0,
+      "nodeReportedTests": 9,
+      "scenarios": 8,
+      "log": "bootstrap-review.log",
+      "scopedEslintExitCode": 0,
+      "firstFailure": {
+        "exitCode": 1,
+        "nodeReportedTests": 9,
+        "pass": 7,
+        "fail": 2,
+        "log": "bootstrap-before-fix.log",
+        "reason": "Raw NULL database ACL materializes as equivalent explicit grants on successful rollback. Final assertion compares every expanded grantor/grantee/privilege/grantability; aborted-batch assertion retains raw ACL comparison. SQL unchanged."
+      },
+      "checks": [
+        "wrong cluster and OID reject before DDL",
+        "wrong initializer and version reject before DDL",
+        "unknown object preserved",
+        "late failure removes all uncommitted roles/data and restores raw ACLs",
+        "non-superuser initializer commits init/seed/verify once",
+        "three roles remain NOLOGIN with no admin flags; reader/writer have no memberships",
+        "repeat invocation preserves committed fixtures",
+        "original rollback restores identical grants and platform default ACLs"
+      ],
+      "preparedFileMatchesGenerator": true,
+      "testedSourceMatchesCommit": true,
+      "fullProjectChecks": "Historical results above retain their original commit attribution; no new build/typecheck/API/hosted acceptance claim.",
+      "existingBootstrapPreserved": true,
+      "testedSourceSha256": {
+        "scripts/prepare-test-bootstrap.cjs": "bd59ddcb5654e0d93f9848e113e47fa1dd2b12331f7cf7a292e7e4a27020a628",
+        "scripts/test-disposable-postgres.cjs": "7816b69f63b824457f9c5ecf959ae6b94eed5c5f141495baf68d0f9e068b1a8c",
+        "tests/bootstrap-postgres.test.cjs": "389dc643ba11b60d159c0442271e4419faeaec272386e4cbec09b6aa3828563e"
+      }
+    },
+    "databaseInitialization": "pending administrator whole-file execution",
+    "roleAuthentication": "not run; credentials not requested/handled; no actual reader proof yet",
+    "netlifySiteId": null,
+    "deployId": null,
+    "deployedSha": null,
+    "runtimeBinding": "pending-approval, unchanged",
+    "gitPushes": "none",
+    "newPrs": 0,
+    "newCloudResources": 0,
+    "incrementalFeesIncurred": 0,
+    "nextAdministratorAction": "Select the approved jinxi-test / production / neondb as neondb_owner and execute cloud-bootstrap.local.sql in one Run; return original count result, resource receipt and final COMMIT, or the error after ending a failed transaction with ROLLBACK. No repeated preflight or credentials requested."
   }
 }

@@ -1,5 +1,7 @@
 # 保留的开发失败与修正
 
+2026-11-07 第二关管理员整批文件：首轮 9 个报告测试中 7 pass / 2 fail（包含父项），仅末项回滚原始 ACL 编码比较失败，原输出见 bootstrap-before-fix.log。原 04 正确恢复了授权，但 PostgreSQL 将 database datacl 的 NULL（隐式默认权限）物化为显式默认 ACL。最终回滚比较改为逐项核对展开后的 grantor、grantee、privilege_type、is_grantable，仍精确比较平台默认 ACL；故障撤销用例继续严格比较原始 ACL，不允许实际变化。没有修改 01/02/03/04 或删去权限断言。复测 9/9，含错误 cluster/OID/主体/版本、未知对象、种子后故障整批撤销、非 superuser 正常提交、重复拒绝及原回滚兼容，日志 bootstrap-review.log。所有 SQL 测试仅在新建本机 PG17.11，不能代替 Neon18.6 云端结果。
+
 2026-11-07 用户预检结果复核：真实 Neon 空业务库仍有 9 条 cloud_admin → neon_superuser 的 public 默认 ACL。原初始化将任何默认 ACL 当作未知对象，本机复现失败 `TEST_NOT_EMPTY_OR_ALREADY_INITIALIZED`，原输出保留为 neon-default-acl-before-fix.log。仅兼容已解释的精确平台模板，不移除平台授权。修复提交 316ae73c9de885ad4ec08c7a70c5a3cd0650d374；专测 11/11（neon-default-acl-review.log），原空库全流程 46/46（neon-default-acl-baseline.log）。未知受让者、全局默认授权、初始化主体默认授权、grantability 或权限集合变化仍拒绝；reader 继承管理角色仍拒绝，回滚保留平台模板和角色。本机 PG17.11 演练与用户 Neon18.6 只读证据分别记录，未在云端执行初始化或补权。
 
 2026-11-07 关卡 1 独立复核：原成员关系结果缺逐项 inherit_option/set_option，无法区分角色默认继承属性相同但具体授权不同的情况。先用本机 PG17 复现缺列断言失败（preflight-before-fix.log），只补原查询的两个字段后预检专测通过（preflight-review.log）。该次不重跑全项目、不创建新的管理员清单或验收关卡；原完整测试结果保持历史受测 SHA。

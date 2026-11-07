@@ -1,0 +1,20 @@
+▶ one administrator batch atomically initializes and verifies only its approved TEST
+  ✔ cloud-bound file rejects another cluster before creating any TEST object or role (4.6887ms)
+  ✔ wrong database OID is rejected even when its name and cluster match (1.9238ms)
+  ✔ wrong initializer and unexpected server version refuse before DDL (3.2709ms)
+  ✔ existing unknown object is preserved and blocks the whole batch (6.6698ms)
+  ✔ late verification-stage failure rolls back seeded rows, roles and ACL changes together (49.4424ms)
+  ✔ non-superuser owner executes initialization, seed and original verification in one commit (47.9926ms)
+  ✔ repeat whole batch refuses without overwriting committed synthetic records (4.1839ms)
+  ✔ original rollback restores identical effective grants and preserves platform default ACL metadata (15.6741ms)
+✔ one administrator batch atomically initializes and verifies only its approved TEST (224.5404ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 324.1273
+Disposable synthetic PostgreSQL passed; no cloud connection was used.
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-Q6D1l3

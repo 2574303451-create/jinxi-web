@@ -1,0 +1,51 @@
+▶ one administrator batch atomically initializes and verifies only its approved TEST
+  ✔ cloud-bound file rejects another cluster before creating any TEST object or role (4.6261ms)
+  ✔ wrong database OID is rejected even when its name and cluster match (1.8333ms)
+  ✔ wrong initializer and unexpected server version refuse before DDL (3.1657ms)
+  ✔ existing unknown object is preserved and blocks the whole batch (6.4519ms)
+  ✔ late verification-stage failure rolls back seeded rows, roles and ACL changes together (46.6932ms)
+  ✔ non-superuser owner executes initialization, seed and original verification in one commit (41.5988ms)
+  ✔ repeat whole batch refuses without overwriting committed synthetic records (3.1356ms)
+  ✖ original rollback remains usable and preserves platform default ACL metadata (14.3838ms)
+✖ one administrator batch atomically initializes and verifies only its approved TEST (221.7615ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 319.2658
+
+✖ failing tests:
+
+test at tests\bootstrap-postgres.test.cjs:91:13
+✖ original rollback remains usable and preserves platform default ACL metadata (14.3838ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+      {
+  +     database_acl: '{neondb_owner=CTc/neondb_owner,=Tc/neondb_owner}',
+  -     database_acl: null,
+        defaults: [
+          {
+            defaclacl: [
+              'neon_superuser=a*r*w*d*D*m*/cloud_admin'
+            ],
+
+      at TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:95:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (<WORKTREE>\tests\bootstrap-postgres.test.cjs:91:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { schema_acl: '{pg_database_owner=UC/pg_database_owner,=U/pg_database_owner}', database_acl: '{neondb_owner=CTc/neondb_owner,=Tc/neondb_owner}', defaults: [Array] } ],
+    expected: [ { schema_acl: '{pg_database_owner=UC/pg_database_owner,=U/pg_database_owner}', database_acl: null, defaults: [Array] } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+Local PostgreSQL evidence directory: %USERPROFILE%\AppData\Local\Temp\jinxi-f03-f05-QRr3My
+DISPOSABLE_POSTGRES_TEST_FAILED

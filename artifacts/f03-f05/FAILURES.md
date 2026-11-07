@@ -1,5 +1,9 @@
 # 保留的开发失败与修正
 
+补充：同precedence样式被React合并为一个style，首个“每段CSS各对应一个标签”假设失败，输出见hydration-css-first-check.log；改为严格核对合并后的总长度和每段按原顺序的字节SHA，840+277=1117字节均一致，不放过CSS增删。另一次本地受控注入使用networkidle等待，首页本地API503重试导致30秒导航超时；该辅助运行未计通过，实际托管验收仍使用真实成功的TEST接口。
+
+2026-11-07 TEST部署6aeeb6eca7db8a290681d599 / 7a65e7df已实际ready，31项HTTP检查通过、14个Functions均为nodejs24.x；真实浏览器首页和攻略页仍报React418，原响应失败截图/记录在cloud-browser/。本机相同浏览器无该错误。CDP断点定位RootLayout的非资源样式链接；Netlify响应在head的charset后插入注释及前置换行。保留换行的去注释、字体预加载/meta和CDN对照均失败；只在诊断响应中去除完整注入或使所有原head样式成为React正式资源，错误消失。这些修改响应的诊断不算云端验收。最小修复只给原link增加precedence、原两段style增加href/precedence并使用字符串children；样式字节前后SHA完全一致，未改CSP、UI组件或任何数据库权限。API14/安全67、原始tsc/lint/build通过；须在新的真实部署上保留原no-pageerror断言重验，不忽略hydration错误。
+
 2026-11-07 Netlify第二次部署6aeeb1036cbf2581ed017071已用GitHub App80952013检出84397a0，后因 run-clean 将 Windows npm 布局用于Linux而 MODULE_NOT_FOUND。云失败原文在 cloud-app-build-failure.log。npm-layout-before-fix.log 为1 pass/3 fail，补齐安装前缀 lib/npm 布局后4/4通过，并增加真实Linux CI入口检查，API14/安全67、tsc/lint/build全部通过。没有改变清理环境、资源绑定、凭据、SQL或页面。
 
 2026-11-07 实际 Netlify TEST deploy 6aeeacb25e993fe946ca77bd 在 preparing repo 阶段失败，错误为 Host key verification failed，尚未进入安装或业务构建。站点 installation_id=null、无 deploy key；同一 TEST Git 分支已存在且 f370e6d 的 CI 成功。已重新暂停 TEST builds 并关闭 PR 预览，等待正规 GitHub App installation 元数据，不禁用 SSH 主机验证。原部署错误全文和创建/变量/CI结果统一保留在 results.json。

@@ -1,5 +1,7 @@
 # 管理员一次性清单与审批边界
 
+> **当前执行更新**：App80952013已绑定，7a65e7df15d04e9f5b0859e647d57932ee98d465的Linux CI全部成功，TEST部署6aeeb6eca7db8a290681d599实际ready。31项真实HTTP检查成功，14个Functions托管运行时均nodejs24.x。浏览器发现平台head注释/换行导致React418，最小样式资源兼容修复已通过本地API14/安全67、原始tsc/lint/build及CSS字节不变性检查；当前等待其精确SHA的CI与真实云端复验，第三关仍未签核。TEST构建已暂停，当前无管理员待办；旧生产未操作。下方此前状态保留为逐步执行记录，以本更新及results.json最新项为准。
+
 ## 已登记，结束旧站基础调查
 
 来源为用户控制台核查，非本轮云操作：生产 Published `69a92f4f7be620c834490be1` 已锁定；main；Branch Deploys 仅生产分支；Deploy Previews 为 Don't deploy pull requests 且已保存。旧站 12 Functions、历史数据、快照和 pr17-validation 保持原状。本轮不重新调查或更改这些设置。

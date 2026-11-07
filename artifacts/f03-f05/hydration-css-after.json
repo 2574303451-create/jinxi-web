@@ -1,0 +1,15 @@
+{
+  "source": "Local post-fix static build",
+  "unchangedOrderedCssBytes": true,
+  "coalescedByReact": true,
+  "segments": [
+    {
+      "sha256": "313209426a96f726f988df38b58b14feee8a71ba8dd968d72e2248349645e4c0",
+      "bytes": 840
+    },
+    {
+      "sha256": "710046c8e55b88fdb3c5fda59d5fba55dec82c01fdf51fe71de86b19fd774492",
+      "bytes": 277
+    }
+  ]
+}

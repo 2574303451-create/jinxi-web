@@ -1,0 +1,14 @@
+{
+  "diagnosticOnly": true,
+  "records": [
+    {
+      "frames": [
+        "r4",
+        "iy",
+        "sE",
+        ""
+      ],
+      "value": "{\"expectedType\":\"link\",\"expectedTag\":5,\"propNames\":[\"href\",\"rel\",\"crossOrigin\"],\"expectedText\":null,\"actualNodeType\":1,\"actualNode\":\"<meta charset=\\\"utf-8\\\">\",\"parents\":[\"head\",\"html\",7,\"__next_root_layout_boundary__\",\"d\",\"p\",\"h\",\"y\"]}"
+    }
+  ]
+}

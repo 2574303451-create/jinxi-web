@@ -1,0 +1,382 @@
+{
+  "attempts": [
+    {
+      "origin": "https://jinxi-web-test.netlify.app",
+      "classification": "synthetic-test",
+      "startedAtUtc": "2026-11-07T05:31:43.867Z",
+      "checks": [
+        {
+          "name": "static /",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "0f0f0135fe3e4a0781f6263d2af90b866ff2836023274ad70763509d2c2b058c",
+          "cspPresent": true
+        },
+        {
+          "name": "static /guides/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "d3f3d3489edfbbf5ad979116a164e3d96c84dae1811ff8e09d331a087b1dfd57",
+          "cspPresent": true
+        },
+        {
+          "name": "static /profile-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "cb07389468f8c130159f0f6a25dcdb254d013ea1b26a71861993f1a914af372a",
+          "cspPresent": true
+        },
+        {
+          "name": "static /session-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "6595f4c605f86885421f013f47e9969b55ed144785420b930362735e37bd0995",
+          "cspPresent": true
+        },
+        {
+          "name": "actual published synthetic strategies",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103",
+            "101",
+            "102",
+            "105"
+          ]
+        },
+        {
+          "name": "server filter latest",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "101",
+            "102",
+            "103"
+          ]
+        },
+        {
+          "name": "server filter video",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "102"
+          ]
+        },
+        {
+          "name": "server filter pinned",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103"
+          ]
+        },
+        {
+          "name": "synthetic video aggregate",
+          "passed": true,
+          "status": 200,
+          "count": 1,
+          "playabilityVerified": false
+        },
+        {
+          "name": "synthetic read messages",
+          "passed": true,
+          "status": 200,
+          "count": 2
+        },
+        {
+          "name": "synthetic read announcements",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "synthetic read sponsorship",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "invalid public query strategies?status=draft",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "invalid public query strategies?id=104",
+          "passed": true,
+          "status": 404
+        },
+        {
+          "name": "invalid public query guide-video-stats?userId=synthetic-forged",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "invalid public query strategies?summary=1&feed=video&limit=50",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "closed write strategies",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write guide-video-stats",
+          "passed": true,
+          "status": 405
+        },
+        {
+          "name": "closed write messages",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write announcements",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write sponsorship",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write auth-login",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write auth-change-password",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write points",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write checkin",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write message-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write strategy-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write leaderboard",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write points-board",
+          "passed": true,
+          "status": 403
+        }
+      ],
+      "passed": true,
+      "completedAtUtc": "2026-11-07T05:32:04.905Z"
+    },
+    {
+      "origin": "https://jinxi-web-test.netlify.app",
+      "classification": "synthetic-test",
+      "startedAtUtc": "2026-11-07T05:36:05.632Z",
+      "checks": [
+        {
+          "name": "static /",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "0f0f0135fe3e4a0781f6263d2af90b866ff2836023274ad70763509d2c2b058c",
+          "cspPresent": true
+        },
+        {
+          "name": "static /guides/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "d3f3d3489edfbbf5ad979116a164e3d96c84dae1811ff8e09d331a087b1dfd57",
+          "cspPresent": true
+        },
+        {
+          "name": "static /profile-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "cb07389468f8c130159f0f6a25dcdb254d013ea1b26a71861993f1a914af372a",
+          "cspPresent": true
+        },
+        {
+          "name": "static /session-lab/",
+          "passed": true,
+          "status": 200,
+          "htmlSha256": "6595f4c605f86885421f013f47e9969b55ed144785420b930362735e37bd0995",
+          "cspPresent": true
+        },
+        {
+          "name": "actual published synthetic strategies",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103",
+            "101",
+            "102",
+            "105"
+          ]
+        },
+        {
+          "name": "server filter latest",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "101",
+            "102",
+            "103"
+          ]
+        },
+        {
+          "name": "server filter video",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "102"
+          ]
+        },
+        {
+          "name": "server filter pinned",
+          "passed": true,
+          "status": 200,
+          "ids": [
+            "103"
+          ]
+        },
+        {
+          "name": "synthetic video aggregate",
+          "passed": true,
+          "status": 200,
+          "count": 1,
+          "playabilityVerified": false
+        },
+        {
+          "name": "synthetic read messages",
+          "passed": true,
+          "status": 200,
+          "count": 2
+        },
+        {
+          "name": "synthetic read announcements",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "synthetic read sponsorship",
+          "passed": true,
+          "status": 200,
+          "count": 1
+        },
+        {
+          "name": "invalid public query strategies?status=draft",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "invalid public query strategies?id=104",
+          "passed": true,
+          "status": 404
+        },
+        {
+          "name": "invalid public query guide-video-stats?userId=synthetic-forged",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "invalid public query strategies?summary=1&feed=video&limit=50",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "closed write strategies",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write guide-video-stats",
+          "passed": true,
+          "status": 405
+        },
+        {
+          "name": "closed write messages",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write announcements",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write sponsorship",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write auth-login",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write auth-change-password",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write points",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write checkin",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "name": "closed write message-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write strategy-actions",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write leaderboard",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "closed write points-board",
+          "passed": true,
+          "status": 403
+        },
+        {
+          "name": "local session lab disabled on cloud GET",
+          "passed": true,
+          "status": 503
+        },
+        {
+          "name": "local session lab disabled on cloud POST",
+          "passed": true,
+          "status": 503
+        }
+      ],
+      "passed": true,
+      "completedAtUtc": "2026-11-07T05:36:21.448Z"
+    }
+  ]
+}

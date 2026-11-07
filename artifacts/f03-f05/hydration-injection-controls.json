@@ -1,0 +1,13 @@
+{
+  "diagnosticOnly": true,
+  "results": [
+    {
+      "variant": "strip-entire-netlify-injection",
+      "errors": []
+    },
+    {
+      "variant": "strip-all-three-controls",
+      "errors": []
+    }
+  ]
+}

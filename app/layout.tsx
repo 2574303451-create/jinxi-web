@@ -65,9 +65,9 @@ html {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" crossOrigin="anonymous" />
-        <style dangerouslySetInnerHTML={{ __html: REMIX_ICON_FIX_CSS }} />
-        <style dangerouslySetInnerHTML={{ __html: rootFontCss }} />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" crossOrigin="anonymous" precedence="icons" />
+        <style href="jinxi-remix-icon-fix" precedence="icons">{REMIX_ICON_FIX_CSS}</style>
+        <style href="jinxi-root-fonts" precedence="icons">{rootFontCss}</style>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         {children}

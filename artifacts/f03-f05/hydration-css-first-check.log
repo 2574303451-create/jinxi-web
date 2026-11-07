@@ -1,0 +1,5 @@
+{
+  "check": "One output tag per input style assumption",
+  "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    {\n+     bytes: 1117,\n+     sha256: 'd4aacd3e6b56f44bd215409dee8dc526c7bd0a5f7448a57f1bc0f123c05be563'\n-     bytes: 840,\n-     sha256: '313209426a96f726f988df38b58b14feee8a71ba8dd968d72e2248349645e4c0'\n    },\n-   {\n-     bytes: 277,\n-     sha256: '710046c8e55b88fdb3c5fda59d5fba55dec82c01fdf51fe71de86b19fd774492'\n-   }\n  ]\n",
+  "explanation": "React coalesces same-precedence styles into one tag. Exact ordered CSS segment bytes are checked below."
+}

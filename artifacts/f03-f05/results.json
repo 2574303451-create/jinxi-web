@@ -7,7 +7,7 @@
   "platform": "win32",
   "databaseTransport": "new loopback-only disposable cluster; cloud targets are not accepted by this runner",
   "networkTelemetry": "No aggregate connection counter collected. Current TEST TLS-only metadata probe is recorded under gate2Execution.readerHandoff.passwordSetup.diagnosticFix.tlsOnlyProbe; it did not authenticate or submit SQL.",
-  "cloudAcceptance": "TEST DB/reader, dedicated site/variables and GitHub App linkage verified at their respective steps. Actual Netlify checkout84397a0 and Build Node24.22.2/npm11.19.1 confirmed. Build failed on npm layout; hosted deployment/runtime/HTTP acceptance remain pending.",
+  "cloudAcceptance": "Actual independent TEST deployment7a65e7d is ready. All31 real HTTP checks passed and14 Functions runtime nodejs24.x confirmed. Browser exposed React418 head hydration failure; evidence and minimal compatibility fix are under verification, so Gate3 is not signed off.",
   "checks": [
     {
       "name": "typecheck",
@@ -1065,6 +1065,13 @@
           "status": "completed",
           "conclusion": "success",
           "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42339434152"
+        },
+        {
+          "sha": "7a65e7df15d04e9f5b0859e647d57932ee98d465",
+          "id": 42342651206,
+          "conclusion": "success",
+          "linuxCleanNpmLauncher": "success",
+          "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42342651206"
         }
       ],
       "privateEnvironmentTool": {
@@ -1299,6 +1306,33 @@
           "npm": "11.19.1",
           "error": "MODULE_NOT_FOUND: /opt/buildhome/.nvm/versions/node/v24.22.2/bin/node_modules/npm/bin/npm-cli.js",
           "log": "cloud-app-build-failure.log"
+        },
+        {
+          "operation": "start-reviewed-npm-layout-TEST-build",
+          "status": 200,
+          "siteId": "17885134-a57c-4589-83d3-39e30be9e0cf",
+          "buildId": "6aeeb6eca7db8a290681d597",
+          "deployId": "6aeeb6eca7db8a290681d599",
+          "approvedCommit": "7a65e7df15d04e9f5b0859e647d57932ee98d465",
+          "installationId": 80952013,
+          "createdAt": "2026-11-07T05:28:12.965Z",
+          "state": "ready",
+          "actualCheckedOutSha": "7a65e7df15d04e9f5b0859e647d57932ee98d465",
+          "buildNode": "24.22.2",
+          "npm": "11.19.1",
+          "functionsRuntime": "nodejs24.x",
+          "publishedAt": "2026-11-07T05:29:32.753Z",
+          "log": "cloud-npm-build-success.log",
+          "hostedHttp": {
+            "file": "cloud-http.json",
+            "attemptChecks": [
+              29,
+              31
+            ],
+            "passed": true
+          },
+          "browserAcceptance": false,
+          "browserIssue": "React418 root head hydration mismatch after platform HTML comment/newline injection. Full, original-response failure evidence retained."
         }
       ],
       "npmLayoutFix": {
@@ -1332,6 +1366,117 @@
             "npm-layout-lint.log",
             "npm-layout-build.log",
             "npm-layout-typecheck.log"
+          ]
+        }
+      },
+      "functionsRuntimeEvidence": {
+        "source": "Actual TEST deployment available_functions metadata",
+        "deployId": "6aeeb6eca7db8a290681d599",
+        "functions": [
+          {
+            "name": "announcements",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "auth-change-password",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "auth-login",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "checkin",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "guide-video-stats",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "leaderboard",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "message-actions",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "messages",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "points",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "points-board",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "session-lab",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "sponsorship",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "strategies",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          },
+          {
+            "name": "strategy-actions",
+            "runtime": "nodejs24.x",
+            "region": "us-east-2"
+          }
+        ]
+      },
+      "hydrationFix": {
+        "sourceUnderTest": "7a65e7df15d04e9f5b0859e647d57932ee98d465",
+        "diagnosticFiles": [
+          "hydration-differential.json",
+          "hydration-font-controls.json",
+          "hydration-injection-controls.json",
+          "hydration-debugger.json",
+          "hydration-precedence-control.json",
+          "hydration-head-resources-control.json"
+        ],
+        "diagnosticScope": "Browser-only response modifications used to isolate cause; never counted as actual hosted acceptance. Complete platform comment plus leading newline removal and React-managed head resources each remove the mismatch. Comment-only removal, font/preload/meta removal and CDN controls do not.",
+        "fix": "Only root stylesheet/style resource annotations; preserve CSS bytes, strict CSP and no-pageerror assertions. Original hosted browser test will rerun against unmodified responses.",
+        "references": [
+          "https://react.dev/reference/react-dom/components/link",
+          "https://react.dev/reference/react-dom/components/style"
+        ],
+        "status": "Local checks passed; exact new SHA Linux CI and unmodified cloud browser acceptance pending",
+        "localChecks": {
+          "apiTests": 14,
+          "securityTests": 67,
+          "rawTypecheckExitCode": 0,
+          "eslintExitCode": 0,
+          "staticBuildExitCode": 0,
+          "orderedCssBytesUnchanged": true,
+          "styleGrouping": "React coalesces same-precedence styles; both original ordered CSS segments independently match their previous SHA256 and byte counts.",
+          "logs": [
+            "hydration-head-unit.log",
+            "hydration-head-lint.log",
+            "hydration-head-build.log",
+            "hydration-head-typecheck.log",
+            "hydration-css-first-check.log",
+            "hydration-css-after.json"
           ]
         }
       }

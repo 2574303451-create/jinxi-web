@@ -1,0 +1,33 @@
+{
+  "origin": "https://jinxi-web-test.netlify.app",
+  "classification": "synthetic-test",
+  "startedAtUtc": "2026-11-07T05:35:07.514Z",
+  "passed": false,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": false,
+      "pageErrors": [
+        {
+          "name": "Error",
+          "stage": "home navigation",
+          "message": "Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        },
+        {
+          "name": "Error",
+          "stage": "guides navigation",
+          "message": "Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        }
+      ],
+      "blockedWrites": 0,
+      "videoRequestsBeforeInteraction": [],
+      "cspViolations": [],
+      "stage": "guides state and layout",
+      "error": "BROWSER_ASSERTION_OR_NETWORK_FAILURE",
+      "failureType": "AssertionError",
+      "assertionOperator": "deepStrictEqual"
+    }
+  ],
+  "edge": "140.0.3485.66",
+  "completedAtUtc": "2026-11-07T05:35:25.579Z"
+}

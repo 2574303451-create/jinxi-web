@@ -77,6 +77,14 @@ async function main() {
         if (name!=='guide-video-stats')assert.match(JSON.parse(text).code,/^LEGACY_(ENDPOINT|WRITE)_DISABLED$/);
       });
     }
+    for(const method of ['GET','POST']) {
+      await check('local session lab disabled on cloud '+method,async row=>{
+        const {response,text}=await request('/.netlify/functions/session-lab',method);
+        row.status=response.status;assert.equal(response.status,503);
+        assert.equal(JSON.parse(text).code,'LAB_UNAVAILABLE');
+        assert.equal(response.headers.get('set-cookie'),null);
+      });
+    }
     attempt.passed=true;
   } finally {
     attempt.completedAtUtc=new Date().toISOString();

@@ -1,5 +1,7 @@
 # F03/F05 本地实施与安全验收交付
 
+> 2026-11-07 云端执行更新：第二关已获明确授权并实际创建独立合成库、专用reader和Netlify TEST站点。当前已部署7a65e7df15d04e9f5b0859e647d57932ee98d465，Deploy ID 6aeeb6eca7db8a290681d599；真实HTTP31项通过，托管Functions为nodejs24.x。浏览器发现平台head注释/换行引起React418，现提交最小样式资源兼容修复并继续真实托管复验；第三关未签核。当前事实以ADMIN_SIGNOFF.md和results.json最新项为准，下方本地初交快照保留历史，不再执行其已完成的预检或授权步骤。
+
 ## A. 实际完成
 
 远端基线 PR #18 / `be9513f37251d08661a3f6c1d5240ed059c59f2e`；开始时只读核实 open/draft/unmerged，base 为 PR #17 分支，main 仍 `2ce600a79955cd5e5a7bd798f266f8e17b0c283e`。

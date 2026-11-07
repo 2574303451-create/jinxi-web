@@ -133,7 +133,9 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
       const known=error instanceof MemberError,status=known?error.status:503;
       const code=known?error.code:'MEMBER_SERVICE_UNAVAILABLE';
       const message=code==='INVALID_CREDENTIALS'?'账号或密码无效。':status===401?'登录状态已失效，请重新登录。':status===429?'请求频繁，请稍后重试。':status===503?'本机身份服务暂不可用，请稍后重试。':'请求未获授权或参数无效。';
-      return output(status,{error:message,code},status===401&&op!=='login'?cookie('',true):undefined);
+      // A delayed unauthorized response must not erase a newer login Cookie.
+      // Explicit authenticated logout/password change still revoke and clear it.
+      return output(status,{error:message,code});
     }finally{await c?.end().catch(()=>{});}
   };
 }

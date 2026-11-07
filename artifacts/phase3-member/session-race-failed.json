@@ -1,0 +1,9 @@
+{
+  "scope": "Local synthetic HTTPS; delayed actual401 must not erase newer successful login",
+  "startedAtUtc": "2026-11-07T08:25:29.300Z",
+  "passed": false,
+  "heldServerStatus": 401,
+  "newLoginDisplayedBeforeOldResponse": true,
+  "errorType": "AssertionError",
+  "completedAtUtc": "2026-11-07T08:25:32.453Z"
+}

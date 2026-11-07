@@ -30,12 +30,12 @@ Node24.22.2/npm11.19.1，PostgreSQL17.11，新临时集群仅127.0.0.1:55436、j
 
 | 检查 | 结果 | 证据 |
 | --- | --- | --- |
-| 连接前安全边界 | 4/4通过，错误地址/角色/context及继承变量拒绝，getter值未读取 | boundary.log、unit-final.log |
-| 真实数据库及HTTPS身份 | 17组子场景全部通过；Node报告18项包含父项。208合成映射、各类登录、同昵称分离、跨账号、改密/全设备撤销、伪造/重复/轮换/退出/到期重放、状态恢复不复活、并发登录、SQL注入、限流、实际越权ACL和故障回滚 | postgres-final.log、local-database-proof.json |
+| 连接前安全边界 | 4/4通过，错误地址/角色/context及继承变量拒绝，getter值未读取 | boundary.log、unit-cookie-race.log |
+| 真实数据库及HTTPS身份 | 17组子场景全部通过；Node报告18项包含父项。208合成映射、各类登录、同昵称分离、跨账号、改密/全设备撤销、伪造/重复/轮换/退出/到期重放、状态恢复不复活、并发登录、SQL注入、限流、实际越权ACL和故障回滚 | postgres-cookie-race.log、local-database-proof.json |
 | 原公开只读功能及隔离 | 46/46，在另一新临时55435集群。筛选先于LIMIT、null附件/封面、缺权限不伪造0、身份/ACL攻击及限定回滚 | read-only-regression.log；未用云端库替代 |
-| API / 安全 | 14/14、71/71；原测试条件保持 | unit-final.log |
-| 原始TypeScript / ESLint / 静态构建 | 均exit0；CSP仍7页/8个哈希 | typecheck.log、lint-final.log、build.log |
-| 本机浏览器 | 1440/1024/768/390/320px通过，正常/首次登录、本人资料、改密、退出、过期、草稿保留；1440多标签共享/退出同步，390断网恢复；键盘3px焦点、reduced-motion、无溢出，页面错误/CSP违规/外部请求均0 | browser-final.log指定目录，真实PNG及results.json |
+| API / 安全 | 14/14、71/71；原测试条件保持 | unit-cookie-race.log |
+| 原始TypeScript / ESLint / 静态构建 | 均exit0；CSP仍7页/8个哈希 | typecheck.log、lint-cookie-race.log、build.log |
+| 本机浏览器 | 1440/1024/768/390/320px通过，正常/首次登录、本人资料、改密、退出、过期、草稿保留；1440多标签共享/退出同步，390断网恢复；键盘3px焦点、reduced-motion、无溢出，页面错误/CSP违规/外部请求均0 | browser-cookie-race.log指定目录，真实PNG及results.json |
 | 原CI与受保护源码 | 原d43ee24 CI成功；本轮未push，无新GitHub CI结果。workflow、lock和app/components/hooks/lib/services/public/styles/Netlify Functions及F03配置无Git内容差异 | test-resource-state.json、results.json；新增目录lint和原规则同跑 |
 
 没有新增依赖，复用基线安装目录；本轮不把旧CI冒充新本地提交的云CI。浏览器仅对本机自签测试证书使用新建上下文；原生HTTPS用指定CA和正确SNI，未关闭证书验证。测试结束均在finally停止本轮数据库/服务器，不清理其他工作树或服务。
@@ -47,6 +47,7 @@ Node24.22.2/npm11.19.1，PostgreSQL17.11，新临时集群仅127.0.0.1:55436、j
 3. PostgreSQL错误对象包含合成会话摘要片段，原完整输出按指纹私有保留，公开日志仅去除failing-row摘要与冗长公钥证书对象；失败位置、错误码和计数保留。不是业务API回显，所有API失败测试均验证无内部标记。private-evidence-receipt.json记录原文摘要；没有真实账号/原始hash导入。
 4. DATE解析对照显示旧式JS ISO切日会将2018-02-10变成2018-02-09；本人资料改用数据库YYYY-MM-DD，实际测试严格断言2018-02-10。原首页创立日数据无改动。
 5. 收尾源码复核发现缺失SQL批准标记的NULL比较可能让IF得到unknown。现在各目标/标记使用IS DISTINCT FROM，实际guard在DDL之前以缺批准标记只读运行必须报错，回滚后才正常初始化。最终PG和浏览器已复验；没有为通过而放宽配置或权限。
+6. 本地提交后的异步状态复核发现旧核验401会同时清显示与Cookie，可能晚于新登录到达。session-race-failed.json是对实际服务器401做延迟、在新登录后释放的失败复现。单改前端代次判断不足，旧清Cookie头仍会删除新令牌；该中间运行等待资料超时，外层60秒停止后遗留一份本轮临时PG，后续浏览器因端口占用未启动。已严格核对临时data路径、postmaster.pid与55436，只停止该测试实例，没有接管其他服务。最终改为401不隐式清Cookie，仍拒绝访问；主动退出/改密照常撤销并清Cookie，前端仅当前代次更新显示。session-race-passed.json验证延迟401后新身份显示和服务器本人资料都有效；另重跑实际数据库/HTTPS及五宽度浏览器。原“过期必须清Cookie”的断言被更严格的“过期401无Cookie副作用 + 新登录不被旧响应破坏”行为测试取代，未弱化认证、CSRF或到期判定。
 
 ## UI登记与云端停止点
 

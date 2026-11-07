@@ -6,9 +6,9 @@
   "scramAuthentication": true,
   "missingApprovalRejectedBeforeDdl": true,
   "identity": {
-    "environment_id": "bda12245-fad0-41e2-b2e9-9ce9b59af1d3",
+    "environment_id": "da739807-d09f-4af4-a8c5-828f6d207540",
     "classification": "synthetic-local",
-    "cluster_id": "7705337352933852340",
+    "cluster_id": "7705344281823517920",
     "database_oid": "16384",
     "database_name": "jinxi_member_local"
   },

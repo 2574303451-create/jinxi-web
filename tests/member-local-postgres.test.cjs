@@ -82,10 +82,10 @@ test('member identity on a fresh SCRAM-authenticated loopback PostgreSQL',async 
       assert.equal((await call('logout',{session:next,headers:{'x-csrf-token':one.csrfToken}})).status,403);
       assert.equal((await call('logout',{session:next})).status,200);assert.equal((await call('logout',{session:next})).status,401);assert.equal((await call('me',{method:'GET',session:next})).status,401);
     });
-    await t.test('absolute and idle expiry reject with cookie clearing',async()=>{
+    await t.test('absolute and idle expiry reject without erasing a potentially newer cookie',async()=>{
       const a=await fresh(),one=await login(a.normal);
       await admin(c=>c.query("UPDATE b2_lab.member_sessions_v2 SET created_at=now()-interval '8 days',expires_at=now()-interval '1 second',idle_expires_at=now()-interval '2 seconds'"));
-      const expired=await call('me',{method:'GET',session:one});assert.equal(expired.status,401);assert.match(expired.headers['Set-Cookie'],/Max-Age=0/);
+      const expired=await call('me',{method:'GET',session:one});assert.equal(expired.status,401);assert.equal(expired.headers['Set-Cookie'],undefined);
       const two=await login(a.normal);await admin(c=>c.query("UPDATE b2_lab.member_sessions_v2 SET created_at=now()-interval '1 hour',idle_expires_at=now()-interval '1 second' WHERE token_hash=$1",[crypto.createHash('sha256').update(two.cookie.split('=')[1]).digest()]));assert.equal((await call('profile',{method:'GET',session:two})).status,401);
     });
     await t.test('locking, deactivation and security disable permanently revoke prior sessions',async()=>{

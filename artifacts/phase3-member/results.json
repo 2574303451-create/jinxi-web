@@ -48,7 +48,7 @@
       "reportedTests": 18,
       "subtests": 17,
       "failed": 0,
-      "log": "postgres-final.log",
+      "log": "postgres-cookie-race.log",
       "includes": [
         "208 fully synthetic legacy shape/mapping/statuses",
         "valid/unknown/wrong/locked/inactive/unsupported/missing-map login",
@@ -72,12 +72,12 @@
     "api": {
       "passed": 14,
       "failed": 0,
-      "log": "unit-final.log"
+      "log": "unit-cookie-race.log"
     },
     "security": {
       "passed": 71,
       "failed": 0,
-      "log": "unit-final.log"
+      "log": "unit-cookie-race.log"
     },
     "rawTypeScript": {
       "exitCode": 0,
@@ -85,7 +85,7 @@
     },
     "eslint": {
       "exitCode": 0,
-      "log": "lint-final.log",
+      "log": "lint-cookie-race.log",
       "rulesDisabled": 0
     },
     "build": {
@@ -95,7 +95,7 @@
       "cspHashes": 8
     },
     "browser": {
-      "file": "browser/2026-11-07T08-11-19-466Z/results.json",
+      "file": "browser/2026-11-07T08-32-58-428Z/results.json",
       "passed": true,
       "widths": [
         1440,
@@ -113,7 +113,15 @@
       "networkRecovery": true,
       "firstPasswordChange": true,
       "expiry": true,
-      "draftPreserved": true
+      "draftPreserved": true,
+      "lateUnauthorizedResponseCannotEraseNewLogin": true
+    },
+    "sessionResponseRace": {
+      "actualLocalHttps": true,
+      "delaysActualServer401": true,
+      "failedBeforeFix": "session-race-failed.json",
+      "passedAfterFix": "session-race-passed.json",
+      "result": "Old unauthorized response has no Set-Cookie side effect; current-generation UI and valid self-profile survive. Explicit logout/password change still revoke and clear cookies."
     }
   },
   "sourceIntegrity": {
@@ -122,13 +130,13 @@
       "member-local/database.cjs": "79e39ecefb5e9c0ac60fd4de4410505d4f887480b50112e94044ee748c241f44",
       "member-local/demo.css": "609355829463781fa7a0eeee4c599e3f456077212e476eee695756b7ab781a60",
       "member-local/demo.html": "db3e15f50469d7565ecb567e075d034e6676d3aac182b7f4ed8db8a50a0fb020",
-      "member-local/demo.js": "f653c4906b430505bdc07a7ad5ddfb3e06b63847097a8facac8499ccce7dd70c",
-      "member-local/identity.cjs": "ad64fd1d6b20fd2584b64ba68b79c37d6fd1fd3d42679cab7d9201562babd10f",
+      "member-local/demo.js": "aeb911227f7290cc9fd7388ad389c953813ec1ac399d004fb343d919cd0dc028",
+      "member-local/identity.cjs": "5fdd6b1ad4b4c2d1d6546452164671a0ef9b25a9a479bee758ebb574b105c0d9",
       "member-local/schema.sql": "f23ba0cd01020e256f07a2ff89bbdc7967873d0bda04c930ceeb52dcb975e50d",
       "member-local/server.cjs": "0814e4765a26c361ebfa6169eb0ace1313c8f05de28678c9a903c6effe87526e",
       "scripts/member-local.cjs": "034f81b04f9d5a5f069dc4e40dbcbed8bc7ddd0fa277c1b04b6073e8494441c9",
       "tests/member-local-boundary.test.cjs": "4126271069d4a24fb8ae94c5ccba692554a0d82b3c034d95148dbb7368dcfe6a",
-      "tests/member-local-postgres.test.cjs": "5284cee37d053c7a8899339d3040619f01e7893c441f9de1cd139be84426836e",
+      "tests/member-local-postgres.test.cjs": "1beb399e16f6f808e08a8a4c6abc7c4d5f5651b7160305b13ad27b5802c00f43",
       "eslint.config.mjs": "16e3eda8fb2422a9c47c9179bfc7fa13d206e537ae67f0517fb7e671f7c5f253",
       "package.json": "e919bfadde02f4dd926626d5796c09d80bb5cfcd2ba7cc73f92bdfbbacbdfeff"
     },
@@ -174,7 +182,14 @@
     },
     "privateOriginalReceipt": "private-evidence-receipt.json",
     "dateBoundary": "date-parser-control.json",
-    "sqlGuard": "Source review changed SQL NULL comparisons to IS DISTINCT FROM; actual negative guard and final PG/browser passed"
+    "sqlGuard": "Source review changed SQL NULL comparisons to IS DISTINCT FROM; actual negative guard and final PG/browser passed",
+    "responseRace": {
+      "reproduced": true,
+      "frontendOnlyFixInsufficient": true,
+      "intermediateAttempt": "No successful receipt; outer runner configured60s, then observed orphan synthetic PG and subsequent port conflict.",
+      "cleanup": "Verified only temp jinxi-member-local-8XZjIM/data, postmaster PID19904, port55436, then stopped this test cluster. No unrelated process or database touched.",
+      "postFixActualPgAndFiveViewportsPassed": true
+    }
   },
   "stoppedAt": {
     "cloudMemberAuthEnabled": false,
@@ -190,7 +205,7 @@
     "productionDatabaseConnections": 0,
     "actualSyntheticLoopbackPostgresUsed": true
   },
-  "completedAtUtc": "2026-11-07T08:17:14.249Z",
+  "completedAtUtc": "2026-11-07T08:35:03.830Z",
   "evidenceFormatting": {
     "receipt": "raw-log-format-receipt.json",
     "originalsRetainedPrivately": true,

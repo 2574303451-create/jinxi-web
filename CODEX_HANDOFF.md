@@ -1,3 +1,7 @@
+> **2026-11-07 第三阶段检查点2，本地合成留言与攻略**：本轮工作树为`E:/Recovery/.jinxi-research/phase3-community/worktree`，分支`codex/jinxi-phase3-community-local`，从已推送身份提交`35ae9a676813249ae2beff9845251eb57a72855c`继承；原身份工作树不改。实现可信UUID归属、留言/攻略状态、服务端审核/管理授权、回复与互动、幂等/版本/回滚。真实PG13/13、实际HTTPS、浏览器完整流程及五宽度通过；旧公开读取/TEST模型PG46、API14/安全86、原始tsc/ESLint/Build通过。旧入口仍冻结，全部业务数据合成，主站UI/FAQ/公告不改。仅本地提交，未推送/部署/迁移/更改平台，最终SHA以本条所属提交及最终答复为准。[本轮最终审查与证据](artifacts/phase3-community/FINAL_REVIEW.md)。下方均为保留的历史快照，其“当前/未推送”等措辞只对应当时。
+
+> **身份检查点已推送记录**：身份分支`codex/jinxi-phase3-member-local`已在此前单独授权下推送35ae9a6；上轮真实[GitHub Actions](https://github.com/2574303451-create/jinxi-web/actions/runs/42363078349)对应完整SHA35ae9a676813249ae2beff9845251eb57a72855c，completed/success，本轮只读复核原运行。这个CI不覆盖本轮未推送的留言与攻略代码。
+
 > **2026-11-07 第三阶段身份独立审查收尾**：本次本地收尾提交保留竞态修复，追加快速切换、重复提交及失败重试验证。当前为12项事件回归、5组实际HTTPS专项、五宽度复验及API14/安全83通过，原始tsc/ESLint退出0。原18PR、TEST13de部署和旧站锁定的只读元数据未变。已获本地提交整理授权，未获推送/部署授权；本条随最终本地提交保存，完整提交SHA以本文件所属提交及最终答复为准。[最终审查与可复现命令](artifacts/phase3-member/final-review/2026-11-07T09-46-44Z/FINAL_REVIEW.md)。下方为此前未提交状态的历史快照，原文保留。
 
 

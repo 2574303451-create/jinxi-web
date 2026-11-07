@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [],
+  "startedAtUtc": "2026-11-07T10:54:37.529Z",
+  "errorType": "TimeoutError",
+  "completedAtUtc": "2026-11-07T10:55:42.021Z"
+}

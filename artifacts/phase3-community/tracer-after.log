@@ -1,0 +1,11 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (1149.2521ms)
+✔ trusted local community operations on actual PostgreSQL (34492.627ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34494.9663

@@ -1,0 +1,116 @@
+{
+  "algorithm": "SHA256 of UTF-8 source normalized to LF",
+  "capturedAt": "2026-11-07T11:46:54.976Z",
+  "files": [
+    {
+      "file": "community-local/README.md",
+      "sha256": "679a99b477c672a4b5cede3041549049cf2dad5dca989c25ae1fa7026eb63cc5",
+      "testedSha256BeforeEofFormatting": "31068d0a9ae924025548cdb8d02f2d740420bc66710538d1a57338d8d5c747e9"
+    },
+    {
+      "file": "community-local/database.cjs",
+      "sha256": "8bd22e31b079e891bd12905eea2ec443d2b5f6015302f08b6a4a48a1e70292e3",
+      "testedSha256BeforeEofFormatting": "8bdf05ae7a17936d10610b1ccb3402e8dc20b9a6b2a5c9929d0b98a814452421"
+    },
+    {
+      "file": "community-local/demo.css",
+      "sha256": "eaeabae5a2d04df9b0d49e40482ec4a75d56489b2dd5bbd37f5f930867b0a420",
+      "testedSha256BeforeEofFormatting": "939f3975b916f1d495a1f999f0dc5a9f15f78f3083d5b0954be00868ecaaabdf"
+    },
+    {
+      "file": "community-local/demo.html",
+      "sha256": "6dc5b78db5157958a367ba093dfca7462b750d25a89040e68783681a0f2b3c35",
+      "testedSha256BeforeEofFormatting": "3263870c26dfcc215ee3f8d044dd288a7c8714eccb7851ea154bfd0ef499e141"
+    },
+    {
+      "file": "community-local/demo.js",
+      "sha256": "b66480ba320c27c8ac9051b06d618730349fa7651fffc5475c2f4f876971be1e",
+      "testedSha256BeforeEofFormatting": "5ab915c9b2acf2b8eb4cfbe704fea6f84da3432d6d586c2da3d512283b1e3275"
+    },
+    {
+      "file": "community-local/handler.cjs",
+      "sha256": "afc6d5c2caf07d32d04ae269a7019f54675119bf40b73509cd13df6e8d986527",
+      "testedSha256BeforeEofFormatting": "7a9f39a462ee85cd1a95fe2109f2c6319607c195c2df86dc3589914f21e8ca3f"
+    },
+    {
+      "file": "community-local/policy.cjs",
+      "sha256": "08343a439dbc8bca23a7c0854f5dc36504ff7ca3d8eb551d9bd5be74fd5dd022",
+      "testedSha256BeforeEofFormatting": "066ee85721a201067d194cf1e2280ce4fcfd45600b1abdab846583b91912cfcc"
+    },
+    {
+      "file": "community-local/proof.cjs",
+      "sha256": "8da272e1249fa50cfaee307f2465113745da029744d09ce56fc3a81a43c6b483",
+      "testedSha256BeforeEofFormatting": "8eca71624662bdae019c7621026d35f26f298781f1dfe369e7c8405673bdc66c"
+    },
+    {
+      "file": "community-local/schema.sql",
+      "sha256": "b055be18ed97de97e56e7e0f91a2dfc6e3d978dc7df5c536b30452322ecd9c2e",
+      "testedSha256BeforeEofFormatting": "a13cde6adccc7de579599f93b27a0fef421f337c3cb39534fa8343142b1b4cf1"
+    },
+    {
+      "file": "community-local/server.cjs",
+      "sha256": "1c15421db71208f716a5b7d25aa8342d0bc2b925221a3160fa0c02854d4fbc0a",
+      "testedSha256BeforeEofFormatting": "bb3d24312a2832845d3b9e9deff24a45723c6fc4ce7c4e0eddbc0b65b456fc88"
+    },
+    {
+      "file": "community-local/store.cjs",
+      "sha256": "d6e37c0aec3632b56b0c6e1814dcc11366267318b7f55f6ecbd634df05db52c1",
+      "testedSha256BeforeEofFormatting": "1e09415e4cf006ff001df2715bcaeeff82364c6421ebf0de514e1e408da805cf"
+    },
+    {
+      "file": "eslint.config.mjs",
+      "sha256": "71e4b5c395b942eac5d9eb7c2bc940436167df0636e541351f2cd0e932e74fca"
+    },
+    {
+      "file": "package.json",
+      "sha256": "81747b2ea06313ebba8ebf400770f2f4aa4cc5d98ea5930e486a57e436cbd8ea"
+    },
+    {
+      "file": "scripts/community-local.cjs",
+      "sha256": "bc42750b2b8421729c30e4c31390853e9951a8767c914b7e27878f0277098d3a",
+      "testedSha256BeforeEofFormatting": "81e3b6361b75275329c15aab97128b59649ecd8a7311e0d5661a2847073bea11"
+    },
+    {
+      "file": "tests/community-local-boundary.test.cjs",
+      "sha256": "7ae0eeaf858f2aea05d748c973422c2e652b68c1356ef86d3371b60092e9a2a7",
+      "testedSha256BeforeEofFormatting": "8a2576efaeab81f3a67d3b37ae57a49fae7735ee5fca02ce1a38efcf7dc8ab71"
+    },
+    {
+      "file": "tests/community-local-browser.cjs",
+      "sha256": "f57171b9a2fb7cf12d2d564b59323ae893f3add4393e11082fc116c68a365dea",
+      "testedSha256BeforeEofFormatting": "3e3b0841c23f4ca7df10208efac2f91e304db92c42b2ef71342d60bfb991aa2b"
+    },
+    {
+      "file": "tests/community-local-https.test.cjs",
+      "sha256": "510e2ef3fb3d491a09ee5d78ed169f87a9d3fc59258d03e45389eceaa725a34a",
+      "testedSha256BeforeEofFormatting": "e5a971540e754582b01e2c5955af8129c83ba1b9dab8b19e08d6f776a99587d7"
+    },
+    {
+      "file": "tests/community-local-postgres.test.cjs",
+      "sha256": "3ad4c2424e4a6977d9a0262d21a064436fb3748d793caac85e460e4b79898e83",
+      "testedSha256BeforeEofFormatting": "9a811495fc48aa8d3507dc49ab3915a8428e01886debe472a4144043796171d9"
+    }
+  ],
+  "postTestFormatting": {
+    "changedAt": "2026-11-07T11:48:33.273Z",
+    "change": "Removed only redundant blank lines at EOF; content before trimEnd is identical. Retained passing-test source hashes and final formatted hashes.",
+    "files": [
+      "community-local/README.md",
+      "community-local/database.cjs",
+      "community-local/demo.css",
+      "community-local/demo.html",
+      "community-local/demo.js",
+      "community-local/handler.cjs",
+      "community-local/policy.cjs",
+      "community-local/proof.cjs",
+      "community-local/schema.sql",
+      "community-local/server.cjs",
+      "community-local/store.cjs",
+      "scripts/community-local.cjs",
+      "tests/community-local-boundary.test.cjs",
+      "tests/community-local-browser.cjs",
+      "tests/community-local-https.test.cjs",
+      "tests/community-local-postgres.test.cjs"
+    ]
+  }
+}

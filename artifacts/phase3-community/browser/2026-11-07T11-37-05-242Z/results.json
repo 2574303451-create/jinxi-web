@@ -1,0 +1,21 @@
+{
+  "passed": false,
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [],
+  "startedAtUtc": "2026-11-07T11:37:05.243Z",
+  "stage": "signed-out-private-content-cleared",
+  "uncertainRetry": {
+    "sameRequestId": true,
+    "oneStoredItem": true,
+    "crossAccountReplayDenied": true,
+    "draftPreserved": true
+  },
+  "errorType": "AssertionError",
+  "testLocation": [
+    "community-local-browser.cjs:81:10"
+  ],
+  "notice": "正在读取公开内容…",
+  "completedAtUtc": "2026-11-07T11:38:08.817Z"
+}

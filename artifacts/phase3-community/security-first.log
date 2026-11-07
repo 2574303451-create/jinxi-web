@@ -1,0 +1,96 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (960.5725ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] REVIEWER_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (3066.6715ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_FOUND
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (2960.2562ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (5590.674ms)
+[DEBUG-cp2] VERSION_CONFLICT
+[DEBUG-cp2] REQUEST_ID_CONFLICT
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (1425.4895ms)
+  ✖ interaction and unpublishing serialize without a partially visible reply (1443.3704ms)
+[DEBUG-cp2] PASSWORD_RESET_REQUIRED
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (3074.4687ms)
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] CSRF_REJECTED
+  ✔ untrusted author flags, malformed text and media references never enter content storage (4045.8096ms)
+  ✖ the actual business role cannot grant authority, read password hashes or forge ownership/audit (123.7559ms)
+✖ trusted local community operations on actual PostgreSQL (55573.2316ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 7
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55576.0184
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:102:11
+✖ interaction and unpublishing serialize without a partially visible reply (1443.3704ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:114:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:102:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\community-local-postgres.test.cjs:143:11
+✖ the actual business role cannot grant authority, read password hashes or forge ownership/audit (123.7559ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:149:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:143:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [Function (anonymous)],
+    operator: 'rejects',
+    diff: 'simple'
+  }

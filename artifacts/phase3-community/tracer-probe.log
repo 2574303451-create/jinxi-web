@@ -1,0 +1,34 @@
+[DEBUG-cp2] COMMUNITY_PERMISSION_REJECTED
+▶ trusted local community operations on actual PostgreSQL
+  ✖ a member creates a server-owned message; retries do not create another; pending content is private (777.3833ms)
+✖ trusted local community operations on actual PostgreSQL (34467.91ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34470.9324
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:20:11
+✖ a member creates a server-owned message; retries do not create another; pending content is private (777.3833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:23:40)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:20:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

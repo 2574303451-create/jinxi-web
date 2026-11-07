@@ -1,0 +1,11 @@
+✔ community rejects cloud targets and inherited credential names before connection or value access (1.5875ms)
+✔ community rejects forged authority, invalid methods and CSRF before business connection (0.5851ms)
+✔ community transport errors are sanitized and never set cookies or permissive CORS (0.1565ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 84.0292

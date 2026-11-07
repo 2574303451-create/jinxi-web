@@ -1,0 +1,99 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (1321.0455ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] REVIEWER_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (4509.7787ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_FOUND
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (3741.418ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (7587.8948ms)
+[DEBUG-cp2] VERSION_CONFLICT
+[DEBUG-cp2] REQUEST_ID_CONFLICT
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (2191.7176ms)
+  ✔ interaction and unpublishing serialize without a partially visible reply (2493.2103ms)
+[DEBUG-cp2] PASSWORD_RESET_REQUIRED
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (4450.3841ms)
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] CSRF_REJECTED
+  ✔ untrusted author flags, malformed text and media references never enter content storage (4757.0013ms)
+[DEBUG-cp2] COMMUNITY_PERMISSION_REJECTED
+  ✔ the actual business role cannot grant authority, read password hashes or forge ownership/audit (1027.086ms)
+  ✖ database policies also forbid staff self-review and changing somebody else's body (1136.6557ms)
+  ✖ every role leaves legacy content and all its interaction rows read-only (855.5769ms)
+✖ trusted local community operations on actual PostgreSQL (67833.6243ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 9
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67836.7094
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:161:11
+✖ database policies also forbid staff self-review and changing somebody else's body (1136.6557ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:166:161)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:161:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [Function (anonymous)],
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests\community-local-postgres.test.cjs:169:11
+✖ every role leaves legacy content and all its interaction rows read-only (855.5769ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:173:115)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:169:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,58 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (1589.9291ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] REVIEWER_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (4596.8722ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_FOUND
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (4035.4436ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (8663.0047ms)
+[DEBUG-cp2] VERSION_CONFLICT
+[DEBUG-cp2] REQUEST_ID_CONFLICT
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (2491.9294ms)
+  ✔ interaction and unpublishing serialize without a partially visible reply (2008.8593ms)
+[DEBUG-cp2] PASSWORD_RESET_REQUIRED
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (4464.4919ms)
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] CSRF_REJECTED
+  ✔ untrusted author flags, malformed text and media references never enter content storage (4753.3387ms)
+[DEBUG-cp2] COMMUNITY_PERMISSION_REJECTED
+  ✔ the actual business role cannot grant authority, read password hashes or forge ownership/audit (1021.9033ms)
+✔ trusted local community operations on actual PostgreSQL (67441.7878ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67444.2555

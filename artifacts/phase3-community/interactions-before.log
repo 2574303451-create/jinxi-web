@@ -1,0 +1,46 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (867.9146ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] REVIEWER_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (3493.6315ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_FOUND
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (2629.7772ms)
+[DEBUG-cp2] OPERATION_NOT_ENABLED
+  ✖ published messages and guides allow owned replies and idempotent set-style interactions (1044.7391ms)
+✖ trusted local community operations on actual PostgreSQL (40983.0215ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40985.7204
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:65:11
+✖ published messages and guides allow owned replies and idempotent set-style interactions (1044.7391ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 404
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:70:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:65:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 404,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [],
+  "startedAtUtc": "2026-11-07T11:02:59.660Z",
+  "stage": "stored-xss-and-viewports",
+  "errorType": "AssertionError",
+  "testLocation": [
+    "community-local-browser.cjs:47:149"
+  ],
+  "completedAtUtc": "2026-11-07T11:04:01.950Z"
+}

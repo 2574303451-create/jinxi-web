@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [],
+  "startedAtUtc": "2026-11-07T11:01:03.060Z",
+  "stage": "guide-workflow",
+  "errorType": "TimeoutError",
+  "testLocation": [
+    "community-local-browser.cjs:42:140"
+  ],
+  "completedAtUtc": "2026-11-07T11:02:05.744Z"
+}

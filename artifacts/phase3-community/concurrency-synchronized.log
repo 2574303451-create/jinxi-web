@@ -1,0 +1,81 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (1402.4578ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] REVIEWER_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] ADMIN_REQUIRED
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+[DEBUG-cp2] LEGACY_OWNERSHIP_UNVERIFIED
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (4345.7253ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_FOUND
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (4180.2272ms)
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+[DEBUG-cp2] NOT_FOUND
+[DEBUG-cp2] NOT_OWNER
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (8277.68ms)
+[DEBUG-cp2] VERSION_CONFLICT
+[DEBUG-cp2] REQUEST_ID_CONFLICT
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (2299.5949ms)
+[DEBUG-cp2-concurrency] 42501
+  ✖ interaction and unpublishing serialize without a partially visible reply (2099.0551ms)
+[DEBUG-cp2] PASSWORD_RESET_REQUIRED
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (4936.4213ms)
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] CLIENT_AUTHORITY_REJECTED
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] INVALID_TEXT
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] UNTRUSTED_MEDIA
+[DEBUG-cp2] CSRF_REJECTED
+  ✔ untrusted author flags, malformed text and media references never enter content storage (4805.8828ms)
+[DEBUG-cp2] COMMUNITY_PERMISSION_REJECTED
+  ✔ the actual business role cannot grant authority, read password hashes or forge ownership/audit (978.7254ms)
+✖ trusted local community operations on actual PostgreSQL (67000.9161ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67003.7005
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:102:11
+✖ interaction and unpublishing serialize without a partially visible reply (2099.0551ms)
+  AssertionError [ERR_ASSERTION]: Unpublishing at its update lock must wait for the in-flight interaction
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:118:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:102:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

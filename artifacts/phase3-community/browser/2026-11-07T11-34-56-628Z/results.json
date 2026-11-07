@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "startedAtUtc": "2026-11-07T11:34:56.628Z",
+  "stage": "stored-xss-and-viewports",
+  "uncertainRetry": {
+    "sameRequestId": true,
+    "oneStoredItem": true,
+    "crossAccountReplayDenied": true,
+    "draftPreserved": true
+  },
+  "signedOutPrivateContentCleared": true,
+  "xss": {
+    "executed": false,
+    "injectedNodes": 0,
+    "literalTextVisible": true
+  },
+  "completedAtUtc": "2026-11-07T11:35:59.808Z"
+}

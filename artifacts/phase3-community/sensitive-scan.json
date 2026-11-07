@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-11-07T11:46:54.976Z",
+  "scope": "New and modified text files only; never read environment values or external private credentials.",
+  "filesScanned": 68,
+  "rules": [
+    "private-key",
+    "database-dsn",
+    "github-token",
+    "jwt",
+    "cookie-value"
+  ],
+  "findings": [],
+  "manualReview": "Synthetic fixture generation and parameterized runtime connections; no .env/private credential file, TLS key, database dump, real member data, cloud client or sensitive log included. Screenshots show only the guest synthetic business page.",
+  "limitations": "Pattern checks are not an exhaustive secret detector; combined with explicit path and content review."
+}

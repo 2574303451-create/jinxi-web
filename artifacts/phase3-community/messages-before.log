@@ -1,0 +1,35 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (896.3014ms)
+[DEBUG-cp2] OPERATION_NOT_ENABLED
+  ✖ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (795.1719ms)
+✖ trusted local community operations on actual PostgreSQL (34266.6734ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34268.8359
+
+✖ failing tests:
+
+test at tests\community-local-postgres.test.cjs:29:11
+✖ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (795.1719ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 404
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:33:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-community\worktree\tests\community-local-postgres.test.cjs:29:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 404,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

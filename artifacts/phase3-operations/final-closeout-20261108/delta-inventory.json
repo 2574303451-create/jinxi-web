@@ -1,0 +1,604 @@
+{
+  "evidenceNature": "primary Git/AST verification; independent reports recorded separately",
+  "reviewBase": "25d6938a6bf42603ecad88428c970c11e5519c21",
+  "reviewCandidate": "4aa491dea5f77cd2b0c03fcf57ac34a38448e520",
+  "commitList": [
+    "4aa491dea5f77cd2b0c03fcf57ac34a38448e520 docs: record final remote read limitation without pushing",
+    "6c09351e04790519ab4dd6b33c04ae5c028ad394 docs: record checkpoint5 local verification and review coverage",
+    "43abd7bdd7f4aa5582e4f1d2cf6c4b6eb237f627 fix: clarify local operations rate-limit failures and test isolation"
+  ],
+  "categories": {
+    "documentation": 5,
+    "historical-evidence": 66,
+    "evidence-execution-helper": 4,
+    "local-error-message": 1,
+    "test-fixture-or-assertions": 3
+  },
+  "files": [
+    {
+      "file": "CODEX_HANDOFF.md",
+      "category": "documentation",
+      "baseBlob": "a6070b43ecb08c1b04566b21d9a41f1b662ef101",
+      "candidateBlob": "39583407534f51988d50298442c8c41c919c5f60"
+    },
+    {
+      "file": "artifacts/phase3-operations/FINAL_REVIEW.md",
+      "category": "documentation",
+      "baseBlob": null,
+      "candidateBlob": "570cb26918fb7a05bf1523a4208fda01d6a4bb33"
+    },
+    {
+      "file": "artifacts/phase3-operations/INDEPENDENT_REVIEW.md",
+      "category": "documentation",
+      "baseBlob": null,
+      "candidateBlob": "2470221037d501b5517ea929ac55f81f15f4a379"
+    },
+    {
+      "file": "artifacts/phase3-operations/RESULTS.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "9c69df30a376e770f1e5a2d6eeb45a8599f5778e"
+    },
+    {
+      "file": "artifacts/phase3-operations/api-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "98cc33b01482ea5a2c0cf9a22ef1084afabf1ad8"
+    },
+    {
+      "file": "artifacts/phase3-operations/attendance-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "afd15396e947c7561066a708eb3564637d390736"
+    },
+    {
+      "file": "artifacts/phase3-operations/attendance-review-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "f8c7c5d91af36de9343cadf7a48486c1d17083e7"
+    },
+    {
+      "file": "artifacts/phase3-operations/base-ci-jobs.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "6e994e60f01d7443ff51ca4118d632081c473d59"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "8e0d5b485b12b531151d569dcc31df3f20b2254b"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser-second.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "53642211e3ee96a24949051691ee0d74f49c3f2d"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser-third.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "ec354ecc817304f312ebabf60e3e356e8b5bbe4c"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-17-11-787Z/failure.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "59b8807361699eacaa7837b63ecf1353bcc30f04"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-17-11-787Z/results.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "b7cce0a0d28d1b2979782101b2c4ab472ed25121"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-20-49-286Z/failure.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "59b8807361699eacaa7837b63ecf1353bcc30f04"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-20-49-286Z/results.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "34e37ca877fcf5728e3665b96dff094dc73d85e7"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/operations-1024.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "fed7ec1bd5b87826acfd33f018ecf3d615240f82"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/operations-1440.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "5cbf06c26c37c06e9af714aebc5fa26ae665f1e5"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/operations-320.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "d975c56bc3741f23331bfa51e67d9a812aba89ea"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/operations-390.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "ffbe1881ba736c712122281f59990cbcb9265160"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/operations-768.png",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "e1f5a3a022f06a4f27df6f78475ddbec6ee7b29c"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T09-25-05-964Z/results.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "40f2055dd64ae4d09fc64b7541406da96968eec4"
+    },
+    {
+      "file": "artifacts/phase3-operations/build-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "7f52e4addba6ae7d71cf88b2fb169ff51c368da8"
+    },
+    {
+      "file": "artifacts/phase3-operations/capability-green.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "8aabf421d99ef51418c705027be350bba485ef9a"
+    },
+    {
+      "file": "artifacts/phase3-operations/capability-red.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "24d77584072281bf931ac817b9db38220bc73a27"
+    },
+    {
+      "file": "artifacts/phase3-operations/collect-results.cjs",
+      "category": "evidence-execution-helper",
+      "baseBlob": null,
+      "candidateBlob": "6c95536d48d18adfca1c21d04c447006ff534e3f"
+    },
+    {
+      "file": "artifacts/phase3-operations/community-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "1ced5c1a499dae9dc3e4048d7387c00c2794e686"
+    },
+    {
+      "file": "artifacts/phase3-operations/community-review-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "217a0b2e5acf7ccbe2bc82a52de484b8e2a60361"
+    },
+    {
+      "file": "artifacts/phase3-operations/core-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "f46ec67dd4d467e350172832e1e7d433c784f925"
+    },
+    {
+      "file": "artifacts/phase3-operations/dependency-install-isolated.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "97c2f7e07bed122d435e554a21b48126c0ad3636"
+    },
+    {
+      "file": "artifacts/phase3-operations/dependency-install.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "57e8a6c943edd160d4e26deb8f1f254427428736"
+    },
+    {
+      "file": "artifacts/phase3-operations/dependency-lock.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "0f137afaf712e8bdf24b4b0856d9dbaf1ab1423c"
+    },
+    {
+      "file": "artifacts/phase3-operations/dependency-proof-first.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "0316ee99b796809b7aea7ba28318c7ea9dfdf703"
+    },
+    {
+      "file": "artifacts/phase3-operations/dependency-proof.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "33d48b6f608d7a94312e4abf48f7a8056b538cea"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-scan.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "786b0ce577c27d2ef1938bad8ab5c17ed9dc52de"
+    },
+    {
+      "file": "artifacts/phase3-operations/handoff-prefix-proof.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "235af308fd25a012c1d036364bc10eb5f852270d"
+    },
+    {
+      "file": "artifacts/phase3-operations/handoff-prefix.md",
+      "category": "documentation",
+      "baseBlob": null,
+      "candidateBlob": "2055d345f51b651963b6a05b32a099770ac88315"
+    },
+    {
+      "file": "artifacts/phase3-operations/html-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "2fd1e7c769de3dfdabf9ef2797e00408bb313a78"
+    },
+    {
+      "file": "artifacts/phase3-operations/https-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "e0fc18c93ed35f0adca0f10670f207a67570ebc3"
+    },
+    {
+      "file": "artifacts/phase3-operations/https-green.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "72a86bccc5b4c87cc0bcecc7cf9d9330a327e22a"
+    },
+    {
+      "file": "artifacts/phase3-operations/lint-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "02a6b650aa822d37c46f93042f76079f666e7d23"
+    },
+    {
+      "file": "artifacts/phase3-operations/lint-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "02a6b650aa822d37c46f93042f76079f666e7d23"
+    },
+    {
+      "file": "artifacts/phase3-operations/member-current-database-proof.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "dd37193a28dd3c684c7a2b451b6ab3f56aff9a0f"
+    },
+    {
+      "file": "artifacts/phase3-operations/member-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "58c59daf50ae4094c5ad1195322b38c823d5c073"
+    },
+    {
+      "file": "artifacts/phase3-operations/operations-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "79cb9e93a12fba3b990f0ad66b109dcaa75401be"
+    },
+    {
+      "file": "artifacts/phase3-operations/pg-launcher-line-ending-red.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "d1624a6f223026838717809338b7ea56966409db"
+    },
+    {
+      "file": "artifacts/phase3-operations/pg-regressions-console.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "101eb70e8c75e758ee21a480993f3aa6671c7555"
+    },
+    {
+      "file": "artifacts/phase3-operations/pg-regressions.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "6a0105299569d52aee1af84769043bdf0f27eb1c"
+    },
+    {
+      "file": "artifacts/phase3-operations/points-invariants-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "ebd2abada0a1a9b5f7e77f1ab57ee15fb74ba85f"
+    },
+    {
+      "file": "artifacts/phase3-operations/points-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "9a9c85ae35f04fcac8b9a515170617a077f90b32"
+    },
+    {
+      "file": "artifacts/phase3-operations/points-review-regression.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "1a7abc5698469ff8acb1daac777b89e859e0fd34"
+    },
+    {
+      "file": "artifacts/phase3-operations/probe-first.cjs",
+      "category": "evidence-execution-helper",
+      "baseBlob": null,
+      "candidateBlob": "21d231f332a35893f25c5128a4e22ed213c23a6c"
+    },
+    {
+      "file": "artifacts/phase3-operations/probe-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "d592ccd454f860eb803180e86c104f7d55f4ceb4"
+    },
+    {
+      "file": "artifacts/phase3-operations/rate-browser-first-result.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "fcd6562c5c4098c8ddc2a9f04fe9c13a66577f46"
+    },
+    {
+      "file": "artifacts/phase3-operations/rate-browser-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "ea83d7fb851e80c2709c82bab3a6238159d54467"
+    },
+    {
+      "file": "artifacts/phase3-operations/rate-browser-green.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "e714273d65e7aec42a4fc41e8ad2773d9077ee98"
+    },
+    {
+      "file": "artifacts/phase3-operations/rate-browser-result.json",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "57c3f5852cb409c792f42297728a45d3b7b32395"
+    },
+    {
+      "file": "artifacts/phase3-operations/rate-browser.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "ea83d7fb851e80c2709c82bab3a6238159d54467"
+    },
+    {
+      "file": "artifacts/phase3-operations/readonly-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "7fd1331f0f0ea5b7ee4e19dffeecf81f12958497"
+    },
+    {
+      "file": "artifacts/phase3-operations/review-expanded-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "68ff1143f2f032ed0fff329d08575ac5ce6580f8"
+    },
+    {
+      "file": "artifacts/phase3-operations/review-expanded-green.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "52fd8e8781ea088eb0f4a30bc632426456c19f32"
+    },
+    {
+      "file": "artifacts/phase3-operations/run-pg-regressions.cjs",
+      "category": "evidence-execution-helper",
+      "baseBlob": null,
+      "candidateBlob": "a60062e734894b3619da30f3d4d85c4f092a0f1a"
+    },
+    {
+      "file": "artifacts/phase3-operations/scan-candidate.cjs",
+      "category": "evidence-execution-helper",
+      "baseBlob": null,
+      "candidateBlob": "7f615de10b065fc6d3b3513226ad9e3711c6afb2"
+    },
+    {
+      "file": "artifacts/phase3-operations/security-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "d84951e6853704f28faf411dc99e829ed292014c"
+    },
+    {
+      "file": "artifacts/phase3-operations/security-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "5a55ca2e413bb8576d70d719233eb7140c09858b"
+    },
+    {
+      "file": "artifacts/phase3-operations/sponsor-and-private-green.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "cc57afdc34a4ab248f80b2cbaa18df191bb000b4"
+    },
+    {
+      "file": "artifacts/phase3-operations/sponsor-and-private-red.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "31b9ff530c3fc6ec74bb8e40c4c2716ee895d7c2"
+    },
+    {
+      "file": "artifacts/phase3-operations/teams-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "24fb7d55f9054a85c0c26bc1e81f988c706f0bb9"
+    },
+    {
+      "file": "artifacts/phase3-operations/teams-red.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "7b7b0e4c912b178bdb65e2679e7d2326f057d97d"
+    },
+    {
+      "file": "artifacts/phase3-operations/tracer-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "f31d01dd41578fb5e673e58eff2a8343ff73cf26"
+    },
+    {
+      "file": "artifacts/phase3-operations/tracer-red.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "708d2bf7bf2b66820527f70459bc132bdf069e84"
+    },
+    {
+      "file": "artifacts/phase3-operations/typecheck-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "b0387c48151f6bcff0782a48c1d87029f54470fb"
+    },
+    {
+      "file": "artifacts/phase3-operations/unit-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "0263de428bd2d3775b7cda9128177f6014ef301d"
+    },
+    {
+      "file": "artifacts/phase3-operations/unit-first.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "3ddaa3d4e2004e6023b660b78a37f406acf614dd"
+    },
+    {
+      "file": "artifacts/phase3-operations/video-final.log",
+      "category": "historical-evidence",
+      "baseBlob": null,
+      "candidateBlob": "5c161b29093267b87a3378cb7c8e151574bdcb68"
+    },
+    {
+      "file": "operations-local/README.md",
+      "category": "documentation",
+      "baseBlob": "7c40d074ae6552583ff4ac2e60313efc4f718b08",
+      "candidateBlob": "8fc1ad090a1bd8bf397fb00445c0069dcdfd3fab"
+    },
+    {
+      "file": "operations-local/demo.js",
+      "category": "local-error-message",
+      "baseBlob": "854e306a6cff6ef8f5d9c178eb00780e38c067a2",
+      "candidateBlob": "71d6240da4313efa24c5960e3dfa63945fc14640"
+    },
+    {
+      "file": "tests/operations-local-browser.cjs",
+      "category": "test-fixture-or-assertions",
+      "baseBlob": "5d6d790fe8c0c9b4a6c2baacdf60ff44b82c9763",
+      "candidateBlob": "b078892f073bde835993020ae84c51053c50b422"
+    },
+    {
+      "file": "tests/operations-local-rate-browser.cjs",
+      "category": "test-fixture-or-assertions",
+      "baseBlob": null,
+      "candidateBlob": "854b044f69e50581665b12f64bb0b6feed752ed1"
+    },
+    {
+      "file": "tests/operations-local-ui.test.cjs",
+      "category": "test-fixture-or-assertions",
+      "baseBlob": "173e328f422f9def454b81089ae3659fc6cea4cc",
+      "candidateBlob": "d809a0e7018dc80d8cac6e5c16a8294ce6bd716a"
+    }
+  ],
+  "protectedPathsUnchanged": [
+    "member-local",
+    "community-local",
+    "attendance-local",
+    "points-local",
+    "app",
+    "components",
+    "services",
+    "types",
+    "styles",
+    "netlify",
+    ".github",
+    "test-environment",
+    "netlify.toml",
+    "deploy.js",
+    "artifacts/rea-003/UI_AUDIT.md"
+  ],
+  "runtimeFiles": [
+    {
+      "file": "operations-local/contract.cjs",
+      "reviewedRuntimeBlob": "cd8f21417e16853b3dae095a1a160addf09d5d1b",
+      "initialReviewedBlob": "cd8f21417e16853b3dae095a1a160addf09d5d1b"
+    },
+    {
+      "file": "operations-local/database.cjs",
+      "reviewedRuntimeBlob": "ce574e3987a3040600bdf1f8b30f5ca561e5a5fe",
+      "initialReviewedBlob": "ce574e3987a3040600bdf1f8b30f5ca561e5a5fe"
+    },
+    {
+      "file": "operations-local/demo.css",
+      "reviewedRuntimeBlob": "d7b613e76ba4bc30a7cf366748b5af9ede523df8",
+      "initialReviewedBlob": "d7b613e76ba4bc30a7cf366748b5af9ede523df8"
+    },
+    {
+      "file": "operations-local/demo.html",
+      "reviewedRuntimeBlob": "f2fde398f2b04d21ff17cb286942f53f623db6d6",
+      "initialReviewedBlob": "f2fde398f2b04d21ff17cb286942f53f623db6d6"
+    },
+    {
+      "file": "operations-local/demo.js",
+      "reviewedRuntimeBlob": "71d6240da4313efa24c5960e3dfa63945fc14640",
+      "initialReviewedBlob": "854e306a6cff6ef8f5d9c178eb00780e38c067a2"
+    },
+    {
+      "file": "operations-local/documents.cjs",
+      "reviewedRuntimeBlob": "66bfe5ab5bcbf8bbf039fc3687ee239bf6513a7e",
+      "initialReviewedBlob": "66bfe5ab5bcbf8bbf039fc3687ee239bf6513a7e"
+    },
+    {
+      "file": "operations-local/handler.cjs",
+      "reviewedRuntimeBlob": "c1fb3c1d87c449213947616bee967c28c549d410",
+      "initialReviewedBlob": "c1fb3c1d87c449213947616bee967c28c549d410"
+    },
+    {
+      "file": "operations-local/html.cjs",
+      "reviewedRuntimeBlob": "7d351f3a3a4a24cf33f81802b214cb3c68a3829a",
+      "initialReviewedBlob": "7d351f3a3a4a24cf33f81802b214cb3c68a3829a"
+    },
+    {
+      "file": "operations-local/media-policy.cjs",
+      "reviewedRuntimeBlob": "cf71ebd59b1afff390319e5f7ab32a6cc104b371",
+      "initialReviewedBlob": "cf71ebd59b1afff390319e5f7ab32a6cc104b371"
+    },
+    {
+      "file": "operations-local/proof.cjs",
+      "reviewedRuntimeBlob": "059bc448644f3e1994ad987cbce987e9b59fbea3",
+      "initialReviewedBlob": "059bc448644f3e1994ad987cbce987e9b59fbea3"
+    },
+    {
+      "file": "operations-local/schema.sql",
+      "reviewedRuntimeBlob": "24f4774f3feb860ed5dd45e4492ab9347f286f50",
+      "initialReviewedBlob": "24f4774f3feb860ed5dd45e4492ab9347f286f50"
+    },
+    {
+      "file": "operations-local/server.cjs",
+      "reviewedRuntimeBlob": "4e8b9eb9aa352bad3d050c0e0260287371e0d500",
+      "initialReviewedBlob": "4e8b9eb9aa352bad3d050c0e0260287371e0d500"
+    },
+    {
+      "file": "operations-local/store.cjs",
+      "reviewedRuntimeBlob": "63d6df39373b071b53a3002b6f8466ef0af7893a",
+      "initialReviewedBlob": "63d6df39373b071b53a3002b6f8466ef0af7893a"
+    },
+    {
+      "file": "operations-local/teams.cjs",
+      "reviewedRuntimeBlob": "fcdceaf59f25e7841adf593140cc0fd2d1c47a1b",
+      "initialReviewedBlob": "fcdceaf59f25e7841adf593140cc0fd2d1c47a1b"
+    },
+    {
+      "file": "operations-local/teams.sql",
+      "reviewedRuntimeBlob": "a412924d58ceaea05ad707bfc9e84e4eaf37d5e9",
+      "initialReviewedBlob": "a412924d58ceaea05ad707bfc9e84e4eaf37d5e9"
+    }
+  ],
+  "assertionPreservation": {
+    "method": "AST multiset inclusion of pre-existing assert expressions; behavioral tests separately required",
+    "files": [
+      {
+        "file": "tests/operations-local-browser.cjs",
+        "oldAssertionCalls": 40,
+        "newAssertionCalls": 40,
+        "missingOldAssertionExpressions": 0
+      },
+      {
+        "file": "tests/operations-local-ui.test.cjs",
+        "oldAssertionCalls": 38,
+        "newAssertionCalls": 43,
+        "missingOldAssertionExpressions": 0
+      }
+    ]
+  }
+}

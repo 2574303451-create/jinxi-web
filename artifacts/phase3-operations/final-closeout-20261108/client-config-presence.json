@@ -1,0 +1,41 @@
+{
+  "recordedAtUtc": "2026-11-08T11:10:55.352Z",
+  "environmentKeyPresenceOnly": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "http_proxy": false,
+    "https_proxy": false,
+    "all_proxy": false,
+    "no_proxy": false,
+    "GIT_SSL_NO_VERIFY": false,
+    "GIT_SSL_CAINFO": false,
+    "GIT_SSL_CAPATH": false,
+    "SSL_CERT_FILE": false,
+    "SSL_CERT_DIR": false,
+    "CURL_CA_BUNDLE": false
+  },
+  "gitConfigurationPresenceOnly": {
+    "http.proxy": {
+      "configured": false,
+      "valueNotPrinted": true
+    },
+    "http.sslVerify": {
+      "configured": false,
+      "valueNotPrinted": true
+    },
+    "http.sslCAInfo": {
+      "configured": false,
+      "valueNotPrinted": true
+    },
+    "http.sslCAPath": {
+      "configured": false,
+      "valueNotPrinted": true
+    }
+  },
+  "currentRetryUsedCleanSubprocessEnvironment": true,
+  "previousRequestEnvironmentWasNotRecorded": true,
+  "noConfigurationModified": true,
+  "noSecretValuesPrinted": true
+}

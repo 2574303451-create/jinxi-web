@@ -1,0 +1,71 @@
+{
+  "evidenceNature": "primary classification of actual stderr and successful read; exact historical root cause is unproven",
+  "target": "GitHub HTTPS smart-Git refs over TCP 443",
+  "historicalErrors": {
+    "sourceSha": "4aa491dea5f77cd2b0c03fcf57ac34a38448e520",
+    "defaultError": "schannel: failed to receive handshake, SSL/TLS connection failed",
+    "alternateError": "TLS connect error: error:0A000126:SSL routines::unexpected eof while reading",
+    "exactPriorFailureTime": "not persisted in the prior evidence; do not invent",
+    "priorVerifiedBase": "9fde7fec87fc145cb51638114fe4eb2de1717b39",
+    "priorCiEvidence": "../base-ci-jobs.json",
+    "priorReadFromFreshTestWindow": {
+      "startedAtUtc": "2026-11-08T09:26:54.804Z",
+      "basis": "pg-regressions.json records the contemporaneous test window; not the exact Git failure time"
+    }
+  },
+  "preciseHistoricalFailureTimestampAvailable": false,
+  "historicalFailureWindow": {
+    "lowerExclusiveCommit": {
+      "sha": "6c09351e04790519ab4dd6b33c04ae5c028ad394",
+      "committedAt": "2026-11-08T17:59:32+08:00"
+    },
+    "upperExclusiveCommit": {
+      "sha": "4aa491dea5f77cd2b0c03fcf57ac34a38448e520",
+      "committedAt": "2026-11-08T18:00:50+08:00"
+    },
+    "utcWindow": [
+      "2026-11-08T09:59:32Z",
+      "2026-11-08T10:00:50Z"
+    ],
+    "basis": "recorded order: both TLS failures occurred after 6c09351 and before 4aa491d; this is a bounded window, not a packet timestamp"
+  },
+  "phase": "TLS handshake/read, before usable Git refs; not a PostgreSQL or Netlify request",
+  "certificateAssessment": "No specific certificate-validation error was recorded; past certificate or intermediary root causes cannot be established from the abbreviated errors. No validation was disabled.",
+  "currentDefaultBackend": "schannel",
+  "currentAttempt": {
+    "backend": "default",
+    "command": [
+      "git",
+      "-c",
+      "http.sslVerify=true",
+      "-c",
+      "http.lowSpeedLimit=1",
+      "-c",
+      "http.lowSpeedTime=15",
+      "ls-remote",
+      "--heads",
+      "origin",
+      "refs/heads/codex/jinxi-phase3-points-local",
+      "refs/heads/codex/jinxi-phase3-operations-local"
+    ],
+    "targetCategory": "GitHub HTTPS smart-Git refs, read only, port 443",
+    "startedAtUtc": "2026-11-08T11:00:01.855Z",
+    "completedAtUtc": "2026-11-08T11:00:05.175Z",
+    "exitCode": 0,
+    "errorType": null,
+    "stdout": "9fde7fec87fc145cb51638114fe4eb2de1717b39\trefs/heads/codex/jinxi-phase3-points-local\n",
+    "stderr": "",
+    "tlsCertificateVerification": true
+  },
+  "currentReadRecovered": true,
+  "mandatoryForLocalSyntheticAcceptance": false,
+  "mandatoryBeforeFuturePush": true,
+  "remainingPushConditions": [
+    "separate user push authorization",
+    "fresh remote HEAD and same-name branch check at push time",
+    "read-only deployment-protection gates at push time"
+  ],
+  "currentCiScope": "previous 9fde Actions success is historical baseline; no checkpoint5 remote CI has run",
+  "netlifyOrNeonContacted": false,
+  "globalConfigurationChanged": false
+}

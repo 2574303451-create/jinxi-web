@@ -1,0 +1,49 @@
+{
+  "recordedAtUtc": "2026-11-08T11:08:48.274Z",
+  "reviewedAndTestedSourceSha": "4aa491dea5f77cd2b0c03fcf57ac34a38448e520",
+  "initialIndependentBase": "25d6938a6bf42603ecad88428c970c11e5519c21",
+  "sourcePathsUnchanged": [
+    "operations-local",
+    "tests",
+    "scripts",
+    "member-local",
+    "community-local",
+    "attendance-local",
+    "points-local",
+    "app",
+    "components",
+    "services",
+    "types",
+    "styles",
+    "netlify",
+    ".github",
+    "test-environment",
+    "netlify.toml",
+    "deploy.js",
+    "package.json",
+    "package-lock.json",
+    "eslint.config.mjs",
+    "next.config.mjs",
+    "tsconfig.json",
+    "artifacts/rea-003/UI_AUDIT.md"
+  ],
+  "oldTrackedEvidenceUnchanged": true,
+  "additionalIndependentReviewedHelpers": [
+    {
+      "file": "run-tests.cjs",
+      "gitBlob": "30d5412309236c685ac011bd9bfd9aaa1ef08e8e",
+      "sha256": "b63a2a470171ea594566a9fae9a8f187293f4012d832137740bf03aa7103320b"
+    },
+    {
+      "file": "check-remote.cjs",
+      "gitBlob": "08bccd111db1b2a37f82cd4546e36e4a4a62a06f",
+      "sha256": "a9df25ea0c7f1365113ad78acea08c80df43dbac609d342ea1b4afd175afb3a3"
+    }
+  ],
+  "allFreshTestExitCodesZero": true,
+  "browserEvidence": "../browser/2026-11-08T11-03-51-818Z/results.json",
+  "remoteReadRecovered": true,
+  "noBusinessOrOriginalTestSourceChangesThisTurn": true,
+  "noKnownUnclosedLocalAcceptanceBlockers": true,
+  "noPushDeployOrCloudDbActions": true
+}

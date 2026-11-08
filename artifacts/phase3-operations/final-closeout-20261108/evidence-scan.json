@@ -1,0 +1,164 @@
+{
+  "checkedAtUtc": "2026-11-08T11:10:55.362Z",
+  "scopeApproved": true,
+  "sensitivePatternHits": 0,
+  "files": [
+    {
+      "file": "CODEX_HANDOFF.md",
+      "bytes": 62010,
+      "sha256": "4b3240e452d4381374b03d0bda6456e1cf061acf5caf2f9d8448e48363d69ee3"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/operations-1024.png",
+      "bytes": 244117,
+      "sha256": "44573589de5f9c40a1ed452a1dbd93fe242ec6a9aeb145ff0f6b0c286f495f79"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/operations-1440.png",
+      "bytes": 256460,
+      "sha256": "16f5a56af68e6e0c5029fc8c783bb9d16e21c9b354168edd380873aa09beb849"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/operations-320.png",
+      "bytes": 198801,
+      "sha256": "88be160488d6bc160e4abf9de8cc02ce988c0cfe5a9245a1418821f72c491a4f"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/operations-390.png",
+      "bytes": 203960,
+      "sha256": "49774b0bb770dfe1caee8b95d1f6d168172855fc6046746c03587fd81afa1937"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/operations-768.png",
+      "bytes": 228804,
+      "sha256": "1bd02fb0c9fc3c06b66e1ccc887fc6d51d2027b27fc8692de9355f8ad6330a07"
+    },
+    {
+      "file": "artifacts/phase3-operations/browser/2026-11-08T11-03-51-818Z/results.json",
+      "bytes": 1357,
+      "sha256": "5a900e083e8c6c3d562f1866017c2f78b7f92ab86adf58bd83da10c5c9164053"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/INDEPENDENT_REVIEW.md",
+      "bytes": 3706,
+      "sha256": "19aecb4f0d09d2b01ae7e527c66269589d0574255d1fbf1eb8ce6f7e637c28d1"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/REPORT.md",
+      "bytes": 9505,
+      "sha256": "5bc95df28205291ae048dc237321c2c72b43998b3b2bf2be50f158df5a444544"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/api.log",
+      "bytes": 1474,
+      "sha256": "07e5eef1a48c7747e2f6048cac68dd0134ffe119fb360471b6515aeee7ea8adc"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/browser.log",
+      "bytes": 353,
+      "sha256": "ff37b06fff8b26032d21e922c2c5347562fe53aa9491c7dbb7203da055c55118"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/check-remote.cjs",
+      "bytes": 2491,
+      "sha256": "a9df25ea0c7f1365113ad78acea08c80df43dbac609d342ea1b4afd175afb3a3"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/delta-inventory.json",
+      "bytes": 21675,
+      "sha256": "512a73d07bdbae55a535beabb4e4821cf4ffdd2b1b05d455195b3ee9c90e23fd"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/handoff-proof.json",
+      "bytes": 175,
+      "sha256": "f07cb3b467d4d715f1658621237749204220438b25960048be106ae47121ae78"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/https.log",
+      "bytes": 251,
+      "sha256": "b8e7c436aa536d92ce0486e46524f9b87b220ed217ffd7c93fdc92c481518747"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/lint.log",
+      "bytes": 221,
+      "sha256": "ee1a8efd1530fb77ec97cadb4ef364cca546d8f44abea901a348f20f938d2680"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/postgres-review.log",
+      "bytes": 1632,
+      "sha256": "3291960772d2e9e8a682ee672692a001597e87416dd5aef9998ba70ef8272ee9"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/postgres.log",
+      "bytes": 1510,
+      "sha256": "3700a36cb62d76aea433295b2aa6a670850afa9b4577832db9dedcfb5b5ad1cc"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/rate-browser-result.json",
+      "bytes": 132,
+      "sha256": "9524f2e4be955c7b2599aac3ec1a8f7a9ad754dfb5f3476de21a68e433cfdb8e"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/rate-browser.log",
+      "bytes": 115,
+      "sha256": "9f9acda01342e9eb38942f6ebee224df3b0b2cdcb9ea3a98c6cf9a98adf23852"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/readonly.log",
+      "bytes": 3941,
+      "sha256": "a6669a7d43c7eccbf61486fa8c0482ac48b6734e6ce5556592e5bc045b7ebb70"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/remote-read.json",
+      "bytes": 1634,
+      "sha256": "657180e53a9da54edf6f4f5deceb997c50f3768e693a9290f7610db625b630d5"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/run-tests.cjs",
+      "bytes": 2961,
+      "sha256": "b63a2a470171ea594566a9fae9a8f187293f4012d832137740bf03aa7103320b"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/security.log",
+      "bytes": 13589,
+      "sha256": "075754476aa21e81bcc51556e26e81738f9526d8cd9e1cfb1969ccf5e0366f36"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/source-proof.json",
+      "bytes": 1437,
+      "sha256": "06148f176af64a6f0856cb136d96bdbcb4f0d12f9bf4b6885ec894cb846b5619"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/test-console.log",
+      "bytes": 5282,
+      "sha256": "9a6e0af42a27d5dc323738bc23dd4aa75f8c1cc39e85f4009ae5bb8f7d78e2e5"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/test-runs.json",
+      "bytes": 6572,
+      "sha256": "5bc0ef848654b8927a8a507a29a97b5201e5c9bd845c5f09dd6de718d8b87912"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/tls-analysis.json",
+      "bytes": 3059,
+      "sha256": "edfd5f3c1da1914db50314263d2ce3566f30cfe7153603c598d8763ccc2b17f2"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/typecheck.log",
+      "bytes": 69,
+      "sha256": "e6f97a22e09041947b70e82daa0a31d686c46840b496e74eaa9c1b060cf0b556"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/unit.log",
+      "bytes": 1987,
+      "sha256": "f60999200f3aef753e8cc400b9b9838d21083bdafb512b8de6d58888438c1c09"
+    },
+    {
+      "file": "artifacts/phase3-operations/final-closeout-20261108/client-config-presence.json",
+      "bytes": 1020,
+      "sha256": "013861871733669b216f42a64fba605f9eab97df6b8ad85c0b44dc389373e883"
+    }
+  ],
+  "scanExcludesItself": true,
+  "noSourceOrOldEvidenceChanges": true
+}

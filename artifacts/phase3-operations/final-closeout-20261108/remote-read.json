@@ -1,0 +1,46 @@
+{
+  "prior": {
+    "sourceSha": "4aa491dea5f77cd2b0c03fcf57ac34a38448e520",
+    "defaultError": "schannel: failed to receive handshake, SSL/TLS connection failed",
+    "alternateError": "TLS connect error: error:0A000126:SSL routines::unexpected eof while reading",
+    "exactPriorFailureTime": "not persisted in the prior evidence; do not invent",
+    "priorVerifiedBase": "9fde7fec87fc145cb51638114fe4eb2de1717b39",
+    "priorCiEvidence": "../base-ci-jobs.json",
+    "priorReadFromFreshTestWindow": {
+      "startedAtUtc": "2026-11-08T09:26:54.804Z",
+      "basis": "pg-regressions.json records the contemporaneous test window; not the exact Git failure time"
+    }
+  },
+  "attempts": [
+    {
+      "backend": "default",
+      "command": [
+        "git",
+        "-c",
+        "http.sslVerify=true",
+        "-c",
+        "http.lowSpeedLimit=1",
+        "-c",
+        "http.lowSpeedTime=15",
+        "ls-remote",
+        "--heads",
+        "origin",
+        "refs/heads/codex/jinxi-phase3-points-local",
+        "refs/heads/codex/jinxi-phase3-operations-local"
+      ],
+      "targetCategory": "GitHub HTTPS smart-Git refs, read only, port 443",
+      "startedAtUtc": "2026-11-08T11:00:01.855Z",
+      "completedAtUtc": "2026-11-08T11:00:05.175Z",
+      "exitCode": 0,
+      "errorType": null,
+      "stdout": "9fde7fec87fc145cb51638114fe4eb2de1717b39\trefs/heads/codex/jinxi-phase3-points-local\n",
+      "stderr": "",
+      "tlsCertificateVerification": true
+    }
+  ],
+  "readRecovered": true,
+  "noPush": true,
+  "noNetlifyOrNeonRequests": true,
+  "noCertificateValidationBypass": true,
+  "noGlobalConfigurationChanged": true
+}

@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "startedAtUtc": "2026-11-08T11:03:51.819Z",
+  "stage": "five-widths-first-reset-and-lock",
+  "pageErrors": [],
+  "externalRequests": 0,
+  "csp": [],
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "announcement": {
+    "draftNotPublished": true,
+    "independentReview": true,
+    "storedHtmlSafe": true
+  },
+  "sponsorship": {
+    "sameNamesIndependent": true,
+    "hideAndRestore": true,
+    "lostResponseOneRecord": true,
+    "sameNonceRetry": true
+  },
+  "teams": {
+    "leaderCreate": true,
+    "automaticJoin": true,
+    "ownLeave": true,
+    "leaderManage": true
+  },
+  "media": {
+    "explicitPlay": true,
+    "localVideoPlays": true,
+    "brokenImageFallback": true,
+    "brokenVideoFallback": true
+  },
+  "silentSwitch": {
+    "finalOldResponseDiscarded": true,
+    "noOtherTeamDraft": true
+  },
+  "idleAndDemotionClear": true,
+  "beforeIndependentFirstReset": {
+    "status": 200,
+    "code": null
+  },
+  "rateFixtureResets": 1,
+  "firstResetNotice": "请先完成首次改密，未显示私有操作。",
+  "lockClears": true,
+  "completedAtUtc": "2026-11-08T11:05:30.983Z"
+}

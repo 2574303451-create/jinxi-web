@@ -1,0 +1,24 @@
+✔ points rejects cloud or nonlocal configuration before reading credential values or connecting (1.7411ms)
+✔ malformed reads, protocol and CSRF are refused before the business connection (0.7514ms)
+✔ points failure responses expose no storage credentials, internal schema, cookie or CORS (0.2306ms)
+✔ an A-bound financial click discovers B and never submits A intent as B (4.655ms)
+✔ identity broadcasts, focus and online clear financial data before the next identity response (2.1661ms)
+✔ a lost redeem response retains the original intent and UUID and never automatically repeats a deduction (1.6739ms)
+✔ a delayed A write result cannot populate B balances, orders or administrative controls (1.0517ms)
+✔ a delayed A identity check cannot send its command after a B invalidation notification (0.8152ms)
+✔ first-reset and mismatched private responses reveal no financial history (1.58ms)
+✔ a failed private read clears prior counters and never presents a fake zero balance (0.7426ms)
+✔ failure before a write is sent is not described as an unconfirmed financial operation (0.8754ms)
+✔ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (0.6891ms)
+✔ withdrawn administrative permission during a delayed board read clears previously fetched private admin data (0.7955ms)
+✔ even the final A private response cannot render after an unbroadcast cookie change (0.7161ms)
+✔ a missing local invalidation marker fails closed without fetching financial history (0.5848ms)
+✔ a silent cookie change clears already rendered financial data without a request or notification (1.1295ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 119.3782

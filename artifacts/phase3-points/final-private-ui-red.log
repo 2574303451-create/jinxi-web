@@ -1,0 +1,38 @@
+✔ an A-bound financial click discovers B and never submits A intent as B (5.4336ms)
+✔ identity broadcasts, focus and online clear financial data before the next identity response (2.3133ms)
+✔ a lost redeem response retains the original intent and UUID and never automatically repeats a deduction (1.9394ms)
+✔ a delayed A write result cannot populate B balances, orders or administrative controls (0.9874ms)
+✔ a delayed A identity check cannot send its command after a B invalidation notification (0.8533ms)
+✔ first-reset and mismatched private responses reveal no financial history (1.4759ms)
+✔ a failed private read clears prior counters and never presents a fake zero balance (0.7134ms)
+✔ failure before a write is sent is not described as an unconfirmed financial operation (1.0127ms)
+✔ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (0.6996ms)
+✔ withdrawn administrative permission during a delayed board read clears previously fetched private admin data (0.7625ms)
+✖ even the final A private response cannot render after an unbroadcast cookie change (1.214ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 91.533
+
+✖ failing tests:
+
+test at tests\points-local-ui.test.cjs:50:1
+✖ even the final A private response cannot render after an unbroadcast cookie change (1.214ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-ui.test.cjs:51:242)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

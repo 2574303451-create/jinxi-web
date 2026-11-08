@@ -1,0 +1,40 @@
+✔ an A-bound financial click discovers B and never submits A intent as B (4.6948ms)
+✔ identity broadcasts, focus and online clear financial data before the next identity response (2.1829ms)
+✔ a lost redeem response retains the original intent and UUID and never automatically repeats a deduction (1.6584ms)
+✔ a delayed A write result cannot populate B balances, orders or administrative controls (0.9976ms)
+✔ a delayed A identity check cannot send its command after a B invalidation notification (0.8042ms)
+✔ first-reset and mismatched private responses reveal no financial history (1.5001ms)
+✔ a failed private read clears prior counters and never presents a fake zero balance (0.7067ms)
+✔ failure before a write is sent is not described as an unconfirmed financial operation (0.8569ms)
+✔ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (0.6868ms)
+✔ withdrawn administrative permission during a delayed board read clears previously fetched private admin data (0.7842ms)
+✔ even the final A private response cannot render after an unbroadcast cookie change (0.7054ms)
+✔ a missing local invalidation marker fails closed without fetching financial history (0.622ms)
+✖ a silent cookie change clears already rendered financial data without a request or notification (1.5728ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94.4042
+
+✖ failing tests:
+
+test at tests\points-local-ui.test.cjs:56:1
+✖ a silent cookie change clears already rendered financial data without a request or notification (1.5728ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-ui.test.cjs:57:121)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

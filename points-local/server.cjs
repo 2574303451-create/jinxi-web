@@ -1,4 +1,4 @@
-const https=require('node:https'),fs=require('node:fs'),path=require('node:path'),{spawnSync}=require('node:child_process');
+const https=require('node:https'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{spawnSync}=require('node:child_process');
 const {cleanEnv}=require('../scripts/run-clean.cjs');
 const {createMemberHandler}=require('../member-local/identity.cjs');
 const {createAttendanceHandler}=require('../attendance-local/handler.cjs');
@@ -23,6 +23,9 @@ async function servePoints(db,openssl){
     const limit=url.pathname==='/api/attendance'?2048:4096;if(Number(req.headers['content-length'])>limit)return send(413,'{"code":"BODY_REJECTED"}');
     let bytes=0;const chunks=[];for await(const chunk of req){bytes+=chunk.length;if(bytes>limit){req.resume();return send(413,'{"code":"BODY_REJECTED"}');}chunks.push(chunk);}
     const r=await (url.pathname==='/api/member'?identity:url.pathname==='/api/attendance'?attendance:points)({httpMethod:req.method,headers:req.headers,queryStringParameters:Object.fromEntries(url.searchParams),body:Buffer.concat(chunks).toString('utf8'),localClientAddress:req.socket.remoteAddress});
+    // Public invalidation nonce only: no identity/credential and never accepted as authority.
+    // Delayed points/me reads must not reset it after another tab changes the auth Cookie.
+    if(url.pathname==='/api/member'&&r.headers['Set-Cookie'])r.headers['Set-Cookie']=[...[r.headers['Set-Cookie']].flat(),'__Host-jinxi_points_epoch='+crypto.randomUUID()+'; Path=/; Secure; SameSite=Strict'];
     return send(r.statusCode,r.body,'application/json; charset=utf-8',r.headers);
    }
    if(req.method!=='GET')return send(404,'{"code":"NOT_FOUND"}');

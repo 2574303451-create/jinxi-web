@@ -1,0 +1,42 @@
+✔ points rejects cloud or nonlocal configuration before reading credential values or connecting (1.7127ms)
+✔ malformed reads, protocol and CSRF are refused before the business connection (0.7693ms)
+✔ points failure responses expose no storage credentials, internal schema, cookie or CORS (0.2439ms)
+✔ an A-bound financial click discovers B and never submits A intent as B (4.925ms)
+✔ identity broadcasts, focus and online clear financial data before the next identity response (2.2204ms)
+✔ a lost redeem response retains the original intent and UUID and never automatically repeats a deduction (1.6881ms)
+✔ a delayed A write result cannot populate B balances, orders or administrative controls (1.0933ms)
+✔ a delayed A identity check cannot send its command after a B invalidation notification (0.8738ms)
+✔ first-reset and mismatched private responses reveal no financial history (1.6025ms)
+✔ a failed private read clears prior counters and never presents a fake zero balance (0.7669ms)
+✔ failure before a write is sent is not described as an unconfirmed financial operation (0.8808ms)
+✔ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (0.6969ms)
+✔ withdrawn administrative permission during a delayed board read clears previously fetched private admin data (0.8085ms)
+✔ even the final A private response cannot render after an unbroadcast cookie change (1.0349ms)
+✖ a missing local invalidation marker fails closed without fetching financial history (1.16ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 119.0446
+
+✖ failing tests:
+
+test at tests\points-local-ui.test.cjs:53:1
+✖ a missing local invalidation marker fails closed without fetching financial history (1.16ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-ui.test.cjs:54:67)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

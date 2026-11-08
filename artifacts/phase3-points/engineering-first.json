@@ -1,0 +1,30 @@
+[
+  {
+    "command": "node scripts/run-clean.cjs run typecheck",
+    "startedAtUtc": "2026-11-08T02:13:28.0388680Z",
+    "completedAtUtc": "2026-11-08T02:13:34.4208667Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-points/engineering-typecheck.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run test:api",
+    "startedAtUtc": "2026-11-08T02:13:34.4855023Z",
+    "completedAtUtc": "2026-11-08T02:13:35.2941817Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-points/engineering-test-api.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run test:security",
+    "startedAtUtc": "2026-11-08T02:13:35.3027971Z",
+    "completedAtUtc": "2026-11-08T02:13:37.3051704Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-points/engineering-test-security.log"
+  },
+  {
+    "command": "node scripts/run-clean.cjs run build",
+    "startedAtUtc": "2026-11-08T02:13:37.3080188Z",
+    "completedAtUtc": "2026-11-08T02:13:59.0157723Z",
+    "exitCode": 0,
+    "log": "artifacts/phase3-points/engineering-build.log"
+  }
+]

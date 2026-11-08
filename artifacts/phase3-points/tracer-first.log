@@ -1,0 +1,39 @@
+✖ trusted synthetic points on actual PostgreSQL (34326.7921ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34331.1821
+
+✖ failing tests:
+
+test at tests\points-local-postgres.test.cjs:6:1
+✖ trusted synthetic points on actual PostgreSQL (34326.7921ms)
+  error: syntax error at end of input
+      at E:\Recovery\.jinxi-research\f03-f05\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async freshPoints (E:\Recovery\.jinxi-research\phase3-points\worktree\points-local\database.cjs:11:97)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-postgres.test.cjs:7:90)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 94,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: '16269',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'scan.l',
+    line: '1240',
+    routine: 'scanner_yyerror'
+  }

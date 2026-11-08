@@ -1,0 +1,16 @@
+▶ trusted synthetic points on actual PostgreSQL
+  ✔ a verified UUID starts at zero and settles one existing attendance event without rewriting it (1840.4048ms)
+  ✔ only trusted admins create immutable rule versions; overlapping and disabled rules cannot award (2920.7065ms)
+  ✔ effective windows, daily caps and cross-version total caps preserve historical settlements (6234.8605ms)
+  ✔ a first concurrent settlement batch, lost response retry and request conflicts never double-credit (2739.4061ms)
+  ✔ same-nickname UUIDs cannot claim events or read each other private point history (3182.5758ms)
+  ✔ redeem, exact retry and owner cancellation atomically debit and refund one fictional order (4718.5894ms)
+✔ trusted synthetic points on actual PostgreSQL (55884.673ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55886.9244

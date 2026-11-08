@@ -1,0 +1,11 @@
+▶ trusted synthetic points on actual PostgreSQL
+  ✔ a verified UUID starts at zero and settles one existing attendance event without rewriting it (2420.2761ms)
+✔ trusted synthetic points on actual PostgreSQL (36905.6477ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36908.7351

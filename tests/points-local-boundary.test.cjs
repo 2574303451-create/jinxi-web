@@ -1,0 +1,17 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const {createPointsHandler}=require('../points-local/handler.cjs');
+const settings=()=>({kind:'jinxi-member-local-v1',host:'127.0.0.1',port:55436,database:'jinxi_member_local',user:'jinxi_member_session',password:'synthetic-unit-only',origin:'https://127.0.0.1:3069',environmentId:crypto.randomUUID(),fingerprint:'0'.repeat(64),csrfKey:'1'.repeat(64),rateKey:'2'.repeat(64)});
+const me=async()=>({statusCode:200,body:JSON.stringify({member:{id:crypto.randomUUID()},csrfToken:'unit-csrf',needsPasswordChange:false})}),post=body=>({httpMethod:'POST',headers:{origin:'https://127.0.0.1:3069','content-type':'application/json','x-csrf-token':'unit-csrf'},body:JSON.stringify(body)});
+test('points rejects cloud or nonlocal configuration before reading credential values or connecting',async()=>{
+ for(const key of ['DATABASE_URL','ADMIN_PASSWORD','NETLIFY','JINXI_TEST_READ_DATABASE_URL']){let reads=0,connections=0;const env={};Object.defineProperty(env,key,{enumerable:true,get(){reads++;throw Error('DO_NOT_READ');}});const h=createPointsHandler({settings:settings(),env,identity:me,connect:()=>{connections++;}});assert.equal((await h({httpMethod:'GET',headers:{}})).statusCode,503);assert.equal(reads,0);assert.equal(connections,0);}
+ let connections=0;const h=createPointsHandler({settings:{...settings(),host:'not-local.invalid'},env:{},identity:me,connect:()=>{connections++;}});assert.equal((await h(post({op:'settle',requestId:crypto.randomUUID(),eventId:crypto.randomUUID()}))).statusCode,503);assert.equal(connections,0);
+});
+test('malformed reads, protocol and CSRF are refused before the business connection',async()=>{
+ let connects=0;const h=createPointsHandler({settings:settings(),env:{},identity:me,connect:()=>{connects++;throw Error('MUST_NOT_CONNECT');}}),body={op:'settle',requestId:crypto.randomUUID(),eventId:crypto.randomUUID()};
+ for(const [query,status]of [[{userId:'foreign'},403],[{memberId:'foreign'},403],[{limit:'0'},400],[{limit:'51'},400],[{beforeLedger:'-1'},400],[{view:'board',metric:'money'},400],[{view:'board',cursor:'<script>'},400]])assert.equal((await h({httpMethod:'GET',headers:{},queryStringParameters:query})).statusCode,status);
+ for(const [e,status]of [[{...post(body),headers:{}},403],[{...post(body),headers:{origin:'https://attacker.invalid'}},403],[{...post(body),headers:{...post(body).headers,'x-csrf-token':'forged'}},403],[{...post(body),isBase64Encoded:true},413],[{...post(body),body:'{not json'},400],[post({...body,requestId:'invalid'}),400],[{...post(body),httpMethod:'OPTIONS'},405]])assert.equal((await h(e)).statusCode,status);assert.equal(connects,0);
+});
+test('points failure responses expose no storage credentials, internal schema, cookie or CORS',async()=>{
+ const h=createPointsHandler({settings:settings(),env:{},identity:me,connect:()=>{throw Error('PRIVATE_DB_PASSWORD_MARKER');}}),r=await h(post({op:'settle',requestId:crypto.randomUUID(),eventId:crypto.randomUUID()}));assert.equal(r.statusCode,503);assert(!r.body.includes('PRIVATE_'));assert(!r.headers['Set-Cookie']);assert(!r.headers['Access-Control-Allow-Origin']);assert.equal(r.headers['Cache-Control'],'no-store');
+ let connects=0;const denied=createPointsHandler({settings:settings(),env:{},identity:async()=>({statusCode:401,headers:{},body:'{"code":"SESSION_INVALID"}'}),connect:()=>{connects++;}});assert.equal((await denied({httpMethod:'GET',headers:{}})).statusCode,401);assert.equal(connects,0);
+});

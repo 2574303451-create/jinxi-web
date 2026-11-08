@@ -1,0 +1,12 @@
+▶ trusted synthetic points on actual PostgreSQL
+  ✔ a verified UUID starts at zero and settles one existing attendance event without rewriting it (1884.3531ms)
+  ✔ only trusted admins create immutable rule versions; overlapping and disabled rules cannot award (3672.4361ms)
+✔ trusted synthetic points on actual PostgreSQL (40044.7868ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40047.8279

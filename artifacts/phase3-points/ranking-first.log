@@ -1,0 +1,42 @@
+▶ trusted synthetic points on actual PostgreSQL
+  ✔ a verified UUID starts at zero and settles one existing attendance event without rewriting it (2206.8131ms)
+  ✔ only trusted admins create immutable rule versions; overlapping and disabled rules cannot award (3764.3066ms)
+  ✔ effective windows, daily caps and cross-version total caps preserve historical settlements (6801.8047ms)
+  ✔ a first concurrent settlement batch, lost response retry and request conflicts never double-credit (3047.3361ms)
+  ✔ same-nickname UUIDs cannot claim events or read each other private point history (3092.5371ms)
+  ✔ redeem, exact retry and owner cancellation atomically debit and refund one fictional order (4577.0884ms)
+  ✔ concurrent redemptions respect balance, stock and per-member limits across distinct UUIDs (6288.6102ms)
+  ✔ only administrators process other orders or reverse original awards, with no repeated refund or reversal (7702.3252ms)
+  ✔ ledger and stock invariants reject direct credential-role tampering without fabricating credits (2899.095ms)
+  ✖ rankings use explicit net-earned or balance metrics, opt-in aliases and stable snapshot pagination (3499.8529ms)
+✖ trusted synthetic points on actual PostgreSQL (78984.7178ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78994.9842
+
+✖ failing tests:
+
+test at tests\points-local-postgres.test.cjs:100:11
+✖ rankings use explicit net-earned or balance metrics, opt-in aliases and stable snapshot pagination (3499.8529ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(!JSON.stringify(r.body).includes(secret))
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-postgres.test.cjs:105:165)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-postgres.test.cjs:100:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

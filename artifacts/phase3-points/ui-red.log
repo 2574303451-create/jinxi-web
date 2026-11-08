@@ -1,0 +1,36 @@
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open 'E:\Recovery\.jinxi-research\phase3-points\worktree\points-local\demo.js'
+    at Object.readFileSync (node:fs:483:20)
+    at Object.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-ui.test.cjs:2:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'E:\\Recovery\\.jinxi-research\\phase3-points\\worktree\\points-local\\demo.js'
+}
+
+Node.js v24.22.2
+✖ tests\points-local-ui.test.cjs (66.6226ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.3369
+
+✖ failing tests:
+
+test at tests\points-local-ui.test.cjs:1:1
+✖ tests\points-local-ui.test.cjs (66.6226ms)
+  'test failed'

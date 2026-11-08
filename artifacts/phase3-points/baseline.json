@@ -1,0 +1,31 @@
+{
+  "checkedAtUtc": "2026-11-08T01:40:26.006Z",
+  "base": "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e",
+  "remoteHeadVerifiedByNativeGit": true,
+  "branch": "codex/jinxi-phase3-attendance-local",
+  "newBranch": "codex/jinxi-phase3-points-local",
+  "newRoot": "E:/Recovery/.jinxi-research/phase3-points/worktree",
+  "ci": {
+    "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42425922538",
+    "sha": "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e",
+    "status": "completed",
+    "conclusion": "success",
+    "covered": {
+      "api": 14,
+      "security": 104,
+      "attendanceBoundary": 3,
+      "attendanceUi": 8,
+      "video": 6,
+      "existingPostgres": 55,
+      "engineering": true
+    },
+    "notCovered": [
+      "attendance PG14/review4",
+      "member/community local PG and HTTPS",
+      "fresh readonly PG46",
+      "real HTTPS/browser",
+      "all new checkpoint4 code remains local/unpushed"
+    ]
+  },
+  "noCloudOrPrWrites": true
+}

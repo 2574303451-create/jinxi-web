@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "startedAtUtc": "2026-11-08T02:13:28.592Z",
+  "stage": "first-reset-safe-text-and-five-widths",
+  "pageErrors": [],
+  "csp": [],
+  "externalRequests": 0,
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "rateFixtureResets": 1,
+  "settlementThroughExistingAttendance": true,
+  "lostResponse": {
+    "sameNonce": true,
+    "oneDebit": true,
+    "noAutomaticPost": true
+  },
+  "refundAndReversal": {
+    "oneOriginalRefund": true,
+    "oneOriginalReversal": true,
+    "eventCannotReaward": true
+  },
+  "rankingPrivacy": true,
+  "realBroadcastPrivacy": {
+    "logoutClears": true,
+    "loginRevalidates": true,
+    "oldPrivateResponseDiscarded": true
+  },
+  "lockClearsPrivate": true,
+  "completedAtUtc": "2026-11-08T02:14:46.444Z"
+}

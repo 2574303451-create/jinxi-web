@@ -1,0 +1,38 @@
+▶ trusted synthetic points on actual PostgreSQL
+  ✔ a verified UUID starts at zero and settles one existing attendance event without rewriting it (1913.4872ms)
+  ✔ only trusted admins create immutable rule versions; overlapping and disabled rules cannot award (3493.4516ms)
+  ✔ effective windows, daily caps and cross-version total caps preserve historical settlements (6189.0477ms)
+  ✔ a first concurrent settlement batch, lost response retry and request conflicts never double-credit (2712.9123ms)
+  ✔ same-nickname UUIDs cannot claim events or read each other private point history (2874.0978ms)
+  ✖ redeem, exact retry and owner cancellation atomically debit and refund one fictional order (2510.4627ms)
+✖ trusted synthetic points on actual PostgreSQL (53756.9496ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 5
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53759.4846
+
+✖ failing tests:
+
+test at tests\points-local-postgres.test.cjs:64:11
+✖ redeem, exact retry and owner cancellation atomically debit and refund one fictional order (2510.4627ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-postgres.test.cjs:66:195)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-postgres.test.cjs:64:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

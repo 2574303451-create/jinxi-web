@@ -167,5 +167,15 @@
   "noDeploy": true,
   "noCloudDbChanges": true,
   "historyUnclaimed": true,
-  "formalUiUnchanged": true
+  "formalUiUnchanged": true,
+  "remoteFinalRead": {
+    "success": false,
+    "errors": [
+      "schannel SSL/TLS handshake failed",
+      "openssl TLS unexpected EOF"
+    ],
+    "earlierVerifiedBase": "9fde7fec87fc145cb51638114fe4eb2de1717b39",
+    "newBranchNeverPushed": true,
+    "safePushRequiresFreshRemoteAndDeploymentGates": true
+  }
 }

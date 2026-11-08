@@ -1,0 +1,9 @@
+{"suite":"operations","exitCode":0}
+{"suite":"member","exitCode":0}
+{"suite":"community","exitCode":0}
+{"suite":"community-review","exitCode":0}
+{"suite":"attendance","exitCode":0}
+{"suite":"attendance-review","exitCode":0}
+{"suite":"points","exitCode":0}
+{"suite":"points-review","exitCode":0}
+{"suite":"points-invariants","exitCode":0}

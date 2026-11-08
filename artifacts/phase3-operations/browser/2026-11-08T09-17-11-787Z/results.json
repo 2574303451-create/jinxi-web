@@ -1,0 +1,42 @@
+{
+  "passed": false,
+  "startedAtUtc": "2026-11-08T09:17:11.788Z",
+  "stage": "five-widths-first-reset-and-lock",
+  "pageErrors": [],
+  "externalRequests": 0,
+  "csp": [],
+  "viewports": [],
+  "announcement": {
+    "draftNotPublished": true,
+    "independentReview": true,
+    "storedHtmlSafe": true
+  },
+  "sponsorship": {
+    "sameNamesIndependent": true,
+    "hideAndRestore": true,
+    "lostResponseOneRecord": true,
+    "sameNonceRetry": true
+  },
+  "teams": {
+    "leaderCreate": true,
+    "automaticJoin": true,
+    "ownLeave": true,
+    "leaderManage": true
+  },
+  "media": {
+    "explicitPlay": true,
+    "localVideoPlays": true,
+    "brokenImageFallback": true,
+    "brokenVideoFallback": true
+  },
+  "silentSwitch": {
+    "finalOldResponseDiscarded": true,
+    "noOtherTeamDraft": true
+  },
+  "idleAndDemotionClear": true,
+  "errorType": "AssertionError",
+  "testLocation": [
+    "operations-local-browser.cjs:17:137"
+  ],
+  "completedAtUtc": "2026-11-08T09:18:45.616Z"
+}

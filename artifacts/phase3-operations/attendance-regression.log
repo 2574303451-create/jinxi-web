@@ -1,0 +1,23 @@
+▶ trusted attendance facts on actual synthetic PostgreSQL
+  ✔ a verified member records a database-dated fact and an unsettled event without crediting points (1303.4029ms)
+  ✔ streaks, leap day, month statistics and paginated history are recomputed from dated facts (3113.1126ms)
+  ✔ duplicate IDs, new IDs and concurrent requests produce one fact/event per day and never sign the next day by replay (2670.1233ms)
+  ✔ the first simultaneous batch on an empty day produces exactly one successful fact and event (1918.3173ms)
+  ✔ calendar boundaries use Shanghai dates independently of connection timezone (5350.3352ms)
+  ✔ concurrent requests straddling midnight are dated at the locked insert and create exactly two dated facts (1381.0445ms)
+  ✔ same-nickname members, including reviewers, cannot read or attribute another member history (2406.8609ms)
+  ✔ guest, first-reset, logout, password change and expired sessions cannot write (3734.8812ms)
+  ✔ state changes and expiry committed during the actual account-lock wait are checked again (8032.5612ms)
+  ✔ actual PostgreSQL failures after the fact or event roll back every write, and a retry succeeds once (3081.7543ms)
+  ✔ runtime ACLs forbid date, streak, reward, legacy and ledger tampering and fail closed on grant drift (1490.148ms)
+  ✔ invalid periods, future fact anomalies and missing events never become fake success or zero (2361.2073ms)
+  ✔ unowned legacy checkins are excluded and original identity/community handlers coexist unchanged (1746.8908ms)
+✔ trusted attendance facts on actual synthetic PostgreSQL (72599.0665ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72601.6846

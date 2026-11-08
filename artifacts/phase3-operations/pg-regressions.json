@@ -1,0 +1,121 @@
+[
+  {
+    "name": "operations",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/operations-local-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:26:54.804Z",
+    "completedAtUtc": "2026-11-08T09:27:59.707Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "member",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/member-local-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "startedAtUtc": "2026-11-08T09:27:59.708Z",
+    "completedAtUtc": "2026-11-08T09:29:14.149Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "community",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/community-local-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:29:14.149Z",
+    "completedAtUtc": "2026-11-08T09:30:29.517Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "community-review",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/community-local-review-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:30:29.517Z",
+    "completedAtUtc": "2026-11-08T09:31:06.900Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "attendance",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/attendance-local-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:31:06.900Z",
+    "completedAtUtc": "2026-11-08T09:32:19.667Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "attendance-review",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/attendance-local-review-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:32:19.668Z",
+    "completedAtUtc": "2026-11-08T09:33:01.144Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "points",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/points-local-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:33:01.145Z",
+    "completedAtUtc": "2026-11-08T09:34:18.490Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "points-review",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/points-local-review-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:34:18.491Z",
+    "completedAtUtc": "2026-11-08T09:35:32.622Z",
+    "exitCode": 0,
+    "errorType": null
+  },
+  {
+    "name": "points-invariants",
+    "command": [
+      "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+      "tests/points-local-invariants-postgres.test.cjs",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "startedAtUtc": "2026-11-08T09:35:32.622Z",
+    "completedAtUtc": "2026-11-08T09:36:13.837Z",
+    "exitCode": 0,
+    "errorType": null
+  }
+]

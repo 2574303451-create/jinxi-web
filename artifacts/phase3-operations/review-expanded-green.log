@@ -1,0 +1,22 @@
+{"case":"cached-admin-capability","status":403,"peerDraftExposed":false}
+▶ remaining operations capability revocation and transaction review on PostgreSQL
+  ✔ an administrator demoted to reviewer cannot replay a cached override edit of another author draft (1878.687ms)
+{"case":"delayed-admin-private-read","status":403,"peerDraftExposed":false}
+  ✔ a demotion after fetching all management drafts refuses the private response (1561.6496ms)
+  ✔ a demotion after an override edit rolls back both the content and its audit revision (1739.7892ms)
+  ✔ denied authenticated management attempts leave an actor-bound audit without a partial document (966.9622ms)
+  ✔ SQL errors at revision, request receipt, membership projection and team event roll back every business row; exact retry succeeds once (7804.7127ms)
+  ✔ logout and actual password change after identity preflight invalidate pending writes and private reads (2772.3612ms)
+  ✔ account-row lock wait rechecks locked, inactive, disabled, version, revoked, expired and first-password-reset states (7650.0783ms)
+  ✔ session and operations-lock waits recheck actual expiry and role demotion before private access (5147.5783ms)
+  ✔ expiry during deferred validation or a delayed private query refuses all data and rolls back the draft (3677.8777ms)
+  ✔ missing mutex and forged client authority fail closed without partial writes (3141.7464ms)
+✔ remaining operations capability revocation and transaction review on PostgreSQL (70851.7199ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70854.1959

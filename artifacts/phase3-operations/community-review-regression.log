@@ -1,0 +1,13 @@
+▶ independent community concurrency and revocation regressions on PostgreSQL
+  ✔ different UUID letter case cannot split the lock for one item (1415.9896ms)
+  ✔ expiry while waiting for the account lock is evaluated at actual validation time (1341.0735ms)
+  ✔ changing the password after identity lookup invalidates the business request and receipt (1011.3917ms)
+✔ independent community concurrency and revocation regressions on PostgreSQL (37227.8353ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37230.0872

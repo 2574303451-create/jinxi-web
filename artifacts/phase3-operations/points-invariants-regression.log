@@ -1,0 +1,13 @@
+▶ points invariant resources and inherited handlers coexist on one actual synthetic cluster
+  ✔ a missing business mutex fails closed before creating any financial state (1647.9257ms)
+  ✔ original identity, community and attendance contracts remain usable after the points extension (2546.6856ms)
+  ✔ deferred database validation cannot commit an award after the session expires (2858.2453ms)
+✔ points invariant resources and inherited handlers coexist on one actual synthetic cluster (41082.8565ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41085.6547

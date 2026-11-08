@@ -1,0 +1,14 @@
+✔ explicit external mode returns only canonical HTTPS watch pages (2.2979ms)
+✔ external mode rejects unsafe protocols, impostors, redirects, duplicates and direct media (0.3684ms)
+✔ native mode requires an approved same-origin asset, without a query or fragment (0.2642ms)
+✔ legacy records infer only approved destinations and malformed explicit modes stay unavailable (0.2311ms)
+✔ projecting playback mode preserves all legacy fields and the B1 attachment-count unit (0.3318ms)
+✔ demo serves only local immutable fixtures and honors a video byte range (53.0849ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.9338

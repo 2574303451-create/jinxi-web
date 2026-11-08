@@ -1,0 +1,24 @@
+{
+  "classification": "synthetic-local",
+  "host": "127.0.0.1",
+  "port": 55436,
+  "database": "jinxi_member_local",
+  "scramAuthentication": true,
+  "missingApprovalRejectedBeforeDdl": true,
+  "identity": {
+    "environment_id": "dffa558b-42df-48bb-9708-c3ac5d9893bd",
+    "classification": "synthetic-local",
+    "cluster_id": "7705730018977046088",
+    "database_oid": "16384",
+    "database_name": "jinxi_member_local"
+  },
+  "role": {
+    "rolname": "jinxi_member_session",
+    "rolsuper": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false,
+    "rolreplication": false,
+    "rolbypassrls": false,
+    "rolinherit": false
+  }
+}

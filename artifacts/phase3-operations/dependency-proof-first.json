@@ -1,0 +1,21 @@
+{
+  "oldPackageVersionsChanged": [
+    "node_modules/source-map-js"
+  ],
+  "addedPackages": [
+    "node_modules/dayjs",
+    "node_modules/dom-serializer",
+    "node_modules/domelementtype",
+    "node_modules/domhandler",
+    "node_modules/domutils",
+    "node_modules/entities",
+    "node_modules/htmlparser2",
+    "node_modules/is-plain-object",
+    "node_modules/launder",
+    "node_modules/parse-srcset",
+    "node_modules/sanitize-html",
+    "node_modules/sanitize-html/node_modules/postcss"
+  ],
+  "newSanitizerVersion": "2.18.1",
+  "independentModules": true
+}

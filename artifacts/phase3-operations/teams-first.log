@@ -1,0 +1,15 @@
+▶ remaining business operations on actual isolated synthetic PostgreSQL
+  ✔ only a trusted staff UUID creates a draft; a different reviewer publishes it and only published content is public (2782.5904ms)
+  ✔ synthetic sponsorship entries keep same-name identities separate, page deterministically and require real administrator maintenance (5263.3235ms)
+{"case":"private-management-read","status":403,"foreignOwnerExposed":false}
+  ✔ private management reads demand a current staff role even when the announcement itself is public (2283.6432ms)
+  ✔ team creation, automatic joining, leaving and leader management use UUID ownership and one-team/capacity constraints (4529.3853ms)
+✔ remaining business operations on actual isolated synthetic PostgreSQL (49887.4765ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49889.7965

@@ -1,0 +1,37 @@
+▶ remaining business operations on actual isolated synthetic PostgreSQL
+  ✔ only a trusted staff UUID creates a draft; a different reviewer publishes it and only published content is public (2877.1955ms)
+  ✔ synthetic sponsorship entries keep same-name identities separate, page deterministically and require real administrator maintenance (5474.7989ms)
+{"case":"private-management-read","status":403,"foreignOwnerExposed":false}
+  ✔ private management reads demand a current staff role even when the announcement itself is public (2007.6505ms)
+  ✖ team creation, automatic joining, leaving and leader management use UUID ownership and one-team/capacity constraints (1395.7346ms)
+✖ remaining business operations on actual isolated synthetic PostgreSQL (46605.7814ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46608.8634
+
+✖ failing tests:
+
+test at tests\operations-local-postgres.test.cjs:40:11
+✖ team creation, automatic joining, leaving and leader management use UUID ownership and one-team/capacity constraints (1395.7346ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:42:43)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:40:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

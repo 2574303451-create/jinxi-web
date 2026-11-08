@@ -1,0 +1,171 @@
+{
+  "classification": "synthetic-local-only",
+  "allExecutedChecksPassed": true,
+  "countsIncludeNodeParentTests": true,
+  "tests": [
+    {
+      "file": "operations-regression.log",
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "review-expanded-green.log",
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "https-green.log",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "unit-final.log",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "member-regression.log",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "community-regression.log",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "community-review-regression.log",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "attendance-regression.log",
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "attendance-review-regression.log",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "points-regression.log",
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "points-review-regression.log",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "points-invariants-regression.log",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "readonly-final.log",
+      "tests": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "api-final.log",
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "security-final.log",
+      "tests": 138,
+      "passed": 138,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "file": "video-final.log",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  ],
+  "pgCommandsAndExitCodes": "pg-regressions.json",
+  "https": "https-green.log",
+  "browser": "browser/2026-11-08T09-25-05-964Z/results.json",
+  "rateBrowser": {
+    "passed": true,
+    "realRateLimitedResponse": true,
+    "scopedSyntheticRateFixtureReset": true,
+    "firstResetStillDenied": true
+  },
+  "engineering": {
+    "rawTypeScript": {
+      "exitCode": 0,
+      "evidence": "typecheck-first.log"
+    },
+    "eslint": {
+      "exitCode": 0,
+      "evidence": "lint-final.log"
+    },
+    "build": {
+      "exitCode": 0,
+      "evidence": "build-first.log"
+    },
+    "exitCodesRecordedByExecutionTools": true
+  },
+  "independentReview": {
+    "reviewedSha": "25d6938a6bf42603ecad88428c970c11e5519c21",
+    "standardsBlockingFindings": 0,
+    "specBlockingFindings": 0,
+    "eachReviewerUnitTestsPassed": 17,
+    "final429AndTestFixtureDelta": "primary reviewed and tested; supplementary independent requests could not run due to tool usage quota; NOT reported as passed"
+  },
+  "noPush": true,
+  "noDeploy": true,
+  "noCloudDbChanges": true,
+  "historyUnclaimed": true,
+  "formalUiUnchanged": true
+}

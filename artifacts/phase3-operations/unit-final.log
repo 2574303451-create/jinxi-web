@@ -1,0 +1,26 @@
+✔ operations rejects settings before identity or any database connection (1.0228ms)
+✔ strict query identifiers time and integer validation reject client authority and malformed values (1.4607ms)
+✔ local-only bootstrap grants no legacy writer role and retains exact request capability receipts (0.6106ms)
+✔ HTTPS adapter exposes only explicit local resources and original cloud writes are not routed (0.6054ms)
+✔ server rich text preserves ordinary formatting and local images but removes active or foreign content (2.6887ms)
+✔ namespace, raw-text, clobbering and deep malformed fragments remain inert or explicitly rejected (1.4081ms)
+✔ only explicit synthetic media references are accepted; URL validity never proves availability (0.1596ms)
+✔ ordinary member receives only own team controls and first-reset account receives no private view (6.4372ms)
+✔ A-bound click discovers B and never posts the A command under B identity (1.7221ms)
+✔ lost write response keeps the exact actor-bound nonce and never automatically replays (2.3037ms)
+✔ even the last private response cannot render after an unbroadcast account cookie change (1.5682ms)
+✔ privilege demotion during multi-request loading refuses cached staff management rows (0.9558ms)
+✔ an idle cookie switch immediately clears draft inputs and private lists without issuing any request (1.063ms)
+✔ drafts never cross actors or restore after a capability change (1.8188ms)
+✔ broadcast, focus and online clear rendered private content before identity is recovered (2.4464ms)
+✔ missing epoch and failed private reads fail closed rather than rendering invented values (1.5822ms)
+✔ delayed old identity after invalidation cannot send a command or restore its draft (1.6127ms)
+✔ actual rate-limited identity response clears private controls and requires an explicit later retry (1.1144ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 160.9953

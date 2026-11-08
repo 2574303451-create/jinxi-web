@@ -1,0 +1,19 @@
+✖ actual HTTPS synthetic announcements sponsorship teams and media use the accepted identity and closed cloud boundary (40408.4238ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40412.2975
+
+✖ failing tests:
+
+test at tests\operations-local-https.test.cjs:2:1
+✖ actual HTTPS synthetic announcements sponsorship teams and media use the accepted identity and closed cloud boundary (40408.4238ms)
+  TypeError: Cannot read properties of undefined (reading 'id')
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-https.test.cjs:17:279)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

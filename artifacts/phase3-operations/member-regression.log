@@ -1,0 +1,27 @@
+▶ member identity on a fresh SCRAM-authenticated loopback PostgreSQL
+  ✔ legacy account/profile FK and opaque mapping; 208 fully synthetic legacy records preserve status (1067.7563ms)
+  ✔ valid login, opaque server identity, self-only profile and token digests (1841.8618ms)
+  ✔ unknown, wrong, locked, inactive, unsupported hashes and missing mappings have uniform denial (2933.6372ms)
+  ✔ same nicknames stay separate; self-reported identity is always rejected (1662.9362ms)
+  ✔ old 200000 PBKDF2 format, mandatory first change and all-device revocation (3808.2991ms)
+  ✔ normal password change invalidates every device, leaves other members intact (3124.9991ms)
+  ✔ logout, forged cookies, duplicate cookies and rotated-session replay (2190.839ms)
+  ✔ absolute and idle expiry reject without erasing a potentially newer cookie (2113.2774ms)
+  ✔ locking, deactivation and security disable permanently revoke prior sessions (3009.9915ms)
+  ✔ multi-tab shares one session; concurrent devices stay capped without identity mixing (3015.9769ms)
+  ✔ SQL injection and bounded input cannot select or change another account (2202.419ms)
+  ✔ Origin/CSRF reject cross-site writes, unsupported businesses never activate (1926.5541ms)
+  ✔ persistent login/password throttles do not reset on rejected attempts (5610.6505ms)
+  ✔ actual restricted role cannot alter locks, profiles, mapping, business tables, DDL or TEMP (1119.609ms)
+  ✔ actual excessive ACL or wrong identity stops before profile/session business work (1973.822ms)
+  ✔ login and password failures roll back partial security writes and suppress internals (2752.7831ms)
+  ✔ real HTTPS cookie, host binding and safe static page; no cloud route (1821.9536ms)
+✔ member identity on a fresh SCRAM-authenticated loopback PostgreSQL (74274.2885ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74277.8554

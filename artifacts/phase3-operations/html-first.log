@@ -1,0 +1,11 @@
+✔ server rich text preserves ordinary formatting and local images but removes active or foreign content (2.709ms)
+✔ namespace, raw-text, clobbering and deep malformed fragments remain inert or explicitly rejected (1.3909ms)
+✔ only explicit synthetic media references are accepted; URL validity never proves availability (0.1465ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.2101

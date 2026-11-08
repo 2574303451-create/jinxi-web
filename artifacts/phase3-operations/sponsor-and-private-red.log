@@ -1,0 +1,56 @@
+▶ remaining business operations on actual isolated synthetic PostgreSQL
+  ✔ only a trusted staff UUID creates a draft; a different reviewer publishes it and only published content is public (2858.3579ms)
+  ✖ synthetic sponsorship entries keep same-name identities separate, page deterministically and require real administrator maintenance (2003.5631ms)
+{"case":"private-management-read","status":200,"foreignOwnerExposed":true}
+  ✖ private management reads demand a current staff role even when the announcement itself is public (2405.6054ms)
+✖ remaining business operations on actual isolated synthetic PostgreSQL (42101.0895ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42103.8473
+
+✖ failing tests:
+
+test at tests\operations-local-postgres.test.cjs:23:11
+✖ synthetic sponsorship entries keep same-name identities separate, page deterministically and require real administrator maintenance (2003.5631ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:26:64)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:23:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\operations-local-postgres.test.cjs:35:11
+✖ private management reads demand a current staff role even when the announcement itself is public (2405.6054ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:38:189)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-postgres.test.cjs:35:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

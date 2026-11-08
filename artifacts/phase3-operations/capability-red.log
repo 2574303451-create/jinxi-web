@@ -1,0 +1,98 @@
+{"case":"cached-admin-capability","status":200,"peerDraftExposed":true}
+▶ remaining operations capability revocation and transaction review on PostgreSQL
+  ✖ an administrator demoted to reviewer cannot replay a cached override edit of another author draft (1918.1008ms)
+{"case":"delayed-admin-private-read","status":200,"peerDraftExposed":true}
+  ✖ a demotion after fetching all management drafts refuses the private response (1503.9693ms)
+  ✖ a demotion after an override edit rolls back both the content and its audit revision (1523.0016ms)
+  ✖ denied authenticated management attempts leave an actor-bound audit without a partial document (1087.9126ms)
+✖ remaining operations capability revocation and transaction review on PostgreSQL (40229.9668ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40241.126
+
+✖ failing tests:
+
+test at tests\operations-local-review-postgres.test.cjs:5:11
+✖ an administrator demoted to reviewer cannot replay a cached override edit of another author draft (1918.1008ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:7:198)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:5:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\operations-local-review-postgres.test.cjs:9:11
+✖ a demotion after fetching all management drafts refuses the private response (1503.9693ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:12:240)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:9:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\operations-local-review-postgres.test.cjs:14:11
+✖ a demotion after an override edit rolls back both the content and its audit revision (1523.0016ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:17:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:14:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\operations-local-review-postgres.test.cjs:19:11
+✖ denied authenticated management attempts leave an actor-bound audit without a partial document (1087.9126ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:20:254)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-operations\worktree\tests\operations-local-review-postgres.test.cjs:19:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

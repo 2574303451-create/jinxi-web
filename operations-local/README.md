@@ -22,3 +22,43 @@
 服务器富文本过滤使用新增且锁定的sanitize-html2.18.1；浏览器仍复用已有DOMPurify，禁用脚本/样式/外来命名空间/表单/iframe和非夹具图片。来源：[官方服务端过滤说明](https://github.com/apostrophecms/apostrophe/blob/main/packages/sanitize-html/README.md)、[2.18.1变更记录](https://github.com/apostrophecms/apostrophe/blob/main/packages/sanitize-html/CHANGELOG.md)。新工作树使用独立node_modules，不改前四个工作树的依赖目录；原锁定包版本需核对不变。
 
 所有新增SQL均需新建loopback55436、固定数据库名、环境指纹及显式本机合成批准；新运行角色不能修改前四模块。HTTPS3069沿用原身份和已验收公开失效标记，不创建新登录体系。原模块和只读TEST回归、失败证据及本轮独立审查存于artifacts/phase3-operations。
+
+## 本机运行和复测
+
+在PowerShell进入本工作树。Node24.22.2、PostgreSQL17.11及OpenSSL须使用已核验的绝对路径；原始模块的固定端口55436和3069不能同时启动多套。下面命令仅创建新的临时合成数据库，绝不加载.env或DSN：
+
+```powershell
+Set-Location 'E:/Recovery/.jinxi-research/phase3-operations/worktree'
+$nodeExe='E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe'
+$pgBin='E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin'
+$sslExe='D:/Program Files/Git/usr/bin/openssl.exe'
+& $nodeExe scripts/run-clean.cjs run operations:local -- --pg-bin $pgBin --openssl $sslExe
+```
+
+终端显示独立临时凭据文件的位置，只有本机用户读取该文件；不得提交或传到云端。浏览器打开https://127.0.0.1:3069/，使用文件里的虚构账号；本机自签名证书仅用于本机演示。从该页进入/operations。每次启动都是新的合成环境，开始时列表为空。管理员保存公告草稿并提交，由另一个合成审核员审核发布；赞助维护只对合成管理员可见；普通成员可以创建/加入/退出自己的队伍。Ctrl+C停止服务和数据库。启动不接入正式网站，也不复制真实数据。
+
+```powershell
+& $nodeExe tests/operations-local-postgres.test.cjs --pg-bin $pgBin
+& $nodeExe tests/operations-local-review-postgres.test.cjs --pg-bin $pgBin
+& $nodeExe tests/operations-local-https.test.cjs --pg-bin $pgBin --openssl $sslExe
+& $nodeExe tests/operations-local-browser.cjs --pg-bin $pgBin --openssl $sslExe --playwright-module 'E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright'
+& $nodeExe tests/operations-local-rate-browser.cjs --pg-bin $pgBin --openssl $sslExe --playwright-module 'E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright'
+& $nodeExe artifacts/phase3-operations/run-pg-regressions.cjs --pg-bin $pgBin --openssl $sslExe
+& $nodeExe scripts/test-disposable-postgres.cjs --pg-bin $pgBin
+& $nodeExe scripts/run-clean.cjs run test:api
+& $nodeExe scripts/run-clean.cjs run test:security
+& $nodeExe scripts/run-clean.cjs run typecheck
+& $nodeExe scripts/run-clean.cjs run lint
+& $nodeExe scripts/run-clean.cjs run build
+```
+
+浏览器综合业务场景与首次改密场景之间只重置新建数据库的限流夹具一次，不修改身份限流规则、账号、会话或业务数据。另有真实429定向场景，确认限流后页面清除私有内容；只在该合成场景恢复被指定的测试限流桶再验证首次改密拒绝。浏览器账号切换的500ms公开标记轮询受浏览器后台调度影响，不能承诺已显示文字被即时远程擦除；所有重新读取/写入由服务器核验，旧回包及未重验命令不能跨账号。内存草稿仅按本人UUID和当时授权绑定，页面关闭即失去，不写localStorage。
+
+## 尚待第四阶段受控验收
+
+- 本轮admin/reviewer、非最后编辑者审核、容量含队长/上限50是明确登记的合成政策。实际发布人员名单、授权变更流程、审核制度、历史时区和发布规则须另行确认，不将合成政策套到历史公告。
+- 旧公告author字符串、历史赞助姓名、localStorage队伍ID不能证明UUID所有权。合成旧结构样本保留在新operations_legacy并禁止运行角色访问；不自动归属、改写、去重或迁移。赞助管理者UUID只表示记录人，不等于感谢对象。
+- 在线缺可信心跳/活跃期限/隐私规则；战绩、等级战力、任务奖励、队长转让和解散缺真实服务端契约，继续待验。成员登记数量绝不显示为实时在线。
+- 媒体仅本机固定合成引用与故意失效夹具；实际外部资源可用性、授权来源、清理/上传/存储策略未建立，没有云上传能力。
+- 本机全局互斥与全量授权快照分页适合此次验证，正式规模需专项容量与查询方案验收。没有云端权限或迁移批准，不可直接部署此原型。
+- 正式FAQ和公告弹窗不改；UI-DEFER-001/002保留第四阶段。本轮最终结果和失败复现看artifacts/phase3-operations/FINAL_REVIEW.md。

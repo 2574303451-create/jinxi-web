@@ -1,0 +1,16 @@
+{
+  "checkedAtUtc": "2026-11-08T04:58:50.779Z",
+  "businessReviewedSha": "61a8483ff529819c1bf894e24e48a9d1da1f23bd",
+  "sourceFilesUnchanged": 26,
+  "inheritedLocalHeads": {
+    "codex/jinxi-phase3-member-local": "35ae9a676813249ae2beff9845251eb57a72855c",
+    "codex/jinxi-phase3-community-local": "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+    "codex/jinxi-phase3-attendance-local": "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e",
+    "codex/jinxi-f03-f05-test-foundation": "d43ee24cfde1277eedabc8c8856de697b702dc0f"
+  },
+  "remoteHeadReadCommand": "git -c http.sslBackend=openssl ls-remote --heads origin refs/heads/codex/jinxi-phase3-attendance-local refs/heads/codex/jinxi-phase3-points-local",
+  "remoteRead": "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e\trefs/heads/codex/jinxi-phase3-attendance-local",
+  "pointsRemoteBranchExists": false,
+  "readOnlyExternalAccess": true,
+  "noPushDeployOrPrAction": true
+}

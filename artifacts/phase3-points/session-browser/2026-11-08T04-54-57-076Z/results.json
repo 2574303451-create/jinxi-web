@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "startedAtUtc": "2026-11-08T04:54:57.076Z",
+  "stage": "idle-private-with-unbroadcast-cookie-switch",
+  "heldRead": "idle",
+  "pageErrors": [],
+  "serverCookieIsB": true,
+  "stalePrivateVisible": false,
+  "completedAtUtc": "2026-11-08T04:55:37.168Z"
+}

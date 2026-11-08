@@ -1,0 +1,17 @@
+
+> my-v0-project@0.1.0 test:community-review
+> node tests/community-local-review-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ independent community concurrency and revocation regressions on PostgreSQL
+  ✔ different UUID letter case cannot split the lock for one item (1282.7267ms)
+  ✔ expiry while waiting for the account lock is evaluated at actual validation time (1441.1434ms)
+  ✔ changing the password after identity lookup invalidates the business request and receipt (1082.9899ms)
+✔ independent community concurrency and revocation regressions on PostgreSQL (37397.1273ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37400.3226

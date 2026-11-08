@@ -1,0 +1,188 @@
+[
+  {
+    "Task": "test:points-session-browser",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-session-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright",
+      "--hold-final-private"
+    ],
+    "StartedAtUtc": "2026-11-08T04:43:10.9271153Z",
+    "Log": "artifacts/phase3-points/final-private-browser-green.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:43:52.7771186Z"
+  },
+  {
+    "Task": "test:points-session-browser",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-session-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright"
+    ],
+    "StartedAtUtc": "2026-11-08T04:43:52.8447510Z",
+    "Log": "artifacts/phase3-points/first-private-browser-marker.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:44:34.8890433Z"
+  },
+  {
+    "Task": "test:points-https",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-https",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "StartedAtUtc": "2026-11-08T04:44:34.8921011Z",
+    "Log": "artifacts/phase3-points/points-https-marker.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:45:14.8702454Z"
+  },
+  {
+    "Task": "test:points-browser",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright"
+    ],
+    "StartedAtUtc": "2026-11-08T04:45:14.8748156Z",
+    "Log": "artifacts/phase3-points/points-browser-marker.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:41.7429244Z"
+  },
+  {
+    "Task": "test:member-local",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:member-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:41.7465783Z",
+    "Log": "artifacts/phase3-points/member-regression-final.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:47:59.4949229Z"
+  },
+  {
+    "Task": "test:community-local",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "StartedAtUtc": "2026-11-08T04:47:59.4999212Z",
+    "Log": "artifacts/phase3-points/community-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:49:19.7774955Z"
+  },
+  {
+    "Task": "test:community-review",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-review",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "StartedAtUtc": "2026-11-08T04:49:19.7810283Z",
+    "Log": "artifacts/phase3-points/community-review-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:49:57.5883607Z"
+  },
+  {
+    "Task": "test:community-https",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:community-https",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "StartedAtUtc": "2026-11-08T04:49:57.5924519Z",
+    "Log": "artifacts/phase3-points/community-https-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:50:34.0575140Z"
+  },
+  {
+    "Task": "test:attendance-local",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-local",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "StartedAtUtc": "2026-11-08T04:50:34.0610770Z",
+    "Log": "artifacts/phase3-points/attendance-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:51:50.8704888Z"
+  },
+  {
+    "Task": "test:attendance-review",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-review",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin"
+    ],
+    "StartedAtUtc": "2026-11-08T04:51:50.8723588Z",
+    "Log": "artifacts/phase3-points/attendance-review-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:52:32.6035518Z"
+  },
+  {
+    "Task": "test:attendance-https",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:attendance-https",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe"
+    ],
+    "StartedAtUtc": "2026-11-08T04:52:32.6066774Z",
+    "Log": "artifacts/phase3-points/attendance-https-regression.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:53:09.1826939Z"
+  }
+]

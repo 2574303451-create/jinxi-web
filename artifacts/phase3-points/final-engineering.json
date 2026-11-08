@@ -1,0 +1,62 @@
+[
+  {
+    "Command": [
+      "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "typecheck"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:13.3809711Z",
+    "Log": "artifacts/phase3-points/final-engineering-typecheck.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:18.1240614Z"
+  },
+  {
+    "Command": [
+      "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "lint"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:18.1619957Z",
+    "Log": "artifacts/phase3-points/final-engineering-lint.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:20.3600472Z"
+  },
+  {
+    "Command": [
+      "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:api"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:20.3677395Z",
+    "Log": "artifacts/phase3-points/final-engineering-test-api.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:21.2049785Z"
+  },
+  {
+    "Command": [
+      "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "test:security"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:21.2122990Z",
+    "Log": "artifacts/phase3-points/final-engineering-test-security.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:23.1669394Z"
+  },
+  {
+    "Command": [
+      "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+      "scripts/run-clean.cjs",
+      "run",
+      "build"
+    ],
+    "StartedAtUtc": "2026-11-08T04:46:23.1715480Z",
+    "Log": "artifacts/phase3-points/final-engineering-build.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:46:30.3607802Z"
+  }
+]

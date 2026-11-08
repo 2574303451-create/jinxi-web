@@ -1,0 +1,61 @@
+[
+  {
+    "Mode": "first",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-session-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright"
+    ],
+    "StartedAtUtc": "2026-11-08T04:53:34.9290715Z",
+    "Log": "artifacts/phase3-points/epoch-browser-first.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:54:16.1848661Z"
+  },
+  {
+    "Mode": "final",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-session-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright",
+      "--hold-final-private"
+    ],
+    "StartedAtUtc": "2026-11-08T04:54:16.2446996Z",
+    "Log": "artifacts/phase3-points/epoch-browser-final.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:54:56.6141524Z"
+  },
+  {
+    "Mode": "idle",
+    "Arguments": [
+      "scripts/run-clean.cjs",
+      "run",
+      "test:points-session-browser",
+      "--",
+      "--pg-bin",
+      "E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin",
+      "--openssl",
+      "D:/Program Files/Git/usr/bin/openssl.exe",
+      "--playwright-module",
+      "E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright",
+      "--idle-private"
+    ],
+    "StartedAtUtc": "2026-11-08T04:54:56.6165529Z",
+    "Log": "artifacts/phase3-points/epoch-browser-idle.log",
+    "ExitCode": 0,
+    "CompletedAtUtc": "2026-11-08T04:55:37.2170846Z"
+  }
+]

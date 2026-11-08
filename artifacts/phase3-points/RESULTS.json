@@ -1,0 +1,295 @@
+{
+  "completedAtUtc": "2026-11-08T04:57:06.544Z",
+  "businessReviewedSha": "61a8483ff529819c1bf894e24e48a9d1da1f23bd",
+  "allRequiredLocalChecksPassed": true,
+  "tests": [
+    {
+      "log": "artifacts/phase3-points/points-postgres-final.log",
+      "pass": 11,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/points-review-final.log",
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/invariants-green.log",
+      "pass": 4,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/points-https-marker.log",
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/epoch-ui-final.log",
+      "pass": 16,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/member-regression-final.log",
+      "pass": 18,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/community-regression.log",
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/community-review-regression.log",
+      "pass": 4,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/community-https-regression.log",
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/attendance-regression.log",
+      "pass": 14,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/attendance-review-regression.log",
+      "pass": 4,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/attendance-https-regression.log",
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/readonly-regression.log",
+      "pass": 46,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/final-engineering-test-api.log",
+      "pass": 14,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "log": "artifacts/phase3-points/final-engineering-test-security.log",
+      "pass": 120,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  ],
+  "engineering": [
+    {
+      "Command": [
+        "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+        "scripts/run-clean.cjs",
+        "run",
+        "typecheck"
+      ],
+      "StartedAtUtc": "2026-11-08T04:46:13.3809711Z",
+      "Log": "artifacts/phase3-points/final-engineering-typecheck.log",
+      "ExitCode": 0,
+      "CompletedAtUtc": "2026-11-08T04:46:18.1240614Z"
+    },
+    {
+      "Command": [
+        "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+        "scripts/run-clean.cjs",
+        "run",
+        "lint"
+      ],
+      "StartedAtUtc": "2026-11-08T04:46:18.1619957Z",
+      "Log": "artifacts/phase3-points/final-engineering-lint.log",
+      "ExitCode": 0,
+      "CompletedAtUtc": "2026-11-08T04:46:20.3600472Z"
+    },
+    {
+      "Command": [
+        "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+        "scripts/run-clean.cjs",
+        "run",
+        "test:api"
+      ],
+      "StartedAtUtc": "2026-11-08T04:46:20.3677395Z",
+      "Log": "artifacts/phase3-points/final-engineering-test-api.log",
+      "ExitCode": 0,
+      "CompletedAtUtc": "2026-11-08T04:46:21.2049785Z"
+    },
+    {
+      "Command": [
+        "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+        "scripts/run-clean.cjs",
+        "run",
+        "test:security"
+      ],
+      "StartedAtUtc": "2026-11-08T04:46:21.2122990Z",
+      "Log": "artifacts/phase3-points/final-engineering-test-security.log",
+      "ExitCode": 0,
+      "CompletedAtUtc": "2026-11-08T04:46:23.1669394Z"
+    },
+    {
+      "Command": [
+        "E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe",
+        "scripts/run-clean.cjs",
+        "run",
+        "build"
+      ],
+      "StartedAtUtc": "2026-11-08T04:46:23.1715480Z",
+      "Log": "artifacts/phase3-points/final-engineering-build.log",
+      "ExitCode": 0,
+      "CompletedAtUtc": "2026-11-08T04:46:30.3607802Z"
+    }
+  ],
+  "browser": {
+    "file": "artifacts/phase3-points/browser/2026-11-08T04-45-15-360Z/results.json",
+    "result": {
+      "passed": true,
+      "startedAtUtc": "2026-11-08T04:45:15.362Z",
+      "stage": "first-reset-safe-text-and-five-widths",
+      "pageErrors": [],
+      "csp": [],
+      "externalRequests": 0,
+      "viewports": [
+        {
+          "width": 1440,
+          "passed": true
+        },
+        {
+          "width": 1024,
+          "passed": true
+        },
+        {
+          "width": 768,
+          "passed": true
+        },
+        {
+          "width": 390,
+          "passed": true
+        },
+        {
+          "width": 320,
+          "passed": true
+        }
+      ],
+      "rateFixtureResets": 1,
+      "settlementThroughExistingAttendance": true,
+      "lostResponse": {
+        "sameNonce": true,
+        "oneDebit": true,
+        "noAutomaticPost": true
+      },
+      "refundAndReversal": {
+        "oneOriginalRefund": true,
+        "oneOriginalReversal": true,
+        "eventCannotReaward": true
+      },
+      "rankingPrivacy": true,
+      "realBroadcastPrivacy": {
+        "logoutClears": true,
+        "loginRevalidates": true,
+        "oldPrivateResponseDiscarded": true
+      },
+      "lockClearsPrivate": true,
+      "completedAtUtc": "2026-11-08T04:46:41.696Z"
+    }
+  },
+  "sessionBrowser": [
+    {
+      "file": "artifacts/phase3-points/session-browser/2026-11-08T04-53-35-390Z/results.json",
+      "result": {
+        "passed": true,
+        "startedAtUtc": "2026-11-08T04:53:35.390Z",
+        "stage": "silent-cookie-switch-with-old-private-response",
+        "heldRead": "first",
+        "pageErrors": [],
+        "serverCookieIsB": true,
+        "stalePrivateVisible": false,
+        "completedAtUtc": "2026-11-08T04:54:16.131Z"
+      }
+    },
+    {
+      "file": "artifacts/phase3-points/session-browser/2026-11-08T04-54-16-763Z/results.json",
+      "result": {
+        "passed": true,
+        "startedAtUtc": "2026-11-08T04:54:16.764Z",
+        "stage": "silent-cookie-switch-with-old-private-response",
+        "heldRead": "final",
+        "pageErrors": [],
+        "serverCookieIsB": true,
+        "stalePrivateVisible": false,
+        "completedAtUtc": "2026-11-08T04:54:56.584Z"
+      }
+    },
+    {
+      "file": "artifacts/phase3-points/session-browser/2026-11-08T04-54-57-076Z/results.json",
+      "result": {
+        "passed": true,
+        "startedAtUtc": "2026-11-08T04:54:57.076Z",
+        "stage": "idle-private-with-unbroadcast-cookie-switch",
+        "heldRead": "idle",
+        "pageErrors": [],
+        "serverCookieIsB": true,
+        "stalePrivateVisible": false,
+        "completedAtUtc": "2026-11-08T04:55:37.168Z"
+      }
+    }
+  ],
+  "independentReviews": {
+    "standards": "No unresolved confirmed finding; independent boundary/UI16 passed.",
+    "spec": "No unresolved Spec finding; independent boundary/UI16 passed.",
+    "portTestsExecutedBy": "root, not the independent agents"
+  },
+  "remoteCi": "Baseline891 only; checkpoint4 not pushed and no checkpoint4 CI exists.",
+  "limits": [
+    "All points, products, old-shaped history and accounts used in tests are synthetic.",
+    "Mutex serializes local financial operations; no cloud throughput or cloud deployment acceptance.",
+    "500ms privacy invalidation may be throttled in background tabs; focus clears and revalidates.",
+    "Historical ownership, real rules, balances, orders/refunds and migration not validated."
+  ]
+}

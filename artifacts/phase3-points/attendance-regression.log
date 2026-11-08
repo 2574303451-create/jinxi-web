@@ -1,0 +1,27 @@
+
+> my-v0-project@0.1.0 test:attendance-local
+> node tests/attendance-local-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ trusted attendance facts on actual synthetic PostgreSQL
+  ✔ a verified member records a database-dated fact and an unsettled event without crediting points (2120.3083ms)
+  ✔ streaks, leap day, month statistics and paginated history are recomputed from dated facts (3496.4033ms)
+  ✔ duplicate IDs, new IDs and concurrent requests produce one fact/event per day and never sign the next day by replay (3081.1797ms)
+  ✔ the first simultaneous batch on an empty day produces exactly one successful fact and event (1950.8873ms)
+  ✔ calendar boundaries use Shanghai dates independently of connection timezone (6409.7395ms)
+  ✔ concurrent requests straddling midnight are dated at the locked insert and create exactly two dated facts (1554.5235ms)
+  ✔ same-nickname members, including reviewers, cannot read or attribute another member history (2442.6484ms)
+  ✔ guest, first-reset, logout, password change and expired sessions cannot write (3719.0993ms)
+  ✔ state changes and expiry committed during the actual account-lock wait are checked again (8013.9179ms)
+  ✔ actual PostgreSQL failures after the fact or event roll back every write, and a retry succeeds once (3151.6024ms)
+  ✔ runtime ACLs forbid date, streak, reward, legacy and ledger tampering and fail closed on grant drift (1864.4199ms)
+  ✔ invalid periods, future fact anomalies and missing events never become fake success or zero (2593.9662ms)
+  ✔ unowned legacy checkins are excluded and original identity/community handlers coexist unchanged (1990.6337ms)
+✔ trusted attendance facts on actual synthetic PostgreSQL (76385.2358ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76387.352

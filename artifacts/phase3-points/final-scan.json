@@ -1,0 +1,129 @@
+{
+  "checkedAtUtc": "2026-11-08T04:59:43.419Z",
+  "root": "E:/Recovery/.jinxi-research/phase3-points/worktree",
+  "branch": "codex/jinxi-phase3-points-local",
+  "head": "61a8483ff529819c1bf894e24e48a9d1da1f23bd",
+  "remote": "https://github.com/2574303451-create/jinxi-web.git",
+  "base": "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e",
+  "inherited": [
+    "35ae9a676813249ae2beff9845251eb57a72855c",
+    "f8175c4d22fc8b83c556a7dad943f1960ed1780e",
+    "891f2356cdbc4e8cb9fb88b74d7c045171c3b94e"
+  ],
+  "commitHistoryScanned": [
+    "61a8483ff529819c1bf894e24e48a9d1da1f23bd",
+    "513678f552e5acd6b636bb4d184a6959fbbce982",
+    "636bd6360a6b5e9cfda6dc20b6b70585102f04e8"
+  ],
+  "changedFiles": 134,
+  "secretPatternFindings": [],
+  "unexpectedPaths": [],
+  "protectedDiff": [],
+  "sourceFingerprint": [
+    {
+      "file": "eslint.config.mjs",
+      "sha256Lf": "3dea74e2e0cbc2a9d3c80e3359a019cffb5373fea3f363580b67a4b9ecd894bc"
+    },
+    {
+      "file": "package.json",
+      "sha256Lf": "df1df7cd4c6401d13d594d70f10653120c35d0ed2cbbd6492a9407553b167ab4"
+    },
+    {
+      "file": "points-local/contract.cjs",
+      "sha256Lf": "0ae8f5753632d14191f097276d7d4e3c387cbc83a14803dbab5289ee799b3e71"
+    },
+    {
+      "file": "points-local/database.cjs",
+      "sha256Lf": "9d6c043fdd4180f3b06fcf2d66c2723881cfbab80f2c1a7d71a02b276d6a5647"
+    },
+    {
+      "file": "points-local/demo.css",
+      "sha256Lf": "b48cc28fbdefd9d8b9201c686b2df6aec85262533dff37dddad8e94f7383ac2e"
+    },
+    {
+      "file": "points-local/demo.html",
+      "sha256Lf": "ce008d595c4cff0af932891a0ed6a7560c75d48124f19829aacb861218d95e9e"
+    },
+    {
+      "file": "points-local/demo.js",
+      "sha256Lf": "0e367e4ddfadd76d209756c57cbfa585e761823f56b06aebf5608af5137c2014"
+    },
+    {
+      "file": "points-local/exchange.cjs",
+      "sha256Lf": "719a7ebd2abeefe23378a854ec348afd07c3ef0684635018b04f52043cdf2cf4"
+    },
+    {
+      "file": "points-local/handler.cjs",
+      "sha256Lf": "087c8fecfe90db3887a11c6ad1ccac74369d4f1caa840c53924ef5fcdf6d9785"
+    },
+    {
+      "file": "points-local/invariants.sql",
+      "sha256Lf": "fb4817d9715590093a95da57b65df8749600e4086f53a11b2f662c6b33cbb862"
+    },
+    {
+      "file": "points-local/proof.cjs",
+      "sha256Lf": "fb167e653d30d66785fe8c71701a9ffbd805722c52913c5a3e9f0d266e70acb2"
+    },
+    {
+      "file": "points-local/ranking.cjs",
+      "sha256Lf": "d245f15d13ddc92567789aac53376bbb79ef5a342f1209fa650d1590c0565387"
+    },
+    {
+      "file": "points-local/rules.cjs",
+      "sha256Lf": "702b17edb881fccef2bad40a2af50223b40bac70f32b4a6696b1292ad7d03700"
+    },
+    {
+      "file": "points-local/schema.sql",
+      "sha256Lf": "17f85e8cbe242f3e98c1dc3ebc05bd606b098229f80dddd2caeb4df448ce17c3"
+    },
+    {
+      "file": "points-local/server.cjs",
+      "sha256Lf": "4de274a6ed3182a2c4f78edc20ddbce6f109281df99eae39f1177ae7014c1c7b"
+    },
+    {
+      "file": "points-local/store.cjs",
+      "sha256Lf": "21eee2118741f3d9f632991288d99c31478435e02cbafd7506ccf5ec2f9fbb36"
+    },
+    {
+      "file": "scripts/points-local.cjs",
+      "sha256Lf": "812052e015b2eb42fbaf33ea278a9bd6c46bf9e964503884d13fcd08fc148897"
+    },
+    {
+      "file": "tests/points-local-boundary.test.cjs",
+      "sha256Lf": "2db429327f3a521d98f44b75c24c262c47f0bd839a9164e401fca9e18c562bad"
+    },
+    {
+      "file": "tests/points-local-browser.cjs",
+      "sha256Lf": "de14af1f50cfe8b2810abd92d4aeade28092a99e6598fa2ba2cc30d392530e36"
+    },
+    {
+      "file": "tests/points-local-https.test.cjs",
+      "sha256Lf": "f48209e3497df76504506970c0444b09c95f11a945ae49a0426a68036111be2d"
+    },
+    {
+      "file": "tests/points-local-invariants-postgres.test.cjs",
+      "sha256Lf": "68da8a27b4ec2a2d95d7a0454673428bce6880cb06e50e510ac8221cdcb9f9e2"
+    },
+    {
+      "file": "tests/points-local-postgres.test.cjs",
+      "sha256Lf": "42e8e37f0b6be60132e76a3e31f01663b26eb5970581ad5da8a7c69a5042d8d1"
+    },
+    {
+      "file": "tests/points-local-review-postgres.test.cjs",
+      "sha256Lf": "682b55494e8cece2341b51b17cfa6740799d2a5c0ac31ab61664e256d58d2321"
+    },
+    {
+      "file": "tests/points-local-session-browser.cjs",
+      "sha256Lf": "7e859e971a734ab6a7157571bc12950fcf4fe8d6882621b3bac17eda1549765c"
+    },
+    {
+      "file": "tests/points-local-support.cjs",
+      "sha256Lf": "121c5b1a678277b9016acbaff34b09977cde3a34e3a322886beb1774b81f3178"
+    },
+    {
+      "file": "tests/points-local-ui.test.cjs",
+      "sha256Lf": "e8f9bffebbc66cc72a8cdaa2689878195cff8dfaf0cc45042cc2036a2fedff6c"
+    }
+  ],
+  "limits": "Pattern scan plus source/evidence review; all fixtures synthetic. No scan can prove absence of every secret."
+}

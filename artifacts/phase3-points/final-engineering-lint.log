@@ -1,0 +1,4 @@
+
+> my-v0-project@0.1.0 lint
+> eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local --no-warn-ignored --max-warnings 0
+

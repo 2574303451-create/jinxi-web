@@ -1,0 +1,13 @@
+
+> my-v0-project@0.1.0 test:points-https
+> node tests/points-local-https.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin --openssl D:/Program Files/Git/usr/bin/openssl.exe
+
+✔ actual local HTTPS points consumes existing sessions and attendance without cloud write paths (38072.181ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38076.1089

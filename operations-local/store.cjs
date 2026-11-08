@@ -1,0 +1,16 @@
+const crypto=require('node:crypto'),{fail}=require('./contract.cjs'),documents=require('./documents.cjs');
+function paginate(items,query,scope){
+ const revision=crypto.createHash('sha256').update(JSON.stringify(items)).digest('hex');let offset=0;
+ if(query.cursor){let cursor;try{cursor=JSON.parse(Buffer.from(query.cursor,'base64url').toString('utf8'));}catch{fail(400,'INVALID_CURSOR');}if(!cursor||cursor.kind!==query.kind||cursor.scope!==scope||!Number.isSafeInteger(cursor.offset)||cursor.offset<0)fail(400,'INVALID_CURSOR');if(cursor.revision!==revision)fail(409,'PAGE_CHANGED');offset=cursor.offset;if(offset>items.length)fail(400,'INVALID_CURSOR');}
+ const page=items.slice(offset,offset+query.limit),next=offset+page.length<items.length?Buffer.from(JSON.stringify({kind:query.kind,scope,revision,offset:offset+page.length})).toString('base64url'):null;return {items:page,nextCursor:next,revision};
+}
+async function state(c,ctx,query){
+ if(query.kind==='media'){if(query.view!=='public')fail(400,'INVALID_VIEW');const media=require('./media-policy.cjs'),items=[{id:'cover',type:'image',url:media.images[0],title:'合成图片夹具'},{id:'motion',type:'video',url:media.videos[0],title:'合成视频夹具'},{id:'missing-image',type:'image',url:media.images[1],title:'失效图片夹具'},{id:'missing-video',type:'video',url:media.videos[1],title:'失效视频夹具'}];return {kind:'media',...paginate(items,query,'public'),online:{available:false,reason:'TRUSTED_HEARTBEAT_NOT_DEFINED'},syntheticOnly:true};}
+ if(query.kind==='team'){const items=await require('./teams.cjs').state(c,ctx,query);return {kind:'team',...paginate(items,query,query.view==='private'?ctx.actor:'public'),...(query.view==='private'?{memberId:ctx.actor,permissions:{admin:ctx.admin,staff:ctx.staff}}:{}),online:{available:false,reason:'TRUSTED_HEARTBEAT_NOT_DEFINED'},syntheticOnly:true};}
+ if(!['announcement','sponsor'].includes(query.kind))fail(400,'OPERATION_NOT_ENABLED');const privateView=query.view==='private';
+ if(privateView){ctx.requiredRole=query.kind==='sponsor'||ctx.admin?'admin':'staff';if(ctx.requiredRole==='admin'&&!ctx.admin||ctx.requiredRole==='staff'&&!ctx.staff)fail(403,'STAFF_REQUIRED');}
+ const rows=(await c.query("SELECT d.*,CASE WHEN kind='announcement' AND status='published' AND expires_at<=attendance_lab.business_now() THEN 'expired' ELSE status END AS effective_status FROM operations_lab.documents d WHERE kind=$1 AND ($2::boolean OR kind='announcement' AND status='published' AND published_at<=attendance_lab.business_now() AND (expires_at IS NULL OR expires_at>attendance_lab.business_now()) OR kind='sponsor' AND status='visible') ORDER BY COALESCE(occurred_at,published_at,created_at) DESC,id DESC",[query.kind,privateView])).rows;
+ const items=rows.map(row=>documents.item(row,privateView));return {kind:query.kind,...paginate(items,query,privateView?ctx.actor:'public'),...(privateView?{memberId:ctx.actor,permissions:{admin:ctx.admin,staff:ctx.staff}}:{}),online:{available:false,reason:'TRUSTED_HEARTBEAT_NOT_DEFINED'},syntheticOnly:true};
+}
+async function mutate(c,ctx,body){return body.op.startsWith('team.')?require('./teams.cjs').mutate(c,ctx,body):documents.mutate(c,ctx,body);}
+module.exports={state,mutate,paginate};

@@ -1,0 +1,29 @@
+{
+  "repositoryRoot": "E:/Recovery/.jinxi-research/phase3-operations/worktree",
+  "branch": "codex/jinxi-phase3-operations-local",
+  "remote": "https://github.com/2574303451-create/jinxi-web.git",
+  "baseSha": "9fde7fec87fc145cb51638114fe4eb2de1717b39",
+  "baseRemoteBranch": "codex/jinxi-phase3-points-local",
+  "baseCi": {
+    "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42450993005",
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "9fde7fec87fc145cb51638114fe4eb2de1717b39",
+    "coverage": [
+      "TypeScript",
+      "ESLint",
+      "Build",
+      "API 14",
+      "security 120",
+      "video 6",
+      "old PostgreSQL integration 55"
+    ],
+    "notCovered": [
+      "dedicated member/community/attendance/points PostgreSQL",
+      "HTTPS",
+      "browser",
+      "new operations checkpoint5"
+    ]
+  },
+  "newCheckpointPushed": false
+}

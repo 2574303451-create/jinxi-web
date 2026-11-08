@@ -1,0 +1,10 @@
+class OperationsError extends Error{constructor(status,code){super(code);this.status=status;this.code=code;}}
+const fail=(status,code)=>{throw new OperationsError(status,code);};
+function uuid(value){if(typeof value!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(value))fail(400,'INVALID_IDENTIFIER');return value.toLowerCase();}
+function text(value,max,empty=false){if(typeof value!=='string'||value.length>max||!empty&&!value.trim()||/[<>\u0000-\u001f\u007f]/.test(value))fail(400,'INVALID_TEXT');return value.normalize('NFC').trim();}
+function fields(body,allowed){if(Object.keys(body).some(k=>!['op','requestId',...allowed].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');}
+function integer(value,min=1,max=1000000000){if(!Number.isSafeInteger(value)||value<min||value>max)fail(400,'INVALID_INTEGER');return value;}
+function instant(value,nullable=false){if(nullable&&value===null)return null;if(typeof value!=='string'||!Number.isFinite(Date.parse(value))||new Date(value).toISOString()!==value||value<'1900-'||value>='2200-')fail(400,'INVALID_INSTANT');return value;}
+function readOptions(q){if(Object.keys(q).some(k=>!['view','kind','limit','cursor'].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');const view=q.view||'public',kind=q.kind||'announcement';if(!['public','private'].includes(view)||!['announcement','sponsor','team','media'].includes(kind))fail(400,'INVALID_VIEW');if(q.limit!==undefined&&(typeof q.limit!=='string'||!/^\d{1,2}$/.test(q.limit)||Number(q.limit)<1||Number(q.limit)>50))fail(400,'INVALID_LIMIT');if(q.cursor!==undefined&&(typeof q.cursor!=='string'||!/^[a-z0-9_-]{1,512}$/i.test(q.cursor)))fail(400,'INVALID_CURSOR');return {...q,view,kind,limit:q.limit===undefined?20:Number(q.limit)};}
+function canonical(v){if(Array.isArray(v))return v.map(canonical);if(v&&typeof v==='object')return Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])]));return v;}
+module.exports={OperationsError,fail,uuid,text,fields,integer,instant,readOptions,canonical};

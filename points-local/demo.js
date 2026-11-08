@@ -42,6 +42,8 @@ async function load(options={}){
   let data=await request('/api/points'+(query.size?'?'+query:''));if(ticket!==generation)return;if(data.memberId!==actor)throw Error('PRIVATE_RESPONSE_REJECTED');
   if(data.permissions.admin){data=await request('/api/points?view=admin');if(ticket!==generation)return;if(data.memberId!==actor)throw Error('PRIVATE_RESPONSE_REJECTED');}
   const boardQuery=new URLSearchParams({view:'board',metric:el('metric').value||'earned'});if(priorActor===actor&&options.boardCursor)boardQuery.set('cursor',options.boardCursor);const board=await request('/api/points?'+boardQuery);if(ticket!==generation)return;
+  // A cookie can change without a broadcast while earlier private data is in flight.
+  if(data.permissions.admin)query.set('view','admin');const latest=await request('/api/points'+(query.size?'?'+query:''));if(ticket!==generation)return;if(latest.memberId!==actor)throw Object.assign(Error('ACCOUNT_CHANGED'),{status:403});data=latest;
   render(data,board);notice(options.completion?.actor===actor?options.completion.text:pending.has(actor)?'原请求结果待确认，请显式重试原请求；不会自动增加或扣减积分。':'本人账户与流水已由服务器复核；全部为合成数据。');
  }catch(e){if(ticket===generation){setMember(null);clearPrivate();notice(readable(e),true);}}
  finally{if(ticket===generation){loading=false;controls();}}

@@ -24,7 +24,7 @@ function createPointsHandler({settings,identity,connect,env=process.env}){
    const tokenHash=hash(token),lookup=(await c.query('SELECT account_id FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[tokenHash])).rows[0];if(!lookup)fail(401,'SESSION_INVALID');
    await c.query('SELECT id FROM b2_lab.guild_member_accounts WHERE id=$1 FOR UPDATE',[lookup.account_id]);await c.query('SELECT account_id FROM b2_lab.member_sessions_v2 WHERE token_hash=$1 FOR UPDATE',[tokenHash]);
    const ctx={actor:member.member.id,account:lookup.account_id,tokenHash,admin:false,requiredAdmin:false};await c.query("SELECT set_config('points.actor',$1,true),set_config('attendance.actor',$1,true)",[ctx.actor]);await authorize(c,ctx,event,write);
-   await c.query('SELECT id FROM points_lab.mutex WHERE id=1 FOR UPDATE');await authorize(c,ctx,event,write);
+   const mutex=await c.query('SELECT id FROM points_lab.mutex WHERE id=1 FOR UPDATE');if(mutex.rowCount!==1)fail(503,'POINTS_INVARIANT_RESOURCE_MISSING');await authorize(c,ctx,event,write);
    let result,status=200;
    if(write){
     await c.query('SAVEPOINT business');
@@ -40,7 +40,8 @@ function createPointsHandler({settings,identity,connect,env=process.env}){
      let eventId=null;try{if(body.eventId!==undefined)eventId=uuid(body.eventId);}catch{}await c.query('INSERT INTO points_lab.audit(actor_id,request_id,code,event_id) VALUES($1,$2,$3,$4)',[ctx.actor,body.requestId,e.code,eventId]);
     }
    }else result=await store.state(c,ctx,query);
-   await authorize(c,ctx,event,write);await c.query('COMMIT');tx=false;return output(status,{...result,...(!write&&query.view==='board'?{}:{memberId:ctx.actor}),syntheticOnly:true});
+   // Finish all deferred financial checks before the final live authorization.
+   await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);await c.query('COMMIT');tx=false;return output(status,{...result,...(!write&&query.view==='board'?{}:{memberId:ctx.actor}),syntheticOnly:true});
   }catch(e){if(tx)await c.query('ROLLBACK').catch(()=>{});return output(e instanceof PointsError?e.status:503,{error:'本机合成积分服务不可用或请求未获允许。',code:e instanceof PointsError?e.code:'POINTS_UNAVAILABLE'});}
   finally{await c?.end().catch(()=>{});}
  };

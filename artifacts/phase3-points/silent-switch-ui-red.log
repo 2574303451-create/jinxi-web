@@ -1,0 +1,36 @@
+✔ an A-bound financial click discovers B and never submits A intent as B (5.1459ms)
+✔ identity broadcasts, focus and online clear financial data before the next identity response (2.3326ms)
+✔ a lost redeem response retains the original intent and UUID and never automatically repeats a deduction (2.0709ms)
+✔ a delayed A write result cannot populate B balances, orders or administrative controls (1.3015ms)
+✔ a delayed A identity check cannot send its command after a B invalidation notification (1.1363ms)
+✔ first-reset and mismatched private responses reveal no financial history (1.3342ms)
+✔ a failed private read clears prior counters and never presents a fake zero balance (1.2746ms)
+✔ failure before a write is sent is not described as an unconfirmed financial operation (0.8391ms)
+✖ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (1.243ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 100.5469
+
+✖ failing tests:
+
+test at tests\points-local-ui.test.cjs:43:1
+✖ without broadcasts, a delayed private snapshot is checked against the latest server identity before rendering (1.243ms)
+  AssertionError [ERR_ASSERTION]: Do not paint A while the final identity is unverified
+  
+  false !== true
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-ui.test.cjs:44:157)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

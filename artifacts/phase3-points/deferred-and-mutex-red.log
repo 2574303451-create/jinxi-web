@@ -1,0 +1,55 @@
+▶ points invariant resources and inherited handlers coexist on one actual synthetic cluster
+  ✖ a missing business mutex fails closed before creating any financial state (1250.9347ms)
+  ✔ original identity, community and attendance contracts remain usable after the points extension (2010.6067ms)
+  ✖ deferred database validation cannot commit an award after the session expires (2138.6978ms)
+✖ points invariant resources and inherited handlers coexist on one actual synthetic cluster (38272.0093ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38274.1679
+
+✖ failing tests:
+
+test at tests\points-local-invariants-postgres.test.cjs:5:11
+✖ a missing business mutex fails closed before creating any financial state (1250.9347ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 503
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-invariants-postgres.test.cjs:7:59)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-invariants-postgres.test.cjs:5:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\points-local-invariants-postgres.test.cjs:19:11
+✖ deferred database validation cannot commit an award after the session expires (2138.6978ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-invariants-postgres.test.cjs:23:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase3-points\worktree\tests\points-local-invariants-postgres.test.cjs:19:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

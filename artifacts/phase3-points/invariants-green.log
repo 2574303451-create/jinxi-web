@@ -1,0 +1,17 @@
+
+> my-v0-project@0.1.0 test:points-invariants
+> node tests/points-local-invariants-postgres.test.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin
+
+▶ points invariant resources and inherited handlers coexist on one actual synthetic cluster
+  ✔ a missing business mutex fails closed before creating any financial state (1177.1357ms)
+  ✔ original identity, community and attendance contracts remain usable after the points extension (2389.8104ms)
+  ✔ deferred database validation cannot commit an award after the session expires (2768.9071ms)
+✔ points invariant resources and inherited handlers coexist on one actual synthetic cluster (39753.0566ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39755.4737

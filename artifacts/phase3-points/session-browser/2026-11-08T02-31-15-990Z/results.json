@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "startedAtUtc": "2026-11-08T02:31:15.990Z",
+  "stage": "silent-cookie-switch-with-old-private-response",
+  "pageErrors": [],
+  "serverCookieIsB": true,
+  "stalePrivateVisible": false,
+  "completedAtUtc": "2026-11-08T02:31:56.254Z"
+}

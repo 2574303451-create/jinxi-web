@@ -43,8 +43,10 @@
     "attendance:local": "node scripts/attendance-local.cjs",
     "test:points-local": "node tests/points-local-postgres.test.cjs",
     "test:points-review": "node tests/points-local-review-postgres.test.cjs",
+    "test:points-invariants": "node tests/points-local-invariants-postgres.test.cjs",
     "test:points-https": "node tests/points-local-https.test.cjs",
     "test:points-browser": "node tests/points-local-browser.cjs",
+    "test:points-session-browser": "node tests/points-local-session-browser.cjs",
     "points:local": "node scripts/points-local.cjs"
   },
   "dependencies": {

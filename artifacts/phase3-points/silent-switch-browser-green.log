@@ -1,0 +1,5 @@
+
+> my-v0-project@0.1.0 test:points-session-browser
+> node tests/points-local-session-browser.cjs --pg-bin E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin --openssl D:/Program Files/Git/usr/bin/openssl.exe --playwright-module E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright
+
+{"passed":true,"directory":"E:\\Recovery\\.jinxi-research\\phase3-points\\worktree\\artifacts\\phase3-points\\session-browser\\2026-11-08T02-31-15-990Z","stalePrivateVisible":false}

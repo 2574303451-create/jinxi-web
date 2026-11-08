@@ -1,0 +1,13 @@
+{
+  "passed": false,
+  "startedAtUtc": "2026-11-08T02:24:19.226Z",
+  "stage": "silent-cookie-switch-with-old-private-response",
+  "pageErrors": [],
+  "serverCookieIsB": true,
+  "stalePrivateVisible": true,
+  "errorType": "AssertionError",
+  "testLocation": [
+    "points-local-session-browser.cjs:14:261"
+  ],
+  "completedAtUtc": "2026-11-08T02:24:58.881Z"
+}

@@ -132,9 +132,9 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
             if(pending.get(row.key)?.id===row.id)pending.delete(row.key);
           }else if(row.key!==key)throw new SessionError('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
         }
-        // A lone same-value retry remains the original request, even when the
-        // status lookup has now proved its commit. No blind unknown renewal.
-        if(wasUnknown&&!family.some(r=>r.key!==key&&r.state==='confirmed'))renewConfirmed=false;
+        // A same-value unknown retry remains the original request even after
+        // lookup proves its commit. An older opposite receipt is not ordering proof.
+        if(wasUnknown)renewConfirmed=false;
       }
       const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed }) : null;
       check(stamp, observed);

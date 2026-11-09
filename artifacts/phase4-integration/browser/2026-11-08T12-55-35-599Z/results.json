@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "stage": "real-home-and-unified-login",
+  "startedAtUtc": "2026-11-08T12:55:35.599Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "failedRequests": [],
+  "scenarios": [
+    "real-home-one-session-login",
+    "browser-checkin-postgres-fact"
+  ],
+  "viewports": [],
+  "completedAtUtc": "2026-11-08T12:56:31.781Z"
+}

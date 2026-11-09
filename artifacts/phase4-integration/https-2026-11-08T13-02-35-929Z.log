@@ -1,0 +1,23 @@
+▶ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL
+  ✔ strict TLS, one UUID session, CSRF, Origin and immutable legacy write freeze (1705.2806ms)
+  ✔ message ownership, independent review, reply and duplicate reactions are database facts (2789.6308ms)
+  ✔ guide draft -> submission -> independent review -> existing public DTO; no nickname claim (1372.9857ms)
+  ✔ concurrent check-ins create exactly one fact and one untouched unsettled event (1167.3693ms)
+  ✔ concurrent event settlement is unique and conserves event, account, ledger and receipt (2503.6379ms)
+  ✔ concurrent redemption cannot overspend; cancellation refunds the original charge exactly once (2222.7273ms)
+  ✔ ranking uses chosen metric, stable public IDs and excludes locked identities (729.8669ms)
+  ✔ announcement permissions, independent publishing, HTML filtering and withdrawal (2732.7593ms)
+  ✔ sponsorship is admin-maintained independent records; no payment or nickname ownership (1024.0005ms)
+  ✔ team creation, duplicate joining, capacity, owner management and own leave are coherent (2237.257ms)
+  ✔ rollback of mid-settlement SQL failure preserves account, event, ledger and receipts (1754.8555ms)
+  ✔ session expires during community business SQL: final commit must reject and roll back (2514.3647ms)
+  ✔ lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states (7732.7665ms)
+✔ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL (65340.6555ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65343.191

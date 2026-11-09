@@ -1,0 +1,25 @@
+
+> my-v0-project@0.1.0 prebuild
+> node scripts/generate-guild-summary.cjs
+
+Archive facts: 208 unique records; no active/online inference.
+Archive date verified against full Git history.
+
+> my-v0-project@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.4.5 (webpack)
+✓ Running next.config.mjs took 12ms
+
+  Creating an optimized production build ...
+  Using tsconfig file: ./tsconfig.json
+✓ Compiled successfully in 11.2s
+  Running TypeScript ...
+.next/types/app/layout.ts(42,13): error TS2344: Type 'OmitWithTag<Readonly<{ children: ReactNode; externalAssets?: boolean | undefined; }>, keyof LayoutProps, "default">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'externalAssets' is incompatible with index signature.
+    Type 'boolean' is not assignable to type 'never'.
+Browserslist: browsers data (caniuse-lite) is 15 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Failed to type check.
+

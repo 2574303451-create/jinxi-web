@@ -1,0 +1,45 @@
+▶ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL
+  ✔ strict TLS, one UUID session, CSRF, Origin and immutable legacy write freeze (1121.1962ms)
+  ✔ message ownership, independent review, reply and duplicate reactions are database facts (2334.8486ms)
+  ✔ guide draft -> submission -> independent review -> existing public DTO; no nickname claim (935.816ms)
+  ✔ concurrent check-ins create exactly one fact and one untouched unsettled event (669.8517ms)
+  ✔ concurrent event settlement is unique and conserves event, account, ledger and receipt (1664.4503ms)
+  ✔ concurrent redemption cannot overspend; cancellation refunds the original charge exactly once (1460.4323ms)
+  ✔ ranking uses chosen metric, stable public IDs and excludes locked identities (573.5306ms)
+  ✔ announcement permissions, independent publishing, HTML filtering and withdrawal (1924.3891ms)
+  ✔ sponsorship is admin-maintained independent records; no payment or nickname ownership (650.9037ms)
+  ✔ team creation, duplicate joining, capacity, owner management and own leave are coherent (1597.4997ms)
+  ✔ rollback of mid-settlement SQL failure preserves account, event, ledger and receipts (1476.2799ms)
+  ✖ session expires during community business SQL: final commit must reject and roll back (2253.7713ms)
+  ✔ lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states (6075.3926ms)
+✖ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL (57012.0747ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 12
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57015.0157
+
+✖ failing tests:
+
+test at tests\integration-local-https.test.cjs:108:11
+✖ session expires during community business SQL: final commit must reject and roll back (2253.7713ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:113:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:108:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,13 @@
+▶ attendance independent review lock-expiry regressions
+  ✔ idle expiry during original identity preflight account-lock wait cannot renew an expired session into a successful checkin (2165.9987ms)
+  ✔ session-row-only lock wait rechecks real idle expiry after the lock is acquired (2165.9951ms)
+  ✔ expiry during a delayed database business operation rolls back before commit (1983.9766ms)
+✔ attendance independent review lock-expiry regressions (39465.3662ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39467.5601

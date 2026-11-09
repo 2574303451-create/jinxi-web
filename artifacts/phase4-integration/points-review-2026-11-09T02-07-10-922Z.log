@@ -1,0 +1,18 @@
+▶ points transaction failure and revocation review on actual synthetic PostgreSQL
+  ✔ real SQL errors at ledger, settlement or request receipt leave no partial credit and permit exact retry (6416.3307ms)
+  ✔ real SQL errors after debit, inventory or status changes roll back the entire order or refund (5710.071ms)
+  ✔ logout and actual password change after identity preflight invalidate the financial request (2746.4417ms)
+  ✔ account-lock wait rechecks lock, activity, security version, revocation, expiry and first-reset state (7556.9117ms)
+  ✔ session-row and global business-lock waits reject actual deadlines and post-lock auth version changes (4458.9405ms)
+  ✔ expiry during slow business SQL rolls back awards before commit (1937.5029ms)
+  ✔ administrator revocation is enforced after business lock waits, before commit and on cached requests (2002.0563ms)
+  ✔ malformed amounts, product conditions, raw stock changes and grant/trigger drift fail safely (4135.2272ms)
+✔ points transaction failure and revocation review on actual synthetic PostgreSQL (69302.5222ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69304.7556

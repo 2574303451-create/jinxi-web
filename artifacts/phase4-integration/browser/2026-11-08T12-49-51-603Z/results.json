@@ -1,0 +1,51 @@
+{
+  "passed": false,
+  "stage": "real-home-and-unified-login",
+  "startedAtUtc": "2026-11-08T12:49:51.604Z",
+  "pageErrors": [],
+  "scenarios": [],
+  "viewports": [],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"unified-session\"]').filter({ hasText: 'anonymous' }) to be visible\u001b[22m\n",
+  "domProbe": {
+    "dialogs": [
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_bclralb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_cclralb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_elb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_1ilb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_2ilb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      }
+    ],
+    "labels": []
+  },
+  "completedAtUtc": "2026-11-08T12:50:54.947Z"
+}

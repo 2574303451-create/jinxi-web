@@ -1,0 +1,199 @@
+{
+  "passed": false,
+  "stage": "locked-inactive-expired-reset-and-real-429",
+  "startedAtUtc": "2026-11-09T01:46:28.301Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "failedRequests": [
+    {
+      "path": "/_next/static/webpack/b477391d9a3e4021.webpack.hot-update.json",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/__nextjs_font/geist-latin.woff2",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/.netlify/functions/strategies",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    }
+  ],
+  "authOperations": [
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "normal",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "reviewer",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "admin",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-message-wall-owner-review-and-logout-denial",
+      "op": "logout",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-message-wall-owner-review-and-logout-denial",
+      "op": "login",
+      "kind": "normal",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "sponsorship-and-trusted-teams",
+      "op": "login",
+      "kind": "same",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "silent-account-switch-delayed-private-response-multiple-tabs",
+      "op": "login",
+      "kind": "same",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "password-change-and-offline-clear-shared-identity",
+      "op": "change-password",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "password-change-and-offline-clear-shared-identity",
+      "op": "login",
+      "kind": "same",
+      "status": 200,
+      "code": null
+    }
+  ],
+  "scenarios": [
+    "real-home-one-session-login",
+    "actual-message-publish-review-db-owner-logout-denies",
+    "existing-guide-submission-private-owner-draft",
+    "existing-guide-center-uuid-reader-independent-review-and-trusted-comment",
+    "checkin-event-single-settlement-same-nonce-lost-response-ledger-board",
+    "redemption-and-cancellation-one-refund-linked-to-charge",
+    "lost-redemption-offline-reverify-same-member-reuses-nonce-no-second-charge",
+    "review-fix-announcement-title-edit-preserves-expiry",
+    "admin-draft-independent-review-publish-sanitized-public-and-forged-admin-denied",
+    "review-fix-sponsor-name-edit-preserves-original-seconds-and-milliseconds",
+    "review-fix-team-name-only-preserves-existing-hidden-fields",
+    "authorized-sponsor-records-separate-and-team-capacity-membership",
+    "same-nickname-A-to-B-two-tabs-old-private-response-discarded-no-old-account-orders",
+    "password-revokes-four-modules-and-other-tab-offline-unverified-online-recovery"
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "real-message-wall-owner-review-and-logout-denial",
+    "real-guide-center-private-draft-submission",
+    "attendance-unique-settlement-lost-response-ledger-board",
+    "review-regression-lost-redemption-offline-same-member-retry",
+    "announcement-draft-independent-review-public-xss",
+    "sponsorship-and-trusted-teams",
+    "silent-account-switch-delayed-private-response-multiple-tabs",
+    "password-change-and-offline-clear-shared-identity",
+    "locked-inactive-expired-reset-and-real-429"
+  ],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.click: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '可信组队', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"paper-button\">可信组队</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" aria-labelledby=\"_r_u_\" class=\"jinxi-dialog max-w-lg\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" aria-labelledby=\"_r_u_\" class=\"jinxi-dialog max-w-lg\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    5 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" aria-labelledby=\"_r_u_\" class=\"jinxi-dialog max-w-lg\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n",
+  "testLocation": [
+    "integration-local-browser.cjs:84:145"
+  ],
+  "domProbe": {
+    "session": "合成伙伴 normal · ready · ",
+    "dialogs": [
+      {
+        "open": true,
+        "text": "_r_u_",
+        "inputs": 2
+      },
+      {
+        "open": false,
+        "text": "_r_v_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_10_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_11_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_mlb_",
+        "inputs": 0
+      }
+    ],
+    "labels": [
+      "合成账号",
+      "合成密码"
+    ]
+  },
+  "completedAtUtc": "2026-11-09T01:48:38.347Z"
+}

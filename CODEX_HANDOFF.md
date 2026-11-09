@@ -1,3 +1,18 @@
+# 当前接管入口：第四阶段第一工作包（2026-11-09）
+
+**下方旧段落是历史验收快照。不要再按其中“身份/检查点5未推送、等待开启第四阶段”安排工作。当前工作以本段、实际Git状态和最新报告为准。**
+
+- 当前工作树：`E:/Recovery/.jinxi-research/phase4-integration/worktree`；本地分支：`codex/jinxi-phase4-integration-local`。`E:/Recovery`只是共同父目录；此前phase3-operations工作树保留原批准版本，不是当前开发位置。
+- 第三阶段五个检查点已完成本地合成开发和独立审核分支验证，正式云端业务尚未接入。最新远程累计基准仍为`5c2856bb386e6d52348d8a15a3a95e0952e177e6`，`codex/jinxi-phase3-operations-local`。真实Push CI：[42478384495](https://github.com/2574303451-create/jinxi-web/actions/runs/42478384495)，success；其API14/安全138/视频6/旧PG55及工程检查不等于本轮统一业务PG/HTTPS/浏览器远程执行。
+- 第四阶段工作包1已在原首页/导航/留言墙/攻略中心/通用弹窗中完成必要本机适配；统一Cookie会话复用五组原处理器和新建合成PG，各业务保持原受限角色。不复制五个demo，不增加第二套身份/签到事实/积分账本。正式`LEGACY_MEMBER_AUTH_READY=false`与旧云写冻结保留。
+- 最终受审实现SHA：`b1114363aecd84cebd4d46f1c223bbcd7d03a80e`。后续本地证据/交接提交不改变该实现源码；最终完整提交以Git HEAD及交付回复为准。[实际结果与源码对应](artifacts/phase4-integration/REPORT.md)、[两路独立审查](artifacts/phase4-integration/INDEPENDENT_REVIEW.md)、[命令/退出码](artifacts/phase4-integration/test-runs.json)。不要将早期失败或局部通过当作最终结论。
+- 本地入口`https://127.0.0.1:3069/`，同站`/guides/`；明确启动方法、私有合成账号文件位置、停止与复测见[integration-local/README.md](integration-local/README.md)。每次启动新临时集群，原站/TEST不连接；自动测试已停止的预览不会常驻。
+- 本轮仅本地提交，没有推送、新PR/合并、部署、数据库迁移、云变量/角色变更、真实账号或历史积分导入。当前待用户验收；任何审核分支推送或受控云端接入须下一次明确授权。
+- 五阶段顺序不变。后续受控云身份/权限、历史可信归属、余额/流水/规则生效日与订单状态对账、真实在线/战绩/支付/媒体服务仍未验收。UI-DEFER-001（FAQ）与002（公会动态弹窗）继续第四阶段后续统一UI验收，本工作包没有把它们标完成。
+
+---
+
+## 既有历史记录（保留追溯，不作为当前任务指令）
 > **2026-11-08 检查点5最终增量补审与只读取证已闭合**：工作树仍为`E:/Recovery/.jinxi-research/phase3-operations/worktree`，分支`codex/jinxi-phase3-operations-local`。受审/受测源码4aa491dea5f77cd2b0c03fcf57ac34a38448e520，继承9fde；相对初轮25d6938的79文件增量已由Standards、Spec两路独立补审，均0阻断，各自纯测试18/18；本轮两取证驱动亦附加审查。没有修改业务或原测试夹具。实际补测PG10/安全专项11/HTTPS1/纯测试18/只读46/API14/安全138、tsc/ESLint及Edge完整业务五宽度/真实429均通过，11组命令退出0；原四模块保持字节一致，旧证据未覆盖。GitHub refs于UTC11:00:01至11:00:05在证书校验开启时恢复读取，积分远端仍9fde，operations分支未推送；旧TLS摘要仅能界定握手中断，不能伪造具体根因或精确失败时间。此前独立补审和只读访问两项本地验收阻断已关闭。最终记录提交SHA见本条所属Git提交及最终答复；本轮只新增取证/交接材料，未推送/部署/PR/迁移/云资源操作，不进入第四阶段。等待单独安全推送授权，实际推送前仍需当时的远端及生产锁定/Preview关闭/TEST冻结门禁。[最终收尾](artifacts/phase3-operations/final-closeout-20261108/REPORT.md)、[两路独立补审](artifacts/phase3-operations/final-closeout-20261108/INDEPENDENT_REVIEW.md)、[真实命令/退出码](artifacts/phase3-operations/final-closeout-20261108/test-runs.json)、[源码对应证明](artifacts/phase3-operations/final-closeout-20261108/source-proof.json)。下文未闭合说明均为此前历史时点，原文保留。
 
 > **2026-11-08 第三阶段检查点5：本地公告、赞助与既有组队业务验收收尾**：工作树`E:/Recovery/.jinxi-research/phase3-operations/worktree`，分支`codex/jinxi-phase3-operations-local`，基于已推送积分审核`9fde7fec87fc145cb51638114fe4eb2de1717b39`；业务实现25d6938a6bf42603ecad88428c970c11e5519c21、429提示/浏览器隔离43abd7bdd7f4aa5582e4f1d2cf6c4b6eb237f627，最终完整本地SHA见本条所属收尾提交与最终答复。实现可信公告草稿/审核/发布/撤回/失效/软删除、合成感谢记录维护、UUID最小组队及本机媒体安全演示；不伪造在线，不新增支付、战绩奖励、语音通信或真实媒体上传。实际新PG10/专项11/HTTPS1/纯测试18、Edge完整业务/五宽度及真实429专项通过；原身份18、社区13+4、签到14+4、积分11+9+4、只读46、API14/安全138/视频6、原始tsc/ESLint/Build均通过。主体Standards/Spec双路独立审查0阻断；最终429文案与测试夹具增量由主代理复核并复测，双路补审因工具额度未执行，不能计为独立通过。原四模块、正式UI及云写冻结门禁未改，无已知未修复安全阻断；历史不认领，在线/真实媒体/正式集成待第四阶段。FAQ与公告UI-DEFER-001/002仍待办。本轮只本地提交，未推送/部署/PR/云DB/环境变量操作。下一动作仅待审核并授权同名独立分支安全推送；不自动执行第四阶段。[最终验收与复现](artifacts/phase3-operations/FINAL_REVIEW.md)、[独立审查与覆盖限制](artifacts/phase3-operations/INDEPENDENT_REVIEW.md)、[实际结果](artifacts/phase3-operations/RESULTS.json)。

@@ -1,0 +1,22 @@
+{
+  "observedAtUtc": "2026-11-09T01:34:16.976Z",
+  "workspace": "E:/Recovery/.jinxi-research/phase4-integration/worktree",
+  "branch": "codex/jinxi-phase4-integration-local",
+  "approvedBase": "5c2856bb386e6d52348d8a15a3a95e0952e177e6",
+  "remote-base": {
+    "label": "remote-base",
+    "ref": "refs/heads/codex/jinxi-phase3-operations-local",
+    "sha": "5c2856bb386e6d52348d8a15a3a95e0952e177e6",
+    "isError": false
+  },
+  "base-ci": {
+    "label": "base-ci",
+    "headSha": "5c2856bb386e6d52348d8a15a3a95e0952e177e6",
+    "status": "completed",
+    "conclusion": "success",
+    "htmlUrl": "https://github.com/2574303451-create/jinxi-web/actions/runs/42478384495",
+    "event": "push",
+    "runAttempt": 1,
+    "isError": false
+  }
+}

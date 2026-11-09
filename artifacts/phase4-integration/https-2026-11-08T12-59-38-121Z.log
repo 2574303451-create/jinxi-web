@@ -1,0 +1,15 @@
+E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:56
+   const value=(await admin('SELECT (SELECT count(*)::int FROM points_lab.settlements WHERE event_id=$1) AS settlements,(SELECT count(*)::int FROM points_lab.ledger WHERE event_id=$1) AS ledger,(SELECT balance::text FROM points_lab.accounts WHERE member_id=$2) AS balance,(SELECT settlement_state FROM attendance_lab.reward_events WHERE event_id=$1) AS original_state,(SELECT to_jsonb(e)->>'amount' FROM attendance_lab.reward_events e WHERE event_id=$1) AS original_amount',[eventId,a.memberId])).rows[0];
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1861:18)
+    at Module._compile (node:internal/modules/cjs/loader:1903:20)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.22.2

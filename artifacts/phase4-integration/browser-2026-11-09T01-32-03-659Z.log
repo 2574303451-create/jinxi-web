@@ -1,0 +1,11 @@
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+route.fulfill: Route is already handled!
+    at E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-browser.cjs:75:401 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.22.2

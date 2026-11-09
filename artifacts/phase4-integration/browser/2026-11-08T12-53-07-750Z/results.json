@@ -1,0 +1,83 @@
+{
+  "passed": false,
+  "stage": "real-home-and-unified-login",
+  "startedAtUtc": "2026-11-08T12:53:07.751Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Refused to load the stylesheet 'https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css' because it violates the following Content Security Policy directive: \"style-src 'self' 'unsafe-inline'\". Note that 'style-src-elem' was not explicitly set, so 'style-src' is used as a fallback.\n",
+    "Refused to load the font 'https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff2' because it violates the following Content Security Policy directive: \"font-src 'self'\".\n",
+    "Refused to load the font 'https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.woff' because it violates the following Content Security Policy directive: \"font-src 'self'\".\n",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308",
+    "WebSocket connection to 'wss://127.0.0.1:3069/_next/hmr?id=nFPOLr1gZc4VtZx69642u' failed: Error during WebSocket handshake: Unexpected response code: 308"
+  ],
+  "failedRequests": [
+    {
+      "path": "/npm/remixicon@4.2.0/fonts/remixicon.css",
+      "error": "csp"
+    },
+    {
+      "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff2",
+      "error": "csp"
+    },
+    {
+      "path": "/npm/remixicon@4.2.0/fonts/remixicon.woff",
+      "error": "csp"
+    },
+    {
+      "path": "/__nextjs_font/geist-latin.woff2",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "scenarios": [],
+  "viewports": [],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"unified-session\"]').filter({ hasText: 'anonymous' }) to be visible\u001b[22m\n",
+  "domProbe": {
+    "dialogs": [
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_bclralb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_cclralb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_elb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_1ilb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_2ilb_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      }
+    ],
+    "labels": []
+  },
+  "completedAtUtc": "2026-11-08T12:54:12.535Z"
+}

@@ -1,0 +1,17 @@
+
+> my-v0-project@0.1.0 lint
+> eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local --no-warn-ignored --max-warnings 0
+
+
+E:\Recovery\.jinxi-research\phase4-integration\worktree\integration-local\runner.cjs
+  10:32  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+  32:48  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs
+  125:260  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-session.test.cjs
+  64:86  error  Return values from promise executor functions cannot be read  no-promise-executor-return
+
+✖ 4 problems (4 errors, 0 warnings)
+

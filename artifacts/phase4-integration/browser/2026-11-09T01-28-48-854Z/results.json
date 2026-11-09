@@ -1,0 +1,111 @@
+{
+  "passed": false,
+  "stage": "announcement-draft-independent-review-public-xss",
+  "startedAtUtc": "2026-11-09T01:28:48.854Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "path": "/_next/static/webpack/9ca51137f4663815.webpack.hot-update.json",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    }
+  ],
+  "scenarios": [
+    "real-home-one-session-login",
+    "actual-message-publish-review-db-owner-logout-denies",
+    "existing-guide-submission-private-owner-draft",
+    "existing-guide-center-uuid-reader-independent-review-and-trusted-comment",
+    "checkin-event-single-settlement-same-nonce-lost-response-ledger-board",
+    "redemption-and-cancellation-one-refund-linked-to-charge",
+    "lost-redemption-offline-reverify-same-member-reuses-nonce-no-second-charge",
+    "review-fix-announcement-title-edit-preserves-expiry"
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "real-message-wall-owner-review-and-logout-denial",
+    "real-guide-center-private-draft-submission",
+    "attendance-unique-settlement-lost-response-ledger-board",
+    "review-regression-lost-redemption-offline-same-member-retry",
+    "announcement-draft-independent-review-public-xss"
+  ],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"managed-announcements\"] [data-item-id]').filter({ hasText: '统一端到端合成公告' }).filter({ hasText: 'submitted' }) to be visible\u001b[22m\n",
+  "domProbe": {
+    "session": "合成admin · ready · ",
+    "dialogs": [
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_4_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_5_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_elb_",
+        "inputs": 0
+      },
+      {
+        "open": true,
+        "text": "_r_6_",
+        "inputs": 1
+      },
+      {
+        "open": false,
+        "text": "_r_7_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_8_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_mlb_",
+        "inputs": 0
+      }
+    ],
+    "labels": [
+      "公告标题",
+      "公告富文本源"
+    ]
+  },
+  "completedAtUtc": "2026-11-09T01:31:05.028Z"
+}

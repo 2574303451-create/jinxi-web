@@ -1,0 +1,175 @@
+▶ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL
+  ✔ strict TLS, one UUID session, CSRF, Origin and immutable legacy write freeze (1087.6838ms)
+  ✖ message ownership, independent review, reply and duplicate reactions are database facts (543.9116ms)
+  ✔ guide draft -> submission -> independent review -> existing public DTO; no nickname claim (1246.9874ms)
+  ✔ concurrent check-ins create exactly one fact and one untouched unsettled event (730.0196ms)
+  ✖ concurrent event settlement is unique and conserves event, account, ledger and receipt (415.3877ms)
+  ✖ concurrent redemption cannot overspend; cancellation refunds the original charge exactly once (636.3256ms)
+  ✖ ranking uses chosen metric, stable public IDs and excludes locked identities (297.1427ms)
+  ✔ announcement permissions, independent publishing, HTML filtering and withdrawal (1289.5043ms)
+  ✔ sponsorship is admin-maintained independent records; no payment or nickname ownership (776.4596ms)
+  ✔ team creation, duplicate joining, capacity, owner management and own leave are coherent (1815.538ms)
+  ✔ rollback of mid-settlement SQL failure preserves account, event, ledger and receipts (1319.9413ms)
+  ✖ session expires during community business SQL: final commit must reject and roll back (265.207ms)
+  ✖ lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states (3448.3901ms)
+✖ one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL (47317.7088ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 7
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47320.7851
+
+✖ failing tests:
+
+test at tests\integration-local-https.test.cjs:26:11
+✖ message ownership, independent review, reply and duplicate reactions are database facts (543.9116ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 403
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:29:38)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:26:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration-local-https.test.cjs:54:11
+✖ concurrent event settlement is unique and conserves event, account, ledger and receipt (415.3877ms)
+  error: column "amount" does not exist
+      at E:\Recovery\.jinxi-research\phase3-operations\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async admin (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-support.cjs:17:111)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:56:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:54:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 107,
+    severity: 'ERROR',
+    code: '42703',
+    detail: undefined,
+    hint: undefined,
+    position: '348',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '3721',
+    routine: 'errorMissingColumn'
+  }
+
+test at tests\integration-local-https.test.cjs:63:11
+✖ concurrent redemption cannot overspend; cancellation refunds the original charge exactly once (636.3256ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:65:134)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:63:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration-local-https.test.cjs:71:11
+✖ ranking uses chosen metric, stable public IDs and excludes locked identities (297.1427ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '1' !== '2'
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:72:244)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:71:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '1',
+    expected: '2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration-local-https.test.cjs:108:11
+✖ session expires during community business SQL: final commit must reject and roll back (265.207ms)
+  error: new row for relation "member_sessions_v2" violates check constraint "member_sessions_v2_check1"
+      at E:\Recovery\.jinxi-research\phase3-operations\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async admin (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-support.cjs:17:111)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:110:4)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:108:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 559,
+    severity: 'ERROR',
+    code: '23514',
+    detail: '[synthetic row values redacted; constraint and SQLSTATE preserved]',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: 'b2_lab',
+    table: 'member_sessions_v2',
+    column: undefined,
+    dataType: undefined,
+    constraint: 'member_sessions_v2_check1',
+    file: 'execMain.c',
+    line: '2079',
+    routine: 'ExecConstraints'
+  }
+
+test at tests\integration-local-https.test.cjs:115:11
+✖ lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states (3448.3901ms)
+  error: new row for relation "member_sessions_v2" violates check constraint "member_sessions_v2_check1"
+      at E:\Recovery\.jinxi-research\phase3-operations\worktree\node_modules\pg\lib\client.js:545:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async admin (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-support.cjs:17:111)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:123:98)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-integration\worktree\tests\integration-local-https.test.cjs:115:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 557,
+    severity: 'ERROR',
+    code: '23514',
+    detail: '[synthetic row values redacted; constraint and SQLSTATE preserved]',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: 'b2_lab',
+    table: 'member_sessions_v2',
+    column: undefined,
+    dataType: undefined,
+    constraint: 'member_sessions_v2_check1',
+    file: 'execMain.c',
+    line: '2079',
+    routine: 'ExecConstraints'
+  }

@@ -1,0 +1,80 @@
+{
+  "passed": false,
+  "stage": "real-message-wall-owner-review-and-logout-denial",
+  "startedAtUtc": "2026-11-08T13:06:32.392Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "failedRequests": [],
+  "scenarios": [
+    "real-home-one-session-login"
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "real-message-wall-owner-review-and-logout-denial"
+  ],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.message-feed [data-message-id=\"7486a0cb-c174-4b0d-b4f2-b4fd96eb01f1\"]') to be visible\u001b[22m\n",
+  "domProbe": {
+    "session": "合成伙伴 normal · ready · ",
+    "dialogs": [
+      {
+        "open": true,
+        "text": "_r_a_",
+        "inputs": 1
+      },
+      {
+        "open": false,
+        "text": "_r_r_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_t_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_b_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_c_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_h_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_e_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_f_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      }
+    ],
+    "labels": [
+      "你的昵称 可留空",
+      "留言分类",
+      "想说的话 必填"
+    ]
+  },
+  "completedAtUtc": "2026-11-08T13:07:46.498Z"
+}

@@ -1,0 +1,22 @@
+▶ trusted local community operations on actual PostgreSQL
+  ✔ a member creates a server-owned message; retries do not create another; pending content is private (647.9788ms)
+  ✔ message review, ownership, pin and deletion use trusted roles; historical content is never claimed (2989.2503ms)
+  ✔ guide drafts, submission, rejection, revision and publication preserve the legacy content contract (2325.4095ms)
+  ✔ published messages and guides allow owned replies and idempotent set-style interactions (4468.5279ms)
+  ✔ concurrent versions, duplicate requests and injected transaction failures do not partially write (1630.8388ms)
+  ✔ interaction and unpublishing serialize without a partially visible reply (1311.5063ms)
+  ✔ invalid identity, forced reset, logout, expiry, locks and deactivation refuse every new write (2767.2784ms)
+  ✔ logout, a lock and expiry between identity lookup and business transaction still refuse the write (1737.2611ms)
+  ✔ untrusted author flags, malformed text and media references never enter content storage (2881.3843ms)
+  ✔ the actual business role cannot grant authority, read password hashes or forge ownership/audit (758.1976ms)
+  ✔ database policies also forbid staff self-review and changing somebody else's body (1149.1703ms)
+  ✔ every role leaves legacy content and all its interaction rows read-only (3783.5565ms)
+✔ trusted local community operations on actual PostgreSQL (59300.9355ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59303.2882

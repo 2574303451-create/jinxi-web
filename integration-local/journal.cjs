@@ -4,6 +4,7 @@ const modules=['community','attendance','points','operations'];
 const TTL=7*86400000,CONFIRMED_TTL=30*86400000,MAX=512;
 function valid(row){return row&&Object.keys(row).every(k=>['v','key','actor','module','op','digest','id','createdAt','expiresAt','state'].includes(k))&&row.v===1&&uuid(row.actor)&&uuid(row.id)&&modules.includes(row.module)&&/^[a-z]+(?:\.[a-z]+)*$/.test(row.op||'')&&/^[a-f0-9]{64}$/.test(row.digest||'')&&row.key===row.actor+':'+row.module+':'+row.digest&&['pending','unknown','confirmed','rejected'].includes(row.state)&&Number.isSafeInteger(row.createdAt)&&row.expiresAt===row.createdAt+TTL;}
 function unavailable(){const e=Error('RECOVERY_STORAGE_UNAVAILABLE');e.code=e.message;return e;}
+function sameStateFamily(a,b){return a.module===b.module&&(a.op===b.op||a.module==='operations'&&['team.join','team.leave'].includes(a.op)&&['team.join','team.leave'].includes(b.op));}
 function createJournal({indexedDB=globalThis.indexedDB,clock=()=>Date.now(),name='jinxi-operation-receipts-v1'}={}){
  let opened;
  async function database(){
@@ -12,15 +13,20 @@ function createJournal({indexedDB=globalThis.indexedDB,clock=()=>Date.now(),name
   return opened;
  }
  async function transaction(mode,action){
-  const db=await database();return new Promise((resolve,reject)=>{let result,failed=false;const tx=db.transaction('intents',mode),store=tx.objectStore('intents');tx.oncomplete=()=>resolve(result);tx.onerror=tx.onabort=()=>reject(unavailable());
-   try{action(store,v=>{result=v;},()=>{failed=true;tx.abort();});}catch{if(!failed)tx.abort();}
+  const db=await database();return new Promise((resolve,reject)=>{let result,failed=false,reason;const tx=db.transaction('intents',mode),store=tx.objectStore('intents');tx.oncomplete=()=>resolve(result);tx.onerror=tx.onabort=()=>{const e=reason?Error(reason):unavailable();if(reason)e.code=reason;reject(e);};
+   try{action(store,v=>{result=v;},code=>{failed=true;reason=code;tx.abort();});}catch{if(!failed)tx.abort();}
   });
  }
  return {
   claim:(input,{renewConfirmed=false}={})=>transaction('readwrite',(store,done,abort)=>{
    const now=clock(),row={v:1,...input,key:input.actor+':'+input.module+':'+input.digest,createdAt:now,expiresAt:now+TTL,state:'pending'};if(!valid(row))return abort();
-   const get=store.get(row.key);get.onsuccess=()=>{if(get.result){if(!valid(get.result))return abort();if(renewConfirmed&&get.result.state==='confirmed'){store.put(row);done({...row,fresh:true});}else done({...get.result,fresh:false});return;}
-    const count=store.count();count.onsuccess=()=>{if(count.result>=MAX)return abort();store.add(row);done({...row,fresh:true});};};
+   const all=store.getAll();all.onsuccess=()=>{
+    if(all.result.length>MAX||all.result.some(r=>!valid(r)))return abort();
+    if(renewConfirmed&&all.result.some(r=>r.actor===row.actor&&r.key!==row.key&&sameStateFamily(r,row)&&['pending','unknown'].includes(r.state)))return abort('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
+    const prior=all.result.find(r=>r.key===row.key);
+    if(prior){if(renewConfirmed&&prior.state==='confirmed'){store.put(row);done({...row,fresh:true});}else done({...prior,fresh:false});return;}
+    if(all.result.length>=MAX)return abort();store.add(row);done({...row,fresh:true});
+   };
   }),
   mark:(key,id,state)=>transaction('readwrite',(store,done,abort)=>{
    if(!['unknown','confirmed','rejected'].includes(state))return abort();const get=store.get(key);get.onsuccess=()=>{const row=get.result;if(!valid(row)||row.id!==id)return abort();if(row.state!=='confirmed'&&!(row.state==='unknown'&&state==='rejected')){row.state=state;store.put(row);}done(row);};
@@ -32,4 +38,4 @@ function createJournal({indexedDB=globalThis.indexedDB,clock=()=>Date.now(),name
   close:async()=>{const db=opened&&await opened;db?.close();opened=null;},
  };
 }
-module.exports={createJournal,TTL,CONFIRMED_TTL,valid};
+module.exports={createJournal,TTL,CONFIRMED_TTL,valid,sameStateFamily};

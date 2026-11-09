@@ -1,4 +1,5 @@
 // Credentials stay in memory; optional IndexedDB stores only operation identifiers.
+const {sameStateFamily}=require('./journal.cjs');
 class SessionError extends Error {
   constructor(code, status = 0) { super(code); this.code = code; this.status = status; }
 }
@@ -117,7 +118,24 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       if (!pending.has(key) && pending.size >= 128) throw new SessionError('UNRESOLVED_REQUEST_LIMIT');
       // Only these constrained target-state operations may start another intent
       // after confirmation. Unknown IDs and creation/financial IDs survive.
-      const renewConfirmed = module === 'points' && ['visibility','rule.status','catalogue.status'].includes(body.op) || module === 'community' && body.op === 'reaction.set' || module === 'operations' && ['team.join','team.leave'].includes(body.op);
+      let renewConfirmed = module === 'points' && ['visibility','rule.status','catalogue.status'].includes(body.op) || module === 'community' && body.op === 'reaction.set' || module === 'operations' && ['team.join','team.leave'].includes(body.op);
+      if (journal && renewConfirmed) {
+        const family=(await journal.list(actor)).filter(r=>sameStateFamily(r,{module,op:body.op}));check(stamp, observed);
+        const original=family.find(r=>r.key===key),wasUnknown=original&&['pending','unknown'].includes(original.state);
+        // Reconcile earlier unknown setters before allowing an opposite target.
+        // Atomic claim below rechecks peers to cover a racing second tab.
+        for (const row of family.filter(r=>['pending','unknown'].includes(r.state))) {
+          const status=await request(row.module,null,{receipt:row.id});check(stamp, observed);
+          if(status.memberId!==actor||status.receipt?.requestId!==row.id||!['committed','unresolved'].includes(status.receipt.state))throw new SessionError('INVALID_RECEIPT');
+          if(status.receipt.state==='committed'){
+            await journal.mark(row.key,row.id,'confirmed');check(stamp, observed);row.state='confirmed';
+            if(pending.get(row.key)?.id===row.id)pending.delete(row.key);
+          }else if(row.key!==key)throw new SessionError('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
+        }
+        // A lone same-value retry remains the original request, even when the
+        // status lookup has now proved its commit. No blind unknown renewal.
+        if(wasUnknown&&!family.some(r=>r.key!==key&&r.state==='confirmed'))renewConfirmed=false;
+      }
       const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed }) : null;
       check(stamp, observed);
       const receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);

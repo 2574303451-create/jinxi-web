@@ -4,6 +4,7 @@ const {localSettings,tokenFrom}=require('../member-local/identity.cjs');
 const {verify}=require('./proof.cjs');
 const {CommunityError,fail,uuid,canonical}=require('./policy.cjs');
 const {role,project,mutate}=require('./store.cjs');
+const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,key)=>Object.entries(e.headers||{}).find(([k])=>k.toLowerCase()===key)?.[1]||'';
 const fields={'message.create':['content','category','color','imageUrl'],'guide.create':['title','content','category','difficulty','tags','imageUrl','mediaFiles'],'item.edit':['id','version','content','category','color','imageUrl','title','difficulty','tags','mediaFiles'],'item.submit':['id','version'],'item.archive':['id','version'],'item.review':['id','version','decision'],'item.pin':['id','version','pinned'],'item.delete':['id','version']};
@@ -14,7 +15,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
   let c,tx=false;
   try{
    localSettings(settings,env);
-   const method=event.httpMethod,query=event.queryStringParameters||{};
+   const method=event.httpMethod,query=event.queryStringParameters||{},recovering=method==='GET'&&recoveryQuery(query);
    if(!['GET','POST'].includes(method))fail(405,'METHOD_NOT_ALLOWED');
    if(header(event,'sec-fetch-site')==='cross-site'||header(event,'origin')&&header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REJECTED');
    let body={};
@@ -27,11 +28,11 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     if(!Object.hasOwn(fields,body.op))fail(400,'OPERATION_NOT_ENABLED');
     if(Object.keys(body).some(k=>!['op','requestId',...fields[body.op]].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');
     if(!uuid(body.requestId))fail(400,'REQUEST_ID_REQUIRED');
-   }else if(Object.keys(query).some(k=>!['kind','scope','id'].includes(k))||!['message','guide'].includes(query.kind)||!['public','mine','review'].includes(query.scope||'public'))fail(400,'INVALID_QUERY');
+   }else if(!recovering&&(Object.keys(query).some(k=>!['kind','scope','id'].includes(k))||!['message','guide'].includes(query.kind)||!['public','mine','review'].includes(query.scope||'public')))fail(400,'INVALID_QUERY');
    let member=null;
-   const authenticated=method==='POST'||query.scope==='mine'||query.scope==='review';
+   const authenticated=recovering||method==='POST'||query.scope==='mine'||query.scope==='review';
    if(authenticated){
-    const r=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'}});
+    const r=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'},localClientAddress:event.localClientAddress});
     if(r.statusCode!==200)return r;
     member=JSON.parse(r.body);
     if(member.needsPasswordChange)fail(403,'PASSWORD_RESET_REQUIRED');
@@ -52,7 +53,8 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     await c.query("SELECT set_config('community.actor',$1,true)",[a.member_id]);
    }
    let response;
-   if(method==='GET'){
+   if(recovering)response=await receipt(c,'community',member.member.id,query.receipt);
+   else if(method==='GET'){
     const scope=query.scope||'public';
     if(scope==='review'&&!['reviewer','admin'].includes(await role(c)))fail(403,'REVIEWER_REQUIRED');
     const rows=(await c.query('SELECT * FROM community_lab.items WHERE kind=$1 AND '+(scope==='public'?"status='published'":scope==='mine'?'owner_id=$2':"status='submitted'")+' ORDER BY is_pinned DESC,created_at DESC LIMIT 100',scope==='mine'?[query.kind,member.member.id]:[query.kind])).rows;

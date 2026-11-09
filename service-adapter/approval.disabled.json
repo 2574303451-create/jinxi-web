@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "enabled": false,
+  "classification": "synthetic-test",
+  "reason": "No cloud business environment or write authorization has been approved. Existing production and read-only TEST are excluded."
+}

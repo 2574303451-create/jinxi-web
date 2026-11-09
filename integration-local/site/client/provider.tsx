@@ -1,6 +1,8 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { createSession } from '../../session.cjs';
+import { createJournal } from '../../journal.cjs';
+import { RecoveryPanel } from './recovery-panel';
 import { SiteRuntimeContext, type SiteRuntime, type MessageActions } from '../../../components/site-runtime';
 import type { Message } from '../../../types/message-wall';
 import type { Strategy, StrategySubmission } from '../../../types/strategy-wall';
@@ -17,7 +19,7 @@ const epoch = () => typeof document === 'undefined' ? '' : document.cookie.split
 const message = (r: any): Message => ({ ...r, timestamp: new Date(r.timestamp), replies: (r.replies || []).map((x: any) => ({ ...x, timestamp: new Date(x.timestamp) })), reactions: r.reactions || [] });
 
 export function IntegrationProvider({ children }: { children: ReactNode }) {
-  const [client] = useState(() => createSession({ fetcher: (...args: Parameters<typeof fetch>) => fetch(...args), epoch, randomId: () => crypto.randomUUID(), notify: () => { if (typeof window !== 'undefined') window.dispatchEvent(new Event('integration:data')); } }) as SessionClient);
+  const [client] = useState(() => createSession({ journal: createJournal(), fetcher: (...args: Parameters<typeof fetch>) => fetch(...args), epoch, randomId: () => crypto.randomUUID(), notify: () => { if (typeof window !== 'undefined') window.dispatchEvent(new Event('integration:data')); } }) as SessionClient);
   useEffect(() => {
     let channel: BroadcastChannel | undefined;
     try { channel = new BroadcastChannel('jinxi-local-integration'); channel.onmessage = () => { client.observeEpoch(); window.dispatchEvent(new Event('integration:remote-data')); }; } catch { /* Epoch polling also covers tabs without BroadcastChannel. */ }
@@ -35,6 +37,7 @@ export function IntegrationProvider({ children }: { children: ReactNode }) {
 function ConnectedSite({ children }: { children: ReactNode }) {
   const { client, state, ready } = useSession();
   const [auth, setAuth] = useState<'login' | 'password' | null>(null), [announcements, setAnnouncements] = useState(false), [sponsorship, setSponsorship] = useState(false), [joinNotice, setJoinNotice] = useState(false), [profile, setProfile] = useState(false), [panel, setPanel] = useState<'checkin' | 'points' | 'teams' | null>(null), [dataVersion, setDataVersion] = useState(0);
+  const [recovery,setRecovery]=useState(false);
   const permissionsLoad = useCallback(() => ready ? client.request('operations', null, { kind: 'team', view: 'private' }).then(r => r.permissions as { admin: boolean; staff: boolean }) : Promise.resolve({ admin: false, staff: false }), [client, ready]);
   const privileges = useResource(permissionsLoad), permissions = privileges.data || { admin: false, staff: false };
   useEffect(() => { window.addEventListener('integration:capabilities', privileges.reload); return () => window.removeEventListener('integration:capabilities', privileges.reload); }, [privileges.reload]);
@@ -82,12 +85,14 @@ function ConnectedSite({ children }: { children: ReactNode }) {
         <button className="paper-button" onClick={() => void client.restore()}>重新核验身份</button>
         <button className="paper-button" onClick={() => setAnnouncements(true)}>公告发布与审核</button>
         <button className="paper-button" onClick={() => setSponsorship(true)}>合成感谢记录</button>
+        <button className="paper-button" onClick={() => setRecovery(true)}>恢复未确认操作</button>
         {(['checkin','points','teams'] as const).map((k,i) => <button className="paper-button" key={k} onClick={() => setPanel(k)}>{['签到事实','账户与兑换','可信组队'][i]}</button>)}
       </div>
     </aside>
     <div key={`${state.revision}-${permissions.admin}-${permissions.staff}`} data-session-revision={state.revision}>{children}</div>
     <AuthDialog key={(auth || 'closed') + (state.member?.id || 'anonymous') + epoch()} mode={auth} close={() => setAuth(null)} />
     <div key={`private-${state.revision}-${permissions.admin}-${permissions.staff}`}>
+      <Modal isOpen={recovery} onClose={()=>setRecovery(false)} title="本人操作回执核对" legacy={false} size="lg"><RecoveryPanel /></Modal>
       <AnnouncementDialog open={announcements} close={() => setAnnouncements(false)} permissions={permissions} />
       <SponsorshipDialog open={sponsorship} close={() => setSponsorship(false)} permissions={permissions} />
       <Modal isOpen={profile} onClose={() => setProfile(false)} title="本人合成资料" legacy={false} size="md"><ProfilePanel /></Modal>

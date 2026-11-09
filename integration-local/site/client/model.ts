@@ -1,6 +1,7 @@
 export type Member = { id: string; displayName: string };
 export type Snapshot = { phase: string; member: Member | null; revision: number; message: string };
 export type Input = Record<string, unknown>;
+export type RecoveryReceipt = { key: string; id: string; actor: string; module: string; op: string; createdAt: number; expired: boolean; serverState: 'committed' | 'unresolved' };
 export interface SessionClient {
   getSnapshot(): Snapshot;
   subscribe(fn: () => void): () => void;
@@ -11,6 +12,9 @@ export interface SessionClient {
   observeEpoch(): void;
   unverify(): void;
   invalidate(): void;
+  recover(): Promise<RecoveryReceipt[]>;
+  forgetReceipt(row: RecoveryReceipt): Promise<void>;
+  cleanupReceipts(): Promise<number>;
 }
 export type Item = {
   id: string; version: number; status: string; content: string; title?: string;

@@ -9,7 +9,7 @@
     "build:optimized": "node optimize-images.js && NODE_ENV=production next build --webpack",
     "dev": "next dev --webpack",
     "dev:netlify": "netlify dev",
-    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local --no-warn-ignored --max-warnings 0",
+    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local service-adapter history-compat --no-warn-ignored --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental false",
     "start": "node scripts/preview-static.cjs",
     "export": "npm run build",
@@ -56,7 +56,9 @@
     "integration:local": "node scripts/integration-local.cjs",
     "test:integration-unit": "node --test tests/integration-local-session.test.cjs tests/integration-local-boundary.test.cjs",
     "test:integration-https": "node tests/integration-local-https.test.cjs",
-    "test:integration-browser": "node tests/integration-local-browser.cjs"
+    "test:integration-browser": "node tests/integration-local-browser.cjs",
+    "test:adaptation": "node --test tests/adaptation-policy.test.cjs tests/adaptation-session.test.cjs tests/history-compat.test.cjs",
+    "history:check": "node scripts/history-compat.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

@@ -1,5 +1,6 @@
 const crypto=require('node:crypto'),{localSettings,tokenFrom}=require('../member-local/identity.cjs'),{verify}=require('./proof.cjs');
 const {PointsError,fail,uuid,readOptions}=require('./contract.cjs'),store=require('./store.cjs');
+const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=v=>crypto.createHash('sha256').update(v).digest(),header=(e,k)=>Object.entries(e.headers||{}).find(([n])=>n.toLowerCase()===k)?.[1]||'';
 const output=(status,body)=>({statusCode:status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'},body:JSON.stringify(body)});
 async function authorize(c,ctx,event,write){
@@ -12,12 +13,12 @@ async function authorize(c,ctx,event,write){
 function createPointsHandler({settings,identity,connect,env=process.env}){
  return async event=>{let c,tx=false;
   try{
-   localSettings(settings,env);const write=event.httpMethod==='POST';let query=event.queryStringParameters||{},body;
+   localSettings(settings,env);const write=event.httpMethod==='POST';let query=event.queryStringParameters||{},body;const recovering=!write&&recoveryQuery(query);
    if(!['GET','POST'].includes(event.httpMethod))fail(405,'METHOD_NOT_ALLOWED');if(header(event,'sec-fetch-site')==='cross-site'||header(event,'origin')&&header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REJECTED');
    if(write){
     if(header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REQUIRED');if(!/^application\/json(?:;|$)/i.test(header(event,'content-type')))fail(415,'JSON_REQUIRED');if(event.isBase64Encoded||typeof event.body!=='string'||Buffer.byteLength(event.body)>4096)fail(413,'BODY_REJECTED');
     try{body=JSON.parse(event.body);}catch{fail(400,'INVALID_JSON');}if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(query).length)fail(400,'INVALID_BODY');body.requestId=uuid(body.requestId);if(typeof body.op!=='string')fail(400,'INVALID_OPERATION');
-   }else query=readOptions(query);
+   }else if(!recovering)query=readOptions(query);
    const auth=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'},localClientAddress:event.localClientAddress});if(auth.statusCode!==200)return auth;const member=JSON.parse(auth.body);if(member.needsPasswordChange)fail(403,'PASSWORD_RESET_REQUIRED');if(write&&header(event,'x-csrf-token')!==member.csrfToken)fail(403,'CSRF_REJECTED');
    c=await connect();await c.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');tx=true;await verify(c,settings);await c.query('COMMIT');tx=false;
    await c.query('BEGIN');tx=true;await c.query("SET LOCAL statement_timeout='3000ms'; SET LOCAL lock_timeout='2000ms'; SET LOCAL DateStyle='ISO, YMD'");const token=tokenFrom(event);if(!token)fail(401,'SESSION_INVALID');
@@ -39,7 +40,7 @@ function createPointsHandler({settings,identity,connect,env=process.env}){
      if(!(e instanceof PointsError)||![400,403,409].includes(e.status))throw e;await c.query('ROLLBACK TO SAVEPOINT business');status=e.status;result={error:'本机合成积分操作未获允许。',code:e.code};
      let eventId=null;try{if(body.eventId!==undefined)eventId=uuid(body.eventId);}catch{}await c.query('INSERT INTO points_lab.audit(actor_id,request_id,code,event_id) VALUES($1,$2,$3,$4)',[ctx.actor,body.requestId,e.code,eventId]);
     }
-   }else result=await store.state(c,ctx,query);
+   }else result=recovering?await receipt(c,'points',ctx.actor,query.receipt):await store.state(c,ctx,query);
    // Finish all deferred financial checks before the final live authorization.
    await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);await c.query('COMMIT');tx=false;return output(status,{...result,...(!write&&query.view==='board'?{}:{memberId:ctx.actor}),syntheticOnly:true});
   }catch(e){if(tx)await c.query('ROLLBACK').catch(()=>{});return output(e instanceof PointsError?e.status:503,{error:'本机合成积分服务不可用或请求未获允许。',code:e instanceof PointsError?e.code:'POINTS_UNAVAILABLE'});}

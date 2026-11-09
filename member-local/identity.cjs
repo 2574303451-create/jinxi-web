@@ -3,6 +3,7 @@ const crypto=require('node:crypto');
 const {ATTESTATION_SQL,validateProof}=require('../netlify/functions/_shared/function-security');
 const {hashPassword,verifyPassword,acceptablePassword}=require('../netlify/functions/_shared/password');
 const {FORBIDDEN_KEYS}=require('../netlify/functions/_shared/test-resource');
+const resource=require('../service-adapter/resource.cjs');
 const COOKIE='__Host-jinxi_member_local';
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,name)=>Object.entries(e.headers||{}).find(([key])=>key.toLowerCase()===name)?.[1]||'';
@@ -22,6 +23,7 @@ const PERMISSIONS=`SELECT host(inet_server_addr()) AS host,inet_server_port() AS
   has_table_privilege(current_user,c.oid,'DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
   OR c.relname NOT IN('member_sessions_v2','member_session_limits_v2') AND has_any_column_privilege(current_user,c.oid,'INSERT'))) AS excess_table_write`;
 function localSettings(value,env={}){
+  if(resource.approved(value,env))return value;
   const keys=['kind','host','port','database','user','password','origin','environmentId','fingerprint','csrfKey','rateKey'];
   if(!value||Object.keys(value).some(key=>!keys.includes(key))||value.kind!=='jinxi-member-local-v1'||value.host!=='127.0.0.1'||value.port!==55436||value.database!=='jinxi_member_local'||value.user!=='jinxi_member_session'||value.origin!=='https://127.0.0.1:3069'||typeof value.password!=='string'||!value.password||!/^[a-f0-9-]{36}$/.test(value.environmentId||'')||!/^[a-f0-9]{64}$/.test(value.fingerprint||'')||![value.csrfKey,value.rateKey].every(x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x)))reject(503,'LOCAL_RESOURCE_REJECTED');
   // Names only. Do not read inherited credentials to decide whether to reject them.
@@ -34,6 +36,12 @@ function tokenFrom(event){
 }
 function cookie(token,clear=false){return `${COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${clear?0:604800}`;}
 function output(status,body,setCookie){return {statusCode:status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...(setCookie?{'Set-Cookie':setCookie}:{})},body:JSON.stringify(body)};}
+async function verifyMember(c,local){
+ const proof=(await c.query(ATTESTATION,['b2_lab'])).rows;
+ validateProof({mode:'member-local',policy:resource.policy(local,'member')},proof);
+ const permissions=(await c.query(PERMISSIONS)).rows[0];
+ if(proof[0].session_role!==local.user||proof[0].database_temp!==false||proof[0].database_name!==local.database||!resource.addressMatches(local,permissions)||permissions.excess_column_update!==false||permissions.excess_table_write!==false)reject(503,'LOCAL_PERMISSION_REJECTED');
+}
 function createMemberHandler({settings,connect,env=process.env,clientAddress=()=> 'loopback'}){
   return async event=>{
     let c,inTransaction=false,op;
@@ -64,10 +72,7 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
       c=await connect(local);
       await c.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');inTransaction=true;
       await c.query("SET LOCAL statement_timeout='3000ms'");
-      const proof=(await c.query(ATTESTATION,['b2_lab'])).rows;
-      validateProof({mode:'member-local',policy:{context:'local',classification:'synthetic-local',environmentId:local.environmentId,fingerprint:local.fingerprint,role:local.user}},proof);
-      const permissions=(await c.query(PERMISSIONS)).rows[0];
-      if(proof[0].session_role!==local.user||proof[0].database_temp!==false||proof[0].database_name!==local.database||permissions.host!==local.host||permissions.port!==local.port||permissions.excess_column_update!==false||permissions.excess_table_write!==false)reject(503,'LOCAL_PERMISSION_REJECTED');
+      await verifyMember(c,local);
       await c.query('COMMIT');inTransaction=false;
       await c.query('BEGIN');inTransaction=true;
       await c.query("SET LOCAL statement_timeout='3000ms'; SET LOCAL lock_timeout='2000ms'");
@@ -142,4 +147,4 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
     }finally{await c?.end().catch(()=>{});}
   };
 }
-module.exports={localSettings,createMemberHandler,COOKIE,tokenFrom,ATTESTATION,PERMISSIONS};
+module.exports={localSettings,createMemberHandler,COOKIE,tokenFrom,ATTESTATION,PERMISSIONS,verifyMember};

@@ -1,11 +1,8 @@
 const https = require('node:https'), http = require('node:http'), fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const { cleanEnv } = require('../scripts/run-clean.cjs');
-const { createMemberHandler, localSettings } = require('../member-local/identity.cjs');
-const { createCommunityHandler } = require('../community-local/handler.cjs');
-const { createAttendanceHandler } = require('../attendance-local/handler.cjs');
-const { createPointsHandler } = require('../points-local/handler.cjs');
-const { createOperationsHandler } = require('../operations-local/handler.cjs');
+const { localSettings } = require('../member-local/identity.cjs');
+const { handlers: createServiceHandlers } = require('../service-adapter/handlers.cjs');
 const { publicContract } = require('./public-contract.cjs');
 
 async function serveIntegration(db, openssl) {
@@ -14,15 +11,9 @@ async function serveIntegration(db, openssl) {
   const key = path.join(db.folder, 'integration-key.private'), certificate = path.join(db.folder, 'integration-cert.pem');
   const result = spawnSync(openssl, ['req','-x509','-newkey','rsa:2048','-nodes','-sha256','-days','2','-subj','/CN=localhost','-addext','subjectAltName=DNS:localhost,IP:127.0.0.1','-keyout',key,'-out',certificate], { env: cleanEnv(), encoding: 'utf8', timeout: 15000, windowsHide: true });
   if (result.status !== 0) throw Error('LOCAL_TLS_UNAVAILABLE');
-  const identity = createMemberHandler({ settings: db.settings, connect: db.connect, env: cleanEnv(), clientAddress: e => e.localClientAddress });
-  const shared = { settings: db.settings, identity, env: cleanEnv() };
-  const handlers = {
-    '/api/member': identity,
-    '/api/community': createCommunityHandler({ ...shared, connect: db.connectBusiness }),
-    '/api/attendance': createAttendanceHandler({ ...shared, connect: db.connectAttendance }),
-    '/api/points': createPointsHandler({ ...shared, connect: db.connectPoints }),
-    '/api/operations': createOperationsHandler({ ...shared, connect: db.connectOperations }),
-  };
+  const services = createServiceHandlers({ settings: db.settings, env: cleanEnv(), clientAddress: e => e.localClientAddress,
+    connections: { member: db.connect, community: db.connectBusiness, attendance: db.connectAttendance, points: db.connectPoints, operations: db.connectOperations } });
+  const handlers = Object.fromEntries(Object.entries(services).map(([name,handler]) => ['/api/' + name,handler]));
   const fixtures = {
     '/fixtures/community-cover.jpg': ['public/placeholder.jpg','image/jpeg'],
     '/fixtures/community-demo.mp4': ['artifacts/b2-a-8/video-demo/synthetic-motion.mp4','video/mp4'],

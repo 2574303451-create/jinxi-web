@@ -1,4 +1,5 @@
 const {ATTESTATION_SQL,validateProof}=require('../netlify/functions/_shared/function-security');
+const resource=require('../service-adapter/resource.cjs');
 const auth={
  guild_member_accounts:{select:['id','employee_no','is_locked','force_reset_password'],update:['last_login_at']},
  guild_member_profiles:{select:['employee_no','nickname','is_active'],update:[]},
@@ -11,9 +12,9 @@ const PROOF=ATTESTATION_SQL.replace(/WITH relation_scope AS \([\s\S]*?\)\nSELECT
 if(PROOF===ATTESTATION_SQL)throw Error('ATTENDANCE_PROOF_TEMPLATE_CHANGED');
 async function verify(c,settings){
  const rows=(await c.query(PROOF,['b2_lab'])).rows;
- validateProof({mode:'attendance-local',policy:{classification:'synthetic-local',environmentId:settings.environmentId,fingerprint:settings.fingerprint,role:'jinxi_attendance_app'}},rows);
- if(rows[0].session_role!=='jinxi_attendance_app'||rows[0].database_temp!==false||rows[0].database_name!=='jinxi_member_local')throw Error('ATTENDANCE_RESOURCE_REJECTED');
- const address=(await c.query('SELECT host(inet_server_addr()) AS host,inet_server_port() AS port')).rows[0];if(address.host!=='127.0.0.1'||address.port!==55436)throw Error('ATTENDANCE_RESOURCE_REJECTED');
+ validateProof({mode:'attendance-local',policy:resource.policy(settings,'attendance')},rows);
+ if(rows[0].session_role!=='jinxi_attendance_app'||rows[0].database_temp!==false||rows[0].database_name!==resource.databaseName(settings))throw Error('ATTENDANCE_RESOURCE_REJECTED');
+ const address=(await c.query('SELECT host(inet_server_addr()) AS host,inet_server_port() AS port')).rows[0];if(!resource.addressMatches(settings,address))throw Error('ATTENDANCE_RESOURCE_REJECTED');
  const permissions=(await c.query("SELECT n.nspname AS schema,c.relname AS name,a.attname AS column,has_column_privilege(current_user,c.oid,a.attnum,'SELECT') AS sel,has_column_privilege(current_user,c.oid,a.attnum,'INSERT') AS ins,has_column_privilege(current_user,c.oid,a.attnum,'UPDATE') AS upd,has_table_privilege(current_user,c.oid,'DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') AS excess,c.relrowsecurity AS rls,c.relkind FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped WHERE n.nspname IN('b2_lab','attendance_lab') AND c.relkind IN('r','p','v','m','f')")).rows;
  for(const p of permissions){
   if(p.excess||p.relkind!=='r')throw Error('ATTENDANCE_PERMISSION_REJECTED');

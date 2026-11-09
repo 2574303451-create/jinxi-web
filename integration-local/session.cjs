@@ -1,8 +1,9 @@
-// One in-memory session for the real React application. Never persisted in Web Storage.
+// Credentials stay in memory; optional IndexedDB stores only operation identifiers.
 class SessionError extends Error {
   constructor(code, status = 0) { super(code); this.code = code; this.status = status; }
 }
-function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
+/** @param {{fetcher: Function, epoch: Function, randomId: Function, notify?: Function, journal?: ReturnType<typeof import('./journal.cjs').createJournal> | null}} options */
+function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = null }) {
   let generation = 0, credential = null, marker = epoch(), authBusy = false, restoring = null, queued = false;
   let state = Object.freeze({ phase: 'checking', member: null, revision: 0, message: '' });
   const listeners = new Set(), pending = new Map(), flights = new Map();
@@ -103,13 +104,25 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
     const flight = (async () => {
       check(stamp, observed);
       if (!actor || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
-      const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload));
+      let scope = '';
+      if (journal && module === 'attendance' && body.op === 'checkin') {
+        const fact = await request('attendance');
+        if (!/^\d{4}-\d\d-\d\d$/.test(fact.today || '') || fact.businessTimeZone !== 'Asia/Shanghai') throw new SessionError('INVALID_BUSINESS_DATE');
+        scope = '\n' + fact.today; // Only an intent scope; the POST still accepts no date.
+      }
+      const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload + scope));
       check(stamp, observed);
-      key = actor + ':' + module + ':' + Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,'0')).join('');
+      const digestText = Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,'0')).join('');
+      key = actor + ':' + module + ':' + digestText;
       if (!pending.has(key) && pending.size >= 128) throw new SessionError('UNRESOLVED_REQUEST_LIMIT');
-      const receipt = pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
-      const result = await request(module, { ...body, requestId: receipt.id }); pending.delete(key); notify(); return result;
-    })().catch(e => {
+      const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }) : null;
+      check(stamp, observed);
+      const receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
+      if (saved && saved.state !== 'confirmed' && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');
+      const result = await request(module, { ...body, requestId: receipt.id });
+      if (journal) await journal.mark(key, receipt.id, 'confirmed');
+      pending.delete(key); notify(); return result;
+    })().catch(async e => {
       // No draft text is retained. An unconfirmed A receipt is never usable by B.
       const receipt = key && pending.get(key);
       if (receipt) {
@@ -117,13 +130,44 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
         // A later 401/403/429 only rejects that retry. It cannot establish that
         // the original unknown transaction did not commit, so keep its ID.
         else if (!receipt.unknown) pending.delete(key);
+        if (journal && receipt.unknown) await journal.mark(key, receipt.id, 'unknown').catch(() => {});
+        else if (journal) await journal.mark(key, receipt.id, 'rejected').catch(() => {});
       }
       throw e;
     }).finally(() => { if (flights.get(running) === flight) flights.delete(running); });
     flights.set(running, flight); return flight;
   }
   function observeEpoch() { if (epoch() !== marker) { marker = epoch(); clear('unverified', '账号已切换，请重新核验。'); void restore(); } }
-  return { getSnapshot: () => state, subscribe: f => { listeners.add(f); return () => listeners.delete(f); }, restore, authenticate, request, mutate, observeEpoch,
+  async function recover() {
+    if (!journal || !credential || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
+    const actor = credential.member.id, stamp = generation, observed = marker, rows = await journal.list(actor), results = [];
+    check(stamp, observed);
+    for (const row of rows.slice(0,16)) {
+      const result = await request(row.module, null, { receipt: row.id });
+      check(stamp, observed);
+      if (result.memberId !== actor || result.receipt?.requestId !== row.id || !['committed','unresolved'].includes(result.receipt.state)) throw new SessionError('INVALID_RECEIPT');
+      if (result.receipt.state === 'committed') await journal.mark(row.key, row.id, 'confirmed');
+      results.push({ ...row, serverState: result.receipt.state });
+    }
+    check(stamp, observed);return results;
+  }
+  async function forgetReceipt(row) {
+    if (!journal || !credential || row.actor !== credential.member.id) throw new SessionError('VERIFIED_SESSION_REQUIRED');
+    const stamp = generation, observed = marker, result = await request(row.module, null, { receipt: row.id });
+    check(stamp, observed);
+    if (result.memberId !== row.actor || result.receipt?.requestId !== row.id || result.receipt?.state !== 'committed') throw new SessionError('UNCONFIRMED_RECEIPT_CANNOT_FORGET');
+    await journal.mark(row.key, row.id, 'confirmed');check(stamp, observed);await journal.forget(row.key, row.id);
+  }
+  async function cleanupReceipts() {
+    if (!journal || !credential || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
+    const stamp = generation, observed = marker, rows = await journal.list(credential.member.id);
+    check(stamp, observed);let removed = 0;
+    for (const row of rows.filter(r => r.state === 'confirmed' && Date.now() > r.createdAt + 30 * 86400000).slice(0,16)) {
+      await forgetReceipt(row);check(stamp, observed);removed++;
+    }
+    return removed;
+  }
+  return { getSnapshot: () => state, subscribe: f => { listeners.add(f); return () => listeners.delete(f); }, restore, authenticate, request, mutate, observeEpoch, recover, forgetReceipt, cleanupReceipts,
     unverify: () => clear('unverified', '连接未核验，所有私有内容已清除。'),
     invalidate: () => { clear(); void restore(); } };
 }

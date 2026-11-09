@@ -1,4 +1,5 @@
 const {ATTESTATION_SQL,validateProof}=require('../netlify/functions/_shared/function-security');
+const resource=require('../service-adapter/resource.cjs');
 const auth={guild_member_accounts:{select:['id','employee_no','is_locked','force_reset_password'],update:['last_login_at']},guild_member_profiles:{select:['employee_no','nickname','is_active'],update:[]},member_account_security_v2:{select:['account_id','member_id','auth_version','disabled_at'],update:[]},member_sessions_v2:{select:['account_id','token_hash','csrf_hash','csrf_key_id','auth_version','expires_at','idle_expires_at','revoked_at','last_seen_at'],update:['last_seen_at']}};
 const business={
  mutex:{insert:[],update:['touched'],rls:false},rules:{insert:['code','version','day1','day3','day7','daily_cap','total_cap','starts_at','ends_at','status'],update:['status'],rls:false},
@@ -14,9 +15,9 @@ const relation="WITH relation_scope AS (SELECT c.oid,c.relkind,(c.relkind='r' AN
 const PROOF=ATTESTATION_SQL.replace(/WITH relation_scope AS \([\s\S]*?\)\nSELECT i\.\*/,relation);if(PROOF===ATTESTATION_SQL)throw Error('POINTS_PROOF_TEMPLATE_CHANGED');
 const requiredTriggers=['rule_guard','catalogue_guard','account_consistent','ledger_account_consistent','account_ranking','ranking_guard','settlement_source','ledger_source','order_guard','order_consistent','inventory_guard','stock_consistent','movement_stock_consistent','ledger_immutable','settlement_immutable','inventory_immutable','request_immutable'];
 async function verify(c,settings){
- const rows=(await c.query(PROOF,['b2_lab'])).rows;validateProof({mode:'points-local',policy:{classification:'synthetic-local',environmentId:settings.environmentId,fingerprint:settings.fingerprint,role:'jinxi_points_app'}},rows);
- if(rows[0].session_role!=='jinxi_points_app'||rows[0].database_temp!==false||rows[0].database_name!=='jinxi_member_local')throw Error('POINTS_RESOURCE_REJECTED');
- const address=(await c.query('SELECT host(inet_server_addr()) AS host,inet_server_port() AS port')).rows[0];if(address.host!=='127.0.0.1'||address.port!==55436)throw Error('POINTS_RESOURCE_REJECTED');
+ const rows=(await c.query(PROOF,['b2_lab'])).rows;validateProof({mode:'points-local',policy:resource.policy(settings,'points')},rows);
+ if(rows[0].session_role!=='jinxi_points_app'||rows[0].database_temp!==false||rows[0].database_name!==resource.databaseName(settings))throw Error('POINTS_RESOURCE_REJECTED');
+ const address=(await c.query('SELECT host(inet_server_addr()) AS host,inet_server_port() AS port')).rows[0];if(!resource.addressMatches(settings,address))throw Error('POINTS_RESOURCE_REJECTED');
  const permissions=(await c.query("SELECT n.nspname AS schema,c.relname AS name,a.attname AS column,has_column_privilege(current_user,c.oid,a.attnum,'SELECT') AS sel,has_column_privilege(current_user,c.oid,a.attnum,'INSERT') AS ins,has_column_privilege(current_user,c.oid,a.attnum,'UPDATE') AS upd,has_table_privilege(current_user,c.oid,'DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') AS excess,c.relrowsecurity AS rls,c.relkind FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped WHERE n.nspname IN('b2_lab','attendance_lab','community_lab','points_lab') AND c.relkind IN('r','p','v','m','f')")).rows;
  for(const p of permissions){
   if(p.excess||p.relkind!=='r')throw Error('POINTS_PERMISSION_REJECTED');

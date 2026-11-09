@@ -3,6 +3,7 @@ const crypto=require('node:crypto');
 const {localSettings,tokenFrom}=require('../member-local/identity.cjs');
 const {verify}=require('./proof.cjs');
 const {AttendanceError,fail,options,moment,state,checkin}=require('./store.cjs');
+const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,key)=>Object.entries(e.headers||{}).find(([k])=>k.toLowerCase()===key)?.[1]||'';
 const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(value);
@@ -11,7 +12,7 @@ function createAttendanceHandler({settings,identity,connect,env=process.env}){
  return async event=>{
   let c,tx=false;
   try{
-   localSettings(settings,env);const method=event.httpMethod,query=event.queryStringParameters||{};let body,readOptions;
+   localSettings(settings,env);const method=event.httpMethod,query=event.queryStringParameters||{},recovering=method==='GET'&&recoveryQuery(query);let body,readOptions;
    if(!['GET','POST'].includes(method))fail(405,'METHOD_NOT_ALLOWED');
    if(header(event,'sec-fetch-site')==='cross-site'||header(event,'origin')&&header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REJECTED');
    if(method==='POST'){
@@ -22,7 +23,7 @@ function createAttendanceHandler({settings,identity,connect,env=process.env}){
     if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(query).length)fail(400,'INVALID_BODY');
     if(Object.keys(body).some(k=>!['op','requestId'].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');
     if(body.op!=='checkin'||!uuid(body.requestId))fail(400,'INVALID_REQUEST');
-   }else{if(Object.keys(query).some(k=>!['month','before','limit'].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');readOptions=options(query);}
+   }else if(!recovering){if(Object.keys(query).some(k=>!['month','before','limit'].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');readOptions=options(query);}
    const auth=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'},localClientAddress:event.localClientAddress});if(auth.statusCode!==200)return auth;
    const member=JSON.parse(auth.body);if(member.needsPasswordChange)fail(403,'PASSWORD_RESET_REQUIRED');
    if(method==='POST'&&header(event,'x-csrf-token')!==member.csrfToken)fail(403,'CSRF_REJECTED');
@@ -40,7 +41,7 @@ function createAttendanceHandler({settings,identity,connect,env=process.env}){
    if(a.force_reset_password)fail(403,'PASSWORD_RESET_REQUIRED');
    if(method==='POST'&&!crypto.timingSafeEqual(hash(header(event,'x-csrf-token')),s.csrf_hash))fail(403,'CSRF_REJECTED');
    await c.query("SELECT set_config('attendance.actor',$1,true)",[a.member_id]);
-   const response=method==='POST'?await checkin(c,a.member_id,body.requestId):await state(c,a.member_id,await moment(c),readOptions);
+   const response=recovering?await receipt(c,'attendance',a.member_id,query.receipt):method==='POST'?await checkin(c,a.member_id,body.requestId):await state(c,a.member_id,await moment(c),readOptions);
    // Account/session rows remain locked. Time may still pass during business SQL.
    const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(token)])).rows[0];
    if(!final?.live)fail(401,'SESSION_INVALID');

@@ -12,7 +12,7 @@ export interface SessionClient {
   observeEpoch(): void;
   unverify(): void;
   invalidate(): void;
-  recover(): Promise<RecoveryReceipt[]>;
+  recover(offset?: number): Promise<RecoveryReceipt[]>;
   forgetReceipt(row: RecoveryReceipt): Promise<void>;
   cleanupReceipts(): Promise<number>;
 }

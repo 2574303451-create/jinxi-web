@@ -20,6 +20,7 @@ function router({services,origin,clientAddress}){return async (event,context)=>{
  }catch{return response(503,'SERVICE_UNAVAILABLE');}
 };}
 async function createCloudService({approval=disabled,env=process.env,secrets,Client=require('pg').Client}={}){
+ if(approval?.enabled!==true)throw Error('APPROVED_TEST_RESOURCE_REQUIRED');
  approval=Object.freeze(structuredClone(approval));env=Object.freeze({...env});secrets=Object.freeze({...secrets});
  const settings=approve(approval,env,secrets),connections={};
  for(const name of Object.keys(roles))connections[name]=async()=>{

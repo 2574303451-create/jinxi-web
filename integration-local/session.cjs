@@ -118,9 +118,10 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }) : null;
       check(stamp, observed);
       const receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
-      if (saved && saved.state !== 'confirmed' && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');
+      if (saved && !['confirmed','rejected'].includes(saved.state) && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');
       const result = await request(module, { ...body, requestId: receipt.id });
       if (journal) await journal.mark(key, receipt.id, 'confirmed');
+      check(stamp, observed);
       pending.delete(key); notify(); return result;
     })().catch(async e => {
       // No draft text is retained. An unconfirmed A receipt is never usable by B.
@@ -138,11 +139,12 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
     flights.set(running, flight); return flight;
   }
   function observeEpoch() { if (epoch() !== marker) { marker = epoch(); clear('unverified', '账号已切换，请重新核验。'); void restore(); } }
-  async function recover() {
+  async function recover(offset = 0) {
+    if (!Number.isSafeInteger(offset) || offset < 0 || offset >= 512) throw new SessionError('INVALID_RECOVERY_PAGE');
     if (!journal || !credential || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
-    const actor = credential.member.id, stamp = generation, observed = marker, rows = await journal.list(actor), results = [];
+    const actor = credential.member.id, stamp = generation, observed = marker, rows = (await journal.list(actor)).sort((a,b) => a.createdAt - b.createdAt || a.key.localeCompare(b.key)), results = [];
     check(stamp, observed);
-    for (const row of rows.slice(0,16)) {
+    for (const row of rows.slice(offset,offset + 16)) {
       const result = await request(row.module, null, { receipt: row.id });
       check(stamp, observed);
       if (result.memberId !== actor || result.receipt?.requestId !== row.id || !['committed','unresolved'].includes(result.receipt.state)) throw new SessionError('INVALID_RECEIPT');

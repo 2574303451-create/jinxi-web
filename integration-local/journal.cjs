@@ -17,9 +17,9 @@ function createJournal({indexedDB=globalThis.indexedDB,clock=()=>Date.now(),name
   });
  }
  return {
-  claim:input=>transaction('readwrite',(store,done,abort)=>{
+  claim:(input,{renewConfirmed=false}={})=>transaction('readwrite',(store,done,abort)=>{
    const now=clock(),row={v:1,...input,key:input.actor+':'+input.module+':'+input.digest,createdAt:now,expiresAt:now+TTL,state:'pending'};if(!valid(row))return abort();
-   const get=store.get(row.key);get.onsuccess=()=>{if(get.result){if(!valid(get.result))return abort();done({...get.result,fresh:false});return;}
+   const get=store.get(row.key);get.onsuccess=()=>{if(get.result){if(!valid(get.result))return abort();if(renewConfirmed&&get.result.state==='confirmed'){store.put(row);done({...row,fresh:true});}else done({...get.result,fresh:false});return;}
     const count=store.count();count.onsuccess=()=>{if(count.result>=MAX)return abort();store.add(row);done({...row,fresh:true});};};
   }),
   mark:(key,id,state)=>transaction('readwrite',(store,done,abort)=>{

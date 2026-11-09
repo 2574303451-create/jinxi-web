@@ -115,7 +115,10 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       const digestText = Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,'0')).join('');
       key = actor + ':' + module + ':' + digestText;
       if (!pending.has(key) && pending.size >= 128) throw new SessionError('UNRESOLVED_REQUEST_LIMIT');
-      const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }) : null;
+      // Only these constrained target-state operations may start another intent
+      // after confirmation. Unknown IDs and creation/financial IDs survive.
+      const renewConfirmed = module === 'points' && ['visibility','rule.status','catalogue.status'].includes(body.op) || module === 'community' && body.op === 'reaction.set' || module === 'operations' && ['team.join','team.leave'].includes(body.op);
+      const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed }) : null;
       check(stamp, observed);
       const receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
       if (saved && !['confirmed','rejected'].includes(saved.state) && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');
@@ -148,7 +151,10 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       const result = await request(row.module, null, { receipt: row.id });
       check(stamp, observed);
       if (result.memberId !== actor || result.receipt?.requestId !== row.id || !['committed','unresolved'].includes(result.receipt.state)) throw new SessionError('INVALID_RECEIPT');
-      if (result.receipt.state === 'committed') await journal.mark(row.key, row.id, 'confirmed');
+      if (result.receipt.state === 'committed') {
+        await journal.mark(row.key, row.id, 'confirmed');check(stamp, observed);
+        if (pending.get(row.key)?.id === row.id) pending.delete(row.key);
+      }
       results.push({ ...row, serverState: result.receipt.state });
     }
     check(stamp, observed);return results;
@@ -158,7 +164,9 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
     const stamp = generation, observed = marker, result = await request(row.module, null, { receipt: row.id });
     check(stamp, observed);
     if (result.memberId !== row.actor || result.receipt?.requestId !== row.id || result.receipt?.state !== 'committed') throw new SessionError('UNCONFIRMED_RECEIPT_CANNOT_FORGET');
-    await journal.mark(row.key, row.id, 'confirmed');check(stamp, observed);await journal.forget(row.key, row.id);
+    await journal.mark(row.key, row.id, 'confirmed');check(stamp, observed);
+    if (pending.get(row.key)?.id === row.id) pending.delete(row.key);
+    await journal.forget(row.key, row.id);check(stamp, observed);
   }
   async function cleanupReceipts() {
     if (!journal || !credential || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');

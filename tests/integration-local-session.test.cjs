@@ -119,3 +119,12 @@ test('a first definitive rejection without an earlier unknown result may use a f
   const s=setup();await login(s);const body={op:'redeem',itemId:'synthetic-item',quantity:1};s.push(()=>response(403,{code:'STAFF_REQUIRED'}));await assert.rejects(s.client.mutate('points',body));const rejected=s.calls.at(-1).body.requestId;
   s.push(()=>response(200,identity('A')));await s.client.restore();s.push(()=>response(200,{memberId:'A'}));await s.client.mutate('points',body);assert.notEqual(s.calls.at(-1).body.requestId,rejected);
 });
+test('first 5xx or malformed response cannot prove no commit: retain the original receipt', async () => {
+  for(const status of [500,502,503,504]){
+    const s=setup();await login(s);const body={op:'redeem',itemId:'synthetic-item',quantity:1};s.push(()=>response(status,{code:'POINTS_UNAVAILABLE'}));await assert.rejects(s.client.mutate('points',body));const first=s.calls.at(-1).body.requestId;
+    s.push(()=>response(200,{memberId:'A',orderId:'original'}));await s.client.mutate('points',body);assert.equal(s.calls.at(-1).body.requestId,first);
+  }
+  for(const value of [null,[],42]){
+    const s=setup();await login(s);const body={op:'redeem',itemId:'synthetic-item',quantity:1};s.push(()=>response(200,value));await assert.rejects(s.client.mutate('points',body));const first=s.calls.at(-1).body.requestId;s.push(()=>response(200,{memberId:'A'}));await s.client.mutate('points',body);assert.equal(s.calls.at(-1).body.requestId,first);
+  }
+});

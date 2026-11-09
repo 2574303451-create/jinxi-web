@@ -86,7 +86,7 @@ function ConnectedSite({ children }: { children: ReactNode }) {
       </div>
     </aside>
     <div key={`${state.revision}-${permissions.admin}-${permissions.staff}`} data-session-revision={state.revision}>{children}</div>
-    <AuthDialog key={(auth || 'closed') + state.revision} mode={auth} close={() => setAuth(null)} />
+    <AuthDialog key={(auth || 'closed') + (state.member?.id || 'anonymous') + epoch()} mode={auth} close={() => setAuth(null)} />
     <div key={`private-${state.revision}-${permissions.admin}-${permissions.staff}`}>
       <AnnouncementDialog open={announcements} close={() => setAnnouncements(false)} permissions={permissions} />
       <SponsorshipDialog open={sponsorship} close={() => setSponsorship(false)} permissions={permissions} />

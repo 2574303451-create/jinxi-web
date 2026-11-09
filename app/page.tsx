@@ -48,7 +48,7 @@ function PageContent() {
   const runtime = useSiteRuntime()
   const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
-  const legacyPanel = activePanel !== null && !["messages", "members", "showcase"].includes(activePanel)
+  const legacyPanel = activePanel !== null && !["messages", "members", "showcase"].includes(activePanel) && !runtime?.panels[activePanel]
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)

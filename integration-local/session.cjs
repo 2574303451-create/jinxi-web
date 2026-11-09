@@ -22,6 +22,7 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
     catch { throw new SessionError('NETWORK_RESULT_UNKNOWN'); }
     let data;
     try { data = await response.json(); } catch { throw new SessionError('INVALID_RESPONSE', response.status); }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new SessionError('INVALID_RESPONSE', response.status);
     return { response, data };
   }
   function check(stamp, observed) {
@@ -112,7 +113,7 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
       // No draft text is retained. An unconfirmed A receipt is never usable by B.
       const receipt = key && pending.get(key);
       if (receipt) {
-        if (['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED'].includes(e.code)) receipt.unknown = true;
+        if (e.status >= 500 || e.status === 408 || ['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED','SUBJECT_MISMATCH'].includes(e.code)) receipt.unknown = true;
         // A later 401/403/429 only rejects that retry. It cannot establish that
         // the original unknown transaction did not commit, so keep its ID.
         else if (!receipt.unknown) pending.delete(key);

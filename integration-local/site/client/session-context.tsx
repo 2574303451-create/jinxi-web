@@ -27,7 +27,7 @@ export function useCommand() {
     if (active.value) return;
     active.value = true; setBusy(true); setNotice('');
     try { await action(); setNotice('操作已由服务器确认。'); }
-    catch (e) { const code = (e as { code?: string }).code; setNotice(code === 'NETWORK_RESULT_UNKNOWN' ? '响应丢失，结果待确认。请原样重试，将复用同一请求编号。' : '请求未完成：' + (code || 'UNAVAILABLE')); }
+    catch (e) { const {code,status} = e as { code?: string; status?: number }; setNotice(code === 'NETWORK_RESULT_UNKNOWN' || code === 'INVALID_RESPONSE' || status && status >= 500 ? '响应丢失或服务暂不可用，结果待确认。请原样重试，将复用同一请求编号。' : '请求未完成：' + (code || 'UNAVAILABLE')); }
     finally { active.value = false; setBusy(false); }
   }
   return { run, busy, notice };

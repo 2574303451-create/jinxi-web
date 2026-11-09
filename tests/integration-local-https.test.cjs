@@ -133,6 +133,20 @@ test('one strict-HTTPS gateway, five reviewed modules and one real synthetic Pos
    assert.equal(retry.orderId,firstOrder);assert.equal(attempts.length,3);assert(attempts.every(id=>id===attempts[0]));
    const proof=(await admin("SELECT (SELECT count(*)::int FROM points_lab.orders WHERE member_id=$1) AS orders,(SELECT count(*)::int FROM points_lab.ledger WHERE member_id=$1 AND kind='redeem') AS debits,(SELECT balance::text FROM points_lab.accounts WHERE member_id=$1) AS balance",[db.accounts.reviewer.memberId])).rows[0];assert.deepEqual(proof,{orders:1,debits:1,balance:'1'});await admin('SELECT points_lab.assert_account($1)',[db.accounts.reviewer.memberId]);
   });
+  await t.test('HTTP503 after a real committed redemption is uncertain and safely replays the same receipt',async()=>{
+   await resetRate();const jar=new Map(),ids=[];let substitute503=true,committedOrder;
+   const memberClient=createSession({epoch:()=>jar.get('__Host-jinxi_points_epoch')||'',randomId:()=>crypto.randomUUID(),fetcher:async(url,options)=>{
+    const body=options.body?JSON.parse(options.body):undefined,r=await request(url,{body,method:options.method,headers:{Cookie:Array.from(jar,([k,v])=>k+'='+v).join('; '),'X-CSRF-Token':options.headers['X-CSRF-Token']||''}});
+    for(const line of r.headers['set-cookie']||[]){const pair=line.split(';')[0],at=pair.indexOf('=');jar.set(pair.slice(0,at),pair.slice(at+1));}
+    if(body?.op==='redeem'){ids.push(body.requestId);if(substitute503&&r.status===200){substitute503=false;committedOrder=r.body.orderId;return {ok:false,status:503,json:async()=>({code:'POINTS_UNAVAILABLE'})};}}
+    return {ok:r.status>=200&&r.status<300,status:r.status,json:async()=>r.body};
+   }});
+   await memberClient.authenticate('login',{account:db.accounts.admin.account,password:db.accounts.admin.password});
+   for(const day of ['2024-03-03','2024-03-04']){await db.setClock(day+'T04:00:00.000Z');await memberClient.mutate('attendance',{op:'checkin'});const state=await memberClient.request('points');for(const event of state.events.filter(e=>e.status==='unsettled'))await memberClient.mutate('points',{op:'settle',eventId:event.eventId});}
+   const item=await mutate('points',staff,{op:'catalogue.create',name:'503恢复用虚构物品',unitCost:1,stock:4,perMemberLimit:3,minEarned:0,startsAt:'1900-01-01T00:00:00.000Z',endsAt:'2199-12-31T00:00:00.000Z',status:'enabled'});assert.equal(item.status,200);const body={op:'redeem',itemId:item.body.itemId,quantity:1};
+   await assert.rejects(memberClient.mutate('points',body),e=>e.status===503);const retry=await memberClient.mutate('points',body);assert.equal(retry.orderId,committedOrder);assert.equal(ids.length,2);assert.equal(ids[0],ids[1]);
+   const proof=(await admin("SELECT (SELECT count(*)::int FROM points_lab.orders WHERE member_id=$1) AS orders,(SELECT count(*)::int FROM points_lab.ledger WHERE member_id=$1 AND kind='redeem') AS debits,(SELECT balance::text FROM points_lab.accounts WHERE member_id=$1) AS balance",[db.accounts.admin.memberId])).rows[0];assert.deepEqual(proof,{orders:1,debits:1,balance:'1'});await admin('SELECT points_lab.assert_account($1)',[db.accounts.admin.memberId]);
+  });
   await t.test('lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states',async()=>{
    await resetRate();
    for(const kind of ['locked','disabled']){const acct=db.accounts[kind];assert.equal((await request('/api/member',{body:{op:'login',account:acct.account,password:acct.password}})).status,401);}

@@ -1,0 +1,65 @@
+✔ default cloud entry rejects before any connection and is not registered as a Function (1.1181ms)
+✔ only a separately approved TEST capability passes; plain objects and both protected sites fail (1.8647ms)
+✔ context, origin, commit, expiry, database, environment and inherited credentials reject safely (0.6605ms)
+✔ cloud connection uses independent role and verified TLS; a connection failure is sanitized (1.3241ms)
+✔ Fetch bridge preserves secure Cookie arrays, no-store and explicit routes, refuses duplicate parameters (14.2585ms)
+✔ wrong rehearsal resource is rejected BEFORE any private financial snapshot is read (0.9375ms)
+✔ new session instance after lost commit reuses durable request ID and queries only the verified actor (5.7168ms)
+✔ storage failure prevents dispatch; absent server receipt is unresolved and cannot be forgotten (0.9586ms)
+✔ expired unknown intent is not silently erased or replayed with a new ID (0.7777ms)
+✔ a newly prepared request with definitive rejection is distinct from an unknown committed result (0.5954ms)
+✔ a delayed durable confirmation cannot return A private data after switching to B (0.6034ms)
+✔ unresolved first page cannot strand a confirmed seventeenth receipt (0.6801ms)
+✔ expired definitive rejection can safely retry with the original ID while unknown expiry still freezes (0.7031ms)
+✖ recovering confirmed receipts frees only matching memory slots before a new operation (16.7173ms)
+✖ naturally idempotent setters retain unknown IDs but rotate a completed intent for a later state cycle (1.7652ms)
+✔ 208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content (5.1642ms)
+✔ duplicate employee and UUID, missing binding, orphan profile classify without guessing (0.3036ms)
+✔ illegal leap date, duplicate checkins and unsupported historical fields are quarantined (1.1455ms)
+✔ legacy positive delta + direction 1/2 balances are checked; mismatch and duplicate rewards are retained (0.2892ms)
+✔ duplicate redemption/refund and unrelated origin cannot produce a migration candidate (0.2911ms)
+✔ no synthetic markers or independent anchor source: refuse real-data-shaped input (0.2017ms)
+✔ rule versions/effective dates and repeated reversal origins require manual reconciliation (0.2696ms)
+✔ safe SQL SERIAL numbers preserve exact source IDs; unsafe IDs must be quarantined (0.2262ms)
+✔ two old user IDs for one trusted UUID cannot hide same-day rewards or independently trusted balances (0.2607ms)
+✔ UUID case variants cannot give two historical accounts the same PostgreSQL identity (0.4313ms)
+✔ nested credential fields are rejected before producing a report (0.2439ms)
+✔ duplicate numeric/string forms of one source ID are quarantined before staging (0.1485ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 25
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 153.5237
+
+✖ failing tests:
+
+test at tests\adaptation-session.test.cjs:13:1
+✖ recovering confirmed receipts frees only matching memory slots before a new operation (16.7173ms)
+  Error: UNRESOLVED_REQUEST_LIMIT
+      at E:\Recovery\.jinxi-research\phase4-adaptation\worktree\integration-local\session.cjs:117:59
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-session.test.cjs:13:993)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'UNRESOLVED_REQUEST_LIMIT',
+    status: 0
+  }
+
+test at tests\adaptation-session.test.cjs:14:1
+✖ naturally idempotent setters retain unknown IDs but rotate a completed intent for a later state cycle (1.7652ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-session.test.cjs:14:1036)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

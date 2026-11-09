@@ -1,0 +1,40 @@
+▶ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS
+  ✔ receipt lookup is private, returns no author/content, absence remains unresolved (2217.5546ms)
+  ✔ lost checkin survives new client and creates one fact and one receipt (2315.4194ms)
+  ✔ lost settlement remains one event settlement, ledger entry and balance update (1998.7727ms)
+  ✔ lost debit and lost cancellation each recover one linked order/charge/refund after relogin (4218.503ms)
+  ✔ lost message, guide and staff document commits recover without new content or private replay payloads (4627.69ms)
+  ✔ concurrent retry shares original server receipt; spoofed outcome never mutates a ledger (1730.7599ms)
+  ✖ receipt query after lock wait rechecks profile, and logout/expiry/lock revoke restoration (3534.4034ms)
+  ✔ synthetic 208 mapping rehearsal stages quarantined records and rolls everything back (1652.7674ms)
+✖ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS (56399.2394ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56402.5072
+
+✖ failing tests:
+
+test at tests\adaptation-postgres.test.cjs:26:10
+✖ receipt query after lock wait rechecks profile, and logout/expiry/lock revoke restoration (3534.4034ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 401
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-postgres.test.cjs:27:614)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-postgres.test.cjs:26:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

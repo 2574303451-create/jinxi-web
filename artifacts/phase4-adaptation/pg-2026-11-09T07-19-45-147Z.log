@@ -1,0 +1,20 @@
+▶ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS
+  ✔ receipt lookup is private, returns no author/content, absence remains unresolved (1922.3991ms)
+  ✔ lost checkin survives new client and creates one fact and one receipt (1953.2281ms)
+  ✔ lost settlement remains one event settlement, ledger entry and balance update (1699.1187ms)
+  ✔ lost debit and lost cancellation each recover one linked order/charge/refund after relogin (4057.23ms)
+  ✔ lost message, guide and staff document commits recover without new content or private replay payloads (4799.4112ms)
+  ✔ concurrent retry shares original server receipt; spoofed outcome never mutates a ledger (1782.5333ms)
+  ✔ confirmed visibility true-false-true is a new setter intent, with no ledger side effect (1986.8418ms)
+  ✔ confirmed join-leave-join uses a new membership intent without duplicate active membership (2426.0893ms)
+  ✔ receipt query rechecks expiry after a real lock wait; disabling, locking and logout revoke restoration (4495.6388ms)
+  ✔ synthetic 208 mapping rehearsal stages quarantined records and rolls everything back (1297.5381ms)
+✔ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS (61792.5857ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61797.1666

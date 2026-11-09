@@ -1,0 +1,81 @@
+{
+  "passed": false,
+  "stage": "message-response-loss-refresh-manual-same-content-retry",
+  "startedAtUtc": "2026-11-09T06:36:21.023Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "8d6c10ce-ed75-4f53-a80b-9453e28cea96"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "6a5d0004-6157-4551-9e37-94027b559b9a"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "37eca6e7-7ac6-4c7c-91f9-33eb10e89a89"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "37eca6e7-7ac6-4c7c-91f9-33eb10e89a89"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "c15ca5f6-4c0f-4686-9358-22486588cdac"
+    }
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "8d6c10ce-ed75-4f53-a80b-9453e28cea96",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "6a5d0004-6157-4551-9e37-94027b559b9a",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "37eca6e7-7ac6-4c7c-91f9-33eb10e89a89",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "c15ca5f6-4c0f-4686-9358-22486588cdac",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "message-response-loss-refresh-manual-same-content-retry"
+  ],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('写一条留言', { exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <span>…</span>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+  "testLocation": [
+    "adaptation-browser.cjs:28:159",
+    "adaptation-browser.cjs:42:94"
+  ],
+  "completedAtUtc": "2026-11-09T06:37:45.670Z"
+}

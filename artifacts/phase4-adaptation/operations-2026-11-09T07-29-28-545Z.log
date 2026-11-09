@@ -1,0 +1,20 @@
+▶ remaining business operations on actual isolated synthetic PostgreSQL
+  ✔ only a trusted staff UUID creates a draft; a different reviewer publishes it and only published content is public (3069.7047ms)
+  ✔ synthetic sponsorship entries keep same-name identities separate, page deterministically and require real administrator maintenance (6316.8022ms)
+{"case":"private-management-read","status":403,"foreignOwnerExposed":false}
+  ✔ private management reads demand a current staff role even when the announcement itself is public (2199.5072ms)
+  ✔ team creation, automatic joining, leaving and leader management use UUID ownership and one-team/capacity constraints (5540.2527ms)
+  ✔ announcement revisions, withdrawal, expiry and soft deletion preserve safe content and server times (4805.2477ms)
+  ✔ exact retries and simultaneous revisions never duplicate documents or overwrite a newer version (1443.7993ms)
+  ✔ simultaneous joins cannot exceed the last slot and membership UUIDs remain private at the database boundary (1351.1332ms)
+  ✔ restricted roles cannot touch old history, identity, points, permissions or invariant triggers (1148.905ms)
+  ✔ all four inherited modules remain callable on the same synthetic cluster and operations do not alter their records (1530.291ms)
+✔ remaining business operations on actual isolated synthetic PostgreSQL (62548.8265ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62551.5725

@@ -1,0 +1,196 @@
+{
+  "passed": true,
+  "stage": "final-consistency-and-five-widths",
+  "startedAtUtc": "2026-11-09T07:17:34.875Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund",
+    "real-idb-confirmed-visibility-true-false-true-keeps-server-state-current",
+    "message-refresh-same-content-original-request-one-item",
+    "private-guide-refresh-one-draft-no-plaintext-journal",
+    "two-tabs-atomic-indexeddb-claim-one-server-operation",
+    "same-nickname-B-cannot-read-recover-or-forget-A-receipts-A-relogin-recovers",
+    "client-success-flag-is-not-server-proof-and-idb-contains-no-body-or-credentials",
+    "real-idb-commit-callback-delayed-A-to-B-old-success-not-returned",
+    "real-idb-17th-confirmed-receipt-paginates-past-16-unresolved-no-deletion",
+    "denied-idb-no-post-no-new-content"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "f244c098-0b04-4d12-858c-b8a078d21776"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "995ab8d1-e27d-43ae-8ba9-dd81d9871287"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "acff93c5-ab78-4c7a-9f16-d37623ed85d2"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "acff93c5-ab78-4c7a-9f16-d37623ed85d2"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "7f8a96ba-ae21-4559-be78-c957f9a6d928"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "77caece2-3f61-4dfd-b84e-30c3754695e9"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "7501dad4-84f1-4ca7-bd6d-b98c9455c217"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "c0694a09-8f61-4f15-ba4d-03eb507f39a7"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "f87d5c78-12ea-48be-aede-085da120d621"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "f87d5c78-12ea-48be-aede-085da120d621"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "99f50416-fa33-4ee1-8f73-995879d6b7e0"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "99f50416-fa33-4ee1-8f73-995879d6b7e0"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "27aa3fa6-bc3c-416c-9446-596b7cf8a8fb"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "27aa3fa6-bc3c-416c-9446-596b7cf8a8fb"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "b0957cb7-b4de-40cd-8e21-f5e5faa81d88"
+    }
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "f244c098-0b04-4d12-858c-b8a078d21776",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "995ab8d1-e27d-43ae-8ba9-dd81d9871287",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "acff93c5-ab78-4c7a-9f16-d37623ed85d2",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "7f8a96ba-ae21-4559-be78-c957f9a6d928",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "f87d5c78-12ea-48be-aede-085da120d621",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "99f50416-fa33-4ee1-8f73-995879d6b7e0",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "confirmed-state-setter-can-change-back",
+    "message-response-loss-refresh-manual-same-content-retry",
+    "guide-response-loss-refresh-original-draft",
+    "real-indexeddb-concurrent-two-tabs",
+    "account-switch-does-not-transfer-private-receipt",
+    "journal-data-minimization-and-false-client-success",
+    "delayed-real-idb-confirmation-account-switch",
+    "seventeenth-receipt-accessible-without-deleting-unresolved-first-page"
+  ],
+  "journalProof": {
+    "rows": 10,
+    "fields": [
+      "actor",
+      "createdAt",
+      "digest",
+      "expiresAt",
+      "id",
+      "key",
+      "module",
+      "op",
+      "state",
+      "v"
+    ],
+    "containsCredentialsOrPlaintext": false
+  },
+  "databaseFinal": {
+    "orders": 1,
+    "debits": 1,
+    "refunds": 1,
+    "balance": "4"
+  },
+  "completedAtUtc": "2026-11-09T07:19:45.122Z"
+}

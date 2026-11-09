@@ -1,0 +1,213 @@
+{
+  "passed": false,
+  "stage": "review-regression-lost-redemption-offline-same-member-retry",
+  "startedAtUtc": "2026-11-09T07:43:04.646Z",
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "获取留言失败: TypeError: Failed to fetch\n    at getMessages (webpack-internal:///(app-pages-browser)/../../services/message-wall-backend.ts:17:32)\n    at usePublicMessages.useCallback[reload] (webpack-internal:///(app-pages-browser)/../../hooks/use-public-messages.ts:29:125)\n    at usePublicMessages.useEffect (webpack-internal:///(app-pages-browser)/../../hooks/use-public-messages.ts:42:18)\n    at Object.react_stack_bottom_frame (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:28673:20)\n    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1046:30)\n    at commitHookEffectListMount (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13749:29)\n    at commitHookPassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13836:11)\n    at commitPassiveMountOnFiber (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16907:13)\n    at recursivelyTraversePassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16852:13)\n    at commitPassiveMountOnFiber (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17184:11)\n    at recursivelyTraversePassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16852:13)\n    at commitPassiveMountOnFiber (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17184:11)\n    at recursivelyTraversePassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16852:13)\n    at commitPassiveMountOnFiber (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17184:11)\n    at recursivelyTraversePassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16852:13)\n    at commitPassiveMountOnFiber (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/re",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "获取留言失败: TypeError: Failed to fetch\n    at getMessages (webpack-internal:///(app-pages-browser)/../../services/message-wall-backend.ts:17:32)\n    at usePublicMessages.useCallback[reload] (webpack-internal:///(app-pages-browser)/../../hooks/use-public-messages.ts:29:125)\n    at usePublicMessages.useEffect (webpack-internal:///(app-pages-browser)/../../hooks/use-public-messages.ts:42:18)\n    at Object.react_stack_bottom_frame (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:28673:20)\n    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1046:30)\n    at commitHookEffectListMount (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13749:29)\n    at commitHookPassiveMountEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13836:11)\n    at reconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17298:11)\n    at recursivelyTraverseReconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17250:9)\n    at reconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17351:11)\n    at recursivelyTraverseReconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17250:9)\n    at reconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17351:11)\n    at recursivelyTraverseReconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17250:9)\n    at reconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17351:11)\n    at recursivelyTraverseReconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17250:9)\n    at reconnectPassiveEffects (webpack-internal:///(app-pages-browser)/../../../../phase3-operations/worktree/node_modules/next/dist/compiled/",
+    "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+    "Failed to load resource: the server responded with a status of 405 (Method Not Allowed)"
+  ],
+  "failedRequests": [
+    {
+      "path": "/_next/static/webpack/4679809df517569f.webpack.hot-update.json",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/api/points",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "path": "/14.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/13.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/bg.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/43.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/44.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/45.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/46.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/.netlify/functions/announcements",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/.netlify/functions/messages",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/.netlify/functions/announcements",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/.netlify/functions/messages",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "path": "/logo.png",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    }
+  ],
+  "authOperations": [
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "normal",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "reviewer",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-home-and-unified-login",
+      "op": "login",
+      "kind": "admin",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-message-wall-owner-review-and-logout-denial",
+      "op": "logout",
+      "status": 200,
+      "code": null
+    },
+    {
+      "stage": "real-message-wall-owner-review-and-logout-denial",
+      "op": "login",
+      "kind": "normal",
+      "status": 200,
+      "code": null
+    }
+  ],
+  "scenarios": [
+    "real-home-one-session-login",
+    "actual-message-publish-review-db-owner-logout-denies",
+    "existing-guide-submission-private-owner-draft",
+    "existing-guide-center-uuid-reader-independent-review-and-trusted-comment",
+    "checkin-event-single-settlement-same-nonce-lost-response-ledger-board",
+    "redemption-and-cancellation-one-refund-linked-to-charge"
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "real-message-wall-owner-review-and-logout-denial",
+    "real-guide-center-private-draft-submission",
+    "attendance-unique-settlement-lost-response-ledger-board",
+    "review-regression-lost-redemption-offline-same-member-retry"
+  ],
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"balance\"]').filter({ hasText: /^1$/ }) to be visible\u001b[22m\n",
+  "testLocation": [
+    "integration-local-browser.cjs:59:433"
+  ],
+  "domProbe": {
+    "session": "合成伙伴 normal · ready · ",
+    "dialogs": [
+      {
+        "open": false,
+        "text": null,
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_4_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_5_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_c_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_7_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_8_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_9_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_r_a_",
+        "inputs": 0
+      },
+      {
+        "open": true,
+        "text": "_r_b_",
+        "inputs": 0
+      },
+      {
+        "open": false,
+        "text": "_R_mlb_",
+        "inputs": 0
+      }
+    ],
+    "labels": [
+      "排行指标净累计获得余额"
+    ]
+  },
+  "completedAtUtc": "2026-11-09T07:45:10.147Z"
+}

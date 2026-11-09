@@ -1,0 +1,35 @@
+✔ default cloud entry rejects before any connection and is not registered as a Function (1.0359ms)
+✔ only a separately approved TEST capability passes; plain objects and both protected sites fail (1.7578ms)
+✔ context, origin, commit, expiry, database, environment and inherited credentials reject safely (0.6553ms)
+✔ cloud connection uses independent role and verified TLS; a connection failure is sanitized (1.46ms)
+✔ Fetch bridge preserves secure Cookie arrays, no-store and explicit routes, refuses duplicate parameters (14.802ms)
+✔ wrong rehearsal resource is rejected BEFORE any private financial snapshot is read (1.0746ms)
+✔ new session instance after lost commit reuses durable request ID and queries only the verified actor (5.0514ms)
+✔ storage failure prevents dispatch; absent server receipt is unresolved and cannot be forgotten (0.9851ms)
+✔ expired unknown intent is not silently erased or replayed with a new ID (0.6915ms)
+✔ a newly prepared request with definitive rejection is distinct from an unknown committed result (0.5932ms)
+✔ a delayed durable confirmation cannot return A private data after switching to B (0.5742ms)
+✔ unresolved first page cannot strand a confirmed seventeenth receipt (0.6519ms)
+✔ expired definitive rejection can safely retry with the original ID while unknown expiry still freezes (0.7041ms)
+✔ recovering confirmed receipts frees only matching memory slots before a new operation (16.6944ms)
+✔ naturally idempotent setters retain unknown IDs but rotate a completed intent for a later state cycle (0.8132ms)
+✔ 208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content (5.4649ms)
+✔ duplicate employee and UUID, missing binding, orphan profile classify without guessing (0.3051ms)
+✔ illegal leap date, duplicate checkins and unsupported historical fields are quarantined (2.169ms)
+✔ legacy positive delta + direction 1/2 balances are checked; mismatch and duplicate rewards are retained (0.301ms)
+✔ duplicate redemption/refund and unrelated origin cannot produce a migration candidate (0.2975ms)
+✔ no synthetic markers or independent anchor source: refuse real-data-shaped input (0.2046ms)
+✔ rule versions/effective dates and repeated reversal origins require manual reconciliation (0.2622ms)
+✔ safe SQL SERIAL numbers preserve exact source IDs; unsafe IDs must be quarantined (0.238ms)
+✔ two old user IDs for one trusted UUID cannot hide same-day rewards or independently trusted balances (0.2563ms)
+✔ UUID case variants cannot give two historical accounts the same PostgreSQL identity (0.2551ms)
+✔ nested credential fields are rejected before producing a report (0.2732ms)
+✔ duplicate numeric/string forms of one source ID are quarantined before staging (0.1548ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150.2558

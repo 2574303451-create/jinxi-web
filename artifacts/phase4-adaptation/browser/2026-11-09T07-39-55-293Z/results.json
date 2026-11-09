@@ -1,0 +1,354 @@
+{
+  "passed": true,
+  "stage": "final-consistency-and-five-widths",
+  "startedAtUtc": "2026-11-09T07:39:55.294Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund",
+    "real-idb-confirmed-visibility-true-false-true-keeps-server-state-current",
+    "unknown-stop-opposite-stop-reconciles-server-before-new-setter-intent",
+    "message-refresh-same-content-original-request-one-item",
+    "private-guide-refresh-one-draft-no-plaintext-journal",
+    "two-tabs-atomic-indexeddb-claim-one-server-operation",
+    "same-nickname-B-cannot-read-recover-or-forget-A-receipts-A-relogin-recovers",
+    "client-success-flag-is-not-server-proof-and-idb-contains-no-body-or-credentials",
+    "real-idb-commit-callback-delayed-A-to-B-old-success-not-returned",
+    "real-idb-17th-confirmed-receipt-paginates-past-16-unresolved-no-deletion",
+    "denied-idb-no-post-no-new-content"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "ee077565-6391-4f23-b741-7dfc6f1686b9"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "eb851417-91c9-4d2d-aa77-2e322a8a790d"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "b62032d8-3140-4717-802b-f785007907d0"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "b62032d8-3140-4717-802b-f785007907d0"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "1ef5abc5-671b-4757-903b-15e8b128726e"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "5c7776c6-3979-4116-8c61-d29b06ea81bc"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "e5052e14-0f61-4b85-9166-b8b3552adc1a"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "f98876b1-6475-46da-b32d-f9d50a95e4d2"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "790b853c-008c-47a4-ac2d-8410306e4830"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "6bd5e85a-1e0d-4e61-8b33-37872f5c1446"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "600431dc-c9bb-4898-abd1-d98ae426cefd"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "349883d9-8ac6-4155-95ea-60fda582b49d"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "349883d9-8ac6-4155-95ea-60fda582b49d"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "057118a3-9c4b-499e-939c-a52491e5e095"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "057118a3-9c4b-499e-939c-a52491e5e095"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "058686af-0909-448b-97b9-ea3df028bcf4"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "058686af-0909-448b-97b9-ea3df028bcf4"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "52a4e4bc-b4f6-492b-9fc9-85da88f75ec3"
+    }
+  ],
+  "receiptQueries": [
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "790b853c-008c-47a4-ac2d-8410306e4830",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "058686af-0909-448b-97b9-ea3df028bcf4",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "058686af-0909-448b-97b9-ea3df028bcf4",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "058686af-0909-448b-97b9-ea3df028bcf4",
+    "058686af-0909-448b-97b9-ea3df028bcf4",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "ef219a0c-3ed6-45e5-8d93-af90d02f2cfd",
+    "ef219a0c-3ed6-45e5-8d93-af90d02f2cfd",
+    "081d018d-d221-4e1d-a66c-f8ac3a0abb0f",
+    "081d018d-d221-4e1d-a66c-f8ac3a0abb0f",
+    "f879d37d-3efb-4768-b3fc-cf6b8a366bfb",
+    "f879d37d-3efb-4768-b3fc-cf6b8a366bfb",
+    "e0538184-b6a0-4637-84ef-556580901816",
+    "e0538184-b6a0-4637-84ef-556580901816",
+    "8501e500-8a49-420a-b65d-1dfbb86ecdbe",
+    "8501e500-8a49-420a-b65d-1dfbb86ecdbe",
+    "30fca216-7e7e-4d47-aede-4b3482b2d50b",
+    "30fca216-7e7e-4d47-aede-4b3482b2d50b",
+    "83af3661-aad2-49e4-bc6a-d783196200b6",
+    "83af3661-aad2-49e4-bc6a-d783196200b6",
+    "8d7b7ac5-9f3b-404b-b855-b0bcf24b01eb",
+    "8d7b7ac5-9f3b-404b-b855-b0bcf24b01eb",
+    "4524de60-b072-4794-bb46-4a68059adaa5",
+    "4524de60-b072-4794-bb46-4a68059adaa5",
+    "73cdc6d5-0d4f-432a-a080-da0dd565b2db",
+    "73cdc6d5-0d4f-432a-a080-da0dd565b2db",
+    "3854f815-bf79-48fb-85b0-e599c5b8bdfb",
+    "3854f815-bf79-48fb-85b0-e599c5b8bdfb",
+    "336c424b-51e2-4e01-b922-13b8650535ae",
+    "336c424b-51e2-4e01-b922-13b8650535ae",
+    "6263717e-ea3e-4c13-b2dd-86ada2b3e66e",
+    "6263717e-ea3e-4c13-b2dd-86ada2b3e66e",
+    "505913e7-a33d-4356-9376-02b1ba93be0d",
+    "505913e7-a33d-4356-9376-02b1ba93be0d",
+    "8c3e8dfd-c042-4e79-9bd9-296a06224142",
+    "8c3e8dfd-c042-4e79-9bd9-296a06224142",
+    "aada8762-7c34-421b-b517-ea74904413eb",
+    "aada8762-7c34-421b-b517-ea74904413eb",
+    "f9d91f29-cf3b-428a-aaef-d29fd3990139",
+    "ee077565-6391-4f23-b741-7dfc6f1686b9",
+    "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+    "b62032d8-3140-4717-802b-f785007907d0",
+    "1ef5abc5-671b-4757-903b-15e8b128726e",
+    "6bd5e85a-1e0d-4e61-8b33-37872f5c1446",
+    "600431dc-c9bb-4898-abd1-d98ae426cefd",
+    "349883d9-8ac6-4155-95ea-60fda582b49d",
+    "057118a3-9c4b-499e-939c-a52491e5e095",
+    "058686af-0909-448b-97b9-ea3df028bcf4",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "52a4e4bc-b4f6-492b-9fc9-85da88f75ec3"
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "ee077565-6391-4f23-b741-7dfc6f1686b9",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "eb851417-91c9-4d2d-aa77-2e322a8a790d",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "b62032d8-3140-4717-802b-f785007907d0",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "1ef5abc5-671b-4757-903b-15e8b128726e",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "790b853c-008c-47a4-ac2d-8410306e4830",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "349883d9-8ac6-4155-95ea-60fda582b49d",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "057118a3-9c4b-499e-939c-a52491e5e095",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "confirmed-state-setter-can-change-back",
+    "unknown-stop-publication-is-resolved-before-opposite-state",
+    "message-response-loss-refresh-manual-same-content-retry",
+    "guide-response-loss-refresh-original-draft",
+    "real-indexeddb-concurrent-two-tabs",
+    "account-switch-does-not-transfer-private-receipt",
+    "journal-data-minimization-and-false-client-success",
+    "delayed-real-idb-confirmation-account-switch",
+    "seventeenth-receipt-accessible-without-deleting-unresolved-first-page"
+  ],
+  "journalProof": {
+    "rows": 10,
+    "fields": [
+      "actor",
+      "createdAt",
+      "digest",
+      "expiresAt",
+      "id",
+      "key",
+      "module",
+      "op",
+      "state",
+      "v"
+    ],
+    "containsCredentialsOrPlaintext": false
+  },
+  "databaseFinal": {
+    "orders": 1,
+    "debits": 1,
+    "refunds": 1,
+    "balance": "4"
+  },
+  "completedAtUtc": "2026-11-09T07:42:01.350Z"
+}

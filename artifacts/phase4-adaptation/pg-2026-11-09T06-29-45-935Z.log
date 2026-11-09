@@ -1,0 +1,20 @@
+✖ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS (34601.7668ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34607.9402
+
+✖ failing tests:
+
+test at tests\adaptation-postgres.test.cjs:5:1
+✖ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS (34601.7668ms)
+  Error: EXPLICIT_SYNTHETIC_INSTANT_REQUIRED
+      at Object.setClock (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\attendance-local\database.cjs:22:129)
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-postgres.test.cjs:7:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

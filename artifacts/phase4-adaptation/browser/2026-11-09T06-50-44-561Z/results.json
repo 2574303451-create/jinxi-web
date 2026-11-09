@@ -1,0 +1,170 @@
+{
+  "passed": true,
+  "stage": "final-consistency-and-five-widths",
+  "startedAtUtc": "2026-11-09T06:50:44.562Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund",
+    "message-refresh-same-content-original-request-one-item",
+    "private-guide-refresh-one-draft-no-plaintext-journal",
+    "two-tabs-atomic-indexeddb-claim-one-server-operation",
+    "same-nickname-B-cannot-read-recover-or-forget-A-receipts-A-relogin-recovers",
+    "client-success-flag-is-not-server-proof-and-idb-contains-no-body-or-credentials",
+    "denied-idb-no-post-no-new-content"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "1fa3a2ae-69ac-4a95-a228-eba38c1a662f"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "2b6bfa4e-9bb9-49d5-90f2-b0c13cd4b8ed"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "09e1721c-553e-4590-b5c1-fbbd8f2791cc"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "09e1721c-553e-4590-b5c1-fbbd8f2791cc"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "d18650fc-c344-47da-8e4b-2ca56621cfa5"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "802d4ffc-1637-4ae3-8e9d-614633f15d9d"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "802d4ffc-1637-4ae3-8e9d-614633f15d9d"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "88fa66ed-4536-45aa-9515-052ba2ef20ea"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "88fa66ed-4536-45aa-9515-052ba2ef20ea"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "bc39adef-cc05-43e7-85a3-811317d158b4"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "bc39adef-cc05-43e7-85a3-811317d158b4"
+    }
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "1fa3a2ae-69ac-4a95-a228-eba38c1a662f",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "2b6bfa4e-9bb9-49d5-90f2-b0c13cd4b8ed",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "09e1721c-553e-4590-b5c1-fbbd8f2791cc",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "d18650fc-c344-47da-8e4b-2ca56621cfa5",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "802d4ffc-1637-4ae3-8e9d-614633f15d9d",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "88fa66ed-4536-45aa-9515-052ba2ef20ea",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "message-response-loss-refresh-manual-same-content-retry",
+    "guide-response-loss-refresh-original-draft",
+    "real-indexeddb-concurrent-two-tabs",
+    "account-switch-does-not-transfer-private-receipt",
+    "journal-data-minimization-and-false-client-success"
+  ],
+  "journalProof": {
+    "rows": 8,
+    "fields": [
+      "actor",
+      "createdAt",
+      "digest",
+      "expiresAt",
+      "id",
+      "key",
+      "module",
+      "op",
+      "state",
+      "v"
+    ],
+    "containsCredentialsOrPlaintext": false
+  },
+  "databaseFinal": {
+    "orders": 1,
+    "debits": 1,
+    "refunds": 1,
+    "balance": "4"
+  },
+  "completedAtUtc": "2026-11-09T06:52:42.607Z"
+}

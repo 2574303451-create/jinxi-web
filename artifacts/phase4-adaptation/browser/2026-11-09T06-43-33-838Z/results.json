@@ -1,0 +1,147 @@
+{
+  "passed": false,
+  "stage": "storage-unavailable-fails-before-business-request",
+  "startedAtUtc": "2026-11-09T06:43:33.840Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund",
+    "message-refresh-same-content-original-request-one-item",
+    "private-guide-refresh-one-draft-no-plaintext-journal",
+    "two-tabs-atomic-indexeddb-claim-one-server-operation",
+    "same-nickname-B-cannot-read-recover-or-forget-A-receipts-A-relogin-recovers",
+    "client-success-flag-is-not-server-proof-and-idb-contains-no-body-or-credentials"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "23ee737e-6034-4da3-baed-590199c0d768"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "586092e5-c2e8-4944-8fa3-51e03cbfcb26"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "3a197d3a-dc78-4727-9a4e-36a6b9199da8"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "3a197d3a-dc78-4727-9a4e-36a6b9199da8"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "194b37c6-fdfe-47c4-80fe-05f170f2df85"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "042ab954-422f-47a4-8650-7f21aeceaf2f"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "042ab954-422f-47a4-8650-7f21aeceaf2f"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "711abd95-9bac-400e-9fc6-98b1d540734c"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "711abd95-9bac-400e-9fc6-98b1d540734c"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "5c76ec7d-ec9a-45b1-9f5c-a2c5cfc38aaf"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "5c76ec7d-ec9a-45b1-9f5c-a2c5cfc38aaf"
+    }
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "23ee737e-6034-4da3-baed-590199c0d768",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "586092e5-c2e8-4944-8fa3-51e03cbfcb26",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "3a197d3a-dc78-4727-9a4e-36a6b9199da8",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "194b37c6-fdfe-47c4-80fe-05f170f2df85",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "042ab954-422f-47a4-8650-7f21aeceaf2f",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "711abd95-9bac-400e-9fc6-98b1d540734c",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "message-response-loss-refresh-manual-same-content-retry",
+    "guide-response-loss-refresh-original-draft",
+    "real-indexeddb-concurrent-two-tabs",
+    "account-switch-does-not-transfer-private-receipt",
+    "journal-data-minimization-and-false-client-success"
+  ],
+  "journalProof": {
+    "rows": 8,
+    "fields": [
+      "actor",
+      "createdAt",
+      "digest",
+      "expiresAt",
+      "id",
+      "key",
+      "module",
+      "op",
+      "state",
+      "v"
+    ],
+    "containsCredentialsOrPlaintext": false
+  },
+  "errorType": "TimeoutError",
+  "errorMessage": "locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('status').filter({ hasText: '发布失败' }) to be visible\u001b[22m\n",
+  "testLocation": [
+    "adaptation-browser.cjs:55:601"
+  ],
+  "completedAtUtc": "2026-11-09T06:46:01.895Z"
+}

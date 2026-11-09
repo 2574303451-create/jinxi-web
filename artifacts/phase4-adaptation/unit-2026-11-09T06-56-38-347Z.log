@@ -1,0 +1,154 @@
+✔ default cloud entry rejects before any connection and is not registered as a Function (1.2306ms)
+✔ only a separately approved TEST capability passes; plain objects and both protected sites fail (2.2896ms)
+✔ context, origin, commit, expiry, database, environment and inherited credentials reject safely (0.688ms)
+✔ cloud connection uses independent role and verified TLS; a connection failure is sanitized (1.3709ms)
+✔ Fetch bridge preserves secure Cookie arrays, no-store and explicit routes, refuses duplicate parameters (14.4876ms)
+✖ wrong rehearsal resource is rejected BEFORE any private financial snapshot is read (1.4217ms)
+✔ new session instance after lost commit reuses durable request ID and queries only the verified actor (4.8951ms)
+✔ storage failure prevents dispatch; absent server receipt is unresolved and cannot be forgotten (0.9541ms)
+✔ expired unknown intent is not silently erased or replayed with a new ID (0.6844ms)
+✔ a newly prepared request with definitive rejection is distinct from an unknown committed result (0.568ms)
+✖ a delayed durable confirmation cannot return A private data after switching to B (0.8377ms)
+✖ unresolved first page cannot strand a confirmed seventeenth receipt (1.4982ms)
+✖ expired definitive rejection can safely retry with the original ID while unknown expiry still freezes (1.7285ms)
+✔ 208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content (4.5601ms)
+✔ duplicate employee and UUID, missing binding, orphan profile classify without guessing (0.2977ms)
+✔ illegal leap date, duplicate checkins and unsupported historical fields are quarantined (1.0483ms)
+✔ legacy positive delta + direction 1/2 balances are checked; mismatch and duplicate rewards are retained (0.2318ms)
+✔ duplicate redemption/refund and unrelated origin cannot produce a migration candidate (0.2283ms)
+✔ no synthetic markers or independent anchor source: refuse real-data-shaped input (0.1929ms)
+✔ rule versions/effective dates and repeated reversal origins require manual reconciliation (0.2194ms)
+✖ safe SQL SERIAL numbers preserve exact source IDs; unsafe IDs must be quarantined (0.6149ms)
+✖ two old user IDs for one trusted UUID cannot hide same-day rewards or independently trusted balances (4.2215ms)
+✖ UUID case variants cannot give two historical accounts the same PostgreSQL identity (0.287ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 16
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157.0791
+
+✖ failing tests:
+
+test at tests\adaptation-policy.test.cjs:19:1
+✖ wrong rehearsal resource is rejected BEFORE any private financial snapshot is read (1.4217ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-policy.test.cjs:19:833)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\adaptation-session.test.cjs:10:1
+✖ a delayed durable confirmation cannot return A private data after switching to B (0.8377ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-session.test.cjs:10:814)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests\adaptation-session.test.cjs:11:1
+✖ unresolved first page cannot strand a confirmed seventeenth receipt (1.4982ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  16 !== 1
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-session.test.cjs:11:838)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 16,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\adaptation-session.test.cjs:12:1
+✖ expired definitive rejection can safely retry with the original ID while unknown expiry still freezes (1.7285ms)
+  Error: RECOVERY_EXPIRED_REQUIRES_QUERY
+      at E:\Recovery\.jinxi-research\phase4-adaptation\worktree\integration-local\session.cjs:121:87
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-session.test.cjs:12:788)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'RECOVERY_EXPIRED_REQUIRES_QUERY',
+    status: 0
+  }
+
+test at tests\history-compat.test.cjs:9:1
+✖ safe SQL SERIAL numbers preserve exact source IDs; unsafe IDs must be quarantined (0.6149ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'row-0' !== '1'
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\history-compat.test.cjs:9:200)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'row-0',
+    expected: '1',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\history-compat.test.cjs:10:1
+✖ two old user IDs for one trusted UUID cannot hide same-day rewards or independently trusted balances (4.2215ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(codes.includes('DUPLICATE_CHECKIN_REWARD'))
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\history-compat.test.cjs:10:692)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\history-compat.test.cjs:11:1
+✖ UUID case variants cannot give two historical accounts the same PostgreSQL identity (0.287ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\history-compat.test.cjs:11:298)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

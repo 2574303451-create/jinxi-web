@@ -1,0 +1,238 @@
+{
+  "evidenceKind": "previous actual remote acceptance, copied read-only; not a fresh WP2 CI run",
+  "sourceFile": "E:/Recovery/.jinxi-research/phase4-integration/REMOTE_ACCEPTANCE_20261109.json",
+  "sourceSha256": "5a406a7f4abb0e863400c3ea74283ee5697bddda7b1179dd474482c1cba2302d",
+  "observedAtUtc": "2026-11-09T02:36:49.956Z",
+  "head": "42722d553849eb98faf171f794a3aeee54440b2c",
+  "workflow": {
+    "name": "B2 security checks",
+    "path": ".github/workflows/security-checks.yml",
+    "gitBlob": "f9bbcfc9cfe0dad715136bbbdf48dcb23ec75004",
+    "unchangedSinceBase": true,
+    "events": [
+      "push",
+      "pull_request",
+      "workflow_dispatch"
+    ],
+    "permissions": {
+      "contents": "read"
+    },
+    "deploymentSteps": false
+  },
+  "ci": {
+    "id": 42551463034,
+    "event": "push",
+    "headSha": "42722d553849eb98faf171f794a3aeee54440b2c",
+    "branch": "codex/jinxi-phase4-integration-local",
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "url": "https://github.com/2574303451-create/jinxi-web/actions/runs/42551463034",
+    "createdAt": "2026-11-09T02:32:01Z",
+    "updatedAt": "2026-11-09T02:33:50Z",
+    "jobs": [
+      {
+        "id": 128947771629,
+        "name": "Security / Node 24.22.2",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 42551463034,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Record tested Git revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Record tested toolchain",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Verify clean npm launcher on Linux",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run npm ci",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Raw TypeScript check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run npm run build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Run npm run test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Verify isolated video demo policy and loopback assets",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run npm run lint",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Initialize isolated ephemeral PostgreSQL",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Actual SQL, identity, session and tampering regressions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Upload sanitized TypeScript reports only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30
+          },
+          {
+            "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 32
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 33
+          }
+        ]
+      }
+    ],
+    "actualCounts": {
+      "api": 14,
+      "security": 138,
+      "video": 6,
+      "originalPostgresIntegration": 55
+    },
+    "testsFailed": 0,
+    "testsSkipped": 0,
+    "testsCancelled": 0,
+    "logExcerpts": [
+      "42722d553849eb98faf171f794a3aeee54440b2c",
+      "42722d553849eb98faf171f794a3aeee54440b2c",
+      "##[group]Run git rev-parse HEAD",
+      "git rev-parse HEAD",
+      "42722d553849eb98faf171f794a3aeee54440b2c",
+      "v24.22.2",
+      "11.19.1",
+      "11.19.1",
+      "> my-v0-project@0.1.0 typecheck",
+      "> my-v0-project@0.1.0 prebuild",
+      "> my-v0-project@0.1.0 build",
+      "> next build --webpack",
+      "> my-v0-project@0.1.0 postbuild",
+      "> npm run test:api && npm run test:security",
+      "> my-v0-project@0.1.0 test:api",
+      "> node --test tests/strategy-api.test.cjs tests/home-guides.test.cjs tests/guide-detail-read.test.cjs",
+      "ℹ tests 14",
+      "ℹ pass 14",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "> my-v0-project@0.1.0 test:security",
+      "> node --test tests/function-boundary.test.cjs tests/password-security.test.cjs tests/function-inventory.test.cjs tests/export-csp.test.cjs tests/announcement-html.test.cjs tests/legacy-reward.test.cjs tests/freeze-release.test.cjs tests/test-resource.test.cjs tests/test-packaging.test.cjs tests/password-setup-diagnostic.test.cjs tests/test-env-provisioning.test.cjs tests/clean-npm-runner.test.cjs tests/member-local-boundary.test.cjs tests/member-local-ui.test.cjs tests/community-local-boundary.test.cjs tests/community-local-ui.test.cjs tests/attendance-local-boundary.test.cjs tests/attendance-local-ui.test.cjs tests/points-local-boundary.test.cjs tests/points-local-ui.test.cjs tests/operations-local-boundary.test.cjs tests/operations-local-html.test.cjs tests/operations-local-ui.test.cjs",
+      "ℹ tests 138",
+      "ℹ pass 138",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "##[group]Run node --test artifacts/b2-a-8/video-demo/policy.test.cjs",
+      "node --test artifacts/b2-a-8/video-demo/policy.test.cjs",
+      "ℹ tests 6",
+      "ℹ pass 6",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "> my-v0-project@0.1.0 lint",
+      "> eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local --no-warn-ignored --max-warnings 0",
+      "##[group]Run npm run test:integration",
+      "npm run test:integration",
+      "> my-v0-project@0.1.0 test:integration",
+      "> node --test --test-concurrency=1 tests/strategy-postgres.test.cjs tests/guide-thumbnail-postgres.test.cjs tests/environment-postgres.test.cjs tests/member-migration-postgres.test.cjs tests/session-postgres.test.cjs",
+      "ℹ tests 55",
+      "ℹ pass 55",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0"
+    ]
+  },
+  "localOnlyCoverage": {
+    "unifiedHttpsPostgres": 16,
+    "previousBusinessPostgres": 98,
+    "sessionBoundary": 23,
+    "readonlyIsolation": 46,
+    "staticExport": 2,
+    "browserScenarioGroups": 16,
+    "browserWidths": [
+      1440,
+      1024,
+      768,
+      390,
+      320
+    ]
+  }
+}

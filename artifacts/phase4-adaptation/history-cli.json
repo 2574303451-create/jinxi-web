@@ -1,0 +1,43 @@
+{
+  "observedAtUtc": "2026-11-09T22:54:22.705Z",
+  "fixture": "history-compat/fixture.cjs syntheticHistory(208)",
+  "command": [
+    "E:\\Recovery\\.jinxi-research\\b2-a-5-tools\\node-v24.22.2-win-x64\\node.exe",
+    "scripts/history-compat.cjs",
+    "--synthetic",
+    "<temporary synthetic JSON>",
+    "--bindings",
+    "<temporary independent synthetic bindings>"
+  ],
+  "exitCode": 0,
+  "summary": {
+    "trusted": 208,
+    "ambiguous": 0,
+    "unmapped": 0,
+    "findings": 1
+  },
+  "candidates": [
+    {
+      "kind": "strategies",
+      "sourceId": "1",
+      "memberId": "00000000-0000-4000-8000-000000000001"
+    }
+  ],
+  "findings": [
+    {
+      "entity": "messages",
+      "ref": "1",
+      "code": "NO_TRUSTED_AUTHOR",
+      "status": "unmapped"
+    }
+  ],
+  "originalInputUnchanged": true,
+  "outputSha256": "3fc5365ae7ac72d15a2552828de0f83a6994d9ac00a3b9ce975d80f4338444a9",
+  "invalidInput": {
+    "missingSyntheticMarker": true,
+    "exitCode": 1,
+    "stdoutEmpty": true,
+    "sanitizedMessage": "历史核验已拒绝：只接受独立的合成数据与合成可信映射文件，不接受数据库连接。"
+  },
+  "productionReadOrWrite": false
+}

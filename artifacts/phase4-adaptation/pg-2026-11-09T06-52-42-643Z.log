@@ -1,0 +1,33 @@
+▶ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS
+  ✔ receipt lookup is private, returns no author/content, absence remains unresolved (2096.7692ms)
+  ✔ lost checkin survives new client and creates one fact and one receipt (2419.9909ms)
+  ✔ lost settlement remains one event settlement, ledger entry and balance update (1681.1005ms)
+  ✔ lost debit and lost cancellation each recover one linked order/charge/refund after relogin (3665.5528ms)
+  ✔ lost message, guide and staff document commits recover without new content or private replay payloads (4293.1864ms)
+  ✔ concurrent retry shares original server receipt; spoofed outcome never mutates a ledger (1989.7038ms)
+  ✖ receipt query rechecks expiry after a real lock wait; disabling, locking and logout revoke restoration (1024.0583ms)
+  ✔ synthetic 208 mapping rehearsal stages quarantined records and rolls everything back (1603.0337ms)
+✖ adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS (53735.0974ms)
+ℹ Error: Test "receipt query rechecks expiry after a real lock wait; disabling, locking and logout revoke restoration" at tests\adaptation-postgres.test.cjs:26:10 generated asynchronous activity after the test ended. This activity created the error "Error: read ECONNRESET" and would have caused the test to fail, but instead triggered an uncaughtException event.
+ℹ Error: Test "receipt query rechecks expiry after a real lock wait; disabling, locking and logout revoke restoration" at tests\adaptation-postgres.test.cjs:26:10 generated asynchronous activity after the test ended. This activity created the error "Error: Connection terminated unexpectedly" and would have caused the test to fail, but instead triggered an uncaughtException event.
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53745.5553
+
+✖ failing tests:
+
+test at tests\adaptation-postgres.test.cjs:26:10
+✖ receipt query rechecks expiry after a real lock wait; disabling, locking and logout revoke restoration (1024.0583ms)
+  Error: SYNTHETIC_SQL_23514_member_sessions_v2_check1
+      at admin (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\integration-local-support.cjs:17:153)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-postgres.test.cjs:27:164)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (E:\Recovery\.jinxi-research\phase4-adaptation\worktree\tests\adaptation-postgres.test.cjs:26:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

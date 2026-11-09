@@ -1,4 +1,6 @@
-# 第四阶段工作包1：统一的本地合成网站
+# 第四阶段：统一的本地合成网站与安全适配准备
+
+当前工作包2基于已推送的`42722d553849eb98faf171f794a3aeee54440b2c`，本地工作树为`E:/Recovery/.jinxi-research/phase4-adaptation/worktree`、分支`codex/jinxi-phase4-adaptation-local`。本次增加[持久化恢复](RECOVERY.md)、[默认禁用的云服务桥](../service-adapter/README.md)及[合成历史核验/回滚预演](../history-compat/README.md)，仍不部署、不读取真实历史数据。五组业务和同一网站的结构继承下面工作包1，不创建第二套模型。
 
 父提交：`5c2856bb386e6d52348d8a15a3a95e0952e177e6`。这里不是第六个业务模型，也不复制前五个demo。独立Next开发工程直接导入原 `app/page.tsx`、`app/guides/page.tsx` 与原布局，调用同一套已经审核的服务端处理器。
 
@@ -24,7 +26,7 @@ HTTPS网关 `server.cjs` 只监听127.0.0.1:3069；Next开发renderer只监听12
 在Windows PowerShell中执行（路径均为本轮实际工具位置）：
 
 ```powershell
-Set-Location 'E:/Recovery/.jinxi-research/phase4-integration/worktree'
+Set-Location 'E:/Recovery/.jinxi-research/phase4-adaptation/worktree'
 $nodeExe='E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe'
 $pgBin='E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin'
 $sslExe='D:/Program Files/Git/usr/bin/openssl.exe'
@@ -41,11 +43,22 @@ $sslExe='D:/Program Files/Git/usr/bin/openssl.exe'
 
 `session.cjs`只管理同一服务端身份在React中的内存状态，不实现密码/角色/令牌验证。私有响应需要同一请求世代、同一已核验主体和未变化的非敏感Cookie标记；退出、改密、联网/窗口恢复与多标签先清空再核验。丢失响应保留同一成员/操作的requestId；不会将令牌、CSRF、密码或私有草稿放进localStorage/BroadcastChannel。通知只发送changed，真正身份仍回读服务器。不同进程/标签的清理依赖浏览器调度，500ms轮询不是服务端权限保障或即时远程擦屏承诺；所有业务请求仍独立授权。
 
-首次5xx/408、非法响应和主体错配也属于结果未确认；后续401/403/429不能证明最初交易未提交，因此保留同一主体、模块及请求摘要绑定的原编号，直到成功回执确认。保留信息不含原草稿正文。最多128条未确认操作，达到上限安全拒绝新写入。该重试意图只在当前客户端内存中：完整刷新、关闭页面或跨设备后的意图恢复，以及生产规模并发/容量，不在本轮验收范围；云端适配时仍需受控设计与验证，不能宣传跨重启的全局恰好一次。
+首次5xx/408、非法响应和主体错配也属于结果未确认；后续401/403/429不能证明最初交易未提交。工作包2在发送前将主体/操作/摘要/原编号保存到IndexedDB，并通过当前会话向服务端核对本人回执；已实测完整刷新、浏览器正常关闭重开、同成员重登和多标签。元数据不含原正文、密码或交易响应。首次确定拒绝与未知结果、7天未知冻结、16条分页、30天已确认清理和512条容量限制详见[恢复契约](RECOVERY.md)。网站数据被手动清空、跨设备及隐私模式不具备相同保证，不能宣传无限期或全局恰好一次。
 
 原静态工程不导入integration-local实现，只保留默认null的通用运行时接口；`LEGACY_MEMBER_AUTH_READY=false`未改。预览工程不在app/public/Functions目录，非development或缺显式本机renderer标记即拒绝启动。生产构建不导出该工程。构建后运行静态产物测试，确认没有本机API/地址、凭据、可写集成路由；修改客户端标志不能创建不存在的服务端写能力。开发HMR所需CSP例外只由本机网关返回，不改生产CSP。
 
 ## 验证命令
+
+当前工作包2使用下列记录命令（`$nodeExe`、`$pgBin`、`$sslExe`沿用上面的实际路径）；固定端口组须顺序执行：
+
+```powershell
+& $nodeExe scripts/adaptation-checks.cjs unit,base-unit,typecheck,lint
+& $nodeExe scripts/adaptation-checks.cjs browser,pg,base-browser,base-https --pg-bin $pgBin --openssl $sslExe --playwright-module 'E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright'
+& $nodeExe scripts/adaptation-checks.cjs regressions,readonly --pg-bin $pgBin --openssl $sslExe
+& $nodeExe scripts/adaptation-checks.cjs build,export,api,security
+```
+
+工作包2真实日志/源码指纹与最终报告位于[artifacts/phase4-adaptation](../artifacts/phase4-adaptation/REPORT.md)。下列`integration-checks.cjs`命令仍是工作包1原回归入口，不代表它覆盖了新增的云门禁、恢复与历史兼容专项。
 
 ```powershell
 & $nodeExe scripts/integration-checks.cjs unit,api,security,typecheck,lint,build
@@ -59,8 +72,8 @@ $sslExe='D:/Program Files/Git/usr/bin/openssl.exe'
 
 ## 仍未获准的事项
 
-没有云端统一会话适配、部署、数据库迁移、真实208账号导入、历史UUID归属、旧余额核对/补算、正式积分规则生效时间或真实兑换。线上管理人员名单/发布政策、真实在线/战绩/任务奖励、支付、存储上传与入会通知仍待受控确认。旧历史合成样本保持无可信归属，不按昵称迁移。
+云端桥仅完成默认禁用的代码准备，没有真实云端接入、部署、数据库迁移、真实208账号导入、历史UUID归属、旧余额核对/补算、正式积分规则生效时间或真实兑换。线上管理人员名单/发布政策、真实在线/战绩/任务奖励、支付、存储上传与入会通知仍待受控确认。旧历史合成样本保持无可信归属，不按昵称迁移。
 
 UI-DEFER-001（FAQ）、002（公会动态弹窗）仍为第四阶段后续统一验收项。本轮没有改变Hero、导航布局、双行展播、攻略首页或头像设计。生产Published、TEST构建冻结、main/18PR及所有云资源未操作。
 
-最终受审实现为`b1114363aecd84cebd4d46f1c223bbcd7d03a80e`；后续证据提交不改变实现。完整验收、真实失败及修复、独立审查和逐命令退出码见[本地验收报告](../artifacts/phase4-integration/REPORT.md)。当前只保留本地分支与提交，没有远程推送或本轮远程CI。
+工作包1受审实现`b1114363aecd84cebd4d46f1c223bbcd7d03a80e`随证据提交42722d5已在此前授权下推送，实际[CI 42551463034](https://github.com/2574303451-create/jinxi-web/actions/runs/42551463034)通过；其覆盖不能替代当前未推送工作包2的新增专项。工作包1历史证据仍见[原报告](../artifacts/phase4-integration/REPORT.md)，当前源码与本地提交以[工作包2最终报告](../artifacts/phase4-adaptation/REPORT.md)和Git HEAD为准。

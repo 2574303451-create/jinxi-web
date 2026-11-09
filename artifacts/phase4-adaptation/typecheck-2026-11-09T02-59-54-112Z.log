@@ -1,0 +1,5 @@
+
+> my-v0-project@0.1.0 typecheck
+> tsc --noEmit --incremental false
+
+integration-local/site/client/provider.tsx(22,51): error TS2322: Type '{ claim: (input: any) => Promise<any>; mark: (key: any, id: any, state: any) => Promise<any>; list: (actor: any) => Promise<any>; forget: (key: any, id: any) => Promise<...>; cleanup: () => Promise<...>; close: () => Promise<...>; }' is not assignable to type 'null | undefined'.

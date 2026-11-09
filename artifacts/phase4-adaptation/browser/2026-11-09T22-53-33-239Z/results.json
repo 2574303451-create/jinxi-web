@@ -1,0 +1,378 @@
+{
+  "passed": true,
+  "stage": "final-consistency-and-five-widths",
+  "startedAtUtc": "2026-11-09T22:53:33.240Z",
+  "scenarios": [
+    "original-website-single-verified-login",
+    "checkin-commit-loss-refresh-queries-one-fact",
+    "settlement-commit-loss-refresh-one-ledger-and-settlement",
+    "offline-after-debit-real-browser-restart-indexeddb-reuses-request-no-second-order",
+    "refund-commit-loss-offline-same-member-login-server-query-one-linked-refund",
+    "real-idb-confirmed-visibility-true-false-true-keeps-server-state-current",
+    "unknown-stop-opposite-stop-reconciles-server-before-new-setter-intent",
+    "older-confirmed-opposite-same-unknown-target-keeps-original-id-real-idb-and-pg",
+    "message-refresh-same-content-original-request-one-item",
+    "private-guide-refresh-one-draft-no-plaintext-journal",
+    "two-tabs-atomic-indexeddb-claim-one-server-operation",
+    "same-nickname-B-cannot-read-recover-or-forget-A-receipts-A-relogin-recovers",
+    "client-success-flag-is-not-server-proof-and-idb-contains-no-body-or-credentials",
+    "real-idb-commit-callback-delayed-A-to-B-old-success-not-returned",
+    "real-idb-17th-confirmed-receipt-paginates-past-16-unresolved-no-deletion",
+    "denied-idb-no-post-no-new-content"
+  ],
+  "pageErrors": [],
+  "attempts": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "fadf6f5f-9e77-4818-be67-89960e2af39a"
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "5e03f0d7-b076-49c7-b9ca-7f88f372981c"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "9cf3a914-2b3a-440f-902a-d2239fddd1e6"
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "9cf3a914-2b3a-440f-902a-d2239fddd1e6"
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "7dedd6aa-4938-4f57-811d-421047ba23bb"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "11218324-58e2-4301-93ee-fbd44091419b"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "e0fcc2b6-a207-4568-ab57-845bfaea9b5e"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "bd1075bf-7b49-4353-83bb-0a3dde121129"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "0db31f93-a7de-472e-ae56-ea371216b306"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "3a20d8ac-39bf-4f73-8a35-5667df350535"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "d89d5e03-d6c5-413f-9f7b-343714fe7694"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "9e1cca1e-c2e5-400b-a405-98d42ede1367"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c"
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "28cfc904-3382-4e7d-9cec-5764a78c9b24"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "28cfc904-3382-4e7d-9cec-5764a78c9b24"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "515c641a-a422-465f-a14d-d5968477abe1"
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "515c641a-a422-465f-a14d-d5968477abe1"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607"
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "73eb1532-b189-4a0d-9042-c44bda86d90c"
+    }
+  ],
+  "receiptQueries": [
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "0db31f93-a7de-472e-ae56-ea371216b306",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607",
+    "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607",
+    "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "d74d26ef-a32f-4dc8-99e1-6443cbb80ee5",
+    "d74d26ef-a32f-4dc8-99e1-6443cbb80ee5",
+    "715fd699-e3a8-44a0-9f20-7b63c3eec772",
+    "715fd699-e3a8-44a0-9f20-7b63c3eec772",
+    "1ced033e-69a6-4732-a18e-8f0e55864396",
+    "1ced033e-69a6-4732-a18e-8f0e55864396",
+    "2b5a0332-9e5d-4627-996b-fa38f43d4c85",
+    "2b5a0332-9e5d-4627-996b-fa38f43d4c85",
+    "a9bff906-1521-4897-b576-ad0f8ac1ece7",
+    "a9bff906-1521-4897-b576-ad0f8ac1ece7",
+    "5f80bda9-7e19-4f8e-957f-97c313aa711a",
+    "5f80bda9-7e19-4f8e-957f-97c313aa711a",
+    "b3312ff9-1728-41b8-a8b5-a0de429a9470",
+    "b3312ff9-1728-41b8-a8b5-a0de429a9470",
+    "d51b8544-8f61-4e74-97f5-9c1900bc99db",
+    "9ecfa9d1-47c9-4eaa-baf0-bb4eb4e6e9e0",
+    "d51b8544-8f61-4e74-97f5-9c1900bc99db",
+    "ac551131-353a-4a7f-8c7f-c802123e4438",
+    "9ecfa9d1-47c9-4eaa-baf0-bb4eb4e6e9e0",
+    "ac551131-353a-4a7f-8c7f-c802123e4438",
+    "399c55d3-f5ff-4136-81e1-2d130238acb8",
+    "399c55d3-f5ff-4136-81e1-2d130238acb8",
+    "f3003208-36bb-418c-90ad-90f4af26c0cc",
+    "f3003208-36bb-418c-90ad-90f4af26c0cc",
+    "74c9b3e9-8fe0-4268-8732-707e373dfeac",
+    "74c9b3e9-8fe0-4268-8732-707e373dfeac",
+    "fc73db27-0d1e-4abf-93c6-a8771fdfe3ae",
+    "fc73db27-0d1e-4abf-93c6-a8771fdfe3ae",
+    "09d09399-9334-4d54-be18-39f2383dabb0",
+    "09d09399-9334-4d54-be18-39f2383dabb0",
+    "e1d00e84-dc67-4237-a7ea-432f32771c85",
+    "e1d00e84-dc67-4237-a7ea-432f32771c85",
+    "cab194bc-846d-41c0-82a5-da127cab088c",
+    "fadf6f5f-9e77-4818-be67-89960e2af39a",
+    "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+    "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+    "7dedd6aa-4938-4f57-811d-421047ba23bb",
+    "9e1cca1e-c2e5-400b-a405-98d42ede1367",
+    "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+    "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+    "515c641a-a422-465f-a14d-d5968477abe1",
+    "17f7efe5-7e7e-4ac6-a6cd-fd7bcd347607",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "73eb1532-b189-4a0d-9042-c44bda86d90c"
+  ],
+  "faults": [
+    {
+      "module": "attendance",
+      "op": "checkin",
+      "id": "fadf6f5f-9e77-4818-be67-89960e2af39a",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "settle",
+      "id": "5e03f0d7-b076-49c7-b9ca-7f88f372981c",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "redeem",
+      "id": "9cf3a914-2b3a-440f-902a-d2239fddd1e6",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "order.cancel",
+      "id": "7dedd6aa-4938-4f57-811d-421047ba23bb",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "0db31f93-a7de-472e-ae56-ea371216b306",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "points",
+      "op": "visibility",
+      "id": "c28253e1-9cd9-4eaf-a8b0-ea2fdd31fd2c",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "message.create",
+      "id": "28cfc904-3382-4e7d-9cec-5764a78c9b24",
+      "actualCommitResponse": 200
+    },
+    {
+      "module": "community",
+      "op": "guide.create",
+      "id": "515c641a-a422-465f-a14d-d5968477abe1",
+      "actualCommitResponse": 200
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "passed": true
+    }
+  ],
+  "rateFixtureResets": [
+    "checkin-response-loss-full-refresh",
+    "settlement-response-loss-full-refresh",
+    "prepare-synthetic-earned-funds",
+    "refund-response-loss-offline-and-relogin",
+    "confirmed-state-setter-can-change-back",
+    "unknown-stop-publication-is-resolved-before-opposite-state",
+    "older-confirmed-opposite-does-not-renew-unknown-same-value",
+    "message-response-loss-refresh-manual-same-content-retry",
+    "guide-response-loss-refresh-original-draft",
+    "real-indexeddb-concurrent-two-tabs",
+    "account-switch-does-not-transfer-private-receipt",
+    "journal-data-minimization-and-false-client-success",
+    "delayed-real-idb-confirmation-account-switch",
+    "seventeenth-receipt-accessible-without-deleting-unresolved-first-page"
+  ],
+  "journalProof": {
+    "rows": 10,
+    "fields": [
+      "actor",
+      "createdAt",
+      "digest",
+      "expiresAt",
+      "id",
+      "key",
+      "module",
+      "op",
+      "state",
+      "v"
+    ],
+    "containsCredentialsOrPlaintext": false
+  },
+  "databaseFinal": {
+    "orders": 1,
+    "debits": 1,
+    "refunds": 1,
+    "balance": "4"
+  },
+  "completedAtUtc": "2026-11-09T22:55:32.655Z"
+}

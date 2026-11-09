@@ -1,3 +1,19 @@
+# 当前接管入口：第四阶段第二工作包（2026-11-10）
+
+**本段覆盖下方历史快照中的“当前/未推送/只在内存恢复”等状态，历史文字保留取证。不要重新开展第三阶段开发或重复18PR审计。**
+
+- 当前实际工作树`E:/Recovery/.jinxi-research/phase4-adaptation/worktree`，本地分支`codex/jinxi-phase4-adaptation-local`，origin为`https://github.com/2574303451-create/jinxi-web.git`。唯一开发基准是已推送的`42722d553849eb98faf171f794a3aeee54440b2c`，原phase4-integration及第三阶段工作树保留不变。
+- 基准[Push CI 42551463034](https://github.com/2574303451-create/jinxi-web/actions/runs/42551463034)真实success，覆盖API14/安全138/视频6/原PG55及工程检查，**不覆盖本轮未推送代码**。继承原实际验收见[BASE_ACCEPTANCE.json](artifacts/phase4-adaptation/BASE_ACCEPTANCE.json)。
+- 本轮完成默认禁用的未来独立TEST服务桥/启动身份门禁、同一网站IndexedDB未知结果恢复、本人服务端回执查询、离线历史分类与208合成映射/本机PG强制回滚预演；不建立第二套身份、签到事实或积分账本，不注册可公网写入的Function。
+- 最终两路受审源码`66fcbb13e54163a15537c803fd506729905866d6`，源码SHA256 `d2ad3da07965cb825a650f9cf1f6f584d72078c9869fb8b0fbe1b39683d37ec5`。后续只保存交接/证据；完整本地收尾SHA见Git HEAD和最终回复，不把受审源码SHA冒充已推送SHA。
+- 最终新纯测试30/30、原会话23/23、新PG/HTTPS12/12、原统一HTTPS16/16、五组旧PG98/98、只读46/46、API14/14、安全138/138、视频6/6、静态导出3/3，原始tsc/ESLint/Build退出0；新增与原浏览器各16组流程/5宽度通过。独立Standards/Spec均53/53，发现的问题及RED/修复均保存。[报告](artifacts/phase4-adaptation/REPORT.md)、[独立审查](artifacts/phase4-adaptation/INDEPENDENT_REVIEW.md)、[失败记录](artifacts/phase4-adaptation/FAILURES.md)、[源码与命令对应](artifacts/phase4-adaptation/FINAL_STATE.json)。
+- 本机仍使用`https://127.0.0.1:3069/`及`/guides/`，启动与复现见[integration-local/README.md](integration-local/README.md)。每次启动新的临时合成库；私有账号/证书文件不进Git。自动测试结束即停止服务，不宣称入口常驻。
+- 工作包2只在本地提交，未推送、部署、PR、云变量/角色、真实208读取或生产迁移。旧Published/Preview/分支规则与TEST Builds stopped继承既有控制台证据，本轮无云操作；仓库门禁及旧写冻结逐文件不变。
+- 真实云Context/TLS/schema/最小角色及静态绑定尚未现场验收，真实历史映射/时区/奖励规则/余额流水/订单状态仍待证实。浏览器正常持久存储支持跨刷新/重开，同源脚本/清空存储/跨设备等边界见[恢复契约](integration-local/RECOVERY.md)，不能盲重做未知交易。UI-DEFER-001/002继续留第四阶段，正式视觉不变。
+- 当前停止点：本地验收及后续安全推送授权；未来云资源建立、角色/变量、部署、真实只读资料或迁移必须另行明确批准，不能把本轮本地通过解释为云写已开通。五阶段计划未变化。
+
+# 以下为第四阶段第一工作包及更早历史快照
+
 # 当前接管入口：第四阶段第一工作包（2026-11-09）
 
 **下方旧段落是历史验收快照。不要再按其中“身份/检查点5未推送、等待开启第四阶段”安排工作。当前工作以本段、实际Git状态和最新报告为准。**

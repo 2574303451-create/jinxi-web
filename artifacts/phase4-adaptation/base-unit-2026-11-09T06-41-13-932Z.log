@@ -1,0 +1,31 @@
+✔ public adapters use only public authenticated handler contracts and never mutate (1.309ms)
+✔ published guide UUID remains its original UUID; filters exclude private and wrong feed (0.6499ms)
+✔ production app has no import of isolated runtime, and original auth freeze remains false (1.8098ms)
+✔ the development renderer refuses production mode even with a spoofed enabling flag (63.5297ms)
+✔ old restoration cannot overwrite a newly logged-in member (1.6759ms)
+✔ pending private response from A is discarded after B login, including old 401 (0.4592ms)
+✔ silent cookie switch blocks writes before fetch and clears memory (0.5559ms)
+✔ switch between private request and response cannot leak another subject (0.211ms)
+✔ explicit member mismatch fails closed even when epoch was unchanged (0.2238ms)
+✔ lost response retry reuses nonce and CSRF; simultaneous repeats share one write (6.1578ms)
+✔ failed logout or password change clears private state and requires server recovery (0.3881ms)
+✔ duplicate identity operations are rejected while notifications queue one revalidation (0.5095ms)
+✔ successful password change and logout remove credentials from all future commands (0.2895ms)
+✔ expiry, password-reset and real 429 errors clear every shared private view (0.3621ms)
+✔ first-reset identity cannot call any of the four business modules (0.1729ms)
+✔ offline invalidation rejects previously started response and erases nonce scope (0.1101ms)
+✔ lost write response -> offline -> same verified member -> retry keeps its original nonce (1.3668ms)
+✔ unknown A receipt cannot be used by B; returning A still safely reuses only its own receipt (0.6212ms)
+✔ delayed A login JSON cannot adopt the current B cookie epoch and enable A private UI (0.1707ms)
+✔ profile member.id is checked as strictly as business memberId (0.1152ms)
+✔ unknown committed receipt survives an intervening 401, role denial or rate limit until same-member confirmation (0.9441ms)
+✔ a first definitive rejection without an earlier unknown result may use a fresh request on recovery (0.4312ms)
+✔ first 5xx or malformed response cannot prove no commit: retain the original receipt (1.0601ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 155.7771

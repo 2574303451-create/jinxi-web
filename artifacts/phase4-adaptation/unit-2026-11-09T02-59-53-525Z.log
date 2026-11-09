@@ -1,0 +1,22 @@
+✔ default cloud entry rejects before any connection and is not registered as a Function (0.9847ms)
+✔ only a separately approved TEST capability passes; plain objects and both protected sites fail (1.6286ms)
+✔ context, origin, commit, expiry, database, environment and inherited credentials reject safely (0.651ms)
+✔ cloud connection uses independent role and verified TLS; a connection failure is sanitized (1.2373ms)
+✔ Fetch bridge preserves secure Cookie arrays, no-store and explicit routes, refuses duplicate parameters (14.0436ms)
+✔ new session instance after lost commit reuses durable request ID and queries only the verified actor (4.7776ms)
+✔ storage failure prevents dispatch; absent server receipt is unresolved and cannot be forgotten (0.9407ms)
+✔ expired unknown intent is not silently erased or replayed with a new ID (0.7462ms)
+✔ 208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content (3.3813ms)
+✔ duplicate employee and UUID, missing binding, orphan profile classify without guessing (0.2673ms)
+✔ illegal leap date, duplicate checkins and unsupported historical fields are quarantined (1.0784ms)
+✔ legacy positive delta + direction 1/2 balances are checked; mismatch and duplicate rewards are retained (0.2531ms)
+✔ duplicate redemption/refund and unrelated origin cannot produce a migration candidate (0.2696ms)
+✔ no synthetic markers or independent anchor source: refuse real-data-shaped input (0.2038ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 146.033

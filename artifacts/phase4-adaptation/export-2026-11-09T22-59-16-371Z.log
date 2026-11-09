@@ -1,0 +1,11 @@
+✔ production export never contains recovery storage code, cloud capability/configuration or private keys (9.4533ms)
+✔ production static pages contain no integrated writable route, local API, renderer or credentials (11.6002ms)
+✔ the original frozen login and public website routes remain in the production export (0.4107ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.7532

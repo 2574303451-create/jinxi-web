@@ -13,6 +13,7 @@ export interface GuildNavigationProps {
   onLogout: () => void;
   onJoin: () => void;
   onAnnouncement: () => void;
+  onProfile?: () => void;
 }
 
 export function GuildNavigation(props: GuildNavigationProps) {
@@ -77,7 +78,7 @@ export function GuildNavigation(props: GuildNavigationProps) {
               <details>
                 <summary>{props.nickname || props.account}</summary>
                 <div className="account-menu">
-                  <a href="/profile-lab/">我的资料（隔离原型）</a>
+                  {props.onProfile ? <button onClick={() => act(props.onProfile!)}>本人资料</button> : <a href="/profile-lab/">我的资料（隔离原型）</a>}
                   <button onClick={() => act(props.onPassword)}>
                     修改密码
                   </button>

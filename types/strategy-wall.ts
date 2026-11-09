@@ -36,6 +36,9 @@ export interface Strategy {
   tags: string[];
   likes: string[]; // 点赞用户ID列表
   favorites: string[]; // 收藏用户ID列表
+  // Count-only trusted readers do not invent member IDs to fill these arrays.
+  likeCount?: number;
+  favoriteCount?: number;
   comments: StrategyComment[];
   isPinned: boolean;
   imageUrl?: string; // 向后兼容的封面图片字段

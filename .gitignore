@@ -41,3 +41,7 @@ next-env.d.ts
 /artifacts/f03-f05/*.proof.local.json
 /artifacts/f03-f05/*.provisioning.local.json
 /test-environment/sql/*.local.sql
+
+# The isolated React development renderer is never a published/static artifact.
+/integration-local/site/.next/
+/integration-local/site/next-env.d.ts

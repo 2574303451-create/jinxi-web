@@ -5,10 +5,12 @@ import { getMessages } from "../services/message-wall-backend";
 import type { Message } from "../types/message-wall";
 
 import { PublicMessageScope } from "../components/profile/public-message-scope";
+import { useSiteRuntime } from "../components/site-runtime";
 
 export const PUBLIC_MESSAGES_CHANGED = "jinxi:public-messages-changed";
 
 export function usePublicMessages() {
+  const dataVersion = useSiteRuntime()?.dataVersion;
   const source = useContext(PublicMessageScope);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export function usePublicMessages() {
     return () => {
       request.current++;
     };
-  }, [reload]);
+  }, [reload, dataVersion]);
   return {
     messages,
     loading,

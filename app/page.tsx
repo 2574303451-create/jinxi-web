@@ -19,6 +19,7 @@ import { MotionConfig } from "framer-motion"
 import dynamic from "next/dynamic"
 const GuildUptimeTerminal = dynamic(() => import("../components/guild-uptime-terminal").then(m => m.GuildUptimeTerminal), { ssr: false })
 import { GuildSponsorship } from "../components/guild-sponsorship"
+import { useSiteRuntime } from "../components/site-runtime"
 
 
 // 动态导入重型组件以减少初始内存占用
@@ -44,6 +45,7 @@ const ComponentLoader = ({ children }: { children: React.ReactNode }) => (
 
 const LEGACY_MEMBER_AUTH_READY = false
 function PageContent() {
+  const runtime = useSiteRuntime()
   const [activePanel, setActivePanel] = useState<MemberAction | null>(null)
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
   const legacyPanel = activePanel !== null && !["messages", "members", "showcase"].includes(activePanel)
@@ -355,6 +357,7 @@ function PageContent() {
 
   // 处理表单提交
   const handleSubmit = async () => {
+    if (runtime) { toast.addToast('本地合成预览不发送真实入会申请。', 'info'); return }
     if (!formData.nickname.trim() || !formData.contact.trim()) {
       toast.addToast('请填写"游戏昵称"和"联系方式"', 'error')
       return
@@ -802,35 +805,38 @@ function PageContent() {
       className="jinxi-site min-h-screen relative"
     >
       <a className="skip-link" href="#main-content">跳到主要内容</a>
-      <GuildNavigation account={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} nickname={loginNickname} onLogin={openLoginModal}
-        onPassword={openChangePasswordModal} onLogout={handleLogout} onJoin={handleJoinClick}
-        onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
+      <GuildNavigation account={runtime?.accountLabel ?? (LEGACY_MEMBER_AUTH_READY ? loginAccount : "")} nickname={runtime?.displayName ?? loginNickname} onLogin={runtime?.onLogin ?? openLoginModal}
+        onPassword={runtime?.onPassword ?? openChangePasswordModal} onLogout={runtime?.onLogout ?? handleLogout} onJoin={runtime?.onJoin ?? handleJoinClick} onProfile={runtime?.onProfile}
+        onAnnouncement={runtime?.onAnnouncement ?? (() => window.dispatchEvent(new Event("cyber-announcement:open")))} />
+      {runtime?.banner}
       <main id="main-content">
-        <GuildHero onJoin={handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
+        <GuildHero onJoin={runtime?.onJoin ?? handleJoinClick} onActions={() => document.getElementById("actions")?.scrollIntoView()} />
         <GuildFacts />
-        <GuildIntroduction onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} />
-        <GuildManagement members={managementTeam} onJoin={handleJoinClick} />
+        <GuildIntroduction onAnnouncement={runtime?.onAnnouncement ?? (() => window.dispatchEvent(new Event("cyber-announcement:open")))} />
+        <GuildManagement members={managementTeam} onJoin={runtime?.onJoin ?? handleJoinClick} />
         <GuildMembers members={allMembers} onAll={() => setActivePanel("members")} onShowcase={() => setActivePanel("showcase")} />
-        <MemberActions account={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} onOpen={setActivePanel} />
+        <MemberActions account={runtime?.accountLabel ?? (LEGACY_MEMBER_AUTH_READY ? loginAccount : "")} onOpen={setActivePanel} />
         <FeaturedGuides />
         <section id="community" className="guild-shell guild-section">
           <SectionHeading label="公会交流" title="好故事，值得一起分享" description="看看公会动态，留下你的声音，再分享一点实战经验。" />
-          <CommunityUpdates onAnnouncement={() => window.dispatchEvent(new Event("cyber-announcement:open"))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} />
+          <CommunityUpdates onAnnouncement={runtime?.onAnnouncement ?? (() => window.dispatchEvent(new Event("cyber-announcement:open")))} onMessages={() => { setSelectedMessageId(null); setActivePanel("messages") }} />
           <MessageShowcase onOpen={(id) => { setSelectedMessageId(id || null); setActivePanel("messages") }} />
         </section>
         <section id="faq" className="guild-shell guild-section">
           <SectionHeading label="想了解更多" title="入会前，你可能想问" description="活动时间、奖励和具体安排，请以公会实际通知为准。" />
           <div className="guild-panel faq-panel legacy-module"><ComponentLoader><Accordion items={faqItems} /></ComponentLoader></div>
         </section>
-        <JoinBanner onJoin={handleJoinClick} />
+        <JoinBanner onJoin={runtime?.onJoin ?? handleJoinClick} />
       </main>
-      <CyberAnnouncement />
+      {runtime ? runtime.announcement : <CyberAnnouncement />}
       <GuildUptimeTerminal />
-      <GuildSponsorship />
+      {runtime ? runtime.sponsorship : <GuildSponsorship />}
+      {runtime?.dialogs}
       <footer className="guild-footer"><div className="guild-shell"><a className="guild-brand" href="#top"><img src="/logo.png" alt="" width={32} height={32} /><span>今夕公会</span></a><p>以战会友，彼此成就。一起记录属于我们的高光。</p><div><span>© <span id="y">2026</span> 今夕公会</span><a href="#top">回到顶部 ↑</a></div></div></footer>
       <Modal isOpen={activePanel !== null} onClose={() => setActivePanel(null)} title={activePanel ? { checkin: "每日签到", tasks: "每日任务", points: "积分与排行", teams: "寻找队伍", game: "游戏数据", messages: "留下你的声音", members: "公会成员", showcase: "成员精彩展示" }[activePanel] : ""} size="2xl" legacy={legacyPanel}>
         <div className={legacyPanel ? "legacy-module" : undefined}>
           <ComponentLoader>
+            {activePanel && runtime?.panels[activePanel] ? runtime.panels[activePanel] : <>
             {activePanel === "checkin" && <p className="paper-notice" role="status">签到和历史记录查询正在安全升级。恢复后以服务器记录为准。</p>}
             {activePanel === "points" && <p className="paper-notice" role="status">积分余额、兑换和排行榜正在安全升级。暂不可查询，已有积分以服务器记录为准。</p>}
             {activePanel === "tasks" && <DailyTasks />}
@@ -843,7 +849,8 @@ function PageContent() {
             )}
             {activePanel === "members" && <MemberGrid members={allMembers} />}
             {activePanel === "showcase" && <Carousel3D members={carouselMembers} />}
-            {activePanel === "messages" && <MessageWall writesPaused loggedInAccount={LEGACY_MEMBER_AUTH_READY ? loginAccount : ""} loggedInNickname={loginNickname} initialMessageId={selectedMessageId} />}
+            {activePanel === "messages" && <MessageWall writesPaused={!runtime?.canWrite} loggedInAccount={runtime?.accountLabel ?? (LEGACY_MEMBER_AUTH_READY ? loginAccount : "")} loggedInNickname={runtime?.displayName ?? loginNickname} initialMessageId={selectedMessageId} actions={runtime?.messageActions} management={runtime?.messageManagement} />}
+            </>}
           </ComponentLoader>
         </div>
       </Modal>

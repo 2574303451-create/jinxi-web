@@ -1,0 +1,16 @@
+/* Only imported by the separate local renderer, never by the static website. */
+.integration-bar { margin: 80px auto 12px; padding: 16px; max-width: 1248px; border: var(--border-width) solid var(--line); background: var(--surface); border-radius: var(--card-radius); box-shadow: var(--hard-shadow) var(--line); }
+.integration-bar p { margin: 8px 0; }
+.integration-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 12px; }
+.integration-panel { color: var(--ink); display: grid; gap: 16px; overflow-wrap: anywhere; }
+.integration-panel h2, .integration-panel h3 { color: var(--ink); }
+.integration-panel form { display: grid; gap: 12px; }
+.integration-record { border: var(--border-width) solid var(--line); border-radius: var(--card-radius); padding: 16px; background: var(--surface); }
+.integration-record textarea { width: 100%; }
+.integration-panel ul { list-style: none; padding: 0; display: grid; gap: 12px; }
+.integration-panel table { width: 100%; border-collapse: collapse; }
+.integration-panel td, .integration-panel th { padding: 8px; text-align: left; border-bottom: 1px solid var(--line); }
+.integration-scroll { overflow: auto; }
+.integration-panel button { white-space: normal; }
+.integration-panel img { max-width: 100%; }
+@media (max-width: 540px) { .integration-bar { margin-inline: 16px; } .integration-record { padding: 12px; } }

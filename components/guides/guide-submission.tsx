@@ -8,11 +8,14 @@ import {
 } from "../../types/strategy-wall";
 import { GuideBody } from "./guide-body";
 import { safeMediaUrl } from "../../lib/guide-media-policy";
+import { useSiteRuntime } from "../site-runtime";
 export default function GuideSubmission({
   onClose,
 }: {
   onClose: () => void;
 }) {
+  const runtime = useSiteRuntime();
+  const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<StrategySubmission>({
       title: "",
       content: "",
@@ -42,7 +45,7 @@ export default function GuideSubmission({
     >
       <div className="guide-submission">
         <p className="paper-notice" role="status">
-          投稿正在安全升级。可以编辑、预览并复制本次草稿。
+          {runtime ? "保存到本人合成草稿；随后提交，由独立审核员审核。" : "投稿正在安全升级。可以编辑、预览并复制本次草稿。"}
         </p>
         <button
           className="paper-button"
@@ -62,7 +65,14 @@ export default function GuideSubmission({
             <GuideBody content={form.content || "尚未填写正文"} />
           </section>
         ) : (
-          <form onSubmit={(event) => event.preventDefault()}>
+          <form onSubmit={async (event) => {
+            event.preventDefault();
+            if (!runtime?.canWrite || saving) return;
+            setSaving(true); setError("");
+            try { await runtime.saveGuide(form); onClose(); }
+            catch { setError("保存未完成，原草稿已保留。重试将核对原请求。"); }
+            finally { setSaving(false); }
+          }}>
             <label className="paper-label" htmlFor="guide-title">
               攻略标题
             </label>
@@ -80,7 +90,8 @@ export default function GuideSubmission({
             <input
               id="guide-author"
               className="paper-input"
-              value={form.author}
+              value={runtime ? runtime.displayName : form.author}
+              readOnly={Boolean(runtime)}
               maxLength={40}
               required
               onChange={(e) => field("author", e.target.value)}
@@ -217,7 +228,7 @@ export default function GuideSubmission({
                 ))}
               </ul>
             </fieldset>
-            <button className="paper-button yellow" disabled>投稿暂未开放</button>
+            <button className="paper-button yellow" disabled={!runtime?.canWrite || saving}>{runtime ? (saving ? "保存中…" : "保存本人草稿") : "投稿暂未开放"}</button>
           </form>
         )}
       </div>

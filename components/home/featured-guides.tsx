@@ -12,7 +12,9 @@ import { PaperState } from "../ui/paper";
 import { HomeGuideCard } from "./home-guide-card";
 import { SectionHeading } from "./guild-sections";
 import styles from "./featured-guides.module.css";
+import { useSiteRuntime } from "../site-runtime";
 export function FeaturedGuides() {
+  const runtime = useSiteRuntime(), readFeed = runtime?.readHomeGuides || readHomeGuides;
   const root = useRef<HTMLElement>(null),
     { active } = useElementActivity(root);
   const requestedRevision = useRef(0);
@@ -35,7 +37,7 @@ export function FeaturedGuides() {
     setUnsupported(false);
     const force = requestedRevision.current !== revision;
     requestedRevision.current = revision;
-    readHomeGuides(tab, force)
+    readFeed(tab, force)
       .then((rows) => {
         if (alive) {
           setItems(rows);
@@ -56,7 +58,7 @@ export function FeaturedGuides() {
     return () => {
       alive = false;
     };
-  }, [armed, active, revision, tab]);
+  }, [armed, active, revision, tab, readFeed, runtime?.dataVersion]);
   const visibleStatus = loadedTab === tab ? status : "loading";
   return (
     <section

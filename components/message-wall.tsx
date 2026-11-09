@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type FormEvent,
+  type ReactNode,
 } from "react";
 import {
   ImagePlus,
@@ -27,6 +28,7 @@ import { AdminPasswordDialog } from "./ui/admin-password-dialog";
 import { Modal } from "./ui/modal";
 import { ContentImage } from "./ui/content-image";
 import { PaperState, PublicAvatar, messageDate } from "./ui/paper";
+import type { MessageActions } from "./site-runtime";
 
 const categories = ["闲聊", "公告", "提醒", "求助"];
 const reactions = ["👍", "❤️", "😂", "😮", "😢", "😡"];
@@ -127,13 +129,18 @@ export const MessageWall = memo(function MessageWall({
   loggedInNickname = "",
   initialMessageId,
   writesPaused = false,
+  actions,
+  management,
 }: {
   className?: string;
   loggedInAccount?: string;
   loggedInNickname?: string;
   initialMessageId?: string | null;
   writesPaused?: boolean;
+  actions?: MessageActions;
+  management?: ReactNode;
 }) {
+  const api = actions || backendAPI;
   const { messages, loading, error, reload, readOnly } = usePublicMessages();
   const canWrite = !writesPaused && !readOnly;
   const [name, setName] = useState(""),
@@ -160,8 +167,8 @@ export const MessageWall = memo(function MessageWall({
     located = useRef<string | null>(null);
   const formId = useId();
   useEffect(() => {
-    setUserId(getUserId());
-  }, []);
+    if (!actions) setUserId(getUserId());
+  }, [actions]);
   useEffect(() => {
     const media = window.matchMedia("(min-width: 801px)");
     const update = () => setComposerOpen(media.matches);
@@ -204,19 +211,19 @@ export const MessageWall = memo(function MessageWall({
     setSubmitting(true);
     setNotice(null);
     try {
-      await backendAPI.addMessage({
+      await api.addMessage({
         name: name.trim() || "匿名",
         content,
         category,
         color,
         imageUrl: image || undefined,
       });
-      updateTaskProgress("daily-message", 1);
+      if (!actions) updateTaskProgress("daily-message", 1);
       setContent("");
       setCategory("闲聊");
       setColor("#3b82f6");
       setImage(null);
-      setNotice({ error: false, text: "留言已发布。谢谢你留下这一刻。" });
+      setNotice({ error: false, text: actions ? "留言已提交审核。通过审核后公开显示。" : "留言已发布。谢谢你留下这一刻。" });
       await refresh();
     } catch {
       setNotice({ error: true, text: "发布失败，内容已保留，请稍后重试。" });
@@ -231,7 +238,7 @@ export const MessageWall = memo(function MessageWall({
     setBusy(id);
     setNotice(null);
     try {
-      await backendAPI.addReply(id, {
+      await api.addReply(id, {
         name: name.trim() || "匿名",
         content: reply,
         color,
@@ -254,7 +261,7 @@ export const MessageWall = memo(function MessageWall({
     setBusy(id);
     setNotice(null);
     try {
-      await backendAPI.toggleReaction(id, type, userId);
+      await api.toggleReaction(id, type, userId);
       await refresh();
     } catch {
       setNotice({ error: true, text: "表情回应失败，请稍后重试。" });
@@ -267,8 +274,8 @@ export const MessageWall = memo(function MessageWall({
     if (!pending) throw new Error("请重新选择需要管理的留言。");
     if (!password.trim()) throw new Error("请输入管理密码。");
     if (pending.type === "pin")
-      await backendAPI.togglePin(pending.id, password);
-    else await backendAPI.deleteMessage(pending.id, password);
+      await api.togglePin(pending.id, password);
+    else await api.deleteMessage(pending.id, password);
     // Keep the pending action if the server rejects the password, so retry is real.
     await refresh();
     setPending(null);
@@ -307,6 +314,7 @@ export const MessageWall = memo(function MessageWall({
         </button>
       </header>
       {writesPaused && <p className="paper-notice" role="status">留言、回复和表情回应暂未开放。可以阅读旧留言，或在表单内编辑并复制草稿。</p>}
+      {management}
       <div className="message-wall-layout">
         <details
           className="message-composer-disclosure"
@@ -377,7 +385,7 @@ export const MessageWall = memo(function MessageWall({
                 placeholder="分享此刻的想法…"
               />
             </div>
-            <MessageImageInput value={image} onChange={setImage} />
+            {actions ? <p className="paper-muted">合成集成仅验证文字与固定媒体引用，不提供上传。</p> : <MessageImageInput value={image} onChange={setImage} />}
             <fieldset className="message-color-picker">
               <legend>头像标记色</legend>
               {colors.map((item, i) => (
@@ -514,7 +522,7 @@ export const MessageWall = memo(function MessageWall({
                     role="group"
                     aria-label={`回应${message.name}的留言`}
                   >
-                    {reactions.map((type) => {
+                    {(actions ? reactions.slice(0, 3) : reactions).map((type) => {
                       const data = message.reactions.find(
                         (item) => item.type === type,
                       );
@@ -551,7 +559,7 @@ export const MessageWall = memo(function MessageWall({
                         ? ` · ${message.replies.length}`
                         : ""}
                     </button>
-                    <details className="message-admin-menu">
+                    {!actions && <details className="message-admin-menu">
                       <summary>管理留言</summary>
                       <div>
                         {!canWrite && <p className="paper-muted">管理权限正在安全升级。</p>}
@@ -579,7 +587,7 @@ export const MessageWall = memo(function MessageWall({
                           删除留言
                         </button>
                       </div>
-                    </details>
+                    </details>}
                   </div>
                   {replyingTo === message.id && (
                     <form

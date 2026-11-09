@@ -49,8 +49,10 @@ span[class^="ri-"], span[class*=" ri-"],
 
 export default function RootLayout({
   children,
+  externalAssets = true,
 }: Readonly<{
   children: React.ReactNode
+  externalAssets?: boolean
 }>) {
   const rootFontCss = `
 html {
@@ -63,10 +65,10 @@ html {
   return (
     <html lang="zh-CN">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {externalAssets && <><link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" crossOrigin="anonymous" precedence="icons" />
-        <style href="jinxi-remix-icon-fix" precedence="icons">{REMIX_ICON_FIX_CSS}</style>
+        <style href="jinxi-remix-icon-fix" precedence="icons">{REMIX_ICON_FIX_CSS}</style></>}
         <style href="jinxi-root-fonts" precedence="icons">{rootFontCss}</style>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>

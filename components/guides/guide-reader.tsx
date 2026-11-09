@@ -5,6 +5,7 @@ import { readGuide } from "../../services/guide-service";
 import { PaperState, PublicAvatar } from "../ui/paper";
 import { GuideBody } from "./guide-body";
 import { GuideMedia } from "./guide-media";
+import { useSiteRuntime } from "../site-runtime";
 export default function GuideReader({
   id,
   listHref,
@@ -16,6 +17,8 @@ export default function GuideReader({
   onReturn: (event: MouseEvent<HTMLAnchorElement>) => void;
   onReady: () => void;
 }) {
+  const runtime = useSiteRuntime();
+  const read = runtime?.readGuide || readGuide;
   const [guide, setGuide] = useState<Strategy | null>(null),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(true),
@@ -28,7 +31,7 @@ export default function GuideReader({
     const controller = new AbortController();
     setLoading(true);
     setError("");
-    readGuide(id, controller.signal)
+    read(id, controller.signal)
       .then(setGuide)
       .catch((e) => {
         if (!controller.signal.aborted) setError(e.message);
@@ -40,7 +43,7 @@ export default function GuideReader({
         }
       });
     return () => controller.abort();
-  }, [id, revision]);
+  }, [id, revision, read, runtime?.dataVersion]);
   useEffect(() => {
     if (!loading && loadedId === id) onReady();
   }, [loading, loadedId, id, onReady]);
@@ -88,12 +91,13 @@ export default function GuideReader({
           </span>
         </div>
         <p className="paper-muted">
-          {guide.viewCount} 浏览 · {guide.likes.length} 点赞 ·{" "}
-          {guide.favorites.length} 收藏 · {guide.comments.length} 评论
+          {guide.viewCount} 浏览 · {guide.likeCount ?? guide.likes.length} 点赞 ·{" "}
+          {guide.favoriteCount ?? guide.favorites.length} 收藏 · {guide.comments.length} 评论
         </p>
       </header>
       <GuideBody content={guide.content} />
       <GuideMedia items={guide.mediaFiles} cover={guide.imageUrl} />
+      {runtime ? runtime.guideDiscussion(guide) : <>
       <p className="paper-notice" role="status">点赞、收藏和评论暂未开放。攻略与历史评论仍可阅读。</p>
       <div className="guide-reader-actions">
         <button className="paper-button" disabled>点赞 {guide.likes.length}</button>
@@ -177,6 +181,7 @@ export default function GuideReader({
           删除攻略
         </button>
       </details>
+      </>}
     </article>
   );
 }

@@ -6,6 +6,7 @@ import {
   fetchAnnouncements,
   type Announcement,
 } from "../../services/announcement-service";
+import { useSiteRuntime } from "../site-runtime";
 
 export function CommunityUpdates({
   onAnnouncement,
@@ -14,6 +15,7 @@ export function CommunityUpdates({
   onAnnouncement: () => void;
   onMessages: () => void;
 }) {
+  const dataVersion = useSiteRuntime()?.dataVersion;
   const [items, setItems] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -36,7 +38,7 @@ export function CommunityUpdates({
     return () => {
       active = false;
     };
-  }, [reload]);
+  }, [reload, dataVersion]);
 
   return (
     <div className="community-layout">

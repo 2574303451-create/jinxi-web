@@ -68,6 +68,13 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
      await c.query('UPDATE community_lab.requests SET response=$3 WHERE member_id=$1 AND request_id=$2',[member.member.id,body.requestId,response]);
     }
    }
+   // The account/session rows remain locked, but wall-clock expiry can still
+   // occur while content SQL waits or runs. A late response must not commit a
+   // write, private read or replay receipt after that authorization has expired.
+   if(member){
+    const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(tokenFrom(event))])).rows[0];
+    if(!final?.live)fail(401,'SESSION_INVALID');
+   }
    await c.query('COMMIT');tx=false;return output(200,response);
   }catch(error){
    if(tx)await c.query('ROLLBACK').catch(()=>{});

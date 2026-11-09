@@ -6,9 +6,11 @@ import { useGuideLocation } from "../../hooks/use-guide-location";
 import { guideHref } from "../../lib/guide-location";
 import type { MouseEvent } from "react";
 import { PaperState, PublicAvatar } from "../ui/paper";
+import { useSiteRuntime } from "../site-runtime";
 const GuideReader = lazy(() => import("./guide-reader"));
 const GuideSubmission = lazy(() => import("./guide-submission"));
 export function GuideCenter() {
+  const runtime = useSiteRuntime();
   const { route, navigate, restoreScroll } = useGuideLocation();
   const [query, setQuery] = useState(""),
     [reload, setReload] = useState(0),
@@ -74,7 +76,7 @@ export function GuideCenter() {
         }
       });
     return () => controller.abort();
-  }, [route, id, search, category, difficulty, sort, page, reload]);
+  }, [route, id, search, category, difficulty, sort, page, reload, runtime?.dataVersion]);
   useEffect(() => {
     if (route && id === null && !loading && loadedRoute === route)
       restoreScroll();
@@ -115,6 +117,7 @@ export function GuideCenter() {
         </div>
       </section>
       <section className="guide-browser" aria-label="攻略筛选与列表">
+        {runtime?.guideManagement}
         <form
           className="guide-search"
           onSubmit={(event) => {

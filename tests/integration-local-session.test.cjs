@@ -11,7 +11,7 @@ function setup() {
   } });
   return { client, calls, push: fn => queue.push(fn), marker: value => { marker = value; } };
 }
-async function login(s, who = 'A') { s.push(() => response(200, identity(who))); await s.client.authenticate('login', { account: who, password: 'synthetic-only' }); }
+async function login(s, who = 'A') { s.push(() => response(200, identity(who))); s.push(() => response(200, identity(who))); await s.client.authenticate('login', { account: who, password: 'synthetic-only' }); }
 test('old restoration cannot overwrite a newly logged-in member', async () => {
   const s = setup(), old = deferred(); s.push(() => old.promise); const restoring = s.client.restore();
   await login(s, 'B'); old.resolve(response(401, { code: 'SESSION_INVALID' })); await restoring;
@@ -60,9 +60,9 @@ test('duplicate identity operations are rejected while notifications queue one r
   const s = setup(), delayed = deferred(); s.push(() => delayed.promise);
   const first = s.client.authenticate('login', { account: 'A', password: 'synthetic' });
   await assert.rejects(s.client.authenticate('login', { account: 'B', password: 'synthetic' }), e => e.code === 'AUTH_BUSY');
-  await s.client.restore(); await s.client.restore(); s.push(() => response(200, identity('A')));
+  await s.client.restore(); await s.client.restore(); s.push(() => response(200, identity('A'))); s.push(() => response(200, identity('A')));
   delayed.resolve(response(200, identity('A'))); await first; await new Promise(r => { setImmediate(r); });
-  assert.equal(s.calls.length, 2); assert.equal(s.client.getSnapshot().member.id, 'A');
+  assert.equal(s.calls.length, 3); assert.equal(s.client.getSnapshot().member.id, 'A');
 });
 test('successful password change and logout remove credentials from all future commands', async () => {
   for (const op of ['logout','change-password']) {
@@ -78,11 +78,33 @@ test('expiry, password-reset and real 429 errors clear every shared private view
   }
 });
 test('first-reset identity cannot call any of the four business modules', async () => {
-  const s = setup(); s.push(() => response(200, { ...identity('first'), needsPasswordChange: true })); await s.client.authenticate('login', {});
+  const s = setup(); s.push(() => response(200, { ...identity('first'), needsPasswordChange: true })); s.push(() => response(200, { ...identity('first'), needsPasswordChange: true })); await s.client.authenticate('login', {});
   for (const module of ['community','attendance','points','operations']) await assert.rejects(s.client.request(module), e => e.code === 'VERIFIED_SESSION_REQUIRED');
-  assert.equal(s.calls.length, 1);
+  assert.equal(s.calls.length, 2);
 });
 test('offline invalidation rejects previously started response and erases nonce scope', async () => {
   const s = setup(); await login(s); const delayed = deferred(); s.push(() => delayed.promise); const old = s.client.request('community').catch(e => e.code);
   s.client.unverify(); delayed.resolve(response(200, { memberId: 'A' })); assert.equal(await old, 'STALE_RESPONSE'); assert.equal(s.client.getSnapshot().member, null);
+});
+test('lost write response -> offline -> same verified member -> retry keeps its original nonce', async () => {
+  const s = setup(); await login(s); const body = { op:'redeem',itemId:'synthetic-item',quantity:1 };
+  s.push(() => { throw Error('lost after commit'); });
+  await assert.rejects(s.client.mutate('points',body),e=>e.code==='NETWORK_RESULT_UNKNOWN');
+  const first=s.calls.at(-1).body.requestId;s.client.unverify();s.push(()=>response(200,identity('A')));await s.client.restore();
+  s.push(()=>response(200,{memberId:'A',orderId:'same-order'}));await s.client.mutate('points',{quantity:1,itemId:'synthetic-item',op:'redeem'});
+  assert.equal(s.calls.at(-1).body.requestId,first);assert.equal(s.client.getSnapshot().member.id,'A');
+});
+test('unknown A receipt cannot be used by B; returning A still safely reuses only its own receipt', async () => {
+  const s=setup();await login(s);const body={op:'redeem',itemId:'shared-synthetic-item',quantity:1};s.push(()=>{throw Error('lost');});await assert.rejects(s.client.mutate('points',body));const a=s.calls.at(-1).body.requestId;
+  await login(s,'B');s.push(()=>response(200,{memberId:'B'}));await s.client.mutate('points',body);assert.notEqual(s.calls.at(-1).body.requestId,a);
+  await login(s,'A');s.push(()=>response(200,{memberId:'A'}));await s.client.mutate('points',body);assert.equal(s.calls.at(-1).body.requestId,a);
+});
+test('delayed A login JSON cannot adopt the current B cookie epoch and enable A private UI', async () => {
+  const s=setup();s.push(()=>{s.marker('epoch-b');return response(200,identity('A'));});s.push(()=>response(200,identity('B')));
+  await assert.rejects(s.client.authenticate('login',{account:'A',password:'synthetic-only'}),e=>e.code==='LOGIN_SESSION_CHANGED');
+  assert.equal(s.client.getSnapshot().member,null);assert.equal(s.client.getSnapshot().phase,'unverified');
+});
+test('profile member.id is checked as strictly as business memberId', async () => {
+  const s=setup();await login(s);s.push(()=>response(200,{member:{id:'B'},profile:{nickname:'private-B'}}));
+  await assert.rejects(s.client.request('member',null,{op:'profile'}),e=>e.code==='SUBJECT_MISMATCH');assert.equal(s.client.getSnapshot().member,null);
 });

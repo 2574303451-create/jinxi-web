@@ -8,7 +8,9 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
   const listeners = new Set(), pending = new Map(), flights = new Map();
   const emit = patch => { state = Object.freeze({ ...state, ...patch }); for (const f of listeners) f(); };
   function clear(phase = 'unverified', message = '') {
-    generation++; credential = null; pending.clear(); flights.clear();
+    // Display generations expire immediately. Unknown write receipts survive
+    // same-member recovery, keyed only by verified UUID + a payload digest.
+    generation++; credential = null; flights.clear();
     emit({ phase, member: null, revision: state.revision + 1, message });
   }
   async function transport(module, body, query = {}, csrf = '') {
@@ -59,8 +61,16 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
       if (!response.ok) { emit({ phase: 'unverified', message: response.status === 429 ? '请求过于频繁，请稍后重试。' : '身份操作未完成，请重新核验。' }); throw new SessionError(data.code || 'AUTH_REJECTED', response.status); }
       notify();
       if (op === 'login') {
-        credential = data;
-        emit({ phase: data.needsPasswordChange ? 'password' : 'ready', member: data.member, message: data.needsPasswordChange ? '请先完成首次改密。' : '' });
+        // A different tab can replace the Cookie after this response's headers
+        // but before its delayed JSON body. Re-read the ACTUAL Cookie identity;
+        // never bind the old body to whichever marker happens to be visible.
+        const observed = epoch(), verified = await transport('member', null, { op: 'me' });
+        check(stamp, observed);
+        if (!verified.response.ok || !data.member?.id || verified.data.member?.id !== data.member.id || verified.data.csrfToken !== data.csrfToken) {
+          clear('unverified', '登录结果与当前会话不一致，请重新核验。'); throw new SessionError('LOGIN_SESSION_CHANGED');
+        }
+        credential = verified.data; marker = observed;
+        emit({ phase: credential.needsPasswordChange ? 'password' : 'ready', member: credential.member, message: credential.needsPasswordChange ? '请先完成首次改密。' : '' });
       } else emit({ phase: 'anonymous', member: null, message: op === 'logout' ? '已退出，所有模块的私有内容已清除。' : '密码已修改，所有旧会话已撤销。请重新登录。' });
       return data;
     } catch (e) { if (stamp === generation && state.phase === 'busy') emit({ phase: 'unverified', message: '操作结果待核验，请检查连接。' }); throw e; }
@@ -75,7 +85,7 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
     const { response, data } = await transport(module, body, query, privateView ? credential.csrfToken : '');
     if (privateView) {
       check(stamp, observed);
-      if (data.memberId && data.memberId !== credential.member.id) { clear(); throw new SessionError('SUBJECT_MISMATCH'); }
+      if (data.memberId && data.memberId !== credential.member.id || data.member?.id && data.member.id !== credential.member.id) { clear(); throw new SessionError('SUBJECT_MISMATCH'); }
     }
     if (!response.ok) {
       if (privateView && (response.status === 401 || response.status === 429 || ['PASSWORD_RESET_REQUIRED','STAFF_REQUIRED','ADMIN_REQUIRED','REVIEWER_REQUIRED'].includes(data.code))) clear('unverified', response.status === 429 ? '请求过于频繁，请稍后核验。' : '身份或权限已变化，所有私有内容已清除。');
@@ -84,15 +94,26 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
     return data;
   }
   function mutate(module, body) {
-    const key = JSON.stringify([generation, module, body]);
-    if (flights.has(key)) return flights.get(key);
-    const id = pending.get(key) || randomId(); pending.set(key, id);
-    const flight = request(module, { ...body, requestId: id }).then(result => { pending.delete(key); notify(); return result; }).catch(e => {
-      // A lost response retains the SAME actor-bound request ID for an explicit retry.
-      if (e.code !== 'NETWORK_RESULT_UNKNOWN' && e.code !== 'INVALID_RESPONSE') pending.delete(key);
+    const stamp = generation, observed = marker, actor = credential?.member.id;
+    const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(k => [k, canonical(value[k])])) : value;
+    const payload = JSON.stringify(canonical(body)), running = JSON.stringify([stamp,module,payload]);
+    if (flights.has(running)) return flights.get(running);
+    let key;
+    const flight = (async () => {
+      check(stamp, observed);
+      if (!actor || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
+      const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload));
+      check(stamp, observed);
+      key = actor + ':' + module + ':' + Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,'0')).join('');
+      if (!pending.has(key) && pending.size >= 128) throw new SessionError('UNRESOLVED_REQUEST_LIMIT');
+      const id = pending.get(key) || randomId(); pending.set(key, id);
+      const result = await request(module, { ...body, requestId: id }); pending.delete(key); notify(); return result;
+    })().catch(e => {
+      // No draft text is retained. An unconfirmed A receipt is never usable by B.
+      if (!['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED'].includes(e.code) && key) pending.delete(key);
       throw e;
-    }).finally(() => { if (flights.get(key) === flight) flights.delete(key); });
-    flights.set(key, flight); return flight;
+    }).finally(() => { if (flights.get(running) === flight) flights.delete(running); });
+    flights.set(running, flight); return flight;
   }
   function observeEpoch() { if (epoch() !== marker) { marker = epoch(); clear('unverified', '账号已切换，请重新核验。'); void restore(); } }
   return { getSnapshot: () => state, subscribe: f => { listeners.add(f); return () => listeners.delete(f); }, restore, authenticate, request, mutate, observeEpoch,

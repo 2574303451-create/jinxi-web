@@ -23,6 +23,7 @@ if(require.main===module){
  for(const group of groups){
   let command;
   if(group==='unit')command=['--test','tests/integration-local-session.test.cjs','tests/integration-local-boundary.test.cjs'];
+  else if(group==='export')command=['--test','tests/integration-local-export.test.cjs'];
   else if(['api','security','typecheck','lint','build'].includes(group))command=['scripts/run-clean.cjs','run',({api:'test:api',security:'test:security'})[group]||group];
   else if(group==='https')command=['tests/integration-local-https.test.cjs',...pg,...ssl];
   else if(group==='browser')command=['tests/integration-local-browser.cjs',...pg,...ssl,...browser];

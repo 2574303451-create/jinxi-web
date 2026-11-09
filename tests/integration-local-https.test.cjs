@@ -1,6 +1,8 @@
 const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {freshOperations}=require('../operations-local/database.cjs'),{serveIntegration}=require('../integration-local/server.cjs');
 const {httpClient}=require('./integration-local-support.cjs');
+const {createSession}=require('../integration-local/session.cjs');
+const {COOKIE}=require('../member-local/identity.cjs');
 test('one strict-HTTPS gateway, five reviewed modules and one real synthetic PostgreSQL',async t=>{
  const args=process.argv.slice(2);assert(args.length===4&&args[0]==='--pg-bin'&&args[2]==='--openssl');
  const db=await freshOperations(args[1]);let server;
@@ -111,6 +113,25 @@ test('one strict-HTTPS gateway, five reviewed modules and one real synthetic Pos
    await admin("CREATE FUNCTION public.integration_slow_message() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_sleep(1.2); RETURN NEW; END $$; CREATE TRIGGER integration_slow BEFORE INSERT ON community_lab.items FOR EACH ROW EXECUTE FUNCTION public.integration_slow_message()");
    const before=await counts();let r;try{r=await mutate('community',s,{op:'message.create',content:'过期不得落库',category:'闲聊',color:'#2360f5'});}finally{await admin('DROP TRIGGER integration_slow ON community_lab.items; DROP FUNCTION public.integration_slow_message()');}
    assert.equal(r.status,401);assert.deepEqual(await counts(),before);assert.equal(r.headers['set-cookie'],undefined);
+  });
+  await t.test('lost committed redemption -> expired retry -> same-member login -> original receipt, not another debit',async()=>{
+   await resetRate();const jar=new Map(),attempts=[];let drop=true,firstOrder;
+   const memberClient=createSession({epoch:()=>jar.get('__Host-jinxi_points_epoch')||'',randomId:()=>crypto.randomUUID(),fetcher:async(url,options)=>{
+    const body=options.body?JSON.parse(options.body):undefined;
+    const r=await request(url,{body,method:options.method,headers:{Cookie:Array.from(jar,([k,v])=>k+'='+v).join('; '),'X-CSRF-Token':options.headers['X-CSRF-Token']||''}});
+    for(const line of r.headers['set-cookie']||[]){const pair=line.split(';')[0],at=pair.indexOf('=');jar.set(pair.slice(0,at),pair.slice(at+1));}
+    if(body?.op==='redeem'){attempts.push(body.requestId);if(drop&&r.status===200){drop=false;firstOrder=r.body.orderId;throw Error('synthetic response lost after real PostgreSQL commit');}}
+    return {ok:r.status>=200&&r.status<300,status:r.status,json:async()=>r.body};
+   }});
+   await memberClient.authenticate('login',{account:db.accounts.reviewer.account,password:db.accounts.reviewer.password});
+   for(const day of ['2024-03-03','2024-03-04']){await db.setClock(day+'T04:00:00.000Z');await memberClient.mutate('attendance',{op:'checkin'});const state=await memberClient.request('points');for(const event of state.events.filter(e=>e.status==='unsettled'))await memberClient.mutate('points',{op:'settle',eventId:event.eventId});}
+   const catalogue=await mutate('points',staff,{op:'catalogue.create',name:'到期重试用虚构物品',unitCost:1,stock:4,perMemberLimit:3,minEarned:0,startsAt:'1900-01-01T00:00:00.000Z',endsAt:'2199-12-31T00:00:00.000Z',status:'enabled'});assert.equal(catalogue.status,200);const body={op:'redeem',itemId:catalogue.body.itemId,quantity:1};
+   await assert.rejects(memberClient.mutate('points',body),e=>e.code==='NETWORK_RESULT_UNKNOWN');
+   const tokenHash=crypto.createHash('sha256').update(jar.get(COOKIE)).digest();await admin("UPDATE b2_lab.member_sessions_v2 SET idle_expires_at=created_at+interval '1 millisecond' WHERE token_hash=$1",[tokenHash]);
+   await assert.rejects(memberClient.mutate('points',body),e=>e.status===401);
+   await memberClient.authenticate('login',{account:db.accounts.reviewer.account,password:db.accounts.reviewer.password});const retry=await memberClient.mutate('points',body);
+   assert.equal(retry.orderId,firstOrder);assert.equal(attempts.length,3);assert(attempts.every(id=>id===attempts[0]));
+   const proof=(await admin("SELECT (SELECT count(*)::int FROM points_lab.orders WHERE member_id=$1) AS orders,(SELECT count(*)::int FROM points_lab.ledger WHERE member_id=$1 AND kind='redeem') AS debits,(SELECT balance::text FROM points_lab.accounts WHERE member_id=$1) AS balance",[db.accounts.reviewer.memberId])).rows[0];assert.deepEqual(proof,{orders:1,debits:1,balance:'1'});await admin('SELECT points_lab.assert_account($1)',[db.accounts.reviewer.memberId]);
   });
   await t.test('lock waiting sees revocation; all modules reject logout, password, lock, disable, expiry and reset states',async()=>{
    await resetRate();

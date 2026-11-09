@@ -108,3 +108,14 @@ test('profile member.id is checked as strictly as business memberId', async () =
   const s=setup();await login(s);s.push(()=>response(200,{member:{id:'B'},profile:{nickname:'private-B'}}));
   await assert.rejects(s.client.request('member',null,{op:'profile'}),e=>e.code==='SUBJECT_MISMATCH');assert.equal(s.client.getSnapshot().member,null);
 });
+test('unknown committed receipt survives an intervening 401, role denial or rate limit until same-member confirmation', async () => {
+  for(const [status,code]of [[401,'SESSION_INVALID'],[403,'STAFF_REQUIRED'],[429,'RATE_LIMITED']]){
+    const s=setup();await login(s);const body={op:'redeem',itemId:'synthetic-item',quantity:1};s.push(()=>{throw Error('committed response lost');});await assert.rejects(s.client.mutate('points',body));
+    const original=s.calls.at(-1).body.requestId;s.push(()=>response(status,{code}));await assert.rejects(s.client.mutate('points',body));assert.equal(s.calls.at(-1).body.requestId,original);
+    s.push(()=>response(200,identity('A')));await s.client.restore();s.push(()=>response(200,{memberId:'A',orderId:'original-order'}));await s.client.mutate('points',body);assert.equal(s.calls.at(-1).body.requestId,original);
+  }
+});
+test('a first definitive rejection without an earlier unknown result may use a fresh request on recovery', async () => {
+  const s=setup();await login(s);const body={op:'redeem',itemId:'synthetic-item',quantity:1};s.push(()=>response(403,{code:'STAFF_REQUIRED'}));await assert.rejects(s.client.mutate('points',body));const rejected=s.calls.at(-1).body.requestId;
+  s.push(()=>response(200,identity('A')));await s.client.restore();s.push(()=>response(200,{memberId:'A'}));await s.client.mutate('points',body);assert.notEqual(s.calls.at(-1).body.requestId,rejected);
+});

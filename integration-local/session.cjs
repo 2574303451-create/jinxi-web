@@ -106,11 +106,17 @@ function createSession({ fetcher, epoch, randomId, notify = () => {} }) {
       check(stamp, observed);
       key = actor + ':' + module + ':' + Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,'0')).join('');
       if (!pending.has(key) && pending.size >= 128) throw new SessionError('UNRESOLVED_REQUEST_LIMIT');
-      const id = pending.get(key) || randomId(); pending.set(key, id);
-      const result = await request(module, { ...body, requestId: id }); pending.delete(key); notify(); return result;
+      const receipt = pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
+      const result = await request(module, { ...body, requestId: receipt.id }); pending.delete(key); notify(); return result;
     })().catch(e => {
       // No draft text is retained. An unconfirmed A receipt is never usable by B.
-      if (!['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED'].includes(e.code) && key) pending.delete(key);
+      const receipt = key && pending.get(key);
+      if (receipt) {
+        if (['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED'].includes(e.code)) receipt.unknown = true;
+        // A later 401/403/429 only rejects that retry. It cannot establish that
+        // the original unknown transaction did not commit, so keep its ID.
+        else if (!receipt.unknown) pending.delete(key);
+      }
       throw e;
     }).finally(() => { if (flights.get(running) === flight) flights.delete(running); });
     flights.set(running, flight); return flight;

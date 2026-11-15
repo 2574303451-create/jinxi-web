@@ -18,7 +18,7 @@ import { AnnouncementDialog, SponsorshipDialog, TeamPanel } from './operations-p
 const epoch = () => typeof document === 'undefined' ? '' : document.cookie.split(';').map(s => s.trim()).find(s => s.startsWith('__Host-jinxi_points_epoch=')) || '';
 const message = (r: any): Message => ({ ...r, timestamp: new Date(r.timestamp), replies: (r.replies || []).map((x: any) => ({ ...x, timestamp: new Date(x.timestamp) })), reactions: r.reactions || [] });
 
-export function IntegrationProvider({ children }: { children: ReactNode }) {
+export function IntegrationProvider({ children, surface = 'local' }: { children: ReactNode; surface?: 'local' | 'synthetic-test' }) {
   const [client] = useState(() => createSession({ journal: createJournal(), fetcher: (...args: Parameters<typeof fetch>) => fetch(...args), epoch, randomId: () => crypto.randomUUID(), notify: () => { if (typeof window !== 'undefined') window.dispatchEvent(new Event('integration:data')); } }) as SessionClient);
   useEffect(() => {
     let channel: BroadcastChannel | undefined;
@@ -32,9 +32,9 @@ export function IntegrationProvider({ children }: { children: ReactNode }) {
     window.addEventListener('integration:data', announce); window.addEventListener('online', verify); window.addEventListener('offline', unverify); window.addEventListener('focus', verify); document.addEventListener('visibilitychange', visibility);
     return () => { clearInterval(markerTimer); clearInterval(serverTimer); channel?.close(); window.removeEventListener('integration:data', announce); window.removeEventListener('online', verify); window.removeEventListener('offline', unverify); window.removeEventListener('focus', verify); document.removeEventListener('visibilitychange', visibility); };
   }, [client]);
-  return <SessionContext.Provider value={client}><ConnectedSite>{children}</ConnectedSite></SessionContext.Provider>;
+  return <SessionContext.Provider value={client}><ConnectedSite surface={surface}>{children}</ConnectedSite></SessionContext.Provider>;
 }
-function ConnectedSite({ children }: { children: ReactNode }) {
+function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'local' | 'synthetic-test' }) {
   const { client, state, ready } = useSession();
   const [auth, setAuth] = useState<'login' | 'password' | null>(null), [announcements, setAnnouncements] = useState(false), [sponsorship, setSponsorship] = useState(false), [joinNotice, setJoinNotice] = useState(false), [profile, setProfile] = useState(false), [panel, setPanel] = useState<'checkin' | 'points' | 'teams' | null>(null), [dataVersion, setDataVersion] = useState(0);
   const [recovery,setRecovery]=useState(false);
@@ -74,8 +74,9 @@ function ConnectedSite({ children }: { children: ReactNode }) {
     guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} />, guideDiscussion: guide => <GuideDiscussion guide={guide} />,
   };
   return <SiteRuntimeContext.Provider value={runtime}>
-    <aside className="integration-bar" aria-label="本地统一集成状态">
-      <strong>本地合成集成预览 · 复用今夕网站</strong><p>与生产和云端 TEST 隔离；未接入真实成员、历史积分或支付。</p>
+    <aside className="integration-bar" aria-label={surface === 'local' ? '本地统一集成状态' : '独立合成 TEST 状态'}>
+      <strong>{surface === 'local' ? '本地合成集成预览 · 复用今夕网站' : '独立合成 TEST · 今夕公会'}</strong>
+      <p>{surface === 'local' ? '与生产和云端 TEST 隔离；未接入真实成员、历史积分或支付。' : '本页仅使用合成成员、积分与兑换记录。'}</p>
       <p role="status" data-testid="unified-session">{state.member?.displayName || '未核验成员'} · {state.phase} · {state.message}</p>
       <p data-testid="unified-permissions">{!ready ? '未授予业务权限' : privileges.loading ? '核验权限中…' : permissions.admin ? '合成管理员' : permissions.staff ? '合成审核员' : '合成成员'}</p>
       <div className="integration-actions">
@@ -98,7 +99,7 @@ function ConnectedSite({ children }: { children: ReactNode }) {
       <Modal isOpen={profile} onClose={() => setProfile(false)} title="本人合成资料" legacy={false} size="md"><ProfilePanel /></Modal>
       <Modal isOpen={panel !== null} onClose={() => setPanel(null)} title={panel ? { checkin: '每日签到', points: '积分与兑换', teams: '寻找队伍' }[panel] : ''} legacy={false} size="xl">{panel && runtime.panels[panel]}</Modal>
     </div>
-    <Modal isOpen={joinNotice} onClose={() => setJoinNotice(false)} title="入会申请未接入" legacy={false} size="md"><p className="paper-notice">本地合成预览不发送真实申请、邮件或其他外部消息。本轮仅验证已授权的五组业务。</p></Modal>
+    <Modal isOpen={joinNotice} onClose={() => setJoinNotice(false)} title="入会申请未接入" legacy={false} size="md"><p className="paper-notice">{surface === 'local' ? '本地合成预览不发送真实申请、邮件或其他外部消息。本轮仅验证已授权的五组业务。' : '合成测试期间不接受真实入会申请。'}</p></Modal>
   </SiteRuntimeContext.Provider>;
 }
 function ProfilePanel() {

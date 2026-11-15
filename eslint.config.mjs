@@ -13,6 +13,7 @@ const rules={
  'use-isnan':'error','valid-typeof':'error',
 };
 export default[
- {ignores:['node_modules/**','out/**','.next/**','integration-local/site/.next/**','integration-local/site/next-env.d.ts','artifacts/**','scripts/output/**','next-env.d.ts']},
+ {ignores:['node_modules/**','out/**','.next/**','integration-local/site/.next/**','integration-local/site/next-env.d.ts','synthetic-cloud/site/out/**','synthetic-cloud/site/.next/**','synthetic-cloud/site/next-env.d.ts','synthetic-cloud/.generated/**','artifacts/**','scripts/output/**','next-env.d.ts']},
  {files:['app/**/*.{ts,tsx}','components/**/*.{ts,tsx}','hooks/**/*.{ts,tsx}','lib/**/*.{js,ts,tsx}','services/**/*.{ts,tsx}','types/**/*.ts','netlify/functions/**/*.js','tests/**/*.cjs','scripts/**/*.{js,cjs,mjs}','member-local/**/*.{js,cjs}','community-local/**/*.{js,cjs}','attendance-local/**/*.{js,cjs}','points-local/**/*.{js,cjs}','operations-local/**/*.{js,cjs}','integration-local/**/*.{js,cjs,mjs,ts,tsx}','service-adapter/**/*.{cjs,mjs}','history-compat/**/*.cjs'],languageOptions:{parser:tseslint.parser,ecmaVersion:'latest',sourceType:'module',parserOptions:{ecmaFeatures:{jsx:true}}},rules},
+ {files:['synthetic-cloud/**/*.{cjs,mjs,ts,tsx}'],languageOptions:{parser:tseslint.parser,ecmaVersion:'latest',sourceType:'module',parserOptions:{ecmaFeatures:{jsx:true}}},rules},
 ];

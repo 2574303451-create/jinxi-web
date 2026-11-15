@@ -9,7 +9,7 @@
     "build:optimized": "node optimize-images.js && NODE_ENV=production next build --webpack",
     "dev": "next dev --webpack",
     "dev:netlify": "netlify dev",
-    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local service-adapter history-compat --no-warn-ignored --max-warnings 0",
+    "lint": "eslint app components hooks lib services types netlify/functions tests scripts member-local community-local attendance-local points-local operations-local integration-local service-adapter history-compat synthetic-cloud --no-warn-ignored --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental false",
     "start": "node scripts/preview-static.cjs",
     "export": "npm run build",

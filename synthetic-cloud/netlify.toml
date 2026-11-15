@@ -1,0 +1,22 @@
+# Only the new project's Package directory may select this configuration.
+[build]
+  ignore = "node ./synthetic-cloud/build.cjs --check"
+  command = "node ./synthetic-cloud/build.cjs"
+  publish = "synthetic-cloud/site/out"
+
+[build.environment]
+  NODE_VERSION = "24.22.2"
+  NPM_VERSION = "11.19.1"
+  NPM_FLAGS = "--include=dev"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[functions]
+  directory = "synthetic-cloud/.generated/functions"
+
+[build.processing]
+  skip_processing = true
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

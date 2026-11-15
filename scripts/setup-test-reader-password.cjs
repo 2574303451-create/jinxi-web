@@ -242,4 +242,4 @@ if (require.main === module) main().catch(error=>{
   console.error(JSON.stringify(error instanceof SetupFailure ? error.diagnostic : describeFailure(error,'STARTUP')));
   process.exitCode=1;
 });
-module.exports={passwordGuard,safeLogging,validNewPassword,checkScope,setReaderPassword,secretPrompt,describeFailure,parseMode};
+module.exports={passwordGuard,loggingSql,safeLogging,validNewPassword,checkScope,setReaderPassword,secretPrompt,describeFailure,parseMode};

@@ -1,0 +1,79 @@
+const { createCloudService, netlifyFetch } = require('../service-adapter/cloud.cjs');
+const { publicContract } = require('../integration-local/public-contract.cjs');
+const { checkInvocation, readCredentials } = require('./binding.cjs');
+const { verifySchema } = require('./database/guard.cjs');
+
+const prefix = '/.netlify/functions/';
+const modules = ['member', 'community', 'attendance', 'points', 'operations'];
+const publicNames = ['messages', 'strategies', 'guide-video-stats', 'announcements', 'sponsorship'];
+const publicHeaders = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-store, private',
+  Pragma: 'no-cache',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Robots-Tag': 'noindex, nofollow',
+  Vary: 'Cookie, Origin',
+};
+const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: publicHeaders });
+
+function createEntry(receipt, env = process.env) {
+  // This receipt is bundled with the function, never accepted from a request.
+  const bound = structuredClone(receipt);
+  let startup, retryAt = 0;
+
+  return async function handle(request, context) {
+    let url, approval;
+    try {
+      url = new URL(request.url);
+      approval = checkInvocation(bound, env, context, url.origin);
+    } catch {
+      return reply(503, { code: 'SYNTHETIC_DEPLOYMENT_NOT_APPROVED' });
+    }
+
+    const route = modules.find(name => url.pathname === '/api/' + name);
+    const publicName = publicNames.find(name => url.pathname === prefix + name);
+    if (!route && !publicName) return reply(404, { code: 'SERVICE_ROUTE_REJECTED' });
+    if (publicName && request.method !== 'GET') return reply(410, { code: 'LEGACY_WRITES_FROZEN' });
+    if (!['GET', 'POST'].includes(request.method)) return reply(405, { code: 'METHOD_NOT_ALLOWED' });
+    const origin = request.headers.get('origin');
+    if (request.headers.get('sec-fetch-site') === 'cross-site' ||
+        (origin && origin !== approval.origin) || (request.method === 'POST' && origin !== approval.origin)) {
+      return reply(403, { code: 'ORIGIN_REJECTED' });
+    }
+    if (url.search.length > 2048 || new Set(url.searchParams.keys()).size !== url.searchParams.size) {
+      return reply(400, { code: 'INVALID_QUERY' });
+    }
+    if (Number(request.headers.get('content-length')) > 65536) return reply(413, { code: 'BODY_REJECTED' });
+
+    try {
+      const secrets = readCredentials(env);
+      if (!startup) {
+        if (Date.now() < retryAt) return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
+        const trustedEnv = { ...env, NETLIFY: 'true', CONTEXT: 'production', COMMIT_REF: approval.commit };
+        startup = createCloudService({
+          approval: { ...approval, port: 5432 }, env: trustedEnv, secrets,
+          verifyDeployment: (client, role) => verifySchema(client, approval, role),
+        }).catch(() => {
+          startup = undefined;
+          retryAt = Date.now() + 2000;
+          throw Error('SYNTHETIC_SERVICE_UNAVAILABLE');
+        });
+      }
+      const service = await startup;
+      checkInvocation(bound, env, context, url.origin);
+      if (publicName) {
+        const publicHandlers = Object.fromEntries(modules.map(name => ['/api/' + name, event => service({
+          ...event, rawUrl: approval.origin + prefix + 'jinxi-service/' + name, path: prefix + 'jinxi-service/' + name,
+        }, context)]));
+        return reply(200, await publicContract(publicName, Object.fromEntries(url.searchParams), publicHandlers));
+      }
+
+      url.pathname = prefix + 'jinxi-service/' + route;
+      return await netlifyFetch(service)(new Request(url, request), context);
+    } catch {
+      return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
+    }
+  };
+}
+
+module.exports = { createEntry };

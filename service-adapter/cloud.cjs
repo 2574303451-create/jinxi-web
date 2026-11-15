@@ -1,7 +1,14 @@
-// Preparation only: deliberately outside netlify/functions and never imported by app/.
+// Server-only bridge, outside the original site's Functions and app trees.
 const crypto=require('node:crypto');
 const {approve,roles}=require('./resource.cjs'),{handlers}=require('./handlers.cjs');
 const disabled=require('./approval.disabled.json');
+const verifiers={
+ member:require('../member-local/identity.cjs').verifyMember,
+ community:require('../community-local/proof.cjs').verify,
+ attendance:require('../attendance-local/proof.cjs').verify,
+ points:require('../points-local/proof.cjs').verify,
+ operations:require('../operations-local/proof.cjs').verify,
+};
 const response=(status,code)=>({statusCode:status,headers:{'Content-Type':'application/json','Cache-Control':'no-store, private','Pragma':'no-cache','X-Content-Type-Options':'nosniff','Vary':'Cookie, Origin'},body:JSON.stringify({code})});
 function router({services,origin,clientAddress}){return async (event,context)=>{
  try{
@@ -19,7 +26,7 @@ function router({services,origin,clientAddress}){return async (event,context)=>{
   return {...result,headers:safe};
  }catch{return response(503,'SERVICE_UNAVAILABLE');}
 };}
-async function createCloudService({approval=disabled,env=process.env,secrets,Client=require('pg').Client}={}){
+async function createCloudService({approval=disabled,env=process.env,secrets,verifyDeployment,Client=require('pg').Client}={}){
  if(approval?.enabled!==true)throw Error('APPROVED_TEST_RESOURCE_REQUIRED');
  approval=Object.freeze(structuredClone(approval));env=Object.freeze({...env});secrets=Object.freeze({...secrets});
  const settings=approve(approval,env,secrets),connections={};
@@ -28,9 +35,26 @@ async function createCloudService({approval=disabled,env=process.env,secrets,Cli
   const c=new Client({host:settings.host,port:settings.port,database:settings.database,user:roles[name],password:secrets[name],ssl:{rejectUnauthorized:true},connectionTimeoutMillis:3000,application_name:'jinxi-approved-test-'+name});
   try{await c.connect();return c;}catch{await c.end().catch(()=>{});throw Error('APPROVED_TEST_CONNECTION_FAILED');}
  };
- const services=handlers({settings,connections,env,clientAddress:event=>event.localClientAddress});
- const verifiers={member:require('../member-local/identity.cjs').verifyMember,...Object.fromEntries(['community','attendance','points','operations'].map(name=>[name,require('../'+name+'-local/proof.cjs').verify]))};
- for(const name of Object.keys(roles)){const c=await connections[name]();try{await c.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');await verifiers[name](c,settings);await c.query('COMMIT');}finally{await c.query('ROLLBACK').catch(()=>{});await c.end().catch(()=>{});}}
+ async function checkConnection(name,checkRole){
+  const c=await connections[name]();
+  try{
+   await c.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+   if(checkRole)await verifiers[name](c,settings);
+   if(verifyDeployment)await verifyDeployment(c,name);
+   await c.query('COMMIT');
+   return c;
+  }catch(error){
+   await c.query('ROLLBACK').catch(()=>{});
+   await c.end().catch(()=>{});
+   throw error;
+  }
+ }
+ for(const name of Object.keys(roles)){
+  const c=await checkConnection(name,true);
+  await c.end();
+ }
+ const serviceConnections=verifyDeployment?Object.fromEntries(Object.keys(roles).map(name=>[name,()=>checkConnection(name,false)])):connections;
+ const services=handlers({settings,connections:serviceConnections,env,clientAddress:event=>event.localClientAddress});
  // Netlify Fetch API context.ip, not a client-controlled forwarding header.
  return router({services,origin:settings.origin,clientAddress:context=>{
   const ip=context?.ip;if(context?.site?.id!==approval.siteId||new URL(context.site.url).origin!==approval.origin||context?.deploy?.context!=='production'||!require('node:net').isIP(ip||''))throw Error('TRUSTED_CLIENT_ADDRESS_REQUIRED');return ip;

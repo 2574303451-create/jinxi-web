@@ -1,0 +1,412 @@
+{
+  "source": "d67e442e80c9d0eb3dc60b55b034690e489392cf",
+  "base": "f7aa0fac2c117f122d98320255230ce8fec546f7",
+  "originalReviewed": "a282e8003ce265388b7c25960d88a0c7026c9692",
+  "originalCandidate": "a8018a7256c61804dac21bed7619d4bca6cbfc33",
+  "branch": "codex/jinxi-phase4-synthetic-cloud-clean-local",
+  "worktree": "E:/Recovery/.jinxi-research/phase4-synthetic-cloud-clean/worktree",
+  "commands": [
+    {
+      "name": "database",
+      "batch": "rehearsal",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/synthetic-cloud-database.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T09:45:07.6300964Z",
+      "finishedUtc": "2026-11-15T09:45:17.2259573Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/database.log",
+      "logSha256": "5ed2c3d227ab9c8d5df3fd58b36138af5068fa88c9e5ff58efe409f9e3647015"
+    },
+    {
+      "name": "https",
+      "batch": "rehearsal",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/synthetic-cloud-https.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T09:45:17.2606044Z",
+      "finishedUtc": "2026-11-15T09:45:57.4869693Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 12,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/https.log",
+      "logSha256": "56aa5cf9594db856ccd9df42c73b5a1a7c986bb29b38590d68e207ec48cc2a48"
+    },
+    {
+      "name": "browser",
+      "batch": "rehearsal",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/synthetic-cloud-browser.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe' --playwright-module 'E:/Recovery/.jinxi-research/identity-review-tools/browser/node_modules/playwright' --edge 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'",
+      "startedUtc": "2026-11-15T09:45:57.4900128Z",
+      "finishedUtc": "2026-11-15T09:46:52.1492187Z",
+      "exitCode": 0,
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/browser.log",
+      "logSha256": "2bab95b27251a1c9f258f4b602f568258ca9240f85b4bf002d7612c34a4cd6a4"
+    },
+    {
+      "name": "build",
+      "batch": "rehearsal",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' scripts/run-clean.cjs run build",
+      "startedUtc": "2026-11-15T09:46:52.1509789Z",
+      "finishedUtc": "2026-11-15T09:47:11.0445803Z",
+      "exitCode": 0,
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/build.log",
+      "logSha256": "d0c216d203fbe5ccc64a9dbadddffe39db4c021f057cc79a139f14ea8ad31e9b"
+    },
+    {
+      "name": "export",
+      "batch": "rehearsal",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' --test tests/adaptation-export.test.cjs tests/export-csp.test.cjs",
+      "startedUtc": "2026-11-15T09:47:11.0461466Z",
+      "finishedUtc": "2026-11-15T09:47:11.2734607Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 2,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/export.log",
+      "logSha256": "dd53b89d00d5242b562ff7c6b4abcfc60532536bb27048f9434e4528c7f16690"
+    },
+    {
+      "name": "lint",
+      "batch": "engineering",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' scripts/run-clean.cjs run lint",
+      "startedUtc": "2026-11-15T09:45:07.5936267Z",
+      "finishedUtc": "2026-11-15T09:45:10.2080687Z",
+      "exitCode": 0,
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/lint.log",
+      "logSha256": "5dbb482c9d4946b826a080ed199a4bc463bf4c41e4561828cb5d07969f83af91"
+    },
+    {
+      "name": "types",
+      "batch": "engineering",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' scripts/run-clean.cjs run typecheck",
+      "startedUtc": "2026-11-15T09:45:10.2363091Z",
+      "finishedUtc": "2026-11-15T09:45:14.4307291Z",
+      "exitCode": 0,
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/types.log",
+      "logSha256": "9907a11dae246f4ed08450ae4b0fba3cc3c727f0a638f8e8d9704788a68b5def"
+    },
+    {
+      "name": "api-security",
+      "batch": "engineering",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' scripts/run-clean.cjs test",
+      "startedUtc": "2026-11-15T09:45:14.4335587Z",
+      "finishedUtc": "2026-11-15T09:45:17.5830895Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 14,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        {
+          "tests": 138,
+          "pass": 138,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/api-security.log",
+      "logSha256": "5208af8d3414f4c4151c615ad38dc7cf0bb9b87cbd8175defd29fbfe54eadf6c"
+    },
+    {
+      "name": "unit",
+      "batch": "engineering",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' --test tests/adaptation-policy.test.cjs tests/adaptation-session.test.cjs tests/history-compat.test.cjs tests/integration-local-boundary.test.cjs tests/integration-local-session.test.cjs tests/synthetic-cloud-boundary.test.cjs artifacts/b2-a-8/video-demo/policy.test.cjs",
+      "startedUtc": "2026-11-15T09:45:17.5852767Z",
+      "finishedUtc": "2026-11-15T09:45:18.5985581Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 65,
+          "pass": 65,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/unit.log",
+      "logSha256": "d997ea59458b6c34caf8b7ab969f6efb9780bd27f3bf1dc31fe1f425466655cd"
+    },
+    {
+      "name": "five-business-https",
+      "batch": "retained-regression",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/integration-local-https.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T09:45:07.6558138Z",
+      "finishedUtc": "2026-11-15T09:46:20.3332364Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 16,
+          "pass": 16,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/five-business-https.log",
+      "logSha256": "6a4e8fc70dc01442ba929e829f3b6e6ec8dcd839ea5ec8f4e5b57d3db9bc2201"
+    },
+    {
+      "name": "recovery-pg",
+      "batch": "retained-regression",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/adaptation-postgres.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T09:46:20.4115631Z",
+      "finishedUtc": "2026-11-15T09:47:19.0459309Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 12,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/recovery-pg.log",
+      "logSha256": "aca6dfb8164ab2f234a0d0f2d0908ee3725eaab0a2f218f6fca9442157708489"
+    },
+    {
+      "name": "readonly-pg",
+      "batch": "retained-regression",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' scripts/test-disposable-postgres.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin'",
+      "startedUtc": "2026-11-15T09:47:19.0485537Z",
+      "finishedUtc": "2026-11-15T09:48:22.5742912Z",
+      "exitCode": 0,
+      "tests": [
+        {
+          "tests": 46,
+          "pass": 46,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-d67e442/readonly-pg.log",
+      "logSha256": "04de2b50ce9e05fadb295dacf38d9698b84fb40a08fecae37ca780f1076bb98e"
+    }
+  ],
+  "earlierFailures": [
+    {
+      "name": "database",
+      "source": "4cbe148037d882f677ca23a30594061c88d037c6",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/synthetic-cloud-database.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T08:20:44.199554Z",
+      "finishedUtc": "2026-11-15T09:39:41.7166592Z",
+      "exitCode": 1,
+      "tests": [
+        {
+          "tests": 7,
+          "pass": 6,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "symptoms": "Six child assertions passed and the pg_ctl stop failed in teardown. The verified isolated instance later stopped. Exact command reran to 7/7.",
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-4cbe148/database.log",
+      "logSha256": "b662fc38ae55b85b71bb8848bf488772908a6806ae93e25441ec0e4ff4e8ede5"
+    },
+    {
+      "name": "https",
+      "source": "4cbe148037d882f677ca23a30594061c88d037c6",
+      "command": "& 'E:/Recovery/.jinxi-research/b2-a-5-tools/node-v24.22.2-win-x64/node.exe' tests/synthetic-cloud-https.test.cjs --pg-bin 'E:/Recovery/.jinxi-research/identity-review-tools/postgresql-17.11/pgsql/bin' --openssl 'D:/Program Files/Git/usr/bin/openssl.exe'",
+      "startedUtc": "2026-11-15T09:42:11.3371966Z",
+      "finishedUtc": "2026-11-15T09:42:52.2081874Z",
+      "exitCode": 1,
+      "tests": [
+        {
+          "tests": 12,
+          "pass": 10,
+          "fail": 2,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      ],
+      "symptoms": "Fictional contact negative control did not throw. Source inspection identified a backspace byte instead of the JavaScript word boundary. Fixed and reran to 12/12.",
+      "log": "artifacts/phase4-synthetic-cloud/local/20261115-4cbe148-retry/https.log",
+      "logSha256": "c74a1869b0d076fccd40aca5903f7dbeb0b142f0b9a4bcc2e81f381ba6fa3899"
+    }
+  ],
+  "browser": {
+    "commit": "d67e442e80c9d0eb3dc60b55b034690e489392cf",
+    "passed": true,
+    "scenarios": [
+      "static-page-uses-one-secure-member-session",
+      "one-attendance-event-settled-into-one-point",
+      "lost-committed-debit-recovered-after-full-refresh-with-the-original-request",
+      "one-linked-refund-and-no-private-order-after-member-switch",
+      "shared-guide-components-show-independently-approved-content"
+    ],
+    "widths": [
+      1440,
+      1024,
+      768,
+      390,
+      320
+    ],
+    "pageErrors": [],
+    "cspErrors": [],
+    "stage": "complete"
+  },
+  "functionPackage": {
+    "runtimeApi": 2,
+    "routes": [
+      "/.netlify/functions/announcements",
+      "/.netlify/functions/guide-video-stats",
+      "/.netlify/functions/messages",
+      "/.netlify/functions/sponsorship",
+      "/.netlify/functions/strategies",
+      "/api/attendance",
+      "/api/community",
+      "/api/member",
+      "/api/operations",
+      "/api/points"
+    ],
+    "bundler": "nft",
+    "zipBytes": 564338
+  },
+  "staticArtifactScan": {
+    "publicTextFiles": 48,
+    "foundPrivateMarkers": 0
+  },
+  "sourceHistoryInspection": {
+    "commits": [
+      "4cbe148037d882f677ca23a30594061c88d037c6",
+      "d67e442e80c9d0eb3dc60b55b034690e489392cf"
+    ],
+    "gitBlobVersions": 32,
+    "changedPaths": 32,
+    "binary": 0,
+    "lfsPointers": 0,
+    "knownMarkerMatches": 0
+  },
+  "generatedOutputInspection": {
+    "archives": 2,
+    "archiveMembers": 10,
+    "knownMarkerMatchesInArchives": 0,
+    "syntheticOutputsAndEvidence": {
+      "scannedFiles": 110,
+      "binary": 10,
+      "knownMarkerMatches": 0
+    },
+    "syntheticCache": {
+      "scannedFiles": 127,
+      "binary": 12,
+      "knownMarkerMatches": 0
+    },
+    "formalBaselineGeneratedMatchPaths": [
+      {
+        "path": "out/index.html",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": 31
+          }
+        ]
+      },
+      {
+        "path": "out/_next/static/chunks/app/page-7d45dc3fc55262df.js",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": 6
+          },
+          {
+            "type": "legacy-contact",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "path": ".next/static/chunks/app/page-7d45dc3fc55262df.js",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": 6
+          },
+          {
+            "type": "legacy-contact",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "path": ".next/server/app/index.html",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": 31
+          }
+        ]
+      },
+      {
+        "path": ".next/server/app/page.js",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": 1
+          },
+          {
+            "type": "legacy-contact",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "path": ".next/cache/webpack/client-production/0.pack",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": null
+          },
+          {
+            "type": "legacy-contact",
+            "line": null
+          }
+        ]
+      },
+      {
+        "path": ".next/cache/webpack/server-production/0.pack",
+        "findings": [
+          {
+            "type": "legacy-member-display",
+            "line": null
+          },
+          {
+            "type": "legacy-contact",
+            "line": null
+          }
+        ]
+      }
+    ],
+    "formalBaselineOutputMovedOutsideCandidate": true,
+    "imagePixelOcrPerformed": false,
+    "fetchedLfsPayloads": false
+  },
+  "postTestCleanup": {
+    "activeTestPortListeners": 0,
+    "temporaryBrowserCaStillTrusted": false
+  },
+  "localOnly": true
+}

@@ -17,7 +17,12 @@ const types = {
 
 function controlledDirectory(folder, allowed = []) {
   fs.mkdirSync(folder, { recursive: true });
-  if (fs.lstatSync(folder).isSymbolicLink() || fs.readdirSync(folder).some(name => !allowed.includes(name))) {
+  const expectedFile = name => {
+    if (!allowed.includes(name)) return false;
+    const stat = fs.lstatSync(path.join(folder, name));
+    return stat.isFile() && stat.nlink === 1;
+  };
+  if (!fs.lstatSync(folder).isDirectory() || !fs.readdirSync(folder).every(expectedFile)) {
     throw Error('SYNTHETIC_DEPLOY_DIRECTORY_REJECTED');
   }
 }
@@ -55,4 +60,4 @@ function makeEdge(receipt, staticExport, publish, edgeFunctions) {
   fs.writeFileSync(path.join(edgeFunctions, 'access.js'), built);
 }
 
-module.exports = { makeEdge };
+module.exports = { controlledDirectory, makeEdge };

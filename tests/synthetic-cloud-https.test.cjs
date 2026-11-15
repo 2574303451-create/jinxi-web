@@ -84,7 +84,11 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         const countSessions = () => admin('SELECT count(*)::int AS n FROM b2_lab.member_sessions_v2');
         const before = await counters(), beforeSessions = await countSessions();
         const body = {op:'login',account:db.accounts.normal.account,password:db.accounts.normal.password};
-        for (const route of ['/','/guides','/logo.png','/fixtures/operations-motion.mp4','/404.html',
+        const home = await request('/');
+        const scriptPath = home.raw.match(/src="(\/_next\/static\/[^"]+\.js)"/)?.[1];
+        assert(scriptPath, 'a real JavaScript resource from the packaged home page');
+        assert.equal((await request(scriptPath)).status,200);
+        for (const route of ['/',scriptPath,'/guides','/logo.png','/fixtures/operations-motion.mp4','/404.html',
           '/unrecognized','/.netlify/functions/jinxi-service','/.netlify/functions/messages','/api/member']) {
           const denied = await visitor(route);
           assert.equal(denied.status,401);

@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
+import fs from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { test } from 'node:test';
 import { accessDigestKey, accessUser } from '../synthetic-cloud/access.mjs';
 import { createAccessEdge } from '../synthetic-cloud/edge-access.mjs';
+import { makeEdge } from '../synthetic-cloud/build-edge.cjs';
 
 function fixture() {
   const binding = {
@@ -37,6 +41,29 @@ function uncacheable(response) {
   assert.equal(response.headers.get('cdn-cache-control'), 'no-store');
   assert.match(response.headers.get('Vary'), /Authorization/i);
 }
+
+test('the Edge build keeps the publication directory empty and rejects linked output', t => {
+  const fixtureRoot = fs.mkdtempSync(path.join(tmpdir(), 'jinxi-edge-output-'));
+  t.after(() => fs.rmSync(fixtureRoot, { recursive: true, force: true }));
+  const source = path.join(fixtureRoot, 'export');
+  const publish = path.join(fixtureRoot, 'public');
+  const functions = path.join(fixtureRoot, 'edge-functions');
+  fs.mkdirSync(source);
+  fs.writeFileSync(path.join(source, 'index.html'), 'synthetic page');
+  fs.writeFileSync(path.join(source, 'csp-manifest.json'), JSON.stringify({ policy: "default-src 'self';" }));
+  const { binding } = fixture();
+  const receipt = { approval: binding, deployId: binding.deployId };
+  makeEdge(receipt, source, publish, functions);
+  assert.deepEqual(fs.readdirSync(publish), []);
+  const unrelated = path.join(fixtureRoot, 'unrelated.txt');
+  const output = path.join(functions, 'access.js');
+  fs.writeFileSync(unrelated, 'file outside the Edge directory');
+  fs.unlinkSync(output);
+  fs.linkSync(unrelated, output);
+  assert.throws(() => makeEdge(receipt, source, publish, functions), /SYNTHETIC_DEPLOY_DIRECTORY_REJECTED/);
+  assert.equal(fs.readFileSync(unrelated, 'utf8'), 'file outside the Edge directory');
+  assert.deepEqual(fs.readdirSync(publish), []);
+});
 
 test('all paths and methods require the same visitor proof before responding or forwarding', async () => {
   const x = fixture();

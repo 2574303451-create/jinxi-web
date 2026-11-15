@@ -6,7 +6,7 @@ const { cleanEnv } = require('../scripts/run-clean.cjs');
 const { generate } = require('../scripts/generate-export-csp.cjs');
 const { buildReceipt, credentialNames } = require('./binding.cjs');
 const { accessDigestKey } = require('./access.mjs');
-const { makeEdge } = require('./build-edge.cjs');
+const { controlledDirectory, makeEdge } = require('./build-edge.cjs');
 
 const root = path.resolve(__dirname, '..');
 const site = path.join(__dirname, 'site');
@@ -43,10 +43,7 @@ function inspectExport(approval, env) {
 }
 
 async function makeFunction(receipt) {
-  fs.mkdirSync(functions, { recursive: true });
-  if (fs.readdirSync(functions).some(name => name !== 'jinxi-service.mjs')) {
-    throw Error('SYNTHETIC_FUNCTION_DIRECTORY_REJECTED');
-  }
+  controlledDirectory(functions, ['jinxi-service.mjs']);
   const template = fs.readFileSync(path.join(__dirname, 'function', 'jinxi-service.mjs'), 'utf8');
   const marker = 'const receipt = null; // JINXI_BUILD_RECEIPT';
   if (!template.includes(marker)) throw Error('SYNTHETIC_FUNCTION_SOURCE_REJECTED');
@@ -105,9 +102,12 @@ if (require.main === module) {
       // Netlify's ignore command uses 0 to skip and 1 to proceed.
       process.exitCode = 1;
     } else if (process.argv.length === 2) {
+      fs.mkdirSync(generated, { recursive: true });
+      if (!fs.lstatSync(generated).isDirectory()) throw Error('SYNTHETIC_DEPLOY_DIRECTORY_REJECTED');
       exportSite(receipt);
       makeEdge(receipt, staticExport, publish, edgeFunctions);
       await makeFunction(receipt);
+      controlledDirectory(publish);
     } else throw Error('SYNTHETIC_BUILD_ARGUMENT_REJECTED');
   })().catch(() => {
     console.error('Synthetic TEST build refused or failed. Verify the approved source, build identity and configuration.');

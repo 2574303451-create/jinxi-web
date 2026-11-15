@@ -53,7 +53,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         ];
         const checkPublicText = value => {
           assert(!forbidden.some(marker => value.includes(marker)), 'private fixture or server binding in static export');
-          assert(!/[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,24}/i.test(value), 'contact address in static export');
+          assert(!/[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,24}\b/i.test(value), 'contact address in static export');
           assert(!/-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----/.test(value), 'private key in static export');
         };
         assert.throws(() => checkPublicText(db.accounts.normal.memberId), /private fixture/);

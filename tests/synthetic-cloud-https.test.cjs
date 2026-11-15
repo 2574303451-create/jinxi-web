@@ -14,7 +14,7 @@ const { freezeRoles } = require('../synthetic-cloud/database/initialize.cjs');
 test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t => {
   const app = await startRehearsal(toolsFromArgs(process.argv.slice(2)));
   const { db, server, bundle } = app;
-  const api = httpClient(app), { admin, request, login, mutate } = api;
+  const { admin, request, login, mutate } = httpClient(app,{Authorization:bundle.authorization});
   const counters = async () => (await admin(`
     SELECT (SELECT count(*)::int FROM community_lab.items) AS items,
            (SELECT count(*)::int FROM attendance_lab.records) AS facts,
@@ -47,6 +47,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         const forbidden = [
           bundle.approval.siteId, bundle.approval.host, bundle.approval.fingerprint, bundle.approval.schemaFingerprint,
           ...Object.values(bundle.envAtRuntime).filter(value => /^[a-f0-9]{64}$/.test(value)),
+          bundle.accessPassword, bundle.authorization,
           ...Object.values(db.accounts).flatMap(({ account, memberId, nickname, password }) =>
             [account, memberId, nickname, password]),
           'jinxi_synthetic_write_v1','JINXI_SERVICE_APPROVAL','127.0.0.1:3069','ADMIN_PASSWORD',
@@ -58,14 +59,15 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         };
         assert.throws(() => checkPublicText(db.accounts.normal.memberId), /private fixture/);
         assert.throws(() => checkPublicText('synthetic-contact@fixture.invalid'), /contact address/);
-        const { publish } = require('../synthetic-cloud/build.cjs');
-        const entries = fs.readdirSync(publish,{recursive:true,withFileTypes:true});
+        const { staticExport, publish } = require('../synthetic-cloud/build.cjs');
+        assert.deepEqual(fs.readdirSync(publish),[]);
+        const entries = fs.readdirSync(staticExport,{recursive:true,withFileTypes:true});
         assert(entries.every(entry => entry.isFile() || entry.isDirectory()), 'non-file entry in static export');
         const exportedFiles = entries.filter(entry => entry.isFile())
-          .map(entry => path.relative(publish,path.join(entry.parentPath,entry.name)).split(path.sep).join('/'));
+          .map(entry => path.relative(staticExport,path.join(entry.parentPath,entry.name)).split(path.sep).join('/'));
         const publicFiles = exportedFiles.filter(file => /\.(js|html|json|txt|css|map|rsc)$/.test(file));
         assert(publicFiles.length > 10);
-        for (const file of publicFiles) checkPublicText(fs.readFileSync(path.join(publish,file),'utf8'));
+        for (const file of publicFiles) checkPublicText(fs.readFileSync(path.join(staticExport,file),'utf8'));
         const approvedMedia = new Set([
           'fixtures/community-cover.jpg', 'fixtures/community-demo.mp4', 'fixtures/operations-cover.svg',
           'fixtures/operations-motion.mp4', 'fixtures/placeholder-user.jpg',
@@ -75,6 +77,38 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert(media.length === approvedMedia.size && media.every(file => approvedMedia.has(file)),
           'media outside the synthetic export allowlist');
         fs.writeFileSync(path.join(evidence,'last-artifact-scan.json'),JSON.stringify({ publicTextFiles:publicFiles.length,foundPrivateMarkers:0 },null,2)+'\n');
+      });
+
+      await t.test('anonymous visitor and direct API attempts stop before opening member sessions', async () => {
+        const visitor = httpClient(app).request;
+        const countSessions = () => admin('SELECT count(*)::int AS n FROM b2_lab.member_sessions_v2');
+        const before = await counters(), beforeSessions = await countSessions();
+        const body = {op:'login',account:db.accounts.normal.account,password:db.accounts.normal.password};
+        for (const route of ['/','/guides','/logo.png','/fixtures/operations-motion.mp4','/404.html',
+          '/unrecognized','/.netlify/functions/jinxi-service','/.netlify/functions/messages','/api/member']) {
+          const denied = await visitor(route);
+          assert.equal(denied.status,401);
+          assert.equal(denied.headers['netlify-cdn-cache-control'],'no-store');
+          assert.equal(denied.headers['location'],undefined);
+          assert.equal(denied.raw,'TEST_ACCESS_REQUIRED');
+        }
+        assert.equal((await visitor('/api/member',{body})).status,401);
+        for (const route of ['/api/member','/.netlify/functions/jinxi-service','/.netlify/functions/messages']) {
+          const denied = await bundle.entry(new Request(bundle.approval.origin+route,{
+            method:'POST',headers:{ Origin:bundle.approval.origin,'Content-Type':'application/json' },
+            body:JSON.stringify(body),
+          }),bundle.context);
+          assert.equal(denied.status,401);
+          assert.equal(denied.headers.get('set-cookie'),null);
+        }
+        assert.equal((await request('/guides')).status,308);
+        assert.equal((await request('/guides')).headers.location,'/guides/');
+        const video = await request('/fixtures/operations-motion.mp4',{headers:{Range:'bytes=0-15'}});
+        assert.equal(video.status,206);
+        assert.equal(video.bytes,16);
+        assert.deepEqual(await counters(),before);
+        assert.deepEqual((await countSessions()).rows,beforeSessions.rows);
+        assert.equal((await visitor('/guides/')).status,401);
       });
 
       await t.test('denied Context, credentials and DB proofs fail closed before login writes', async () => {
@@ -90,7 +124,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
           server.setContext(context);
           const denied = await request('/api/member',{body:attempt,headers:{'x-nf-deploy-context':'production','x-jinxi-environment':'synthetic-test'}});
           assert.equal(denied.status,503);
-          assert.equal(denied.body.code,'SYNTHETIC_DEPLOYMENT_NOT_APPROVED');
+          assert.equal(denied.raw,'TEST_ACCESS_UNAVAILABLE');
         }
         server.setContext(bundle.context);
         for (const [approvalChange,envChange] of [
@@ -102,7 +136,8 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
           const approval = {...bundle.approval,...approvalChange}, env = {...bundle.envAtRuntime,...envChange};
           const entry = createEntry({approval,deployId:bundle.deployId},env);
           const r = await withEnv({},()=>entry(new Request(approval.origin+'/api/member',{
-            method:'POST',headers:{Origin:approval.origin,'Content-Type':'application/json'},body:JSON.stringify(attempt),
+            method:'POST',headers:{Origin:approval.origin,'Content-Type':'application/json',Authorization:bundle.authorization},
+            body:JSON.stringify(attempt),
           }),bundle.context));
           assert.equal(r.status,503);
           assert.equal(r.headers.get('set-cookie'),null);

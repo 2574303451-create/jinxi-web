@@ -3,13 +3,14 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { randomBytes } = require('node:crypto');
+const { createHash, randomBytes } = require('node:crypto');
 const { cleanEnv } = require('../scripts/run-clean.cjs');
 const { PROTECTED_SITE_ID } = require('../netlify/functions/_shared/test-resource');
 const previousTest = require('../netlify/functions/_shared/test-resource-binding.json');
 const { makeApproval, buildEnv, contextFor } = require('./synthetic-cloud-support.cjs');
 const { buildReceipt, checkInvocation, credentialNames, DATABASE } = require('../synthetic-cloud/binding.cjs');
 const { createEntry } = require('../synthetic-cloud/entry.cjs');
+const { accessDigestKey, accessUser } = require('../synthetic-cloud/access.mjs');
 const { administer, verifyAdminApproval } = require('../synthetic-cloud/database/admin.cjs');
 
 function configuration() {
@@ -18,8 +19,11 @@ function configuration() {
     endpointId:'ep-synthetic-rehearsal',host:'ep-synthetic-rehearsal.us-east-2.aws.neon.tech',
     database:DATABASE,environmentId:'badb6a4a-6938-4b27-9e76-bfd78895133e',fingerprint:'3'.repeat(64),serverAddresses:['127.0.0.1'] } }, '4'.repeat(64), commit);
   const id = 'b'.repeat(24), env = buildEnv(approval,id), context = contextFor(approval,id);
-  const runtime = { SITE_ID:approval.siteId, URL:approval.origin, JINXI_SERVICE_APPROVAL:commit };
-  return { commit, approval, id, env, context, runtime };
+  const password = randomBytes(32).toString('hex');
+  const authorization = 'Basic ' + Buffer.from(accessUser + ':' + password).toString('base64');
+  const runtime = { SITE_ID:approval.siteId, URL:approval.origin, JINXI_SERVICE_APPROVAL:commit,
+    [accessDigestKey]:createHash('sha256').update(password).digest('hex') };
+  return { commit, approval, id, env, context, runtime, authorization };
 }
 
 test('only the exact fresh checkout and trusted build metadata can produce a receipt', () => {
@@ -70,7 +74,9 @@ test('Runtime matches the published deploy, origin, site, team and approved SHA 
 
 test('unapproved requests, unsupported paths, legacy writes and missing keys are rejected with no private output', async () => {
   const x = configuration(), entry = createEntry(buildReceipt(x.env,x.commit,true),x.runtime);
-  const call = (url,opts,ctx=x.context) => entry(new Request(x.approval.origin+url,opts),ctx);
+  const call = (url,opts,ctx=x.context) => entry(new Request(x.approval.origin+url,{
+    ...opts, headers:{ Authorization:x.authorization,...opts?.headers },
+  }),ctx);
   const unavailable = await call('/api/member');
   assert.equal(unavailable.status,503);
   assert.equal((await unavailable.json()).code,'SYNTHETIC_SERVICE_UNAVAILABLE');
@@ -88,7 +94,9 @@ test('unapproved requests, unsupported paths, legacy writes and missing keys are
   assert.equal((await call('/api/member',{ ...options, headers:{ ...options.headers,'Content-Length':'65537' } })).status,413);
   const invalid = { ...x.runtime, ...Object.fromEntries(Object.values(credentialNames).map(key => [key,randomBytes(32).toString('hex')])) };
   invalid[credentialNames.member] = 'invalid-private-value';
-  const result = await createEntry(buildReceipt(x.env,x.commit,true),invalid)(new Request(x.approval.origin+'/api/member'),x.context);
+  const result = await createEntry(buildReceipt(x.env,x.commit,true),invalid)(new Request(x.approval.origin+'/api/member',{
+    headers:{Authorization:x.authorization},
+  }),x.context);
   assert.equal(result.status,503);
   assert(!((await result.text()).includes(invalid[credentialNames.member])));
 });

@@ -1,10 +1,10 @@
 const https=require('node:https'),crypto=require('node:crypto'),assert=require('node:assert/strict');
-function httpClient(app){
+function httpClient(app,defaultHeaders={}){
  const origin=app.db.settings.origin;
  async function request(route,{body,session,headers={},method}={}){
   const raw=body===undefined?null:JSON.stringify(body);
   return new Promise((resolve,reject)=>{
-   const req=https.request(new URL(route,origin),{method:method||(raw?'POST':'GET'),ca:app.server.cert,rejectUnauthorized:true,headers:{...(raw?{Origin:origin,'Content-Type':'application/json','Content-Length':Buffer.byteLength(raw)}:{}),...(session?{Cookie:session.cookie,'X-CSRF-Token':session.csrf}:{}),...headers}},res=>{
+   const req=https.request(new URL(route,origin),{method:method||(raw?'POST':'GET'),ca:app.server.cert,rejectUnauthorized:true,headers:{...defaultHeaders,...(raw?{Origin:origin,'Content-Type':'application/json','Content-Length':Buffer.byteLength(raw)}:{}),...(session?{Cookie:session.cookie,'X-CSRF-Token':session.csrf}:{}),...headers}},res=>{
     const chunks=[];res.on('data',c=>chunks.push(c));res.on('end',()=>{const text=Buffer.concat(chunks).toString('utf8');let value;try{value=JSON.parse(text);}catch{value=null;}resolve({status:res.statusCode,body:value,headers:res.headers,bytes:Buffer.concat(chunks).length,raw:text});});
    });req.setTimeout(20000,()=>req.destroy(Error('LOCAL_TEST_TIMEOUT')));req.on('error',reject);if(raw)req.write(raw);req.end();
   });

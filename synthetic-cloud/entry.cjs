@@ -2,18 +2,14 @@ const { createCloudService, netlifyFetch } = require('../service-adapter/cloud.c
 const { publicContract } = require('../integration-local/public-contract.cjs');
 const { checkInvocation, readCredentials } = require('./binding.cjs');
 const { verifySchema } = require('./database/guard.cjs');
+const { accessDigestKey, accessError, authorizeAccess, privateHeaders, privateResponse } = require('./access.mjs');
 
 const prefix = '/.netlify/functions/';
 const modules = ['member', 'community', 'attendance', 'points', 'operations'];
 const publicNames = ['messages', 'strategies', 'guide-video-stats', 'announcements', 'sponsorship'];
-const publicHeaders = {
+const publicHeaders = privateHeaders({
   'Content-Type': 'application/json',
-  'Cache-Control': 'no-store, private',
-  Pragma: 'no-cache',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Robots-Tag': 'noindex, nofollow',
-  Vary: 'Cookie, Origin',
-};
+}, 'Cookie, Origin, Authorization');
 const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: publicHeaders });
 
 function createEntry(receipt, env = process.env) {
@@ -28,6 +24,13 @@ function createEntry(receipt, env = process.env) {
       approval = checkInvocation(bound, env, context, url.origin);
     } catch {
       return reply(503, { code: 'SYNTHETIC_DEPLOYMENT_NOT_APPROVED' });
+    }
+
+    try {
+      const refusal = await authorizeAccess(request, env[accessDigestKey]);
+      if (refusal) return refusal;
+    } catch {
+      return accessError(503, request.method === 'HEAD');
     }
 
     const route = modules.find(name => url.pathname === '/api/' + name);
@@ -69,7 +72,9 @@ function createEntry(receipt, env = process.env) {
       }
 
       url.pathname = prefix + 'jinxi-service/' + route;
-      return await netlifyFetch(service)(new Request(url, request), context);
+      const authorizedRequest = new Request(url, request);
+      authorizedRequest.headers.delete('Authorization');
+      return privateResponse(await netlifyFetch(service)(authorizedRequest, context));
     } catch {
       return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
     }

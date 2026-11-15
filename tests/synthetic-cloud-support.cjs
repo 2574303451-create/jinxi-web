@@ -13,7 +13,8 @@ const { cleanEnv } = require('../scripts/run-clean.cjs');
 const { fingerprint } = require('../netlify/functions/_shared/function-security');
 const { roles } = require('../service-adapter/resource.cjs');
 const { DATABASE, REVISION, resourceKeys, credentialNames } = require('../synthetic-cloud/binding.cjs');
-const { root, publish, functions } = require('../synthetic-cloud/build.cjs');
+const { root, publish, functions, edgeFunctions } = require('../synthetic-cloud/build.cjs');
+const { accessDigestKey, accessUser } = require('../synthetic-cloud/access.mjs');
 const { initialize, activateRoles } = require('../synthetic-cloud/database/initialize.cjs');
 const { seed } = require('../synthetic-cloud/database/seed.cjs');
 
@@ -167,7 +168,10 @@ async function withEnv(env, action) {
 async function buildAndBundle(database, schemaFingerprint, passwords) {
   const commit = run('git', ['rev-parse', 'HEAD']);
   const approval = makeApproval(database, schemaFingerprint, commit), deployId = crypto.randomBytes(12).toString('hex');
-  const env = buildEnv(approval, deployId);
+  const accessPassword = hex();
+  const authorization = 'Basic ' + Buffer.from(accessUser + ':' + accessPassword).toString('base64');
+  const accessDigest = crypto.createHash('sha256').update(accessPassword).digest('hex');
+  const env = { ...buildEnv(approval, deployId), [accessDigestKey]: accessDigest };
   const cli = path.dirname(require.resolve('netlify-cli/package.json'));
   const { resolveConfig } = await import(pathToFileURL(path.join(cli, 'node_modules/@netlify/config/lib/index.js')).href);
   const { config, configPath } = await withEnv(env, () => resolveConfig({
@@ -176,6 +180,7 @@ async function buildAndBundle(database, schemaFingerprint, passwords) {
   }));
   assert.equal(path.normalize(configPath), path.join(root, 'synthetic-cloud/netlify.toml'));
   assert.equal(path.normalize(config.build.publish), publish);
+  assert.equal(path.normalize(config.build.edge_functions), edgeFunctions);
   assert.equal(path.normalize(config.functionsDirectory), functions);
   assert.equal(config.build.command, 'node ./synthetic-cloud/build.cjs');
   assert.equal(config.build.ignore, 'node ./synthetic-cloud/build.cjs --check');
@@ -188,6 +193,14 @@ async function buildAndBundle(database, schemaFingerprint, passwords) {
   fs.mkdirSync(evidence, { recursive: true });
   fs.writeFileSync(path.join(evidence, 'last-static-build.log'), build.stdout + '\n' + build.stderr);
   if (build.status !== 0) throw Error('SYNTHETIC_BUILD_FAILED_SEE_LAST_STATIC_BUILD_LOG');
+  assert.deepEqual(fs.readdirSync(publish), []);
+  const edgeFile = path.join(edgeFunctions,'access.js');
+  const edgeSource = fs.readFileSync(edgeFile, 'utf8');
+  assert(![accessPassword,accessDigest,authorization].some(value => edgeSource.includes(value)));
+  const edgeURL = pathToFileURL(edgeFile);
+  edgeURL.searchParams.set('build', deployId);
+  const edge = await import(edgeURL.href);
+  assert.deepEqual(edge.config, { path:'/*', onError:'fail' });
 
   const pkg = path.join(cli, 'node_modules/@netlify/zip-it-and-ship-it');
   const { zipFunctions } = await import(pathToFileURL(path.join(pkg,'dist/main.js')).href);
@@ -203,7 +216,7 @@ async function buildAndBundle(database, schemaFingerprint, passwords) {
     '/.netlify/functions/sponsorship','/.netlify/functions/strategies','/api/attendance','/api/community',
     '/api/member','/api/operations','/api/points',
   ]);
-  const envAtRuntime = runtimeEnv(approval, passwords);
+  const envAtRuntime = { ...runtimeEnv(approval, passwords), [accessDigestKey]: accessDigest };
   const unpacked = path.join(database.folder,'bundle');
   fs.mkdirSync(unpacked);
   run('tar.exe',['-xf',zip[0].path,'-C',unpacked]);
@@ -213,58 +226,42 @@ async function buildAndBundle(database, schemaFingerprint, passwords) {
   const files = fs.readdirSync(unpacked, { recursive: true });
   const runtimeFile = files.find(file => path.basename(file) === 'jinxi-service.mjs');
   if (!runtimeFile) throw Error('BUNDLED_FETCH_ENTRY_MISSING');
-  const { default: entry } = await withEnv(envAtRuntime, () => import(pathToFileURL(path.join(unpacked, runtimeFile)).href));
-  return { entry, approval, deployId, envAtRuntime, context: contextFor(approval, deployId), packageRecord: record };
-}
-
-function staticFile(url) {
-  let pathname;
-  try { pathname = decodeURIComponent(url.pathname); } catch { return null; }
-  if (pathname.includes('\\') || pathname.includes('\0')) return null;
-  const direct = path.resolve(publish, '.' + pathname);
-  if (!direct.startsWith(publish + path.sep) && direct !== publish) return null;
-  const file = [direct, path.join(direct,'index.html')].find(candidate => fs.existsSync(candidate) && fs.statSync(candidate).isFile());
-  return file && !path.basename(file).startsWith('.') ? file : null;
+  const bundledPath = path.join(unpacked, runtimeFile);
+  assert(![accessPassword,accessDigest,authorization].some(value => fs.readFileSync(bundledPath,'utf8').includes(value)));
+  const { default: entry } = await withEnv(envAtRuntime, () => import(pathToFileURL(bundledPath).href));
+  return { entry, edge:edge.default, approval, deployId, envAtRuntime, authorization, accessPassword, accessUser,
+    context: contextFor(approval, deployId), packageRecord: record };
 }
 
 async function serve(database, bundle) {
-  const headers = Object.fromEntries(fs.readFileSync(path.join(publish,'_headers'),'utf8').split(/\r?\n/)
-    .filter(line => line.startsWith('  ') && !line.includes('Cache-Control'))
-    .map(line => { const idx=line.indexOf(':');return [line.slice(0,idx).trim(),line.slice(idx+1).trim()]; }));
-  const types = { '.html':'text/html; charset=utf-8','.js':'application/javascript','.css':'text/css','.txt':'text/plain',
-    '.json':'application/json','.woff2':'font/woff2','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.mp4':'video/mp4' };
+  const previousNetlify = globalThis.Netlify;
   let context = bundle.context;
   let localOrigin;
   const server = https.createServer({ key: database.key, cert: database.leaf }, async (req,res) => {
     try {
       if (!req.url.startsWith('/') || req.url.startsWith('//')) { res.writeHead(400).end(); return; }
       const url = new URL(req.url, origin);
-      if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/.netlify/')) {
-        const body = ['GET','HEAD'].includes(req.method) ? undefined : req;
-        const requestHeaders = new Headers(req.headers);
-        // Local TLS listener stands in for Netlify's canonical site. Rewrite
-        // only its own Origin. Foreign Origin and all body bytes stay intact.
-        if (requestHeaders.get('origin') === localOrigin) requestHeaders.set('origin', origin);
-        const request = new Request(url, { method:req.method, headers:requestHeaders, body, duplex:'half' });
-        const response = await bundle.entry(request, context);
-        const values = Object.fromEntries(response.headers);
-        if (response.headers.getSetCookie().length) values['set-cookie'] = response.headers.getSetCookie();
-        res.writeHead(response.status, values).end(Buffer.from(await response.arrayBuffer()));
-        return;
-      }
-      const file = staticFile(url);
-      if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405).end(); return; }
-      if (!file) { res.writeHead(404, { ...headers, 'Content-Type':types['.html'] }).end(fs.readFileSync(path.join(publish,'404.html'))); return; }
-      res.writeHead(200, { ...headers, 'Content-Type':types[path.extname(file)] || 'application/octet-stream' });
-      if (req.method === 'HEAD') res.end();
-      else fs.createReadStream(file).pipe(res);
+      const body = ['GET','HEAD'].includes(req.method) ? undefined : req;
+      const requestHeaders = new Headers(req.headers);
+      // The listener simulates Netlify routing; both handlers use the actual built source.
+      if (requestHeaders.get('origin') === localOrigin) requestHeaders.set('origin', origin);
+      const request = new Request(url, { method:req.method, headers:requestHeaders, body, duplex:'half' });
+      const requestContext = context;
+      const response = await bundle.edge(request, { ...requestContext, next: nextRequest => bundle.entry(nextRequest,requestContext) });
+      const values = Object.fromEntries(response.headers);
+      if (response.headers.getSetCookie().length) values['set-cookie'] = response.headers.getSetCookie();
+      res.writeHead(response.status, values).end(Buffer.from(await response.arrayBuffer()));
     } catch { if (!res.headersSent) res.writeHead(503).end('SYNTHETIC_REHEARSAL_UNAVAILABLE'); else res.destroy(); }
   });
   server.requestTimeout = 10000;
   await new Promise((resolve,reject) => { server.once('error',reject); server.listen(0,'127.0.0.1',resolve); });
   localOrigin = 'https://127.0.0.1:' + server.address().port;
+  globalThis.Netlify = { env:{ get:key => bundle.envAtRuntime[key] } };
   return { cert: database.cert, origin: localOrigin,
-    setContext: value => { context = value; }, close: () => new Promise(resolve => { server.closeAllConnections(); server.close(resolve); }) };
+    setContext: value => { context = value; }, close: () => new Promise(resolve => {
+      server.closeAllConnections();
+      server.close(() => { globalThis.Netlify = previousNetlify; resolve(); });
+    }) };
 }
 
 async function startRehearsal(tools) {

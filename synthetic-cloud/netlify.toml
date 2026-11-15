@@ -2,7 +2,8 @@
 [build]
   ignore = "node ./synthetic-cloud/build.cjs --check"
   command = "node ./synthetic-cloud/build.cjs"
-  publish = "synthetic-cloud/site/out"
+  publish = "synthetic-cloud/.generated/public"
+  edge_functions = "synthetic-cloud/.generated/edge-functions"
 
 [build.environment]
   NODE_VERSION = "24.22.2"
@@ -15,8 +16,3 @@
 
 [build.processing]
   skip_processing = true
-
-[[redirects]]
-  from = "/*"
-  to = "/404.html"
-  status = 404

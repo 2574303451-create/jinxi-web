@@ -5,11 +5,16 @@ const { createRequire } = require('node:module');
 const { cleanEnv } = require('../scripts/run-clean.cjs');
 const { generate } = require('../scripts/generate-export-csp.cjs');
 const { buildReceipt, credentialNames } = require('./binding.cjs');
+const { accessDigestKey } = require('./access.mjs');
+const { makeEdge } = require('./build-edge.cjs');
 
 const root = path.resolve(__dirname, '..');
 const site = path.join(__dirname, 'site');
-const publish = path.join(site, 'out');
-const functions = path.join(__dirname, '.generated', 'functions');
+const staticExport = path.join(site, 'out');
+const generated = path.join(__dirname, '.generated');
+const publish = path.join(generated, 'public');
+const edgeFunctions = path.join(generated, 'edge-functions');
+const functions = path.join(generated, 'functions');
 
 function git(args) {
   const result = spawnSync('git', args, { cwd: root, env: cleanEnv(), encoding: 'utf8', timeout: 10000, windowsHide: true });
@@ -19,7 +24,7 @@ function git(args) {
 
 function exportFile(relative, source, approval, secrets) {
   if (/\.(?:pem|key|crt|private|map)$/i.test(relative)) throw Error('SYNTHETIC_STATIC_FILE_REJECTED');
-  if (!/\.(?:js|html|json|txt|css)$/i.test(relative)) return;
+  if (!/\.(?:js|html|json|txt|css|rsc)$/i.test(relative)) return;
   const content = fs.readFileSync(source,'utf8');
   if (['jinxi_synthetic_write_v1', 'JINXI_SERVICE_APPROVAL', approval.host, approval.siteId, ...secrets]
       .some(marker => content.includes(marker)) || /-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(content)) {
@@ -28,10 +33,10 @@ function exportFile(relative, source, approval, secrets) {
 }
 
 function inspectExport(approval, env) {
-  const secrets = Object.values(credentialNames).map(name => env[name])
+  const secrets = [...Object.values(credentialNames), accessDigestKey].map(name => env[name])
     .filter(value => typeof value === 'string' && value.length >= 24);
-  for (const relative of fs.readdirSync(publish,{recursive:true})) {
-    const absolute = path.join(publish,relative), stat = fs.lstatSync(absolute);
+  for (const relative of fs.readdirSync(staticExport,{recursive:true})) {
+    const absolute = path.join(staticExport,relative), stat = fs.lstatSync(absolute);
     if (stat.isSymbolicLink()) throw Error('SYNTHETIC_STATIC_FILE_REJECTED');
     if (stat.isFile()) exportFile(relative,absolute,approval,secrets);
   }
@@ -68,7 +73,7 @@ function exportSite(receipt) {
     stdio: 'inherit', windowsHide: true, timeout: 180000,
   });
   if (result.status !== 0) throw Error('SYNTHETIC_STATIC_EXPORT_FAILED');
-  const fixtures = path.join(publish, 'fixtures');
+  const fixtures = path.join(staticExport, 'fixtures');
   fs.mkdirSync(fixtures, { recursive: true });
   for (const [name, source] of Object.entries({
     'community-cover.jpg': 'public/placeholder.jpg',
@@ -78,7 +83,7 @@ function exportSite(receipt) {
     'placeholder-user.jpg': 'public/placeholder-user.jpg',
   })) fs.copyFileSync(path.join(root, source), path.join(fixtures, name));
   for (const name of ['logo.png', 'placeholder.svg', 'placeholder.jpg', 'placeholder-user.jpg']) {
-    fs.copyFileSync(path.join(root, 'public', name), path.join(publish, name));
+    fs.copyFileSync(path.join(root, 'public', name), path.join(staticExport, name));
   }
 
   const policy = hashes => [
@@ -87,20 +92,7 @@ function exportSite(receipt) {
     "media-src 'self'", "font-src 'self' data:", "connect-src 'self'", "object-src 'none'",
     "base-uri 'none'", "frame-ancestors 'none'", "form-action 'self'",
   ].join('; ');
-  const csp = generate(publish, policy);
-  fs.appendFileSync(path.join(publish, '_headers'), [
-    '  X-Robots-Tag: noindex, nofollow, noarchive',
-    '  X-Content-Type-Options: nosniff',
-    '  Referrer-Policy: no-referrer',
-    '  Strict-Transport-Security: max-age=31536000',
-    '  X-Frame-Options: DENY',
-    '  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()',
-    '/api/*',
-    '  Cache-Control: no-store, private',
-    '/.netlify/functions/*',
-    '  Cache-Control: no-store, private',
-    '',
-  ].join('\n'));
+  const csp = generate(staticExport, policy);
   inspectExport(receipt.approval,process.env);
   console.log('Synthetic static export verified:', JSON.stringify(csp));
 }
@@ -114,6 +106,7 @@ if (require.main === module) {
       process.exitCode = 1;
     } else if (process.argv.length === 2) {
       exportSite(receipt);
+      makeEdge(receipt, staticExport, publish, edgeFunctions);
       await makeFunction(receipt);
     } else throw Error('SYNTHETIC_BUILD_ARGUMENT_REJECTED');
   })().catch(() => {
@@ -121,4 +114,4 @@ if (require.main === module) {
     process.exitCode = check ? 0 : 1;
   });
 }
-module.exports = { root, publish, functions };
+module.exports = { root, staticExport, publish, edgeFunctions, functions };

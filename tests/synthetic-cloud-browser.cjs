@@ -39,15 +39,17 @@ async function main() {
   assert(path.isAbsolute(args[5]) && path.isAbsolute(args[7]));
   const { chromium } = require(args[5]);
   const app = await startRehearsal(toolsFromArgs(args.slice(0,4)));
-  const { db, server } = app, api = httpClient(app);
+  const { db, server, bundle } = app, api = httpClient(app,{Authorization:bundle.authorization});
   const record = { commit:app.bundle.packageRecord.commit, passed:false, scenarios:[], widths:[], pageErrors:[], cspErrors:[] };
   const origin = server.origin;
   try {
     await loopbackTls({cert:db.cert}, () => withCertificate(db.cert, async () => {
       const browser = await chromium.launch({executablePath:args[7],args:['--no-proxy-server']});
       try {
-        const context = await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
-        const reviewerContext = await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+        const options={viewport:{width:1440,height:1000},reducedMotion:'reduce',
+          httpCredentials:{username:bundle.accessUser,password:bundle.accessPassword,origin}};
+        const context = await browser.newContext(options);
+        const reviewerContext = await browser.newContext(options);
         for (const c of [context,reviewerContext]) {
           await c.route('**/*',route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
         }

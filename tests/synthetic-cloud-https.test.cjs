@@ -169,7 +169,8 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         const data = JSON.stringify({...content,content:'a'.repeat(70000)});
         const chunked = await new Promise((resolve,reject) => {
           const req = https.request(server.origin+'/api/community',{ca:server.cert,method:'POST',
-            headers:{Origin:server.origin,'Content-Type':'application/json','Transfer-Encoding':'chunked'}},
+            headers:{Origin:server.origin,Authorization:bundle.authorization,
+              'Content-Type':'application/json','Transfer-Encoding':'chunked'}},
             res=>{res.resume();res.on('end',()=>resolve(res.statusCode));});
           req.on('error',reject);req.write(data.slice(0,35000));req.end(data.slice(35000));
         });

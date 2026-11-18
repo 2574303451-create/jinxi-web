@@ -1,0 +1,9 @@
+[build]
+publish = "public"
+edge_functions = "edge"
+
+[functions]
+directory = "functions"
+
+[build.processing]
+skip_processing = true

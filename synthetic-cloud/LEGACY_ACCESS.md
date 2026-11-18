@@ -14,6 +14,10 @@
 
 ## 后续获准的新站验证
 
+空数据库首发使用独立 Package directory `synthetic-cloud/gate-only` 下的 netlify.toml，构建基目录为仓库根。仅适用于 `jinxi-synthetic-gate-test` 和审核分支 `codex/jinxi-phase4-synthetic-cloud-gate-only`。使用新的干净检出和空输出目录；已有输出会被拒绝。构建需要平台提供真实部署身份、服务端批准的提交 SHA（`JINXI_SERVICE_APPROVAL`）与 24 小时以内的 UTC 到期时间（`JINXI_GATE_EXPIRES_AT`）。运行端需要同一批准 SHA 及原访客摘要。不得配置业务批准记录、数据库连接或密钥。核对实际选中的配置文件及两个空目录后才可发布。授权 GET / 返回固定探针文本；业务路径始终拒绝。下列涉及数据库初始化、业务 Functions 和业务构建批准记录的步骤仅适用于后续完整业务版本。
+
+Gate-only 不读取 Neon Project ID、Branch ID、Endpoint ID、数据库指纹或连接凭据，无需先创建 Neon 项目。采用空 Publish 目录，没有 index.html；本地生成并加载 Edge 入口只能证明处理器可返回固定正文，Netlify 是否接受空目录、是否先于平台 404 执行全路径 Edge、CDN 与部署别名是否正确拒绝，必须在单独批准的真实门禁部署上验收。
+
 1. 在 **Usage & billing** 核对 XUST 当期剩余额度及旧站用量，先确定试点次数、观察阈值和可执行的停止入口。Legacy Free 公示额度为 Edge 100 万次/月、带宽 100 GB/月和构建 300 分钟/月。首页、资产、API 和被拒绝的请求均可能产生 Edge 调用。构建额度满会停止同账户新构建，其他受计量服务额度耗尽可能暂停同账户站点。若无法保留旧站所需余量、无法及时关闭新站入口，或管理员尚未接受共享风险，试点保持暂停。[Legacy 套餐](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/legacy-pricing-plans/) · [Legacy Free 超额行为](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/billing-faq-for-legacy-plans/)
 2. 单独批准后只核验全新空 Neon 项目和新 Netlify 站。数据库初始化完成并取得真实结构指纹后，服务角色保持 `NOLOGIN`。新站只连接获审分支，关闭 Split Testing、Deploy Previews 和分支部署，保持 Build Hooks 为空，停用无关插件。核对实际 Publish、Edge Functions、Functions 目录都来自合成站包。
 3. 首发配置只包含获审的非密钥 `JINXI_SYNTHETIC_BUILD_APPROVAL`、`JINXI_SERVICE_APPROVAL`，以及 Edge 和 Node 共同读取的运行端 `JINXI_SYNTHETIC_ACCESS_SHA256`。由受控密码库生成独立的 32 随机字节，写作 64 位小写十六进制字符，对字符本身计算 SHA-256。平台仅保存摘要，授权访客通过 HTTPS 原生认证使用用户名 `jinxi-test` 输入口令。实际仅有 all-scope 时，先沿用管理员清单的专用变量与获审构建限制。[`Netlify.env`](https://docs.netlify.com/build/edge-functions/environment-variables/)

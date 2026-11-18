@@ -48,6 +48,7 @@ next-env.d.ts
 
 # Separate, server-only synthetic TEST build outputs and local evidence.
 /synthetic-cloud/.generated/
+/synthetic-cloud/gate-only/.output/
 /synthetic-cloud/site/.next/
 /synthetic-cloud/site/out/
 /synthetic-cloud/site/next-env.d.ts

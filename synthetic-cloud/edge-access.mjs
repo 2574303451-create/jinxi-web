@@ -1,6 +1,6 @@
 import { accessDigestKey, accessError, authorizeAccess, privateHeaders, privateResponse } from './access.mjs';
 
-function matchesDeploy(binding, context, origin, readEnv) {
+export function matchesDeploy(binding, context, origin, readEnv) {
   return binding && Date.parse(binding.expiresAt) > Date.now() &&
     context?.deploy?.context === 'production' && context.deploy.published === true &&
     [

@@ -1,0 +1,13 @@
+[build]
+  command = "node synthetic-cloud/gate-only/build.cjs"
+  publish = "synthetic-cloud/gate-only/.output/public"
+  edge_functions = "synthetic-cloud/gate-only/.output/edge"
+
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[functions]
+  directory = "synthetic-cloud/gate-only/.output/functions"
+
+[build.processing]
+  skip_processing = true

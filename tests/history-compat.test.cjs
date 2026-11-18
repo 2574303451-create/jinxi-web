@@ -11,3 +11,11 @@ test('two old user IDs for one trusted UUID cannot hide same-day rewards or inde
 test('UUID case variants cannot give two historical accounts the same PostgreSQL identity',()=>{const {data,anchors}=syntheticHistory(2),id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';anchors.members[0].memberId=id;anchors.members[1].memberId=id.toUpperCase();const r=checkHistory(data,anchors);assert.equal(r.summary.trusted,0);assert(r.findings.some(f=>f.code==='TRUST_BINDING_CONFLICT'));});
 test('nested credential fields are rejected before producing a report',()=>{const {data,anchors}=syntheticHistory(1);data.accounts[0].password_hash='synthetic-field-that-must-not-be-imported';assert.throws(()=>checkHistory(data,anchors),/HISTORY_SENSITIVE_FIELD_REJECTED/);});
 test('duplicate numeric/string forms of one source ID are quarantined before staging',()=>{const {data,anchors}=syntheticHistory(1);data.strategies.push({...data.strategies[0],id:1});const r=checkHistory(data,anchors);assert.equal(r.candidates.length,0);assert(r.findings.some(f=>f.code==='DUPLICATE_SOURCE_ID'));});
+test('an unsafe numeric author anchor cannot claim a lossless text source ID',()=>{
+ const {data,anchors}=syntheticHistory(1);
+ data.strategies[0].id='9007199254740992';
+ anchors.records[0].id=JSON.parse('9007199254740993');
+ const report=checkHistory(data,anchors);
+ assert.equal(report.candidates.length,0);
+ assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='NO_TRUSTED_AUTHOR'));
+});

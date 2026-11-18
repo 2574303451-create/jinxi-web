@@ -1,5 +1,10 @@
 const {localSettings}=require('../member-local/identity.cjs');
 const {fingerprint}=require('../netlify/functions/_shared/function-security');
+async function rollbackAndClose(c){
+  let confirmed=true;try{await c.query('ROLLBACK');}catch{confirmed=false;}
+  try{await c.end();}catch(error){if(confirmed)throw error;}
+  if(!confirmed)throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');
+}
 async function rehearse(db,report){
  // Only the disposable factory's LOCAL resource; never accept a URL or user SQL.
  localSettings(db.settings,{});if(db.settings.kind!=='jinxi-member-local-v1'||report?.kind!=='jinxi-history-report-v1'||report.syntheticOnly!==true)throw Error('LOCAL_SYNTHETIC_REHEARSAL_REQUIRED');
@@ -13,9 +18,7 @@ async function rehearse(db,report){
   for(const row of report.findings)await c.query('INSERT INTO compat_quarantine VALUES($1,$2,$3)',[row.entity,row.ref,row.code]);
   result=(await c.query('SELECT (SELECT count(*)::int FROM compat_candidates) AS candidates,(SELECT count(*)::int FROM compat_quarantine) AS quarantined')).rows[0];
  }finally{
-  let confirmed=true;try{await c.query('ROLLBACK');}catch{confirmed=false;}
-  try{await c.end();}catch(error){if(confirmed)throw error;}
-  if(!confirmed)throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');
+  await rollbackAndClose(c);
  }
  const after=await db.financialSnapshot();if(JSON.stringify(before)!==JSON.stringify(after))throw Error('REHEARSAL_CHANGED_EXISTING_DATA');
  return {...result,rolledBack:true,legacyAndBusinessDataUnchanged:true};

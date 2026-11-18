@@ -26,3 +26,11 @@ test('exact large text source IDs stay distinct across authors even when Number 
  const report=checkHistory(data,anchors);
  assert.deepEqual(report.candidates.map(r=>[r.sourceId,r.memberId]),ids.map((id,i)=>[id,anchors.members[i].memberId]));
 });
+test('an invalid author anchor is reported separately from independent exact evidence',()=>{
+ const {data,anchors}=syntheticHistory(2);
+ data.strategies[0].id='9007199254740992';anchors.records[0].id=data.strategies[0].id;
+ anchors.records.push({...anchors.records[0],accountId:anchors.members[1].accountId,id:JSON.parse('9007199254740993')});
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.candidates.map(r=>r.memberId),[anchors.members[0].memberId]);
+ assert(report.findings.some(f=>f.entity==='recordBinding'&&f.ref==='1'&&f.code==='UNSUPPORTED_BINDING_SOURCE_ID'&&f.status==='unmapped'));
+});

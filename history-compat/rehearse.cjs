@@ -12,7 +12,11 @@ async function rehearse(db,report){
   for(const row of report.candidates)await c.query('INSERT INTO compat_candidates VALUES($1,$2,$3)',[row.sourceId,row.kind,row.memberId]);
   for(const row of report.findings)await c.query('INSERT INTO compat_quarantine VALUES($1,$2,$3)',[row.entity,row.ref,row.code]);
   result=(await c.query('SELECT (SELECT count(*)::int FROM compat_candidates) AS candidates,(SELECT count(*)::int FROM compat_quarantine) AS quarantined')).rows[0];
- }finally{try{await c.query('ROLLBACK');}catch{throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');}finally{await c.end();}}
+ }finally{
+  let confirmed=true;try{await c.query('ROLLBACK');}catch{confirmed=false;}
+  try{await c.end();}catch(error){if(confirmed)throw error;}
+  if(!confirmed)throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');
+ }
  const after=await db.financialSnapshot();if(JSON.stringify(before)!==JSON.stringify(after))throw Error('REHEARSAL_CHANGED_EXISTING_DATA');
  return {...result,rolledBack:true,legacyAndBusinessDataUnchanged:true};
 }

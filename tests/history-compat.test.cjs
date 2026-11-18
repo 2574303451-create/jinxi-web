@@ -19,3 +19,10 @@ test('an unsafe numeric author anchor cannot claim a lossless text source ID',()
  assert.equal(report.candidates.length,0);
  assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='NO_TRUSTED_AUTHOR'));
 });
+test('exact large text source IDs stay distinct across authors even when Number would round them together',()=>{
+ const {data,anchors}=syntheticHistory(2), ids=['9007199254740992','9007199254740993'];
+ data.strategies=ids.map(id=>({...data.strategies[0],id}));
+ anchors.records=ids.map((id,i)=>({kind:'strategies',id,accountId:anchors.members[i].accountId})).reverse();
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.candidates.map(r=>[r.sourceId,r.memberId]),ids.map((id,i)=>[id,anchors.members[i].memberId]));
+});

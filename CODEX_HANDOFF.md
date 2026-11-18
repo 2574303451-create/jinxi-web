@@ -1,4 +1,14 @@
-# 当前接管入口 · 第四阶段第三工作包干净候选（2026-11-15）
+# 当前接管入口 · 第四阶段 Gate-only 试点及历史兼容（2026-11-19，北京时间）
+
+- 云端试点唯一已审候选：`codex/jinxi-phase4-gate-manual-pilot`，`4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。[审核 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44344721147)。[试点操作说明](synthetic-cloud/gate-only/MANUAL-PILOT.md)。不要部署本交接文档所在的历史兼容分支。
+- 首次限定发布已经尝试一次：CLI 到 95 秒被终止，未返回 Deploy ID；随即禁用独立站。停用后 API 实查 Disabled、无 Published、零 Deploy、零 Build；主域名匿名 404 不能作为门禁通过证据。首次许可已使用，不能自行重发；原站点变量未删除，首次短期批准已失效。
+- 使用同一收据的四个输入，在本机以 CLI 23.15.1、Deno 2.4.2 单独执行 Edge 打包核心步骤成功，产出一个 eszip 与一个全路径 access 清单。这不能确认首次超时的根因，也不是已上传包的证明。若另获单次批准，在启用新站之前做本地打包预检，核对额度、站点专用变量和停用权限，并保留不含凭据的阶段耗时。真实 CDN、匿名 401、授权 200、部署身份仍待验收；不接 Neon。
+- 并行历史兼容审核：`codex/jinxi-phase4-history-quarantine`，业务及测试提交 `5b72536f34ecb9f25bfdd2abfab99f0b8e783fb9`，[审核 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44349595997)。有损数字绑定不能证明作者身份，可能碰撞的记录隔离；无冲突的大整数文本保留精确归属。合成专项 15/15 及两路复审通过，不涉及真实资料或迁移。
+- 生产、原只读 TEST、main 与原 PR 不在试点范围。下文为历史快照，不应据此重复创建站点或重做既有审查。
+
+---
+
+# 历史快照 · 第四阶段第三工作包干净候选（2026-11-15）
 
 - 工作树 `E:/Recovery/.jinxi-research/phase4-synthetic-cloud-clean/worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-clean-local`，已验收远程基准 `f7aa0fac2c117f122d98320255230ce8fec546f7`。实测及双路补审源码 `d67e442e80c9d0eb3dc60b55b034690e489392cf`，其后只含交接及验收证据，最终本地 HEAD 以 Git 为准。
 - 原 `a8018a7256c61804dac21bed7619d4bca6cbfc33` 的新增历史含旧站资料，留在原本地分支隔离。新候选从远程基准重建，合成运行源码与原复审版一致，HTTPS 防泄漏断言改用合成数据，原测试中保留的业务与权限断言原样。基准和旧站已有的资料照原范围保留。

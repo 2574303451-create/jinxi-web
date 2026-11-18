@@ -25,6 +25,7 @@ function checkHistory(data,anchors){
   const row={legacyAccountId:ref(a.id,i),employeeNo:ref(a.employee_no,i),memberId:status==='trusted'?b[0].memberId.toLowerCase():null,status,reasons};mappings.push(row);subjects.set(a.id,row);for(const reason of reasons)add('account',a.id,reason,status);
  }
  for(const [i,p]of data.profiles.entries())if(!(accounts.get(p.employee_no)||[]).length)add('profile',p.employee_no||String(i),'PROFILE_WITHOUT_LOGIN_ACCOUNT','unmapped');
+ const lossy=groups(anchors.records.filter(r=>typeof r.id==='number'&&Number.isInteger(r.id)&&!Number.isSafeInteger(r.id)),r=>r.kind+':'+r.id);
  for(const [i,r]of anchors.records.entries())if(sourceId(r.id)===null)add('recordBinding',String(i),'UNSUPPORTED_BINDING_SOURCE_ID','unmapped');
  const userBindings=groups(anchors.users,r=>r.userId),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
  function owner(userId){const rows=userBindings.get(userId)||[];if(rows.length!==1)return null;const s=subjects.get(rows[0].accountId);return s?.status==='trusted'?s:null;}
@@ -32,6 +33,7 @@ function checkHistory(data,anchors){
  for(const kind of ['messages','strategies'])for(const [i,row]of data[kind].entries()){
   if(sourceId(row.id)===null){add(kind,String(i),'UNSUPPORTED_SOURCE_ID','unmapped');continue;}
   if(contentIds[kind].get(sourceId(row.id)).length!==1){add(kind,row.id,'DUPLICATE_SOURCE_ID');continue;}
+  if(typeof row.id==='string'&&/^-?\d+$/.test(row.id)&&lossy.has(kind+':'+Number(row.id))){add(kind,row.id,'LOSSY_AUTHOR_BINDING_AMBIGUITY');continue;}
   const b=records.get(kind+':'+row.id)||[],s=b.length===1?subjects.get(b[0].accountId):null;
   if(s?.status!=='trusted')add(kind,row.id||String(i),b.length>1?'AUTHOR_BINDING_CONFLICT':'NO_TRUSTED_AUTHOR','unmapped');
   else candidates.push({kind,sourceId:ref(row.id,i),memberId:s.memberId});

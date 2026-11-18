@@ -17,7 +17,7 @@ test('an unsafe numeric author anchor cannot claim a lossless text source ID',()
  anchors.records[0].id=JSON.parse('9007199254740993');
  const report=checkHistory(data,anchors);
  assert.equal(report.candidates.length,0);
- assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='NO_TRUSTED_AUTHOR'));
+ assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='LOSSY_AUTHOR_BINDING_AMBIGUITY'));
 });
 test('exact large text source IDs stay distinct across authors even when Number would round them together',()=>{
  const {data,anchors}=syntheticHistory(2), ids=['9007199254740992','9007199254740993'];
@@ -31,6 +31,6 @@ test('an invalid author anchor is reported separately from independent exact evi
  data.strategies[0].id='9007199254740992';anchors.records[0].id=data.strategies[0].id;
  anchors.records.push({...anchors.records[0],accountId:anchors.members[1].accountId,id:JSON.parse('9007199254740993')});
  const report=checkHistory(data,anchors);
- assert.deepEqual(report.candidates.map(r=>r.memberId),[anchors.members[0].memberId]);
+ assert.deepEqual(report.candidates,[]);
  assert(report.findings.some(f=>f.entity==='recordBinding'&&f.ref==='1'&&f.code==='UNSUPPORTED_BINDING_SOURCE_ID'&&f.status==='unmapped'));
 });

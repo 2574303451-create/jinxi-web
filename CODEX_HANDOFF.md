@@ -1,4 +1,14 @@
-# 当前接管入口 · 第四阶段第三工作包干净候选（2026-11-15）
+# 当前接管入口 · 第四阶段累计本地验收（2026-11-19，北京时间）
+
+- 累计审核分支 `codex/jinxi-phase4-acceptance`。浏览器验收基准为 `eed923b647c764923f926cb41635d6efcec502ac`，包含兑换管理员独占认领、FAQ、公会动态及使用进程级 CA 的 Firefox HTTPS 验收。[浏览器基准 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44441911527)
+- 合入已审历史兼容基准 `d1322127e2ab45744f2a533b683d706b6e81283a`。有损数字绑定影响的作者记录隔离，精确大整数文本可保留可信归属，回滚确认丢失时拒绝生成成功回执。检查和预演使用合成资料。[历史兼容基准 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44357599303)
+- 新 Gate-only 站的两次许可均用于 `4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。首次 CLI 超时且平台没有对应部署，第二次部署 `6afe4688aa63d39d85b1938b` 缺少 Edge 注册。站点随即停用，未关联 Git，主域名和部署别名均复核为 404。真实 CDN 上的匿名 401、授权 200 和部署身份仍待验收。
+- Gate-only 独立修复版本为 `codex/jinxi-phase4-gate-upload-manifest` 的 `134b572f69a27b155dfeaab514457047f7f41297`，已用指定 CLI 的文件收集器核验。该版本仍需单次发布授权。发布前核验站点、额度、专用变量及停用权限。[修复版本 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44432015892) · [试点操作说明](synthetic-cloud/gate-only/MANUAL-PILOT.md)
+- 生产、原只读 TEST、main 和原 PR 继续沿用既有保护。云端业务及历史迁移仍待后续授权验收。
+
+---
+
+# 历史快照 · 第四阶段第三工作包干净候选（2026-11-15）
 
 - 工作树 `E:/Recovery/.jinxi-research/phase4-synthetic-cloud-clean/worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-clean-local`，已验收远程基准 `f7aa0fac2c117f122d98320255230ce8fec546f7`。实测及双路补审源码 `d67e442e80c9d0eb3dc60b55b034690e489392cf`，其后只含交接及验收证据，最终本地 HEAD 以 Git 为准。
 - 原 `a8018a7256c61804dac21bed7619d4bca6cbfc33` 的新增历史含旧站资料，留在原本地分支隔离。新候选从远程基准重建，合成运行源码与原复审版一致，HTTPS 防泄漏断言改用合成数据，原测试中保留的业务与权限断言原样。基准和旧站已有的资料照原范围保留。

@@ -33,6 +33,31 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   for(const module of ['community','attendance','points','operations'])assert.equal((await request('/api/'+module+'?receipt='+id,{session:{...a,cookie:''}})).status,401);
   assert.equal((await request('/api/member',{session:a,body:{op:'logout'}})).status,200);assert.equal((await request('/api/points?receipt='+id,{session:a})).status,401);
  });
+ await t.test('lossy author collisions stay outside the PostgreSQL candidate table',async()=>{
+  const {data,anchors}=syntheticHistory(2);
+  data.strategies[0].id='9007199254740993';anchors.records[0].id=data.strategies[0].id;
+  data.strategies.push({...data.strategies[0],id:'safe-strategy'});
+  anchors.records.push({...anchors.records[0],id:'safe-strategy',accountId:anchors.members[1].accountId},
+   {...anchors.records[0],id:JSON.parse('9007199254740993'),accountId:anchors.members[1].accountId});
+  const report=checkHistory(data,anchors);
+  assert.deepEqual(report.candidates,[{kind:'strategies',sourceId:'safe-strategy',memberId:anchors.members[1].memberId}]);
+  const proof=await rehearse(db,report);
+  assert.deepEqual(proof,{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
+ await t.test('failed rollback acknowledgement cannot produce a successful rehearsal receipt',async()=>{
+  const {data,anchors}=syntheticHistory(1);for(const loseCloseAck of [false,true]){let closed=false,withheld=false;
+  const dbWithLostAck={...db,admin:async()=>{
+   const c=await db.admin();
+   return {query:async(sql,...args)=>{
+    const response=await c.query(sql,...args);
+    if(sql==='ROLLBACK'){withheld=true;throw Error('synthetic lost acknowledgement');}
+    return response;
+   },end:async()=>{await c.end();closed=true;if(loseCloseAck)throw Error('synthetic close failure');}};
+  }};
+  await assert.rejects(rehearse(dbWithLostAck,checkHistory(data,anchors)),/REHEARSAL_ROLLBACK_UNCONFIRMED/);
+  assert.equal(withheld,true);assert.equal(closed,true);assert.deepEqual(await db.financialSnapshot(),old);}
+ });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,r);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},r),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});
  }finally{await server?.close();await db.stop();}
 });

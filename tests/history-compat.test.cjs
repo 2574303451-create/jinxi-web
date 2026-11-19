@@ -11,3 +11,26 @@ test('two old user IDs for one trusted UUID cannot hide same-day rewards or inde
 test('UUID case variants cannot give two historical accounts the same PostgreSQL identity',()=>{const {data,anchors}=syntheticHistory(2),id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';anchors.members[0].memberId=id;anchors.members[1].memberId=id.toUpperCase();const r=checkHistory(data,anchors);assert.equal(r.summary.trusted,0);assert(r.findings.some(f=>f.code==='TRUST_BINDING_CONFLICT'));});
 test('nested credential fields are rejected before producing a report',()=>{const {data,anchors}=syntheticHistory(1);data.accounts[0].password_hash='synthetic-field-that-must-not-be-imported';assert.throws(()=>checkHistory(data,anchors),/HISTORY_SENSITIVE_FIELD_REJECTED/);});
 test('duplicate numeric/string forms of one source ID are quarantined before staging',()=>{const {data,anchors}=syntheticHistory(1);data.strategies.push({...data.strategies[0],id:1});const r=checkHistory(data,anchors);assert.equal(r.candidates.length,0);assert(r.findings.some(f=>f.code==='DUPLICATE_SOURCE_ID'));});
+test('an unsafe numeric author anchor cannot claim a lossless text source ID',()=>{
+ const {data,anchors}=syntheticHistory(1);
+ data.strategies[0].id='9007199254740992';
+ anchors.records[0].id=JSON.parse('9007199254740993');
+ const report=checkHistory(data,anchors);
+ assert.equal(report.candidates.length,0);
+ assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='LOSSY_AUTHOR_BINDING_AMBIGUITY'));
+});
+test('exact large text source IDs stay distinct across authors even when Number would round them together',()=>{
+ const {data,anchors}=syntheticHistory(2), ids=['9007199254740992','9007199254740993'];
+ data.strategies=ids.map(id=>({...data.strategies[0],id}));
+ anchors.records=ids.map((id,i)=>({kind:'strategies',id,accountId:anchors.members[i].accountId})).reverse();
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.candidates.map(r=>[r.sourceId,r.memberId]),ids.map((id,i)=>[id,anchors.members[i].memberId]));
+});
+test('an invalid author anchor is reported separately from independent exact evidence',()=>{
+ const {data,anchors}=syntheticHistory(2);
+ data.strategies[0].id='9007199254740992';anchors.records[0].id=data.strategies[0].id;
+ anchors.records.push({...anchors.records[0],accountId:anchors.members[1].accountId,id:JSON.parse('9007199254740993')});
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.candidates,[]);
+ assert(report.findings.some(f=>f.entity==='recordBinding'&&f.ref==='1'&&f.code==='UNSUPPORTED_BINDING_SOURCE_ID'&&f.status==='unmapped'));
+});

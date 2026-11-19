@@ -8,16 +8,25 @@ async function redeem(c,ctx,body){
  fields(body,['itemId','quantity']);const itemId=uuid(body.itemId),quantity=integer(body.quantity,1,5);await money.ensure(c,ctx.actor);await money.reconcile(c,ctx.actor);
  await c.query('SELECT id FROM points_lab.catalogue WHERE id=$1 FOR UPDATE',[itemId]);
  const item=(await c.query('SELECT *,starts_at<=attendance_lab.business_now() AND ends_at>attendance_lab.business_now() AS live FROM points_lab.catalogue WHERE id=$1',[itemId])).rows[0];if(!item||item.status!=='enabled'||!item.live)fail(409,'ITEM_NOT_AVAILABLE');if(item.available<quantity)fail(409,'STOCK_LIMIT');
- const used=(await c.query("SELECT COALESCE(sum(quantity),0)::int AS n FROM points_lab.orders WHERE member_id=$1 AND item_id=$2 AND status IN('pending','fulfilled')",[ctx.actor,itemId])).rows[0].n;if(used+quantity>item.per_member_limit)fail(409,'MEMBER_LIMIT');
+ const used=(await c.query("SELECT COALESCE(sum(quantity),0)::int AS n FROM points_lab.orders WHERE member_id=$1 AND item_id=$2 AND status IN('pending','processing','fulfilled')",[ctx.actor,itemId])).rows[0].n;if(used+quantity>item.per_member_limit)fail(409,'MEMBER_LIMIT');
  const account=(await c.query('SELECT earned-reversed AS net,balance FROM points_lab.accounts WHERE member_id=$1',[ctx.actor])).rows[0];if(BigInt(account.net)<BigInt(item.min_earned))fail(409,'ITEM_CONDITION');const cost=(BigInt(item.unit_cost)*BigInt(quantity)).toString();if(BigInt(account.balance)<BigInt(cost))fail(409,'INSUFFICIENT_BALANCE');
  const order=(await c.query('INSERT INTO points_lab.orders(member_id,item_id,quantity,unit_cost,cost) VALUES($1,$2,$3,$4,$5) RETURNING id',[ctx.actor,itemId,quantity,item.unit_cost,cost])).rows[0];
  const charge=await money.post(c,ctx.actor,'redeem',cost,{bizId:'redeem:'+order.id,orderId:order.id});await c.query('UPDATE points_lab.orders SET charge_id=$2 WHERE id=$1',[order.id,charge]);await move(c,itemId,order.id,'reserve',quantity);return {orderId:order.id,ledgerId:charge,amount:cost,status:'pending',outcome:'redeemed'};
 }
 async function processOrder(c,ctx,body){
  fields(body,body.op==='order.cancel'?['orderId']:['orderId','status']);const id=uuid(body.orderId),own=body.op==='order.cancel';if(!own&&!ctx.admin)fail(403,'ADMIN_REQUIRED');if(!own)ctx.requiredAdmin=true;
- const target=own?'cancelled':body.status;if(!['cancelled','failed','fulfilled'].includes(target)||!own&&target==='cancelled')fail(400,'INVALID_ORDER_STATUS');
+ const target=own?'cancelled':body.status;if(!own&&!['processing','failed','fulfilled'].includes(target))fail(400,'INVALID_ORDER_STATUS');
  await c.query('SELECT id FROM points_lab.orders WHERE id=$1 FOR UPDATE',[id]);const order=(await c.query('SELECT * FROM points_lab.orders WHERE id=$1',[id])).rows[0];if(!order||own&&order.member_id!==ctx.actor)fail(403,'ORDER_NOT_AVAILABLE');
- if(order.status!=='pending'){if(order.status!==target)fail(409,'ORDER_CLOSED');return {orderId:id,status:order.status,amount:order.cost,outcome:'already_processed'};}
+ const active = ['pending','processing'].includes(order.status);
+ if (active && own && order.status==='processing') fail(409,'ORDER_IN_PROCESS');
+ if (!own && order.claimed_by && order.claimed_by!==ctx.actor) fail(409,'ORDER_CLAIMED_BY_ANOTHER');
+ if (order.status===target) return {orderId:id,status:order.status,amount:order.cost,outcome:'already_processed'};
+ if (!active) fail(409,'ORDER_CLOSED');
+ if (target==='processing') {
+  await c.query("UPDATE points_lab.orders SET status='processing' WHERE id=$1",[id]);
+  return {orderId:id,status:target,amount:order.cost,outcome:'order_claimed'};
+ }
+ if (!own && order.status!=='processing') fail(409,'ORDER_CLAIM_REQUIRED');
  await money.reconcile(c,order.member_id);await c.query('UPDATE points_lab.orders SET status=$2 WHERE id=$1',[id,target]);let ledgerId=order.charge_id;
  if(target!=='fulfilled'){
   ledgerId=await money.post(c,order.member_id,'refund',order.cost,{bizId:'refund:'+id,orderId:id,originId:order.charge_id});await move(c,order.item_id,id,'release',order.quantity);

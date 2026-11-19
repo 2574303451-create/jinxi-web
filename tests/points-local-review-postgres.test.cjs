@@ -17,8 +17,8 @@ test('points transaction failure and revocation review on actual synthetic Postg
    }
    const created=await p.op(s,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});assert.equal(created.status,200);const request={op:'order.cancel',orderId:created.body.orderId,requestId:crypto.randomUUID()},before=await p.snapshot();assert.equal((await p.call(s,request,{},faulty('INSERT INTO points_lab.ledger'))).status,503);assert.deepEqual(await p.snapshot(),before);assert.equal((await p.call(s,request)).status,200);assert.equal((await p.call(s,request)).body.replayed,true);assert.equal((await p.call(s)).body.account.balance,'4');
   });
-  for (const winner of ['cancelled','fulfilled']) {
-   await t.test(`cancel and manual fulfilment contend for one order: ${winner} commits first`, async () => {
+  for (const winner of ['cancelled','processing']) {
+   await t.test(`member cancellation and staff claim contend: ${winner} commits first`, async () => {
     const member = await p.login(), staff = await p.login('admin');
     await p.fund(member);
     const order = await p.op(member,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});
@@ -28,9 +28,10 @@ test('points transaction failure and revocation review on actual synthetic Postg
     assert.equal((await p.call(member)).body.account.balance,'2');
 
     const cancelled = {session:member, body:{op:'order.cancel',orderId,requestId:crypto.randomUUID()}};
-    const fulfilled = {session:staff, body:{op:'order.process',orderId,status:'fulfilled',requestId:crypto.randomUUID()}};
+    const claim = {session:staff, body:{op:'order.process',orderId,status:'processing',requestId:crypto.randomUUID()}};
     const refunded = winner === 'cancelled';
-    const [first, second] = refunded ? [cancelled,fulfilled] : [fulfilled,cancelled];
+    const [first, second] = refunded ? [cancelled,claim] : [claim,cancelled];
+    const conflictCode = refunded ? 'ORDER_CLOSED' : 'ORDER_IN_PROCESS';
     const firstHasLock = signal(), secondAttemptedLock = signal();
     const observeMutex = observe => p.make({connect:async () => {
      const c = await db.connectPoints();
@@ -58,7 +59,7 @@ test('points transaction failure and revocation review on actual synthetic Postg
      assert.equal(success.status,200);
      assert.equal(success.body.status,winner);
      assert.equal(conflict.status,409);
-     assert.equal(conflict.body.code,'ORDER_CLOSED');
+     assert.equal(conflict.body.code,conflictCode);
     } finally {
      await committed;
     }
@@ -70,8 +71,11 @@ test('points transaction failure and revocation review on actual synthetic Postg
     assert.equal(replay.body.replayed,true);
     assert.deepEqual(await p.snapshot(),beforeRetry);
 
-    assert.deepEqual((await p.admin('SELECT status,charge_id FROM points_lab.orders WHERE id=$1',[orderId])).rows,
-     [{status:winner,charge_id:chargeId}]);
+    const {rows:[persisted]} = await p.admin('SELECT status,charge_id,claimed_by,claimed_at FROM points_lab.orders WHERE id=$1',[orderId]);
+    assert.equal(persisted.status,winner);
+    assert.equal(persisted.charge_id,chargeId);
+    assert.equal(persisted.claimed_by,refunded ? null : db.accounts.admin.memberId);
+    assert.equal(persisted.claimed_at instanceof Date,!refunded);
     const debit = { kind:'redeem', point_delta:'2', origin_id:null };
     const refund = { kind:'refund', point_delta:'2', origin_id:chargeId };
     assert.deepEqual((await p.admin('SELECT kind,point_delta,origin_id FROM points_lab.ledger WHERE order_id=$1 ORDER BY entry_no',[orderId])).rows,
@@ -82,9 +86,46 @@ test('points transaction failure and revocation review on actual synthetic Postg
     assert.equal(state.body.account.balance,refunded ? '4' : '2');
     assert.equal(state.body.catalogue[0].available,refunded ? 3 : 2);
     assert.deepEqual((await p.admin('SELECT actor_id,code FROM points_lab.audit WHERE request_id=$1',[second.body.requestId])).rows,
-     [{actor_id:refunded ? db.accounts.admin.memberId : db.accounts.normal.memberId,code:'ORDER_CLOSED'}]);
+     [{actor_id:refunded ? db.accounts.admin.memberId : db.accounts.normal.memberId,code:conflictCode}]);
    });
   }
+  await t.test('only the recorded claimant can close an order; a role loss keeps it fenced', async () => {
+   const member = await p.login(), staff = await p.login('admin'), other = await p.login('same');
+   await p.fund(member);
+   const placed = await p.op(member,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});
+   assert.equal(placed.status,200);
+   const {orderId} = placed.body;
+   const change = status => ({op:'order.process',orderId,status});
+   assert.equal((await p.op(staff,change('fulfilled'))).body.code,'ORDER_CLAIM_REQUIRED');
+   assert.equal((await p.op(member,change('processing'))).status,403);
+   assert.equal((await p.op(staff,change('processing'))).body.status,'processing');
+   const claimed = await p.snapshot();
+
+   await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.same.memberId]);
+   try {
+    const {body:{adminOrders:[unowned]}} = await p.call(other,null,{view:'admin'});
+    assert.equal(unowned.id,orderId);
+    assert.equal(unowned.claimedByMe,false);
+    assert(!Object.hasOwn(unowned,'claimedBy'));
+    for (const status of ['processing','failed','fulfilled']) {
+     assert.equal((await p.op(other,change(status))).body.code,'ORDER_CLAIMED_BY_ANOTHER');
+    }
+    const c = await db.connectPoints();
+    try {
+     await c.query('BEGIN');
+     await c.query("SELECT set_config('points.actor',$1,true)",[db.accounts.same.memberId]);
+     await assert.rejects(c.query("UPDATE points_lab.orders SET status='fulfilled' WHERE id=$1",[orderId]), e=>e.code==='42501');
+    } finally { await c.query('ROLLBACK'); await c.end(); }
+   } finally {
+    await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.same.memberId]);
+   }
+   await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.admin.memberId]);
+   try { assert.equal((await p.op(staff,change('failed'))).status,403); }
+   finally { await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.admin.memberId]); }
+   assert.equal((await p.op(member,{op:'order.cancel',orderId})).body.code,'ORDER_IN_PROCESS');
+   assert.deepEqual(await p.snapshot(),claimed);
+   assert.equal((await p.op(staff,change('fulfilled'))).body.status,'fulfilled');
+  });
   await t.test('logout and actual password change after identity preflight invalidate the financial request',async()=>{
    for(const mode of ['logout','password']){
     const s=await p.login(),eventId=await p.checkin(s);const h=p.make({identity:async e=>{const r=await p.identity(e);assert.equal(r.statusCode,200);const next=crypto.randomBytes(20).toString('hex')+'A9!';const ended=await p.identity(p.event(s,mode==='logout'?{op:'logout'}:{op:'change-password',currentPassword:db.accounts.normal.password,newPassword:next}));assert.equal(ended.statusCode,200);if(mode==='password')db.accounts.normal.password=next;return r;}});

@@ -199,7 +199,7 @@ async function main() {
           assert.equal((await api.request('/api/points?view=admin',{session:await session(reviewer)})).status,403);
           await points(staff);
           const row = staff.locator('[data-admin-order-id="'+id+'"]');
-          await row.getByText('集成用虚构纸签（仅合成） · 1 件',{exact:true}).waitFor();
+          await row.getByText('集成用虚构纸签（仅合成） · 1 件 · '+id,{exact:true}).waitFor();
           assert(!(await row.innerText()).includes(member.memberId));
           if(outcome === 'failed') {
             for (const width of [320,768,1024,1440]) {
@@ -207,7 +207,15 @@ async function main() {
               assert(await row.evaluate(element=>element.scrollWidth<=element.clientWidth),'queue row overflows at '+width);
             }
           }
-          const action = row.getByRole('button',{name:outcome === 'failed' ? '无法履约，退回积分' : '确认已人工开通',exact:true});
+          assert.equal(await row.getByRole('button',{name:'确认已人工开通',exact:true}).count(),0);
+          const claim = command(staff,'points','order.process');
+          await row.getByRole('button',{name:'认领订单',exact:true}).click();
+          assert.equal((await (await claim).json()).status,'processing');
+          await row.getByText(/已由你认领/).waitFor();
+          await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
+          await ownOrder.getByText(/管理员正在核验和处理此订单/).waitFor();
+          assert.equal(await ownOrder.getByRole('button',{name:'取消并按原流水退款',exact:true}).isDisabled(),true);
+          const action = row.getByRole('button',{name:outcome === 'failed' ? '确认未开通，退回积分' : '确认已人工开通',exact:true});
           result = command(staff,'points','order.process');
           await action.focus();
           await action.press('Enter');

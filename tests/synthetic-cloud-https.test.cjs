@@ -236,6 +236,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert.equal((await request('/api/points?receipt='+redeem.requestId,{session:a})).body.receipt.state,'committed');
         assert.equal((await mutate('points',b,{op:'order.cancel',orderId})).status,403);
         assert.equal((await mutate('points',reviewer,{op:'order.process',orderId,status:'failed'})).status,403);
+        assert.equal((await mutate('points',staff,{op:'order.process',orderId,status:'processing'})).body.status,'processing');
         const fail = {op:'order.process',orderId,status:'failed',requestId:crypto.randomUUID()};
         for (const r of await Promise.all([mutate('points',staff,fail),mutate('points',staff,fail)])) assert.equal(r.status,200,r.body?.code);
         const {rows} = await admin('SELECT kind,origin_id,id FROM points_lab.ledger WHERE order_id=$1 ORDER BY entry_no',[orderId]);
@@ -267,6 +268,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert.equal((await state()).balance,'0');
         const id = retried.body.orderId;
         assert.equal((await mutate('points',a,{op:'order.process',orderId:id,status:'fulfilled'})).status,403);
+        assert.equal((await mutate('points',staff,{op:'order.process',orderId:id,status:'processing'})).body.status,'processing');
         assert.equal((await mutate('points',staff,{op:'order.process',orderId:id,status:'fulfilled'})).status,200);
         assert.equal((await mutate('points',a,{op:'order.cancel',orderId:id})).status,409);
         assert.deepEqual((await admin('SELECT kind FROM points_lab.ledger WHERE order_id=$1',[id])).rows,[{kind:'redeem'}]);

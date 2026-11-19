@@ -81,12 +81,26 @@ DECLARE item points_lab.catalogue%ROWTYPE; live timestamptz:=attendance_lab.busi
 BEGIN
  IF TG_OP='INSERT' THEN
   SELECT * INTO item FROM points_lab.catalogue WHERE id=NEW.item_id;
-  SELECT COALESCE(sum(quantity),0) INTO used FROM points_lab.orders WHERE member_id=NEW.member_id AND item_id=NEW.item_id AND status IN('pending','fulfilled');
+  SELECT COALESCE(sum(quantity),0) INTO used FROM points_lab.orders WHERE member_id=NEW.member_id AND item_id=NEW.item_id AND status IN('pending','processing','fulfilled');
   IF NEW.member_id<>points_lab.actor() OR item.id IS NULL OR item.status<>'enabled' OR live<item.starts_at OR live>=item.ends_at OR NEW.unit_cost<>item.unit_cost OR NEW.status<>'pending' OR used+NEW.quantity>item.per_member_limit
   OR NOT EXISTS(SELECT 1 FROM points_lab.accounts WHERE member_id=NEW.member_id AND earned-reversed>=item.min_earned) THEN RAISE EXCEPTION 'POINTS_ORDER_CONDITION_REJECTED' USING ERRCODE='23514'; END IF;
  ELSE
   IF ROW(NEW.id,NEW.member_id,NEW.item_id,NEW.quantity,NEW.unit_cost,NEW.cost,NEW.created_at) IS DISTINCT FROM ROW(OLD.id,OLD.member_id,OLD.item_id,OLD.quantity,OLD.unit_cost,OLD.cost,OLD.created_at) OR OLD.charge_id IS NOT NULL AND NEW.charge_id IS DISTINCT FROM OLD.charge_id THEN RAISE EXCEPTION 'POINTS_ORDER_IMMUTABLE' USING ERRCODE='23514'; END IF;
-  IF NEW.status IS DISTINCT FROM OLD.status AND (OLD.status<>'pending' OR NOT(NEW.status='cancelled' AND (NEW.member_id=points_lab.actor() OR points_lab.staff()) OR NEW.status IN('failed','fulfilled') AND points_lab.staff())) THEN RAISE EXCEPTION 'POINTS_ORDER_STATE_REJECTED' USING ERRCODE='42501'; END IF;
+  IF ROW(NEW.claimed_by,NEW.claimed_at) IS DISTINCT FROM ROW(OLD.claimed_by,OLD.claimed_at) THEN
+   RAISE EXCEPTION 'POINTS_CLAIM_IMMUTABLE' USING ERRCODE='23514';
+  END IF;
+  IF NEW.status IS DISTINCT FROM OLD.status THEN
+   IF OLD.status='pending' AND NEW.status='processing' AND points_lab.staff() THEN
+    NEW.claimed_by:=points_lab.actor();
+    NEW.claimed_at:=clock_timestamp();
+   ELSIF NOT COALESCE(
+    (OLD.status='pending' AND NEW.status='cancelled' AND OLD.member_id=points_lab.actor())
+    OR (OLD.status='processing' AND NEW.status IN('failed','fulfilled') AND OLD.claimed_by=points_lab.actor() AND points_lab.staff()),
+    false
+   ) THEN
+    RAISE EXCEPTION 'POINTS_ORDER_STATE_REJECTED' USING ERRCODE='42501';
+   END IF;
+  END IF;
  END IF; RETURN NEW;
 END $$;
 CREATE TRIGGER order_guard BEFORE INSERT OR UPDATE ON points_lab.orders FOR EACH ROW EXECUTE FUNCTION points_lab.guard_order();
@@ -95,7 +109,7 @@ DECLARE o points_lab.orders%ROWTYPE; closed boolean;
 BEGIN
  SELECT * INTO o FROM points_lab.orders WHERE id=NEW.id; closed:=o.status IN('cancelled','failed');
  IF TG_OP='INSERT' AND NOT EXISTS(SELECT 1 FROM points_lab.catalogue c WHERE c.id=o.item_id AND c.status='enabled' AND c.starts_at<=attendance_lab.business_now() AND c.ends_at>attendance_lab.business_now()) THEN RAISE EXCEPTION 'POINTS_ITEM_EXPIRED' USING ERRCODE='23514'; END IF;
- IF (SELECT COALESCE(sum(quantity),0) FROM points_lab.orders WHERE member_id=o.member_id AND item_id=o.item_id AND status IN('pending','fulfilled'))>(SELECT per_member_limit FROM points_lab.catalogue WHERE id=o.item_id) THEN RAISE EXCEPTION 'POINTS_ITEM_MEMBER_LIMIT' USING ERRCODE='23514'; END IF;
+ IF (SELECT COALESCE(sum(quantity),0) FROM points_lab.orders WHERE member_id=o.member_id AND item_id=o.item_id AND status IN('pending','processing','fulfilled'))>(SELECT per_member_limit FROM points_lab.catalogue WHERE id=o.item_id) THEN RAISE EXCEPTION 'POINTS_ITEM_MEMBER_LIMIT' USING ERRCODE='23514'; END IF;
  IF o.charge_id IS NULL OR NOT EXISTS(SELECT 1 FROM points_lab.ledger WHERE id=o.charge_id AND kind='redeem' AND member_id=o.member_id AND order_id=o.id AND point_delta=o.cost)
  OR NOT EXISTS(SELECT 1 FROM points_lab.inventory WHERE order_id=o.id AND kind='reserve' AND item_id=o.item_id AND quantity=o.quantity)
  OR closed IS DISTINCT FROM EXISTS(SELECT 1 FROM points_lab.ledger WHERE kind='refund' AND origin_id=o.charge_id AND point_delta=o.cost AND member_id=o.member_id AND order_id=o.id)

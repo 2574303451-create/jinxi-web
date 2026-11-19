@@ -19,7 +19,7 @@ function checkEpoch(){const value=sessionEpoch();if(value!==observedEpoch){obser
 function node(tag,text){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;}
 function button(label,body){const b=node('button',label);b.type='button';b.dataset.op=body.op;b.addEventListener('click',()=>void act(body));return b;}
 function row(target,title,text){const a=node('article');a.append(node('strong',title),node('p',text));el(target).append(a);return a;}
-const kindLabel={award:'签到奖励',redeem:'兑换扣减',refund:'原订单退款',reversal:'原奖励冲正'},orderLabel={pending:'待处理',fulfilled:'虚构完成',failed:'失败已退款',cancelled:'已取消并退款'};
+const kindLabel={award:'签到奖励',redeem:'兑换扣减',refund:'原订单退款',reversal:'原奖励冲正'},orderLabel={pending:'待处理',processing:'处理中',fulfilled:'虚构完成',failed:'失败已退款',cancelled:'已取消并退款'};
 function render(data,board){
  const stats=el('stats');for(const [name,value]of [['可用余额',data.account.balance],['累计毛获得',data.account.totalEarned],['净获得',data.account.netEarned],['净消费',data.account.totalSpent],['已退款',data.account.refunds],['已冲正',data.account.reversed]])stats.append(node('dt',name),node('dd',value+' 分'));el('listed').checked=data.account.listed;
  for(const e of data.events){const r=row('events',e.businessDate,e.status==='unsettled'?'未结算，金额由有效规则确定':e.status==='reversed'?'原奖励已冲正':'独立回执已结算 '+e.amount+' 分');r.dataset.eventId=e.eventId;if(e.status==='unsettled'){const b={op:'settle',eventId:e.eventId};if(data.rules.length===1)b.ruleId=data.rules[0].id;r.append(button('结算本次签到',b));}}
@@ -31,7 +31,13 @@ function render(data,board){
  el('admin').hidden=!data.permissions.admin;
  if(data.permissions.admin){
   for(const r of data.rules){const a=row('rules',r.code+' · 版本 '+r.version,'状态 '+r.status+' · 连续奖励 '+[r.day1,r.day3,r.day7].join('/')+' · 每日/总限额 '+r.daily_cap+'/'+r.total_cap);a.dataset.ruleId=r.id;a.append(button(r.status==='enabled'?'停用此版本':'启用此版本',{op:'rule.status',ruleId:r.id,status:r.status==='enabled'?'disabled':'enabled'}));}
-  for(const o of data.adminOrders){const a=row('admin-orders',o.ownerLabel+' · 订单 '+o.id.slice(0,8),o.cost+' 分 · 待处理');a.dataset.orderId=o.id;a.append(button('标记虚构完成',{op:'order.process',orderId:o.id,status:'fulfilled'}),button('标记失败并退款',{op:'order.process',orderId:o.id,status:'failed'}));}
+  for(const o of data.adminOrders){
+   const a=row('admin-orders',o.ownerLabel+' · 订单 '+o.id.slice(0,8),o.cost+' 分 · '+orderLabel[o.status]);a.dataset.orderId=o.id;
+   const change=status=>({op:'order.process',orderId:o.id,status});
+   if(o.status==='pending')a.append(button('认领订单',change('processing')));
+   else if(o.claimedByMe)a.append(button('标记虚构完成',change('fulfilled')),button('确认未开通并标记失败退款',change('failed')));
+   else a.append(node('p','其他管理员正在处理。'));
+  }
   for(const a of data.adminAwards){const r=row('admin-awards',a.ownerLabel+' · 原签到奖励',a.amount+' 分');r.dataset.ledgerId=a.id;r.append(button('冲正原奖励',{op:'award.reverse',ledgerId:a.id}));}
  }
  el('private').hidden=false;

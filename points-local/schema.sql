@@ -44,7 +44,9 @@ CREATE TABLE points_lab.accounts(
 CREATE TABLE points_lab.orders(
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),member_id uuid NOT NULL REFERENCES points_lab.accounts(member_id),item_id uuid NOT NULL REFERENCES points_lab.catalogue(id),
  quantity integer NOT NULL CHECK(quantity BETWEEN 1 AND 5),unit_cost integer NOT NULL CHECK(unit_cost BETWEEN 1 AND 1000000),cost bigint NOT NULL CHECK(cost=quantity::bigint*unit_cost),
- status text NOT NULL DEFAULT 'pending' CHECK(status IN('pending','fulfilled','failed','cancelled')),charge_id uuid UNIQUE,created_at timestamptz NOT NULL DEFAULT statement_timestamp()
+ status text NOT NULL DEFAULT 'pending' CHECK(status IN('pending','processing','fulfilled','failed','cancelled')),
+ claimed_by uuid,claimed_at timestamptz,charge_id uuid UNIQUE,created_at timestamptz NOT NULL DEFAULT statement_timestamp(),
+ CHECK((status IN('processing','fulfilled','failed'))=(claimed_by IS NOT NULL) AND (claimed_by IS NULL)=(claimed_at IS NULL))
 );
 CREATE TABLE points_lab.ledger(
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),member_id uuid NOT NULL REFERENCES points_lab.accounts(member_id),entry_no bigint NOT NULL CHECK(entry_no>0),

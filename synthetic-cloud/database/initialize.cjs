@@ -9,8 +9,8 @@ const sourcePins = {
   'member-local/schema.sql': 'f23ba0cd01020e256f07a2ff89bbdc7967873d0bda04c930ceeb52dcb975e50d',
   'community-local/schema.sql': 'b055be18ed97de97e56e7e0f91a2dfc6e3d978dc7df5c536b30452322ecd9c2e',
   'attendance-local/schema.sql': '14bf4348de437d982ae0890614554b6556a1f4451991f26757950e8ad48857f3',
-  'points-local/schema.sql': '17f85e8cbe242f3e98c1dc3ebc05bd606b098229f80dddd2caeb4df448ce17c3',
-  'points-local/invariants.sql': 'fb4817d9715590093a95da57b65df8749600e4086f53a11b2f662c6b33cbb862',
+  'points-local/schema.sql': '5394e321cc62658bb3ac279ba89a80e0d275c0065253b72ec414600514bdb268',
+  'points-local/invariants.sql': '1a7614905cb66b22dce6f426e265a3a6ed9ba5ae9689bb5e1c451be4f33769b5',
   'operations-local/schema.sql': 'bb0f52b6cc836761adf24f4958bdd401c1ca6b50b60f7bf890e30c91caa5321a',
   'operations-local/teams.sql': 'e5103377c42b22d4ade130d7260d2f70b6657d46889a80b88ea6f7068c8ed40a',
 };
@@ -26,7 +26,7 @@ function schemaSteps() {
     let sql = readSource(file).replace(/\nCOMMIT;\s*$/, '');
     if (file.endsWith('/schema.sql')) {
       // The host guard is replaced by verifyTarget + verifyInventory in the same
-      // outer transaction. The seven original SQL sources stay unchanged.
+      // outer transaction. The SQL contents are pinned before adaptation.
       const start = sql.indexOf('\nCREATE ROLE ');
       if (start < 0) throw Error('SYNTHETIC_SCHEMA_SOURCE_CHANGED');
       const owner = owners.find(name => sql.includes('CREATE ROLE ' + name + ' '));

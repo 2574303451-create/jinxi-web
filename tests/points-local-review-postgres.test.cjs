@@ -99,14 +99,16 @@ test('points transaction failure and revocation review on actual synthetic Postg
    assert.equal((await p.op(staff,change('fulfilled'))).body.code,'ORDER_CLAIM_REQUIRED');
    assert.equal((await p.op(member,change('processing'))).status,403);
    assert.equal((await p.op(staff,change('processing'))).body.status,'processing');
+   assert.equal((await p.op(member,{op:'redeem',itemId:db.fixtures.itemId,quantity:2})).body.code,'MEMBER_LIMIT');
    const claimed = await p.snapshot();
 
    await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.same.memberId]);
    try {
-    const {body:{adminOrders:[unowned]}} = await p.call(other,null,{view:'admin'});
-    assert.equal(unowned.id,orderId);
-    assert.equal(unowned.claimedByMe,false);
-    assert(!Object.hasOwn(unowned,'claimedBy'));
+    const {body:{adminOrders:[mine]}} = await p.call(staff,null,{view:'admin'});
+    assert.equal(mine.id,orderId);
+    assert.equal(mine.status,'processing');
+    assert(!Object.hasOwn(mine,'claimedBy'));
+    assert.deepEqual((await p.call(other,null,{view:'admin'})).body.adminOrders,[]);
     for (const status of ['processing','failed','fulfilled']) {
      assert.equal((await p.op(other,change(status))).body.code,'ORDER_CLAIMED_BY_ANOTHER');
     }

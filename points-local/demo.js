@@ -35,8 +35,7 @@ function render(data,board){
    const a=row('admin-orders',o.ownerLabel+' · 订单 '+o.id.slice(0,8),o.cost+' 分 · '+orderLabel[o.status]);a.dataset.orderId=o.id;
    const change=status=>({op:'order.process',orderId:o.id,status});
    if(o.status==='pending')a.append(button('认领订单',change('processing')));
-   else if(o.claimedByMe)a.append(button('标记虚构完成',change('fulfilled')),button('确认未开通并标记失败退款',change('failed')));
-   else a.append(node('p','其他管理员正在处理。'));
+   else if(o.status==='processing')a.append(button('标记虚构完成',change('fulfilled')),button('确认未开通并标记失败退款',change('failed')));
   }
   for(const a of data.adminAwards){const r=row('admin-awards',a.ownerLabel+' · 原签到奖励',a.amount+' 分');r.dataset.ledgerId=a.id;r.append(button('冲正原奖励',{op:'award.reverse',ledgerId:a.id}));}
  }

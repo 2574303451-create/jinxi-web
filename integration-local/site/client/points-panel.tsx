@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
-type ActiveOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: 'pending' | 'processing'; claimedByMe: boolean };
+type ActiveOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: 'pending' | 'processing' };
 const orderLabels: Record<string,string> = { pending: '待处理', processing: '处理中', fulfilled: '已完成', failed: '未履约 · 已退款', cancelled: '已取消 · 已退款' };
 
 export function PointsPanel() {
@@ -47,18 +47,18 @@ export function PointsPanel() {
       </li>)}</ul>
       {!resource.loading && resource.data?.orders && <section aria-labelledby="points-queue-title">
         <h3 id="points-queue-title">待处理兑换</h3>
-        <p>显示最早的 50 笔待处理或处理中订单。先核对订单号并认领，再模拟人工开通。</p>
+        <p>待认领和本人处理中各显示最早的 50 笔。先核对订单号并认领，再模拟人工开通。</p>
         {resource.data.orders.length === 0 && <p role="status">暂无待处理订单。</p>}
         <ul>{resource.data.orders.map(order => <li className="integration-record" key={order.id} data-admin-order-id={order.id}>
           <strong id={'order-summary-' + order.id}>{order.itemName} · {order.quantity} 件 · {order.id}</strong>
           <p>{order.ownerLabel} · 扣减 {order.cost} 分</p>
           <div className="integration-actions">
             {order.status === 'pending' ? <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'processing')}>认领订单</button>
-              : order.claimedByMe ? <>
+              : <>
                 <p>已由你认领。核实奖励尚未开通时，可登记无法履约并退款。</p>
                 <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'fulfilled')}>确认已人工开通</button>
                 <button className="paper-button" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'failed')}>确认未开通，退回积分</button>
-              </> : <p>其他管理员正在处理。</p>}
+              </>}
           </div>
         </li>)}</ul>
       </section>}

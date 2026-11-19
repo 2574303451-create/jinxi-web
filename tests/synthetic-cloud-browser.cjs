@@ -361,12 +361,13 @@ async function main() {
       } finally { await browser.close(); }
     }));
   } finally {
+    if (!record.passed && process.env.CI === 'true') console.error('Synthetic browser stage: '+record.stage);
     fs.writeFileSync(path.join(evidence,'last-browser.json'),JSON.stringify(record,null,2)+'\n');
     await app.close();
   }
   console.log(JSON.stringify(record));
 }
 main().catch(error=>{
-  console.error(error.message);
+  console.error(process.env.CI === 'true' ? 'Synthetic browser rehearsal failed' : error.message);
   process.exitCode=1;
 });

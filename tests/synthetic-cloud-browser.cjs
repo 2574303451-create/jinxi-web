@@ -137,6 +137,8 @@ async function main() {
           return new URL(response.url()).pathname === '/api/'+module &&
             request.method()==='POST' && request.postDataJSON().op===op;
         });
+        // Independent browser visits use the same loopback IP in this fixture.
+        const resetVisitQuota = () => api.admin('TRUNCATE b2_lab.member_session_limits_v2');
         async function points(p) {
           await close(p);
           await p.getByRole('button',{name:'账户与兑换',exact:true}).click();
@@ -215,8 +217,7 @@ async function main() {
         let previousRequest = lostRequest;
         for (const outcome of ['failed','fulfilled']) {
           record.stage='manual-redemption-admin-queue-'+outcome;
-          // The two orders simulate distinct visits; all test browsers share one loopback IP.
-          await api.admin('TRUNCATE b2_lab.member_session_limits_v2');
+          await resetVisitQuota();
           await close(a);
           await a.getByRole('button',{name:'恢复未确认操作',exact:true}).click();
           const receipt = a.locator('[data-request-id="'+previousRequest+'"]').filter({hasText:'服务端确认已提交'});
@@ -318,10 +319,7 @@ async function main() {
         record.scenarios.push('one-linked-refund-and-no-private-order-after-member-switch');
 
         record.stage='guide-and-public-review';
-        await adminContext.close();
-        // Each scenario shares the rehearsal's loopback address. Give the
-        // unrelated guide path its own request quota after the three-account run.
-        await api.admin('TRUNCATE b2_lab.member_session_limits_v2');
+        await resetVisitQuota();
         await navigate(a,'/guides/');
         await ready(a);
         await a.getByRole('button',{name:'写一篇攻略',exact:false}).click();
@@ -343,6 +341,113 @@ async function main() {
         await a.reload({waitUntil:'domcontentloaded'});
         await a.locator('.guide-card').filter({hasText:'独立 TEST 浏览器合成攻略'}).waitFor();
         record.scenarios.push('shared-guide-components-show-independently-approved-content');
+
+        record.stage='announcement-publish';
+        await resetVisitQuota();
+        for (const page of [a,staff,reviewer]) {
+          await navigate(page);
+          await ready(page);
+        }
+        const announce = '独立 TEST 合成公会通知';
+        const announcementButton = '公告发布与审核';
+        const announcementCard = a.locator('.announcement-list').getByRole('button',{name:announce,exact:true});
+        await staff.getByRole('button',{name:announcementButton,exact:true}).click();
+        await staff.getByLabel('公告标题',{exact:true}).fill(announce);
+        await staff.getByLabel('公告富文本源',{exact:true}).fill('<p><strong>合成公告正文</strong></p>');
+        result = command(staff,'operations','announcement.create');
+        await staff.getByRole('button',{name:'保存公告草稿',exact:true}).click();
+        const created = await result;
+        assert.equal(created.status(),200);
+        const {item:{id:announcementId}} = await created.json();
+        const managed = page => page.getByTestId('managed-announcements').locator(`[data-item-id="${announcementId}"]`);
+        await managed(staff).getByRole('button',{name:'提交公告审核',exact:true}).click();
+        await managed(staff).getByText(/submitted/).waitFor();
+        assert.equal(await managed(staff).getByRole('button',{name:'独立审核并发布',exact:true}).count(),0);
+        await a.locator('.announcement-preview').getByText(/暂无公告/).waitFor();
+        await reviewer.getByRole('button',{name:announcementButton,exact:true}).click();
+        result = command(reviewer,'operations','announcement.publish');
+        await managed(reviewer).getByRole('button',{name:'独立审核并发布',exact:true}).click();
+        assert.equal((await result).status(),200);
+        const {rows:[announcement]} = await api.admin(`
+          SELECT d.status,d.owner_id,r.actor_id AS reviewer_id
+          FROM operations_lab.documents d JOIN operations_lab.revisions r
+            ON r.item_id=d.id AND r.version=d.version WHERE d.id=$1
+        `,[announcementId]);
+        assert.deepEqual(announcement,{status:'published',owner_id:db.accounts.admin.memberId,
+          reviewer_id:db.accounts.reviewer.memberId});
+        await navigate(a);
+        await ready(a);
+        await announcementCard.click();
+        await a.getByTestId('public-announcements').locator('strong').filter({hasText:/^合成公告正文$/}).waitFor();
+        assert.equal(await a.getByLabel('公告标题',{exact:true}).count(),0);
+        record.scenarios.push('packed-home-announcement-visible-after-independent-review');
+
+        record.stage='sponsorship-visibility';
+        await resetVisitQuota();
+        for (const page of [staff,reviewer]) {
+          await close(page);
+          await page.getByRole('button',{name:'合成感谢记录',exact:true}).click();
+        }
+        const sponsor = '独立 TEST 合成感谢对象';
+        await staff.getByLabel('合成感谢对象',{exact:true}).fill(sponsor);
+        result = command(staff,'operations','sponsor.create');
+        await staff.getByRole('button',{name:'登记合成感谢',exact:true}).click();
+        const registered = await result;
+        assert.equal(registered.status(),200);
+        const {item:{id:sponsorId}} = await registered.json();
+        const sponsorRow = reviewer.locator(`[data-sponsor-id="${sponsorId}"]`);
+        await reviewer.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        await sponsorRow.getByText(sponsor,{exact:true}).waitFor();
+        assert.equal(await reviewer.getByLabel('合成感谢对象',{exact:true}).count(),0);
+        result = command(staff,'operations','sponsor.hide');
+        await staff.locator('.integration-record').filter({hasText:sponsor}).getByRole('button',{name:'隐藏感谢记录',exact:true}).click();
+        assert.equal((await result).status(),200);
+        await reviewer.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        await sponsorRow.waitFor({state:'hidden'});
+        assert.equal(await reviewer.getByRole('alert').count(),0);
+        const {rows:[sponsorship]} = await api.admin('SELECT status,owner_id,occurred_at FROM operations_lab.documents WHERE id=$1',[sponsorId]);
+        assert.deepEqual(sponsorship,{status:'hidden',owner_id:db.accounts.admin.memberId,occurred_at:new Date('2024-03-01T04:00:00Z')});
+        record.scenarios.push('administrator-maintained-synthetic-sponsorship-obeys-public-visibility');
+
+        record.stage='team-capacity-and-leave';
+        await resetVisitQuota();
+        for (const page of [a,staff,reviewer]) {
+          await close(page);
+          await page.getByRole('button',{name:'可信组队',exact:true}).click();
+        }
+        await a.getByLabel('队伍名称',{exact:true}).fill('独立 TEST 合成队');
+        await a.getByLabel('人数上限',{exact:true}).fill('2');
+        result = command(a,'operations','team.create');
+        await a.getByRole('button',{name:'创建合成队伍',exact:true}).click();
+        const formed = await result;
+        assert.equal(formed.status(),200);
+        const {item:{id:teamId}} = await formed.json();
+        const join = async page => {
+          await page.getByRole('button',{name:'刷新队伍',exact:true}).click();
+          const joined = command(page,'operations','team.join');
+          await page.locator(`[data-team-id="${teamId}"]`).getByRole('button',{name:'加入此合成队伍',exact:true}).click();
+          return await joined;
+        };
+        assert.equal((await join(reviewer)).status(),200);
+        await reviewer.getByTestId('own-team').getByText(/member · 2\/2/).waitFor();
+        const full = await join(staff);
+        assert.equal(full.status(),409);
+        assert.equal((await full.json()).code,'TEAM_FULL');
+        const {rows:activeMembers} = await api.admin(`
+          SELECT member_id,role FROM operations_lab.team_members WHERE team_id=$1 AND left_at IS NULL ORDER BY role
+        `,[teamId]);
+        assert.deepEqual(activeMembers,[{member_id:other.memberId,role:'leader'},{member_id:db.accounts.reviewer.memberId,role:'member'}]);
+        result = command(reviewer,'operations','team.leave');
+        await reviewer.getByRole('button',{name:'退出本人队伍',exact:true}).click();
+        assert.equal((await result).status(),200);
+        await reviewer.getByTestId('own-team').waitFor({state:'hidden'});
+        const {rows:[team]} = await api.admin(`
+          SELECT t.leader_id,t.member_count,m.left_at IS NOT NULL AS member_left
+          FROM operations_lab.teams t JOIN operations_lab.team_members m ON m.team_id=t.id
+          WHERE t.id=$1 AND m.member_id=$2
+        `,[teamId,db.accounts.reviewer.memberId]);
+        assert.deepEqual(team,{leader_id:other.memberId,member_count:1,member_left:true});
+        record.scenarios.push('packed-team-membership-enforces-capacity-and-ordinary-member-exit');
 
         record.stage='viewports';
         await navigate(a);

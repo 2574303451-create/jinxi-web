@@ -39,7 +39,7 @@ Next 16.4.5 的 `output: 'export'` 把网页导出为静态文件。数据请求
 
 ## 本机复现
 
-`B2 security checks` 在干净检出中运行合成会话、历史兼容、Edge 门禁和 Gate-only 测试。文件清单测试使用锁文件安装的 Netlify CLI 23.2.1，核对零公开文件和 Edge 收集路径。CI 在 GitHub 托管 Linux 测试机上用签名软件包的 PostgreSQL 17 顺序执行积分事务、回执与历史预演、合成库权限、已打包函数的 HTTPS 测试。随后用 Playwright 1.64.1 配套的 Firefox 验证合成会话、积分扣减与退款、回执恢复、权限隔离和五种屏幕宽度。临时数据库只绑定环回地址，测试凭据每次生成。Firefox 的临时信任只覆盖该次 HTTPS 预演。正式构建后 CI 扫描真实静态产物，核对其中没有合成业务入口或恢复代码。CLI 23.15.1 试点打包、Windows Edge 和真实 Netlify CDN 仍按各自说明验收。
+`B2 security checks` 在干净检出中运行合成会话、历史兼容、Edge 门禁和 Gate-only 测试。文件清单测试使用锁文件安装的 Netlify CLI 23.2.1，核对零公开文件和 Edge 收集路径。CI 在 GitHub 托管 Linux 测试机上用签名软件包的 PostgreSQL 17 顺序执行积分事务、回执与历史预演、合成库权限、已打包函数的 HTTPS 测试。随后用 Playwright 1.64.1 配套的 Firefox 验证合成会话、积分与退款、回执恢复、攻略和公告审核、感谢记录的公开状态、基础组队及五种屏幕宽度。临时数据库只绑定环回地址，测试凭据每次生成。Firefox 的临时信任只覆盖该次 HTTPS 预演。正式构建后 CI 扫描真实静态产物，核对其中没有合成业务入口或恢复代码。CLI 23.15.1 试点打包、Windows Edge 和真实 Netlify CDN 仍按各自说明验收。
 
 在本分支的干净工作树运行。需要锁文件中的 Node 24.22.2/npm 11.19.1 依赖、本机 PostgreSQL 17.11 bin、OpenSSL、Windows Edge、Playwright。预演只启动随机临时目录下的 PostgreSQL `127.0.0.1:5432`，端口已占用时应先查清归属。测试命令不会接管现有监听者。用明确的工具路径替换占位文字。
 

@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {freshOperations}=require('../operations-local/database.cjs'),{serveIntegration}=require('../integration-local/server.cjs'),{createSession}=require('../integration-local/session.cjs'),{httpClient}=require('./integration-local-support.cjs');
-const {syntheticHistory}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs'),{rehearse}=require('../history-compat/rehearse.cjs');
+const {syntheticHistory,syntheticLegacyRedemption}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs'),{rehearse}=require('../history-compat/rehearse.cjs');
 function journal(){const rows=new Map();return{rows,async claim(r,{renewConfirmed=false}={}){const key=r.actor+':'+r.module+':'+r.digest;if(rows.has(key)&&!(renewConfirmed&&rows.get(key).state==='confirmed'))return{...rows.get(key),fresh:false};const row={...r,key,state:'pending',createdAt:Date.now(),expiresAt:Date.now()+86400000};rows.set(key,row);return{...row,fresh:true};},async mark(k,id,s){const row=rows.get(k);assert.equal(row.id,id);if(row.state!=='confirmed')row.state=s;},async list(a){return [...rows.values()].filter(r=>r.actor===a);},async forget(k,id){assert.equal(rows.get(k).id,id);rows.delete(k);}};}
 test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS',async t=>{
  const args=process.argv.slice(2);assert(args.length===4&&args[0]==='--pg-bin'&&args[2]==='--openssl');const db=await freshOperations(args[1]);let server;
@@ -68,6 +68,18 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   }};
   await assert.rejects(rehearse(dbWithLostAck,checkHistory(data,anchors)),/REHEARSAL_ROLLBACK_UNCONFIRMED/);
   assert.equal(withheld,true);assert.equal(closed,true);assert.deepEqual(await db.financialSnapshot(),old);}
+ });
+ await t.test('historical redemption mismatches are rehearsed as findings without staging orders or money',async()=>{
+  const {data,anchors,order}=syntheticLegacyRedemption();
+  const report=checkHistory(data,anchors);
+  assert.deepEqual(report.findings.map(f=>f.entity),['messages']);
+  assert.deepEqual(await rehearse(db,report),{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  order.status='cancelled';
+  const noRefund=checkHistory(data,anchors);
+  assert(noRefund.findings.some(f=>f.entity==='order'&&f.code==='ORDER_LEDGER_STATUS_UNPROVEN'));
+  assert.deepEqual(noRefund.candidates,report.candidates);
+  assert.deepEqual(await rehearse(db,noRefund),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,r);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},r),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});
  }finally{await server?.close();await db.stop();}

@@ -8,6 +8,51 @@ const sourceId=v=>{const value=Number.isSafeInteger(v)?String(v):v;return typeof
 const isLossyId=id=>Number.isInteger(id)&&!Number.isSafeInteger(id);
 const ref=(v,i)=>sourceId(v)||'row-'+i;
 function groups(rows,key){const map=new Map();for(const row of rows){const k=key(row);if(!map.has(k))map.set(k,[]);map.get(k).push(row);}return map;}
+const hasOrderNumber=value=>typeof value==='string'&&value.trim().length>0;
+function isLegacyOrderDebit(row){
+ return row.direction===2&&row.scene==='redeem'&&row.event_type==='item_exchange';
+}
+function hasValidMovement(row){
+ return integer(row.id)&&[1,2].includes(row.direction)&&integer(row.point_delta)&&row.point_delta!=='0'&&
+  integer(row.balance_before)&&integer(row.balance_after)&&
+  BigInt(row.balance_before)+(row.direction===1?1n:-1n)*BigInt(row.point_delta)===BigInt(row.balance_after);
+}
+function checkOrders(orders,ledger,businessIds,owner,add){
+ const byNumber=groups(orders,r=>r.order_no);
+ const byExplicitOrder=groups(ledger.filter(r=>hasOrderNumber(r.ext_json?.order_no)),r=>r.ext_json.order_no);
+ const refundsByOrigin=groups(ledger.filter(r=>r.event_type==='refund'&&hasOrderNumber(r.ext_json?.origin_biz_id)),r=>r.ext_json.origin_biz_id);
+ for(const row of ledger){
+  if(isLegacyOrderDebit(row)&&hasOrderNumber(row.biz_id)&&!byNumber.has(row.biz_id))add('ledger',row.id,'UNMATCHED_REDEMPTION_DEBIT');
+ }
+ for(const row of orders){
+  if(!owner(row.user_id))add('order',row.id,'UNPROVEN_ORDER_SUBJECT','unmapped');
+  if(!integer(row.id)||!integer(row.point_cost)||row.point_cost==='0'||!hasOrderNumber(row.order_no)||
+   !hasOrderNumber(row.item_code)||!['pending','success','failed','cancelled'].includes(row.status))add('order',row.id,'INVALID_ORDER_FIELDS');
+  if(byNumber.get(row.order_no).length!==1)add('order',row.id,'DUPLICATE_REDEMPTION');
+  if(!hasOrderNumber(row.order_no)){add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');continue;}
+
+  // point_create_redeem_order uses order_no as point_spend's biz_id; order_no is absent from its ledger JSON.
+  const businessRows=businessIds.get(row.order_no)||[],explicitRows=byExplicitOrder.get(row.order_no)||[];
+  const charges=[...new Set([...businessRows,...explicitRows].filter(r=>r.direction===2))];
+  const refunds=[...new Set([...(refundsByOrigin.get(row.order_no)||[]),...explicitRows.filter(r=>r.event_type==='refund')])];
+  if(charges.length>1)add('order',row.id,'DUPLICATE_ORDER_CHARGE');
+  if(refunds.length>1)add('order',row.id,'DUPLICATE_REFUND');
+  const charge=charges.length===1&&businessRows.length===1?charges[0]:null;
+  const debitProven=charge&&isLegacyOrderDebit(charge)&&hasValidMovement(charge)&&charge.biz_id===row.order_no&&
+   charge.user_id===row.user_id&&charge.point_delta===row.point_cost&&
+   charge.ext_json?.item_code===row.item_code&&
+   (charge.ext_json?.order_no===undefined||charge.ext_json.order_no===row.order_no);
+  const refundInvalid=refunds.some(refund=>!debitProven||refund.direction!==1||!hasValidMovement(refund)||
+   !hasOrderNumber(refund.biz_id)||businessIds.get(refund.biz_id).length!==1||
+   BigInt(refund.id)<=BigInt(charge.id)||
+   refund.user_id!==row.user_id||refund.point_delta!==row.point_cost||
+   refund.ext_json?.origin_biz_id!==row.order_no||
+   (refund.ext_json?.order_no!==undefined&&refund.ext_json.order_no!==row.order_no));
+  if(refundInvalid)add('order',row.id,'UNLINKED_OR_INVALID_REFUND');
+  const refundsExpected=['cancelled','failed'].includes(row.status)?1:0;
+  if(!debitProven||refundInvalid||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
+ }
+}
 function checkHistory(data,anchors){
  if(data?.kind!=='jinxi-synthetic-history-v1'||anchors?.kind!=='jinxi-synthetic-bindings-v1'||anchors.proofSource!=='synthetic-authoritative-fixture')throw Error('SYNTHETIC_HISTORY_AND_SEPARATE_BINDINGS_REQUIRED');
  const stack=[data,anchors];let nodes=0;while(stack.length){const value=stack.pop();if(value&&typeof value==='object'){if(++nodes>200000)throw Error('HISTORY_SHAPE_REJECTED');for(const[key,child]of Object.entries(value)){if(/password|csrf|token|credential|private.?key|connection.?string|^dsn$/i.test(key))throw Error('HISTORY_SENSITIVE_FIELD_REJECTED');if(child&&typeof child==='object')stack.push(child);}}}
@@ -60,7 +105,8 @@ function checkHistory(data,anchors){
   else if(BigInt(row.balance_before)+(row.direction===1?1n:-1n)*BigInt(row.point_delta)!==BigInt(row.balance_after))add('ledger',row.id,'LEDGER_DIRECTION_OR_BALANCE_MISMATCH');
   if(typeof row.biz_id!=='string'||!row.biz_id||(biz.get(row.biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_OR_MISSING_BUSINESS_ID');
   if(row.event_type==='checkin'&&day(row.ext_json?.checkin_date)){const k=(owner(row.user_id)?.memberId||'unmapped:'+row.user_id)+':'+row.ext_json.checkin_date;if(rewardKeys.has(k))add('ledger',row.id,'DUPLICATE_CHECKIN_REWARD');rewardKeys.add(k);}
-  if(row.rule_code&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
+  const generatedDebitCode=isLegacyOrderDebit(row)&&row.rule_code==='redeem.item_exchange.consume';
+  if(row.rule_code&&!generatedDebitCode&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
   if(['refund','reverse','reversal'].includes(row.event_type)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
  const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
@@ -72,13 +118,7 @@ function checkHistory(data,anchors){
   for(const row of rows){if(![1,2].includes(row.direction)||!integer(row.point_delta)||!integer(row.balance_before)||!integer(row.balance_after)){ok=false;continue;}if(BigInt(row.balance_before)!==balance)ok=false;balance+=(row.direction===1?1n:-1n)*BigInt(row.point_delta);if(balance!==BigInt(row.balance_after)||balance<0n)ok=false;}
   if(!ok||balance!==BigInt(a.balance))add('pointAccount',a.user_id,'BALANCE_LEDGER_INCONSISTENT');
  }
- const orderNo=groups(data.orders,r=>r.order_no);
- for(const row of data.orders){if(!owner(row.user_id))add('order',row.id,'UNPROVEN_ORDER_SUBJECT','unmapped');if(!integer(row.id)||!integer(row.point_cost)||row.point_cost==='0'||!['pending','success','failed','cancelled'].includes(row.status))add('order',row.id,'INVALID_ORDER_FIELDS');if((orderNo.get(row.order_no)||[]).length!==1)add('order',row.id,'DUPLICATE_REDEMPTION');
-  const movement=data.ledger.filter(l=>l.ext_json?.order_no===row.order_no),charges=movement.filter(l=>l.direction===2),refunds=movement.filter(l=>l.event_type==='refund');
-  if(charges.length>1)add('order',row.id,'DUPLICATE_ORDER_CHARGE');if(refunds.length>1)add('order',row.id,'DUPLICATE_REFUND');
-  if(refunds.some(l=>l.direction!==1||charges.length!==1||l.ext_json?.origin_biz_id!==charges[0].biz_id||l.point_delta!==charges[0].point_delta||l.user_id!==row.user_id))add('order',row.id,'UNLINKED_OR_INVALID_REFUND');
-  if(charges.length!==1||charges[0]?.point_delta!==row.point_cost||charges[0]?.user_id!==row.user_id||row.status==='cancelled'&&refunds.length!==1||row.status==='success'&&refunds.length!==0)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
- }
+ checkOrders(data.orders,data.ledger,biz,owner,add);
  for(const row of data.announcements){add('announcement',row.id,'LEGACY_AUTHOR_AND_PUBLICATION_POLICY_UNPROVEN','unmapped');if(!instant(row.created_at)||!instant(row.updated_at)||typeof row.content_html!=='string')add('announcement',row.id,'INVALID_ANNOUNCEMENT_FIELDS');}
  for(const row of data.sponsorships){if(!instant(row.sponsor_time))add('sponsorship',row.id,'INVALID_SPONSOR_TIME');add('sponsorship',row.id,'SOURCE_AUDIT_REQUIRED','unmapped');}
  const safeCandidates=candidates.filter(c=>!findings.some(f=>f.entity===c.kind&&f.ref===c.sourceId));

@@ -1,4 +1,4 @@
-const {test}=require('node:test'),assert=require('node:assert/strict');const {syntheticHistory}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs');
+const {test}=require('node:test'),assert=require('node:assert/strict');const {syntheticHistory,syntheticLegacyRedemption}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs');
 test('208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content',()=>{const {data,anchors}=syntheticHistory(),before=JSON.stringify(data),r=checkHistory(data,anchors);assert.equal(r.summary.trusted,208);assert.notEqual(r.mappings[0].memberId,r.mappings[1].memberId);assert.equal(r.mappings[0].legacyAccountId,'9007199254740993');assert.equal(r.candidates.length,1);assert(r.findings.some(f=>f.entity==='messages'&&f.code==='NO_TRUSTED_AUTHOR'));assert.equal(JSON.stringify(data),before);assert(!JSON.stringify(r).includes('同名合成成员'));});
 test('duplicate employee and UUID, missing binding, orphan profile classify without guessing',()=>{const {data,anchors}=syntheticHistory(5);data.profiles.push({...data.profiles[0]});anchors.members[1].memberId=anchors.members[2].memberId;anchors.members.pop();data.profiles.push({employee_no:'ORPHAN'});const r=checkHistory(data,anchors);assert.equal(r.mappings[0].status,'ambiguous');assert.equal(r.mappings[1].status,'ambiguous');assert.equal(r.mappings[4].status,'unmapped');assert(r.findings.some(f=>f.code==='PROFILE_WITHOUT_LOGIN_ACCOUNT'));});
 test('illegal leap date, duplicate checkins and unsupported historical fields are quarantined',()=>{const {data,anchors}=syntheticHistory(1),uid=anchors.users[0].userId;data.checkins.push({id:'1',user_id:uid,checkin_date:'2023-02-29',checkin_time:'2023-02-29T04:00:00Z',continuous_days:0,is_continuous:true,reward_points:-1});for(const id of ['2','3'])data.checkins.push({id,user_id:uid,checkin_date:'2024-02-29',checkin_time:'2024-02-29T04:00:00Z',continuous_days:1,is_continuous:false,reward_points:1});data.strategies[0].difficulty=99;const codes=checkHistory(data,anchors).findings.map(f=>f.code);assert(codes.includes('INVALID_DATE_STREAK_OR_REWARD'));assert(codes.includes('DUPLICATE_CHECKIN_FACT'));assert(codes.includes('INCOMPATIBLE_STRATEGY_FIELDS'));});
@@ -48,4 +48,42 @@ test('unsafe numeric source rows quarantine matching text IDs only within the sa
  assert.deepEqual(report.candidates,[{kind:'messages',sourceId:textId,memberId:anchors.members[1].memberId}]);
  assert.deepEqual(report.findings.filter(f=>f.code==='LOSSY_SOURCE_ID_AMBIGUITY').map(f=>f.ref),[textId,'9007199254740992']);
  assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='UNSUPPORTED_SOURCE_ID'));
+});
+
+test('the legacy SQL order number matches the debit business ID without metadata order_no',()=>{
+ const {data,anchors,order}=syntheticLegacyRedemption();
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.findings.filter(f=>['order','ledger','pointAccount'].includes(f.entity)),[]);
+ assert(!report.candidates.some(c=>c.sourceId===order.id&&c.kind==='order'));
+});
+test('a cancelled legacy order can link an exact refund by original business ID',()=>{
+ const {data,anchors,order,charge}=syntheticLegacyRedemption();
+ order.status='cancelled';
+ const refund={id:'2',user_id:order.user_id,biz_id:'SYN-REFUND',event_type:'refund',direction:1,
+  point_delta:'2',balance_before:'0',balance_after:'2',ext_json:{origin_biz_id:charge.biz_id}};
+ data.ledger.push(refund);
+ assert.deepEqual(checkHistory(data,anchors).findings.filter(f=>f.entity==='order'),[]);
+ order.status='pending';
+ assert(checkHistory(data,anchors).findings.some(f=>f.entity==='order'&&f.code==='ORDER_LEDGER_STATUS_UNPROVEN'));
+ order.status='cancelled';
+ refund.ext_json.order_no='SYN-DIFFERENT';
+ assert(checkHistory(data,anchors).findings.some(f=>f.entity==='order'&&f.code==='UNLINKED_OR_INVALID_REFUND'));
+ refund.ext_json.order_no=order.order_no;
+ refund.id=charge.id;
+ assert(checkHistory(data,anchors).findings.some(f=>f.entity==='order'&&f.code==='UNLINKED_OR_INVALID_REFUND'));
+});
+test('an unrelated debit or conflicting order metadata cannot establish a legacy charge',()=>{
+ const {data,anchors,order,charge}=syntheticLegacyRedemption();
+ charge.ext_json.order_no=order.order_no;
+ charge.event_type='unrelated';
+ const codes=()=>checkHistory(data,anchors).findings.filter(f=>f.entity==='order').map(f=>f.code);
+ assert(codes().includes('ORDER_LEDGER_STATUS_UNPROVEN'));
+ charge.event_type='item_exchange';
+ charge.ext_json.order_no='SYN-DIFFERENT';
+ assert(codes().includes('ORDER_LEDGER_STATUS_UNPROVEN'));
+ charge.ext_json.order_no=order.order_no;
+ charge.ext_json.item_code='different-synthetic-reward';
+ assert(codes().includes('ORDER_LEDGER_STATUS_UNPROVEN'));
+ data.orders.length=0;
+ assert(checkHistory(data,anchors).findings.some(f=>f.entity==='ledger'&&f.code==='UNMATCHED_REDEMPTION_DEBIT'));
 });

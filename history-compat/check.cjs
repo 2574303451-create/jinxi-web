@@ -58,14 +58,16 @@ function checkOrders(orders,ledger,businessIds,owner,add){
   if(!debitProven||refundInvalid||needsReversalReview||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
  }
 }
-function checkPointAccounts(data,bindings,owner,add,businessIds,ledgerIds){
+function checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds,ledgerIds}){
  const accountsByUser=groups(data.pointAccounts,r=>r.user_id);
  const ledgerByUser=groups(data.ledger,r=>r.user_id);
  const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
- const aliasedMembers=new Set();
+ const ambiguousOpeningAccounts=new Set();
+ for(const [accountId,aliases]of usersByAccount){
+  if(aliases.some(alias=>alias.userId!==aliases[0].userId))ambiguousOpeningAccounts.add(accountId);
+ }
  for(const [member,rows]of financialIdentities){
   if(member&&new Set(rows.map(r=>r.user_id)).size>1){
-   aliasedMembers.add(member);
    add('pointAccount',member,'MULTIPLE_LEGACY_FINANCIAL_IDENTITIES');
   }
  }
@@ -83,6 +85,9 @@ function checkPointAccounts(data,bindings,owner,add,businessIds,ledgerIds){
   const subject=owner(userId);
   if(!subject){add('pointAccount',userId,'UNPROVEN_BALANCE_SUBJECT','unmapped');continue;}
   if(accounts.length!==1)continue;
+  if(ambiguousOpeningAccounts.has(subject.legacyAccountId)){
+   add('pointAccount',userId,'OPENING_ACCOUNT_ALIAS_UNPROVEN');continue;
+  }
   const [account]=accounts;
   const anchor=bindings.get(subject.legacyAccountId)?.[0];
   if(!integer(account.balance)||!integer(anchor?.openingBalance)){
@@ -99,7 +104,7 @@ function checkPointAccounts(data,bindings,owner,add,businessIds,ledgerIds){
    chainMatches&&=balance>=0n&&balance===BigInt(row.balance_after);
   }
   if(!chainMatches||balance!==BigInt(account.balance))add('pointAccount',userId,'BALANCE_LEDGER_INCONSISTENT');
-  if(aliasedMembers.has(subject.memberId)||!integer(anchor.openingTotalEarned)||!integer(anchor.openingTotalSpent)){
+  if(!integer(anchor.openingTotalEarned)||!integer(anchor.openingTotalSpent)){
    add('pointAccount',userId,'OPENING_ACCOUNT_COUNTERS_UNPROVEN');continue;
   }
   const openingEarned=BigInt(anchor.openingTotalEarned),openingSpent=BigInt(anchor.openingTotalSpent);
@@ -134,7 +139,7 @@ function checkHistory(data,anchors){
  for(const [i,p]of data.profiles.entries())if(!(accounts.get(p.employee_no)||[]).length)add('profile',p.employee_no||String(i),'PROFILE_WITHOUT_LOGIN_ACCOUNT','unmapped');
  const lossyBindings=new Set(anchors.records.filter(r=>isLossyId(r.id)).map(r=>r.kind+':'+r.id));
  for(const [i,r]of anchors.records.entries())if(sourceId(r.id)===null)add('recordBinding',String(i),'UNSUPPORTED_BINDING_SOURCE_ID','unmapped');
- const userBindings=groups(anchors.users,r=>r.userId),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
+ const userBindings=groups(anchors.users,r=>r.userId),usersByAccount=groups(anchors.users,r=>r.accountId),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
  function owner(userId){const rows=userBindings.get(userId)||[];if(rows.length!==1)return null;const s=subjects.get(rows[0].accountId);return s?.status==='trusted'?s:null;}
  const contentKinds=['messages','strategies'];
  const contentIds=Object.fromEntries(contentKinds.map(kind=>[kind,groups(data[kind],r=>sourceId(r.id))]));
@@ -165,13 +170,13 @@ function checkHistory(data,anchors){
   if(!integer(row.id)||![1,2].includes(row.direction)||!integer(row.point_delta)||row.point_delta==='0'||!integer(row.balance_before)||!integer(row.balance_after))add('ledger',row.id,'INVALID_LEDGER_FIELDS');
   else if(!hasValidMovement(row))add('ledger',row.id,'LEDGER_DIRECTION_OR_BALANCE_MISMATCH');
   if(integer(row.id)&&ledgerIds.get(row.id).length!==1)add('ledger',row.id,'DUPLICATE_LEDGER_ID');
-  if(typeof row.biz_id!=='string'||!row.biz_id||(biz.get(row.biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_OR_MISSING_BUSINESS_ID');
+  if(!nonBlankText(row.biz_id)||biz.get(row.biz_id).length>1)add('ledger',row.id,'DUPLICATE_OR_MISSING_BUSINESS_ID');
   if(row.event_type==='checkin'&&day(row.ext_json?.checkin_date)){const k=(owner(row.user_id)?.memberId||'unmapped:'+row.user_id)+':'+row.ext_json.checkin_date;if(rewardKeys.has(k))add('ledger',row.id,'DUPLICATE_CHECKIN_REWARD');rewardKeys.add(k);}
   const generatedDebitCode=isLegacyOrderDebit(row)&&row.rule_code==='redeem.item_exchange.consume';
   if(row.rule_code&&!generatedDebitCode&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
   if(isCompensation(row)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
- checkPointAccounts(data,bindings,owner,add,biz,ledgerIds);
+ checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds:biz,ledgerIds});
  checkOrders(data.orders,data.ledger,biz,owner,add);
  for(const row of data.announcements){add('announcement',row.id,'LEGACY_AUTHOR_AND_PUBLICATION_POLICY_UNPROVEN','unmapped');if(!instant(row.created_at)||!instant(row.updated_at)||typeof row.content_html!=='string')add('announcement',row.id,'INVALID_ANNOUNCEMENT_FIELDS');}
  for(const row of data.sponsorships){if(!instant(row.sponsor_time))add('sponsorship',row.id,'INVALID_SPONSOR_TIME');add('sponsorship',row.id,'SOURCE_AUDIT_REQUIRED','unmapped');}

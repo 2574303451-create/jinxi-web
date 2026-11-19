@@ -161,3 +161,13 @@ test('legacy compensation never confirms cumulative counters without separate po
  assert(report.findings.some(f=>f.entity==='pointAccount'&&f.code==='ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN'));
  assert(!report.findings.some(f=>f.code==='ACCOUNT_COUNTERS_LEDGER_INCONSISTENT'));
 });
+test('a single exported account cannot reuse opening evidence when another alias is known',()=>{
+ const {data,anchors,order,charge}=syntheticLegacyRedemption();
+ const alias='synthetic-absent-from-original-snapshot';
+ anchors.users.push({userId:alias,accountId:anchors.members[0].accountId});
+ data.pointAccounts[0].user_id=order.user_id=charge.user_id=alias;
+ const report=checkHistory(data,anchors);
+ assert.equal(report.summary.trusted,1);
+ assert(report.findings.some(f=>f.entity==='pointAccount'&&f.ref===alias&&f.code==='OPENING_ACCOUNT_ALIAS_UNPROVEN'));
+ assert(!report.candidates.some(c=>c.kind==='pointAccount'));
+});

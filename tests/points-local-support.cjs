@@ -8,21 +8,26 @@ async function setup(pgBin){
  async function login(kind='normal'){
   const a=db.accounts[kind];
   const sqlStates=[];
-  const record=error=>{
-   if(typeof error.code==='string'&&/^[A-Z0-9]{5}$/.test(error.code))sqlStates.push(error.code);
+  const record=(error,stage)=>{
+   if(typeof error.code==='string'&&/^[A-Z0-9]{5}$/.test(error.code))sqlStates.push(stage+':'+error.code);
   };
   const diagnoseLogin=createMemberHandler({settings:db.settings,env:{},connect:async settings=>{
    let c;
-   try{c=await db.connect(settings);}catch(error){record(error);throw error;}
+   try{c=await db.connect(settings);}catch(error){record(error,'connect');throw error;}
    const query=c.query.bind(c);
    c.query=async(...args)=>{
-    try{return await query(...args);}catch(error){record(error);throw error;}
+    try{return await query(...args);}catch(error){
+     const statement=args[0];
+     const stage=statement.startsWith('/* jinxi database identity')?'database-identity':
+      statement.includes('excess_column_update')?'database-permissions':'login-transaction';
+     record(error,stage);throw error;
+    }
    };
    return c;
   }});
   const r=await diagnoseLogin(event(null,{op:'login',account:a.account,password:a.password}));
   const body=JSON.parse(r.body);
-  const reason=typeof body.code==='string'&&/^[A-Z_]+$/.test(body.code)?body.code:'UNEXPECTED_RESPONSE';
+  const reason=typeof body.code==='string'&&/^[A-Z_]{1,64}$/.test(body.code)?body.code:'UNEXPECTED_RESPONSE';
   assert.equal(r.statusCode,200,'Synthetic login failed: '+reason+(sqlStates.length?' (PostgreSQL '+sqlStates.join(', ')+')':''));
   return {cookie:r.headers['Set-Cookie'].split(';')[0],csrf:body.csrfToken};
  }

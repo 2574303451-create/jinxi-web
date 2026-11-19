@@ -100,7 +100,7 @@ async function freshDatabase({ pgBin, openssl }) {
     pg('initdb', ['-D',data,'-U','synthetic_rehearsal_root','--auth-local=trust','--auth-host=scram-sha-256',
       '--pwfile='+passwordFile,'--encoding=UTF8','--no-locale']);
     fs.unlinkSync(passwordFile);
-    fs.appendFileSync(path.join(data, 'postgresql.conf'), "\nlisten_addresses = '127.0.0.1'\nport = 5432\n" +
+    fs.appendFileSync(path.join(data, 'postgresql.conf'), "\nlisten_addresses = '127.0.0.1'\nport = 5432\njit = off\n" +
       (process.platform === 'win32' ? '' : "unix_socket_directories = ''\n") +
       "ssl = on\nssl_key_file = '" + keyPath + "'\nssl_cert_file = '" + certPath + "'\n" +
       "log_parameter_max_length = 0\nlog_min_error_statement = 'fatal'\n");

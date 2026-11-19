@@ -482,19 +482,23 @@ async function main() {
         // Use the existing server limit parameter to exercise several genuine pages.
         // Every row and cursor still comes from the packed HTTPS handler and PostgreSQL.
         let heldLedger;
+        const rankRequests = [];
         await a.route('**/api/points**',async route=>{
           const requested = new URL(route.request().url());
           if (requested.pathname !== '/api/points' || route.request().method() !== 'GET' ||
               requested.searchParams.get('view') === 'admin' || requested.searchParams.has('receipt')) return route.continue();
           requested.searchParams.set('limit','2');
+          if (requested.searchParams.get('view') === 'board') {
+            rankRequests.push({metric:requested.searchParams.get('metric'),cursor:requested.searchParams.has('cursor')});
+          }
           if (heldLedger && requested.searchParams.has('beforeLedger')) {
             const hold = heldLedger;
             heldLedger = null;
             const response = await api.request(requested.pathname+requested.search,{session:other});
             hold.received.resolve(response.status);
             await hold.release.promise;
-            await route.fulfill({status:response.status,contentType:'application/json',body:response.raw});
-            hold.delivered.resolve();
+            await route.fulfill({status:response.status,body:response.raw,
+              headers:{'content-type':'application/json','cache-control':'no-store','x-jinxi-rehearsal':'held-ledger'}});
             return;
           }
           return route.continue({url:requested.href});
@@ -506,7 +510,8 @@ async function main() {
         const boardPager = a.getByRole('navigation',{name:'排行分页',exact:true});
         const boardList = a.getByTestId('points-board');
         assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(0,2));
-        await orderPager.getByRole('button',{name:'查看更早订单',exact:true}).click();
+        await orderPager.getByRole('button',{name:'查看更早订单',exact:true}).press('Enter');
+        assert.equal(await a.evaluate(()=>document.activeElement?.textContent),'本人订单');
         await a.locator(`[data-order-id="${orders[2]}"]`).waitFor();
         assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(2));
         await ledgerPager.getByRole('button',{name:'查看更早流水',exact:true}).click();
@@ -517,7 +522,18 @@ async function main() {
         await a.locator(`[data-order-id="${orders[0]}"]`).waitFor();
         assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(0,2));
         assert.deepEqual(await ids('[data-ledger-id]','data-ledger-id'),entries.slice(2,4).map(row=>row.id));
-        const hold = { received:Promise.withResolvers(), release:Promise.withResolvers(), delivered:Promise.withResolvers() };
+        await a.evaluate(()=>{
+          const read = Response.prototype.json;
+          Response.prototype.json = async function () {
+            const data = await read.call(this);
+            if (this.headers.get('x-jinxi-rehearsal') === 'held-ledger') {
+              Response.prototype.json = read;
+              requestAnimationFrame(()=>requestAnimationFrame(()=>{ document.documentElement.dataset.heldLedgerRead='yes'; }));
+            }
+            return data;
+          };
+        });
+        const hold = { received:Promise.withResolvers(), release:Promise.withResolvers() };
         heldLedger = hold;
         try {
           await ledgerPager.getByRole('button',{name:'查看更早流水',exact:true}).click();
@@ -525,19 +541,15 @@ async function main() {
           await ledgerPager.getByRole('button',{name:'返回第一页',exact:true}).click();
           await a.locator(`[data-ledger-id="${entries[0].id}"]`).waitFor();
         } finally { hold.release.resolve(); }
-        await Promise.race([hold.delivered.promise,a.waitForEvent('close',{timeout:15000})]);
+        await a.waitForFunction(()=>document.documentElement.dataset.heldLedgerRead === 'yes');
         assert.deepEqual(await ids('[data-ledger-id]','data-ledger-id'),entries.slice(0,2).map(row=>row.id));
 
         await boardPager.getByRole('button',{name:'查看后续排名',exact:true}).click();
         await boardList.getByText(/^#3 /).waitFor();
         assert.equal(await boardList.locator('li').count(),1);
-        const nextRanking = a.waitForResponse(response=>{
-          const query = new URL(response.url()).searchParams;
-          return query.get('view') === 'board' && query.get('metric') === 'balance' && !query.has('cursor');
-        });
-        await a.getByLabel('排行指标',{exact:true}).selectOption('balance');
-        assert.equal((await nextRanking).status(),200);
+        await a.getByRole('combobox',{name:/排行指标/}).selectOption('balance');
         await boardList.getByText(/^#1 /).waitFor();
+        assert.deepEqual(rankRequests.at(-1),{metric:'balance',cursor:false});
         assert.equal((await api.mutate('points',reviewerSession,{op:'visibility',listed:false})).status,200);
         await boardPager.getByRole('button',{name:'查看后续排名',exact:true}).click();
         await a.getByRole('alert').filter({hasText:'排行已更新，请返回第一页。'}).waitFor();

@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState, type RefObject } from 'react';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
 type AdminOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: string; canClose: boolean };
@@ -12,14 +12,19 @@ type History = {
 type Board = { entries: { publicId: string; position: number; label: string; score: string }[]; nextCursor: string | null };
 const orderLabels: Record<string,string> = { pending: '待处理', processing: '处理中', fulfilled: '已完成', failed: '未履约 · 已退款', cancelled: '已取消 · 已退款' };
 
-function PageControls({ label, olderLabel, atStart, next, loading, onChange }: {
+function PageControls({ label, olderLabel, atStart, next, loading, heading, onChange }: {
   label: string; olderLabel: string; atStart: boolean; next?: string | null; loading: boolean;
+  heading: RefObject<HTMLHeadingElement | null>;
   onChange: (cursor: string | null) => void;
 }) {
   if (atStart && !next) return null;
+  const navigate = (cursor: string | null) => {
+    onChange(cursor);
+    heading.current?.focus();
+  };
   return <nav className="integration-actions" aria-label={label} aria-busy={loading}>
-    <button type="button" className="paper-button" disabled={atStart} onClick={() => onChange(null)}>返回第一页</button>
-    <button type="button" className="paper-button" disabled={loading || !next} onClick={() => { if (next) onChange(next); }}>{olderLabel}</button>
+    <button type="button" className="paper-button" disabled={atStart} onClick={() => navigate(null)}>返回第一页</button>
+    <button type="button" className="paper-button" disabled={loading || !next} onClick={() => { if (next) navigate(next); }}>{olderLabel}</button>
   </nav>;
 }
 
@@ -29,6 +34,9 @@ export function PointsPanel() {
   const [boardCursor, setBoardCursor] = useState<string | null>(null);
   const [beforeOrders, setBeforeOrders] = useState<string | null>(null);
   const [beforeLedger, setBeforeLedger] = useState<string | null>(null);
+  const orderHeading = useRef<HTMLHeadingElement>(null);
+  const ledgerHeading = useRef<HTMLHeadingElement>(null);
+  const boardHeading = useRef<HTMLHeadingElement>(null);
   const [orderInput, setOrderInput] = useState('');
   const [orderLookup, setOrderLookup] = useState('');
   const [orderInputError, setOrderInputError] = useState(false);
@@ -96,7 +104,7 @@ export function PointsPanel() {
         <strong>{i.name}</strong><p>单价 {i.unitCost} · 可用库存 {i.available}</p>
         <button className="paper-button yellow" disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('points', { op: 'redeem', itemId: i.id, quantity: 1 }))}>兑换虚构商品</button>
       </li>)}</ul>
-      <h3>本人订单</h3>
+      <h3 ref={orderHeading} tabIndex={-1}>本人订单</h3>
       {beforeOrders && history.error && <p role="alert">历史订单暂时无法读取。请刷新或返回第一页。</p>}
       {beforeOrders && !orderPage && !history.error && <p role="status">正在读取历史订单…</p>}
       <ul>{orderPage?.orders.map(o => <li className="integration-record" key={o.id} data-order-id={o.id}>
@@ -106,7 +114,7 @@ export function PointsPanel() {
         <button className="paper-button" disabled={cmd.busy || o.status !== 'pending'} onClick={() => void cmd.run(() => client.mutate('points', { op: 'order.cancel', orderId: o.id }))}>取消并按原流水退款</button>
       </li>)}</ul>
       <PageControls label="订单分页" olderLabel="查看更早订单" atStart={!beforeOrders} next={orderPage?.nextOrdersBefore}
-        loading={resource.loading || (Boolean(beforeOrders) && history.loading) || cmd.busy} onChange={setBeforeOrders} />
+        loading={resource.loading || (Boolean(beforeOrders) && history.loading) || cmd.busy} heading={orderHeading} onChange={setBeforeOrders} />
       {resource.data?.orders && <section aria-labelledby="points-queue-title">
         <h3 id="points-queue-title">待处理兑换</h3>
         <p>待认领和本人处理中各显示最早的 50 笔。先核对订单号并认领，再模拟人工开通。</p>
@@ -145,13 +153,13 @@ export function PointsPanel() {
           </li>)}</ul>
         </>}
       </section>}
-      <h3>本人积分流水</h3>
+      <h3 ref={ledgerHeading} tabIndex={-1}>本人积分流水</h3>
       {beforeLedger && history.error && <p role="alert">历史流水暂时无法读取。请刷新或返回第一页。</p>}
       {beforeLedger && !ledgerPage && !history.error && <p role="status">正在读取历史流水…</p>}
       <ul>{ledgerPage?.ledger.map(l => <li key={l.id} data-ledger-id={l.id}>#{l.entryNo} · {l.kind} · {l.direction === 1 ? '+' : '-'}{l.pointDelta} · 余额 {l.balanceAfter}</li>)}</ul>
       <PageControls label="流水分页" olderLabel="查看更早流水" atStart={!beforeLedger} next={ledgerPage?.nextLedgerBefore}
-        loading={resource.loading || (Boolean(beforeLedger) && history.loading)} onChange={setBeforeLedger} />
-      <h3>合成排行榜</h3><p>只展示主动公开、且会话身份条件合格的合成账户。并列按服务端公开标识稳定排序。</p>
+        loading={resource.loading || (Boolean(beforeLedger) && history.loading)} heading={ledgerHeading} onChange={setBeforeLedger} />
+      <h3 ref={boardHeading} tabIndex={-1}>合成排行榜</h3><p>只展示主动公开、且会话身份条件合格的合成账户。并列按服务端公开标识稳定排序。</p>
       <label className="paper-label">排行指标<select className="paper-input" value={metric} onChange={e => { setBoardCursor(null); setMetric(e.target.value); }}><option value="earned">净累计获得</option><option value="balance">余额</option></select></label>
       <button className="paper-button" disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('points', { op: 'visibility', listed: !data.account.listed }))}>{data.account.listed ? '停止公开排行' : '公开本人合成排行'}</button>
       {ranking.error && <p role="alert">{ranking.error === 'RANK_CHANGED' ? '排行已更新，请返回第一页。' : '排行暂时无法读取。'}</p>}
@@ -159,7 +167,7 @@ export function PointsPanel() {
       {board?.entries.length === 0 && <p>当前指标暂无公开排行。</p>}
       <ol data-testid="points-board">{board?.entries.map(r => <li key={r.publicId}>#{r.position} · {r.label} · {r.score}</li>)}</ol>
       <PageControls label="排行分页" olderLabel="查看后续排名" atStart={!boardCursor} next={board?.nextCursor}
-        loading={ranking.loading} onChange={setBoardCursor} />
+        loading={ranking.loading} heading={boardHeading} onChange={setBoardCursor} />
     </>}
     {cmd.notice && <p className="paper-notice" role="status">{cmd.notice}</p>}
   </section>;

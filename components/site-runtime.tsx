@@ -36,7 +36,7 @@ export interface SiteRuntime {
   readHomeGuides: (feed: HomeGuideFeed, force?: boolean) => Promise<HomeGuide[]>;
   saveGuide: (draft: StrategySubmission) => Promise<void>;
   guideManagement: ReactNode;
-  guideDiscussion: (guide: Strategy) => ReactNode;
+  guideDiscussion: (guide: Strategy, refreshing: boolean) => ReactNode;
 }
 export const SiteRuntimeContext = createContext<SiteRuntime | null>(null);
 export const useSiteRuntime = () => useContext(SiteRuntimeContext);

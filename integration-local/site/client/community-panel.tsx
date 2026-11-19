@@ -48,17 +48,28 @@ export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'
   </section>;
 }
 
-export function GuideDiscussion({ guide }: { guide: Strategy }) {
+export function GuideDiscussion({ guide, refreshing }: { guide: Strategy; refreshing: boolean }) {
   const { client, ready } = useSession(), cmd = useCommand(), [comment, setComment] = useState('');
+  const verified = guide.ownership === 'verified';
+  const canInteract = ready && Boolean(guide.viewerReactions) && !refreshing && !cmd.busy;
+  const react = (type: 'like' | 'favorite') => {
+    if (!canInteract) return;
+    void cmd.run(() => client.mutate('community', { op: 'reaction.set', id: guide.id, type, active: !guide.viewerReactions?.[type] }));
+  };
   return <section className="integration-panel" aria-label="攻略交流">
-    <h2>一起讨论</h2><p>{guide.comments.length} 条已公开评论。互动只依据当前服务端会话。</p>
-    <div className="integration-actions"><button className="paper-button" disabled={!ready || cmd.busy} onClick={() => void cmd.run(() => client.mutate('community', { op: 'reaction.set', id: guide.id, type: 'like', active: true }))}>回应这篇攻略</button></div>
-    <form onSubmit={e => { e.preventDefault(); void cmd.run(async () => { await client.mutate('community', { op: 'reply.create', id: guide.id, content: comment }); setComment(''); }); }}>
+    <h2>一起讨论</h2><p>{guide.comments.length} 条已公开评论。</p>
+    {verified ? <>
+    <div className="integration-actions">
+      <button type="button" className="paper-button" aria-pressed={ready && guide.viewerReactions?.like === true} disabled={!canInteract} onClick={() => react('like')}>点赞攻略</button>
+      <button type="button" className="paper-button" aria-pressed={ready && guide.viewerReactions?.favorite === true} disabled={!canInteract} onClick={() => react('favorite')}>收藏攻略</button>
+    </div>
+    <form onSubmit={e => { e.preventDefault(); if (!canInteract) return; void cmd.run(async () => { await client.mutate('community', { op: 'reply.create', id: guide.id, content: comment }); setComment(''); }); }}>
       <label className="paper-label">攻略评论<textarea className="paper-input" required maxLength={1000} value={comment} onChange={e => setComment(e.target.value)} /></label>
-      <button className="paper-button yellow" disabled={!ready || cmd.busy}>发布攻略评论</button>
+      <button className="paper-button yellow" disabled={!canInteract}>发布攻略评论</button>
     </form>
-    {cmd.notice && <p role="status">{cmd.notice} 重新打开正文可核对最新公开评论。</p>}
-    <ul>{guide.comments.map(c => <li key={c.id}><strong>{c.userName}</strong><p>{c.content}</p></li>)}</ul>
     {!ready && <PaperState kind="empty" title="请先登录合成账号" />}
+    </> : <p className="paper-notice">这篇历史攻略仅供阅读。</p>}
+    {cmd.notice && <p role="status">{cmd.notice}</p>}
+    <ul>{guide.comments.map(c => <li key={c.id}><strong>{c.userName}</strong><p>{c.content}</p></li>)}</ul>
   </section>;
 }

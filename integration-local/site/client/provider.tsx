@@ -51,12 +51,13 @@ function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'l
     deleteMessage: async () => { throw Error('USE_SERVER_AUTHORIZED_MANAGEMENT'); },
   }), [client]);
   const readGuide = useCallback(async (id: string, signal?: AbortSignal): Promise<Strategy> => {
-    const r = await client.request('community', null, { kind: 'guide', scope: 'public' }, false);
+    const query: Record<string, string> = ready ? { kind: 'guide', scope: 'member-feed', id } : { kind: 'guide', scope: 'public' };
+    const r = await client.request('community', null, query, ready);
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     const guide = r.items.find((x: any) => x.id === id);
     if (!guide) throw Error('这篇攻略尚未公开。');
     return { ...guide, createdAt: new Date(guide.createdAt), updatedAt: new Date(guide.updatedAt), comments: guide.comments.map((c: any) => ({ ...c, timestamp: new Date(c.timestamp) })), likes: [], favorites: [] };
-  }, [client]);
+  }, [client, ready]);
   const readHomeGuides = useCallback(async (feed: HomeGuideFeed): Promise<HomeGuide[]> => {
     const r = await client.request('community', null, { kind: 'guide', scope: 'public' }, false);
     return r.items.filter((g: any) => feed === 'latest' || feed === 'pinned' && g.isPinned || feed === 'video' && g.mediaFiles.some((m: any) => m.type === 'video')).slice(0,3).map((g: any) => ({ id: g.id, title: g.title, excerpt: g.content.slice(0,150), author: g.author, category: g.category, image: g.imageUrl || null, hasVideo: g.mediaFiles.some((m: any) => m.type === 'video'), isPinned: g.isPinned, views: g.viewCount, comments: g.comments.length, updatedAt: g.updatedAt, tags: g.tags }));
@@ -71,7 +72,7 @@ function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'l
     banner: null, dialogs: null, announcement: null, sponsorship: null,
     panels: { checkin: <AttendancePanel />, points: <PointsPanel />, teams: <TeamPanel />, tasks: <p className="paper-notice">游戏任务缺少可信来源及奖励规则。本轮不连接积分、不伪造任务成功。</p>, game: <p className="paper-notice">真实战绩与在线来源尚未核验，本轮不导入浏览器示例记录。</p> },
     messageActions, messageManagement: <CommunityManagement kind="message" staff={permissions.staff} />, readGuide, readHomeGuides, saveGuide,
-    guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} />, guideDiscussion: guide => <GuideDiscussion guide={guide} />,
+    guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} />, guideDiscussion: (guide, refreshing) => <GuideDiscussion key={guide.id} guide={guide} refreshing={refreshing} />,
   };
   return <SiteRuntimeContext.Provider value={runtime}>
     <aside className="integration-bar" aria-label={surface === 'local' ? '本地统一集成状态' : '独立合成 TEST 状态'}>

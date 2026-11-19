@@ -31,9 +31,9 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     if(!uuid(body.requestId))fail(400,'REQUEST_ID_REQUIRED');
    }else if(!recovering){
     const validScope=['public','mine','review','member-feed'].includes(query.scope||'public');
-    const validKind=memberFeed?query.kind==='message':['message','guide'].includes(query.kind);
-    if(!validScope||!validKind||Object.keys(query).some(k=>!['kind','scope','id'].includes(k))||
-      (memberFeed&&query.id!==undefined))fail(400,'INVALID_QUERY');
+    const validKind=['message','guide'].includes(query.kind);
+    const validMemberFeed=!memberFeed||(query.kind==='guide'?uuid(query.id):query.id===undefined);
+    if(!validScope||!validKind||!validMemberFeed||Object.keys(query).some(k=>!['kind','scope','id'].includes(k)))fail(400,'INVALID_QUERY');
    }
    let member=null;
    const authenticated=recovering||method==='POST'||memberFeed||query.scope==='mine'||query.scope==='review';
@@ -63,8 +63,10 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    else if(method==='GET'){
     const scope=query.scope||'public';
     if(scope==='review'&&!['reviewer','admin'].includes(await role(c)))fail(403,'REVIEWER_REQUIRED');
-    const filter=scope==='mine'?'owner_id=$2':scope==='review'?"status='submitted'":"status='published'";
-    const args=scope==='mine'?[query.kind,member.member.id]:[query.kind];
+    const guideForMember=memberFeed&&query.kind==='guide';
+    const filter=scope==='mine'?'owner_id=$2':scope==='review'?"status='submitted'":
+      guideForMember?"status='published' AND id=$2":"status='published'";
+    const args=scope==='mine'?[query.kind,member.member.id]:guideForMember?[query.kind,query.id]:[query.kind];
     const rows=(await c.query('SELECT * FROM community_lab.items WHERE kind=$1 AND '+filter+' ORDER BY is_pinned DESC,created_at DESC LIMIT 100',args)).rows;
     const items=await Promise.all(rows.map(row=>project(c,row,{includeMyReactions:memberFeed})));
     response=memberFeed?{memberId:member.member.id,items}:{items};

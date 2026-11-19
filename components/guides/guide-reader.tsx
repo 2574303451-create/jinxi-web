@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import type { Strategy } from "../../types/strategy-wall";
 import { readGuide } from "../../services/guide-service";
 import { PaperState, PublicAvatar } from "../ui/paper";
@@ -18,6 +18,7 @@ export default function GuideReader({
   onReady: () => void;
 }) {
   const runtime = useSiteRuntime();
+  const integrated = Boolean(runtime);
   const read = runtime?.readGuide || readGuide;
   const [guide, setGuide] = useState<Strategy | null>(null),
     [error, setError] = useState(""),
@@ -27,12 +28,14 @@ export default function GuideReader({
     [name, setName] = useState(""),
     [comment, setComment] = useState("");
   const [loadedId, setLoadedId] = useState<string | null>(null);
+  const restoredId = useRef<string | null>(null);
+  useEffect(() => { restoredId.current = null; }, [id]);
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     setError("");
     read(id, controller.signal)
-      .then(setGuide)
+      .then((result) => { if (!controller.signal.aborted) setGuide(result); })
       .catch((e) => {
         if (!controller.signal.aborted) setError(e.message);
       })
@@ -45,9 +48,13 @@ export default function GuideReader({
     return () => controller.abort();
   }, [id, revision, read, runtime?.dataVersion]);
   useEffect(() => {
-    if (!loading && loadedId === id) onReady();
-  }, [loading, loadedId, id, onReady]);
-  if (loading) return <PaperState kind="loading" title="正在读取攻略正文…" />;
+    if (!loading && loadedId === id && (!integrated || restoredId.current !== id)) {
+      restoredId.current = id;
+      onReady();
+    }
+  }, [loading, loadedId, id, onReady, integrated]);
+  if (loadedId !== id || (loading && (!integrated || !guide)))
+    return <PaperState kind="loading" title="正在读取攻略正文…" />;
   if (error || !guide)
     return (
       <section className="guide-reader">
@@ -85,7 +92,7 @@ export default function GuideReader({
           <span>
             {guide.author}
             <small>
-              历史署名 · 未认证 ·{" "}
+              {runtime && guide.ownership === "verified" ? "成员署名" : "历史署名 · 未认证"} ·{" "}
               {new Date(guide.createdAt).toLocaleDateString("zh-CN")}
             </small>
           </span>
@@ -97,7 +104,7 @@ export default function GuideReader({
       </header>
       <GuideBody content={guide.content} />
       <GuideMedia items={guide.mediaFiles} cover={guide.imageUrl} />
-      {runtime ? runtime.guideDiscussion(guide) : <>
+      {runtime ? runtime.guideDiscussion(guide, loading) : <>
       <p className="paper-notice" role="status">点赞、收藏和评论暂未开放。攻略与历史评论仍可阅读。</p>
       <div className="guide-reader-actions">
         <button className="paper-button" disabled>点赞 {guide.likes.length}</button>

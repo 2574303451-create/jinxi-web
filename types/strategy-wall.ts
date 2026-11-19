@@ -39,6 +39,8 @@ export interface Strategy {
   // Count-only trusted readers do not invent member IDs to fill these arrays.
   likeCount?: number;
   favoriteCount?: number;
+  ownership?: 'verified' | 'unverified-legacy';
+  viewerReactions?: { like: boolean; favorite: boolean };
   comments: StrategyComment[];
   isPinned: boolean;
   imageUrl?: string; // 向后兼容的封面图片字段

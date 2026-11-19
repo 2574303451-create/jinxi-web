@@ -28,17 +28,20 @@ export function PointsPanel() {
     return { orderLookup, orders: adminOrders };
   }, [client, ready, data?.permissions.admin, orderLookup]);
   const orderSearch = useResource(loadOrder);
+  const normalizedOrderInput = orderInput.trim().toLowerCase();
+  const showingLookup = Boolean(orderLookup) && normalizedOrderInput === orderLookup;
   const adminOrders = orderLookup
-    ? !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null
+    ? showingLookup && !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null
     : !resource.loading ? resource.data?.orders : null;
+  const refreshPoints = () => { resource.reload(); orderSearch.reload(); };
   const processOrder = (orderId: string, status: 'processing' | 'fulfilled' | 'failed') => void cmd.run(async () => {
     try { await client.mutate('points', { op: 'order.process', orderId, status }); }
-    finally { resource.reload(); orderSearch.reload(); }
+    finally { refreshPoints(); }
   });
   if (!ready) return <PaperState kind="empty" title="请先登录并完成首次改密" />;
   return <section className="integration-panel" aria-label="统一积分与兑换">
     <h2>积分、流水与兑换</h2><p className="paper-notice">完全合成的规则和虚构商品，无真实积分或奖品。待结算事件不计入余额。</p>
-    <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新积分记录</button>
+    <button className="paper-button" onClick={refreshPoints} disabled={resource.loading || orderSearch.loading}>刷新积分记录</button>
     {resource.error && <p role="alert">{resource.error}</p>}
     {resource.loading && <PaperState kind="loading" title="核对账户、流水和结算记录…" />}
     {data && <>
@@ -62,7 +65,7 @@ export function PointsPanel() {
         <p>待认领和本人处理中各显示最早的 50 笔。先核对订单号并认领，再模拟人工开通。</p>
         <form className="integration-actions" onSubmit={event => {
           event.preventDefault();
-          const id = orderInput.trim().toLowerCase();
+          const id = normalizedOrderInput;
           if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(id)) {
             setOrderInputError(true);
             return;
@@ -76,8 +79,8 @@ export function PointsPanel() {
           {orderLookup && <button className="paper-button" type="button" disabled={cmd.busy} onClick={() => { setOrderInput(''); setOrderInputError(false); setOrderLookup(''); resource.reload(); }}>返回待处理列表</button>}
         </form>
         {orderInputError && <p role="alert">请输入成员提供的完整订单号。</p>}
-        {orderLookup && orderSearch.loading && <p role="status">正在核对订单…</p>}
-        {orderLookup && orderSearch.error && <p role="alert">订单暂时无法查询。请重试或返回列表。</p>}
+        {showingLookup && orderSearch.loading && <p role="status">正在核对订单…</p>}
+        {showingLookup && orderSearch.error && <p role="alert">订单暂时无法查询。请重试或返回列表。</p>}
         {adminOrders && <>
           {adminOrders.length === 0 && <p role="status">{orderLookup ? '未找到该订单。' : '暂无待处理订单。'}</p>}
           <ul>{adminOrders.map(order => <li className="integration-record" key={order.id} data-admin-order-id={order.id}>

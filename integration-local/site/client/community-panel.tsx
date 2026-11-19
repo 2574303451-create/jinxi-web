@@ -64,7 +64,15 @@ export function GuideDiscussion({ guide, refreshing, comment, setComment }: Guid
       <button type="button" className="paper-button" aria-pressed={ready && guide.viewerReactions?.like === true} disabled={!canInteract} onClick={() => react('like')}>点赞攻略</button>
       <button type="button" className="paper-button" aria-pressed={ready && guide.viewerReactions?.favorite === true} disabled={!canInteract} onClick={() => react('favorite')}>收藏攻略</button>
     </div>
-    <form onSubmit={e => { e.preventDefault(); if (!canInteract) return; void cmd.run(async () => { await client.mutate('community', { op: 'reply.create', id: guide.id, content: comment }); setComment(''); }); }}>
+    <form onSubmit={e => {
+      e.preventDefault();
+      if (!canInteract) return;
+      const submitted = comment;
+      void cmd.run(async () => {
+        await client.mutate('community', { op: 'reply.create', id: guide.id, content: submitted });
+        setComment(current => current === submitted ? '' : current);
+      });
+    }}>
       <div className="paper-label">
         <label htmlFor={commentId}>攻略评论</label>
         <textarea id={commentId} className="paper-input" required maxLength={1000} value={comment} onChange={e => setComment(e.target.value)} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import type * as messages from "../services/message-wall-backend";
 import type { Message } from "../types/message-wall";
 import type { Strategy, StrategySubmission } from "../types/strategy-wall";
@@ -18,7 +18,7 @@ export type GuideDiscussionProps = {
   guide: Strategy;
   refreshing: boolean;
   comment: string;
-  setComment: (value: string) => void;
+  setComment: Dispatch<SetStateAction<string>>;
 };
 export interface SiteRuntime {
   accountLabel: string;

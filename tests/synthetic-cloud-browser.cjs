@@ -651,23 +651,57 @@ async function main() {
           if (!failedRead && request.method()==='GET' && query.get('scope')==='member-feed' && query.get('id')===guideId) {
             failedRead = true;
             await route.fulfill({status:503,json:{code:'COMMUNITY_UNAVAILABLE'}});
-          } else await route.continue();
+          } else await route.fallback();
         });
         const [liked] = await Promise.all([command(a,'community','reaction.set'),guideButton(a,'点赞攻略').click()]);
         assert.equal(liked.status(),200);
         await a.getByRole('button',{name:'重试',exact:true}).click();
         assert(failedRead);
-        await a.unroute('**/api/community?**');
         await hasPressed(a,'点赞攻略',true);
+        await a.unroute('**/api/community?**');
         assert.equal(await editor.inputValue(),guideComment);
         record.stage='guide-post-comment';
         await guideReaction(a,'收藏攻略','favorite',true);
-        const [posted] = await Promise.all([command(a,'community','reply.create'),guideButton(a,'发布攻略评论').click()]);
+        const committed = Promise.withResolvers(), release = Promise.withResolvers();
+        const nextDraft = '上一条攻略评论提交期间输入的新草稿';
+        await a.route('**/api/community',async route=>{
+          const request = route.request();
+          if (request.method()!=='POST' || request.postDataJSON().op!=='reply.create') return route.fallback();
+          try {
+            const response = await api.request('/api/community',{session:other,body:request.postDataJSON()});
+            committed.resolve(response.status);
+            await release.promise;
+            await route.fulfill({status:response.status,body:response.raw,
+              headers:{'content-type':'application/json','cache-control':'no-store'}});
+          } catch (error) {
+            committed.reject(error);
+            await route.abort();
+          }
+        });
+        await guideButton(a,'发布攻略评论').click();
+        let posted;
+        try {
+          let timeout;
+          try {
+            assert.equal(await Promise.race([committed.promise,new Promise((_,reject)=>{
+              timeout = setTimeout(()=>reject(Error('Expected comment transaction did not complete')),15000);
+            })]),200);
+          } finally { clearTimeout(timeout); }
+          await editor.fill(nextDraft);
+          const response = command(a,'community','reply.create');
+          release.resolve();
+          posted = await response;
+        } finally { release.resolve(); }
         assert.equal(posted.status(),200);
         const {replyId:guideCommentId} = await posted.json();
         await discussion(a).getByText(guideComment,{exact:true}).waitFor();
-        const {rows:[savedReply]} = await api.admin('SELECT author_id,item_id FROM community_lab.replies WHERE id=$1',[guideCommentId]);
-        assert.deepEqual(savedReply,{author_id:other.memberId,item_id:guideId});
+        const {rows:[savedReply]} = await api.admin('SELECT author_id,item_id,content FROM community_lab.replies WHERE id=$1',[guideCommentId]);
+        assert.deepEqual(savedReply,{author_id:other.memberId,item_id:guideId,content:guideComment});
+        assert.equal(await editor.inputValue(),nextDraft);
+        await a.unroute('**/api/community');
+        const [nextPosted] = await Promise.all([command(a,'community','reply.create'),guideButton(a,'发布攻略评论').click()]);
+        assert.equal(nextPosted.status(),200);
+        await discussion(a).getByText(nextDraft,{exact:true}).waitFor();
         assert.equal(await editor.inputValue(),'');
 
         record.stage='guide-reactions-and-comment-privacy';

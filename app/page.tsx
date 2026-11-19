@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, lazy, Suspense } from "react"
+import { ArrowUp, CircleHelp, Gift, Mic } from "lucide-react"
+import { Accordion } from "../components/ui/accordion"
 import { LoadingSpinner } from "../components/ui/loading-spinner"
 import { ToastProvider, useToast } from "../components/ui/toast"
 import { sendRecruitmentEmail, RecruitmentData } from "../components/email-service"
@@ -26,7 +28,6 @@ import { useSiteRuntime } from "../components/site-runtime"
 const MessageWall = lazy(() => import("../components/message-wall").then(m => ({ default: m.MessageWall })))
 const Carousel3D = lazy(() => import("../components/magicui/3d-carousel").then(m => ({ default: m.Carousel3D })))
 const MemberGrid = lazy(() => import("../components/magicui/member-grid").then(m => ({ default: m.MemberGrid })))
-const Accordion = lazy(() => import("../components/ui/accordion").then(m => ({ default: m.Accordion })))
 const DailyTasks = lazy(() => import("../components/daily-tasks"))
 const TeamSystem = lazy(() => import("../components/team-system"))
 const GameDataPanel = lazy(() => import("../components/game-data-panel"))
@@ -747,25 +748,25 @@ function PageContent() {
     {
       id: "1",
       title: "新人多久能参加活动？",
-      icon: "ri-question-line",
+      icon: <CircleHelp size={18} />,
       content: "通常 1–3 天熟悉期，视配合度可更快。我们会安排专门的引导员帮助新成员快速融入团队。",
     },
     {
       id: "2",
       title: "要不要强制语音？",
-      icon: "ri-mic-line",
+      icon: <Mic size={18} />,
       content: "战队赛建议语音，日常娱乐不强制。我们理解每个人的情况不同，会根据活动类型灵活安排。",
     },
     {
       id: "3",
       title: "公会有什么福利？",
-      icon: "ri-gift-line",
+      icon: <Gift size={18} />,
       content: "定期组织内部比赛，优胜者有游戏道具奖励；节日活动礼品；技术指导和战术培训；温馨的游戏氛围。",
     },
     {
       id: "4",
       title: "如何提升在公会中的地位？",
-      icon: "ri-arrow-up-line",
+      icon: <ArrowUp size={18} />,
       content: "积极参与活动、帮助新人、展现良好的团队合作精神。我们重视每个成员的贡献，表现优秀者有机会晋升管理层。",
     },
   ]
@@ -824,7 +825,7 @@ function PageContent() {
         </section>
         <section id="faq" className="guild-shell guild-section">
           <SectionHeading label="想了解更多" title="入会前，你可能想问" description="活动时间、奖励和具体安排，请以公会实际通知为准。" />
-          <div className="guild-panel faq-panel legacy-module"><ComponentLoader><Accordion items={faqItems} /></ComponentLoader></div>
+          <div className="guild-panel faq-panel"><Accordion items={faqItems} /></div>
         </section>
         <JoinBanner onJoin={runtime?.onJoin ?? handleJoinClick} />
       </main>

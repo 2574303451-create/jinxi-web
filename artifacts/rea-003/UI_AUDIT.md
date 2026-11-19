@@ -1,3 +1,5 @@
+> 第四阶段 UI-DEFER-001 实施记录：FAQ 内层已迁出旧主题兼容样式，保留四组原问答。Edge 静态导出验证覆盖 1440/1024/768/390/320 像素、Tab/Enter/Space、单项展开与切换、展开状态与受控内容的关联、减少动态以及溢出。复现使用 `node scripts/run-clean.cjs run build`、`node scripts/preview-static.cjs 3074` 和 `node tests/faq-browser.cjs http://127.0.0.1:3074 <本地证据目录>`，浏览器工具路径由 `JINXI_PLAYWRIGHT_MODULE`、`JINXI_EDGE_BINARY` 提供。UI-DEFER-002 的公告弹窗继续按下方验收项跟进。
+
 > 2026-11-09 第四阶段工作包1状态同步：本文以下为原UI审计快照，旧业务风险/批次状态不代表当前累计实现；最新状态见CODEX_HANDOFF与artifacts/phase4-integration/REPORT.md。两项既有待办编号此前记于交接摘要，本处同步明确：**UI-DEFER-001 首页FAQ、UI-DEFER-002 公会动态公告弹窗，均待第四阶段后续统一UI验收**。本轮只做原网站组件的本地合成功能接入；没有改FAQ、正式公告弹窗或已认可视觉。1440/1024/768/390/320本地预览截图只证明本轮预览适配，不代表两项视觉待办已关闭。
 # JINXI-REA-003 全站 UI 基线审计
 

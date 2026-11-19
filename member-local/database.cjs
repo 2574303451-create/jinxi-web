@@ -25,6 +25,7 @@ async function freshDatabase(pgBin){
   async function stop(){if(started){pg('pg_ctl',['-D',data,'-m','fast','-w','stop']);started=false;}}
   try{
     pg('initdb',['-D',data,'-U','jinxi_member_admin','--auth-local=trust','--auth-host=scram-sha-256','--pwfile='+passwordFile,'--encoding=UTF8','--no-locale']);
+    if(process.platform!=='win32')fs.appendFileSync(path.join(data,'postgresql.conf'), "\nunix_socket_directories = ''\n");
     pg('pg_ctl',['-D',data,'-l',path.join(folder,'postgres.log'),'-o','-h 127.0.0.1 -p 55436','-w','start']);started=true;
     const first=connection(settings,'jinxi_member_admin',adminPassword,'postgres');await first.connect();try{await first.query('CREATE DATABASE jinxi_member_local');}finally{await first.end();}
     const c=await admin();try{

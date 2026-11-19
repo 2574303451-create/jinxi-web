@@ -101,6 +101,7 @@ async function freshDatabase({ pgBin, openssl }) {
       '--pwfile='+passwordFile,'--encoding=UTF8','--no-locale']);
     fs.unlinkSync(passwordFile);
     fs.appendFileSync(path.join(data, 'postgresql.conf'), "\nlisten_addresses = '127.0.0.1'\nport = 5432\n" +
+      (process.platform === 'win32' ? '' : "unix_socket_directories = ''\n") +
       "ssl = on\nssl_key_file = '" + keyPath + "'\nssl_cert_file = '" + certPath + "'\n" +
       "log_parameter_max_length = 0\nlog_min_error_statement = 'fatal'\n");
     // On Windows the server may inherit the pg_ctl output pipes. A real file
@@ -219,7 +220,8 @@ async function buildAndBundle(database, schemaFingerprint, passwords) {
   const envAtRuntime = { ...runtimeEnv(approval, passwords), [accessDigestKey]: accessDigest };
   const unpacked = path.join(database.folder,'bundle');
   fs.mkdirSync(unpacked);
-  run('tar.exe',['-xf',zip[0].path,'-C',unpacked]);
+  if(process.platform==='win32')run('tar.exe',['-xf',zip[0].path,'-C',unpacked]);
+  else run('unzip',['-q',zip[0].path,'-d',unpacked]);
   const record = { commit, netlifyConfig: 'synthetic-cloud/netlify.toml', runtimeApi: 2, routes,
     bundler: zip[0].bundler, zipBytes: fs.statSync(zip[0].path).size, schemaFingerprint };
   fs.writeFileSync(path.join(evidence, 'last-package.json'), JSON.stringify(record, null, 2) + '\n');

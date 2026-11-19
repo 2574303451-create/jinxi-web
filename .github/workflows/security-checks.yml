@@ -57,6 +57,35 @@ jobs:
           npm run test:integration-unit
           npm run test:adaptation
           node --test tests/synthetic-cloud-boundary.test.cjs tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
+      - name: Run synthetic transaction and package rehearsals on PostgreSQL 17
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RUNNER_ENVIRONMENT" == github-hosted && "$RUNNER_OS" == Linux ]]
+          pg_bin=/usr/lib/postgresql/17/bin
+          if [[ ! -x "$pg_bin/postgres" ]]; then
+            key="$RUNNER_TEMP/jinxi-pgdg.asc"
+            curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+              --output "$key" https://www.postgresql.org/media/keys/ACCC4CF8.asc
+            fingerprint="$(gpg --batch --show-keys --with-colons "$key" |
+              awk -F: '$1 == "pub" {primary=1} $1 == "fpr" && primary {print $10; primary=0}')"
+            [[ "$fingerprint" == B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 ]]
+            sudo install -m 0644 "$key" /usr/share/keyrings/jinxi-pgdg.asc
+            source_list=/etc/apt/sources.list.d/jinxi-pgdg.list
+            printf '%s\n' 'deb [signed-by=/usr/share/keyrings/jinxi-pgdg.asc] https://apt.postgresql.org/pub/repos/apt noble-pgdg main' |
+              sudo tee "$source_list" >/dev/null
+            sudo install -d /etc/postgresql-common/createcluster.d
+            printf '%s\n' 'create_main_cluster = false' |
+              sudo tee /etc/postgresql-common/createcluster.d/jinxi-ci.conf >/dev/null
+            sudo apt-get update -o Dir::Etc::sourcelist="$source_list" -o Dir::Etc::sourceparts=-
+            sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends postgresql-17
+          fi
+          "$pg_bin/postgres" --version | grep -E '^postgres \(PostgreSQL\) 17\.'
+          openssl_bin="$(command -v openssl)"
+          node tests/points-local-review-postgres.test.cjs --pg-bin "$pg_bin"
+          node tests/adaptation-postgres.test.cjs --pg-bin "$pg_bin" --openssl "$openssl_bin"
+          node tests/synthetic-cloud-database.test.cjs --pg-bin "$pg_bin" --openssl "$openssl_bin"
+          node tests/synthetic-cloud-https.test.cjs --pg-bin "$pg_bin" --openssl "$openssl_bin"
       - name: Raw TypeScript check
         shell: bash
         run: |

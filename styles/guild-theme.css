@@ -1321,43 +1321,12 @@ button:disabled {
 .jinxi-dialog .strategy-content {
   background: var(--surface) !important;
 }
-.jinxi-dialog [class*="cyberAnnPanel"] {
-  background: none;
-  border: none;
-  padding: 0;
-  box-shadow: none;
-}
-.jinxi-dialog [class*="cyberAnnPanel"]::before,
-.jinxi-dialog [class*="cyberAnnHeader"] {
-  display: none;
-}
-.jinxi-dialog [class*="cyberAnn"] {
-  color: var(--ink);
-}
-.jinxi-dialog [class*="cyberAnnItem"],
-.jinxi-dialog [class*="cyberAnnStatus"],
-.jinxi-dialog [class*="cyberAnnLoginBox"] {
-  background: var(--surface-strong);
-  border-color: #9ca3af;
-  box-shadow: none;
-}
-.jinxi-site aside[aria-label="公告栏"] {
-  width: auto;
-  left: 20px;
-  right: auto;
-  bottom: 20px;
-}
-.jinxi-site aside[aria-label="公告栏"] > button,
 .jinxi-site button[aria-label="赞助公会"] {
   background: #101010 !important;
   color: white;
   border: 2px solid var(--line);
   box-shadow: 4px 4px 0 var(--accent) !important;
   min-height: 44px;
-}
-.jinxi-site aside[aria-label="公告栏"] > button {
-  font-family: inherit;
-  font-size: 12px;
 }
 
 @media (max-width: 1100px) {

@@ -5,6 +5,7 @@ import { type Announcement, fetchAnnouncements } from "../services/announcement-
 import { loadAnnouncementSanitizer, safeAnnouncementUrl, MAX_ANNOUNCEMENT_HTML, type AnnouncementSanitizer } from "../lib/announcement-html"
 import { useToast } from "./ui/toast"
 import { Modal } from "./ui/modal"
+import { PaperState } from "./ui/paper"
 import styles from "./cyber-announcement.module.css"
 
 // JSON.stringify can expand one code unit to six characters (\u0000).
@@ -226,38 +227,37 @@ export function CyberRichEditor({ value, onChange, sanitize }: RichEditorProps) 
 
   return (
     <div className={styles.cyberAnnEditorWrap}>
-      <div className={styles.cyberAnnToolbar}>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("bold")} title="加粗">
+      <div className={styles.cyberAnnToolbar} role="group" aria-label="草稿排版">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("bold")} title="加粗" aria-label="加粗">
           B
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("italic")} title="斜体">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("italic")} title="斜体" aria-label="斜体">
           I
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("underline")} title="下划线">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("underline")} title="下划线" aria-label="下划线">
           U
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("formatBlock", "h2")} title="二级标题">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("formatBlock", "h2")} title="二级标题" aria-label="二级标题">
           H2
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("insertUnorderedList")} title="无序列表">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("insertUnorderedList")} title="无序列表" aria-label="无序列表">
           •
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("insertOrderedList")} title="有序列表">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("insertOrderedList")} title="有序列表" aria-label="有序列表">
           1.
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("formatBlock", "blockquote")} title="引用块">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => executeCommand("formatBlock", "blockquote")} title="引用块" aria-label="引用块">
           "
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => setShowEmojiPanel((prev) => !prev)} title="插入 Emoji">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => setShowEmojiPanel((prev) => !prev)} title="插入 Emoji" aria-label="插入表情">
           🙂
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => setShowImageUrlInput((prev) => !prev)} title="插入图片 URL">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => setShowImageUrlInput((prev) => !prev)} title="插入图片 URL" aria-label="插入图片网址">
           URL
         </button>
-        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => fileInputRef.current?.click()} title="本地上传图片（Base64）">
+        <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => fileInputRef.current?.click()} title="本地上传图片（Base64）" aria-label="从本机选择草稿图片">
           IMG
         </button>
-        <span className={styles.cyberAnnToolHint}>提示: Win + . 可呼出系统 Emoji</span>
       </div>
 
       {showEmojiPanel ? (
@@ -272,7 +272,7 @@ export function CyberRichEditor({ value, onChange, sanitize }: RichEditorProps) 
 
       {showImageUrlInput ? (
         <div className={styles.cyberAnnImageRow}>
-          <input type="url" className={styles.cyberAnnUrlInput} value={imageUrlDraft} onChange={(event) => setImageUrlDraft(event.target.value)} placeholder="粘贴图片 URL（https://...）" />
+          <input type="url" className="paper-input" aria-label="图片 URL" value={imageUrlDraft} onChange={(event) => setImageUrlDraft(event.target.value)} placeholder="粘贴图片 URL（https://...）" />
           <button type="button" className={styles.cyberAnnToolBtn} onMouseDown={(e) => e.preventDefault()} onClick={handleInsertImageUrl}>
             插入
           </button>
@@ -304,7 +304,6 @@ export function CyberRichEditor({ value, onChange, sanitize }: RichEditorProps) 
 }
 
 export function CyberAnnouncement(_props: CyberAnnouncementProps = {}) {
-  const toast = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState("")
@@ -365,45 +364,47 @@ export function CyberAnnouncement(_props: CyberAnnouncementProps = {}) {
     } catch { setDraftMessage("草稿保存失败，请保留编辑内容后重试。") }
   }
   return (
-    <aside className={styles.cyberAnnRoot} aria-label="公告栏">
-      <button type="button" className={`${styles.cyberAnnFab} ${isOpen ? styles.cyberAnnFabActive : ""}`} onClick={() => setIsOpen(prev => !prev)} aria-expanded={isOpen}>
-        <span>{isOpen ? "ONLINE" : "NOTICE"}</span><span>{isOpen ? "关闭公告" : "查看公告"}</span>
-      </button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="公会动态" size="lg">
-        <div className={styles.cyberAnnPanel}>
-          <div className={styles.cyberAnnHeader}>
-            <div><h3 className={styles.cyberAnnTitle}>公会公告</h3><div className={styles.cyberAnnSubtitle}>以公会实际发布内容为准</div></div>
-            <button type="button" className={styles.cyberAnnClose} onClick={() => setIsOpen(false)} aria-label="关闭公告面板">×</button>
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="公会动态" size="lg" legacy={false}>
+      <div className={styles.stack}>
+        {isLoading && <PaperState kind="loading" title="正在加载公告…" />}
+        {loadError && <PaperState kind="error" title={loadError} action={
+          <button type="button" className="paper-button" onClick={() => void loadAnnouncements()}>重试</button>
+        } />}
+        {sanitizerError && <PaperState kind="error" title={sanitizerError} />}
+        {!isLoading && !loadError && !sanitize && !sanitizerError && <PaperState kind="loading" title="正在准备安全公告显示…" />}
+        {!isLoading && !loadError && sanitize && (
+          displayAnnouncements.length === 0
+            ? <PaperState kind="empty" title="暂无公告" />
+            : displayAnnouncements.map(item => (
+              <article key={item.id} className={styles.announcement}>
+                <header className={styles.announcementHeader}>
+                  <h3>{item.title}</h3>
+                  <p>{item.author} · {formatAnnouncementTime(item.createdAt)}</p>
+                </header>
+                <div className={styles.richText} data-announcement-content dangerouslySetInnerHTML={{ __html: item.safeHtml }} />
+              </article>
+            ))
+        )}
+        <section className={styles.draft} aria-labelledby="cyber-ann-draft-heading">
+          <h3 id="cyber-ann-draft-heading">本机草稿</h3>
+          <p>草稿及图片只保存在此浏览器。</p>
+          <button type="button" className="paper-button" onClick={() => setDraftOpen(prev => !prev)} disabled={!sanitize} aria-expanded={draftOpen} aria-controls="cyber-ann-draft">
+            {draftOpen ? "收起本机草稿" : "编辑本机草稿"}
+          </button>
+          <div id="cyber-ann-draft" hidden={!draftOpen || !sanitize}>
+            {draftOpen && sanitize && <div className={styles.stack}>
+              <label className="paper-label" htmlFor="cyber-ann-title">草稿标题</label>
+              <input id="cyber-ann-title" className="paper-input" value={titleInput} onChange={e => setTitleInput(e.target.value)} maxLength={120} />
+              <CyberRichEditor value={contentHtml} onChange={setContentHtml} sanitize={sanitize} />
+              <div className={styles.actions}>
+                <button type="button" className="paper-button yellow" onClick={saveDraft}>保存本机草稿</button>
+                <button type="button" className="paper-button" disabled>发布暂未开放</button>
+              </div>
+              {draftMessage && <p role={draftMessage.includes('失败') || draftMessage.includes('无法') ? 'alert' : 'status'}>{draftMessage}</p>}
+            </div>}
           </div>
-          <div className={styles.cyberAnnBody}>
-            {isLoading ? <div className={styles.cyberAnnStatus} role="status">正在同步公告数据...</div> : null}
-            {loadError ? <div className={`${styles.cyberAnnStatus} ${styles.cyberAnnStatusError}`} role="alert">{loadError}<button type="button" className={styles.cyberAnnInlineBtn} onClick={() => void loadAnnouncements()}>重试</button></div> : null}
-            {sanitizerError ? <div className={styles.cyberAnnStatusError} role="alert">{sanitizerError}</div> : null}
-            {!sanitize && !sanitizerError ? <p role="status">正在准备安全公告显示...</p> : null}
-            {!isLoading && !loadError && sanitize ? <div className={styles.cyberAnnList}>
-              {displayAnnouncements.length === 0 ? <div className={styles.cyberAnnStatus}>暂无公告</div> : displayAnnouncements.map(item => (
-                <article key={item.id} className={styles.cyberAnnItem}>
-                  <div className={styles.cyberAnnItemHeader}><h4 className={styles.cyberAnnItemTitle}>{item.title}</h4><span className={styles.cyberAnnMeta}>{formatAnnouncementTime(item.createdAt)}</span></div>
-                  <div className={styles.cyberAnnMeta}>By 执手</div>
-                  <div className={styles.cyberAnnContent} data-announcement-content dangerouslySetInnerHTML={{__html:item.safeHtml}} />
-                </article>
-              ))}
-            </div> : null}
-            <section>
-              <p className={styles.cyberAnnStatus}>公告认证与发布正在安全升级。可以先编辑并保留本机草稿，暂不接受旧管理口令。</p>
-              <button type="button" className={styles.cyberAnnAdminToggle} onClick={() => setDraftOpen(prev => !prev)} disabled={!sanitize}>{draftOpen ? "收起本机草稿" : "编辑本机草稿"}</button>
-              {draftOpen && sanitize ? <div className={`${styles.cyberAnnAdminPanel} ${styles.cyberAnnAdminPanelOpen}`}>
-                <div className={styles.cyberAnnField}><label className={styles.cyberAnnLabel} htmlFor="cyber-ann-title">草稿标题</label><input id="cyber-ann-title" className={styles.cyberAnnInput} value={titleInput} onChange={e => setTitleInput(e.target.value)} maxLength={120} /></div>
-                <div className={styles.cyberAnnField}><span className={styles.cyberAnnLabel}>草稿内容</span><CyberRichEditor value={contentHtml} onChange={setContentHtml} sanitize={sanitize} /></div>
-                <button type="button" className={styles.cyberAnnSubmit} onClick={saveDraft}>保存本机草稿</button>
-                <button type="button" className={styles.cyberAnnSubmit} disabled title="服务器成员及管理员权限验收后恢复">发布暂未开放</button>
-                <p className={styles.cyberAnnFootnote}>图片仅随草稿保存在此浏览器，未上传。草稿保存不代表公会发布。</p>
-                {draftMessage ? <p role={draftMessage.includes('失败') || draftMessage.includes('无法') ? 'alert' : 'status'}>{draftMessage}</p> : null}
-              </div> : null}
-            </section>
-          </div>
-        </div>
-      </Modal>
-    </aside>
+        </section>
+      </div>
+    </Modal>
   )
 }

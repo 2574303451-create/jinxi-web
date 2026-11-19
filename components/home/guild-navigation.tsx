@@ -67,7 +67,11 @@ export function GuildNavigation(props: GuildNavigationProps) {
             <a href="#members" onClick={() => setOpen(false)}>
               成员
             </a>
-            <button onClick={() => act(props.onAnnouncement)}>公告活动</button>
+            <button onClick={() => {
+              // The mobile entry becomes hidden when the dialog opens.
+              if (open) menuRef.current?.focus({ preventScroll: true });
+              act(props.onAnnouncement);
+            }}>公告活动</button>
             <a href="#actions" onClick={() => setOpen(false)}>
               签到与任务
             </a>

@@ -129,6 +129,15 @@ async function main() {
     assert(await trigger.evaluate(button => document.activeElement === button));
     result.scenarios.push('local-only-draft-restored-with-disabled-publish');
 
+    const menu = page.getByRole('button', { name: '打开导航', exact: true });
+    await menu.click();
+    await page.getByRole('button', { name: '公告活动', exact: true }).click();
+    await modal.waitFor();
+    await page.keyboard.press('Escape');
+    await modal.waitFor({ state: 'hidden' });
+    assert(await menu.evaluate(button => document.activeElement === button), 'mobile focus should return to the menu toggle');
+    result.scenarios.push('mobile-navigation-restores-focus-to-menu-toggle');
+
     assert.deepEqual(result.pageErrors, []);
     assert.deepEqual(result.writes, []);
     result.passed = true;

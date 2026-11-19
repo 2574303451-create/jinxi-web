@@ -52,4 +52,6 @@ node tests/synthetic-cloud-browser.cjs --pg-bin '<PG bin 路径>' --openssl '<op
 
 `scripts/run-clean.cjs run build` 是正式导出回归命令。它会重生成现有 `lib/guild-home-facts.json`。正式导出与合成预演不要并行运行。如果出现只有换行符的脏工作区，先用 Git 比较该文件内容，再恢复这个生成文件，不要恢复用户修改。
 
+Windows 根证书导入不可用时，可以在同一套浏览器测试末尾使用 `--firefox`（替代 `--edge '<msedge.exe 路径>'`）。使用同版本 Playwright 安装其 Firefox 构建。测试先以默认验证访问本机 HTTPS 并断言拒绝未知颁发者，再仅为一个临时 Firefox 进程配置本次预演的 CA。证书链、域名和 TLS 版本照常检查，浏览器关闭后清除临时配置。此结果记录为 Firefox，不计入 Edge 的复测结果。
+
 [管理员执行清单](ADMIN_RUNBOOK.md) 说明下一次明确授权之后的操作、报价依据和真实平台需补验事项。本轮只验收本机。

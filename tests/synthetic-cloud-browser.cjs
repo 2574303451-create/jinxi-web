@@ -1,6 +1,7 @@
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
-const { X509Certificate, randomUUID } = require('node:crypto');
+const { X509Certificate } = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const assert = require('node:assert/strict');
 const { toolsFromArgs, startRehearsal, loopbackTls, evidence } = require('./synthetic-cloud-support.cjs');
@@ -33,19 +34,52 @@ async function withCertificate(cert, use) {
   }
 }
 
+async function withFirefox(firefox, origin, cert, use) {
+  const untrusted = await firefox.launch({ env:cleanEnv() });
+  try {
+    const page = await untrusted.newPage();
+    await assert.rejects(page.goto(origin,{timeout:10000}), /SEC_ERROR_UNKNOWN_ISSUER/);
+  } finally {
+    await untrusted.close();
+  }
+
+  // Firefox reads this policy only in the test process. Its temporary profile
+  // trusts the single rehearsal CA while retaining chain and hostname checks.
+  const temp = fs.realpathSync(os.tmpdir());
+  const directory = fs.mkdtempSync(path.join(temp,'jinxi-firefox-policy-'));
+  const certificate = path.join(directory,'rehearsal-ca.pem');
+  const policy = path.join(directory,'policies.json');
+  try {
+    fs.writeFileSync(certificate,cert,{flag:'wx'});
+    fs.writeFileSync(policy,JSON.stringify({policies:{Certificates:{Install:[certificate]}}}),{flag:'wx'});
+    const browser = await firefox.launch({ env:cleanEnv({PLAYWRIGHT_FIREFOX_POLICIES_JSON:policy}) });
+    await use(browser);
+  } finally {
+    assert.equal(path.dirname(fs.realpathSync(directory)),temp);
+    fs.rmSync(directory,{recursive:true,force:true,maxRetries:2});
+  }
+}
+
 async function main() {
   const args = process.argv.slice(2);
-  assert(args.length === 8 && args[4] === '--playwright-module' && args[6] === '--edge');
-  assert(path.isAbsolute(args[5]) && path.isAbsolute(args[7]));
-  const { chromium } = require(args[5]);
+  const useFirefox = args.length === 7 && args[6] === '--firefox';
+  assert(args[4] === '--playwright-module' && path.isAbsolute(args[5]) &&
+    (useFirefox || args.length === 8 && args[6] === '--edge' && path.isAbsolute(args[7])));
+  const { chromium, firefox } = require(args[5]);
   const app = await startRehearsal(toolsFromArgs(args.slice(0,4)));
   const { db, server, bundle } = app, api = httpClient(app,{Authorization:bundle.authorization});
-  const record = { commit:app.bundle.packageRecord.commit, passed:false, scenarios:[], widths:[], pageErrors:[], cspErrors:[] };
+  const record = { commit:app.bundle.packageRecord.commit, browser:useFirefox?'Firefox':'Edge',
+    passed:false, scenarios:[], widths:[], pageErrors:[], cspErrors:[], stage:'browser-certificate-setup' };
   const origin = server.origin;
+  const runWithBrowser = useFirefox
+    ? use => withFirefox(firefox,origin,db.cert,use)
+    : use => withCertificate(db.cert,async () => use(await chromium.launch({
+      executablePath:args[7], args:['--no-proxy-server'],
+    })));
   try {
-    await loopbackTls({cert:db.cert}, () => withCertificate(db.cert, async () => {
-      const browser = await chromium.launch({executablePath:args[7],args:['--no-proxy-server']});
+    await loopbackTls({cert:db.cert}, () => runWithBrowser(async browser => {
       try {
+        if (useFirefox) record.scenarios.push('browser-rejects-the-local-server-without-the-rehearsal-root');
         const options={viewport:{width:1440,height:1000},reducedMotion:'reduce',
           httpCredentials:{username:bundle.accessUser,password:bundle.accessPassword,origin}};
         const context = await browser.newContext(options);

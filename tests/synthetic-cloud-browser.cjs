@@ -244,6 +244,10 @@ async function main() {
         record.scenarios.push('one-linked-refund-and-no-private-order-after-member-switch');
 
         record.stage='guide-and-public-review';
+        await adminContext.close();
+        // Each scenario shares the rehearsal's loopback address. Give the
+        // unrelated guide path its own request quota after the three-account run.
+        await api.admin('TRUNCATE b2_lab.member_session_limits_v2');
         await navigate(a,'/guides/');
         await ready(a);
         await a.getByRole('button',{name:'写一篇攻略',exact:false}).click();

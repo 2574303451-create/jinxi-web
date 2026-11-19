@@ -11,6 +11,8 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
   let client;
   try {
     client = await db.admin();
+    const { rows: [{ server_version_num: serverVersion }] } = await client.query('SHOW server_version_num');
+    const postgresVersion = Number(serverVersion);
     const empty = async () => {
       const { rows: [row] } = await client.query("SELECT to_regnamespace('jinxi_guard') IS NULL AS no_schema, NOT EXISTS(SELECT FROM pg_roles WHERE rolname='jinxi_member_session') AS no_role");
       assert.deepEqual(row, { no_schema:true, no_role:true });
@@ -61,7 +63,8 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
     });
     const initialized = await initialize(client,db.target);
     await t.test('owner is not superuser, initialized roles cannot log in, schema is repeatable', async () => {
-      assert.equal(initialized.postgresVersion,170011);
+      assert(Number.isInteger(postgresVersion) && postgresVersion >= 170000 && postgresVersion < 180000);
+      assert.equal(initialized.postgresVersion,postgresVersion);
       assert.equal((await roleState(client,false)).length,5);
       await client.query('BEGIN READ ONLY');
       try { assert.equal(await schemaFingerprint(client),initialized.schemaFingerprint); }
@@ -151,7 +154,6 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await assert.rejects(rollbackEmpty(client,db.target,initialized.schemaFingerprint), /SYNTHETIC_ROLLBACK_DATA_PRESENT/);
       assert.equal((await client.query('SELECT count(*)::int AS n FROM b2_lab.guild_member_accounts')).rows[0].n,7);
     });
-    const { rows: [version] } = await client.query('SHOW server_version_num');
-    t.diagnostic('PostgreSQL '+version.server_version_num+' with TLS, five fixed roles and transaction cleanup verified on the disposable cluster');
+    t.diagnostic('PostgreSQL '+postgresVersion+' with TLS, five fixed roles and transaction cleanup verified on the disposable cluster');
   } finally { await client?.end(); db.stop(); }
 });

@@ -14,7 +14,8 @@ test('pilot staging preserves both internal Edge upload entries with zero public
   assert.equal(version,process.env.JINXI_PILOT_CLI_ROOT?'23.15.1':'23.2.1');
   const load=file=>import(pathToFileURL(path.join(cli,'dist/utils/deploy',file)));
   const {default:collect}=await load('hash-files.js');
-  const {deployFileNormalizer,getEdgeFunctionsDistPathIfExists}=await load('process-files.js');
+  const mod=await load(version==='23.2.1'?'../../lib/edge-functions/deploy.js':'process-files.js');
+  const {deployFileNormalizer}=mod, getEdgeFunctionsDistPathIfExists=mod.getEdgeFunctionsDistPathIfExists??mod.getDistPathIfExists;
   const sha=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const {dir}=JSON.parse(execFileSync(process.execPath,[path.join(root,'synthetic-cloud/gate-only/manual-stage.mjs'),sha,
     new Date(Date.now()+60000).toISOString()],{cwd:root,encoding:'utf8'}));

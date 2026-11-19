@@ -17,6 +17,74 @@ test('points transaction failure and revocation review on actual synthetic Postg
    }
    const created=await p.op(s,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});assert.equal(created.status,200);const request={op:'order.cancel',orderId:created.body.orderId,requestId:crypto.randomUUID()},before=await p.snapshot();assert.equal((await p.call(s,request,{},faulty('INSERT INTO points_lab.ledger'))).status,503);assert.deepEqual(await p.snapshot(),before);assert.equal((await p.call(s,request)).status,200);assert.equal((await p.call(s,request)).body.replayed,true);assert.equal((await p.call(s)).body.account.balance,'4');
   });
+  for (const winner of ['cancelled','fulfilled']) {
+   await t.test(`cancel and manual fulfilment contend for one order: ${winner} commits first`, async () => {
+    const member = await p.login(), staff = await p.login('admin');
+    await p.fund(member);
+    const order = await p.op(member,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});
+    assert.equal(order.status,200);
+    assert.equal(order.body.status,'pending');
+    const { orderId, ledgerId: chargeId } = order.body;
+    assert.equal((await p.call(member)).body.account.balance,'2');
+
+    const cancelled = {session:member, body:{op:'order.cancel',orderId,requestId:crypto.randomUUID()}};
+    const fulfilled = {session:staff, body:{op:'order.process',orderId,status:'fulfilled',requestId:crypto.randomUUID()}};
+    const refunded = winner === 'cancelled';
+    const [first, second] = refunded ? [cancelled,fulfilled] : [fulfilled,cancelled];
+    const firstHasLock = signal(), secondAttemptedLock = signal();
+    const observeMutex = observe => p.make({connect:async () => {
+     const c = await db.connectPoints();
+     const query = c.query.bind(c);
+     c.query = (sql,...values) => {
+      const queryResult = query(sql,...values);
+      return sql === 'SELECT id FROM points_lab.mutex WHERE id=1 FOR UPDATE' ? observe(queryResult) : queryResult;
+     };
+     return c;
+    }});
+    const hold = observeMutex(async acquired => {
+     const rows = await acquired;
+     firstHasLock.enter();
+     await secondAttemptedLock.wait();
+     return rows;
+    });
+    const observeSecond = observeMutex(waiting => {
+     secondAttemptedLock.enter();
+     return waiting;
+    });
+    const committed = p.call(first.session,first.body,{},hold);
+    try {
+     await firstHasLock.wait();
+     const [success, conflict] = await Promise.all([committed,p.call(second.session,second.body,{},observeSecond)]);
+     assert.equal(success.status,200);
+     assert.equal(success.body.status,winner);
+     assert.equal(conflict.status,409);
+     assert.equal(conflict.body.code,'ORDER_CLOSED');
+    } finally {
+     await committed;
+    }
+
+    const beforeRetry = await p.snapshot();
+    const replay = await p.call(first.session,first.body);
+    assert.equal(replay.status,200);
+    assert.equal(replay.body.status,winner);
+    assert.equal(replay.body.replayed,true);
+    assert.deepEqual(await p.snapshot(),beforeRetry);
+
+    assert.deepEqual((await p.admin('SELECT status,charge_id FROM points_lab.orders WHERE id=$1',[orderId])).rows,
+     [{status:winner,charge_id:chargeId}]);
+    const debit = { kind:'redeem', point_delta:'2', origin_id:null };
+    const refund = { kind:'refund', point_delta:'2', origin_id:chargeId };
+    assert.deepEqual((await p.admin('SELECT kind,point_delta,origin_id FROM points_lab.ledger WHERE order_id=$1 ORDER BY entry_no',[orderId])).rows,
+     refunded ? [debit,refund] : [debit]);
+    assert.deepEqual((await p.admin('SELECT kind,quantity FROM points_lab.inventory WHERE order_id=$1 ORDER BY kind DESC',[orderId])).rows,
+     refunded ? [{kind:'reserve',quantity:1},{kind:'release',quantity:1}] : [{kind:'reserve',quantity:1}]);
+    const state = await p.call(member);
+    assert.equal(state.body.account.balance,refunded ? '4' : '2');
+    assert.equal(state.body.catalogue[0].available,refunded ? 3 : 2);
+    assert.deepEqual((await p.admin('SELECT actor_id,code FROM points_lab.audit WHERE request_id=$1',[second.body.requestId])).rows,
+     [{actor_id:refunded ? db.accounts.admin.memberId : db.accounts.normal.memberId,code:'ORDER_CLOSED'}]);
+   });
+  }
   await t.test('logout and actual password change after identity preflight invalidate the financial request',async()=>{
    for(const mode of ['logout','password']){
     const s=await p.login(),eventId=await p.checkin(s);const h=p.make({identity:async e=>{const r=await p.identity(e);assert.equal(r.statusCode,200);const next=crypto.randomBytes(20).toString('hex')+'A9!';const ended=await p.identity(p.event(s,mode==='logout'?{op:'logout'}:{op:'change-password',currentPassword:db.accounts.normal.password,newPassword:next}));assert.equal(ended.statusCode,200);if(mode==='password')db.accounts.normal.password=next;return r;}});

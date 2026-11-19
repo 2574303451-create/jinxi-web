@@ -3,11 +3,32 @@ import { useCallback, useState } from 'react';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
 type AdminOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: string; canClose: boolean };
+type History = {
+  orders: { id: string; status: string; cost: string }[];
+  ledger: { id: string; entryNo: string; kind: string; direction: number; pointDelta: string; balanceAfter: string }[];
+  nextOrdersBefore: string | null;
+  nextLedgerBefore: string | null;
+};
+type Board = { entries: { publicId: string; position: number; label: string; score: string }[]; nextCursor: string | null };
 const orderLabels: Record<string,string> = { pending: '待处理', processing: '处理中', fulfilled: '已完成', failed: '未履约 · 已退款', cancelled: '已取消 · 已退款' };
+
+function PageControls({ label, olderLabel, atStart, next, loading, onChange }: {
+  label: string; olderLabel: string; atStart: boolean; next?: string | null; loading: boolean;
+  onChange: (cursor: string | null) => void;
+}) {
+  if (atStart && !next) return null;
+  return <nav className="integration-actions" aria-label={label} aria-busy={loading}>
+    <button type="button" className="paper-button" disabled={atStart} onClick={() => onChange(null)}>返回第一页</button>
+    <button type="button" className="paper-button" disabled={loading || !next} onClick={() => { if (next) onChange(next); }}>{olderLabel}</button>
+  </nav>;
+}
 
 export function PointsPanel() {
   const { client, ready } = useSession(), cmd = useCommand();
   const [metric, setMetric] = useState('earned');
+  const [boardCursor, setBoardCursor] = useState<string | null>(null);
+  const [beforeOrders, setBeforeOrders] = useState<string | null>(null);
+  const [beforeLedger, setBeforeLedger] = useState<string | null>(null);
   const [orderInput, setOrderInput] = useState('');
   const [orderLookup, setOrderLookup] = useState('');
   const [orderInputError, setOrderInputError] = useState(false);
@@ -15,13 +36,34 @@ export function PointsPanel() {
     if (!ready) return null;
     // Serial reads avoid burst limits and use the same client identity generation.
     const self = await client.request('points');
-    const board = await client.request('points', null, { view: 'board', metric });
     const orders = self.permissions.admin
       ? (await client.request<{ adminOrders: AdminOrder[] }>('points', null, { view: 'admin' })).adminOrders
       : null;
-    return { self, board, orders };
-  }, [client, ready, metric]);
+    return { self, orders };
+  }, [client, ready]);
   const resource = useResource(load), data = resource.data?.self;
+  const hasAccount = Boolean(data);
+  const loadHistory = useCallback(async () => {
+    if (!ready || (!beforeOrders && !beforeLedger)) return null;
+    const page = await client.request<History>('points', null, {
+      ...(beforeOrders ? { beforeOrders } : {}), ...(beforeLedger ? { beforeLedger } : {}),
+    });
+    return { beforeOrders, beforeLedger, page };
+  }, [client, ready, beforeOrders, beforeLedger]);
+  const history = useResource(loadHistory);
+  const olderOrders = history.data?.beforeOrders === beforeOrders ? history.data?.page : null;
+  const olderLedger = history.data?.beforeLedger === beforeLedger ? history.data?.page : null;
+  const orderPage = beforeOrders ? olderOrders : data as History | undefined;
+  const ledgerPage = beforeLedger ? olderLedger : data as History | undefined;
+  const loadBoard = useCallback(async () => {
+    if (!ready || !hasAccount) return null;
+    const page = await client.request<Board>('points', null, {
+      view: 'board', metric, ...(boardCursor ? { cursor: boardCursor } : {}),
+    });
+    return { metric, boardCursor, page };
+  }, [client, ready, hasAccount, metric, boardCursor]);
+  const ranking = useResource(loadBoard);
+  const board = ranking.data?.metric === metric && ranking.data.boardCursor === boardCursor ? ranking.data.page : null;
   const loadOrder = useCallback(async () => {
     if (!ready || !data?.permissions.admin || !orderLookup) return null;
     const { adminOrders } = await client.request<{ adminOrders: AdminOrder[] }>('points', null, { view: 'admin', orderId: orderLookup });
@@ -33,7 +75,7 @@ export function PointsPanel() {
   const adminOrders = orderLookup
     ? showingLookup && !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null
     : !resource.loading ? resource.data?.orders : null;
-  const refreshPoints = () => { resource.reload(); orderSearch.reload(); };
+  const refreshPoints = () => { resource.reload(); orderSearch.reload(); history.reload(); ranking.reload(); };
   const processOrder = (orderId: string, status: 'processing' | 'fulfilled' | 'failed') => void cmd.run(async () => {
     try { await client.mutate('points', { op: 'order.process', orderId, status }); }
     finally { refreshPoints(); }
@@ -54,12 +96,17 @@ export function PointsPanel() {
         <strong>{i.name}</strong><p>单价 {i.unitCost} · 可用库存 {i.available}</p>
         <button className="paper-button yellow" disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('points', { op: 'redeem', itemId: i.id, quantity: 1 }))}>兑换虚构商品</button>
       </li>)}</ul>
-      <h3>本人订单</h3><ul>{data.orders.map((o: any) => <li className="integration-record" key={o.id} data-order-id={o.id}>
+      <h3>本人订单</h3>
+      {beforeOrders && history.error && <p role="alert">历史订单暂时无法读取。请刷新或返回第一页。</p>}
+      {beforeOrders && !orderPage && !history.error && <p role="status">正在读取历史订单…</p>}
+      <ul>{orderPage?.orders.map(o => <li className="integration-record" key={o.id} data-order-id={o.id}>
         <p>订单 {o.id} · {orderLabels[o.status] ?? o.status} · 扣减 {o.cost} 分</p>
         {o.status === 'pending' && <p>积分已扣减。请凭订单号联系公会管理员，由管理员核验并人工开通奖励。</p>}
         {o.status === 'processing' && <p>管理员正在核验和处理此订单。如有疑问，请凭订单号联系管理员。</p>}
         <button className="paper-button" disabled={cmd.busy || o.status !== 'pending'} onClick={() => void cmd.run(() => client.mutate('points', { op: 'order.cancel', orderId: o.id }))}>取消并按原流水退款</button>
       </li>)}</ul>
+      <PageControls label="订单分页" olderLabel="查看更早订单" atStart={!beforeOrders} next={orderPage?.nextOrdersBefore}
+        loading={resource.loading || (Boolean(beforeOrders) && history.loading) || cmd.busy} onChange={setBeforeOrders} />
       {resource.data?.orders && <section aria-labelledby="points-queue-title">
         <h3 id="points-queue-title">待处理兑换</h3>
         <p>待认领和本人处理中各显示最早的 50 笔。先核对订单号并认领，再模拟人工开通。</p>
@@ -98,11 +145,21 @@ export function PointsPanel() {
           </li>)}</ul>
         </>}
       </section>}
-      <h3>本人积分流水</h3><ul>{data.ledger.map((l: any) => <li key={l.id} data-ledger-id={l.id}>#{l.entryNo} · {l.kind} · {l.direction === 1 ? '+' : '-'}{l.pointDelta} · 余额 {l.balanceAfter}</li>)}</ul>
+      <h3>本人积分流水</h3>
+      {beforeLedger && history.error && <p role="alert">历史流水暂时无法读取。请刷新或返回第一页。</p>}
+      {beforeLedger && !ledgerPage && !history.error && <p role="status">正在读取历史流水…</p>}
+      <ul>{ledgerPage?.ledger.map(l => <li key={l.id} data-ledger-id={l.id}>#{l.entryNo} · {l.kind} · {l.direction === 1 ? '+' : '-'}{l.pointDelta} · 余额 {l.balanceAfter}</li>)}</ul>
+      <PageControls label="流水分页" olderLabel="查看更早流水" atStart={!beforeLedger} next={ledgerPage?.nextLedgerBefore}
+        loading={resource.loading || (Boolean(beforeLedger) && history.loading)} onChange={setBeforeLedger} />
       <h3>合成排行榜</h3><p>只展示主动公开、且会话身份条件合格的合成账户。并列按服务端公开标识稳定排序。</p>
-      <label className="paper-label">排行指标<select className="paper-input" value={metric} onChange={e => setMetric(e.target.value)}><option value="earned">净累计获得</option><option value="balance">余额</option></select></label>
+      <label className="paper-label">排行指标<select className="paper-input" value={metric} onChange={e => { setBoardCursor(null); setMetric(e.target.value); }}><option value="earned">净累计获得</option><option value="balance">余额</option></select></label>
       <button className="paper-button" disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('points', { op: 'visibility', listed: !data.account.listed }))}>{data.account.listed ? '停止公开排行' : '公开本人合成排行'}</button>
-      <ol data-testid="points-board">{resource.data?.board.entries.map((r: any) => <li key={r.publicId}>#{r.position} · {r.label} · {r.score}</li>)}</ol>
+      {ranking.error && <p role="alert">{ranking.error === 'RANK_CHANGED' ? '排行已更新，请返回第一页。' : '排行暂时无法读取。'}</p>}
+      {!board && !ranking.error && <p role="status">正在读取排行榜…</p>}
+      {board?.entries.length === 0 && <p>当前指标暂无公开排行。</p>}
+      <ol data-testid="points-board">{board?.entries.map(r => <li key={r.publicId}>#{r.position} · {r.label} · {r.score}</li>)}</ol>
+      <PageControls label="排行分页" olderLabel="查看后续排名" atStart={!boardCursor} next={board?.nextCursor}
+        loading={ranking.loading} onChange={setBoardCursor} />
     </>}
     {cmd.notice && <p className="paper-notice" role="status">{cmd.notice}</p>}
   </section>;

@@ -460,6 +460,94 @@ async function main() {
         assert.deepEqual(team,{leader_id:other.memberId,member_count:1,member_left:true});
         record.scenarios.push('packed-team-membership-enforces-capacity-and-ordinary-member-exit');
 
+        record.stage='points-pagination';
+        await resetVisitQuota();
+        const reviewerSession = await session(reviewer);
+        for (const participant of [other,reviewerSession,await session(staff)]) {
+          const attendance = await api.mutate('attendance',participant,{op:'checkin'});
+          assert.equal(attendance.status,200);
+          const eventId = attendance.body.history[0].rewardEventId;
+          assert.equal((await api.mutate('points',participant,{op:'settle',eventId})).status,200);
+          assert.equal((await api.mutate('points',participant,{op:'visibility',listed:true})).status,200);
+        }
+        const orders = [];
+        for (let order = 0; order < 3; order++) {
+          const purchase = await api.mutate('points',other,{op:'redeem',itemId,quantity:1});
+          assert.equal(purchase.status,200);
+          orders.unshift(purchase.body.orderId);
+          assert.equal((await api.mutate('points',other,{op:'order.cancel',orderId:purchase.body.orderId})).status,200);
+        }
+        const {rows:entries} = await api.admin('SELECT id FROM points_lab.ledger WHERE member_id=$1 ORDER BY entry_no DESC',[other.memberId]);
+        assert.equal(entries.length,7);
+        // Use the existing server limit parameter to exercise several genuine pages.
+        // Every row and cursor still comes from the packed HTTPS handler and PostgreSQL.
+        let heldLedger;
+        await a.route('**/api/points**',async route=>{
+          const requested = new URL(route.request().url());
+          if (requested.pathname !== '/api/points' || route.request().method() !== 'GET' ||
+              requested.searchParams.get('view') === 'admin' || requested.searchParams.has('receipt')) return route.continue();
+          requested.searchParams.set('limit','2');
+          if (heldLedger && requested.searchParams.has('beforeLedger')) {
+            const hold = heldLedger;
+            heldLedger = null;
+            const response = await api.request(requested.pathname+requested.search,{session:other});
+            hold.received.resolve(response.status);
+            await hold.release.promise;
+            await route.fulfill({status:response.status,contentType:'application/json',body:response.raw});
+            hold.delivered.resolve();
+            return;
+          }
+          return route.continue({url:requested.href});
+        });
+        await points(a);
+        const ids = (selector,attribute) => a.locator(selector).evaluateAll((nodes,key)=>nodes.map(node=>node.getAttribute(key)),attribute);
+        const orderPager = a.getByRole('navigation',{name:'订单分页',exact:true});
+        const ledgerPager = a.getByRole('navigation',{name:'流水分页',exact:true});
+        const boardPager = a.getByRole('navigation',{name:'排行分页',exact:true});
+        const boardList = a.getByTestId('points-board');
+        assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(0,2));
+        await orderPager.getByRole('button',{name:'查看更早订单',exact:true}).click();
+        await a.locator(`[data-order-id="${orders[2]}"]`).waitFor();
+        assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(2));
+        await ledgerPager.getByRole('button',{name:'查看更早流水',exact:true}).click();
+        await a.locator(`[data-ledger-id="${entries[2].id}"]`).waitFor();
+        assert.deepEqual(await ids('[data-ledger-id]','data-ledger-id'),entries.slice(2,4).map(row=>row.id));
+        assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(2));
+        await orderPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+        await a.locator(`[data-order-id="${orders[0]}"]`).waitFor();
+        assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(0,2));
+        assert.deepEqual(await ids('[data-ledger-id]','data-ledger-id'),entries.slice(2,4).map(row=>row.id));
+        const hold = { received:Promise.withResolvers(), release:Promise.withResolvers(), delivered:Promise.withResolvers() };
+        heldLedger = hold;
+        try {
+          await ledgerPager.getByRole('button',{name:'查看更早流水',exact:true}).click();
+          assert.equal(await Promise.race([hold.received.promise,a.waitForEvent('close',{timeout:15000})]),200);
+          await ledgerPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+          await a.locator(`[data-ledger-id="${entries[0].id}"]`).waitFor();
+        } finally { hold.release.resolve(); }
+        await Promise.race([hold.delivered.promise,a.waitForEvent('close',{timeout:15000})]);
+        assert.deepEqual(await ids('[data-ledger-id]','data-ledger-id'),entries.slice(0,2).map(row=>row.id));
+
+        await boardPager.getByRole('button',{name:'查看后续排名',exact:true}).click();
+        await boardList.getByText(/^#3 /).waitFor();
+        assert.equal(await boardList.locator('li').count(),1);
+        const nextRanking = a.waitForResponse(response=>{
+          const query = new URL(response.url()).searchParams;
+          return query.get('view') === 'board' && query.get('metric') === 'balance' && !query.has('cursor');
+        });
+        await a.getByLabel('排行指标',{exact:true}).selectOption('balance');
+        assert.equal((await nextRanking).status(),200);
+        await boardList.getByText(/^#1 /).waitFor();
+        assert.equal((await api.mutate('points',reviewerSession,{op:'visibility',listed:false})).status,200);
+        await boardPager.getByRole('button',{name:'查看后续排名',exact:true}).click();
+        await a.getByRole('alert').filter({hasText:'排行已更新，请返回第一页。'}).waitFor();
+        assert.deepEqual(await ids('[data-order-id]','data-order-id'),orders.slice(0,2));
+        await boardPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+        await boardList.getByText(/^#2 /).waitFor();
+        assert.equal(await boardList.locator('li').count(),2);
+        await a.unroute('**/api/points**');
+        record.scenarios.push('packed-points-pagination-is-independent-and-stale-rankings-can-restart');
+
         record.stage='viewports';
         await navigate(a);
         await ready(a);

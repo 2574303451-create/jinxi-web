@@ -151,6 +151,7 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await assert.rejects(rollbackEmpty(client,db.target,initialized.schemaFingerprint), /SYNTHETIC_ROLLBACK_DATA_PRESENT/);
       assert.equal((await client.query('SELECT count(*)::int AS n FROM b2_lab.guild_member_accounts')).rows[0].n,7);
     });
-    t.diagnostic('PG17.11 version, TLS, all five fixed roles, and transaction cleanup verified on the disposable cluster');
+    const { rows: [version] } = await client.query('SHOW server_version_num');
+    t.diagnostic('PostgreSQL '+version.server_version_num+' with TLS, five fixed roles and transaction cleanup verified on the disposable cluster');
   } finally { await client?.end(); db.stop(); }
 });

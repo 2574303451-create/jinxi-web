@@ -5,7 +5,27 @@ async function setup(pgBin){
  const make=options=>createPointsHandler({settings:db.settings,identity,connect:db.connectPoints,env:{},...options}),points=make();
  const event=(s,body,query={})=>({httpMethod:body?'POST':'GET',headers:{...(body?{origin,'content-type':'application/json'}:{}),...(s?{cookie:s.cookie,'x-csrf-token':s.csrf}:{})},body:body?JSON.stringify(body):'',queryStringParameters:query});
  async function admin(sql,values){const c=await db.admin();try{return typeof sql==='function'?await sql(c):await c.query(sql,values);}finally{await c.end();}}
- async function login(kind='normal'){const a=db.accounts[kind],r=await identity(event(null,{op:'login',account:a.account,password:a.password}));assert.equal(r.statusCode,200);return {cookie:r.headers['Set-Cookie'].split(';')[0],csrf:JSON.parse(r.body).csrfToken};}
+ async function login(kind='normal'){
+  const a=db.accounts[kind];
+  const sqlStates=[];
+  const record=error=>{
+   if(typeof error.code==='string'&&/^[A-Z0-9]{5}$/.test(error.code))sqlStates.push(error.code);
+  };
+  const diagnoseLogin=createMemberHandler({settings:db.settings,env:{},connect:async settings=>{
+   let c;
+   try{c=await db.connect(settings);}catch(error){record(error);throw error;}
+   const query=c.query.bind(c);
+   c.query=async(...args)=>{
+    try{return await query(...args);}catch(error){record(error);throw error;}
+   };
+   return c;
+  }});
+  const r=await diagnoseLogin(event(null,{op:'login',account:a.account,password:a.password}));
+  const body=JSON.parse(r.body);
+  const reason=typeof body.code==='string'&&/^[A-Z_]+$/.test(body.code)?body.code:'UNEXPECTED_RESPONSE';
+  assert.equal(r.statusCode,200,'Synthetic login failed: '+reason+(sqlStates.length?' (PostgreSQL '+sqlStates.join(', ')+')':''));
+  return {cookie:r.headers['Set-Cookie'].split(';')[0],csrf:body.csrfToken};
+ }
  async function call(s,body,query={},handler=points){const r=await handler(event(s,body,query));return {status:r.statusCode,body:JSON.parse(r.body),headers:r.headers};}
  const op=(s,body)=>call(s,{requestId:crypto.randomUUID(),...body});
  async function checkin(s,instant='2024-03-01T04:00:00.000Z'){await db.setClock(instant);const r=await attendance(event(s,{op:'checkin',requestId:crypto.randomUUID()}));assert.equal(r.statusCode,200);return JSON.parse(r.body).history[0].rewardEventId;}

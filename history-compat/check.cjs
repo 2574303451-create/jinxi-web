@@ -58,6 +58,62 @@ function checkOrders(orders,ledger,businessIds,owner,add){
   if(!debitProven||refundInvalid||needsReversalReview||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
  }
 }
+function checkPointAccounts(data,bindings,owner,add,businessIds,ledgerIds){
+ const accountsByUser=groups(data.pointAccounts,r=>r.user_id);
+ const ledgerByUser=groups(data.ledger,r=>r.user_id);
+ const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
+ const aliasedMembers=new Set();
+ for(const [member,rows]of financialIdentities){
+  if(member&&new Set(rows.map(r=>r.user_id)).size>1){
+   aliasedMembers.add(member);
+   add('pointAccount',member,'MULTIPLE_LEGACY_FINANCIAL_IDENTITIES');
+  }
+ }
+ for(const userId of ledgerByUser.keys()){
+  if(!accountsByUser.has(userId))add('pointAccount',userId,'LEDGER_ACCOUNT_MISSING');
+ }
+ for(const [userId,accounts]of accountsByUser){
+  if(accounts.length!==1)add('pointAccount',userId,'DUPLICATE_POINT_ACCOUNT');
+  const rows=ledgerByUser.get(userId)||[];
+  const validRows=rows.filter(hasValidMovement).sort((a,b)=>a.id===b.id?0:BigInt(a.id)<BigInt(b.id)?-1:1);
+  const rowsProven=validRows.length===rows.length&&rows.every(row=>ledgerIds.get(row.id).length===1&&
+   nonBlankText(row.biz_id)&&businessIds.get(row.biz_id).length===1);
+  if(!rowsProven)add('pointAccount',userId,'ACCOUNT_LEDGER_ROWS_UNPROVEN');
+  if(accounts.some(a=>!integer(a.total_earned)||!integer(a.total_spent)))add('pointAccount',userId,'INVALID_ACCOUNT_COUNTERS');
+  const subject=owner(userId);
+  if(!subject){add('pointAccount',userId,'UNPROVEN_BALANCE_SUBJECT','unmapped');continue;}
+  if(accounts.length!==1)continue;
+  const [account]=accounts;
+  const anchor=bindings.get(subject.legacyAccountId)?.[0];
+  if(!integer(account.balance)||!integer(anchor?.openingBalance)){
+   add('pointAccount',userId,'BALANCE_OR_OPENING_ANCHOR_UNPROVEN');continue;
+  }
+  const openingBalance=BigInt(anchor.openingBalance);
+  let balance=openingBalance,earned=0n,spent=0n;
+  let chainMatches=validRows.length===rows.length;
+  for(const row of validRows){
+   const delta=BigInt(row.point_delta);
+   chainMatches&&=balance===BigInt(row.balance_before);
+   if(row.direction===1){earned+=delta;balance+=delta;}
+   else{spent+=delta;balance-=delta;}
+   chainMatches&&=balance>=0n&&balance===BigInt(row.balance_after);
+  }
+  if(!chainMatches||balance!==BigInt(account.balance))add('pointAccount',userId,'BALANCE_LEDGER_INCONSISTENT');
+  if(aliasedMembers.has(subject.memberId)||!integer(anchor.openingTotalEarned)||!integer(anchor.openingTotalSpent)){
+   add('pointAccount',userId,'OPENING_ACCOUNT_COUNTERS_UNPROVEN');continue;
+  }
+  const openingEarned=BigInt(anchor.openingTotalEarned),openingSpent=BigInt(anchor.openingTotalSpent);
+  if(openingEarned-openingSpent!==openingBalance){
+   add('pointAccount',userId,'OPENING_ACCOUNT_COUNTERS_INCONSISTENT');continue;
+  }
+  // The legacy earn/spend SQL increments gross counters. It does not establish the counter policy for a compensation.
+  if(rows.some(isCompensation)){add('pointAccount',userId,'ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN');continue;}
+  if(rowsProven&&integer(account.total_earned)&&integer(account.total_spent)&&
+   (openingEarned+earned!==BigInt(account.total_earned)||openingSpent+spent!==BigInt(account.total_spent))){
+   add('pointAccount',userId,'ACCOUNT_COUNTERS_LEDGER_INCONSISTENT');
+  }
+ }
+}
 function checkHistory(data,anchors){
  if(data?.kind!=='jinxi-synthetic-history-v1'||anchors?.kind!=='jinxi-synthetic-bindings-v1'||anchors.proofSource!=='synthetic-authoritative-fixture')throw Error('SYNTHETIC_HISTORY_AND_SEPARATE_BINDINGS_REQUIRED');
  const stack=[data,anchors];let nodes=0;while(stack.length){const value=stack.pop();if(value&&typeof value==='object'){if(++nodes>200000)throw Error('HISTORY_SHAPE_REJECTED');for(const[key,child]of Object.entries(value)){if(/password|csrf|token|credential|private.?key|connection.?string|^dsn$/i.test(key))throw Error('HISTORY_SENSITIVE_FIELD_REJECTED');if(child&&typeof child==='object')stack.push(child);}}}
@@ -101,28 +157,21 @@ function checkHistory(data,anchors){
   if(!day(row.checkin_date)||!instant(row.checkin_time)||!Number.isInteger(row.continuous_days)||row.continuous_days<1||typeof row.is_continuous!=='boolean'||row.is_continuous!==(row.continuous_days>1)||!Number.isInteger(row.reward_points)||row.reward_points<0)add('checkin',row.id,'INVALID_DATE_STREAK_OR_REWARD');
   if(s&&day(row.checkin_date)){const k=s.memberId+':'+row.checkin_date;if(days.has(k))add('checkin',row.id,'DUPLICATE_CHECKIN_FACT');days.set(k,row);}
  }
- const ledgerGroups=groups(data.ledger,r=>r.user_id),biz=groups(data.ledger,r=>r.biz_id),rewardKeys=new Set();
+ const ledgerIds=groups(data.ledger,r=>r.id),biz=groups(data.ledger,r=>r.biz_id),rewardKeys=new Set();
  const ruleVersions=groups(data.rules,r=>r.rule_code+':'+r.version),compensations=groups(data.ledger.filter(isCompensation),r=>r.ext_json?.origin_biz_id);
  for(const row of data.rules){if(!Number.isInteger(row.version)||row.version<1||!['draft','active','inactive'].includes(row.status)||!Number.isInteger(row.point_delta)||row.point_delta<1||!instant(row.start_at)||row.end_at!==null&&(!instant(row.end_at)||Date.parse(row.end_at)<=Date.parse(row.start_at)))add('rule',row.id,'RULE_EFFECTIVE_TIME_OR_FIELDS_UNPROVEN');if(row.daily_cap===0||row.total_cap===0)add('rule',row.id,'ZERO_CAP_SEMANTIC_REVIEW_REQUIRED');if((ruleVersions.get(row.rule_code+':'+row.version)||[]).length>1)add('rule',row.id,'DUPLICATE_RULE_VERSION');}
  for(const row of data.ledger){
   if(!owner(row.user_id))add('ledger',row.id,'UNPROVEN_LEDGER_SUBJECT','unmapped');
   if(!integer(row.id)||![1,2].includes(row.direction)||!integer(row.point_delta)||row.point_delta==='0'||!integer(row.balance_before)||!integer(row.balance_after))add('ledger',row.id,'INVALID_LEDGER_FIELDS');
-  else if(BigInt(row.balance_before)+(row.direction===1?1n:-1n)*BigInt(row.point_delta)!==BigInt(row.balance_after))add('ledger',row.id,'LEDGER_DIRECTION_OR_BALANCE_MISMATCH');
+  else if(!hasValidMovement(row))add('ledger',row.id,'LEDGER_DIRECTION_OR_BALANCE_MISMATCH');
+  if(integer(row.id)&&ledgerIds.get(row.id).length!==1)add('ledger',row.id,'DUPLICATE_LEDGER_ID');
   if(typeof row.biz_id!=='string'||!row.biz_id||(biz.get(row.biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_OR_MISSING_BUSINESS_ID');
   if(row.event_type==='checkin'&&day(row.ext_json?.checkin_date)){const k=(owner(row.user_id)?.memberId||'unmapped:'+row.user_id)+':'+row.ext_json.checkin_date;if(rewardKeys.has(k))add('ledger',row.id,'DUPLICATE_CHECKIN_REWARD');rewardKeys.add(k);}
   const generatedDebitCode=isLegacyOrderDebit(row)&&row.rule_code==='redeem.item_exchange.consume';
   if(row.rule_code&&!generatedDebitCode&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
   if(isCompensation(row)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
- const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
- for(const [member,rows]of financialIdentities)if(member&&new Set(rows.map(r=>r.user_id)).size>1)add('pointAccount',member,'MULTIPLE_LEGACY_FINANCIAL_IDENTITIES');
- for(const a of data.pointAccounts){const s=owner(a.user_id);if(!integer(a.total_earned)||!integer(a.total_spent))add('pointAccount',a.user_id,'INVALID_ACCOUNT_COUNTERS');if(!s){add('pointAccount',a.user_id,'UNPROVEN_BALANCE_SUBJECT','unmapped');continue;}
-  const anchor=bindings.get(s.legacyAccountId)?.[0],rows=(ledgerGroups.get(a.user_id)||[]).slice();
-  if(!integer(a.balance)||!integer(anchor?.openingBalance)){add('pointAccount',a.user_id,'BALANCE_OR_OPENING_ANCHOR_UNPROVEN');continue;}
-  let balance=BigInt(anchor.openingBalance);let ok=true;rows.sort((a,b)=>integer(a.id)&&integer(b.id)?BigInt(a.id)<BigInt(b.id)?-1:1:0);
-  for(const row of rows){if(![1,2].includes(row.direction)||!integer(row.point_delta)||!integer(row.balance_before)||!integer(row.balance_after)){ok=false;continue;}if(BigInt(row.balance_before)!==balance)ok=false;balance+=(row.direction===1?1n:-1n)*BigInt(row.point_delta);if(balance!==BigInt(row.balance_after)||balance<0n)ok=false;}
-  if(!ok||balance!==BigInt(a.balance))add('pointAccount',a.user_id,'BALANCE_LEDGER_INCONSISTENT');
- }
+ checkPointAccounts(data,bindings,owner,add,biz,ledgerIds);
  checkOrders(data.orders,data.ledger,biz,owner,add);
  for(const row of data.announcements){add('announcement',row.id,'LEGACY_AUTHOR_AND_PUBLICATION_POLICY_UNPROVEN','unmapped');if(!instant(row.created_at)||!instant(row.updated_at)||typeof row.content_html!=='string')add('announcement',row.id,'INVALID_ANNOUNCEMENT_FIELDS');}
  for(const row of data.sponsorships){if(!instant(row.sponsor_time))add('sponsorship',row.id,'INVALID_SPONSOR_TIME');add('sponsorship',row.id,'SOURCE_AUDIT_REQUIRED','unmapped');}

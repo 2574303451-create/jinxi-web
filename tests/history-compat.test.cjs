@@ -105,3 +105,59 @@ test('legacy debits need the fixed consumption code and reversals need independe
   }
  }
 });
+
+test('equal closing balances cannot hide inconsistent cumulative earnings or spending',()=>{
+ const {data,anchors,charge}=syntheticLegacyRedemption();
+ const credit={...charge,id:'9007199254740992',biz_id:'SYN-CREDIT',scene:'synthetic',event_type:'award',
+  rule_code:'',direction:1,balance_before:'0',balance_after:'2',ext_json:{}};
+ charge.id='9007199254740993';
+ data.ledger.push(credit);
+ anchors.members[0].openingBalance='0';
+ anchors.members[0].openingTotalEarned='0';
+ assert.deepEqual(checkHistory(data,anchors).findings.filter(f=>f.entity==='pointAccount'),[]);
+ data.pointAccounts[0].total_earned='3';
+ data.pointAccounts[0].total_spent='3';
+ const report=checkHistory(data,anchors);
+ assert(report.findings.some(f=>f.code==='ACCOUNT_COUNTERS_LEDGER_INCONSISTENT'));
+ assert(!report.findings.some(f=>f.code==='BALANCE_LEDGER_INCONSISTENT'));
+});
+test('nonzero opening counters reconcile exactly as bigint; missing or contradictory evidence is explicit',()=>{
+ const {data,anchors}=syntheticLegacyRedemption();
+ const start=anchors.members[0], account=data.pointAccounts[0];
+ Object.assign(start,{openingTotalEarned:'9007199254740995',openingTotalSpent:'9007199254740993'});
+ Object.assign(account,{total_earned:'9007199254740995',total_spent:'9007199254740995'});
+ const codes=()=>checkHistory(data,anchors).findings.filter(f=>f.entity==='pointAccount').map(f=>f.code);
+ assert.deepEqual(codes(),[]);
+ account.total_spent='9007199254740996';
+ assert(codes().includes('ACCOUNT_COUNTERS_LEDGER_INCONSISTENT'));
+ delete start.openingTotalSpent;
+ assert(codes().includes('OPENING_ACCOUNT_COUNTERS_UNPROVEN'));
+ start.openingTotalSpent='9007199254740994';
+ assert(codes().includes('OPENING_ACCOUNT_COUNTERS_INCONSISTENT'));
+});
+test('duplicate source rows and orphan movements cannot establish complete ledger evidence',()=>{
+ const {data,anchors,charge}=syntheticLegacyRedemption();
+ data.pointAccounts.push({...data.pointAccounts[0]});
+ data.ledger.push({...charge,id:charge.id,biz_id:'SYN-OTHER-MOVEMENT'});
+ const codes=()=>checkHistory(data,anchors).findings.map(f=>f.code);
+ for(const code of ['DUPLICATE_POINT_ACCOUNT','DUPLICATE_LEDGER_ID','ACCOUNT_LEDGER_ROWS_UNPROVEN'])assert(codes().includes(code));
+ data.pointAccounts.length=0;
+ assert(codes().includes('LEDGER_ACCOUNT_MISSING'));
+});
+test('a zero movement breaks ledger evidence even when it leaves balances untouched',()=>{
+ const {data,anchors,charge}=syntheticLegacyRedemption();
+ data.ledger.push({...charge,id:'2',biz_id:'SYN-ZERO',scene:'synthetic',event_type:'note',rule_code:'',
+  point_delta:'0',balance_before:'0',balance_after:'0',ext_json:{}});
+ const codes=checkHistory(data,anchors).findings.map(f=>f.code);
+ for(const code of ['INVALID_LEDGER_FIELDS','ACCOUNT_LEDGER_ROWS_UNPROVEN','BALANCE_LEDGER_INCONSISTENT'])assert(codes.includes(code));
+});
+test('legacy compensation never confirms cumulative counters without separate policy evidence',()=>{
+ const {data,anchors,order,charge}=syntheticLegacyRedemption();
+ order.status='cancelled';
+ data.ledger.push({id:'2',user_id:order.user_id,biz_id:'SYN-REFUND',event_type:'refund',direction:1,
+  point_delta:'2',balance_before:'0',balance_after:'2',ext_json:{origin_biz_id:charge.biz_id}});
+ Object.assign(data.pointAccounts[0],{balance:'2',total_earned:'4'});
+ const report=checkHistory(data,anchors);
+ assert(report.findings.some(f=>f.entity==='pointAccount'&&f.code==='ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN'));
+ assert(!report.findings.some(f=>f.code==='ACCOUNT_COUNTERS_LEDGER_INCONSISTENT'));
+});

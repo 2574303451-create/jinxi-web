@@ -86,7 +86,17 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   const reversal=checkHistory(data,anchors);
   assert(reversal.findings.some(f=>f.entity==='order'&&f.code==='ORDER_REVERSAL_POLICY_UNPROVEN'));
   assert.deepEqual(reversal.candidates,report.candidates);
-  assert.deepEqual(await rehearse(db,reversal),{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert(reversal.findings.some(f=>f.entity==='pointAccount'&&f.code==='ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN'));
+  assert.deepEqual(await rehearse(db,reversal),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
+ await t.test('a balanced snapshot with mismatched cumulative totals produces only an audit finding',async()=>{
+  const {data,anchors}=syntheticLegacyRedemption();
+  Object.assign(data.pointAccounts[0],{total_earned:'3',total_spent:'3'});
+  const report=checkHistory(data,anchors);
+  assert.deepEqual(report.findings.filter(f=>f.entity==='pointAccount').map(f=>f.code),['ACCOUNT_COUNTERS_LEDGER_INCONSISTENT']);
+  assert.deepEqual(report.candidates.map(row=>row.kind),['strategies']);
+  assert.deepEqual(await rehearse(db,report),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,r);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},r),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});

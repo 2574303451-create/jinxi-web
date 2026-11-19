@@ -5,6 +5,7 @@ const integer=v=>typeof v==='string'&&/^(0|[1-9]\d{0,18})$/.test(v)&&BigInt(v)<=
 const day=v=>typeof v==='string'&&/^(?!0000)\d{4}-\d\d-\d\d$/.test(v)&&Number.isFinite(Date.parse(v+'T00:00:00Z'))&&new Date(v+'T00:00:00Z').toISOString().slice(0,10)===v;
 const instant=v=>typeof v==='string'&&/^\d{4}-\d\d-\d\dT(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(v)&&day(v.slice(0,10))&&Number.isFinite(Date.parse(v));
 const sourceId=v=>{const value=Number.isSafeInteger(v)?String(v):v;return typeof value==='string'&&/^[a-zA-Z0-9_-]{1,64}$/.test(value)?value:null;};
+const isLossyId=id=>Number.isInteger(id)&&!Number.isSafeInteger(id);
 const ref=(v,i)=>sourceId(v)||'row-'+i;
 function groups(rows,key){const map=new Map();for(const row of rows){const k=key(row);if(!map.has(k))map.set(k,[]);map.get(k).push(row);}return map;}
 function checkHistory(data,anchors){
@@ -25,15 +26,21 @@ function checkHistory(data,anchors){
   const row={legacyAccountId:ref(a.id,i),employeeNo:ref(a.employee_no,i),memberId:status==='trusted'?b[0].memberId.toLowerCase():null,status,reasons};mappings.push(row);subjects.set(a.id,row);for(const reason of reasons)add('account',a.id,reason,status);
  }
  for(const [i,p]of data.profiles.entries())if(!(accounts.get(p.employee_no)||[]).length)add('profile',p.employee_no||String(i),'PROFILE_WITHOUT_LOGIN_ACCOUNT','unmapped');
- const lossy=groups(anchors.records.filter(r=>typeof r.id==='number'&&Number.isInteger(r.id)&&!Number.isSafeInteger(r.id)),r=>r.kind+':'+r.id);
+ const lossyBindings=new Set(anchors.records.filter(r=>isLossyId(r.id)).map(r=>r.kind+':'+r.id));
  for(const [i,r]of anchors.records.entries())if(sourceId(r.id)===null)add('recordBinding',String(i),'UNSUPPORTED_BINDING_SOURCE_ID','unmapped');
  const userBindings=groups(anchors.users,r=>r.userId),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
  function owner(userId){const rows=userBindings.get(userId)||[];if(rows.length!==1)return null;const s=subjects.get(rows[0].accountId);return s?.status==='trusted'?s:null;}
- const contentIds=Object.fromEntries(['messages','strategies'].map(kind=>[kind,groups(data[kind],r=>sourceId(r.id))]));
- for(const kind of ['messages','strategies'])for(const [i,row]of data[kind].entries()){
+ const contentKinds=['messages','strategies'];
+ const contentIds=Object.fromEntries(contentKinds.map(kind=>[kind,groups(data[kind],r=>sourceId(r.id))]));
+ const lossySources=new Set(contentKinds.flatMap(kind=>data[kind].filter(r=>isLossyId(r.id)).map(r=>kind+':'+r.id)));
+ for(const kind of contentKinds)for(const [i,row]of data[kind].entries()){
   if(sourceId(row.id)===null){add(kind,String(i),'UNSUPPORTED_SOURCE_ID','unmapped');continue;}
   if(contentIds[kind].get(sourceId(row.id)).length!==1){add(kind,row.id,'DUPLICATE_SOURCE_ID');continue;}
-  if(typeof row.id==='string'&&/^-?\d+$/.test(row.id)&&lossy.has(kind+':'+Number(row.id))){add(kind,row.id,'LOSSY_AUTHOR_BINDING_AMBIGUITY');continue;}
+  if(typeof row.id==='string'&&/^-?\d+$/.test(row.id)){
+   const roundedKey=kind+':'+Number(row.id);
+   if(lossySources.has(roundedKey)){add(kind,row.id,'LOSSY_SOURCE_ID_AMBIGUITY');continue;}
+   if(lossyBindings.has(roundedKey)){add(kind,row.id,'LOSSY_AUTHOR_BINDING_AMBIGUITY');continue;}
+  }
   const b=records.get(kind+':'+row.id)||[],s=b.length===1?subjects.get(b[0].accountId):null;
   if(s?.status!=='trusted')add(kind,row.id||String(i),b.length>1?'AUTHOR_BINDING_CONFLICT':'NO_TRUSTED_AUTHOR','unmapped');
   else candidates.push({kind,sourceId:ref(row.id,i),memberId:s.memberId});

@@ -34,3 +34,18 @@ test('an invalid author anchor is reported separately from independent exact evi
  assert.deepEqual(report.candidates,[]);
  assert(report.findings.some(f=>f.entity==='recordBinding'&&f.ref==='1'&&f.code==='UNSUPPORTED_BINDING_SOURCE_ID'&&f.status==='unmapped'));
 });
+test('unsafe numeric source rows quarantine matching text IDs only within the same content type',()=>{
+ const {data,anchors}=syntheticHistory(2);
+ const textId='9007199254740993', roundedId=JSON.parse(textId), original=data.strategies[0];
+ data.strategies=[{...original,id:textId},{...original,id:'9007199254740992'},{...original,id:roundedId}];
+ data.messages=[{id:textId}];
+ anchors.records=[
+  {kind:'strategies',id:textId,accountId:anchors.members[0].accountId},
+  {kind:'strategies',id:'9007199254740992',accountId:anchors.members[1].accountId},
+  {kind:'messages',id:textId,accountId:anchors.members[1].accountId},
+ ];
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.candidates,[{kind:'messages',sourceId:textId,memberId:anchors.members[1].memberId}]);
+ assert.deepEqual(report.findings.filter(f=>f.code==='LOSSY_SOURCE_ID_AMBIGUITY').map(f=>f.ref),[textId,'9007199254740992']);
+ assert(report.findings.some(f=>f.entity==='strategies'&&f.code==='UNSUPPORTED_SOURCE_ID'));
+});

@@ -45,6 +45,17 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert.deepEqual(proof,{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
+ await t.test('lossy source collisions stay outside the PostgreSQL candidate table',async()=>{
+  const {data,anchors}=syntheticHistory(1),id='9007199254740993';
+  data.strategies[0].id=id;anchors.records[0].id=id;
+  data.strategies.push({...data.strategies[0],id:JSON.parse(id)});
+  const report=checkHistory(data,anchors);
+  assert.deepEqual(report.candidates,[]);
+  assert(report.findings.some(f=>f.code==='LOSSY_SOURCE_ID_AMBIGUITY'&&f.ref===id));
+  const proof=await rehearse(db,report);
+  assert.deepEqual(proof,{candidates:0,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
  await t.test('failed rollback acknowledgement cannot produce a successful rehearsal receipt',async()=>{
   const {data,anchors}=syntheticHistory(1);for(const loseCloseAck of [false,true]){let closed=false,withheld=false;
   const dbWithLostAck={...db,admin:async()=>{

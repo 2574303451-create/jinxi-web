@@ -14,6 +14,12 @@ export type MessageActions = Pick<typeof messages,
   readMemberFeed: () => Promise<Message[]>;
   setReaction: (id: string, type: string, active: boolean) => Promise<void>;
 };
+export type GuideDiscussionProps = {
+  guide: Strategy;
+  refreshing: boolean;
+  comment: string;
+  setComment: (value: string) => void;
+};
 export interface SiteRuntime {
   accountLabel: string;
   displayName: string;
@@ -36,7 +42,7 @@ export interface SiteRuntime {
   readHomeGuides: (feed: HomeGuideFeed, force?: boolean) => Promise<HomeGuide[]>;
   saveGuide: (draft: StrategySubmission) => Promise<void>;
   guideManagement: ReactNode;
-  guideDiscussion: (guide: Strategy, refreshing: boolean) => ReactNode;
+  guideDiscussion: (props: GuideDiscussionProps) => ReactNode;
 }
 export const SiteRuntimeContext = createContext<SiteRuntime | null>(null);
 export const useSiteRuntime = () => useContext(SiteRuntimeContext);

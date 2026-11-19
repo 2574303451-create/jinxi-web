@@ -86,6 +86,7 @@ export function GuideCenter() {
     return (
       <Suspense fallback={<PaperState kind="loading" title="正在打开攻略…" />}>
         <GuideReader
+          key={runtime ? id : undefined}
           id={id}
           listHref={guideHref(route, { id: null })}
           onReturn={(event) => follow(event, { id: null }, "list")}

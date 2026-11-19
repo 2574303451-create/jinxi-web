@@ -1,6 +1,6 @@
 "use client";
-import { useCallback, useState } from 'react';
-import type { Strategy } from '../../../types/strategy-wall';
+import { useCallback, useId, useState } from 'react';
+import type { GuideDiscussionProps } from '../../../components/site-runtime';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
 import type { Item } from './model';
@@ -48,8 +48,9 @@ export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'
   </section>;
 }
 
-export function GuideDiscussion({ guide, refreshing }: { guide: Strategy; refreshing: boolean }) {
-  const { client, ready } = useSession(), cmd = useCommand(), [comment, setComment] = useState('');
+export function GuideDiscussion({ guide, refreshing, comment, setComment }: GuideDiscussionProps) {
+  const { client, ready } = useSession(), cmd = useCommand();
+  const commentId = useId();
   const verified = guide.ownership === 'verified';
   const canInteract = ready && Boolean(guide.viewerReactions) && !refreshing && !cmd.busy;
   const react = (type: 'like' | 'favorite') => {
@@ -64,7 +65,10 @@ export function GuideDiscussion({ guide, refreshing }: { guide: Strategy; refres
       <button type="button" className="paper-button" aria-pressed={ready && guide.viewerReactions?.favorite === true} disabled={!canInteract} onClick={() => react('favorite')}>收藏攻略</button>
     </div>
     <form onSubmit={e => { e.preventDefault(); if (!canInteract) return; void cmd.run(async () => { await client.mutate('community', { op: 'reply.create', id: guide.id, content: comment }); setComment(''); }); }}>
-      <label className="paper-label">攻略评论<textarea className="paper-input" required maxLength={1000} value={comment} onChange={e => setComment(e.target.value)} /></label>
+      <div className="paper-label">
+        <label htmlFor={commentId}>攻略评论</label>
+        <textarea id={commentId} className="paper-input" required maxLength={1000} value={comment} onChange={e => setComment(e.target.value)} />
+      </div>
       <button className="paper-button yellow" disabled={!canInteract}>发布攻略评论</button>
     </form>
     {!ready && <PaperState kind="empty" title="请先登录合成账号" />}

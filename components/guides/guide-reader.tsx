@@ -29,7 +29,6 @@ export default function GuideReader({
     [comment, setComment] = useState("");
   const [loadedId, setLoadedId] = useState<string | null>(null);
   const restoredId = useRef<string | null>(null);
-  useEffect(() => { restoredId.current = null; }, [id]);
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -104,7 +103,7 @@ export default function GuideReader({
       </header>
       <GuideBody content={guide.content} />
       <GuideMedia items={guide.mediaFiles} cover={guide.imageUrl} />
-      {runtime ? runtime.guideDiscussion(guide, loading) : <>
+      {runtime ? runtime.guideDiscussion({ guide, refreshing: loading, comment, setComment }) : <>
       <p className="paper-notice" role="status">点赞、收藏和评论暂未开放。攻略与历史评论仍可阅读。</p>
       <div className="guide-reader-actions">
         <button className="paper-button" disabled>点赞 {guide.likes.length}</button>

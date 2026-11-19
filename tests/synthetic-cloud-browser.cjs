@@ -643,9 +643,24 @@ async function main() {
         };
         const guideComment = '独立 TEST 合成攻略评论';
         const editor = a.getByLabel('攻略评论',{exact:true});
+        record.stage='guide-draft-after-read-failure';
         await editor.fill(guideComment);
-        await guideReaction(a,'点赞攻略','like',true);
+        let failedRead = false;
+        await a.route('**/api/community?**',async route=>{
+          const request = route.request(), query = new URL(request.url()).searchParams;
+          if (!failedRead && request.method()==='GET' && query.get('scope')==='member-feed' && query.get('id')===guideId) {
+            failedRead = true;
+            await route.fulfill({status:503,json:{code:'COMMUNITY_UNAVAILABLE'}});
+          } else await route.continue();
+        });
+        const [liked] = await Promise.all([command(a,'community','reaction.set'),guideButton(a,'点赞攻略').click()]);
+        assert.equal(liked.status(),200);
+        await a.getByRole('button',{name:'重试',exact:true}).click();
+        assert(failedRead);
+        await a.unroute('**/api/community?**');
+        await hasPressed(a,'点赞攻略',true);
         assert.equal(await editor.inputValue(),guideComment);
+        record.stage='guide-post-comment';
         await guideReaction(a,'收藏攻略','favorite',true);
         const [posted] = await Promise.all([command(a,'community','reply.create'),guideButton(a,'发布攻略评论').click()]);
         assert.equal(posted.status(),200);
@@ -655,6 +670,7 @@ async function main() {
         assert.deepEqual(savedReply,{author_id:other.memberId,item_id:guideId});
         assert.equal(await editor.inputValue(),'');
 
+        record.stage='guide-reactions-and-comment-privacy';
         await navigate(a,guideLink);
         await ready(a);
         await hasPressed(a,'点赞攻略',true);

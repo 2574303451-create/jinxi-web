@@ -58,6 +58,9 @@ async function main() {
           const p = await c.newPage();
           p.setDefaultTimeout(15000);
           p.on('pageerror',error=>record.pageErrors.push(error.name));
+          p.on('response',response=>{
+            if(response.status()===429) (record.rateLimits ??= []).push({stage:record.stage,path:new URL(response.url()).pathname});
+          });
           p.on('console',message=>{
             if (/Content Security Policy|Refused to execute/i.test(message.text())) {
               record.cspErrors.push(message.text().slice(0,250));
@@ -177,6 +180,9 @@ async function main() {
         await login(reviewer,'reviewer');
         let previousRequest = lostRequest;
         for (const outcome of ['failed','fulfilled']) {
+          record.stage='manual-redemption-admin-queue-'+outcome;
+          // The two orders simulate distinct visits; all test browsers share one loopback IP.
+          await api.admin('TRUNCATE b2_lab.member_session_limits_v2');
           await close(a);
           await a.getByRole('button',{name:'恢复未确认操作',exact:true}).click();
           const receipt = a.locator('[data-request-id="'+previousRequest+'"]').filter({hasText:'服务端确认已提交'});

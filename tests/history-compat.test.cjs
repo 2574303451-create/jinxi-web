@@ -87,3 +87,21 @@ test('an unrelated debit or conflicting order metadata cannot establish a legacy
  data.orders.length=0;
  assert(checkHistory(data,anchors).findings.some(f=>f.entity==='ledger'&&f.code==='UNMATCHED_REDEMPTION_DEBIT'));
 });
+test('legacy debits need the fixed consumption code and reversals need independent review',()=>{
+ const {data,anchors,order,charge}=syntheticLegacyRedemption();
+ const orderCodes=()=>checkHistory(data,anchors).findings.filter(f=>f.entity==='order').map(f=>f.code);
+ charge.rule_code='';
+ assert(orderCodes().includes('ORDER_LEDGER_STATUS_UNPROVEN'));
+ charge.rule_code='redeem.item_exchange.consume';
+ const returnEntry={id:'2',user_id:order.user_id,biz_id:'SYN-REVERSAL',direction:1,point_delta:'2',
+  balance_before:'0',balance_after:'2',ext_json:{origin_biz_id:charge.biz_id}};
+ for(const event_type of ['reverse','reversal']){
+  data.ledger[1]={...returnEntry,event_type};
+  for(const status of ['success','cancelled']){
+   order.status=status;
+   const codes=orderCodes();
+   assert(codes.includes('ORDER_REVERSAL_POLICY_UNPROVEN'));
+   assert(codes.includes('ORDER_LEDGER_STATUS_UNPROVEN'));
+  }
+ }
+});

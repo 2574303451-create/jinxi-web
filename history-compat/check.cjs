@@ -8,10 +8,11 @@ const sourceId=v=>{const value=Number.isSafeInteger(v)?String(v):v;return typeof
 const isLossyId=id=>Number.isInteger(id)&&!Number.isSafeInteger(id);
 const ref=(v,i)=>sourceId(v)||'row-'+i;
 function groups(rows,key){const map=new Map();for(const row of rows){const k=key(row);if(!map.has(k))map.set(k,[]);map.get(k).push(row);}return map;}
-const hasOrderNumber=value=>typeof value==='string'&&value.trim().length>0;
+const nonBlankText=value=>typeof value==='string'&&value.trim().length>0;
 function isLegacyOrderDebit(row){
  return row.direction===2&&row.scene==='redeem'&&row.event_type==='item_exchange';
 }
+const isCompensation=row=>['refund','reverse','reversal'].includes(row.event_type);
 function hasValidMovement(row){
  return integer(row.id)&&[1,2].includes(row.direction)&&integer(row.point_delta)&&row.point_delta!=='0'&&
   integer(row.balance_before)&&integer(row.balance_after)&&
@@ -19,38 +20,42 @@ function hasValidMovement(row){
 }
 function checkOrders(orders,ledger,businessIds,owner,add){
  const byNumber=groups(orders,r=>r.order_no);
- const byExplicitOrder=groups(ledger.filter(r=>hasOrderNumber(r.ext_json?.order_no)),r=>r.ext_json.order_no);
- const refundsByOrigin=groups(ledger.filter(r=>r.event_type==='refund'&&hasOrderNumber(r.ext_json?.origin_biz_id)),r=>r.ext_json.origin_biz_id);
+ const byExplicitOrder=groups(ledger.filter(r=>nonBlankText(r.ext_json?.order_no)),r=>r.ext_json.order_no);
+ const compensationByOrigin=groups(ledger.filter(r=>isCompensation(r)&&nonBlankText(r.ext_json?.origin_biz_id)),r=>r.ext_json.origin_biz_id);
  for(const row of ledger){
-  if(isLegacyOrderDebit(row)&&hasOrderNumber(row.biz_id)&&!byNumber.has(row.biz_id))add('ledger',row.id,'UNMATCHED_REDEMPTION_DEBIT');
+  if(isLegacyOrderDebit(row)&&nonBlankText(row.biz_id)&&!byNumber.has(row.biz_id))add('ledger',row.id,'UNMATCHED_REDEMPTION_DEBIT');
  }
  for(const row of orders){
   if(!owner(row.user_id))add('order',row.id,'UNPROVEN_ORDER_SUBJECT','unmapped');
-  if(!integer(row.id)||!integer(row.point_cost)||row.point_cost==='0'||!hasOrderNumber(row.order_no)||
-   !hasOrderNumber(row.item_code)||!['pending','success','failed','cancelled'].includes(row.status))add('order',row.id,'INVALID_ORDER_FIELDS');
+  if(!integer(row.id)||!integer(row.point_cost)||row.point_cost==='0'||!nonBlankText(row.order_no)||
+   !nonBlankText(row.item_code)||!['pending','success','failed','cancelled'].includes(row.status))add('order',row.id,'INVALID_ORDER_FIELDS');
   if(byNumber.get(row.order_no).length!==1)add('order',row.id,'DUPLICATE_REDEMPTION');
-  if(!hasOrderNumber(row.order_no)){add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');continue;}
+  if(!nonBlankText(row.order_no)){add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');continue;}
 
   // point_create_redeem_order uses order_no as point_spend's biz_id; order_no is absent from its ledger JSON.
   const businessRows=businessIds.get(row.order_no)||[],explicitRows=byExplicitOrder.get(row.order_no)||[];
   const charges=[...new Set([...businessRows,...explicitRows].filter(r=>r.direction===2))];
-  const refunds=[...new Set([...(refundsByOrigin.get(row.order_no)||[]),...explicitRows.filter(r=>r.event_type==='refund')])];
+  const orderCompensations=[...new Set([...(compensationByOrigin.get(row.order_no)||[]),...explicitRows.filter(isCompensation)])];
+  const refunds=orderCompensations.filter(r=>r.event_type==='refund');
+  const needsReversalReview=orderCompensations.length!==refunds.length;
   if(charges.length>1)add('order',row.id,'DUPLICATE_ORDER_CHARGE');
   if(refunds.length>1)add('order',row.id,'DUPLICATE_REFUND');
+  if(needsReversalReview)add('order',row.id,'ORDER_REVERSAL_POLICY_UNPROVEN');
   const charge=charges.length===1&&businessRows.length===1?charges[0]:null;
   const debitProven=charge&&isLegacyOrderDebit(charge)&&hasValidMovement(charge)&&charge.biz_id===row.order_no&&
+   charge.rule_code==='redeem.item_exchange.consume'&&
    charge.user_id===row.user_id&&charge.point_delta===row.point_cost&&
    charge.ext_json?.item_code===row.item_code&&
    (charge.ext_json?.order_no===undefined||charge.ext_json.order_no===row.order_no);
   const refundInvalid=refunds.some(refund=>!debitProven||refund.direction!==1||!hasValidMovement(refund)||
-   !hasOrderNumber(refund.biz_id)||businessIds.get(refund.biz_id).length!==1||
+   !nonBlankText(refund.biz_id)||businessIds.get(refund.biz_id).length!==1||
    BigInt(refund.id)<=BigInt(charge.id)||
    refund.user_id!==row.user_id||refund.point_delta!==row.point_cost||
    refund.ext_json?.origin_biz_id!==row.order_no||
    (refund.ext_json?.order_no!==undefined&&refund.ext_json.order_no!==row.order_no));
   if(refundInvalid)add('order',row.id,'UNLINKED_OR_INVALID_REFUND');
   const refundsExpected=['cancelled','failed'].includes(row.status)?1:0;
-  if(!debitProven||refundInvalid||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
+  if(!debitProven||refundInvalid||needsReversalReview||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
  }
 }
 function checkHistory(data,anchors){
@@ -97,7 +102,7 @@ function checkHistory(data,anchors){
   if(s&&day(row.checkin_date)){const k=s.memberId+':'+row.checkin_date;if(days.has(k))add('checkin',row.id,'DUPLICATE_CHECKIN_FACT');days.set(k,row);}
  }
  const ledgerGroups=groups(data.ledger,r=>r.user_id),biz=groups(data.ledger,r=>r.biz_id),rewardKeys=new Set();
- const ruleVersions=groups(data.rules,r=>r.rule_code+':'+r.version),compensations=groups(data.ledger.filter(r=>['refund','reverse','reversal'].includes(r.event_type)),r=>r.ext_json?.origin_biz_id);
+ const ruleVersions=groups(data.rules,r=>r.rule_code+':'+r.version),compensations=groups(data.ledger.filter(isCompensation),r=>r.ext_json?.origin_biz_id);
  for(const row of data.rules){if(!Number.isInteger(row.version)||row.version<1||!['draft','active','inactive'].includes(row.status)||!Number.isInteger(row.point_delta)||row.point_delta<1||!instant(row.start_at)||row.end_at!==null&&(!instant(row.end_at)||Date.parse(row.end_at)<=Date.parse(row.start_at)))add('rule',row.id,'RULE_EFFECTIVE_TIME_OR_FIELDS_UNPROVEN');if(row.daily_cap===0||row.total_cap===0)add('rule',row.id,'ZERO_CAP_SEMANTIC_REVIEW_REQUIRED');if((ruleVersions.get(row.rule_code+':'+row.version)||[]).length>1)add('rule',row.id,'DUPLICATE_RULE_VERSION');}
  for(const row of data.ledger){
   if(!owner(row.user_id))add('ledger',row.id,'UNPROVEN_LEDGER_SUBJECT','unmapped');
@@ -107,7 +112,7 @@ function checkHistory(data,anchors){
   if(row.event_type==='checkin'&&day(row.ext_json?.checkin_date)){const k=(owner(row.user_id)?.memberId||'unmapped:'+row.user_id)+':'+row.ext_json.checkin_date;if(rewardKeys.has(k))add('ledger',row.id,'DUPLICATE_CHECKIN_REWARD');rewardKeys.add(k);}
   const generatedDebitCode=isLegacyOrderDebit(row)&&row.rule_code==='redeem.item_exchange.consume';
   if(row.rule_code&&!generatedDebitCode&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
-  if(['refund','reverse','reversal'].includes(row.event_type)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
+  if(isCompensation(row)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
  const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
  for(const [member,rows]of financialIdentities)if(member&&new Set(rows.map(r=>r.user_id)).size>1)add('pointAccount',member,'MULTIPLE_LEGACY_FINANCIAL_IDENTITIES');

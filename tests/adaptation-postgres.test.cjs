@@ -70,7 +70,7 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert.equal(withheld,true);assert.equal(closed,true);assert.deepEqual(await db.financialSnapshot(),old);}
  });
  await t.test('historical redemption mismatches are rehearsed as findings without staging orders or money',async()=>{
-  const {data,anchors,order}=syntheticLegacyRedemption();
+  const {data,anchors,order,charge}=syntheticLegacyRedemption();
   const report=checkHistory(data,anchors);
   assert.deepEqual(report.findings.map(f=>f.entity),['messages']);
   assert.deepEqual(await rehearse(db,report),{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});
@@ -79,6 +79,14 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert(noRefund.findings.some(f=>f.entity==='order'&&f.code==='ORDER_LEDGER_STATUS_UNPROVEN'));
   assert.deepEqual(noRefund.candidates,report.candidates);
   assert.deepEqual(await rehearse(db,noRefund),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  order.status='success';
+  data.ledger.push({id:'2',user_id:order.user_id,biz_id:'SYN-REVERSAL',event_type:'reversal',direction:1,
+   point_delta:'2',balance_before:'0',balance_after:'2',ext_json:{origin_biz_id:charge.biz_id}});
+  data.pointAccounts[0].balance='2';
+  const reversal=checkHistory(data,anchors);
+  assert(reversal.findings.some(f=>f.entity==='order'&&f.code==='ORDER_REVERSAL_POLICY_UNPROVEN'));
+  assert.deepEqual(reversal.candidates,report.candidates);
+  assert.deepEqual(await rehearse(db,reversal),{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,r);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},r),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});

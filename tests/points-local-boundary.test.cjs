@@ -15,3 +15,19 @@ test('points failure responses expose no storage credentials, internal schema, c
  const h=createPointsHandler({settings:settings(),env:{},identity:me,connect:()=>{throw Error('PRIVATE_DB_PASSWORD_MARKER');}}),r=await h(post({op:'settle',requestId:crypto.randomUUID(),eventId:crypto.randomUUID()}));assert.equal(r.statusCode,503);assert(!r.body.includes('PRIVATE_'));assert(!r.headers['Set-Cookie']);assert(!r.headers['Access-Control-Allow-Origin']);assert.equal(r.headers['Cache-Control'],'no-store');
  let connects=0;const denied=createPointsHandler({settings:settings(),env:{},identity:async()=>({statusCode:401,headers:{},body:'{"code":"SESSION_INVALID"}'}),connect:()=>{connects++;}});assert.equal((await denied({httpMethod:'GET',headers:{}})).statusCode,401);assert.equal(connects,0);
 });
+test('administrator order lookup accepts only a complete order ID on the admin view',async()=>{
+ let connects=0;
+ const h=createPointsHandler({settings:settings(),env:{},identity:me,connect:()=>{connects++;throw Error('MUST_NOT_CONNECT');}});
+ const orderId=crypto.randomUUID();
+ for(const [query,status] of [
+  [{orderId},403],
+  [{view:'board',orderId},403],
+  [{view:'admin',orderId:'partial'},400],
+  [{view:'admin',orderId,limit:'20'},403],
+  [{view:'admin',orderId,receipt:crypto.randomUUID()},403],
+ ]){
+  const result=await h({httpMethod:'GET',headers:{},queryStringParameters:query});
+  assert.equal(result.statusCode,status,JSON.stringify(query));
+ }
+ assert.equal(connects,0);
+});

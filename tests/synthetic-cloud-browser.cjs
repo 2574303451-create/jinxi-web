@@ -238,6 +238,12 @@ async function main() {
           assert.equal(await reviewer.getByRole('heading',{name:'待处理兑换',exact:true}).count(),0);
           assert.equal((await api.request('/api/points?view=admin',{session:await session(reviewer)})).status,403);
           await points(staff);
+          const input = staff.getByRole('searchbox',{name:'完整订单号',exact:true});
+          if(outcome === 'failed') {
+            await input.fill(id.slice(0,8));
+            await input.press('Enter');
+            await staff.getByText('请输入成员提供的完整订单号。',{exact:true}).waitFor();
+          }
           const row = staff.locator('[data-admin-order-id="'+id+'"]');
           await row.getByText('集成用虚构纸签（仅合成） · 1 件 · '+id,{exact:true}).waitFor();
           assert(!(await row.innerText()).includes(member.memberId));
@@ -248,6 +254,10 @@ async function main() {
             }
           }
           assert.equal(await row.getByRole('button',{name:'确认已人工开通',exact:true}).count(),0);
+          await input.fill(id.toUpperCase());
+          await input.press('Enter');
+          await staff.getByRole('button',{name:'返回待处理列表',exact:true}).waitFor();
+          await row.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           const claim = command(staff,'points','order.process');
           await row.getByRole('button',{name:'认领订单',exact:true}).click();
           assert.equal((await (await claim).json()).status,'processing');
@@ -262,6 +272,9 @@ async function main() {
           const decision = await result;
           assert.equal(decision.status(),200);
           assert.equal((await decision.json()).status,outcome);
+          await row.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
+          assert.equal(await row.getByRole('button').count(),0);
+          await staff.getByRole('button',{name:'返回待处理列表',exact:true}).click();
           await staff.getByText('暂无待处理订单。',{exact:true}).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
           await ownOrder.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
@@ -275,6 +288,7 @@ async function main() {
           assert.deepEqual(actual,{status:outcome,charges:1,refunds:outcome === 'failed' ? 1 : 0,available:outcome === 'failed' ? 2 : 1});
         }
         record.scenarios.push('manual-admin-queue-keyboard-fulfilment-and-failure-refund-with-member-and-reviewer-isolation');
+        record.scenarios.push('administrator-exact-order-lookup-keeps-closed-orders-visible-without-actions');
 
         record.stage='refund-and-account-switch';
         await close(a);

@@ -128,6 +128,69 @@ test('points transaction failure and revocation review on actual synthetic Postg
    assert.deepEqual(await p.snapshot(),claimed);
    assert.equal((await p.op(staff,change('fulfilled'))).body.status,'fulfilled');
   });
+  await t.test('exact administrator lookup finds closed orders and preserves claim permissions', async () => {
+   const member=await p.login(), staff=await p.login('admin'), other=await p.login('same');
+   await p.fund(member);
+   const placed=await p.op(member,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});
+   assert.equal(placed.status,200);
+   const {orderId}=placed.body;
+   const find=(session,id=orderId)=>p.call(session,null,{view:'admin',orderId:id});
+   const action=status=>p.op(staff,{op:'order.process',orderId,status});
+   const before=await p.snapshot();
+   assert.equal((await find(null)).status,401);
+   assert.equal((await find(member)).status,403);
+   assert.equal((await find(other)).status,403);
+   assert.deepEqual((await find(staff,crypto.randomUUID())).body.adminOrders,[]);
+   const pending=await find(staff,orderId.toUpperCase());
+   assert.equal(pending.status,200);
+   assert.equal(pending.headers['Cache-Control'],'no-store');
+   const [row]=pending.body.adminOrders;
+   assert.deepEqual(Object.keys(row).sort(),['canClose','cost','id','itemName','ownerLabel','quantity','status']);
+   assert.equal(row.id,orderId);
+   assert.equal(row.status,'pending');
+   assert.equal(row.canClose,false);
+   assert(!JSON.stringify(row).includes(db.accounts.normal.memberId));
+   assert.deepEqual(await p.snapshot(),before);
+
+   const revokedDuringRead=p.make({connect:async()=>{
+    const c=await db.connectPoints(), query=c.query.bind(c);
+    c.query=async(sql,...values)=>{
+     const response=await query(sql,...values);
+     if(sql.includes('WITH queue AS')){
+      await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.admin.memberId]);
+     }
+     return response;
+    };
+    return c;
+   }});
+   try{
+    const result=await p.call(staff,null,{view:'admin',orderId},revokedDuringRead);
+    assert.equal(result.status,403);
+    assert(!Object.hasOwn(result.body,'adminOrders'));
+   }finally{
+    await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.admin.memberId]);
+   }
+
+   assert.equal((await action('processing')).body.status,'processing');
+   await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.same.memberId]);
+   try{
+    assert.equal((await find(staff)).body.adminOrders[0].canClose,true);
+    const claimed=(await find(other)).body.adminOrders[0];
+    assert.equal(claimed.status,'processing');
+    assert.equal(claimed.canClose,false);
+    assert(!JSON.stringify(claimed).includes(db.accounts.admin.memberId));
+    assert.equal((await p.op(other,{op:'order.process',orderId,status:'failed'})).body.code,'ORDER_CLAIMED_BY_ANOTHER');
+   }finally{
+    await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.same.memberId]);
+   }
+   assert.equal((await find(other)).status,403);
+   assert.equal((await action('failed')).body.status,'failed');
+   const closed=await p.snapshot();
+   assert.deepEqual((await p.call(staff,null,{view:'admin'})).body.adminOrders,[]);
+   assert.deepEqual((await find(staff)).body.adminOrders,[{...row,status:'failed'}]);
+   assert.deepEqual(closed.ledger.filter(l=>l.order_id===orderId).map(l=>l.kind),['redeem','refund']);
+   assert.deepEqual(await p.snapshot(),closed);
+  });
   await t.test('logout and actual password change after identity preflight invalidate the financial request',async()=>{
    for(const mode of ['logout','password']){
     const s=await p.login(),eventId=await p.checkin(s);const h=p.make({identity:async e=>{const r=await p.identity(e);assert.equal(r.statusCode,200);const next=crypto.randomBytes(20).toString('hex')+'A9!';const ended=await p.identity(p.event(s,mode==='logout'?{op:'logout'}:{op:'change-password',currentPassword:db.accounts.normal.password,newPassword:next}));assert.equal(ended.statusCode,200);if(mode==='password')db.accounts.normal.password=next;return r;}});

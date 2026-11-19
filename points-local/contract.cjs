@@ -5,6 +5,10 @@ function integer(value,min=1,max=1000000){if(typeof value!=='number'||!Number.is
 function fields(body,allowed){if(Object.keys(body).some(k=>!['op','requestId',...allowed].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');}
 function instant(value){if(typeof value!=='string'||!Number.isFinite(Date.parse(value))||new Date(value).toISOString()!==value)fail(400,'INVALID_INSTANT');return value;}
 function readOptions(query){
+ if(query.view==='admin'&&query.orderId!==undefined){
+  if(Object.keys(query).some(k=>!['view','orderId'].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');
+  return {view:'admin',orderId:uuid(query.orderId)};
+ }
  const view=query.view||'self',allowed=view==='board'?['view','metric','limit','cursor']:['view','limit','beforeLedger','beforeOrders'];if(Object.keys(query).some(k=>!allowed.includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');if(!['self','board','admin'].includes(view))fail(400,'INVALID_VIEW');
  let limit=20;if(query.limit!==undefined){if(typeof query.limit!=='string'||!/^\d{1,2}$/.test(query.limit)||Number(query.limit)<1||Number(query.limit)>50)fail(400,'INVALID_LIMIT');limit=Number(query.limit);}
  for(const key of ['beforeLedger','beforeOrders'])if(query[key]!==undefined&&(typeof query[key]!=='string'||!/^\d{1,13}$/.test(query[key])||BigInt(query[key])<1n||BigInt(query[key])>9000000000000n))fail(400,'INVALID_CURSOR');

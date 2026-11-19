@@ -14,7 +14,7 @@ if (!/^[a-f0-9]{40}$/.test(sha) || git('rev-parse','HEAD').toString().trim() !==
   throw Error('PILOT_INPUT_REJECTED');
 git('merge-base','--is-ancestor','6bb92684c7aecc125890dc97c8899383184d4c73',sha);
 const dir = mkdtempSync(join(tmpdir(),'jinxi-pilot-'));
-for (const folder of ['public','functions','edge','lib','lib/gate-only']) mkdirSync(join(dir,folder));
+for (const folder of ['public','public/empty','functions','edge','lib','lib/gate-only']) mkdirSync(join(dir,folder));
 const files = {};
 function put(name, bytes) {
   writeFileSync(join(dir,name),bytes,{flag:'wx'});

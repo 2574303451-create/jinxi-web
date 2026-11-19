@@ -363,6 +363,8 @@ async function main() {
         await managed(staff).getByRole('button',{name:'提交公告审核',exact:true}).click();
         await managed(staff).getByText(/submitted/).waitFor();
         assert.equal(await managed(staff).getByRole('button',{name:'独立审核并发布',exact:true}).count(),0);
+        await navigate(a);
+        await ready(a);
         await a.locator('.announcement-preview').getByText(/暂无公告/).waitFor();
         await reviewer.getByRole('button',{name:announcementButton,exact:true}).click();
         result = command(reviewer,'operations','announcement.publish');
@@ -398,13 +400,22 @@ async function main() {
         const sponsorRow = reviewer.locator(`[data-sponsor-id="${sponsorId}"]`);
         await reviewer.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
         await sponsorRow.getByText(sponsor,{exact:true}).waitFor();
-        assert.equal(await reviewer.getByLabel('合成感谢对象',{exact:true}).count(),0);
+        const publicSponsorship = reviewer.getByRole('dialog',{name:'合成感谢记录',exact:true});
+        assert.equal(await publicSponsorship.getByLabel('合成感谢对象',{exact:true}).count(),0,'reviewer cannot maintain sponsorships');
         result = command(staff,'operations','sponsor.hide');
         await staff.locator('.integration-record').filter({hasText:sponsor}).getByRole('button',{name:'隐藏感谢记录',exact:true}).click();
         assert.equal((await result).status(),200);
-        await reviewer.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        const refreshed = reviewer.waitForResponse(response=>{
+          const url = new URL(response.url());
+          return response.request().method() === 'GET' && url.pathname === '/api/operations' &&
+            url.searchParams.get('kind') === 'sponsor' && url.searchParams.get('view') === 'public';
+        });
+        await publicSponsorship.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        const publicFeed = await refreshed;
+        assert.equal(publicFeed.status(),200);
+        assert(!(await publicFeed.json()).items.some(item=>item.id===sponsorId));
         await sponsorRow.waitFor({state:'hidden'});
-        assert.equal(await reviewer.getByRole('alert').count(),0);
+        assert.equal(await publicSponsorship.getByRole('alert').count(),0,'sponsorship panel completed its refresh');
         const {rows:[sponsorship]} = await api.admin('SELECT status,owner_id,occurred_at FROM operations_lab.documents WHERE id=$1',[sponsorId]);
         assert.deepEqual(sponsorship,{status:'hidden',owner_id:db.accounts.admin.memberId,occurred_at:new Date('2024-03-01T04:00:00Z')});
         record.scenarios.push('administrator-maintained-synthetic-sponsorship-obeys-public-visibility');

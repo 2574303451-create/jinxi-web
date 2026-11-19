@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 import type * as messages from "../services/message-wall-backend";
+import type { Message } from "../types/message-wall";
 import type { Strategy, StrategySubmission } from "../types/strategy-wall";
 import type { MemberAction } from "./home/guild-sections";
 import type { HomeGuide, HomeGuideFeed } from "../services/home-guides";
@@ -9,7 +10,10 @@ import type { HomeGuide, HomeGuideFeed } from "../services/home-guides";
 // No local endpoints, credentials or enabling flags belong in the public app.
 // Only the separate, loopback-only development application supplies a provider.
 export type MessageActions = Pick<typeof messages,
-  "addMessage" | "addReply" | "toggleReaction" | "togglePin" | "deleteMessage">;
+  "addMessage" | "addReply" | "togglePin" | "deleteMessage"> & {
+  readMemberFeed: () => Promise<Message[]>;
+  setReaction: (id: string, type: string, active: boolean) => Promise<void>;
+};
 export interface SiteRuntime {
   accountLabel: string;
   displayName: string;

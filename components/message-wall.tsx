@@ -141,7 +141,7 @@ export const MessageWall = memo(function MessageWall({
   management?: ReactNode;
 }) {
   const api = actions || backendAPI;
-  const { messages, loading, error, reload, readOnly } = usePublicMessages();
+  const { messages, loading, error, reload, readOnly } = usePublicMessages(writesPaused ? undefined : actions?.readMemberFeed);
   const canWrite = !writesPaused && !readOnly;
   const [name, setName] = useState(""),
     [content, setContent] = useState("");
@@ -255,13 +255,14 @@ export const MessageWall = memo(function MessageWall({
       setBusy(null);
     }
   }
-  async function react(id: string, type: string) {
+  async function react(id: string, type: string, active: boolean) {
     if (!canWrite) return;
     if (busy) return;
     setBusy(id);
     setNotice(null);
     try {
-      await api.toggleReaction(id, type, userId);
+      if (actions) await actions.setReaction(id, type, active);
+      else await backendAPI.toggleReaction(id, type, userId);
       await refresh();
     } catch {
       setNotice({ error: true, text: "表情回应失败，请稍后重试。" });
@@ -526,14 +527,15 @@ export const MessageWall = memo(function MessageWall({
                       const data = message.reactions.find(
                         (item) => item.type === type,
                       );
+                      const pressed = actions ? canWrite && Boolean(data?.mine) : Boolean(data?.users.includes(userId));
                       return (
                         <button
                           key={type}
                           className="message-reaction"
                           aria-label={`回应 ${type}`}
-                          aria-pressed={Boolean(data?.users.includes(userId))}
-                          disabled={!canWrite || busy === message.id}
-                          onClick={() => void react(message.id, type)}
+                          aria-pressed={pressed}
+                          disabled={!canWrite || busy === message.id || Boolean(actions && (loading || error || message.ownership === "unverified-legacy"))}
+                          onClick={() => void react(message.id, type, !pressed)}
                         >
                           {type}
                           <span>{data?.count || 0}</span>

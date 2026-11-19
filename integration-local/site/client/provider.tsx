@@ -43,10 +43,10 @@ function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'l
   useEffect(() => { window.addEventListener('integration:capabilities', privileges.reload); return () => window.removeEventListener('integration:capabilities', privileges.reload); }, [privileges.reload]);
   useEffect(() => { const update = () => setDataVersion(n => n + 1); window.addEventListener('integration:data', update); window.addEventListener('integration:remote-data', update); return () => { window.removeEventListener('integration:data', update); window.removeEventListener('integration:remote-data', update); }; }, []);
   const messageActions = useMemo<MessageActions>(() => ({
+    readMemberFeed: async () => (await client.request('community', null, { kind: 'message', scope: 'member-feed' })).items.map(message),
     addMessage: async input => message((await client.mutate('community', { op: 'message.create', content: input.content, category: input.category, color: input.color })).item),
     addReply: async (id, input) => { const r = await client.mutate('community', { op: 'reply.create', id, content: input.content }); return message(r.item).replies.find(x => x.id === r.replyId)!; },
-    // Explicit set, rather than a browser-derived count or identity. Repeated responses stay idempotent.
-    toggleReaction: async (id, type) => (await client.mutate('community', { op: 'reaction.set', id, type, active: true })).item.reactions,
+    setReaction: async (id, type, active) => { await client.mutate('community', { op: 'reaction.set', id, type, active }); },
     togglePin: async () => { throw Error('USE_SERVER_AUTHORIZED_MANAGEMENT'); },
     deleteMessage: async () => { throw Error('USE_SERVER_AUTHORIZED_MANAGEMENT'); },
   }), [client]);

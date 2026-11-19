@@ -3,6 +3,7 @@ export interface Reaction {
   type: string;
   count: number;
   users: string[];
+  mine?: boolean;
 }
 
 export interface Reply {
@@ -24,6 +25,7 @@ export interface Message {
   category: string;
   isPinned: boolean;
   imageUrl?: string | null;
+  ownership?: "verified" | "unverified-legacy";
 }
 
 export interface MessageWallPost {

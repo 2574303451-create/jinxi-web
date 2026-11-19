@@ -16,6 +16,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
   try{
    localSettings(settings,env);
    const method=event.httpMethod,query=event.queryStringParameters||{},recovering=method==='GET'&&recoveryQuery(query);
+   const memberFeed=method==='GET'&&query.scope==='member-feed';
    if(!['GET','POST'].includes(method))fail(405,'METHOD_NOT_ALLOWED');
    if(header(event,'sec-fetch-site')==='cross-site'||header(event,'origin')&&header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REJECTED');
    let body={};
@@ -28,9 +29,14 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     if(!Object.hasOwn(fields,body.op))fail(400,'OPERATION_NOT_ENABLED');
     if(Object.keys(body).some(k=>!['op','requestId',...fields[body.op]].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');
     if(!uuid(body.requestId))fail(400,'REQUEST_ID_REQUIRED');
-   }else if(!recovering&&(Object.keys(query).some(k=>!['kind','scope','id'].includes(k))||!['message','guide'].includes(query.kind)||!['public','mine','review'].includes(query.scope||'public')))fail(400,'INVALID_QUERY');
+   }else if(!recovering){
+    const validScope=['public','mine','review','member-feed'].includes(query.scope||'public');
+    const validKind=memberFeed?query.kind==='message':['message','guide'].includes(query.kind);
+    if(!validScope||!validKind||Object.keys(query).some(k=>!['kind','scope','id'].includes(k))||
+      (memberFeed&&query.id!==undefined))fail(400,'INVALID_QUERY');
+   }
    let member=null;
-   const authenticated=recovering||method==='POST'||query.scope==='mine'||query.scope==='review';
+   const authenticated=recovering||method==='POST'||memberFeed||query.scope==='mine'||query.scope==='review';
    if(authenticated){
     const r=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'},localClientAddress:event.localClientAddress});
     if(r.statusCode!==200)return r;
@@ -57,8 +63,11 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    else if(method==='GET'){
     const scope=query.scope||'public';
     if(scope==='review'&&!['reviewer','admin'].includes(await role(c)))fail(403,'REVIEWER_REQUIRED');
-    const rows=(await c.query('SELECT * FROM community_lab.items WHERE kind=$1 AND '+(scope==='public'?"status='published'":scope==='mine'?'owner_id=$2':"status='submitted'")+' ORDER BY is_pinned DESC,created_at DESC LIMIT 100',scope==='mine'?[query.kind,member.member.id]:[query.kind])).rows;
-    response={items:await Promise.all(rows.map(row=>project(c,row)))};
+    const filter=scope==='mine'?'owner_id=$2':scope==='review'?"status='submitted'":"status='published'";
+    const args=scope==='mine'?[query.kind,member.member.id]:[query.kind];
+    const rows=(await c.query('SELECT * FROM community_lab.items WHERE kind=$1 AND '+filter+' ORDER BY is_pinned DESC,created_at DESC LIMIT 100',args)).rows;
+    const items=await Promise.all(rows.map(row=>project(c,row,{includeMyReactions:memberFeed})));
+    response=memberFeed?{memberId:member.member.id,items}:{items};
    }else{
     const requestHash=hash(JSON.stringify(canonical(body)));
     await c.query('INSERT INTO community_lab.requests(member_id,request_id,request_hash) VALUES($1,$2,$3) ON CONFLICT DO NOTHING',[member.member.id,body.requestId,requestHash]);

@@ -560,6 +560,68 @@ async function main() {
         await a.unroute('**/api/points**');
         record.scenarios.push('packed-points-pagination-is-independent-and-stale-rankings-can-restart');
 
+        record.stage='message-reaction-ownership';
+        await resetVisitQuota();
+        const openMessages = async page => {
+          await close(page);
+          await page.locator('button.community-door').filter({hasText:'留下你的声音'}).click();
+        };
+        const memberFeed = '/api/community?kind=message&scope=member-feed';
+        assert.equal((await api.request(memberFeed)).status,401);
+        assert.equal((await api.request('/api/community?kind=guide&scope=member-feed',{session:other})).status,400);
+        await openMessages(a);
+        await a.getByLabel(/想说的话/).fill('独立 TEST 合成回应留言');
+        result = command(a,'community','message.create');
+        await a.getByRole('button',{name:'发布留言',exact:true}).click();
+        const submitted = await result;
+        assert.equal(submitted.status(),200);
+        const {item:{id:messageId}} = await submitted.json();
+        await openMessages(reviewer);
+        result = command(reviewer,'community','item.review');
+        await reviewer.locator(`[data-review-id="${messageId}"]`).getByRole('button',{name:'审核通过',exact:true}).click();
+        assert.equal((await result).status(),200);
+        const reaction = page => page.locator(`.message-feed [data-message-id="${messageId}"]`)
+          .getByRole('button',{name:'回应 👍',exact:true});
+        const respond = async (page, active) => {
+          const changed = command(page,'community','reaction.set');
+          await reaction(page).click();
+          const response = await changed;
+          assert.equal(response.status(),200);
+          assert.equal(response.request().postDataJSON().active,active);
+          await reaction(page).and(page.locator(`[aria-pressed="${active}"]`)).waitFor();
+        };
+        await a.getByRole('button',{name:'刷新留言',exact:true}).click();
+        await respond(a,true);
+        await navigate(a);
+        await ready(a);
+        await openMessages(a);
+        await reaction(a).and(a.locator('[aria-pressed="true"]')).waitFor();
+
+        await login(staff,'normal');
+        const sameNickname = await session(staff);
+        assert.equal(sameNickname.memberId,db.accounts.normal.memberId);
+        assert.equal(db.accounts.normal.nickname,db.accounts.same.nickname);
+        await openMessages(staff);
+        await reaction(staff).and(staff.locator('[aria-pressed="false"]')).waitFor();
+        await reaction(staff).locator('span').filter({hasText:/^1$/}).waitFor();
+        await respond(staff,true);
+        await a.getByRole('button',{name:'刷新留言',exact:true}).click();
+        await reaction(a).locator('span').filter({hasText:/^2$/}).waitFor();
+        await respond(a,false);
+        const {rows:reactions} = await api.admin('SELECT member_id,active FROM community_lab.reactions WHERE item_id=$1 AND type=$2',[messageId,'👍']);
+        assert.deepEqual(Object.fromEntries(reactions.map(row=>[row.member_id,row.active])),{
+          [other.memberId]:false,[sameNickname.memberId]:true,
+        });
+        const publicFeed = await api.request('/.netlify/functions/messages');
+        assert.equal(publicFeed.status,200);
+        assert.deepEqual(publicFeed.body.find(item=>item.id===messageId).reactions,[{type:'👍',count:1,users:[]}]);
+        const scopedFeed = await api.request(memberFeed,{session:other});
+        assert.equal(scopedFeed.status,200);
+        assert.equal(scopedFeed.body.memberId,other.memberId);
+        assert.deepEqual(scopedFeed.body.items.find(item=>item.id===messageId).reactions,[{type:'👍',count:1,mine:false,users:[]}]);
+        assert(!scopedFeed.raw.includes(sameNickname.memberId));
+        record.scenarios.push('packed-message-reactions-toggle-and-isolate-same-nickname-members');
+
         record.stage='viewports';
         await navigate(a);
         await ready(a);

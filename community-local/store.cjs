@@ -1,9 +1,10 @@
 const {fail,uuid,payload,text,media}=require('./policy.cjs');
 async function role(c){return (await c.query('SELECT role FROM community_lab.member_roles WHERE member_id=community_lab.actor()')).rows[0]?.role||'member';}
-async function project(c,r){
+async function project(c,r,{includeMyReactions=false}={}){
  const base={id:r.id,content:r.payload.content,category:r.payload.category,status:r.status,version:r.version,isPinned:r.is_pinned,ownership:r.legacy?'unverified-legacy':'verified'};
  const replies=r.status==='published'?(await c.query('SELECT id,author_id,author_label,content,created_at FROM community_lab.replies WHERE item_id=$1 AND NOT deleted ORDER BY created_at LIMIT 100',[r.id])).rows:[];
- const reactions=r.status==='published'?(await c.query('SELECT type,count(*)::int AS count FROM community_lab.reactions WHERE item_id=$1 AND active GROUP BY type',[r.id])).rows:[];
+ const myReaction=includeMyReactions?',bool_or(member_id=community_lab.actor()) AS mine':'';
+ const reactions=r.status==='published'?(await c.query('SELECT type,count(*)::int AS count'+myReaction+' FROM community_lab.reactions WHERE item_id=$1 AND active GROUP BY type',[r.id])).rows:[];
  if(r.kind==='message')return {...base,name:r.author_label,timestamp:r.created_at,color:/^#[a-f0-9]{6}$/i.test(r.payload.color||'')?r.payload.color:'#2360f5',imageUrl:r.payload.imageUrl==='/fixtures/community-cover.jpg'?r.payload.imageUrl:null,replies:replies.map(x=>({id:x.id,name:x.author_label,content:x.content,color:'#2360f5',timestamp:x.created_at})),reactions:reactions.filter(x=>x.type!=='favorite').map(x=>({...x,users:[]}))};
  const safeMedia=[];for(const candidate of Array.isArray(r.payload.mediaFiles)?r.payload.mediaFiles:[]){try{safeMedia.push(media([candidate])[0]);}catch{/* Unsafe legacy references are omitted from the projection, never rewritten. */}}
  return {...base,title:r.payload.title,author:r.author_label,difficulty:r.payload.difficulty,tags:Array.isArray(r.payload.tags)?r.payload.tags:[],imageUrl:r.payload.imageUrl==='/fixtures/community-cover.jpg'?r.payload.imageUrl:undefined,mediaFiles:safeMedia,likes:[],favorites:[],likeCount:reactions.find(x=>x.type==='like')?.count||0,favoriteCount:reactions.find(x=>x.type==='favorite')?.count||0,comments:replies.map(x=>({id:x.id,userId:x.author_id,userName:x.author_label,content:x.content,timestamp:x.created_at})),viewCount:0,createdAt:r.created_at,updatedAt:r.updated_at};

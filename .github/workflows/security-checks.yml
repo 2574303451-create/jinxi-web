@@ -52,6 +52,11 @@ jobs:
       - name: Verify clean npm launcher on Linux
         run: node scripts/run-clean.cjs --version
       - run: npm ci
+      - name: Verify synthetic access and historical compatibility
+        run: |
+          npm run test:integration-unit
+          npm run test:adaptation
+          node --test tests/synthetic-cloud-boundary.test.cjs tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
       - name: Raw TypeScript check
         shell: bash
         run: |
@@ -59,6 +64,8 @@ jobs:
           mkdir -p artifacts-ci
           npm run typecheck | tee artifacts-ci/typescript.txt
       - run: npm run build
+      - name: Verify production export isolation
+        run: node --test tests/integration-local-export.test.cjs tests/adaptation-export.test.cjs
       - run: npm run test
       - name: Verify isolated video demo policy and loopback assets
         run: node --test artifacts/b2-a-8/video-demo/policy.test.cjs

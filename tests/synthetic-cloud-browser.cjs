@@ -50,7 +50,8 @@ async function main() {
           httpCredentials:{username:bundle.accessUser,password:bundle.accessPassword,origin}};
         const context = await browser.newContext(options);
         const reviewerContext = await browser.newContext(options);
-        for (const c of [context,reviewerContext]) {
+        const adminContext = await browser.newContext(options);
+        for (const c of [context,reviewerContext,adminContext]) {
           await c.route('**/*',route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
         }
         async function pageFor(c) {
@@ -64,7 +65,7 @@ async function main() {
           });
           return p;
         }
-        const a=await pageFor(context), reviewer=await pageFor(reviewerContext);
+        const a=await pageFor(context), reviewer=await pageFor(reviewerContext), staff=await pageFor(adminContext);
         async function navigate(p, route = '/') {
           const r = await p.goto(origin+route,{waitUntil:'domcontentloaded'});
           assert.equal(r.status(),200);
@@ -168,6 +169,66 @@ async function main() {
         const {rows:ledger} = await api.admin('SELECT kind,id,origin_id FROM points_lab.ledger WHERE order_id=$1 ORDER BY entry_no',[committedOrder]);
         assert.deepEqual(ledger.map(row=>row.kind),['redeem','refund']);
         assert.equal(ledger[1].origin_id,ledger[0].id);
+
+        record.stage='manual-redemption-admin-queue';
+        await navigate(staff);
+        await login(staff,'admin');
+        await navigate(reviewer);
+        await login(reviewer,'reviewer');
+        let previousRequest = lostRequest;
+        for (const outcome of ['failed','fulfilled']) {
+          await close(a);
+          await a.getByRole('button',{name:'恢复未确认操作',exact:true}).click();
+          const receipt = a.locator('[data-request-id="'+previousRequest+'"]').filter({hasText:'服务端确认已提交'});
+          await receipt.getByRole('button',{name:'确认已完成，允许新操作',exact:true}).click();
+          await receipt.waitFor({state:'hidden'});
+          await points(a);
+          result = command(a,'points','redeem');
+          await a.locator('[data-catalogue-id="'+itemId+'"]').getByRole('button',{name:'兑换虚构商品',exact:true}).click();
+          const placed = await result;
+          assert.equal(placed.status(),200);
+          previousRequest = placed.request().postDataJSON().requestId;
+          const { orderId: id } = await placed.json();
+          const ownOrder = a.locator('[data-order-id="'+id+'"]');
+          await ownOrder.getByText(/凭订单号联系公会管理员/).waitFor();
+          await a.getByTestId('balance').filter({hasText:/^0$/}).waitFor();
+          assert.equal(await a.getByRole('heading',{name:'待处理兑换',exact:true}).count(),0);
+
+          await points(reviewer);
+          assert.equal(await reviewer.getByRole('heading',{name:'待处理兑换',exact:true}).count(),0);
+          assert.equal((await api.request('/api/points?view=admin',{session:await session(reviewer)})).status,403);
+          await points(staff);
+          const row = staff.locator('[data-admin-order-id="'+id+'"]');
+          await row.getByText('集成用虚构纸签（仅合成） · 1 件',{exact:true}).waitFor();
+          assert(!(await row.innerText()).includes(member.memberId));
+          if(outcome === 'failed') {
+            for (const width of [320,768,1024,1440]) {
+              await staff.setViewportSize({width,height:1000});
+              assert(await row.evaluate(element=>element.scrollWidth<=element.clientWidth),'queue row overflows at '+width);
+            }
+          }
+          const action = row.getByRole('button',{name:outcome === 'failed' ? '无法履约，退回积分' : '确认已人工开通',exact:true});
+          result = command(staff,'points','order.process');
+          await action.focus();
+          await action.press('Enter');
+          const decision = await result;
+          assert.equal(decision.status(),200);
+          assert.equal((await decision.json()).status,outcome);
+          await staff.getByText('暂无待处理订单。',{exact:true}).waitFor();
+          await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
+          await ownOrder.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
+          await a.getByTestId('balance').filter({hasText:outcome === 'failed' ? /^1$/ : /^0$/}).waitFor();
+          const {rows:[actual]} = await api.admin(`
+            SELECT (SELECT status FROM points_lab.orders WHERE id=$1) AS status,
+                   (SELECT count(*)::int FROM points_lab.ledger WHERE order_id=$1 AND kind='redeem') AS charges,
+                   (SELECT count(*)::int FROM points_lab.ledger WHERE order_id=$1 AND kind='refund') AS refunds,
+                   (SELECT available FROM points_lab.catalogue WHERE id=$2) AS available
+          `,[id,itemId]);
+          assert.deepEqual(actual,{status:outcome,charges:1,refunds:outcome === 'failed' ? 1 : 0,available:outcome === 'failed' ? 2 : 1});
+        }
+        record.scenarios.push('manual-admin-queue-keyboard-fulfilment-and-failure-refund-with-member-and-reviewer-isolation');
+
+        record.stage='refund-and-account-switch';
         await close(a);
         await a.getByRole('button',{name:'退出统一会话',exact:true}).click();
         await a.getByTestId('unified-session').filter({hasText:'anonymous'}).waitFor();
@@ -195,7 +256,7 @@ async function main() {
         const guideId = (await draft.json()).item.id;
         await a.locator('[data-item-id="'+guideId+'"]').getByRole('button',{name:'提交攻略审核',exact:true}).click();
         await navigate(reviewer,'/guides/');
-        await login(reviewer,'reviewer');
+        await ready(reviewer);
         result = command(reviewer,'community','item.review');
         await reviewer.locator('[data-review-id="'+guideId+'"]').getByRole('button',{name:'审核通过',exact:true}).click();
         assert.equal((await result).status(),200);

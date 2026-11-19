@@ -612,9 +612,9 @@ async function main() {
         assert.deepEqual(Object.fromEntries(reactions.map(row=>[row.member_id,row.active])),{
           [other.memberId]:false,[sameNickname.memberId]:true,
         });
-        const publicFeed = await api.request('/.netlify/functions/messages');
-        assert.equal(publicFeed.status,200);
-        assert.deepEqual(publicFeed.body.find(item=>item.id===messageId).reactions,[{type:'👍',count:1,users:[]}]);
+        const publicMessages = await api.request('/.netlify/functions/messages');
+        assert.equal(publicMessages.status,200);
+        assert.deepEqual(publicMessages.body.find(item=>item.id===messageId).reactions,[{type:'👍',count:1,users:[]}]);
         const scopedFeed = await api.request(memberFeed,{session:other});
         assert.equal(scopedFeed.status,200);
         assert.equal(scopedFeed.body.memberId,other.memberId);

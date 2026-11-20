@@ -438,6 +438,10 @@ async function main() {
         await openAnnArchive(staff);
         await archiveRow(staff).getByRole('button',{name:'修订此公告',exact:true}).click();
         assert.equal(await staff.getByLabel('公告标题',{exact:true}).inputValue(),'早期合成公告草稿');
+        await staff.getByRole('button',{name:'取消公告修订',exact:true}).click();
+        assert.equal(await staff.getByLabel('公告标题',{exact:true}).inputValue(),'');
+        assert.equal(await staff.getByLabel('公告富文本源',{exact:true}).inputValue(),'');
+        await archiveRow(staff).getByRole('button',{name:'修订此公告',exact:true}).click();
         await staff.getByLabel('公告富文本源',{exact:true}).fill('<p>早期公告修订正文</p>');
         const [archiveEdited] = await Promise.all([command(staff,'operations','announcement.edit'),staff.getByRole('button',{name:'保存公告草稿',exact:true}).click()]);
         assert.equal(archiveEdited.status(),200);
@@ -457,7 +461,14 @@ async function main() {
         await manageAnn(staff).getByRole('button',{name:'刷新管理公告',exact:true}).click();
         const [archiveWithdrawn] = await Promise.all([command(staff,'operations','announcement.withdraw'),archiveRow(staff).getByRole('button',{name:'撤回公告',exact:true}).click()]);
         assert.equal(archiveWithdrawn.status(),200);
-        await a.getByRole('button',{name:'刷新公告',exact:true}).click();
+        const [withdrawnPublicPage] = await Promise.all([a.waitForResponse(response=>{
+          const url = new URL(response.url());
+          return response.request().method()==='GET' && url.pathname==='/api/operations' &&
+            url.searchParams.get('kind')==='announcement' && url.searchParams.get('view')==='public' && !url.searchParams.has('cursor');
+        }),a.getByRole('button',{name:'刷新公告',exact:true}).click()]);
+        assert.equal(withdrawnPublicPage.status(),200);
+        assert(!(await withdrawnPublicPage.json()).items.some(item=>item.id===archiveId));
+        await visitorArchive.waitFor({state:'detached'});
         await a.getByTestId('public-announcements').locator(`[data-item-id="${publishedHistory[0]}"]`).waitFor();
         assert.equal(await visitorArchive.count(),0);
         const {rows:archiveRevisions} = await api.admin(`SELECT data->>'status' AS status,actor_id FROM operations_lab.revisions

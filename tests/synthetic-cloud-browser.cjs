@@ -783,6 +783,38 @@ async function main() {
         await latest.click();
         await waitForRecord(a,expectedFirst[0]);
         assert.deepEqual(await attendanceIds(a),expectedFirst);
+
+        record.stage='attendance-history-delayed-page';
+        const delayedPage = url => url.pathname==='/api/attendance' && url.searchParams.get('before')===attendanceRows[29].date;
+        const releaseAttendance = Promise.withResolvers();
+        await a.evaluate(()=>{
+          const read = Response.prototype.json;
+          Response.prototype.json = async function () {
+            const body = await read.call(this);
+            if (this.headers.get('x-jinxi-rehearsal') === 'delayed-attendance') {
+              Response.prototype.json = read;
+              requestAnimationFrame(()=>requestAnimationFrame(()=>{ document.documentElement.dataset.delayedAttendanceRead='yes'; }));
+            }
+            return body;
+          };
+        });
+        await a.route(delayedPage,async route=>{
+          const request = route.request(), {pathname,search} = new URL(request.url());
+          const headers = await request.allHeaders();
+          const response = await api.request(pathname+search,{headers:{Cookie:headers.cookie}});
+          await releaseAttendance.promise;
+          await route.fulfill({status:response.status,body:response.raw,headers:{
+            'content-type':'application/json','cache-control':'no-store','x-jinxi-rehearsal':'delayed-attendance',
+          }});
+        },{times:1});
+        try {
+          await Promise.all([a.waitForRequest(request=>delayedPage(new URL(request.url()))),older.click()]);
+          assert.deepEqual(await attendanceIds(a),[]);
+          await latest.click();
+          await waitForRecord(a,expectedFirst[0]);
+        } finally { releaseAttendance.resolve(); }
+        await a.waitForFunction(()=>document.documentElement.dataset.delayedAttendanceRead==='yes');
+        assert.deepEqual(await attendanceIds(a),expectedFirst);
         await older.click();
         await waitForRecord(a,expectedOlder[0]);
 

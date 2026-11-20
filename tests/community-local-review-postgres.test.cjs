@@ -35,10 +35,10 @@ test('independent community concurrency and revocation regressions on PostgreSQL
    }finally{await admin.query('ROLLBACK').catch(()=>{});await pending?.catch(()=>{});await admin.end();}
   });
   await t.test('changing the password after identity lookup invalidates the business request and receipt',async()=>{
-   const s=await login('same'),requestId=crypto.randomUUID();
+   const s=await login('same'),requestId=crypto.randomUUID(),newPassword=crypto.randomBytes(18).toString('base64url')+'A9!';
    const raced=createCommunityHandler({settings:db.settings,connect:db.connectBusiness,env:{},identity:async e=>{
     const verified=await identity(e);assert.equal(verified.statusCode,200);
-    const changed=await identity(event(s,{op:'change-password',currentPassword:db.accounts.same.password,newPassword:crypto.randomBytes(18).toString('base64url')+'A9!'}));assert.equal(changed.statusCode,200);return verified;
+    const changed=await identity(event(s,{op:'change-password',currentPassword:db.accounts.same.password,newPassword}));assert.equal(changed.statusCode,200);db.accounts.same.password=newPassword;return verified;
    }});
    const r=await raced(event(s,{op:'message.create',requestId,content:'改密撤销后不能写入'}));assert.equal(r.statusCode,401);
    const admin=await db.admin();try{assert.equal((await admin.query('SELECT count(*)::int AS n FROM community_lab.requests WHERE request_id=$1',[requestId])).rows[0].n,0);}finally{await admin.end();}
@@ -267,6 +267,69 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      assert.equal(JSON.parse(denied.body).code,code);
     }
     assert.deepEqual(await snapshot(),{status:'archived',is_pinned:false,version});
+   }finally{await admin.end();}
+  });
+  await t.test('committed community responses still require current role and visibility',async()=>{
+   const author=await login('normal'),operator=await login('admin'),reviewer=await login('reviewer'),visitor=await login('same');
+   const admin=await db.admin(),authorId=db.accounts.normal.memberId;
+   const order=(op,fields)=>({op,requestId:crypto.randomUUID(),...fields});
+   const send=(session,body)=>handler(event(session,body));
+   const statusOnly=(session,requestId)=>handler({httpMethod:'GET',headers:{cookie:session.cookie},queryStringParameters:{receipt:requestId}});
+   try{
+    await admin.query("TRUNCATE b2_lab.member_session_limits_v2");
+    await admin.query("UPDATE community_lab.member_roles SET role='admin' WHERE member_id=$1",[db.accounts.admin.memberId]);
+    const lesson='合成退回审核正文',withdrawn='稍后撤回的合成留言',closedReply='稍后移除的合成回复',deleted='合成已删除草稿';
+    const {rows:seeded}=await admin.query(`
+     INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status)
+     SELECT 'message',$1,'合成回执作者',jsonb_build_object('content',body,'category','闲聊'),status
+     FROM (VALUES ($2::text,'submitted'),($3::text,'published'),($4::text,'submitted')) AS sample(body,status)
+     RETURNING id,version,payload->>'content' AS body
+    `,[authorId,lesson,withdrawn,deleted]);
+    const target=body=>seeded.find(row=>row.body===body);
+    const review=order('item.review',{id:target(lesson).id,version:1,decision:'reject'});
+    const remove=order('item.delete',{id:target(deleted).id,version:1});
+    const reaction=order('reaction.set',{id:target(withdrawn).id,type:'like',active:true});
+    const reply=order('reply.create',{id:target(withdrawn).id,content:closedReply});
+    const cases=[[reviewer,review,lesson],[operator,remove,deleted],[visitor,reaction,withdrawn],[visitor,reply,closedReply]];
+    for(const [session,body,content] of cases){
+     const first=await send(session,body);
+     assert.equal(first.statusCode,200);
+     assert(first.body.includes(content));
+     const immediate=await send(session,body);
+     assert.equal(immediate.statusCode,200);
+     assert.equal(JSON.parse(immediate.body).item.id,body.id);
+    }
+    const {rows:[replyRow]}=await admin.query('SELECT id FROM community_lab.replies WHERE item_id=$1 AND author_id=$2',[reply.id,db.accounts.same.memberId]);
+    const moderation=order('reply.delete',{id:reply.id,replyId:replyRow.id});
+    assert.equal((await send(operator,moderation)).statusCode,200);
+    const visibleReplay=await send(visitor,reaction);
+    const replyReplay=await send(visitor,reply);
+    assert.equal(visibleReplay.statusCode,200);
+    const userRemoved=await send(author,order('item.delete',{id:target(withdrawn).id,version:1}));
+    assert.equal(userRemoved.statusCode,200);
+    const roles=await admin.query('DELETE FROM community_lab.member_roles WHERE member_id=ANY($1::uuid[])',[[
+     db.accounts.admin.memberId,db.accounts.reviewer.memberId,
+    ]]);
+    assert.equal(roles.rowCount,2);
+    const count=async()=> (await admin.query('SELECT count(*)::int AS n FROM community_lab.audit')).rows[0].n;
+    const before=await count();
+    const afterChanges=[];
+    for(const [session,body,content] of [...cases,[operator,moderation,withdrawn]]){
+     const blocked=await send(session,body);
+     afterChanges.push({op:body.op,status:blocked.statusCode,containsContent:blocked.body.includes(content)});
+     const metadata=await statusOnly(session,body.requestId);
+     assert.equal(metadata.statusCode,200);
+     assert.deepEqual(JSON.parse(metadata.body).receipt,{requestId:body.requestId,state:'committed'});
+     assert(!metadata.body.includes(content));
+    }
+    assert.equal(await count(),before);
+    assert.deepEqual(afterChanges.map(({status,containsContent})=>({status,containsContent})),[
+     {status:403,containsContent:false},{status:404,containsContent:false},{status:404,containsContent:false},
+     {status:404,containsContent:false},{status:404,containsContent:false},
+    ]);
+    assert(!visibleReplay.body.includes(closedReply));
+    assert.equal(replyReplay.statusCode,409);
+    assert(!replyReplay.body.includes(closedReply));
    }finally{await admin.end();}
   });
  }finally{await db.stop();}

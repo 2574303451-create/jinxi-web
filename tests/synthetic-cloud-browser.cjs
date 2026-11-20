@@ -1025,16 +1025,20 @@ async function main() {
         assert.equal(approval.request().postDataJSON().id,messageId);
         const reaction = page => page.locator(`.message-feed [data-message-id="${messageId}"]`)
           .getByRole('button',{name:'回应 👍',exact:true});
-        const respond = async (page, active) => {
-          const changed = command(page,'community','reaction.set');
-          await reaction(page).click();
-          const response = await changed;
+        const respond = async (page, active, stage) => {
+          record.stage=stage;
+          const management = page.getByTestId('manage-message');
+          await management.getByRole('button',{name:'刷新本人内容',exact:true}).and(management.locator('button:enabled')).waitFor();
+          const button = reaction(page).and(page.locator('button:enabled'));
+          await button.waitFor();
+          const [response] = await Promise.all([command(page,'community','reaction.set'),button.press('Space')]);
           assert.equal(response.status(),200);
+          assert.equal(response.request().postDataJSON().id,messageId);
           assert.equal(response.request().postDataJSON().active,active);
           await reaction(page).and(page.locator(`[aria-pressed="${active}"]`)).waitFor();
         };
         await a.getByRole('button',{name:'刷新留言',exact:true}).click();
-        await respond(a,true);
+        await respond(a,true,'message-reaction-first-member');
         await navigate(a);
         await ready(a);
         await openMessages(a);
@@ -1047,10 +1051,10 @@ async function main() {
         await openMessages(staff);
         await reaction(staff).and(staff.locator('[aria-pressed="false"]')).waitFor();
         await reaction(staff).locator('span').filter({hasText:/^1$/}).waitFor();
-        await respond(staff,true);
+        await respond(staff,true,'message-reaction-second-member');
         await a.getByRole('button',{name:'刷新留言',exact:true}).click();
         await reaction(a).locator('span').filter({hasText:/^2$/}).waitFor();
-        await respond(a,false);
+        await respond(a,false,'message-reaction-first-member-removal');
         const {rows:reactions} = await api.admin('SELECT member_id,active FROM community_lab.reactions WHERE item_id=$1 AND type=$2',[messageId,'👍']);
         assert.deepEqual(Object.fromEntries(reactions.map(row=>[row.member_id,row.active])),{
           [other.memberId]:false,[sameNickname.memberId]:true,

@@ -31,6 +31,22 @@ type SponsorRecord = {
 };
 const defaultSponsorDate = '2024-03-01T12:00';
 const shanghaiInput = (iso: string) => new Date(Date.parse(iso) + 8*60*60*1000).toISOString().slice(0,-1);
+const shanghaiInstant = (value: string) => new Date(value + '+08:00').toISOString();
+
+function ConfirmRemoval({ label, busy, onConfirm }: { label: string; busy: boolean; onConfirm: () => void }) {
+  const [confirming, setConfirming] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  return <div>
+    <button ref={trigger} type="button" className="paper-button" aria-expanded={confirming} disabled={busy}
+      onClick={() => setConfirming(!confirming)}>删除{label}</button>
+    {confirming && <div className="integration-actions">
+      <p>删除后将停止展示，保留历史版本和审计记录。</p>
+      <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); trigger.current?.focus(); }}>取消删除</button>
+      <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); onConfirm(); }}>确认删除{label}</button>
+    </div>}
+  </div>;
+}
+
 export function SafeAnnouncement({ html }: { html: string }) {
   const [safe, setSafe] = useState<string | null>(null);
   useEffect(() => { let live = true; setSafe(null); loadAnnouncementSanitizer().then(sanitize => { if (live) setSafe(sanitize(html)); }).catch(() => {}); return () => { live = false; }; }, [html]);
@@ -42,10 +58,14 @@ export function AnnouncementDialog({ open, close, permissions }: { open: boolean
 function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
   const { client, ready, state } = useSession(), cmd = useCommand();
   const contentId = useId();
-  const [title, setTitle] = useState(''), [html, setHtml] = useState('');
+  const [title, setTitle] = useState(''), [html, setHtml] = useState(''), [expiry, setExpiry] = useState('');
   const [editing, setEditing] = useState<AnnouncementRecord | null>(null);
-  const resetDraft = () => { setTitle(''); setHtml(''); setEditing(null); };
-  const advance = (op: 'announcement.submit' | 'announcement.publish' | 'announcement.withdraw', record: AnnouncementRecord) =>
+  const resetDraft = () => { setTitle(''); setHtml(''); setExpiry(''); setEditing(null); };
+  const editDraft = (record: AnnouncementRecord) => {
+    setEditing(record); setTitle(record.title); setHtml(record.contentHtml);
+    setExpiry(record.expiresAt ? shanghaiInput(record.expiresAt) : '');
+  };
+  const advance = (op: 'announcement.submit' | 'announcement.publish' | 'announcement.withdraw' | 'announcement.delete', record: AnnouncementRecord) =>
     void cmd.run(() => client.mutate('operations', { op, id: record.id, version: record.version }));
   return <section className="integration-panel" aria-label="公告发布管理">
     <p className="paper-notice">本轮使用合成发布人员与独立审核员，不变动云端公告。本机草稿与已发布内容分别显示。</p>
@@ -57,7 +77,7 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
     {ready && permissions.staff && <>
       <h2>{editing ? '修订公告草稿' : '创建公告草稿'}</h2>
       <form aria-label="公告草稿" onSubmit={e => { e.preventDefault(); void cmd.run(async () => {
-        await client.mutate('operations', { op: editing ? 'announcement.edit' : 'announcement.create', ...(editing ? { id: editing.id, version: editing.version } : {}), title, contentHtml: html, expiresAt: editing?.expiresAt ?? null });
+        await client.mutate('operations', { op: editing ? 'announcement.edit' : 'announcement.create', ...(editing ? { id: editing.id, version: editing.version } : {}), title, contentHtml: html, expiresAt: expiry ? shanghaiInstant(expiry) : null });
         resetDraft();
       }); }}>
         <label className="paper-label">公告标题<input className="paper-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={120} required disabled={cmd.busy} /></label>
@@ -65,6 +85,9 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
           <label htmlFor={contentId}>公告富文本源</label>
           <textarea id={contentId} className="paper-input" rows={6} value={html} onChange={e => setHtml(e.target.value)} maxLength={32768} required disabled={cmd.busy} />
         </div>
+        <label className="paper-label">到期时间（上海）<input className="paper-input" type="datetime-local" step="0.001"
+          value={expiry} onChange={e => setExpiry(e.target.value)} disabled={cmd.busy} /></label>
+        <p>留空表示没有到期时间。已发布公告到期后会从公开列表移除。</p>
         <p>支持安全段落、强调、列表与固定合成图片。服务端过滤后保存，禁止上传。</p>
         <button className="paper-button yellow" disabled={cmd.busy}>保存公告草稿</button>
         {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={resetDraft}>取消公告修订</button>}
@@ -74,12 +97,15 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
           const canManage = permissions.admin || (record.ownerId != null && record.ownerId === state.member?.id);
           return <li key={record.id} className="integration-record" data-item-id={record.id}>
             <h3>{record.title}</h3><p>{record.effectiveStatus} · 版本 {record.version}</p><SafeAnnouncement html={record.contentHtml} />
+            {record.expiresAt && <p>到期时间（上海） {shanghaiInput(record.expiresAt).replace('T', ' ')}</p>}
             {record.legacy ? <p>历史公告 · 仅供查看</p> : <div className="integration-actions">
               {canManage && ['draft','withdrawn'].includes(record.status) && <button className="paper-button" disabled={cmd.busy}
-                onClick={() => { setEditing(record); setTitle(record.title); setHtml(record.contentHtml); }}>修订此公告</button>}
+                onClick={() => editDraft(record)}>修订此公告</button>}
               {canManage && record.status === 'draft' && <button className="paper-button" disabled={cmd.busy} onClick={() => advance('announcement.submit', record)}>提交公告审核</button>}
               {record.status === 'submitted' && record.lastEditor !== state.member?.id && <button className="paper-button yellow" disabled={cmd.busy} onClick={() => advance('announcement.publish', record)}>独立审核并发布</button>}
               {canManage && ['submitted','published'].includes(record.status) && <button className="paper-button" disabled={cmd.busy} onClick={() => advance('announcement.withdraw', record)}>撤回公告</button>}
+              {permissions.admin && record.status !== 'deleted' && <ConfirmRemoval key={record.version} label="公告" busy={cmd.busy}
+                onConfirm={() => advance('announcement.delete', record)} />}
             </div>}
           </li>;
         })}</ul>}
@@ -100,7 +126,7 @@ function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
     <SponsorshipRecords />
     {ready && permissions.admin && <>
       <form aria-label="维护感谢记录" onSubmit={e => { e.preventDefault(); void cmd.run(async () => {
-        const sponsorTime = editing && date === shanghaiInput(editing.sponsorTime) ? editing.sponsorTime : new Date(date + '+08:00').toISOString();
+        const sponsorTime = editing && date === shanghaiInput(editing.sponsorTime) ? editing.sponsorTime : shanghaiInstant(date);
         await client.mutate('operations', { op: editing ? 'sponsor.edit' : 'sponsor.create', ...(editing ? { id: editing.id, version: editing.version } : {}), sponsor: name, sponsorTime }); setName(''); setEditing(null);
       }); }}>
         <label className="paper-label">合成感谢对象<input className="paper-input" value={name} onChange={e => setName(e.target.value)} maxLength={80} required /></label>
@@ -116,6 +142,7 @@ function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
         toggle: record => void cmd.run(() => client.mutate('operations', {
           op: record.status === 'visible' ? 'sponsor.hide' : 'sponsor.show', id: record.id, version: record.version,
         })),
+        remove: record => void cmd.run(() => client.mutate('operations', { op: 'sponsor.delete', id: record.id, version: record.version })),
       }} />
     </>}
     {cmd.notice && <p role="status" className="paper-notice">{cmd.notice}</p>}
@@ -125,6 +152,7 @@ function SponsorshipRecords({ management }: { management?: {
   busy: boolean;
   edit: (record: SponsorRecord) => void;
   toggle: (record: SponsorRecord) => void;
+  remove: (record: SponsorRecord) => void;
 } }) {
   const title = management ? '感谢记录管理' : '公开感谢记录';
   return <OperationsRecords<SponsorRecord> kind="sponsor" view={management ? 'private' : 'public'} label="感谢记录" title={title}
@@ -134,6 +162,7 @@ function SponsorshipRecords({ management }: { management?: {
       {record.legacy ? <p>历史记录 · 仅供查看</p> : record.status !== 'deleted' && <div className="integration-actions">
         <button className="paper-button" disabled={management.busy} onClick={() => management.edit(record)}>编辑感谢记录</button>
         <button className="paper-button" disabled={management.busy} onClick={() => management.toggle(record)}>{record.status === 'visible' ? '隐藏感谢记录' : '恢复感谢展示'}</button>
+        <ConfirmRemoval key={record.version} label="感谢记录" busy={management.busy} onConfirm={() => management.remove(record)} />
       </div>}
     </li>)}</ul> : <table><thead><tr><th>感谢对象</th><th>登记时间</th></tr></thead><tbody>{records.map(record =>
       <tr key={record.id} data-sponsor-id={record.id}><td>{record.sponsor}</td><td>{record.time}</td></tr>)}</tbody></table>}

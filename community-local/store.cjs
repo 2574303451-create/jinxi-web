@@ -76,7 +76,10 @@ async function replay(c,body,actor,previous) {
  const { rows:[item] } = await c.query('SELECT * FROM community_lab.items WHERE id=$1',[body.id]);
  if (!item || item.legacy) fail(404,'NOT_FOUND');
  if ((interaction(body.op) || body.op === 'item.pin') && item.status !== 'published') fail(404,'NOT_FOUND');
- if (body.op === 'item.review' && !['submitted','published','rejected'].includes(item.status)) fail(404,'NOT_FOUND');
+ if (body.op === 'item.review') {
+  if (!['submitted','published','rejected'].includes(item.status)) fail(404,'NOT_FOUND');
+  if (item.status === 'rejected' && item.version !== previous.item?.version) fail(404,'NOT_FOUND');
+ }
  if (!interaction(body.op)) {
   const access = body.op === 'item.delete' && item.owner_id !== actor ? await role(c) : staff;
   requireItemAuthority(body.op,item,actor,access);
@@ -93,6 +96,10 @@ async function replay(c,body,actor,previous) {
   }
  }
  const current=await project(c,item,{includeReply});
+ if (includeReply) {
+  const replies = item.kind === 'message' ? current.replies : current.comments;
+  if (!replies.some(reply => reply.id === includeReply)) fail(409,'REPLY_NOT_AVAILABLE');
+ }
  if (restricted) await checkRole();
  if (adminDeletion && await role(c) !== 'admin') fail(403,'ADMIN_REQUIRED');
  return {...previous,item:current};

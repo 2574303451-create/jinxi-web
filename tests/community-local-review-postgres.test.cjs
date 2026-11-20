@@ -300,23 +300,28 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      assert.equal(JSON.parse(immediate.body).item.id,body.id);
      if(body.op==='reaction.set')assert(immediate.body.includes(closedReply));
     }
-    await admin.query(`
-     INSERT INTO community_lab.replies(item_id,author_id,author_label,content,created_at)
-     SELECT $1,$2,'合成旧回复作者','合成更早的可见回复','2020-01-01T00:00:00Z'
-     FROM generate_series(1,100)
-    `,[target(withdrawn).id,authorId]);
-    const overflow=await send(visitor,order('reply.create',{id:reply.id,content:'合成追加回复保留在成功响应中'}));
-    assert.equal(overflow.statusCode,200);
-    const overflowResult=JSON.parse(overflow.body);
-    assert.equal(overflowResult.item.replies.length,100);
-    assert(overflowResult.item.replies.some(row=>row.id===overflowResult.replyId));
-    assert((await send(visitor,reply)).body.includes(closedReply));
     const {rows:[replyRow]}=await admin.query('SELECT id FROM community_lab.replies WHERE item_id=$1 AND author_id=$2 AND content=$3',[reply.id,db.accounts.same.memberId,closedReply]);
     const moderation=order('reply.delete',{id:reply.id,replyId:replyRow.id});
     assert.equal((await send(operator,moderation)).statusCode,200);
     const visibleReplay=await send(visitor,reaction);
     const replyReplay=await send(visitor,reply);
     assert.equal(visibleReplay.statusCode,200);
+    assert(!visibleReplay.body.includes(closedReply));
+    assert.equal(replyReplay.statusCode,409);
+    assert(!replyReplay.body.includes(closedReply));
+    await admin.query(`
+     INSERT INTO community_lab.replies(item_id,author_id,author_label,content,created_at)
+     SELECT $1,$2,'合成旧回复作者','合成更早的可见回复','2020-01-01T00:00:00Z'
+     FROM generate_series(1,100)
+    `,[target(withdrawn).id,authorId]);
+    const overflowRequest=order('reply.create',{id:reply.id,content:'合成追加回复保留在成功响应中'});
+    for(let attempt=0;attempt<2;attempt++){
+     const overflow=await send(visitor,overflowRequest);
+     assert.equal(overflow.statusCode,200);
+     const result=JSON.parse(overflow.body);
+     assert.equal(result.item.replies.length,100);
+     assert(result.item.replies.some(row=>row.id===result.replyId));
+    }
     const pin=order('item.pin',{id:target(withdrawn).id,version:1,pinned:true});
     const pinned=await send(operator,pin);
     assert.equal(pinned.statusCode,200);
@@ -349,9 +354,58 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      {status:403,containsContent:false},{status:404,containsContent:false},{status:404,containsContent:false},
      {status:404,containsContent:false},{status:404,containsContent:false},
     ]);
-    assert(!visibleReplay.body.includes(closedReply));
-    assert.equal(replyReplay.statusCode,409);
-    assert(!replyReplay.body.includes(closedReply));
+   }finally{await admin.end();}
+  });
+  await t.test('community replay rejects a later rejected revision and a reply removed during projection',async()=>{
+   const author=await login('normal'),reviewer=await login('reviewer'),operator=await login('admin'),visitor=await login('same');
+   const admin=await db.admin();
+   const order=(op,fields)=>({op,requestId:crypto.randomUUID(),...fields});
+   const send=(session,body)=>handler(event(session,body));
+   try{
+    await admin.query('TRUNCATE b2_lab.member_session_limits_v2');
+    await admin.query(`INSERT INTO community_lab.member_roles(member_id,role) VALUES($1,'reviewer'),($2,'admin')
+     ON CONFLICT(member_id) DO UPDATE SET role=EXCLUDED.role`,[db.accounts.reviewer.memberId,db.accounts.admin.memberId]);
+    const submitted=await send(author,order('message.create',{content:'合成最初公开版本',category:'闲聊'}));
+    assert.equal(submitted.statusCode,200);
+    const {id,version}=JSON.parse(submitted.body).item;
+    const review=order('item.review',{id,version,decision:'approve'});
+    const published=await send(reviewer,review);
+    assert.equal(published.statusCode,200);
+    const originalReply=order('reply.create',{id,content:'合成竞态移除回复'});
+    const reply=await send(visitor,originalReply);
+    assert.equal(reply.statusCode,200);
+    const replyId=JSON.parse(reply.body).replyId;
+    let deletion;
+    const raced=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{
+     const c=await db.connectBusiness(),query=c.query.bind(c);
+     c.query=async(sql,...values)=>{
+      if(sql.includes('AS visible ORDER BY created_at,id'))deletion=await send(operator,order('reply.delete',{id,replyId}));
+      return query(sql,...values);
+     };
+     return c;
+    }});
+    const duringProjection=await raced(event(visitor,originalReply));
+    assert.equal(deletion?.statusCode,200);
+    assert.equal((await admin.query('SELECT deleted FROM community_lab.replies WHERE id=$1',[replyId])).rows[0].deleted,true);
+    const revisedText='合成后来退回的不同正文';
+    const revised=await send(author,order('item.edit',{id,version:version+1,content:revisedText,category:'闲聊'}));
+    assert.equal(revised.statusCode,200);
+    const reject=order('item.review',{id,version:version+2,decision:'reject'});
+    assert.equal((await send(operator,reject)).statusCode,200);
+    assert((await send(operator,reject)).body.includes(revisedText));
+    const auditCount=async()=> (await admin.query('SELECT count(*)::int AS n FROM community_lab.audit WHERE item_id=$1',[id])).rows[0].n;
+    const before=await auditCount();
+    const staleReview=await send(reviewer,review);
+    for(const [session,request] of [[reviewer,review],[visitor,originalReply]]){
+     const metadata=await handler({httpMethod:'GET',headers:{cookie:session.cookie},queryStringParameters:{receipt:request.requestId}});
+     assert.equal(metadata.statusCode,200);
+     assert.deepEqual(JSON.parse(metadata.body).receipt,{requestId:request.requestId,state:'committed'});
+    }
+    assert.equal(await auditCount(),before);
+    assert.deepEqual([duringProjection.statusCode,staleReview.statusCode],[409,404]);
+    assert.equal(JSON.parse(duringProjection.body).code,'REPLY_NOT_AVAILABLE');
+    assert(!duringProjection.body.includes(originalReply.content));
+    assert(!staleReview.body.includes(revisedText));
    }finally{await admin.end();}
   });
  }finally{await db.stop();}

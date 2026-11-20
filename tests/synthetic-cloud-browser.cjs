@@ -736,9 +736,9 @@ async function main() {
         await requirementsInput.fill(requirements);
         const join = async page => {
           await page.getByRole('button',{name:'刷新队伍',exact:true}).click();
-          const joined = command(page,'operations','team.join');
-          await page.locator(`[data-team-id="${teamId}"]`).getByRole('button',{name:'加入此合成队伍',exact:true}).click();
-          return await joined;
+          const [joined] = await Promise.all([command(page,'operations','team.join'),
+            teamCard(page).getByRole('button',{name:'加入此合成队伍',exact:true}).click()]);
+          return joined;
         };
         assert.equal((await join(reviewer)).status(),200);
         await reviewer.getByTestId('own-team').getByText(/member · 2\/2/).waitFor();
@@ -863,7 +863,10 @@ async function main() {
         assert(await olderTeams.isDisabled());
         await teamCard(staff).getByText(/1\/2/).waitFor();
 
-        assert.equal((await join(reviewer)).status(),200);
+        const competingMember = await session(reviewer);
+        const competingJoin = await api.mutate('operations',competingMember,{op:'team.join',id:teamId,message:''});
+        assert.equal(competingJoin.status,200);
+        assert.equal(competingJoin.body.item.memberCount,2);
         const joinOlderTeam = async () => {
           const [response] = await Promise.all([command(staff,'operations','team.join'),
             teamCard(staff).getByRole('button',{name:'加入此合成队伍',exact:true}).click()]);
@@ -877,9 +880,9 @@ async function main() {
         assert.deepEqual((await staffMembership()).rows,[]);
         await reloadList.click();
         await panel.getByText('队伍已更新，请返回第一页。',{exact:true}).waitFor();
-        const reviewerLeft = command(reviewer,'operations','team.leave');
-        await reviewer.getByRole('button',{name:'退出本人队伍',exact:true}).click();
-        assert.equal((await reviewerLeft).status(),200);
+        const competingLeave = await api.mutate('operations',competingMember,{op:'team.leave',id:teamId});
+        assert.equal(competingLeave.status,200);
+        assert.equal(competingLeave.body.item.memberCount,1);
         await firstTeams.click();
         await checkTeamPage(orderedTeams.slice(0,50));
         await olderTeams.click();

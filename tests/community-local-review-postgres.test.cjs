@@ -225,8 +225,9 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      const entered=new Promise(resolve=>{enteredLock=resolve;});
      const waiting=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{
       const c=await db.connectBusiness(),query=c.query.bind(c);
+      const {rows:[backend]}=await query('SELECT pg_backend_pid() AS pid');
       c.query=(sql,...values)=>{
-       if(sql.startsWith('SELECT pg_advisory_xact_lock(')) enteredLock();
+       if(sql.startsWith('SELECT pg_advisory_xact_lock(')) enteredLock(backend.pid);
        return query(sql,...values);
       };
       return c;
@@ -234,8 +235,17 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      const requestId=crypto.randomUUID();
      try{
       pending=waiting(event(operator,{op,...fields,id:item.id,version:item.version,requestId}));
-      const step=await Promise.race([entered.then(()=>true),pending.then(()=>false)]);
-      assert.equal(step,true,'request reached the actual content lock');
+      const pid=await Promise.race([entered,pending.then(()=>null)]);
+      assert(Number.isInteger(pid),'request reached the content lock call');
+      let waitingOnLock=false;
+      for(let attempt=0;attempt<20&&!waitingOnLock;attempt++){
+       const {rows:[proof]}=await admin.query(`SELECT EXISTS(
+        SELECT 1 FROM pg_locks WHERE pid=$1 AND locktype='advisory' AND NOT granted
+       ) AS waiting`,[pid]);
+       waitingOnLock=proof.waiting;
+       if(!waitingOnLock) await new Promise(resolve=>setTimeout(resolve,25));
+      }
+      assert.equal(waitingOnLock,true,'PostgreSQL confirmed the business backend was blocked on the held lock');
       const {rowCount}=await admin.query("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[operatorId]);
       assert.equal(rowCount,1);
      }finally{await admin.query('SELECT pg_advisory_unlock(hashtextextended($1,73))',[item.id]);}

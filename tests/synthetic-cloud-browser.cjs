@@ -1017,9 +1017,12 @@ async function main() {
         assert.equal(submitted.status(),200);
         const {item:{id:messageId}} = await submitted.json();
         await openMessages(reviewer);
-        result = command(reviewer,'community','item.review');
-        await reviewer.locator(`[data-review-id="${messageId}"]`).getByRole('button',{name:'审核通过',exact:true}).click();
-        assert.equal((await result).status(),200);
+        const moderation = reviewer.getByTestId('manage-message');
+        await moderation.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        const approveMessage = moderation.locator(`[data-review-id="${messageId}"]`).getByRole('button',{name:'审核通过',exact:true});
+        const [approval] = await Promise.all([command(reviewer,'community','item.review'),approveMessage.click()]);
+        assert.equal(approval.status(),200);
+        assert.equal(approval.request().postDataJSON().id,messageId);
         const reaction = page => page.locator(`.message-feed [data-message-id="${messageId}"]`)
           .getByRole('button',{name:'回应 👍',exact:true});
         const respond = async (page, active) => {

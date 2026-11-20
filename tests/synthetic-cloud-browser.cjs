@@ -1478,25 +1478,26 @@ async function main() {
         const queueMember = await api.login('reviewer'), queueStaff = await session(staff);
         assert.equal(queueMember.memberId,db.accounts.reviewer.memberId);
         assert.notEqual(queueMember.memberId,member.memberId);
-        const {rows:[queueClock]} = await api.admin('SELECT synthetic_now,attendance_lab.business_now() AS at FROM attendance_lab.clock');
+        const {rows:[queueClock]} = await api.admin(`
+          SELECT GREATEST(attendance_lab.business_now(),
+            (SELECT max(signed_at) FROM attendance_lab.records WHERE member_id=$1)) AS at
+        `,[queueMember.memberId]);
         const queueProduct = await api.mutate('points',queueStaff,{op:'catalogue.create',name:'合成分页纸签',unitCost:1,stock:12,
           perMemberLimit:12,minEarned:0,startsAt:'1900-01-01T00:00:00.000Z',endsAt:'2199-12-31T00:00:00.000Z',status:'enabled'});
         assert.equal(queueProduct.status,200,'queue rehearsal catalogue created');
         const queueItem = queueProduct.body.itemId;
-        try {
-          for (let day=-7;day<0;day++) {
-            await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[new Date(queueClock.at.getTime()+day*86400000)]);
-            const checked = await api.mutate('attendance',queueMember,{op:'checkin'});
-            assert.equal(checked.status,200,'queue rehearsal attendance fact created');
-            const award = await api.mutate('points',queueMember,{op:'settle',eventId:checked.body.history[0].rewardEventId});
-            assert.equal(award.status,200,'queue rehearsal attendance event settled');
-          }
-          for (let order=0;order<12;order++) {
-            const placed = await api.mutate('points',queueMember,{op:'redeem',itemId:queueItem,quantity:1});
-            assert.equal(placed.status,200,'queue rehearsal order debited');
-          }
-        } finally {
-          await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[queueClock.synthetic_now]);
+        // This is the last business scenario. Keep advancing the disposable
+        // clock so the attendance facts created by earlier scenarios stay valid.
+        for (let day=1;day<=7;day++) {
+          await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[new Date(queueClock.at.getTime()+day*86400000)]);
+          const checked = await api.mutate('attendance',queueMember,{op:'checkin'});
+          assert.equal(checked.status,200,'queue rehearsal attendance fact created');
+          const award = await api.mutate('points',queueMember,{op:'settle',eventId:checked.body.history[0].rewardEventId});
+          assert.equal(award.status,200,'queue rehearsal attendance event settled');
+        }
+        for (let order=0;order<12;order++) {
+          const placed = await api.mutate('points',queueMember,{op:'redeem',itemId:queueItem,quantity:1});
+          assert.equal(placed.status,200,'queue rehearsal order debited');
         }
         const {rows:queued}=await api.admin('SELECT id FROM points_lab.orders WHERE item_id=$1 ORDER BY created_at,id',[queueItem]);
         assert.equal(queued.length,12);

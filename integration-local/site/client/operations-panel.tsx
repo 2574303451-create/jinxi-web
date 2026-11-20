@@ -1,10 +1,20 @@
 "use client";
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal } from '../../../components/ui/modal';
 import { PaperState } from '../../../components/ui/paper';
 import { loadAnnouncementSanitizer, type AnnouncementSanitizer } from '../../../lib/announcement-html';
+import { PageControls } from './page-controls';
 import { useCommand, useResource, useSession } from './session-context';
 type Permissions = { admin: boolean; staff: boolean };
+type SponsorRecord = {
+  id: string;
+  sponsor: string;
+  time: string;
+  sponsorTime: string;
+  status: 'visible' | 'hidden' | 'deleted';
+  version: number;
+  legacy: boolean;
+};
 const shanghaiInput = (iso: string) => new Date(Date.parse(iso) + 8*60*60*1000).toISOString().slice(0,-1);
 export function SafeAnnouncement({ html }: { html: string }) {
   const [safe, setSafe] = useState<string | null>(null);
@@ -56,18 +66,11 @@ export function SponsorshipDialog({ open, close, permissions }: { open: boolean;
 }
 function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
   const { client, ready } = useSession(), cmd = useCommand();
-  const [name, setName] = useState(''), [date, setDate] = useState('2024-03-01T12:00'), [editing, setEditing] = useState<any>(null);
-  const load = useCallback(async () => {
-    const published = await client.request('operations', null, { kind: 'sponsor', view: 'public', limit: '50' }, false);
-    const managed = ready && permissions.admin ? await client.request('operations', null, { kind: 'sponsor', view: 'private', limit: '50' }) : { items: [] };
-    return { published: published.items, managed: managed.items };
-  }, [client, ready, permissions.admin]);
-  const resource = useResource(load);
+  const [name, setName] = useState(''), [date, setDate] = useState('2024-03-01T12:00');
+  const [editing, setEditing] = useState<SponsorRecord | null>(null);
   return <section className="integration-panel" aria-label="感谢名单管理">
     <p className="paper-notice">只验证虚构感谢记录；没有收款二维码、真实付款或财务结算。</p>
-    <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新感谢记录</button>
-    {resource.error && <p role="alert">{resource.error}</p>}
-    <table><thead><tr><th>感谢对象</th><th>登记时间</th></tr></thead><tbody>{resource.data?.published.map((r: any) => <tr key={r.id} data-sponsor-id={r.id}><td>{r.sponsor}</td><td>{r.time}</td></tr>)}</tbody></table>
+    <SponsorshipRecords />
     {ready && permissions.admin && <>
       <form aria-label="维护感谢记录" onSubmit={e => { e.preventDefault(); void cmd.run(async () => {
         const sponsorTime = editing && date === shanghaiInput(editing.sponsorTime) ? editing.sponsorTime : new Date(date + '+08:00').toISOString();
@@ -75,13 +78,57 @@ function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
       }); }}>
         <label className="paper-label">合成感谢对象<input className="paper-input" value={name} onChange={e => setName(e.target.value)} maxLength={80} required /></label>
         <label className="paper-label">发生时间（上海）<input className="paper-input" type="datetime-local" step="0.001" value={date} onChange={e => setDate(e.target.value)} required /></label>
-        <button className="paper-button yellow" disabled={cmd.busy || resource.loading}>{editing ? '保存感谢修订' : '登记合成感谢'}</button>
+        <button className="paper-button yellow" disabled={cmd.busy}>{editing ? '保存感谢修订' : '登记合成感谢'}</button>
+        {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={() => { setEditing(null); setName(''); }}>取消修订</button>}
       </form>
-      <ul>{resource.data?.managed.map((r: any) => <li key={r.id} className="integration-record"><strong>{r.sponsor}</strong><p>{r.status} · {r.time}</p><div className="integration-actions">
-        {r.status !== 'deleted' && <><button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => { setEditing(r); setName(r.sponsor); setDate(shanghaiInput(r.sponsorTime)); }}>编辑感谢记录</button><button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: r.status === 'visible' ? 'sponsor.hide' : 'sponsor.show', id: r.id, version: r.version }))}>{r.status === 'visible' ? '隐藏感谢记录' : '恢复感谢展示'}</button></>}
-      </div></li>)}</ul>
+      <SponsorshipRecords management={{
+        busy: cmd.busy,
+        edit: record => { setEditing(record); setName(record.sponsor); setDate(shanghaiInput(record.sponsorTime)); },
+        toggle: record => void cmd.run(() => client.mutate('operations', {
+          op: record.status === 'visible' ? 'sponsor.hide' : 'sponsor.show', id: record.id, version: record.version,
+        })),
+      }} />
     </>}
     {cmd.notice && <p role="status" className="paper-notice">{cmd.notice}</p>}
+  </section>;
+}
+function SponsorshipRecords({ management }: { management?: {
+  busy: boolean;
+  edit: (record: SponsorRecord) => void;
+  toggle: (record: SponsorRecord) => void;
+} }) {
+  const { client } = useSession();
+  const [cursor, setCursor] = useState<string | null>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const view = management ? 'private' : 'public';
+  const load = useCallback(async () => {
+    const page = await client.request<{ items: SponsorRecord[]; nextCursor: string | null }>('operations', null, {
+      kind: 'sponsor', view, limit: '50', ...(cursor ? { cursor } : {}),
+    }, view === 'private');
+    return { cursor, page };
+  }, [client, cursor, view]);
+  const resource = useResource(load);
+  const page = resource.data?.cursor === cursor ? resource.data?.page : null;
+  const loading = resource.loading || (!page && !resource.error);
+  const changed = resource.error === 'PAGE_CHANGED';
+  const title = management ? '感谢记录管理' : '公开感谢记录';
+  return <section aria-label={title}>
+    <h2 ref={heading} tabIndex={-1}>{title}</h2>
+    <button className="paper-button" onClick={resource.reload} disabled={loading || changed}>{management ? '刷新管理记录' : '刷新感谢记录'}</button>
+    {loading && <PaperState kind="loading" title="读取感谢记录…" />}
+    {resource.error && <PaperState kind="error" title={changed ? '感谢记录已更新，请返回第一页。' : '暂时无法读取感谢记录，请刷新。'} />}
+    {page && !loading && (page.items.length === 0 ? <PaperState kind="empty" title="暂无感谢记录" /> : management ?
+      <ul>{page.items.map(record => <li key={record.id} className="integration-record" data-managed-sponsor-id={record.id}>
+        <strong>{record.sponsor}</strong><p>{record.status} · {record.time}</p>
+        {record.legacy ? <p>历史记录 · 仅供查看</p> : record.status !== 'deleted' && <div className="integration-actions">
+          <button className="paper-button" disabled={management.busy} onClick={() => management.edit(record)}>编辑感谢记录</button>
+          <button className="paper-button" disabled={management.busy} onClick={() => management.toggle(record)}>{record.status === 'visible' ? '隐藏感谢记录' : '恢复感谢展示'}</button>
+        </div>}
+      </li>)}</ul> :
+      <table><thead><tr><th>感谢对象</th><th>登记时间</th></tr></thead><tbody>{page.items.map(record =>
+        <tr key={record.id} data-sponsor-id={record.id}><td>{record.sponsor}</td><td>{record.time}</td></tr>)}</tbody></table>)}
+    <PageControls label={`${title}分页`} olderLabel="查看更早记录" atStart={!cursor} next={page?.nextCursor}
+      loading={loading || Boolean(management?.busy)} heading={heading} onChange={setCursor} />
   </section>;
 }
 export function TeamPanel() {

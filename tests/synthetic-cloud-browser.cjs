@@ -420,6 +420,76 @@ async function main() {
         assert.deepEqual(sponsorship,{status:'hidden',owner_id:db.accounts.admin.memberId,occurred_at:new Date('2024-03-01T04:00:00Z')});
         record.scenarios.push('administrator-maintained-synthetic-sponsorship-obeys-public-visibility');
 
+        record.stage='sponsorship-pagination';
+        await resetVisitQuota();
+        const adminSession = await session(staff);
+        const seededSponsors = await api.admin(async c=>{
+          await c.query('BEGIN');
+          await c.query("SELECT set_config('operations.actor',$1,true)",[adminSession.memberId]);
+          const seeded = await c.query(`INSERT INTO operations_lab.documents(kind,owner_id,last_editor,payload,status,occurred_at)
+            SELECT 'sponsor',$1,$1,jsonb_build_object('sponsor','虚构历史感谢 '||day),'visible',
+              TIMESTAMPTZ '2025-01-01 12:00:00+08' + make_interval(days => day)
+            FROM generate_series(0,51) AS day`,[adminSession.memberId]);
+          await c.query('COMMIT');
+          return seeded.rowCount;
+        });
+        assert.equal(seededSponsors,52);
+        const {rows:sponsorRecords} = await api.admin(`SELECT id,status FROM operations_lab.documents
+          WHERE kind='sponsor' ORDER BY occurred_at DESC,id DESC`);
+        const sponsorPublicIds = sponsorRecords.filter(row=>row.status==='visible').map(row=>row.id);
+        const sponsorManagedIds = sponsorRecords.map(row=>row.id);
+        const olderSponsor = sponsorPublicIds[50];
+        const manageSponsorship = staff.getByRole('region',{name:'感谢记录管理',exact:true});
+        const publicSponsorIdsOn = page => page.locator('[data-sponsor-id]').evaluateAll(nodes=>nodes.map(node=>node.dataset.sponsorId));
+        const managedSponsorIdsOn = () => manageSponsorship.locator('[data-managed-sponsor-id]').evaluateAll(nodes=>nodes.map(node=>node.dataset.managedSponsorId));
+        await publicSponsorship.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        const publicSponsorPager = reviewer.getByRole('navigation',{name:'公开感谢记录分页',exact:true});
+        await publicSponsorPager.waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(reviewer),sponsorPublicIds.slice(0,50));
+        await publicSponsorPager.getByRole('button',{name:'查看更早记录',exact:true}).press('Enter');
+        await reviewer.locator(`[data-sponsor-id="${olderSponsor}"]`).waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(reviewer),sponsorPublicIds.slice(50));
+        assert(await reviewer.getByRole('heading',{name:'公开感谢记录',exact:true}).evaluate(node=>node===document.activeElement));
+        assert.equal(await reviewer.getByRole('navigation',{name:'感谢记录管理分页',exact:true}).count(),0);
+
+        await staff.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        await staff.locator(`[data-sponsor-id="${sponsorPublicIds[0]}"]`).waitFor();
+        const manageSponsorPager = staff.getByRole('navigation',{name:'感谢记录管理分页',exact:true});
+        await manageSponsorship.getByRole('button',{name:'刷新管理记录',exact:true}).click();
+        await manageSponsorPager.waitFor();
+        assert.deepEqual(await managedSponsorIdsOn(),sponsorManagedIds.slice(0,50));
+        const managedPage = staff.waitForResponse(response=>{
+          const url = new URL(response.url());
+          return url.pathname==='/api/operations' && response.request().method()==='GET' &&
+            url.searchParams.get('kind')==='sponsor' && url.searchParams.get('view')==='private' && url.searchParams.has('cursor');
+        });
+        await manageSponsorPager.getByRole('button',{name:'查看更早记录',exact:true}).click();
+        const managedReply = await managedPage;
+        assert.equal(managedReply.status(),200);
+        const privateCursor = new URL(managedReply.url()).searchParams.get('cursor');
+        assert.equal((await api.request(`/api/operations?kind=sponsor&view=public&cursor=${encodeURIComponent(privateCursor)}`)).status,400);
+        const hiddenRow = manageSponsorship.locator(`[data-managed-sponsor-id="${sponsorId}"]`);
+        await hiddenRow.getByRole('button',{name:'恢复感谢展示',exact:true}).waitFor();
+        assert((await managedSponsorIdsOn()).includes(sponsorId));
+        assert.deepEqual(await managedSponsorIdsOn(),sponsorManagedIds.slice(50));
+        assert.deepEqual(await publicSponsorIdsOn(staff),sponsorPublicIds.slice(0,50));
+
+        const olderSponsorRow = manageSponsorship.locator(`[data-managed-sponsor-id="${olderSponsor}"]`);
+        assert.equal((await Promise.all([command(staff,'operations','sponsor.hide'),
+          olderSponsorRow.getByRole('button',{name:'隐藏感谢记录',exact:true}).click()]))[0].status(),200);
+        assert.equal((await api.admin('SELECT status FROM operations_lab.documents WHERE id=$1',[olderSponsor])).rows[0].status,'hidden');
+        await manageSponsorship.getByRole('alert').getByText('感谢记录已更新，请返回第一页。',{exact:true}).waitFor();
+        await publicSponsorship.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
+        await publicSponsorship.getByRole('alert').getByText('感谢记录已更新，请返回第一页。',{exact:true}).waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(reviewer),[]);
+        await publicSponsorPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+        await reviewer.locator(`[data-sponsor-id="${sponsorPublicIds[0]}"]`).waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(reviewer),sponsorPublicIds.slice(0,50));
+        await publicSponsorPager.getByRole('button',{name:'查看更早记录',exact:true}).click();
+        await reviewer.locator(`[data-sponsor-id="${sponsorPublicIds[51]}"]`).waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(reviewer),sponsorPublicIds.slice(51));
+        record.scenarios.push('sponsorship-paginates-public-and-admin-records-and-recovers-a-stale-cursor');
+
         record.stage='team-capacity-and-leave';
         await resetVisitQuota();
         for (const page of [a,staff,reviewer]) {

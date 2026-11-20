@@ -1046,7 +1046,21 @@ async function main() {
           assert.equal(response.request().postDataJSON().active,active);
           await reaction(page).and(page.locator(`[aria-pressed="${active}"]`)).waitFor();
         };
-        await a.getByRole('button',{name:'刷新留言',exact:true}).click();
+        record.stage='message-reaction-published-feed';
+        await navigate(a);
+        await ready(a);
+        const [freshFeed] = await Promise.all([
+          a.waitForResponse(response=>{
+            const url=new URL(response.url());
+            return url.pathname==='/api/community'&&url.searchParams.get('kind')==='message'&&
+              url.searchParams.get('scope')==='member-feed'&&response.request().method()==='GET';
+          }),
+          openMessages(a),
+        ]);
+        assert.equal(freshFeed.status(),200);
+        const freshMessages = await freshFeed.json();
+        assert.equal(freshMessages.memberId,other.memberId);
+        assert.equal(freshMessages.items.find(item=>item.id===messageId)?.status,'published');
         await respond(a,true,'message-reaction-first-member');
         await navigate(a);
         await ready(a);

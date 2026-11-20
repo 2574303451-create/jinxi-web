@@ -1502,9 +1502,9 @@ async function main() {
         await points(staff);
         const pendingQueue=staff.getByRole('region',{name:'待认领订单',exact:true});
         const processingQueue=staff.getByRole('region',{name:'本人处理中订单',exact:true});
-        const pager=pendingQueue.getByRole('navigation',{name:'待认领订单分页'});
+        const queuePager=pendingQueue.getByRole('navigation',{name:'待认领订单分页'});
         const queueIds=()=>pendingQueue.locator('[data-admin-order-id]').evaluateAll(rows=>rows.map(row=>row.dataset.adminOrderId));
-        const nextQueue=pager.getByRole('button',{name:'查看下一页',exact:true}).and(pager.locator('button:enabled'));
+        const nextQueue=queuePager.getByRole('button',{name:'查看下一页',exact:true}).and(queuePager.locator('button:enabled'));
         await nextQueue.waitFor();
         assert.deepEqual(await queueIds(),queued.slice(0,10).map(row=>row.id));
         await nextQueue.press('Enter');
@@ -1513,7 +1513,7 @@ async function main() {
         assert.deepEqual(await queueIds(),[lastQueued]);
         assert.equal(await pendingQueue.getByRole('heading').evaluate(node=>node===document.activeElement),true);
         await processingQueue.getByText('暂无本人处理中订单。',{exact:true}).waitFor();
-        await pager.getByRole('button',{name:'返回第一页',exact:true}).press('Enter');
+        await queuePager.getByRole('button',{name:'返回第一页',exact:true}).press('Enter');
         await nextQueue.waitFor();
         assert.deepEqual(await queueIds(),queued.slice(0,10).map(row=>row.id));
         const {rows:[queueTotals]}=await api.admin(`

@@ -37,6 +37,7 @@ function CommunityPage({ kind, scope, busy, children }: {
 
 export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'; staff: boolean }) {
   const { client, ready } = useSession(), cmd = useCommand();
+  const contentId = useId();
   const [editing, setEditing] = useState<Item | null>(null), [content, setContent] = useState(''), [title, setTitle] = useState('');
   if (!ready) return <p className="paper-notice">登录并完成改密后才能管理本人内容。</p>;
   return <section className="integration-panel" data-testid={'manage-' + kind} aria-label={kind === 'message' ? '本人留言与审核' : '本人攻略与审核'}>
@@ -48,7 +49,10 @@ export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'
         ...(editing.imageUrl ? { imageUrl: editing.imageUrl } : {}) }); setEditing(null);
     }); }}>
       {kind === 'guide' && <label className="paper-label">修改攻略标题<input className="paper-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={100} required /></label>}
-      <label className="paper-label">修改正文<textarea className="paper-input" value={content} onChange={e => setContent(e.target.value)} maxLength={kind === 'message' ? 1000 : 10000} required /></label>
+      <div className="paper-label">
+        <label htmlFor={contentId}>修改正文</label>
+        <textarea id={contentId} className="paper-input" value={content} onChange={e => setContent(e.target.value)} maxLength={kind === 'message' ? 1000 : 10000} required />
+      </div>
       <div className="integration-actions"><button className="paper-button yellow" disabled={cmd.busy}>保存本人修改</button><button className="paper-button" type="button" onClick={() => setEditing(null)}>取消编辑</button></div>
     </form>}
     <CommunityPage kind={kind} scope="mine" busy={cmd.busy}>{items =>

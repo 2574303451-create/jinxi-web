@@ -214,11 +214,12 @@ type TeamRecord = TeamDraft & {
   icon: string;
   color: string;
 };
+type TeamEdit = { version: number | null; changes: Partial<TeamDraft> };
 
-function TeamEditor({ team, disabled, save }: {
-  team: TeamRecord | null; disabled: boolean; save: (draft: TeamDraft, onSaved: () => void) => void;
+function TeamEditor({ team, edit, setEdit, disabled, save }: {
+  team: TeamRecord | null; edit: TeamEdit | null; setEdit: (edit: TeamEdit | null) => void;
+  disabled: boolean; save: (draft: TeamDraft, onSaved: () => void) => void;
 }) {
-  const [edit, setEdit] = useState<{ version: number | null; changes: Partial<TeamDraft> } | null>(null);
   const version = team?.version ?? null;
   const latest: TeamDraft = {
     name: team?.name ?? '', slogan: team?.slogan ?? '', description: team?.description ?? '',
@@ -226,10 +227,10 @@ function TeamEditor({ team, disabled, save }: {
   };
   const draft = { ...latest, ...edit?.changes };
   const changed = edit !== null && edit.version !== version;
-  const change = (fields: Partial<TeamDraft>) => setEdit(current => ({
-    version: current ? current.version : version,
-    changes: { ...current?.changes, ...fields },
-  }));
+  const change = (fields: Partial<TeamDraft>) => setEdit({
+    version: edit ? edit.version : version,
+    changes: { ...edit?.changes, ...fields },
+  });
   return <form aria-label="本人队伍管理" onSubmit={e => { e.preventDefault(); if (!disabled && !changed) save(draft, () => setEdit(null)); }}>
     <fieldset disabled={disabled}>
       <label className="paper-label">队伍名称<input className="paper-input" value={draft.name} onChange={e => change({ name: e.target.value })} maxLength={60} required /></label>
@@ -259,13 +260,20 @@ function TeamEditor({ team, disabled, save }: {
 }
 
 export function TeamPanel() {
-  const { client, ready } = useSession(), cmd = useCommand();
+  const { client, ready, state } = useSession(), cmd = useCommand();
+  const [draft, setDraft] = useState<{ scope: string; edit: TeamEdit } | null>(null);
   const load = useCallback(async () => {
     const published = await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'public', limit: '50' }, false);
     const mine = ready ? await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private', limit: '50' }) : { items: [] };
     return { published: published.items, mine: mine.items[0] ?? null };
   }, [client, ready]);
   const resource = useResource(load), mine = resource.data?.mine ?? null;
+  const scope = `${state.revision}:${state.member?.id ?? ''}:${mine?.id ?? 'new'}`;
+  const edit = draft?.scope === scope ? draft.edit : null;
+  const setEdit = (value: TeamEdit | null) => setDraft(current => value ? { scope, edit: value } : current?.scope === scope ? null : current);
+  useEffect(() => {
+    if (!ready || (resource.data && mine?.myRole === 'member')) setDraft(null);
+  }, [ready, resource.data, mine?.myRole]);
   const save = (draft: TeamDraft, onSaved: () => void) => void cmd.run(async () => {
     try {
       await client.mutate('operations', {
@@ -284,7 +292,7 @@ export function TeamPanel() {
     {resource.error && <p role="alert">{resource.error}</p>}
     {mine && <article className="integration-record" data-testid="own-team"><h3>本人队伍：{mine.name}</h3><p>{mine.myRole} · {mine.memberCount}/{mine.maxMembers}</p>{mine.myRole === 'member' && <button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.leave', id: mine.id }))}>退出本人队伍</button>}</article>}
     {ready && resource.data && (!mine || mine.myRole === 'leader') && <TeamEditor key={mine?.id ?? 'new'}
-      team={mine} disabled={cmd.busy || resource.loading} save={save} />}
+      team={mine} edit={edit} setEdit={setEdit} disabled={cmd.busy || resource.loading} save={save} />}
     <ul data-testid="team-list">{resource.data?.published.map(record => <li className="integration-record" key={record.id} data-team-id={record.id}>
       <h3>{record.icon} {record.name}</h3><p>{record.slogan} · {record.memberCount}/{record.maxMembers}</p>
       {record.description && <p className="whitespace-pre-wrap break-words">{record.description}</p>}

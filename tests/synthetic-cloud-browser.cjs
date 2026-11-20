@@ -752,9 +752,15 @@ async function main() {
         record.stage='team-leader-details';
         assert.equal(await reviewer.getByRole('form',{name:'本人队伍管理',exact:true}).count(),0);
         const saveTeam = a.getByRole('button',{name:'保存本人队伍',exact:true});
+        const failedTeamRead = url => url.pathname==='/api/operations' &&
+          url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='public';
+        await a.route(failedTeamRead,route=>route.fulfill({status:503,json:{code:'OPERATIONS_UNAVAILABLE'}}),{times:1});
         const [conflict] = await Promise.all([command(a,'operations','team.edit'),saveTeam.click()]);
         assert.equal(conflict.status(),409);
         assert.equal((await conflict.json()).code,'VERSION_CONFLICT');
+        await a.getByRole('alert').getByText('OPERATIONS_UNAVAILABLE',{exact:true}).waitFor();
+        await a.getByRole('form',{name:'本人队伍管理',exact:true}).waitFor({state:'detached'});
+        await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
         await a.getByTestId('own-team').getByText(/leader · 2\/2/).waitFor();
         const currentTeam = a.getByRole('region',{name:'队伍最新版',exact:true});
         await currentTeam.getByText(formedTeam.description,{exact:true}).waitFor();

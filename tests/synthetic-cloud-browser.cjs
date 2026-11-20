@@ -434,7 +434,7 @@ async function main() {
           return seeded.rowCount;
         });
         assert.equal(seededSponsors,52);
-        const {rows:sponsorRecords} = await api.admin(`SELECT id,status FROM operations_lab.documents
+        const {rows:sponsorRecords} = await api.admin(`SELECT id,status,(occurred_at AT TIME ZONE 'Asia/Shanghai')::date::text AS day FROM operations_lab.documents
           WHERE kind='sponsor' ORDER BY occurred_at DESC,id DESC`);
         const sponsorPublicIds = sponsorRecords.filter(row=>row.status==='visible').map(row=>row.id);
         const sponsorManagedIds = sponsorRecords.map(row=>row.id);
@@ -475,10 +475,21 @@ async function main() {
         assert.deepEqual(await publicSponsorIdsOn(staff),sponsorPublicIds.slice(0,50));
 
         const olderSponsorRow = manageSponsorship.locator(`[data-managed-sponsor-id="${olderSponsor}"]`);
+        await olderSponsorRow.getByRole('button',{name:'编辑感谢记录',exact:true}).click();
+        const sponsorDate = staff.getByLabel('发生时间（上海）',{exact:true});
+        assert.equal((await sponsorDate.inputValue()).slice(0,10),sponsorRecords.find(row=>row.id===olderSponsor).day);
+        await staff.getByRole('button',{name:'取消修订',exact:true}).click();
+        assert.equal(await sponsorDate.inputValue(),'2024-03-01T12:00');
         assert.equal((await Promise.all([command(staff,'operations','sponsor.hide'),
           olderSponsorRow.getByRole('button',{name:'隐藏感谢记录',exact:true}).click()]))[0].status(),200);
         assert.equal((await api.admin('SELECT status FROM operations_lab.documents WHERE id=$1',[olderSponsor])).rows[0].status,'hidden');
         await manageSponsorship.getByRole('alert').getByText('感谢记录已更新，请返回第一页。',{exact:true}).waitFor();
+        assert.deepEqual(await managedSponsorIdsOn(),[]);
+        await manageSponsorPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+        await manageSponsorship.locator(`[data-managed-sponsor-id="${sponsorManagedIds[0]}"]`).waitFor();
+        assert.deepEqual(await managedSponsorIdsOn(),sponsorManagedIds.slice(0,50));
+        await staff.locator(`[data-sponsor-id="${sponsorPublicIds[0]}"]`).waitFor();
+        assert.deepEqual(await publicSponsorIdsOn(staff),sponsorPublicIds.slice(0,50));
         await publicSponsorship.getByRole('button',{name:'刷新感谢记录',exact:true}).click();
         await publicSponsorship.getByRole('alert').getByText('感谢记录已更新，请返回第一页。',{exact:true}).waitFor();
         assert.deepEqual(await publicSponsorIdsOn(reviewer),[]);

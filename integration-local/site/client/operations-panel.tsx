@@ -15,6 +15,7 @@ type SponsorRecord = {
   version: number;
   legacy: boolean;
 };
+const defaultSponsorDate = '2024-03-01T12:00';
 const shanghaiInput = (iso: string) => new Date(Date.parse(iso) + 8*60*60*1000).toISOString().slice(0,-1);
 export function SafeAnnouncement({ html }: { html: string }) {
   const [safe, setSafe] = useState<string | null>(null);
@@ -66,7 +67,7 @@ export function SponsorshipDialog({ open, close, permissions }: { open: boolean;
 }
 function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
   const { client, ready } = useSession(), cmd = useCommand();
-  const [name, setName] = useState(''), [date, setDate] = useState('2024-03-01T12:00');
+  const [name, setName] = useState(''), [date, setDate] = useState(defaultSponsorDate);
   const [editing, setEditing] = useState<SponsorRecord | null>(null);
   return <section className="integration-panel" aria-label="感谢名单管理">
     <p className="paper-notice">只验证虚构感谢记录；没有收款二维码、真实付款或财务结算。</p>
@@ -79,7 +80,9 @@ function SponsorshipPanel({ permissions }: { permissions: Permissions }) {
         <label className="paper-label">合成感谢对象<input className="paper-input" value={name} onChange={e => setName(e.target.value)} maxLength={80} required /></label>
         <label className="paper-label">发生时间（上海）<input className="paper-input" type="datetime-local" step="0.001" value={date} onChange={e => setDate(e.target.value)} required /></label>
         <button className="paper-button yellow" disabled={cmd.busy}>{editing ? '保存感谢修订' : '登记合成感谢'}</button>
-        {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={() => { setEditing(null); setName(''); }}>取消修订</button>}
+        {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={() => {
+          setEditing(null); setName(''); setDate(defaultSponsorDate);
+        }}>取消修订</button>}
       </form>
       <SponsorshipRecords management={{
         busy: cmd.busy,

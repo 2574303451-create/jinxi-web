@@ -807,12 +807,18 @@ async function main() {
             'content-type':'application/json','cache-control':'no-store','x-jinxi-rehearsal':'delayed-attendance',
           }});
         },{times:1});
+        let delayed;
         try {
           await Promise.all([a.waitForRequest(request=>delayedPage(new URL(request.url()))),older.click()]);
           assert.deepEqual(await attendanceIds(a),[]);
           await latest.click();
           await waitForRecord(a,expectedFirst[0]);
+          const reply = a.waitForResponse(response=>response.headers()['x-jinxi-rehearsal']==='delayed-attendance');
+          releaseAttendance.resolve();
+          delayed = await reply;
         } finally { releaseAttendance.resolve(); }
+        assert.equal(delayed.status(),200);
+        assert.deepEqual((await delayed.json()).history.map(row=>row.id),expectedOlder);
         await a.waitForFunction(()=>document.documentElement.dataset.delayedAttendanceRead==='yes');
         assert.deepEqual(await attendanceIds(a),expectedFirst);
         await older.click();

@@ -21,28 +21,40 @@ async function settle(c,ctx,body){
  const ledgerId=await post(c,ctx.actor,'award',amount,{bizId:'award:'+eventId,eventId,ruleId:rule.id});
  await c.query('INSERT INTO points_lab.settlements(event_id,member_id,rule_id,rule_code,rule_version,amount,business_date,streak,ledger_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',[eventId,ctx.actor,rule.id,rule.code,rule.version,amount,fact.day,streak,ledgerId]);return {eventId,ledgerId,amount,outcome:'settled'};
 }
-async function adminOrders(c,actor,orderId){
- const queue = orderId ? 'SELECT id FROM points_lab.orders WHERE id=$2' : `
-  (SELECT id FROM points_lab.orders WHERE status='pending' ORDER BY created_at,id LIMIT 50)
-  UNION ALL
-  (SELECT id FROM points_lab.orders WHERE status='processing' AND claimed_by=$1 ORDER BY created_at,id LIMIT 50)
+async function adminOrders(c,actor,{orderId,queue='all',after=null,limit=50}={}){
+ const exact='SELECT id FROM points_lab.orders WHERE id=$2';
+ const page=`
+  SELECT id FROM points_lab.orders WHERE status=$2 AND (status='pending' OR claimed_by=$1)
+   AND ($3::uuid IS NULL OR (created_at,id)>(SELECT created_at,id FROM points_lab.orders WHERE id=$3))
+  ORDER BY created_at,id LIMIT $4
  `;
+ const initial=`
+  (SELECT id FROM points_lab.orders WHERE status='pending' ORDER BY created_at,id LIMIT $2)
+  UNION ALL
+  (SELECT id FROM points_lab.orders WHERE status='processing' AND claimed_by=$1 ORDER BY created_at,id LIMIT $2)
+ `;
+ if(after&&!(await c.query('SELECT id FROM points_lab.orders WHERE id=$1',[after])).rowCount)fail(409,'QUEUE_CHANGED');
  const {rows}=await c.query(`
-  WITH queue AS (${queue})
+  WITH queue AS (${orderId?exact:queue==='all'?initial:page})
   SELECT o.id,o.cost,o.status,o.quantity,a.public_id,i.name AS item_name,
          (o.status='processing' AND o.claimed_by=$1) IS TRUE AS can_close
   FROM queue JOIN points_lab.orders o USING (id) JOIN points_lab.accounts a ON a.member_id=o.member_id
   JOIN points_lab.catalogue i ON i.id=o.item_id
   ORDER BY o.status,o.created_at,o.id
- `,orderId?[actor,orderId]:[actor]);
- return rows.map(o=>({id:o.id,cost:o.cost,status:o.status,quantity:o.quantity,itemName:o.item_name,ownerLabel:'合成成员 '+o.public_id.slice(0,8),canClose:o.can_close}));
+ `,orderId?[actor,orderId]:queue==='all'?[actor,limit+1]:[actor,queue,after,limit+1]);
+ const item=o=>({id:o.id,cost:o.cost,status:o.status,quantity:o.quantity,itemName:o.item_name,ownerLabel:'合成成员 '+o.public_id.slice(0,8),canClose:o.can_close});
+ if(orderId)return {adminOrders:rows.map(item)};
+ const pending=rows.filter(o=>o.status==='pending'),processing=rows.filter(o=>o.status==='processing');
+ return {adminOrders:[...pending.slice(0,limit),...processing.slice(0,limit)].map(item),
+  nextPendingAfter:pending.length>limit?pending[limit-1].id:null,
+  nextProcessingAfter:processing.length>limit?processing[limit-1].id:null};
 }
 async function state(c,ctx,query={limit:20}){
  if(query.view==='board')return require('./ranking.cjs').board(c,query);
  if(query.view==='admin'){
   if(!ctx.admin)fail(403,'ADMIN_REQUIRED');
   ctx.requiredAdmin=true;
-  if(query.orderId)return {adminOrders:await adminOrders(c,ctx.actor,query.orderId)};
+  if(query.orderId||query.queue)return adminOrders(c,ctx.actor,query);
  }
  await reconcile(c,ctx.actor);const a=(await c.query('SELECT * FROM points_lab.accounts WHERE member_id=$1',[ctx.actor])).rows[0]||{balance:'0',earned:'0',spent:'0',refunds:'0',reversed:'0',entries:'0',listed:false,public_id:null};
  const limit=query.limit||20,ledgerRows=(await c.query('SELECT id,entry_no,kind,direction,point_delta,before_balance,after_balance,event_id,order_id,origin_id,created_at FROM points_lab.ledger WHERE member_id=$1 AND ($2::bigint IS NULL OR entry_no<$2) ORDER BY entry_no DESC LIMIT $3',[ctx.actor,query.beforeLedger||null,limit+1])).rows,ledger=ledgerRows.slice(0,limit);
@@ -52,7 +64,8 @@ async function state(c,ctx,query={limit:20}){
  const rules=(await c.query("SELECT id,code,version,day1,day3,day7,daily_cap,total_cap,starts_at,ends_at,status FROM points_lab.rules WHERE status='enabled' OR $1 ORDER BY code,version",[ctx.admin])).rows;
  const adminAwards=query.view==='admin'?(await c.query("SELECT l.id,l.point_delta,a.public_id FROM points_lab.ledger l JOIN points_lab.accounts a ON a.member_id=l.member_id WHERE l.kind='award' AND NOT EXISTS(SELECT 1 FROM points_lab.ledger x WHERE x.origin_id=l.id) ORDER BY l.created_at,l.id LIMIT 50")).rows.map(l=>({id:l.id,amount:l.point_delta,ownerLabel:'合成成员 '+l.public_id.slice(0,8)})):[];
  const now=(await c.query('SELECT attendance_lab.business_now() AS at')).rows[0].at;
- return {memberId:ctx.actor,syntheticOnly:true,businessNow:now,permissions:{admin:ctx.admin},account:{balance:a.balance,totalEarned:a.earned,totalSpent:(BigInt(a.spent)-BigInt(a.refunds)).toString(),grossSpent:a.spent,refunds:a.refunds,reversed:a.reversed,netEarned:(BigInt(a.earned)-BigInt(a.reversed)).toString(),entries:a.entries,listed:a.listed,publicId:a.public_id},ledger:ledger.map(l=>({id:l.id,entryNo:l.entry_no,kind:l.kind,direction:l.direction,pointDelta:l.point_delta,balanceBefore:l.before_balance,balanceAfter:l.after_balance,eventId:l.event_id,orderId:l.order_id,originId:l.origin_id,createdAt:l.created_at})),nextLedgerBefore:ledgerRows.length>limit?ledger.at(-1).entry_no:null,orders:orders.map(o=>({id:o.id,itemId:o.item_id,quantity:o.quantity,unitCost:String(o.unit_cost),cost:o.cost,status:o.status,createdAt:o.created_at})),nextOrdersBefore:orderRows.length>limit?orders.at(-1).entry_no:null,catalogue:catalogue.map(i=>({id:i.id,name:i.name,unitCost:String(i.unit_cost),available:i.available,perMemberLimit:i.per_member_limit,minEarned:i.min_earned,startsAt:i.starts_at,endsAt:i.ends_at,status:i.status})),events:events.map(e=>({eventId:e.event_id,businessDate:e.day,status:e.reversal_id?'reversed':e.ledger_id?'settled':'unsettled',amount:e.amount||null,ledgerId:e.ledger_id||null})),rules,adminOrders:query.view==='admin'?await adminOrders(c,ctx.actor):[],adminAwards};
+ const orderSummary=query.view==='admin'?await adminOrders(c,ctx.actor):{adminOrders:[]};
+ return {memberId:ctx.actor,syntheticOnly:true,businessNow:now,permissions:{admin:ctx.admin},account:{balance:a.balance,totalEarned:a.earned,totalSpent:(BigInt(a.spent)-BigInt(a.refunds)).toString(),grossSpent:a.spent,refunds:a.refunds,reversed:a.reversed,netEarned:(BigInt(a.earned)-BigInt(a.reversed)).toString(),entries:a.entries,listed:a.listed,publicId:a.public_id},ledger:ledger.map(l=>({id:l.id,entryNo:l.entry_no,kind:l.kind,direction:l.direction,pointDelta:l.point_delta,balanceBefore:l.before_balance,balanceAfter:l.after_balance,eventId:l.event_id,orderId:l.order_id,originId:l.origin_id,createdAt:l.created_at})),nextLedgerBefore:ledgerRows.length>limit?ledger.at(-1).entry_no:null,orders:orders.map(o=>({id:o.id,itemId:o.item_id,quantity:o.quantity,unitCost:String(o.unit_cost),cost:o.cost,status:o.status,createdAt:o.created_at})),nextOrdersBefore:orderRows.length>limit?orders.at(-1).entry_no:null,catalogue:catalogue.map(i=>({id:i.id,name:i.name,unitCost:String(i.unit_cost),available:i.available,perMemberLimit:i.per_member_limit,minEarned:i.min_earned,startsAt:i.starts_at,endsAt:i.ends_at,status:i.status})),events:events.map(e=>({eventId:e.event_id,businessDate:e.day,status:e.reversal_id?'reversed':e.ledger_id?'settled':'unsettled',amount:e.amount||null,ledgerId:e.ledger_id||null})),rules,...orderSummary,adminAwards};
 }
 async function mutate(c,ctx,body){
  if(body.op==='settle')return settle(c,ctx,body);if(['rule.create','rule.status'].includes(body.op))return require('./rules.cjs').mutateRule(c,ctx,body);

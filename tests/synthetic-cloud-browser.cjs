@@ -1473,6 +1473,56 @@ async function main() {
         assert.equal(await attendancePager.count(),0);
         record.scenarios.push('attendance-history-paginates-private-records-and-resets-on-account-switch');
 
+        record.stage='manual-redemption-queue-pagination';
+        await resetVisitQuota();
+        const queueMember = await session(reviewer), queueStaff = await session(staff);
+        const {rows:[queueClock]} = await api.admin('SELECT synthetic_now,attendance_lab.business_now() AS at FROM attendance_lab.clock');
+        const queueProduct = await api.mutate('points',queueStaff,{op:'catalogue.create',name:'合成分页纸签',unitCost:1,stock:11,
+          perMemberLimit:11,minEarned:0,startsAt:'1900-01-01T00:00:00.000Z',endsAt:'2199-12-31T00:00:00.000Z',status:'enabled'});
+        assert.equal(queueProduct.status,200);
+        const queueItem = queueProduct.body.itemId;
+        try {
+          for (let day=-7;day<0;day++) {
+            await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[new Date(queueClock.at.getTime()+day*86400000)]);
+            const checked = await api.mutate('attendance',queueMember,{op:'checkin'});
+            assert.equal(checked.status,200);
+            const award = await api.mutate('points',queueMember,{op:'settle',eventId:checked.body.history[0].rewardEventId});
+            assert.equal(award.status,200);
+          }
+          for (let order=0;order<11;order++) {
+            const placed = await api.mutate('points',queueMember,{op:'redeem',itemId:queueItem,quantity:1});
+            assert.equal(placed.status,200);
+          }
+        } finally {
+          await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[queueClock.synthetic_now]);
+        }
+        const {rows:queued}=await api.admin('SELECT id FROM points_lab.orders WHERE item_id=$1 ORDER BY created_at,id',[queueItem]);
+        assert.equal(queued.length,11);
+        await resetVisitQuota();
+        await points(staff);
+        const pendingQueue=staff.getByRole('region',{name:'待认领订单',exact:true});
+        const processingQueue=staff.getByRole('region',{name:'本人处理中订单',exact:true});
+        const pager=pendingQueue.getByRole('navigation',{name:'待认领订单分页'});
+        const queueIds=()=>pendingQueue.locator('[data-admin-order-id]').evaluateAll(rows=>rows.map(row=>row.dataset.adminOrderId));
+        const nextQueue=pager.getByRole('button',{name:'查看下一页',exact:true}).and(pager.locator('button:enabled'));
+        await nextQueue.waitFor();
+        assert.deepEqual(await queueIds(),queued.slice(0,10).map(row=>row.id));
+        await nextQueue.press('Enter');
+        const lastQueued=queued[10].id;
+        await pendingQueue.locator('[data-admin-order-id="'+lastQueued+'"]').waitFor();
+        assert.deepEqual(await queueIds(),[lastQueued]);
+        assert.equal(await pendingQueue.getByRole('heading').evaluate(node=>node===document.activeElement),true);
+        await processingQueue.getByText('暂无本人处理中订单。',{exact:true}).waitFor();
+        await pager.getByRole('button',{name:'返回第一页',exact:true}).press('Enter');
+        await nextQueue.waitFor();
+        assert.deepEqual(await queueIds(),queued.slice(0,10).map(row=>row.id));
+        const {rows:[queueTotals]}=await api.admin(`
+          SELECT count(*) FILTER(WHERE kind='redeem')::int AS charged,count(*) FILTER(WHERE kind='refund')::int AS refunds
+          FROM points_lab.ledger WHERE order_id IN(SELECT id FROM points_lab.orders WHERE item_id=$1)
+        `,[queueItem]);
+        assert.deepEqual(queueTotals,{charged:11,refunds:0});
+        record.scenarios.push('administrator-queue-pages-reach-later-pending-orders-without-financial-writes');
+
         record.stage='viewports';
         await navigate(a);
         await ready(a);

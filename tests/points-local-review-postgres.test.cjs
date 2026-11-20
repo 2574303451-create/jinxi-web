@@ -191,6 +191,77 @@ test('points transaction failure and revocation review on actual synthetic Postg
    assert.deepEqual(closed.ledger.filter(l=>l.order_id===orderId).map(l=>l.kind),['redeem','refund']);
    assert.deepEqual(await p.snapshot(),closed);
   });
+  await t.test('administrator queue pages follow submission order and retain claim isolation',async()=>{
+   const member=await p.login(),staff=await p.login('admin'),other=await p.login('same');
+   const created=await p.op(staff,{op:'catalogue.create',name:'合成分页兑换',unitCost:1,stock:10,perMemberLimit:10,minEarned:0,
+    startsAt:'1900-01-01T00:00:00.000Z',endsAt:'2199-12-31T00:00:00.000Z',status:'enabled'});
+   assert.equal(created.status,200);
+   await p.fund(member);
+   await p.fund(other);
+   for(const session of [member,member,member,member,other,other]){
+    assert.equal((await p.op(session,{op:'redeem',itemId:created.body.itemId,quantity:1})).status,200);
+   }
+   const {rows}=await p.admin('SELECT id FROM points_lab.orders ORDER BY created_at,id');
+   assert.equal(rows.length,6);
+   const ids=rows.map(row=>row.id);
+   const get=(session,queue,after,handler)=>p.call(session,null,{view:'admin',queue,limit:'1',...(after?{after}:{})},handler);
+   const claim=(session,id)=>p.op(session,{op:'order.process',orderId:id,status:'processing'});
+   assert.equal((await get(null,'pending')).status,401);
+   assert.equal((await get(member,'pending')).status,403);
+   assert.equal((await get(staff,'invalid')).status,400);
+   assert.equal((await get(staff,'all',ids[0])).status,400);
+   assert.equal((await get(staff,'pending',crypto.randomUUID())).body.code,'QUEUE_CHANGED');
+   const before=await p.snapshot();
+   const first=await get(staff,'all');
+   assert.equal(first.status,200);
+   assert.equal(first.headers['Cache-Control'],'no-store');
+   assert.deepEqual(first.body.adminOrders.map(row=>row.id),[ids[0]]);
+   assert.equal(first.body.nextPendingAfter,ids[0]);
+   const walked=[ids[0]];
+   let after=first.body.nextPendingAfter;
+   for(let page=1;page<ids.length;page++){
+    const next=await get(staff,'pending',after);
+    assert.equal(next.status,200);
+    assert.equal(next.body.adminOrders.length,1);
+    walked.push(next.body.adminOrders[0].id);
+    after=next.body.nextPendingAfter;
+   }
+   assert.deepEqual(walked,ids);
+   assert.equal(after,null);
+   assert.deepEqual(await p.snapshot(),before);
+
+   assert.equal((await claim(staff,ids[0])).status,200);
+   assert.equal((await claim(staff,ids[2])).status,200);
+   const second=await get(staff,'pending',first.body.nextPendingAfter);
+   assert.deepEqual(second.body.adminOrders.map(row=>row.id),[ids[1]]);
+   await p.admin("INSERT INTO community_lab.member_roles VALUES($1,'admin')",[db.accounts.same.memberId]);
+   try{
+    assert.equal((await claim(other,ids[1])).status,200);
+    const own=await get(staff,'processing');
+    assert.deepEqual(own.body.adminOrders.map(row=>[row.id,row.canClose]),[[ids[0],true]]);
+    assert.equal(own.body.nextProcessingAfter,ids[0]);
+    const ownNext=await get(staff,'processing',own.body.nextProcessingAfter);
+    assert.deepEqual(ownNext.body.adminOrders.map(row=>[row.id,row.canClose]),[[ids[2],true]]);
+    assert.equal(ownNext.body.nextProcessingAfter,null);
+    assert.deepEqual((await get(other,'processing')).body.adminOrders.map(row=>row.id),[ids[1]]);
+    const checkpoint=await p.snapshot();
+    const revokeDuringRead=p.make({connect:async()=>{
+     const c=await db.connectPoints(),query=c.query.bind(c);
+     c.query=async(sql,...values)=>{
+      const result=await query(sql,...values);
+      if(sql.includes('WITH queue AS'))await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.same.memberId]);
+      return result;
+     };
+     return c;
+    }});
+    const denied=await get(other,'processing',ids[0],revokeDuringRead);
+    assert.equal(denied.status,403);
+    assert(!Object.hasOwn(denied.body,'adminOrders'));
+    assert.deepEqual(await p.snapshot(),checkpoint);
+   }finally{
+    await p.admin('DELETE FROM community_lab.member_roles WHERE member_id=$1',[db.accounts.same.memberId]);
+   }
+  });
   await t.test('logout and actual password change after identity preflight invalidate the financial request',async()=>{
    for(const mode of ['logout','password']){
     const s=await p.login(),eventId=await p.checkin(s);const h=p.make({identity:async e=>{const r=await p.identity(e);assert.equal(r.statusCode,200);const next=crypto.randomBytes(20).toString('hex')+'A9!';const ended=await p.identity(p.event(s,mode==='logout'?{op:'logout'}:{op:'change-password',currentPassword:db.accounts.normal.password,newPassword:next}));assert.equal(ended.statusCode,200);if(mode==='password')db.accounts.normal.password=next;return r;}});

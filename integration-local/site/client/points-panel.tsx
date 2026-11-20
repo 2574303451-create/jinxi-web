@@ -4,6 +4,10 @@ import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
 import { PageControls } from './page-controls';
 type AdminOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: string; canClose: boolean };
+type AdminQueue = { adminOrders: AdminOrder[]; nextPendingAfter: string | null; nextProcessingAfter: string | null };
+type Queue = 'pending' | 'processing';
+type OrderAction = 'processing' | 'fulfilled' | 'failed';
+const queueLimit = '10';
 type History = {
   orders: { id: string; status: string; cost: string }[];
   ledger: { id: string; entryNo: string; kind: string; direction: number; pointDelta: string; balanceAfter: string }[];
@@ -13,8 +17,62 @@ type History = {
 type Board = { entries: { publicId: string; position: number; label: string; score: string }[]; nextCursor: string | null };
 const orderLabels: Record<string,string> = { pending: '待处理', processing: '处理中', fulfilled: '已完成', failed: '未履约 · 已退款', cancelled: '已取消 · 已退款' };
 
+function AdminOrderRows({ orders, busy, onProcess }: {
+  orders: AdminOrder[]; busy: boolean; onProcess: (id: string, action: OrderAction) => void;
+}) {
+  return <ul>{orders.map(order => <li className="integration-record" key={order.id} data-admin-order-id={order.id}>
+    <strong id={'order-summary-' + order.id}>{order.itemName} · {order.quantity} 件 · {order.id}</strong>
+    <p>{order.ownerLabel} · 扣减 {order.cost} 分 · {orderLabels[order.status] ?? order.status}</p>
+    <div className="integration-actions">
+      {order.status === 'pending' && <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={busy} onClick={() => onProcess(order.id, 'processing')}>认领订单</button>}
+      {order.status === 'processing' && !order.canClose && <p>已由其他管理员认领。</p>}
+      {order.canClose && <>
+        <p>已由你认领。核实奖励尚未开通时，可登记无法履约并退款。</p>
+        <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={busy} onClick={() => onProcess(order.id, 'fulfilled')}>确认已人工开通</button>
+        <button className="paper-button" aria-describedby={'order-summary-' + order.id} disabled={busy} onClick={() => onProcess(order.id, 'failed')}>确认未开通，退回积分</button>
+      </>}
+    </div>
+  </li>)}</ul>;
+}
+
+function AdminQueuePage({ queue, first, refreshing, busy, onProcess }: {
+  queue: Queue; first: AdminQueue; refreshing: boolean; busy: boolean; onProcess: (id: string, action: OrderAction) => void;
+}) {
+  const { client, ready } = useSession();
+  const [after, setAfter] = useState<string | null>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const load = useCallback(async () => {
+    if (!ready || !after || refreshing) return null;
+    const page = await client.request<AdminQueue>('points', null, { view: 'admin', queue, after, limit: queueLimit });
+    return { after, page };
+  }, [client, ready, queue, after, refreshing]);
+  const later = useResource(load);
+  const loading = refreshing || Boolean(after && later.loading);
+  const matchingPage = later.data?.after === after ? later.data?.page : null;
+  const page = loading ? null : after ? matchingPage : first;
+  const rows = page ? page.adminOrders.filter(order => order.status === queue) : null;
+  const next = queue === 'pending' ? page?.nextPendingAfter : page?.nextProcessingAfter;
+  const title = queue === 'pending' ? '待认领订单' : '本人处理中订单';
+  const empty = queue === 'pending' ? '暂无待处理订单。' : '暂无本人处理中订单。';
+  return <section aria-labelledby={'points-queue-' + queue}>
+    <h4 id={'points-queue-' + queue} tabIndex={-1} ref={heading}>{title}</h4>
+    {loading && <p role="status">正在读取{title}…</p>}
+    {after && later.error && !loading && <p role="alert">此页暂时无法读取，请刷新或返回第一页。</p>}
+    {rows?.length === 0 && <p role="status">{empty}</p>}
+    {rows && <AdminOrderRows orders={rows} busy={busy} onProcess={onProcess} />}
+    <PageControls label={title + '分页'} olderLabel="查看下一页" atStart={!after}
+      next={next}
+      loading={loading || busy} heading={heading} onChange={setAfter} />
+  </section>;
+}
+
 export function PointsPanel() {
-  const { client, ready } = useSession(), cmd = useCommand();
+  const { state } = useSession();
+  return <MemberPointsPanel key={state.member?.id ?? 'anonymous'} />;
+}
+
+function MemberPointsPanel() {
+  const { client, ready, state } = useSession(), cmd = useCommand();
   const [metric, setMetric] = useState('earned');
   const [boardCursor, setBoardCursor] = useState<string | null>(null);
   const [beforeOrders, setBeforeOrders] = useState<string | null>(null);
@@ -30,11 +88,13 @@ export function PointsPanel() {
     // Serial reads avoid burst limits and use the same client identity generation.
     const self = await client.request('points');
     const orders = self.permissions.admin
-      ? (await client.request<{ adminOrders: AdminOrder[] }>('points', null, { view: 'admin' })).adminOrders
+      ? await client.request<AdminQueue>('points', null, { view: 'admin', queue: 'all', limit: queueLimit })
       : null;
     return { self, orders };
   }, [client, ready]);
-  const resource = useResource(load), data = resource.data?.self;
+  const resource = useResource(load);
+  const data = resource.data?.self.memberId === state.member?.id ? resource.data?.self : null;
+  const orderQueues = data?.permissions.admin ? resource.data?.orders : null;
   const hasAccount = Boolean(data);
   const loadHistory = useCallback(async () => {
     if (!ready || (!beforeOrders && !beforeLedger)) return null;
@@ -65,11 +125,9 @@ export function PointsPanel() {
   const orderSearch = useResource(loadOrder);
   const normalizedOrderInput = orderInput.trim().toLowerCase();
   const showingLookup = Boolean(orderLookup) && normalizedOrderInput === orderLookup;
-  const adminOrders = orderLookup
-    ? showingLookup && !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null
-    : !resource.loading ? resource.data?.orders : null;
+  const foundOrders = showingLookup && !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null;
   const refreshPoints = () => { resource.reload(); orderSearch.reload(); history.reload(); ranking.reload(); };
-  const processOrder = (orderId: string, status: 'processing' | 'fulfilled' | 'failed') => void cmd.run(async () => {
+  const processOrder = (orderId: string, status: OrderAction) => void cmd.run(async () => {
     try { await client.mutate('points', { op: 'order.process', orderId, status }); }
     finally { refreshPoints(); }
   });
@@ -100,9 +158,9 @@ export function PointsPanel() {
       </li>)}</ul>
       <PageControls label="订单分页" olderLabel="查看更早订单" atStart={!beforeOrders} next={orderPage?.nextOrdersBefore}
         loading={resource.loading || (Boolean(beforeOrders) && history.loading) || cmd.busy} heading={orderHeading} onChange={setBeforeOrders} />
-      {resource.data?.orders && <section aria-labelledby="points-queue-title">
+      {orderQueues && <section aria-labelledby="points-queue-title">
         <h3 id="points-queue-title">待处理兑换</h3>
-        <p>待认领和本人处理中各显示最早的 50 笔。先核对订单号并认领，再模拟人工开通。</p>
+        <p>先核对订单号并认领，再模拟人工开通。两组订单分别按提交顺序分页。</p>
         <form className="integration-actions" onSubmit={event => {
           event.preventDefault();
           const id = normalizedOrderInput;
@@ -121,22 +179,11 @@ export function PointsPanel() {
         {orderInputError && <p role="alert">请输入成员提供的完整订单号。</p>}
         {showingLookup && orderSearch.loading && <p role="status">正在核对订单…</p>}
         {showingLookup && orderSearch.error && <p role="alert">订单暂时无法查询。请重试或返回列表。</p>}
-        {adminOrders && <>
-          {adminOrders.length === 0 && <p role="status">{orderLookup ? '未找到该订单。' : '暂无待处理订单。'}</p>}
-          <ul>{adminOrders.map(order => <li className="integration-record" key={order.id} data-admin-order-id={order.id}>
-          <strong id={'order-summary-' + order.id}>{order.itemName} · {order.quantity} 件 · {order.id}</strong>
-          <p>{order.ownerLabel} · 扣减 {order.cost} 分 · {orderLabels[order.status] ?? order.status}</p>
-          <div className="integration-actions">
-            {order.status === 'pending' && <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'processing')}>认领订单</button>}
-            {order.status === 'processing' && !order.canClose && <p>已由其他管理员认领。</p>}
-            {order.canClose && <>
-                <p>已由你认领。核实奖励尚未开通时，可登记无法履约并退款。</p>
-                <button className="paper-button yellow" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'fulfilled')}>确认已人工开通</button>
-                <button className="paper-button" aria-describedby={'order-summary-' + order.id} disabled={cmd.busy} onClick={() => processOrder(order.id, 'failed')}>确认未开通，退回积分</button>
-            </>}
-          </div>
-          </li>)}</ul>
-        </>}
+        {foundOrders && (foundOrders.length === 0 ? <p role="status">未找到该订单。</p> :
+          <AdminOrderRows orders={foundOrders} busy={cmd.busy} onProcess={processOrder} />)}
+        {!orderLookup && (['pending', 'processing'] as const).map(queue =>
+          <AdminQueuePage key={queue} queue={queue} first={orderQueues} refreshing={resource.loading}
+            busy={cmd.busy} onProcess={processOrder} />)}
       </section>}
       <h3 ref={ledgerHeading} tabIndex={-1}>本人积分流水</h3>
       {beforeLedger && history.error && <p role="alert">历史流水暂时无法读取。请刷新或返回第一页。</p>}

@@ -1208,7 +1208,7 @@ async function main() {
         const reviewOlder = reviewGuides.getByRole('button',{name:'查看更早记录',exact:true});
         const checkGuides = async (region,key,expected) => {
           const visible = region.locator(`[data-${key}-id]`);
-          await visible.nth(expected.length-1).waitFor();
+          await region.locator(`[data-${key}-id="${expected[0].id}"]`).waitFor();
           assert.deepEqual(await visible.evaluateAll((rows,attr)=>rows.map(row=>row.getAttribute(attr)),`data-${key}-id`),expected.map(row=>row.id));
         };
         await checkGuides(ownerGuides,'item',ownGuideRows.slice(0,50));
@@ -1232,12 +1232,26 @@ async function main() {
           WHERE item_id=$1 AND operation='item.review'`,[oldSubmission.id]);
         assert.deepEqual(reviewAudit,{actor_id:communityReviewer.memberId,operation:'item.review'});
         await reviewGuides.locator(`[data-review-id="${oldSubmission.id}"]`).waitFor({state:'detached'});
+        const remainingOlder = reviewGuideRows.slice(50,-1);
+        if (remainingOlder.length) await checkGuides(reviewGuides,'review',remainingOlder);
+        else await reviewGuides.getByText('暂无待审核内容',{exact:true}).waitFor();
         const anchor = reviewGuideRows[49];
         const ownerDeleted = await api.mutate('community',other,{op:'item.delete',id:anchor.id,version:anchor.version});
         assert.equal(ownerDeleted.status,200);
         await reviewGuides.getByRole('button',{name:'刷新审核队列',exact:true}).click();
         await reviewGuides.getByText('独立审核队列已更新，请返回第一页。',{exact:true}).waitFor();
         await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        const olderOwned = ownGuideRows.at(-1);
+        await ownerGuides.locator(`[data-item-id="${olderOwned.id}"]`).getByRole('button',{name:'编辑本人内容',exact:true}).click();
+        const ownedEditor = guideManagement.getByRole('form',{name:'编辑本人内容',exact:true});
+        const amended = '合成旧稿从本人历史页更新';
+        await ownedEditor.getByLabel('修改正文',{exact:true}).fill(amended);
+        const [edited] = await Promise.all([command(reviewer,'community','item.edit'),
+          ownedEditor.getByRole('button',{name:'保存本人修改',exact:true}).click()]);
+        assert.equal(edited.status(),200);
+        const {rows:[storedDraft]} = await api.admin(`SELECT owner_id,status,version,payload->>'content' AS content
+          FROM community_lab.items WHERE id=$1`,[olderOwned.id]);
+        assert.deepEqual(storedDraft,{owner_id:communityReviewer.memberId,status:'draft',version:olderOwned.version+1,content:amended});
         await reviewGuides.getByRole('button',{name:'返回第一页',exact:true}).click();
         await checkGuides(reviewGuides,'review',reviewGuideRows.filter(row=>![anchor.id,oldSubmission.id].includes(row.id)).slice(0,50));
 

@@ -43,10 +43,10 @@ test('independent community concurrency and revocation regressions on PostgreSQL
    const admin=await db.admin();try{assert.equal((await admin.query('SELECT count(*)::int AS n FROM community_lab.requests WHERE request_id=$1',[requestId])).rows[0].n,0);}finally{await admin.end();}
   });
   await t.test('private community pages scope cursors and recheck the reviewer after reading actual rows',async()=>{
-   const author=await login('normal'),reviewer=await login('reviewer'),admin=await db.admin();
+   const author=await login('normal'),reviewer=await login('reviewer'),operator=await login('admin'),admin=await db.admin();
    const authorId=db.accounts.normal.memberId,reviewerId=db.accounts.reviewer.memberId;
-   const read=(session,scope,query={},serve=handler)=>serve({httpMethod:'GET',headers:session?{cookie:session.cookie}:{},
-    queryStringParameters:{kind:'guide',scope,limit:'1',...query}});
+   const get=(session,query,serve=handler)=>serve({httpMethod:'GET',headers:session?{cookie:session.cookie}:{},queryStringParameters:query});
+   const read=(session,scope,query={},serve=handler)=>get(session,{kind:'guide',scope,limit:'1',...query},serve);
    try{
     const {rows}=await admin.query(`
      INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status,created_at)
@@ -72,7 +72,21 @@ test('independent community concurrency and revocation regressions on PostgreSQL
     assert.equal((await read(reviewer,'review',{cursor:mine.nextCursor})).statusCode,400);
     assert.equal((await read(author,'mine',{cursor:mine.nextCursor,kind:'message'})).statusCode,400);
     assert.equal((await read(author,'mine',{limit:'101'})).statusCode,400);
-    assert.equal((await read(null,'public',{cursor:mine.nextCursor})).statusCode,400);
+    const publicQuery={kind:'guide',scope:'public'};
+    assert.equal((await get(null,{...publicQuery,cursor:mine.nextCursor})).statusCode,400);
+    assert.equal((await get(null,{...publicQuery,limit:'1'})).statusCode,400);
+    const publicResponse=await get(null,publicQuery);
+    assert.equal(publicResponse.statusCode,200);
+    const publicBody=JSON.parse(publicResponse.body);
+    assert.deepEqual(Object.keys(publicBody),['items']);
+    const published=publicBody.items.find(item=>item.ownership==='unverified-legacy');
+    assert(published);
+    const feed=await get(author,{kind:'guide',scope:'member-feed',id:published.id});
+    assert.equal(feed.statusCode,200);
+    const memberFeed=JSON.parse(feed.body);
+    assert.deepEqual(Object.keys(memberFeed).sort(),['items','memberId']);
+    assert.equal(memberFeed.memberId,authorId);
+    assert.equal(memberFeed.items[0].id,published.id);
     assert.equal((await read(author,'review')).statusCode,403);
     const firstReview=await read(reviewer,'review');
     assert.equal(firstReview.statusCode,200);
@@ -83,6 +97,28 @@ test('independent community concurrency and revocation regressions on PostgreSQL
     const stale=await read(reviewer,'review',{cursor:queue.nextCursor});
     assert.equal(stale.statusCode,409);
     assert.equal(JSON.parse(stale.body).code,'PAGE_CHANGED');
+
+    const operatorId=db.accounts.admin.memberId;
+    const {rows:messages}=await admin.query(`
+     INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status,created_at)
+     SELECT 'message',owner_id,'合成留言作者','{"content":"合成分页留言","category":"闲聊"}','submitted','2090-03-01T00:00:00.123456Z'
+     FROM unnest($1::uuid[]) AS owner_id RETURNING id,owner_id
+    `,[[authorId,authorId,operatorId]]);
+    const ownMessage=messages.find(row=>row.owner_id===operatorId);
+    const otherMessages=messages.filter(row=>row.owner_id===authorId).map(row=>row.id).sort().reverse();
+    for (const [session,scope] of [[author,'mine'],[operator,'review']]) {
+     const first=await read(session,scope,{kind:'message'});
+     assert.equal(first.statusCode,200);
+     const firstPage=JSON.parse(first.body);
+     assert.deepEqual(firstPage.items.map(row=>row.id),[otherMessages[0]]);
+     const next=await read(session,scope,{kind:'message',cursor:firstPage.nextCursor});
+     assert.equal(next.statusCode,200);
+     assert.deepEqual(JSON.parse(next.body).items.map(row=>row.id),[otherMessages[1]]);
+    }
+    const selfReview=await handler(event(operator,{op:'item.review',requestId:crypto.randomUUID(),id:ownMessage.id,version:1,decision:'approve'}));
+    assert.equal(selfReview.statusCode,403);
+    assert.equal(JSON.parse(selfReview.body).code,'REVIEWER_REQUIRED');
+    assert.equal((await admin.query('SELECT status FROM community_lab.items WHERE id=$1',[ownMessage.id])).rows[0].status,'submitted');
 
     let removed=false;
     const demoted=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{

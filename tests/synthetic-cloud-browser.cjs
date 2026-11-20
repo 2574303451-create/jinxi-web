@@ -221,8 +221,8 @@ async function main() {
           await resetVisitQuota();
           await close(a);
           await a.getByRole('button',{name:'恢复未确认操作',exact:true}).click();
-          const receipt = a.locator('[data-request-id="'+previousRequest+'"]').filter({hasText:'服务端确认已提交'});
-          await receipt.getByRole('button',{name:'确认已完成，允许新操作',exact:true}).click();
+          const receipt = a.locator('[data-request-id="'+previousRequest+'"]');
+          await receipt.filter({hasText:'服务端确认已提交'}).getByRole('button',{name:'确认已完成，允许新操作',exact:true}).click();
           await receipt.waitFor({state:'hidden'});
           const verifyReceipts=a.getByRole('button',{name:'核对服务端回执',exact:true});
           await verifyReceipts.and(a.locator('button:enabled')).waitFor();
@@ -278,15 +278,17 @@ async function main() {
             await row.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           }
           record.stage=orderStage+'-claim';
+          const claimOrder = row.getByRole('button',{name:'认领订单',exact:true}).and(row.locator('button:enabled'));
           const [claim] = await Promise.all([command(staff,'points','order.process'),
-            row.getByRole('button',{name:'认领订单',exact:true}).press('Enter')]);
+            claimOrder.press('Enter')]);
           assert.equal(claim.status(),200);
           assert.equal((await claim.json()).status,'processing');
           await row.getByText(/已由你认领/).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
           await ownOrder.getByText(/管理员正在核验和处理此订单/).waitFor();
           assert.equal(await ownOrder.getByRole('button',{name:'取消并按原流水退款',exact:true}).isDisabled(),true);
-          const action = row.getByRole('button',{name:outcome === 'failed' ? '确认未开通，退回积分' : '确认已人工开通',exact:true});
+          const action = row.getByRole('button',{name:outcome === 'failed' ? '确认未开通，退回积分' : '确认已人工开通',exact:true})
+            .and(row.locator('button:enabled'));
           record.stage=orderStage+'-decision';
           const [decision] = await Promise.all([command(staff,'points','order.process'),action.press('Enter')]);
           assert.equal(decision.status(),200);
@@ -1486,7 +1488,8 @@ main().catch(error=>{
     // Log only fixed categories and source locations. Browser error text may
     // contain page contents, URLs or request details.
     const kind = ['AssertionError','TimeoutError','TypeError','Error'].includes(error?.name) ? error.name : 'OtherError';
-    const locations = Array.from(String(error?.stack).matchAll(/synthetic-cloud-browser\.cjs:(\d+:\d+)/g), match=>match[1]).slice(0,4);
+    const frames = /^\s*at [^\r\n]*[\\/]synthetic-cloud-browser\.cjs:(\d{1,5}:\d{1,4})\)?$/gm;
+    const locations = Array.from(String(error?.stack).matchAll(frames), match=>match[1]).slice(0,4);
     console.error('Synthetic browser rehearsal failed: '+JSON.stringify({kind,locations}));
   } else {
     console.error(error.message);

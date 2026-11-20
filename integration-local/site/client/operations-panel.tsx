@@ -199,28 +199,69 @@ function OperationsRecords<Record>({ kind, view, title, label, refresh, busy, ch
       loading={loading || Boolean(busy)} heading={heading} onChange={setCursor} />
   </section>;
 }
+type TeamDraft = {
+  name: string;
+  slogan: string;
+  description: string;
+  requirements: string;
+  maxMembers: number;
+};
+type TeamRecord = TeamDraft & {
+  id: string;
+  version: number;
+  memberCount: number;
+  myRole?: 'leader' | 'member';
+  icon: string;
+  color: string;
+};
+
+function TeamEditor({ team, disabled, save }: { team: TeamRecord | null; disabled: boolean; save: (draft: TeamDraft) => void }) {
+  const [draft, setDraft] = useState<TeamDraft>(() => ({
+    name: team?.name ?? '', slogan: team?.slogan ?? '', description: team?.description ?? '',
+    requirements: team?.requirements ?? '', maxMembers: team?.maxMembers ?? 2,
+  }));
+  return <form aria-label="本人队伍管理" onSubmit={e => { e.preventDefault(); if (!disabled) save(draft); }}>
+    <fieldset disabled={disabled}>
+      <label className="paper-label">队伍名称<input className="paper-input" value={draft.name} onChange={e => setDraft({ ...draft, name: e.target.value })} maxLength={60} required /></label>
+      <label className="paper-label">队伍说明<input className="paper-input" value={draft.slogan} onChange={e => setDraft({ ...draft, slogan: e.target.value })} maxLength={160} /></label>
+      <label className="paper-label">队伍简介<input className="paper-input" value={draft.description}
+        onChange={e => setDraft({ ...draft, description: e.target.value })} maxLength={1000} /></label>
+      <label className="paper-label">入队条件<input className="paper-input" value={draft.requirements}
+        onChange={e => setDraft({ ...draft, requirements: e.target.value })} maxLength={300} /></label>
+      <p>入队条件供成员参考。</p>
+      <label className="paper-label">人数上限<input className="paper-input" type="number" min={team?.memberCount ?? 1} max={50}
+        value={draft.maxMembers || ''} onChange={e => setDraft({ ...draft, maxMembers: Number(e.target.value) })} required /></label>
+      <button className="paper-button yellow">{team ? '保存本人队伍' : '创建合成队伍'}</button>
+    </fieldset>
+  </form>;
+}
+
 export function TeamPanel() {
   const { client, ready } = useSession(), cmd = useCommand();
-  const [name, setName] = useState(''), [slogan, setSlogan] = useState(''), [capacity, setCapacity] = useState(2);
   const load = useCallback(async () => {
-    const published = await client.request('operations', null, { kind: 'team', view: 'public', limit: '50' }, false);
-    const mine = ready ? await client.request('operations', null, { kind: 'team', view: 'private', limit: '50' }) : { items: [] };
-    return { published: published.items, mine: mine.items[0] || null };
+    const published = await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'public', limit: '50' }, false);
+    const mine = ready ? await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private', limit: '50' }) : { items: [] };
+    return { published: published.items, mine: mine.items[0] ?? null };
   }, [client, ready]);
-  const resource = useResource(load), mine = resource.data?.mine;
-  useEffect(() => { setName(mine?.name || ''); setSlogan(mine?.slogan || ''); setCapacity(mine?.maxMembers ?? 2); }, [mine?.id, mine?.version]);
+  const resource = useResource(load), mine = resource.data?.mine ?? null;
+  const save = (draft: TeamDraft) => void cmd.run(() => client.mutate('operations', {
+    op: mine ? 'team.edit' : 'team.create', ...(mine ? { id: mine.id, version: mine.version } : {}),
+    ...draft, icon: mine?.icon ?? '⭐', color: mine?.color ?? '#2360f5',
+  }));
   return <section className="integration-panel" aria-label="统一组队">
     <h2>寻找队伍</h2><p>容量包括队长；每个可信成员同时最多一队。没有伪造战绩、在线人数或战队积分。</p>
     <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新队伍</button>
     {resource.error && <p role="alert">{resource.error}</p>}
     {mine && <article className="integration-record" data-testid="own-team"><h3>本人队伍：{mine.name}</h3><p>{mine.myRole} · {mine.memberCount}/{mine.maxMembers}</p>{mine.myRole === 'member' && <button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.leave', id: mine.id }))}>退出本人队伍</button>}</article>}
-    {ready && !resource.loading && (!mine || mine.myRole === 'leader') && <form aria-label="本人队伍管理" onSubmit={e => { e.preventDefault(); void cmd.run(() => client.mutate('operations', { op: mine ? 'team.edit' : 'team.create', ...(mine ? { id: mine.id, version: mine.version } : {}), name, slogan, maxMembers: capacity, description: mine?.description ?? '', requirements: mine?.requirements ?? '', icon: mine?.icon ?? '⭐', color: mine?.color ?? '#2360f5' })); }}>
-      <label className="paper-label">队伍名称<input className="paper-input" value={name} onChange={e => setName(e.target.value)} maxLength={60} required /></label>
-      <label className="paper-label">队伍说明<input className="paper-input" value={slogan} onChange={e => setSlogan(e.target.value)} maxLength={160} /></label>
-      <label className="paper-label">人数上限<input className="paper-input" type="number" min={1} max={50} value={capacity} onChange={e => setCapacity(Number(e.target.value))} required /></label>
-      <button className="paper-button yellow" disabled={cmd.busy || resource.loading}>{mine ? '保存本人队伍' : '创建合成队伍'}</button>
-    </form>}
-    <ul data-testid="team-list">{resource.data?.published.map((r: any) => <li className="integration-record" key={r.id} data-team-id={r.id}><h3>{r.icon} {r.name}</h3><p>{r.slogan} · {r.memberCount}/{r.maxMembers}</p>{ready && !mine && <button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.join', id: r.id, message: '' }))}>加入此合成队伍</button>}</li>)}</ul>
+    {ready && resource.data && (!mine || mine.myRole === 'leader') && <TeamEditor key={mine ? `${mine.id}:${mine.version}` : 'new'}
+      team={mine} disabled={cmd.busy || resource.loading} save={save} />}
+    <ul data-testid="team-list">{resource.data?.published.map(record => <li className="integration-record" key={record.id} data-team-id={record.id}>
+      <h3>{record.icon} {record.name}</h3><p>{record.slogan} · {record.memberCount}/{record.maxMembers}</p>
+      {record.description && <p className="whitespace-pre-wrap break-words">{record.description}</p>}
+      {record.requirements && <p className="whitespace-pre-wrap break-words"><strong>入队条件</strong> {record.requirements}</p>}
+      {ready && !mine && <button className="paper-button" disabled={cmd.busy || resource.loading}
+        onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.join', id: record.id, message: '' }))}>加入此合成队伍</button>}
+    </li>)}</ul>
     {!ready && <PaperState kind="empty" title="登录合成账号后才能加入或管理队伍" />}
     {cmd.notice && <p role="status" className="paper-notice">{cmd.notice}</p>}
   </section>;

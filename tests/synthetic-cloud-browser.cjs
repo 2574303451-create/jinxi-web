@@ -715,11 +715,17 @@ async function main() {
         }
         await a.getByLabel('队伍名称',{exact:true}).fill('独立 TEST 合成队');
         await a.getByLabel('人数上限',{exact:true}).fill('2');
+        await a.getByLabel('队伍简介',{exact:true}).fill('合成队伍周末协作');
+        await a.getByLabel('入队条件',{exact:true}).fill('欢迎了解合成测试流程的成员');
         result = command(a,'operations','team.create');
         await a.getByRole('button',{name:'创建合成队伍',exact:true}).click();
         const formed = await result;
         assert.equal(formed.status(),200);
-        const {item:{id:teamId}} = await formed.json();
+        const {item:formedTeam} = await formed.json();
+        const teamId = formedTeam.id;
+        assert.equal(formedTeam.description,'合成队伍周末协作');
+        assert.equal(formedTeam.requirements,'欢迎了解合成测试流程的成员');
+        const teamCard = page => page.getByTestId('team-list').locator(`[data-team-id="${teamId}"]`);
         const join = async page => {
           await page.getByRole('button',{name:'刷新队伍',exact:true}).click();
           const joined = command(page,'operations','team.join');
@@ -735,6 +741,45 @@ async function main() {
           SELECT member_id,role FROM operations_lab.team_members WHERE team_id=$1 AND left_at IS NULL ORDER BY role
         `,[teamId]);
         assert.deepEqual(activeMembers,[{member_id:other.memberId,role:'leader'},{member_id:db.accounts.reviewer.memberId,role:'member'}]);
+        record.stage='team-leader-details';
+        assert.equal(await reviewer.getByRole('form',{name:'本人队伍管理',exact:true}).count(),0);
+        await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
+        await a.getByTestId('own-team').getByText(/leader · 2\/2/).waitFor();
+        const descriptionInput = a.getByLabel('队伍简介',{exact:true});
+        const requirementsInput = a.getByLabel('入队条件',{exact:true});
+        assert.equal(await descriptionInput.inputValue(),formedTeam.description);
+        assert.equal(await requirementsInput.inputValue(),formedTeam.requirements);
+        assert.equal(await a.getByLabel('人数上限',{exact:true}).getAttribute('min'),'2');
+        const description = '合成队伍改为工作日晚间协作', requirements = '请先阅读合成点数与签到说明';
+        await descriptionInput.fill(description);
+        await requirementsInput.fill(requirements);
+        await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
+        const [teamUpdated] = await Promise.all([command(a,'operations','team.edit'),a.getByRole('button',{name:'保存本人队伍',exact:true}).click()]);
+        assert.equal(teamUpdated.status(),200);
+        const {item:updatedTeam} = await teamUpdated.json();
+        assert.equal(updatedTeam.description,description);
+        assert.equal(updatedTeam.requirements,requirements);
+        await reviewer.getByRole('button',{name:'刷新队伍',exact:true}).click();
+        await teamCard(reviewer).getByText(description,{exact:true}).waitFor();
+        await teamCard(reviewer).getByText(requirements,{exact:false}).waitFor();
+        assert.equal(await reviewer.getByRole('form',{name:'本人队伍管理',exact:true}).count(),0);
+        const acceptedFields = teamUpdated.request().postDataJSON();
+        const {requestId:usedTeamRequest,...currentTeamEdit} = acceptedFields;
+        assert(usedTeamRequest);
+        const memberEdit = await api.mutate('operations',await session(reviewer),{
+          ...currentTeamEdit,version:updatedTeam.version,description:'普通成员不可覆盖',
+        });
+        assert.equal(memberEdit.status,403);
+        assert.equal(memberEdit.body.code,'LEADER_REQUIRED');
+        const staleEdit = await api.mutate('operations',other,{...currentTeamEdit,description:'旧版本不可覆盖'});
+        assert.equal(staleEdit.status,409);
+        assert.equal(staleEdit.body.code,'VERSION_CONFLICT');
+        const {rows:[savedTeam]} = await api.admin(`SELECT leader_id,member_count,max_members,version,
+          payload->>'description' AS description,payload->>'requirements' AS requirements FROM operations_lab.teams WHERE id=$1`,[teamId]);
+        assert.deepEqual(savedTeam,{leader_id:other.memberId,member_count:2,max_members:2,version:updatedTeam.version,description,requirements});
+        record.scenarios.push('team-description-and-entry-conditions-are-editable-only-by-the-current-leader');
+
+        record.stage='team-member-leave';
         result = command(reviewer,'operations','team.leave');
         await reviewer.getByRole('button',{name:'退出本人队伍',exact:true}).click();
         assert.equal((await result).status(),200);

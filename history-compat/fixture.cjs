@@ -21,4 +21,18 @@ function syntheticLegacyRedemption(){
  Object.assign(data.pointAccounts[0],{balance:'0',total_earned:'2',total_spent:'2'});
  return {data,anchors,order,charge};
 }
-module.exports={syntheticHistory,syntheticLegacyRedemption};
+function syntheticLegacyCheckin(){
+ const {data,anchors}=syntheticHistory(1);
+ const user_id=anchors.users[0].userId;
+ const fact={id:'1',user_id,checkin_date:'2024-02-29',checkin_time:'2024-02-29T04:00:00Z',
+  continuous_days:3,is_continuous:true,reward_points:2};
+ const award={id:'1',user_id,biz_id:'SYN-CHECKIN-RECEIPT',scene:'daily_behavior',event_type:'checkin',
+  rule_code:'daily.checkin.base',direction:1,point_delta:'2',balance_before:'0',balance_after:'2',
+  ext_json:{checkin_date:fact.checkin_date,continuous_days:fact.continuous_days}};
+ data.checkins.push(fact);
+ data.ledger.push(award);
+ Object.assign(data.pointAccounts[0],{balance:'2',total_earned:'2'});
+ anchors.datePolicy='synthetic-clock-v1';
+ return {data,anchors,fact,award};
+}
+module.exports={syntheticHistory,syntheticLegacyRedemption,syntheticLegacyCheckin};

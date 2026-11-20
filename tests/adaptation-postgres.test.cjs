@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {freshOperations}=require('../operations-local/database.cjs'),{serveIntegration}=require('../integration-local/server.cjs'),{createSession}=require('../integration-local/session.cjs'),{httpClient}=require('./integration-local-support.cjs');
-const {syntheticHistory,syntheticLegacyRedemption}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs'),{rehearse}=require('../history-compat/rehearse.cjs');
+const {syntheticHistory,syntheticLegacyRedemption,syntheticLegacyCheckin}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs'),{rehearse}=require('../history-compat/rehearse.cjs');
 function journal(){const rows=new Map();return{rows,async claim(r,{renewConfirmed=false}={}){const key=r.actor+':'+r.module+':'+r.digest;if(rows.has(key)&&!(renewConfirmed&&rows.get(key).state==='confirmed'))return{...rows.get(key),fresh:false};const row={...r,key,state:'pending',createdAt:Date.now(),expiresAt:Date.now()+86400000};rows.set(key,row);return{...row,fresh:true};},async mark(k,id,s){const row=rows.get(k);assert.equal(row.id,id);if(row.state!=='confirmed')row.state=s;},async list(a){return [...rows.values()].filter(r=>r.actor===a);},async forget(k,id){assert.equal(rows.get(k).id,id);rows.delete(k);}};}
 test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQL + pinned HTTPS',async t=>{
  const args=process.argv.slice(2);assert(args.length===4&&args[0]==='--pg-bin'&&args[2]==='--openssl');const db=await freshOperations(args[1]);let server;
@@ -88,6 +88,27 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert.deepEqual(reversal.candidates,report.candidates);
   assert(reversal.findings.some(f=>f.entity==='pointAccount'&&f.code==='ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN'));
   assert.deepEqual(await rehearse(db,reversal),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
+ await t.test('historical checkin award conflicts remain findings and never stage facts or points',async()=>{
+  const {data,anchors,award}=syntheticLegacyCheckin();
+  const current=await counts();
+  const matched=checkHistory(data,anchors);
+  assert.deepEqual(matched.candidates.map(row=>row.kind),['strategies']);
+  assert.deepEqual(await rehearse(db,matched),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+
+  award.ext_json.continuous_days+=1;
+  const conflict=checkHistory(data,anchors);
+  assert.deepEqual(conflict.findings.filter(f=>f.code==='CHECKIN_REWARD_LINK_CONFLICT').map(f=>f.entity).sort(),['checkin','ledger']);
+  assert.deepEqual(conflict.candidates,matched.candidates);
+  assert.deepEqual(await rehearse(db,conflict),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+
+  data.checkins=[];
+  const orphan=checkHistory(data,anchors);
+  assert(orphan.findings.some(f=>f.entity==='ledger'&&f.code==='CHECKIN_REWARD_WITHOUT_FACT'));
+  assert.deepEqual(orphan.candidates,matched.candidates);
+  assert.deepEqual(await rehearse(db,orphan),{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await counts(),current);
   assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('a balanced snapshot with mismatched cumulative totals produces only an audit finding',async()=>{

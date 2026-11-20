@@ -1,4 +1,4 @@
-const {test}=require('node:test'),assert=require('node:assert/strict');const {syntheticHistory,syntheticLegacyRedemption}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs');
+const {test}=require('node:test'),assert=require('node:assert/strict');const {syntheticHistory,syntheticLegacyRedemption,syntheticLegacyCheckin}=require('../history-compat/fixture.cjs'),{checkHistory}=require('../history-compat/check.cjs');
 test('208 synthetic profiles map only through independent account anchors; bigint is lossless and names never own content',()=>{const {data,anchors}=syntheticHistory(),before=JSON.stringify(data),r=checkHistory(data,anchors);assert.equal(r.summary.trusted,208);assert.notEqual(r.mappings[0].memberId,r.mappings[1].memberId);assert.equal(r.mappings[0].legacyAccountId,'9007199254740993');assert.equal(r.candidates.length,1);assert(r.findings.some(f=>f.entity==='messages'&&f.code==='NO_TRUSTED_AUTHOR'));assert.equal(JSON.stringify(data),before);assert(!JSON.stringify(r).includes('同名合成成员'));});
 test('duplicate employee and UUID, missing binding, orphan profile classify without guessing',()=>{const {data,anchors}=syntheticHistory(5);data.profiles.push({...data.profiles[0]});anchors.members[1].memberId=anchors.members[2].memberId;anchors.members.pop();data.profiles.push({employee_no:'ORPHAN'});const r=checkHistory(data,anchors);assert.equal(r.mappings[0].status,'ambiguous');assert.equal(r.mappings[1].status,'ambiguous');assert.equal(r.mappings[4].status,'unmapped');assert(r.findings.some(f=>f.code==='PROFILE_WITHOUT_LOGIN_ACCOUNT'));});
 test('illegal leap date, duplicate checkins and unsupported historical fields are quarantined',()=>{const {data,anchors}=syntheticHistory(1),uid=anchors.users[0].userId;data.checkins.push({id:'1',user_id:uid,checkin_date:'2023-02-29',checkin_time:'2023-02-29T04:00:00Z',continuous_days:0,is_continuous:true,reward_points:-1});for(const id of ['2','3'])data.checkins.push({id,user_id:uid,checkin_date:'2024-02-29',checkin_time:'2024-02-29T04:00:00Z',continuous_days:1,is_continuous:false,reward_points:1});data.strategies[0].difficulty=99;const codes=checkHistory(data,anchors).findings.map(f=>f.code);assert(codes.includes('INVALID_DATE_STREAK_OR_REWARD'));assert(codes.includes('DUPLICATE_CHECKIN_FACT'));assert(codes.includes('INCOMPATIBLE_STRATEGY_FIELDS'));});
@@ -170,4 +170,67 @@ test('a single exported account cannot reuse opening evidence when another alias
  assert.equal(report.summary.trusted,1);
  assert(report.findings.some(f=>f.entity==='pointAccount'&&f.ref===alias&&f.code==='OPENING_ACCOUNT_ALIAS_UNPROVEN'));
  assert(!report.candidates.some(c=>c.kind==='pointAccount'));
+});
+
+test('the legacy checkin SQL award links only by exact date, original user, amount and streak',()=>{
+ const {data,anchors,award}=syntheticLegacyCheckin();
+ const before=JSON.stringify({data,anchors});
+ const matched=checkHistory(data,anchors);
+ assert.deepEqual(matched.findings.filter(f=>f.entity!=='messages').map(f=>f.code),['HISTORICAL_RULE_VERSION_UNPROVEN']);
+ assert.deepEqual(matched.candidates.map(row=>row.kind),['strategies']);
+ assert.equal(JSON.stringify({data,anchors}),before);
+ const snapshots=[
+  {...award,scene:'unrelated'},
+  {...award,direction:2,balance_before:'2',balance_after:'0'},
+  {...award,point_delta:'3',balance_after:'3'},
+  {...award,ext_json:{...award.ext_json,continuous_days:4}},
+  {...award,ext_json:{checkin_date:award.ext_json.checkin_date}},
+ ];
+ for(const changed of snapshots){
+  data.ledger[0]=changed;
+  const report=checkHistory(data,anchors);
+  assert.deepEqual(report.findings.filter(f=>f.code==='CHECKIN_REWARD_LINK_CONFLICT').map(f=>f.entity).sort(),['checkin','ledger']);
+  assert.deepEqual(report.candidates,matched.candidates);
+ }
+ data.ledger[0]=award;
+ anchors.users.push({userId:'synthetic-checkin-alias',accountId:anchors.members[0].accountId});
+ award.user_id='synthetic-checkin-alias';
+ assert(checkHistory(data,anchors).findings.some(f=>f.entity==='ledger'&&f.code==='CHECKIN_REWARD_LINK_CONFLICT'));
+});
+
+test('checkin reconciliation reports missing links, ambiguous days, and invalid award metadata',()=>{
+ const {data,anchors,fact,award}=syntheticLegacyCheckin();
+ const matches=(entity,code)=>checkHistory(data,anchors).findings.filter(f=>f.entity===entity&&f.code===code).map(f=>f.ref);
+ data.ledger=[];
+ assert.deepEqual(matches('checkin','CHECKIN_REWARD_WITHOUT_LEDGER'),[fact.id]);
+ fact.reward_points=0;
+ assert.deepEqual(matches('checkin','CHECKIN_REWARD_WITHOUT_LEDGER'),[]);
+ fact.reward_points=2;
+ data.ledger=[award];
+ data.checkins=[];
+ assert.deepEqual(matches('ledger','CHECKIN_REWARD_WITHOUT_FACT'),[award.id]);
+ data.checkins=[fact];
+ award.ext_json.checkin_date='2024-02-30';
+ assert.deepEqual(matches('ledger','CHECKIN_REWARD_DATE_UNPROVEN'),[award.id]);
+ award.ext_json.checkin_date=fact.checkin_date;
+ anchors.users.push({userId:'synthetic-checkin-alias',accountId:anchors.members[0].accountId});
+ data.checkins.push({...fact,id:'2',user_id:'synthetic-checkin-alias'});
+ assert.deepEqual(matches('checkin','DUPLICATE_CHECKIN_FACT'),['1','2']);
+ assert.deepEqual(matches('ledger','CHECKIN_REWARD_LINK_AMBIGUOUS'),[award.id]);
+ data.checkins.pop();
+ data.ledger.push({...award,id:'2',biz_id:'SYN-CHECKIN-OTHER',user_id:'synthetic-checkin-alias'});
+ assert.deepEqual(matches('ledger','DUPLICATE_CHECKIN_REWARD'),['1','2']);
+ assert.deepEqual(matches('checkin','CHECKIN_REWARD_LINK_AMBIGUOUS'),[fact.id]);
+});
+
+test('a reused business ID or a missing legacy user cannot prove a checkin reward',()=>{
+ const {data,anchors,fact,award}=syntheticLegacyCheckin();
+ data.ledger.push({...award,id:'2',event_type:'unrelated'});
+ const conflicts=()=>checkHistory(data,anchors).findings.filter(f=>f.code==='CHECKIN_REWARD_LINK_CONFLICT').map(f=>f.entity).sort();
+ assert.deepEqual(conflicts(),['checkin','ledger']);
+ data.ledger.pop();
+ delete anchors.users[0].userId;
+ delete fact.user_id;
+ delete award.user_id;
+ assert.deepEqual(conflicts(),['checkin','ledger']);
 });

@@ -1182,6 +1182,78 @@ async function main() {
         assert.equal(await discussion(staff).getByRole('textbox').count(),0);
         record.scenarios.push('packed-guide-reactions-and-live-comments-keep-member-ids-private');
 
+        record.stage='community-management-pagination';
+        await resetVisitQuota();
+        const communityReviewer = await session(reviewer);
+        const inserted = await api.admin(`
+          INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status,created_at)
+          SELECT 'guide',collection.owner_id,'合成分页作者',
+            jsonb_build_object('title','合成分页攻略 ' || sample,'content','合成正文','category','PVE','difficulty',1),
+            collection.status, TIMESTAMPTZ '2020-01-01 00:00:00Z'
+          FROM (VALUES ($1::uuid,'submitted'),($2::uuid,'submitted')) AS collection(owner_id,status)
+          CROSS JOIN generate_series(1,51) AS sample
+        `,[other.memberId,communityReviewer.memberId]);
+        assert.equal(inserted.rowCount,102);
+        const ownGuideRows = (await api.admin(`SELECT id,version FROM community_lab.items
+          WHERE kind='guide' AND owner_id=$1 ORDER BY created_at DESC,id DESC`,[communityReviewer.memberId])).rows;
+        const reviewGuideRows = (await api.admin(`SELECT id,version FROM community_lab.items
+          WHERE kind='guide' AND status='submitted' AND owner_id<>$1 ORDER BY created_at DESC,id DESC`,[communityReviewer.memberId])).rows;
+        assert(ownGuideRows.length>50 && reviewGuideRows.length>50);
+        await navigate(reviewer,'/guides/');
+        await ready(reviewer);
+        const guideManagement = reviewer.getByTestId('manage-guide');
+        const ownerGuides = guideManagement.getByRole('region',{name:'本人内容',exact:true});
+        const reviewGuides = guideManagement.getByRole('region',{name:'独立审核队列',exact:true});
+        const ownOlder = ownerGuides.getByRole('button',{name:'查看更早记录',exact:true});
+        const reviewOlder = reviewGuides.getByRole('button',{name:'查看更早记录',exact:true});
+        const checkGuides = async (region,key,expected) => {
+          const visible = region.locator(`[data-${key}-id]`);
+          await visible.nth(expected.length-1).waitFor();
+          assert.deepEqual(await visible.evaluateAll((rows,attr)=>rows.map(row=>row.getAttribute(attr)),`data-${key}-id`),expected.map(row=>row.id));
+        };
+        await checkGuides(ownerGuides,'item',ownGuideRows.slice(0,50));
+        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(0,50));
+        await ownOlder.focus();
+        await reviewer.keyboard.press('Enter');
+        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        assert(await ownerGuides.getByRole('heading',{name:'本人内容',exact:true}).evaluate(node=>document.activeElement===node));
+        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(0,50));
+        await reviewOlder.click();
+        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(50));
+        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+
+        const oldSubmission = reviewGuideRows.at(-1);
+        const [rejected] = await Promise.all([command(reviewer,'community','item.review'),
+          reviewGuides.locator(`[data-review-id="${oldSubmission.id}"]`).getByRole('button',{name:'审核拒绝',exact:true}).click()]);
+        assert.equal(rejected.status(),200);
+        const {rows:[rejectedStored]} = await api.admin('SELECT owner_id,status,version FROM community_lab.items WHERE id=$1',[oldSubmission.id]);
+        assert.deepEqual(rejectedStored,{owner_id:other.memberId,status:'rejected',version:oldSubmission.version+1});
+        const {rows:[reviewAudit]} = await api.admin(`SELECT actor_id,operation FROM community_lab.audit
+          WHERE item_id=$1 AND operation='item.review'`,[oldSubmission.id]);
+        assert.deepEqual(reviewAudit,{actor_id:communityReviewer.memberId,operation:'item.review'});
+        await reviewGuides.locator(`[data-review-id="${oldSubmission.id}"]`).waitFor({state:'detached'});
+        const anchor = reviewGuideRows[49];
+        const ownerDeleted = await api.mutate('community',other,{op:'item.delete',id:anchor.id,version:anchor.version});
+        assert.equal(ownerDeleted.status,200);
+        await reviewGuides.getByRole('button',{name:'刷新审核队列',exact:true}).click();
+        await reviewGuides.getByText('独立审核队列已更新，请返回第一页。',{exact:true}).waitFor();
+        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        await reviewGuides.getByRole('button',{name:'返回第一页',exact:true}).click();
+        await checkGuides(reviewGuides,'review',reviewGuideRows.filter(row=>![anchor.id,oldSubmission.id].includes(row.id)).slice(0,50));
+
+        await reviewer.getByRole('button',{name:'退出统一会话',exact:true}).click();
+        await reviewer.getByTestId('unified-session').filter({hasText:'anonymous'}).waitFor();
+        await resetVisitQuota();
+        await login(reviewer,'normal');
+        assert.equal((await session(reviewer)).memberId,member.memberId);
+        const newOwn = (await api.admin(`SELECT id FROM community_lab.items
+          WHERE kind='guide' AND owner_id=$1 ORDER BY created_at DESC,id DESC`,[member.memberId])).rows;
+        if (newOwn.length) await checkGuides(ownerGuides,'item',newOwn);
+        else await ownerGuides.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        assert.equal(await reviewGuides.count(),0);
+        assert.equal(await ownerGuides.getByRole('navigation',{name:'本人内容分页'}).count(),0);
+        record.scenarios.push('community-management-paginates-private-guides-and-review-queues-independently');
+
         record.stage='attendance-history';
         await resetVisitQuota();
         const seededAttendance = await api.admin(`WITH records AS (

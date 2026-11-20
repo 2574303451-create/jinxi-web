@@ -3,13 +3,28 @@ const crypto=require('node:crypto');
 const {localSettings,tokenFrom}=require('../member-local/identity.cjs');
 const {verify}=require('./proof.cjs');
 const {CommunityError,fail,uuid,canonical}=require('./policy.cjs');
-const {role,project,mutate}=require('./store.cjs');
+const {role,project,mutate,managementPage}=require('./store.cjs');
 const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,key)=>Object.entries(e.headers||{}).find(([k])=>k.toLowerCase()===key)?.[1]||'';
 const fields={'message.create':['content','category','color','imageUrl'],'guide.create':['title','content','category','difficulty','tags','imageUrl','mediaFiles'],'item.edit':['id','version','content','category','color','imageUrl','title','difficulty','tags','mediaFiles'],'item.submit':['id','version'],'item.archive':['id','version'],'item.review':['id','version','decision'],'item.pin':['id','version','pinned'],'item.delete':['id','version']};
 fields['reply.create']=['id','content'];fields['reply.delete']=['id','replyId'];fields['reaction.set']=['id','type','active'];
 function output(status,body){return {statusCode:status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'},body:JSON.stringify(body)};}
+function managementQuery(query) {
+ const limit = query.limit ?? '100';
+ if (typeof limit !== 'string' || !/^(?:[1-9][0-9]?|100)$/.test(limit)) fail(400, 'INVALID_QUERY');
+ const prefix = `${query.scope}.${query.kind}.`;
+ let anchorId = null;
+ if (query.cursor !== undefined) {
+  if (typeof query.cursor !== 'string' || !query.cursor.startsWith(prefix)) fail(400, 'INVALID_CURSOR');
+  anchorId = query.cursor.slice(prefix.length);
+  if (!uuid(anchorId)) fail(400, 'INVALID_CURSOR');
+ }
+ return { kind: query.kind, scope: query.scope, anchorId, limit: Number(limit) };
+}
+async function requireReviewer(c) {
+ if (!['reviewer', 'admin'].includes(await role(c))) fail(403, 'REVIEWER_REQUIRED');
+}
 function createCommunityHandler({settings,identity,connect,env=process.env}){
  return async event=>{
   let c,tx=false;
@@ -20,6 +35,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    if(!['GET','POST'].includes(method))fail(405,'METHOD_NOT_ALLOWED');
    if(header(event,'sec-fetch-site')==='cross-site'||header(event,'origin')&&header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REJECTED');
    let body={};
+   let management;
    if(method==='POST'){
     if(header(event,'origin')!==settings.origin)fail(403,'ORIGIN_REQUIRED');
     if(!/^application\/json(?:;|$)/i.test(header(event,'content-type')))fail(415,'JSON_REQUIRED');
@@ -33,10 +49,13 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     const validScope=['public','mine','review','member-feed'].includes(query.scope||'public');
     const validKind=['message','guide'].includes(query.kind);
     const validMemberFeed=!memberFeed||(query.kind==='guide'?uuid(query.id):query.id===undefined);
-    if(!validScope||!validKind||!validMemberFeed||Object.keys(query).some(k=>!['kind','scope','id'].includes(k)))fail(400,'INVALID_QUERY');
+    const privateList = query.scope === 'mine' || query.scope === 'review';
+    const allowed = privateList ? ['kind','scope','limit','cursor'] : ['kind','scope','id'];
+    if(!validScope||!validKind||!validMemberFeed||Object.keys(query).some(k=>!allowed.includes(k)))fail(400,'INVALID_QUERY');
+    if (privateList) management = managementQuery(query);
    }
    let member=null;
-   const authenticated=recovering||method==='POST'||memberFeed||query.scope==='mine'||query.scope==='review';
+   const authenticated=recovering||method==='POST'||memberFeed||management;
    if(authenticated){
     const r=await identity({httpMethod:'GET',headers:event.headers,queryStringParameters:{op:'me'},localClientAddress:event.localClientAddress});
     if(r.statusCode!==200)return r;
@@ -60,13 +79,17 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    }
    let response;
    if(recovering)response=await receipt(c,'community',member.member.id,query.receipt);
+   else if (management) {
+    if (management.scope === 'review') await requireReviewer(c);
+    const memberId = member.member.id;
+    const { rows, nextCursor } = await managementPage(c, { ...management, memberId });
+    const items = await Promise.all(rows.map(row => project(c, row)));
+    response = { memberId, items, nextCursor };
+   }
    else if(method==='GET'){
-    const scope=query.scope||'public';
-    if(scope==='review'&&!['reviewer','admin'].includes(await role(c)))fail(403,'REVIEWER_REQUIRED');
     const guideForMember=memberFeed&&query.kind==='guide';
-    const filter=scope==='mine'?'owner_id=$2':scope==='review'?"status='submitted'":
-      guideForMember?"status='published' AND id=$2":"status='published'";
-    const args=scope==='mine'?[query.kind,member.member.id]:guideForMember?[query.kind,query.id]:[query.kind];
+    const filter=guideForMember?"status='published' AND id=$2":"status='published'";
+    const args=guideForMember?[query.kind,query.id]:[query.kind];
     const rows=(await c.query('SELECT * FROM community_lab.items WHERE kind=$1 AND '+filter+' ORDER BY is_pinned DESC,created_at DESC LIMIT 100',args)).rows;
     const items=await Promise.all(rows.map(row=>project(c,row,{includeMyReactions:memberFeed})));
     response=memberFeed?{memberId:member.member.id,items}:{items};
@@ -87,6 +110,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    if(member){
     const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(tokenFrom(event))])).rows[0];
     if(!final?.live)fail(401,'SESSION_INVALID');
+    if (management?.scope === 'review') await requireReviewer(c);
    }
    await c.query('COMMIT');tx=false;return output(200,response);
   }catch(error){

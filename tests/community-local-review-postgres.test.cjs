@@ -42,5 +42,70 @@ test('independent community concurrency and revocation regressions on PostgreSQL
    const r=await raced(event(s,{op:'message.create',requestId,content:'改密撤销后不能写入'}));assert.equal(r.statusCode,401);
    const admin=await db.admin();try{assert.equal((await admin.query('SELECT count(*)::int AS n FROM community_lab.requests WHERE request_id=$1',[requestId])).rows[0].n,0);}finally{await admin.end();}
   });
+  await t.test('private community pages scope cursors and recheck the reviewer after reading actual rows',async()=>{
+   const author=await login('normal'),reviewer=await login('reviewer'),admin=await db.admin();
+   const authorId=db.accounts.normal.memberId,reviewerId=db.accounts.reviewer.memberId;
+   const read=(session,scope,query={},serve=handler)=>serve({httpMethod:'GET',headers:session?{cookie:session.cookie}:{},
+    queryStringParameters:{kind:'guide',scope,limit:'1',...query}});
+   try{
+    const {rows}=await admin.query(`
+     INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status,created_at)
+     SELECT 'guide',owner_id,'合成分页作者','{"title":"合成专项攻略","content":"合成专项正文","category":"PVE","difficulty":1}',
+       'submitted','2024-02-29T00:00:00.123456Z'
+     FROM unnest($1::uuid[]) AS owner_id
+     RETURNING id,owner_id,version
+    `,[[authorId,authorId,reviewerId]]);
+    const ordered=rows.filter(row=>row.owner_id===authorId).sort((a,b)=>a.id<b.id?1:-1);
+    const ownerFirst=await read(author,'mine');
+    assert.equal(ownerFirst.statusCode,200);
+    assert.equal(ownerFirst.headers['Cache-Control'],'no-store');
+    const mine=JSON.parse(ownerFirst.body);
+    assert.equal(mine.memberId,authorId);
+    assert.deepEqual(mine.items.map(x=>x.id),[ordered[0].id]);
+    const ownerNext=await read(author,'mine',{cursor:mine.nextCursor});
+    assert.deepEqual(JSON.parse(ownerNext.body).items.map(x=>x.id),[ordered[1].id]);
+    assert.equal(JSON.parse(ownerNext.body).nextCursor,null);
+    assert.equal((await read(null,'mine',{cursor:mine.nextCursor})).statusCode,401);
+    const wrongOwner=await read(reviewer,'mine',{cursor:mine.nextCursor});
+    assert.equal(wrongOwner.statusCode,409);
+    assert.equal(JSON.parse(wrongOwner.body).code,'PAGE_CHANGED');
+    assert.equal((await read(reviewer,'review',{cursor:mine.nextCursor})).statusCode,400);
+    assert.equal((await read(author,'mine',{cursor:mine.nextCursor,kind:'message'})).statusCode,400);
+    assert.equal((await read(author,'mine',{limit:'101'})).statusCode,400);
+    assert.equal((await read(null,'public',{cursor:mine.nextCursor})).statusCode,400);
+    assert.equal((await read(author,'review')).statusCode,403);
+    const firstReview=await read(reviewer,'review');
+    assert.equal(firstReview.statusCode,200);
+    const queue=JSON.parse(firstReview.body);
+    assert.equal(queue.memberId,reviewerId);
+    assert.deepEqual(queue.items.map(x=>x.id),[ordered[0].id]);
+    assert.equal((await handler(event(author,{op:'item.delete',requestId:crypto.randomUUID(),id:ordered[0].id,version:ordered[0].version}))).statusCode,200);
+    const stale=await read(reviewer,'review',{cursor:queue.nextCursor});
+    assert.equal(stale.statusCode,409);
+    assert.equal(JSON.parse(stale.body).code,'PAGE_CHANGED');
+
+    let removed=false;
+    const demoted=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{
+     const c=await db.connectBusiness(),query=c.query.bind(c);
+     c.query=async(sql,...values)=>{
+      const result=await query(sql,...values);
+      if (!removed && sql.includes('AS cursor_valid')) {
+       assert.equal(result.rows[0].id,ordered[1].id);
+       const deletion=await admin.query('DELETE FROM community_lab.member_roles WHERE member_id=$1',[reviewerId]);
+       assert.equal(deletion.rowCount,1);
+       removed=true;
+      }
+      return result;
+     };
+     return c;
+    }});
+    const refused=await read(reviewer,'review',{},demoted);
+    assert.equal(removed,true);
+    assert.equal(refused.statusCode,403);
+    assert.equal(JSON.parse(refused.body).code,'REVIEWER_REQUIRED');
+    assert(!refused.body.includes(ordered[1].id));
+    assert(!refused.body.includes('合成专项正文'));
+   }finally{await admin.end();}
+  });
  }finally{await db.stop();}
 });

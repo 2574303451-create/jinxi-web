@@ -1,25 +1,46 @@
 "use client";
-import { useCallback, useId, useState } from 'react';
+import { useCallback, useId, useRef, useState, type ReactNode } from 'react';
 import type { GuideDiscussionProps } from '../../../components/site-runtime';
 import { PaperState } from '../../../components/ui/paper';
+import { PageControls } from './page-controls';
 import { useCommand, useResource, useSession } from './session-context';
 import type { Item } from './model';
 
-export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'; staff: boolean }) {
-  const { client, ready } = useSession();
+function CommunityPage({ kind, scope, busy, children }: {
+  kind: 'message' | 'guide'; scope: 'mine' | 'review'; busy: boolean; children: (items: Item[]) => ReactNode;
+}) {
+  const { client } = useSession();
+  const [cursor, setCursor] = useState<string | null>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const mine = scope === 'mine';
+  const title = mine ? '本人内容' : '独立审核队列';
   const load = useCallback(async () => {
-    if (!ready) return { mine: [] as Item[], review: [] as Item[] };
-    const mine = await client.request<{ items: Item[] }>('community', null, { kind, scope: 'mine' });
-    const review = staff ? await client.request<{ items: Item[] }>('community', null, { kind, scope: 'review' }) : { items: [] };
-    return { mine: mine.items, review: review.items.filter(r => !mine.items.some(m => m.id === r.id)) };
-  }, [client, ready, kind, staff]);
-  const resource = useResource(load), cmd = useCommand();
+    const page = await client.request<{ items: Item[]; nextCursor: string | null }>('community', null, {
+      kind, scope, limit: '50', ...(cursor ? { cursor } : {}),
+    });
+    return { cursor, page };
+  }, [client, cursor, kind, scope]);
+  const resource = useResource(load);
+  const page = resource.data?.cursor === cursor ? resource.data?.page : null;
+  const loading = resource.loading || (!page && !resource.error);
+  const changed = resource.error === 'PAGE_CHANGED';
+  return <section aria-label={title}>
+    <h3 ref={heading} tabIndex={-1}>{title}</h3>
+    <button className="paper-button" onClick={resource.reload} disabled={loading || changed}>{mine ? '刷新本人内容' : '刷新审核队列'}</button>
+    {loading && <PaperState kind="loading" title={`读取${title}…`} />}
+    {resource.error && <PaperState kind="error" title={changed ? `${title}已更新，请返回第一页。` : `暂时无法读取${title}，请刷新。`} />}
+    {page && !loading && (page.items.length ? children(page.items) : <PaperState kind="empty" title={mine ? '暂无本人内容，历史同名记录不会自动认领。' : '暂无待审核内容'} />)}
+    <PageControls label={`${title}分页`} olderLabel="查看更早记录" atStart={!cursor} next={page?.nextCursor}
+      loading={loading || busy} heading={heading} onChange={setCursor} />
+  </section>;
+}
+
+export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'; staff: boolean }) {
+  const { client, ready } = useSession(), cmd = useCommand();
   const [editing, setEditing] = useState<Item | null>(null), [content, setContent] = useState(''), [title, setTitle] = useState('');
   if (!ready) return <p className="paper-notice">登录并完成改密后才能管理本人内容。</p>;
   return <section className="integration-panel" data-testid={'manage-' + kind} aria-label={kind === 'message' ? '本人留言与审核' : '本人攻略与审核'}>
     <h3>{kind === 'message' ? '本人留言与审核' : '本人攻略与审核'}</h3>
-    <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新本人内容</button>
-    {resource.error && <p role="alert">{resource.error}</p>}
     {cmd.notice && <p role="status" className="paper-notice">{cmd.notice}</p>}
     {editing && <form aria-label="编辑本人内容" onSubmit={e => { e.preventDefault(); void cmd.run(async () => {
       await client.mutate('community', { op: 'item.edit', id: editing.id, version: editing.version, content, category: editing.category,
@@ -30,8 +51,8 @@ export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'
       <label className="paper-label">修改正文<textarea className="paper-input" value={content} onChange={e => setContent(e.target.value)} maxLength={kind === 'message' ? 1000 : 10000} required /></label>
       <div className="integration-actions"><button className="paper-button yellow" disabled={cmd.busy}>保存本人修改</button><button className="paper-button" type="button" onClick={() => setEditing(null)}>取消编辑</button></div>
     </form>}
-    {!resource.loading && !resource.data?.mine.length && <p>暂无本人内容，历史同名记录不会自动认领。</p>}
-    <ul>{resource.data?.mine.map(item => <li className="integration-record" key={item.id} data-item-id={item.id}>
+    <CommunityPage kind={kind} scope="mine" busy={cmd.busy}>{items =>
+    <ul>{items.map(item => <li className="integration-record" key={item.id} data-item-id={item.id}>
       <strong>{item.title || item.content}</strong><p>状态：{item.status} · 版本 {item.version}</p>
       <div className="integration-actions">
         {!['deleted','archived'].includes(item.status) && <>
@@ -40,11 +61,12 @@ export function CommunityManagement({ kind, staff }: { kind: 'message' | 'guide'
         </>}
         {kind === 'guide' && ['draft','rejected'].includes(item.status) && <button className="paper-button yellow" disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('community', { op: 'item.submit', id: item.id, version: item.version }))}>提交攻略审核</button>}
       </div>
-    </li>)}</ul>
-    {staff && <><h3>独立审核队列</h3><ul>{resource.data?.review.map(item => <li className="integration-record" key={item.id} data-review-id={item.id}>
+    </li>)}</ul>}</CommunityPage>
+    {staff && <CommunityPage kind={kind} scope="review" busy={cmd.busy}>{items =>
+    <ul>{items.map(item => <li className="integration-record" key={item.id} data-review-id={item.id}>
       <strong>{item.title || item.content}</strong><p>{item.content}</p>
       <div className="integration-actions">{(['approve','reject'] as const).map(decision => <button className="paper-button" key={decision} disabled={cmd.busy} onClick={() => void cmd.run(() => client.mutate('community', { op: 'item.review', id: item.id, version: item.version, decision }))}>{decision === 'approve' ? '审核通过' : '审核拒绝'}</button>)}</div>
-    </li>)}</ul></>}
+    </li>)}</ul>}</CommunityPage>}
   </section>;
 }
 

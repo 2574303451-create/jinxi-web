@@ -1,5 +1,29 @@
 const {fail,uuid,payload,text,media}=require('./policy.cjs');
 async function role(c){return (await c.query('SELECT role FROM community_lab.member_roles WHERE member_id=community_lab.actor()')).rows[0]?.role||'member';}
+async function managementPage(c, { kind, scope, memberId, anchorId, limit }) {
+ const eligible = scope === 'mine' ? 'owner_id = $2' : "status = 'submitted' AND owner_id <> $2";
+ const { rows } = await c.query(`
+  WITH eligible AS NOT MATERIALIZED (
+   SELECT * FROM community_lab.items WHERE kind = $1 AND ${eligible}
+  ), anchor AS (
+   SELECT id, created_at FROM eligible WHERE id = $3::uuid
+  )
+  SELECT page.*, ($3::uuid IS NULL OR anchor.id IS NOT NULL) AS cursor_valid
+  FROM (VALUES (1)) AS request(present)
+  LEFT JOIN anchor ON true
+  LEFT JOIN LATERAL (
+   SELECT * FROM eligible
+   WHERE $3::uuid IS NULL OR (eligible.created_at, eligible.id) < (anchor.created_at, anchor.id)
+   ORDER BY created_at DESC, id DESC LIMIT $4
+  ) AS page ON true
+  ORDER BY page.created_at DESC, page.id DESC
+ `, [kind, memberId, anchorId, limit + 1]);
+ if (!rows[0].cursor_valid) fail(409, 'PAGE_CHANGED');
+ return {
+  rows: rows[0].id ? rows.slice(0, limit) : [],
+  nextCursor: rows.length > limit ? `${scope}.${kind}.${rows[limit - 1].id}` : null,
+ };
+}
 async function project(c,r,{includeMyReactions=false}={}){
  const base={id:r.id,content:r.payload.content,category:r.payload.category,status:r.status,version:r.version,isPinned:r.is_pinned,ownership:r.legacy?'unverified-legacy':'verified'};
  const replies=r.status==='published'?(await c.query('SELECT id,author_label,content,created_at FROM community_lab.replies WHERE item_id=$1 AND NOT deleted ORDER BY created_at LIMIT 100',[r.id])).rows:[];
@@ -71,4 +95,4 @@ async function mutate(c,body,member){
  await c.query('INSERT INTO community_lab.audit(actor_id,operation,item_id) VALUES($1,$2,$3)',[actor,body.op,item.id]);
  return {item:await project(c,item)};
 }
-module.exports={role,project,mutate};
+module.exports={role,project,mutate,managementPage};

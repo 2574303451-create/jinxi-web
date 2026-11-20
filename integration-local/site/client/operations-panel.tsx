@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Modal } from '../../../components/ui/modal';
 import { PaperState } from '../../../components/ui/paper';
 import { loadAnnouncementSanitizer, type AnnouncementSanitizer } from '../../../lib/announcement-html';
@@ -41,6 +41,7 @@ export function AnnouncementDialog({ open, close, permissions }: { open: boolean
 }
 function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
   const { client, ready, state } = useSession(), cmd = useCommand();
+  const contentId = useId();
   const [title, setTitle] = useState(''), [html, setHtml] = useState('');
   const [editing, setEditing] = useState<AnnouncementRecord | null>(null);
   const resetDraft = () => { setTitle(''); setHtml(''); setEditing(null); };
@@ -60,7 +61,10 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
         resetDraft();
       }); }}>
         <label className="paper-label">公告标题<input className="paper-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={120} required disabled={cmd.busy} /></label>
-        <label className="paper-label">公告富文本源<textarea className="paper-input" rows={6} value={html} onChange={e => setHtml(e.target.value)} maxLength={32768} required disabled={cmd.busy} /></label>
+        <div className="paper-label">
+          <label htmlFor={contentId}>公告富文本源</label>
+          <textarea id={contentId} className="paper-input" rows={6} value={html} onChange={e => setHtml(e.target.value)} maxLength={32768} required disabled={cmd.busy} />
+        </div>
         <p>支持安全段落、强调、列表与固定合成图片。服务端过滤后保存，禁止上传。</p>
         <button className="paper-button yellow" disabled={cmd.busy}>保存公告草稿</button>
         {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={resetDraft}>取消公告修订</button>}

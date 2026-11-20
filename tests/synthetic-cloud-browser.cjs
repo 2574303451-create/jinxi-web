@@ -435,6 +435,7 @@ async function main() {
           await manageAnnPager(page).getByRole('button',{name:'返回第一页',exact:true}).click();
           await page.getByTestId('managed-announcements').locator('li').first().waitFor();
         };
+        record.stage='announcement-history-edit';
         await openAnnArchive(staff);
         await archiveRow(staff).getByRole('button',{name:'修订此公告',exact:true}).click();
         assert.equal(await staff.getByLabel('公告标题',{exact:true}).inputValue(),'早期合成公告草稿');
@@ -450,6 +451,7 @@ async function main() {
         const [archiveSubmitted] = await Promise.all([command(staff,'operations','announcement.submit'),archiveRow(staff).getByRole('button',{name:'提交公告审核',exact:true}).click()]);
         assert.equal(archiveSubmitted.status(),200);
         await recoverAnnFirstPage(staff);
+        record.stage='announcement-history-review';
         await openAnnArchive(reviewer);
         const [archivePublished] = await Promise.all([command(reviewer,'operations','announcement.publish'),archiveRow(reviewer).getByRole('button',{name:'独立审核并发布',exact:true}).click()]);
         assert.equal(archivePublished.status(),200);
@@ -458,6 +460,7 @@ async function main() {
         await publicAnnPager.getByRole('button',{name:'返回第一页',exact:true}).click();
         const visitorArchive = a.getByTestId('public-announcements').locator(`[data-item-id="${archiveId}"]`);
         await visitorArchive.getByText('早期公告修订正文',{exact:true}).waitFor();
+        record.stage='announcement-history-withdraw';
         await manageAnn(staff).getByRole('button',{name:'刷新管理公告',exact:true}).click();
         const [archiveWithdrawn] = await Promise.all([command(staff,'operations','announcement.withdraw'),archiveRow(staff).getByRole('button',{name:'撤回公告',exact:true}).click()]);
         assert.equal(archiveWithdrawn.status(),200);

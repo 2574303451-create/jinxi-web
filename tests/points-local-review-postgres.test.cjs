@@ -217,6 +217,10 @@ test('points transaction failure and revocation review on actual synthetic Postg
    assert.equal(first.headers['Cache-Control'],'no-store');
    assert.deepEqual(first.body.adminOrders.map(row=>row.id),[ids[0]]);
    assert.equal(first.body.nextPendingAfter,ids[0]);
+   const existingAdmin=await p.call(staff,null,{view:'admin'});
+   assert.equal(existingAdmin.status,200);
+   assert.equal(existingAdmin.body.adminOrders.length,6);
+   assert.equal(Object.hasOwn(existingAdmin.body,'nextPendingAfter'),false);
    const walked=[ids[0]];
    let after=first.body.nextPendingAfter;
    for(let page=1;page<ids.length;page++){

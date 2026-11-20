@@ -7,7 +7,7 @@ type AdminOrder = { id: string; itemName: string; ownerLabel: string; quantity: 
 type AdminQueue = { adminOrders: AdminOrder[]; nextPendingAfter: string | null; nextProcessingAfter: string | null };
 type Queue = 'pending' | 'processing';
 type OrderAction = 'processing' | 'fulfilled' | 'failed';
-const queueLimit = '10';
+const queueLimit = '5';
 type History = {
   orders: { id: string; status: string; cost: string }[];
   ledger: { id: string; entryNo: string; kind: string; direction: number; pointDelta: string; balanceAfter: string }[];

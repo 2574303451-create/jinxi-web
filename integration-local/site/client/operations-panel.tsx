@@ -215,23 +215,45 @@ type TeamRecord = TeamDraft & {
   color: string;
 };
 
-function TeamEditor({ team, disabled, save }: { team: TeamRecord | null; disabled: boolean; save: (draft: TeamDraft) => void }) {
-  const [draft, setDraft] = useState<TeamDraft>(() => ({
+function TeamEditor({ team, disabled, save }: {
+  team: TeamRecord | null; disabled: boolean; save: (draft: TeamDraft, onSaved: () => void) => void;
+}) {
+  const [edit, setEdit] = useState<{ version: number | null; changes: Partial<TeamDraft> } | null>(null);
+  const version = team?.version ?? null;
+  const latest: TeamDraft = {
     name: team?.name ?? '', slogan: team?.slogan ?? '', description: team?.description ?? '',
     requirements: team?.requirements ?? '', maxMembers: team?.maxMembers ?? 2,
+  };
+  const draft = { ...latest, ...edit?.changes };
+  const changed = edit !== null && edit.version !== version;
+  const change = (fields: Partial<TeamDraft>) => setEdit(current => ({
+    version: current ? current.version : version,
+    changes: { ...current?.changes, ...fields },
   }));
-  return <form aria-label="本人队伍管理" onSubmit={e => { e.preventDefault(); if (!disabled) save(draft); }}>
+  return <form aria-label="本人队伍管理" onSubmit={e => { e.preventDefault(); if (!disabled && !changed) save(draft, () => setEdit(null)); }}>
     <fieldset disabled={disabled}>
-      <label className="paper-label">队伍名称<input className="paper-input" value={draft.name} onChange={e => setDraft({ ...draft, name: e.target.value })} maxLength={60} required /></label>
-      <label className="paper-label">队伍说明<input className="paper-input" value={draft.slogan} onChange={e => setDraft({ ...draft, slogan: e.target.value })} maxLength={160} /></label>
+      <label className="paper-label">队伍名称<input className="paper-input" value={draft.name} onChange={e => change({ name: e.target.value })} maxLength={60} required /></label>
+      <label className="paper-label">队伍说明<input className="paper-input" value={draft.slogan} onChange={e => change({ slogan: e.target.value })} maxLength={160} /></label>
       <label className="paper-label">队伍简介<input className="paper-input" value={draft.description}
-        onChange={e => setDraft({ ...draft, description: e.target.value })} maxLength={1000} /></label>
+        onChange={e => change({ description: e.target.value })} maxLength={1000} /></label>
       <label className="paper-label">入队条件<input className="paper-input" value={draft.requirements}
-        onChange={e => setDraft({ ...draft, requirements: e.target.value })} maxLength={300} /></label>
+        onChange={e => change({ requirements: e.target.value })} maxLength={300} /></label>
       <p>入队条件供成员参考。</p>
       <label className="paper-label">人数上限<input className="paper-input" type="number" min={team?.memberCount ?? 1} max={50}
-        value={draft.maxMembers || ''} onChange={e => setDraft({ ...draft, maxMembers: Number(e.target.value) })} required /></label>
-      <button className="paper-button yellow">{team ? '保存本人队伍' : '创建合成队伍'}</button>
+        value={draft.maxMembers || ''} onChange={e => change({ maxMembers: Number(e.target.value) })} required /></label>
+      {changed && <section aria-label="队伍最新版" className="paper-notice">
+        <p role="status">队伍已更新。请核对最新资料后再保存。</p>
+        <dl>
+          <dt>队伍名称</dt><dd>{latest.name}</dd><dt>队伍说明</dt><dd>{latest.slogan || '未填写'}</dd>
+          <dt>队伍简介</dt><dd>{latest.description || '未填写'}</dd><dt>入队条件</dt><dd>{latest.requirements || '未填写'}</dd>
+          <dt>当前人数与上限</dt><dd>{team?.memberCount}/{latest.maxMembers}</dd>
+        </dl>
+        <div className="integration-actions">
+          <button type="button" className="paper-button" onClick={() => setEdit(null)}>采用最新资料</button>
+          <button type="button" className="paper-button" onClick={() => setEdit({ ...edit, version })}>核对完成，保留修改</button>
+        </div>
+      </section>}
+      <button className="paper-button yellow" disabled={changed}>{team ? '保存本人队伍' : '创建合成队伍'}</button>
     </fieldset>
   </form>;
 }
@@ -244,16 +266,24 @@ export function TeamPanel() {
     return { published: published.items, mine: mine.items[0] ?? null };
   }, [client, ready]);
   const resource = useResource(load), mine = resource.data?.mine ?? null;
-  const save = (draft: TeamDraft) => void cmd.run(() => client.mutate('operations', {
-    op: mine ? 'team.edit' : 'team.create', ...(mine ? { id: mine.id, version: mine.version } : {}),
-    ...draft, icon: mine?.icon ?? '⭐', color: mine?.color ?? '#2360f5',
-  }));
+  const save = (draft: TeamDraft, onSaved: () => void) => void cmd.run(async () => {
+    try {
+      await client.mutate('operations', {
+        op: mine ? 'team.edit' : 'team.create', ...(mine ? { id: mine.id, version: mine.version } : {}),
+        ...draft, icon: mine?.icon ?? '⭐', color: mine?.color ?? '#2360f5',
+      });
+      onSaved();
+    } catch (error) {
+      if ((error as { code?: string }).code === 'VERSION_CONFLICT') resource.reload();
+      throw error;
+    }
+  });
   return <section className="integration-panel" aria-label="统一组队">
     <h2>寻找队伍</h2><p>容量包括队长；每个可信成员同时最多一队。没有伪造战绩、在线人数或战队积分。</p>
     <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新队伍</button>
     {resource.error && <p role="alert">{resource.error}</p>}
     {mine && <article className="integration-record" data-testid="own-team"><h3>本人队伍：{mine.name}</h3><p>{mine.myRole} · {mine.memberCount}/{mine.maxMembers}</p>{mine.myRole === 'member' && <button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.leave', id: mine.id }))}>退出本人队伍</button>}</article>}
-    {ready && resource.data && (!mine || mine.myRole === 'leader') && <TeamEditor key={mine ? `${mine.id}:${mine.version}` : 'new'}
+    {ready && resource.data && (!mine || mine.myRole === 'leader') && <TeamEditor key={mine?.id ?? 'new'}
       team={mine} disabled={cmd.busy || resource.loading} save={save} />}
     <ul data-testid="team-list">{resource.data?.published.map(record => <li className="integration-record" key={record.id} data-team-id={record.id}>
       <h3>{record.icon} {record.name}</h3><p>{record.slogan} · {record.memberCount}/{record.maxMembers}</p>

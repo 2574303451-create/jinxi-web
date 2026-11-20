@@ -726,6 +726,14 @@ async function main() {
         assert.equal(formedTeam.description,'合成队伍周末协作');
         assert.equal(formedTeam.requirements,'欢迎了解合成测试流程的成员');
         const teamCard = page => page.getByTestId('team-list').locator(`[data-team-id="${teamId}"]`);
+        await a.getByTestId('own-team').getByText(/leader · 1\/2/).waitFor();
+        const descriptionInput = a.getByLabel('队伍简介',{exact:true});
+        const requirementsInput = a.getByLabel('入队条件',{exact:true});
+        assert.equal(await descriptionInput.inputValue(),formedTeam.description);
+        assert.equal(await requirementsInput.inputValue(),formedTeam.requirements);
+        const description = '合成队伍改为工作日晚间协作', requirements = '请先阅读合成点数与签到说明';
+        await descriptionInput.fill(description);
+        await requirementsInput.fill(requirements);
         const join = async page => {
           await page.getByRole('button',{name:'刷新队伍',exact:true}).click();
           const joined = command(page,'operations','team.join');
@@ -743,18 +751,20 @@ async function main() {
         assert.deepEqual(activeMembers,[{member_id:other.memberId,role:'leader'},{member_id:db.accounts.reviewer.memberId,role:'member'}]);
         record.stage='team-leader-details';
         assert.equal(await reviewer.getByRole('form',{name:'本人队伍管理',exact:true}).count(),0);
-        await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
+        const saveTeam = a.getByRole('button',{name:'保存本人队伍',exact:true});
+        const [conflict] = await Promise.all([command(a,'operations','team.edit'),saveTeam.click()]);
+        assert.equal(conflict.status(),409);
+        assert.equal((await conflict.json()).code,'VERSION_CONFLICT');
         await a.getByTestId('own-team').getByText(/leader · 2\/2/).waitFor();
-        const descriptionInput = a.getByLabel('队伍简介',{exact:true});
-        const requirementsInput = a.getByLabel('入队条件',{exact:true});
-        assert.equal(await descriptionInput.inputValue(),formedTeam.description);
-        assert.equal(await requirementsInput.inputValue(),formedTeam.requirements);
+        const currentTeam = a.getByRole('region',{name:'队伍最新版',exact:true});
+        await currentTeam.getByText(formedTeam.description,{exact:true}).waitFor();
+        assert.equal(await descriptionInput.inputValue(),description);
+        assert.equal(await requirementsInput.inputValue(),requirements);
+        assert(await saveTeam.isDisabled());
         assert.equal(await a.getByLabel('人数上限',{exact:true}).getAttribute('min'),'2');
-        const description = '合成队伍改为工作日晚间协作', requirements = '请先阅读合成点数与签到说明';
-        await descriptionInput.fill(description);
-        await requirementsInput.fill(requirements);
+        await currentTeam.getByRole('button',{name:'核对完成，保留修改',exact:true}).click();
         await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
-        const [teamUpdated] = await Promise.all([command(a,'operations','team.edit'),a.getByRole('button',{name:'保存本人队伍',exact:true}).click()]);
+        const [teamUpdated] = await Promise.all([command(a,'operations','team.edit'),saveTeam.click()]);
         assert.equal(teamUpdated.status(),200);
         const {item:updatedTeam} = await teamUpdated.json();
         assert.equal(updatedTeam.description,description);
@@ -774,6 +784,9 @@ async function main() {
         const staleEdit = await api.mutate('operations',other,{...currentTeamEdit,description:'旧版本不可覆盖'});
         assert.equal(staleEdit.status,409);
         assert.equal(staleEdit.body.code,'VERSION_CONFLICT');
+        const lowerCapacity = await api.mutate('operations',other,{...currentTeamEdit,version:updatedTeam.version,maxMembers:1});
+        assert.equal(lowerCapacity.status,409);
+        assert.equal(lowerCapacity.body.code,'TEAM_CAPACITY_CONFLICT');
         const {rows:[savedTeam]} = await api.admin(`SELECT leader_id,member_count,max_members,version,
           payload->>'description' AS description,payload->>'requirements' AS requirements FROM operations_lab.teams WHERE id=$1`,[teamId]);
         assert.deepEqual(savedTeam,{leader_id:other.memberId,member_count:2,max_members:2,version:updatedTeam.version,description,requirements});

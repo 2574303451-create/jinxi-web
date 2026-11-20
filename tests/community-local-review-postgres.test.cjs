@@ -1,5 +1,6 @@
 // Independent review regressions: a fresh synthetic loopback database only.
 const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const {setTimeout:delay}=require('node:timers/promises');
 const {freshCommunity}=require('../community-local/database.cjs');
 const {createMemberHandler}=require('../member-local/identity.cjs');
 const {createCommunityHandler}=require('../community-local/handler.cjs');
@@ -243,7 +244,7 @@ test('independent community concurrency and revocation regressions on PostgreSQL
         SELECT 1 FROM pg_locks WHERE pid=$1 AND locktype='advisory' AND NOT granted
        ) AS waiting`,[pid]);
        waitingOnLock=proof.waiting;
-       if(!waitingOnLock) await new Promise(resolve=>setTimeout(resolve,25));
+       if(!waitingOnLock) await delay(25);
       }
       assert.equal(waitingOnLock,true,'PostgreSQL confirmed the business backend was blocked on the held lock');
       const {rowCount}=await admin.query("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[operatorId]);

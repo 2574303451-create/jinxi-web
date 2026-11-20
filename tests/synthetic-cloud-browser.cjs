@@ -1160,6 +1160,7 @@ async function main() {
         const [nextPosted] = await Promise.all([command(a,'community','reply.create'),guideButton(a,'发布攻略评论').click()]);
         assert.equal(nextPosted.status(),200);
         await discussion(a).getByText(nextDraft,{exact:true}).waitFor();
+        await a.waitForFunction(() => document.querySelector('section[aria-label="攻略交流"] textarea')?.value === '');
         assert.equal(await editor.inputValue(),'');
 
         record.stage='guide-reactions-and-comment-privacy';

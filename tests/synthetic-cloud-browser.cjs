@@ -506,11 +506,24 @@ async function main() {
         assert.equal((await expiryInput.inputValue()).slice(0,16),shanghaiDeadline);
         await staff.getByRole('button',{name:'取消公告修订',exact:true}).click();
         assert.equal(await expiryInput.inputValue(),'');
+        for (const [input, expected] of [['',null],[shanghaiDeadline,deadline]]) {
+          await scheduledRow(staff).getByRole('button',{name:'修订此公告',exact:true}).click();
+          await expiryInput.fill(input);
+          const [editedExpiry] = await Promise.all([command(staff,'operations','announcement.edit'),
+            staff.getByRole('button',{name:'保存公告草稿',exact:true}).click()]);
+          assert.equal(editedExpiry.status(),200);
+          const savedExpiry = (await api.admin('SELECT expires_at FROM operations_lab.documents WHERE id=$1',[scheduledItem.id])).rows[0].expires_at;
+          assert.equal(savedExpiry?.toISOString() ?? null,expected);
+        }
         const [scheduledSubmit] = await Promise.all([command(staff,'operations','announcement.submit'),scheduledRow(staff).getByRole('button',{name:'提交公告审核',exact:true}).click()]);
         assert.equal(scheduledSubmit.status(),200);
         await reviewer.getByRole('button',{name:'刷新管理公告',exact:true}).click();
         const [scheduledPublished] = await Promise.all([command(reviewer,'operations','announcement.publish'),scheduledRow(reviewer).getByRole('button',{name:'独立审核并发布',exact:true}).click()]);
         assert.equal(scheduledPublished.status(),200);
+        const publishedVersion = (await scheduledPublished.json()).item.version;
+        assert.equal(publishedVersion,5);
+        await scheduledRow(reviewer).getByText(`published · 版本 ${publishedVersion}`,{exact:true}).waitFor();
+        assert.equal(await scheduledRow(reviewer).getByRole('button',{name:'删除公告',exact:true}).count(),0);
         await a.getByRole('button',{name:'刷新公告',exact:true}).click();
         const publicScheduledRow = a.getByTestId('public-announcements').locator(`[data-item-id="${scheduledItem.id}"]`);
         await publicScheduledRow.getByText('合成定时正文',{exact:true}).waitFor();
@@ -525,28 +538,36 @@ async function main() {
           assert(!(await expiredPublicPage.json()).items.some(item=>item.id===scheduledItem.id));
           await publicScheduledRow.waitFor({state:'detached'});
           await staff.getByRole('button',{name:'刷新管理公告',exact:true}).click();
-          await scheduledRow(staff).getByText(/^expired · 版本 3$/).waitFor();
-          await reviewer.getByRole('button',{name:'刷新管理公告',exact:true}).click();
-          await scheduledRow(reviewer).getByText(/^expired · 版本 3$/).waitFor();
-          assert.equal(await scheduledRow(reviewer).getByRole('button',{name:'删除公告',exact:true}).count(),0);
+          await scheduledRow(staff).getByText(`expired · 版本 ${publishedVersion}`,{exact:true}).waitFor();
+          const [reviewerPage] = await Promise.all([reviewer.waitForResponse(response=>{
+            const url = new URL(response.url());
+            return url.pathname==='/api/operations' && response.request().method()==='GET' &&
+              url.searchParams.get('kind')==='announcement' && url.searchParams.get('view')==='private';
+          }),reviewer.getByRole('button',{name:'刷新管理公告',exact:true}).click()]);
+          assert.equal(reviewerPage.status(),200);
+          assert(!(await reviewerPage.json()).items.some(item=>item.id===scheduledItem.id));
+          await scheduledRow(reviewer).waitFor({state:'detached'});
           assert.equal((await api.mutate('operations',announcementReviewer,{
-            op:'announcement.delete',id:scheduledItem.id,version:3,
+            op:'announcement.delete',id:scheduledItem.id,version:publishedVersion,
           })).status,403);
 
           record.stage='announcement-soft-delete';
           await scheduledRow(staff).getByRole('button',{name:'删除公告',exact:true}).click();
           await scheduledRow(staff).getByRole('button',{name:'取消删除',exact:true}).click();
+          assert(await scheduledRow(staff).getByRole('button',{name:'删除公告',exact:true}).evaluate(node=>node===document.activeElement));
           const {rows:[stillPublished]} = await api.admin('SELECT status,version,expires_at FROM operations_lab.documents WHERE id=$1',[scheduledItem.id]);
-          assert.deepEqual(stillPublished,{status:'published',version:3,expires_at:clock.deadline});
+          assert.deepEqual(stillPublished,{status:'published',version:publishedVersion,expires_at:clock.deadline});
           await scheduledRow(staff).getByRole('button',{name:'删除公告',exact:true}).click();
           const [deleted] = await Promise.all([command(staff,'operations','announcement.delete'),scheduledRow(staff).getByRole('button',{name:'确认删除公告',exact:true}).click()]);
           assert.equal(deleted.status(),200);
-          await scheduledRow(staff).getByText(/^deleted · 版本 4$/).waitFor();
+          assert(await staff.getByRole('heading',{name:'公告审核与修订',exact:true}).evaluate(node=>node===document.activeElement));
+          await scheduledRow(staff).getByText(`deleted · 版本 ${publishedVersion+1}`,{exact:true}).waitFor();
           assert.equal(await scheduledRow(staff).getByRole('button',{name:'删除公告',exact:true}).count(),0);
           const {rows:scheduledRevisions} = await api.admin(`SELECT data->>'status' AS status,actor_id FROM operations_lab.revisions
             WHERE item_id=$1 ORDER BY version`,[scheduledItem.id]);
           assert.deepEqual(scheduledRevisions,[
-            {status:'draft',actor_id:announcementOwner.memberId},{status:'submitted',actor_id:announcementOwner.memberId},
+            ...Array.from({length:3},()=>({status:'draft',actor_id:announcementOwner.memberId})),
+            {status:'submitted',actor_id:announcementOwner.memberId},
             {status:'published',actor_id:announcementReviewer.memberId},{status:'deleted',actor_id:announcementOwner.memberId},
           ]);
         } finally { await api.admin('UPDATE attendance_lab.clock SET synthetic_now=$1 WHERE id=1',[clock.synthetic_now]); }
@@ -675,6 +696,7 @@ async function main() {
         const [sponsorDeleted] = await Promise.all([command(staff,'operations','sponsor.delete'),
           hiddenRow.getByRole('button',{name:'确认删除感谢记录',exact:true}).click()]);
         assert.equal(sponsorDeleted.status(),200);
+        assert(await manageSponsorship.getByRole('heading',{name:'感谢记录管理',exact:true}).evaluate(node=>node===document.activeElement));
         await manageSponsorship.getByRole('alert').getByText('感谢记录已更新，请返回第一页。',{exact:true}).waitFor();
         await manageSponsorPager.getByRole('button',{name:'返回第一页',exact:true}).click();
         await manageSponsorPager.getByRole('button',{name:'查看更早记录',exact:true}).click();

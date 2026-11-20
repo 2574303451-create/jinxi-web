@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { Modal } from '../../../components/ui/modal';
 import { PaperState } from '../../../components/ui/paper';
 import { loadAnnouncementSanitizer, type AnnouncementSanitizer } from '../../../lib/announcement-html';
@@ -33,7 +33,9 @@ const defaultSponsorDate = '2024-03-01T12:00';
 const shanghaiInput = (iso: string) => new Date(Date.parse(iso) + 8*60*60*1000).toISOString().slice(0,-1);
 const shanghaiInstant = (value: string) => new Date(value + '+08:00').toISOString();
 
-function ConfirmRemoval({ label, busy, onConfirm }: { label: string; busy: boolean; onConfirm: () => void }) {
+function ConfirmRemoval({ label, busy, heading, onConfirm }: {
+  label: string; busy: boolean; heading: RefObject<HTMLHeadingElement | null>; onConfirm: () => void;
+}) {
   const [confirming, setConfirming] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   return <div>
@@ -42,7 +44,9 @@ function ConfirmRemoval({ label, busy, onConfirm }: { label: string; busy: boole
     {confirming && <div className="integration-actions">
       <p>删除后将停止展示，保留历史版本和审计记录。</p>
       <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); trigger.current?.focus(); }}>取消删除</button>
-      <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); onConfirm(); }}>确认删除{label}</button>
+      <button type="button" className="paper-button" disabled={busy} onClick={() => {
+        setConfirming(false); heading.current?.focus(); onConfirm();
+      }}>确认删除{label}</button>
     </div>}
   </div>;
 }
@@ -93,7 +97,7 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
         {editing && <button type="button" className="paper-button" disabled={cmd.busy} onClick={resetDraft}>取消公告修订</button>}
       </form>
       <OperationsRecords<AnnouncementRecord> kind="announcement" view="private" label="公告" title="公告审核与修订" refresh="刷新管理公告" busy={cmd.busy}>
-        {records => <ul data-testid="managed-announcements">{records.map(record => {
+        {(records, heading) => <ul data-testid="managed-announcements">{records.map(record => {
           const canManage = permissions.admin || (record.ownerId != null && record.ownerId === state.member?.id);
           return <li key={record.id} className="integration-record" data-item-id={record.id}>
             <h3>{record.title}</h3><p>{record.effectiveStatus} · 版本 {record.version}</p><SafeAnnouncement html={record.contentHtml} />
@@ -104,7 +108,7 @@ function AnnouncementPanel({ permissions }: { permissions: Permissions }) {
               {canManage && record.status === 'draft' && <button className="paper-button" disabled={cmd.busy} onClick={() => advance('announcement.submit', record)}>提交公告审核</button>}
               {record.status === 'submitted' && record.lastEditor !== state.member?.id && <button className="paper-button yellow" disabled={cmd.busy} onClick={() => advance('announcement.publish', record)}>独立审核并发布</button>}
               {canManage && ['submitted','published'].includes(record.status) && <button className="paper-button" disabled={cmd.busy} onClick={() => advance('announcement.withdraw', record)}>撤回公告</button>}
-              {permissions.admin && record.status !== 'deleted' && <ConfirmRemoval key={record.version} label="公告" busy={cmd.busy}
+              {permissions.admin && record.status !== 'deleted' && <ConfirmRemoval key={record.version} label="公告" busy={cmd.busy} heading={heading}
                 onConfirm={() => advance('announcement.delete', record)} />}
             </div>}
           </li>;
@@ -157,12 +161,12 @@ function SponsorshipRecords({ management }: { management?: {
   const title = management ? '感谢记录管理' : '公开感谢记录';
   return <OperationsRecords<SponsorRecord> kind="sponsor" view={management ? 'private' : 'public'} label="感谢记录" title={title}
     refresh={management ? '刷新管理记录' : '刷新感谢记录'} busy={management?.busy}>
-    {records => management ? <ul>{records.map(record => <li key={record.id} className="integration-record" data-managed-sponsor-id={record.id}>
+    {(records, heading) => management ? <ul>{records.map(record => <li key={record.id} className="integration-record" data-managed-sponsor-id={record.id}>
       <strong>{record.sponsor}</strong><p>{record.status} · {record.time}</p>
       {record.legacy ? <p>历史记录 · 仅供查看</p> : record.status !== 'deleted' && <div className="integration-actions">
         <button className="paper-button" disabled={management.busy} onClick={() => management.edit(record)}>编辑感谢记录</button>
         <button className="paper-button" disabled={management.busy} onClick={() => management.toggle(record)}>{record.status === 'visible' ? '隐藏感谢记录' : '恢复感谢展示'}</button>
-        <ConfirmRemoval key={record.version} label="感谢记录" busy={management.busy} onConfirm={() => management.remove(record)} />
+        <ConfirmRemoval key={record.version} label="感谢记录" busy={management.busy} heading={heading} onConfirm={() => management.remove(record)} />
       </div>}
     </li>)}</ul> : <table><thead><tr><th>感谢对象</th><th>登记时间</th></tr></thead><tbody>{records.map(record =>
       <tr key={record.id} data-sponsor-id={record.id}><td>{record.sponsor}</td><td>{record.time}</td></tr>)}</tbody></table>}
@@ -170,7 +174,7 @@ function SponsorshipRecords({ management }: { management?: {
 }
 function OperationsRecords<Record>({ kind, view, title, label, refresh, busy, children }: {
   kind: 'sponsor' | 'announcement'; view: 'public' | 'private'; title: string; label: string; refresh: string;
-  busy?: boolean; children: (items: Record[]) => ReactNode;
+  busy?: boolean; children: (items: Record[], heading: RefObject<HTMLHeadingElement | null>) => ReactNode;
 }) {
   const { client } = useSession();
   const [cursor, setCursor] = useState<string | null>(null);
@@ -190,7 +194,7 @@ function OperationsRecords<Record>({ kind, view, title, label, refresh, busy, ch
     <button className="paper-button" onClick={resource.reload} disabled={loading || changed}>{refresh}</button>
     {loading && <PaperState kind="loading" title={`读取${label}…`} />}
     {resource.error && <PaperState kind="error" title={changed ? `${label}已更新，请返回第一页。` : `暂时无法读取${label}，请刷新。`} />}
-    {page && !loading && (page.items.length ? children(page.items) : <PaperState kind="empty" title={`暂无${label}`} />)}
+    {page && !loading && (page.items.length ? children(page.items, heading) : <PaperState kind="empty" title={`暂无${label}`} />)}
     <PageControls label={`${title}分页`} olderLabel="查看更早记录" atStart={!cursor} next={page?.nextCursor}
       loading={loading || Boolean(busy)} heading={heading} onChange={setCursor} />
   </section>;

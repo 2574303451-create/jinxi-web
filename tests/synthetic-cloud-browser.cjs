@@ -1280,7 +1280,12 @@ async function main() {
         await staff.getByTestId('unified-permissions').getByText('合成管理员',{exact:true}).waitFor();
         await openMessages(staff);
         const messageManagement = staff.getByTestId('manage-message');
-        await messageManagement.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        const waitForCommunityAdminLists = async management => {
+          await management.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+          await management.getByRole('button',{name:'刷新审核队列',exact:true}).and(management.locator('button:enabled')).waitFor();
+        };
+        await waitForCommunityAdminLists(messageManagement);
+        record.stage='published-community-moderation-message-list';
         await messageManagement.getByRole('button',{name:'管理已发布内容',exact:true}).click();
         const publishedMessages = messageManagement.getByRole('region',{name:'已发布内容管理',exact:true});
         const messageRow = publishedMessages.locator(`[data-moderation-id="${messageId}"]`);
@@ -1291,6 +1296,7 @@ async function main() {
         await messageRow.waitFor();
         assert.equal(await publishedMessages.locator(`[data-moderation-id="${legacyMessage}"]`).count(),0);
         for (const pinned of [true,false]) {
+          record.stage=pinned?'published-community-moderation-pin-message':'published-community-moderation-unpin-message';
           const [pin] = await Promise.all([command(staff,'community','item.pin'),
             messageRow.getByRole('button',{name:pinned?'置顶':'取消置顶',exact:true}).click()]);
           assert.equal(pin.status(),200);
@@ -1298,7 +1304,10 @@ async function main() {
           assert.equal((await storedMessage()).is_pinned,pinned);
           const publicMessages = await api.request('/.netlify/functions/messages');
           assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
+          await messageRow.getByRole('button',{name:pinned?'取消置顶':'置顶',exact:true,pressed:pinned}).waitFor();
+          await waitForCommunityAdminLists(messageManagement);
         }
+        record.stage='published-community-moderation-remove-message';
         const versionAfterPins = (await storedMessage()).version;
         assert.equal(versionAfterPins,initialMessage.version+2);
         const removeMessage = messageRow.getByRole('button',{name:'删除已发布内容',exact:true});
@@ -1316,15 +1325,17 @@ async function main() {
           WHERE item_id=$1 AND actor_id=$2 AND operation IN('item.pin','item.delete') GROUP BY operation ORDER BY operation`,[messageId,adminSession.memberId])).rows;
         assert.deepEqual(actionAudit,[{operation:'item.delete',count:1},{operation:'item.pin',count:2}]);
 
+        record.stage='published-community-moderation-pin-guide';
         await navigate(staff,'/guides/');
         await ready(staff);
         const adminGuideManagement = staff.getByTestId('manage-guide');
-        await adminGuideManagement.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        await waitForCommunityAdminLists(adminGuideManagement);
         await adminGuideManagement.getByRole('button',{name:'管理已发布内容',exact:true}).click();
         const guidePin = adminGuideManagement.locator(`[data-moderation-id="${guideId}"]`).getByRole('button',{name:'置顶',exact:true});
         assert.equal((await Promise.all([command(staff,'community','item.pin'),guidePin.click()]))[0].status(),200);
         const beforeArchive = (await api.admin('SELECT is_pinned,version FROM community_lab.items WHERE id=$1',[guideId])).rows[0];
         assert.equal(beforeArchive.is_pinned,true);
+        record.stage='published-community-moderation-archive-guide';
         await navigate(a,'/guides/');
         await ready(a);
         const ownerRow = a.getByTestId('manage-guide').locator(`[data-item-id="${guideId}"]`);

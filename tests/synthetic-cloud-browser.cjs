@@ -753,7 +753,7 @@ async function main() {
         assert.equal(await reviewer.getByRole('form',{name:'本人队伍管理',exact:true}).count(),0);
         const saveTeam = a.getByRole('button',{name:'保存本人队伍',exact:true});
         const failedTeamRead = url => url.pathname==='/api/operations' &&
-          url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='private';
+          url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='private' && url.searchParams.get('limit')==='1';
         await a.route(failedTeamRead,route=>route.fulfill({status:503,json:{code:'OPERATIONS_UNAVAILABLE'}}),{times:1});
         const [conflict] = await Promise.all([command(a,'operations','team.edit'),saveTeam.click()]);
         assert.equal(conflict.status(),409);
@@ -770,6 +770,11 @@ async function main() {
         assert.equal(await a.getByLabel('人数上限',{exact:true}).getAttribute('min'),'2');
         await currentTeam.getByRole('button',{name:'核对完成，保留修改',exact:true}).click();
         await a.getByRole('button',{name:'刷新我的队伍',exact:true}).click();
+        const publicTeamRead = url => url.pathname==='/api/operations' &&
+          url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='public';
+        await a.route(publicTeamRead,route=>route.fulfill({status:503,json:{code:'OPERATIONS_UNAVAILABLE'}}),{times:1});
+        await a.getByRole('button',{name:'刷新队伍',exact:true}).click();
+        await a.getByText('暂时无法读取队伍，请刷新。',{exact:true}).waitFor();
         const [teamUpdated] = await Promise.all([command(a,'operations','team.edit'),saveTeam.click()]);
         assert.equal(teamUpdated.status(),200);
         const {item:updatedTeam} = await teamUpdated.json();
@@ -827,7 +832,8 @@ async function main() {
               team := gen_random_uuid();
               slot := gen_random_uuid();
               INSERT INTO operations_lab.teams(id,leader_id,leader_slot,payload,max_members)
-                VALUES(team,member,slot,jsonb_build_object('name','合成分页队伍 ' || i),2);
+                VALUES(team,member,slot,jsonb_build_object('name','合成分页队伍 ' || i,
+                  'icon','⭐','color','#2360f5','slogan','','description','','requirements',''),2);
               INSERT INTO operations_lab.team_members(id,team_id,member_id,role)
                 VALUES(slot,team,member,'leader');
             END LOOP;
@@ -871,18 +877,19 @@ async function main() {
         assert.deepEqual((await staffMembership()).rows,[]);
         await reloadList.click();
         await panel.getByText('队伍已更新，请返回第一页。',{exact:true}).waitFor();
-        await firstTeams.click();
-        await checkTeamPage(orderedTeams.slice(0,50));
         const reviewerLeft = command(reviewer,'operations','team.leave');
         await reviewer.getByRole('button',{name:'退出本人队伍',exact:true}).click();
         assert.equal((await reviewerLeft).status(),200);
-        await reloadList.click();
+        await firstTeams.click();
         await checkTeamPage(orderedTeams.slice(0,50));
         await olderTeams.click();
         await checkTeamPage(orderedTeams.slice(50));
         assert.equal((await joinOlderTeam()).status(),200);
         await staff.getByTestId('own-team').getByText(/member · 2\/2/).waitFor();
         await panel.getByText('队伍已更新，请返回第一页。',{exact:true}).waitFor();
+        const secondTeam = await api.mutate('operations',staffSession,{op:'team.join',id:orderedTeams[0].id,message:''});
+        assert.equal(secondTeam.status,409);
+        assert.equal(secondTeam.body.code,'ALREADY_IN_TEAM');
         assert.deepEqual((await staffMembership()).rows,[{team_id:teamId,role:'member'}]);
         const staffLeft = command(staff,'operations','team.leave');
         await staff.getByRole('button',{name:'退出本人队伍',exact:true}).click();

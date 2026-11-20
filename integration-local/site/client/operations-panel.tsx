@@ -263,7 +263,7 @@ export function TeamPanel() {
   const { client, ready, state } = useSession(), cmd = useCommand();
   const [draft, setDraft] = useState<{ scope: string; edit: TeamEdit } | null>(null);
   const load = useCallback(() => ready
-    ? client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private' })
+    ? client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private', limit: '1' })
     : Promise.resolve(null), [client, ready]);
   const resource = useResource(load), mine = ready ? resource.data?.items[0] ?? null : null;
   const scope = `${state.revision}:${state.member?.id ?? ''}:${mine?.id ?? 'new'}`;

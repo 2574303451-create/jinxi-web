@@ -3,7 +3,7 @@ const crypto=require('node:crypto');
 const {localSettings,tokenFrom}=require('../member-local/identity.cjs');
 const {verify}=require('./proof.cjs');
 const {CommunityError,fail,uuid,canonical}=require('./policy.cjs');
-const {role,project,mutate,managementPage,publishedSummary}=require('./store.cjs');
+const {role,project,mutate,replay,managementPage,publishedSummary}=require('./store.cjs');
 const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,key)=>Object.entries(e.headers||{}).find(([k])=>k.toLowerCase()===key)?.[1]||'';
@@ -99,7 +99,7 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     await c.query('INSERT INTO community_lab.requests(member_id,request_id,request_hash) VALUES($1,$2,$3) ON CONFLICT DO NOTHING',[member.member.id,body.requestId,requestHash]);
     const prior=(await c.query('SELECT request_hash,response FROM community_lab.requests WHERE member_id=$1 AND request_id=$2 FOR UPDATE',[member.member.id,body.requestId])).rows[0];
     if(!prior.request_hash.equals(requestHash))fail(409,'REQUEST_ID_CONFLICT');
-    if(prior.response)response=prior.response;
+    if(prior.response)response=await replay(c,body,member.member.id,prior.response);
     else{
      response=await mutate(c,body,member);
      await c.query('UPDATE community_lab.requests SET response=$3 WHERE member_id=$1 AND request_id=$2',[member.member.id,body.requestId,response]);

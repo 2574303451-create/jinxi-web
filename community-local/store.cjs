@@ -42,9 +42,14 @@ function requireItemAuthority(op, item, actor, staff) {
   if (staff !== 'admin') fail(403,'ADMIN_REQUIRED');
  } else if (item.owner_id !== actor && !(op === 'item.delete' && staff === 'admin')) fail(403,'NOT_OWNER');
 }
-async function project(c,r,{includeMyReactions=false}={}){
+async function project(c,r,{includeMyReactions=false,includeReply=null}={}){
  const base={id:r.id,content:r.payload.content,category:r.payload.category,status:r.status,version:r.version,isPinned:r.is_pinned,ownership:r.legacy?'unverified-legacy':'verified'};
- const replies=r.status==='published'?(await c.query('SELECT id,author_label,content,created_at FROM community_lab.replies WHERE item_id=$1 AND NOT deleted ORDER BY created_at LIMIT 100',[r.id])).rows:[];
+ const replies=r.status==='published'?(await c.query(`
+  SELECT * FROM (
+   SELECT id,author_label,content,created_at FROM community_lab.replies WHERE item_id=$1 AND NOT deleted
+   ORDER BY (id=$2::uuid) DESC NULLS LAST,created_at,id LIMIT 100
+  ) AS visible ORDER BY created_at,id
+ `,[r.id,includeReply])).rows:[];
  const myReaction=includeMyReactions?',bool_or(member_id=community_lab.actor()) AS mine':'';
  const reactions=r.status==='published'?(await c.query('SELECT type,count(*)::int AS count'+myReaction+' FROM community_lab.reactions WHERE item_id=$1 AND active GROUP BY type',[r.id])).rows:[];
  if(r.kind==='message')return {...base,name:r.author_label,timestamp:r.created_at,color:/^#[a-f0-9]{6}$/i.test(r.payload.color||'')?r.payload.color:'#2360f5',imageUrl:r.payload.imageUrl==='/fixtures/community-cover.jpg'?r.payload.imageUrl:null,replies:replies.map(x=>({id:x.id,name:x.author_label,content:x.content,color:'#2360f5',timestamp:x.created_at})),reactions:reactions.filter(x=>x.type!=='favorite').map(x=>({...x,users:[]}))};
@@ -54,10 +59,48 @@ async function project(c,r,{includeMyReactions=false}={}){
   ...(includeMyReactions?{viewerReactions:{like:like?.mine===true,favorite:favorite?.mine===true}}:{}),
   comments:replies.map(x=>({id:x.id,userId:'',userName:x.author_label,content:x.content,timestamp:x.created_at})),viewCount:0,createdAt:r.created_at,updatedAt:r.updated_at};
 }
+const interaction = op => ['reply.create','reply.delete','reaction.set'].includes(op);
+async function replay(c,body,actor,previous) {
+ // Creation receipts are owned by the verified actor and contain no public interactions.
+ if (body.op === 'message.create' || body.op === 'guide.create') return previous;
+
+ await c.query('SELECT pg_advisory_xact_lock_shared(hashtextextended($1,73))',[body.id.toLowerCase()]);
+ const checkRole = async () => {
+  const staff = await role(c);
+  if (body.op === 'item.review' && !['reviewer','admin'].includes(staff)) fail(403,'REVIEWER_REQUIRED');
+  if (body.op === 'item.pin' && staff !== 'admin') fail(403,'ADMIN_REQUIRED');
+  return staff;
+ };
+ const restricted = body.op === 'item.review' || body.op === 'item.pin';
+ const staff = restricted ? await checkRole() : 'member';
+ const { rows:[item] } = await c.query('SELECT * FROM community_lab.items WHERE id=$1',[body.id]);
+ if (!item || item.legacy) fail(404,'NOT_FOUND');
+ if ((interaction(body.op) || body.op === 'item.pin') && item.status !== 'published') fail(404,'NOT_FOUND');
+ if (body.op === 'item.review' && !['submitted','published','rejected'].includes(item.status)) fail(404,'NOT_FOUND');
+ if (!interaction(body.op)) {
+  const access = body.op === 'item.delete' && item.owner_id !== actor ? await role(c) : staff;
+  requireItemAuthority(body.op,item,actor,access);
+ }
+ let includeReply=null,adminDeletion=body.op==='item.delete' && item.owner_id!==actor;
+ if (body.op === 'reply.create' || body.op === 'reply.delete') {
+  const { rows:[reply] } = await c.query('SELECT author_id,deleted FROM community_lab.replies WHERE id=$1 AND item_id=$2',[previous.replyId,item.id]);
+  if (body.op === 'reply.create') {
+   if (!reply || reply.author_id !== actor || reply.deleted) fail(409,'REPLY_NOT_AVAILABLE');
+   includeReply=previous.replyId;
+  } else {
+   if (!reply) fail(404,'NOT_FOUND');
+   adminDeletion=reply.author_id!==actor;
+  }
+ }
+ const current=await project(c,item,{includeReply});
+ if (restricted) await checkRole();
+ if (adminDeletion && await role(c) !== 'admin') fail(403,'ADMIN_REQUIRED');
+ return {...previous,item:current};
+}
 async function mutate(c,body,member){
  const actor=member.member.id,staff=await role(c);
  let item;
- if(['reply.create','reply.delete','reaction.set'].includes(body.op)){
+ if(interaction(body.op)){
   if(!uuid(body.id))fail(400,'INVALID_ID');
   await c.query('SELECT pg_advisory_xact_lock_shared(hashtextextended($1,73))',[body.id.toLowerCase()]);
   item=(await c.query('SELECT * FROM community_lab.items WHERE id=$1',[body.id])).rows[0];
@@ -77,7 +120,7 @@ async function mutate(c,body,member){
    await c.query('INSERT INTO community_lab.reactions(item_id,member_id,type,active) VALUES($1,$2,$3,$4) ON CONFLICT(item_id,member_id,type) DO UPDATE SET active=EXCLUDED.active',[item.id,actor,body.type,body.active]);
   }
   await c.query('INSERT INTO community_lab.audit(actor_id,operation,item_id) VALUES($1,$2,$3)',[actor,body.op,item.id]);
-  return {item:await project(c,item),...(replyId?{replyId}:{}),...(body.op==='reaction.set'?{active:body.active}:{})};
+  return {item:await project(c,item,{includeReply:body.op==='reply.create'?replyId:null}),...(replyId?{replyId}:{}),...(body.op==='reaction.set'?{active:body.active}:{})};
  }
  if(body.op==='message.create'||body.op==='guide.create'){
   const kind=body.op==='message.create'?'message':'guide';
@@ -112,4 +155,4 @@ async function mutate(c,body,member){
  await c.query('INSERT INTO community_lab.audit(actor_id,operation,item_id) VALUES($1,$2,$3)',[actor,body.op,item.id]);
  return {item:await project(c,item)};
 }
-module.exports={role,project,mutate,managementPage,publishedSummary};
+module.exports={role,project,mutate,replay,managementPage,publishedSummary};

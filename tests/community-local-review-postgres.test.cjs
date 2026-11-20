@@ -286,6 +286,11 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      RETURNING id,version,payload->>'content' AS body
     `,[authorId,lesson,withdrawn,deleted]);
     const target=body=>seeded.find(row=>row.body===body);
+    await admin.query(`
+     INSERT INTO community_lab.replies(item_id,author_id,author_label,content,created_at)
+     SELECT $1,$2,'合成旧回复作者','合成更早的可见回复','2020-01-01T00:00:00Z'
+     FROM generate_series(1,100)
+    `,[target(withdrawn).id,authorId]);
     const review=order('item.review',{id:target(lesson).id,version:1,decision:'reject'});
     const remove=order('item.delete',{id:target(deleted).id,version:1});
     const reaction=order('reaction.set',{id:target(withdrawn).id,type:'like',active:true});
@@ -305,12 +310,22 @@ test('independent community concurrency and revocation regressions on PostgreSQL
     const visibleReplay=await send(visitor,reaction);
     const replyReplay=await send(visitor,reply);
     assert.equal(visibleReplay.statusCode,200);
-    const userRemoved=await send(author,order('item.delete',{id:target(withdrawn).id,version:1}));
-    assert.equal(userRemoved.statusCode,200);
+    const pin=order('item.pin',{id:target(withdrawn).id,version:1,pinned:true});
+    const pinned=await send(operator,pin);
+    assert.equal(pinned.statusCode,200);
+    assert.equal(JSON.parse(pinned.body).item.isPinned,true);
     const roles=await admin.query('DELETE FROM community_lab.member_roles WHERE member_id=ANY($1::uuid[])',[[
      db.accounts.admin.memberId,db.accounts.reviewer.memberId,
     ]]);
     assert.equal(roles.rowCount,2);
+    for(const body of [moderation,pin]) {
+     const denied=await send(operator,body);
+     assert.equal(denied.statusCode,403);
+     assert.equal(JSON.parse(denied.body).code,'ADMIN_REQUIRED');
+     assert(!denied.body.includes(withdrawn));
+    }
+    const userRemoved=await send(author,order('item.delete',{id:target(withdrawn).id,version:2}));
+    assert.equal(userRemoved.statusCode,200);
     const count=async()=> (await admin.query('SELECT count(*)::int AS n FROM community_lab.audit')).rows[0].n;
     const before=await count();
     const afterChanges=[];

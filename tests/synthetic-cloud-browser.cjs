@@ -216,18 +216,23 @@ async function main() {
         await login(reviewer,'reviewer');
         let previousRequest = lostRequest;
         for (const outcome of ['failed','fulfilled']) {
-          record.stage='manual-redemption-admin-queue-'+outcome;
+          const orderStage='manual-redemption-admin-queue-'+outcome;
+          record.stage=orderStage+'-new-receipt';
           await resetVisitQuota();
           await close(a);
           await a.getByRole('button',{name:'恢复未确认操作',exact:true}).click();
           const receipt = a.locator('[data-request-id="'+previousRequest+'"]').filter({hasText:'服务端确认已提交'});
           await receipt.getByRole('button',{name:'确认已完成，允许新操作',exact:true}).click();
           await receipt.waitFor({state:'hidden'});
+          const verifyReceipts=a.getByRole('button',{name:'核对服务端回执',exact:true});
+          await verifyReceipts.and(a.locator('button:enabled')).waitFor();
+          assert.equal(await receipt.count(),0);
+          record.stage=orderStage+'-place';
           await points(a);
-          result = command(a,'points','redeem');
-          await a.locator('[data-catalogue-id="'+itemId+'"]').getByRole('button',{name:'兑换虚构商品',exact:true}).click();
-          const placed = await result;
+          const [placed] = await Promise.all([command(a,'points','redeem'),
+            a.locator('[data-catalogue-id="'+itemId+'"]').getByRole('button',{name:'兑换虚构商品',exact:true}).click()]);
           assert.equal(placed.status(),200);
+          assert.notEqual(placed.request().postDataJSON().requestId,previousRequest);
           previousRequest = placed.request().postDataJSON().requestId;
           const { orderId: id } = await placed.json();
           const ownOrder = a.locator('[data-order-id="'+id+'"]');
@@ -235,6 +240,7 @@ async function main() {
           await a.getByTestId('balance').filter({hasText:/^0$/}).waitFor();
           assert.equal(await a.getByRole('heading',{name:'待处理兑换',exact:true}).count(),0);
 
+          record.stage=orderStage+'-lookup';
           await points(reviewer);
           assert.equal(await reviewer.getByRole('heading',{name:'待处理兑换',exact:true}).count(),0);
           assert.equal((await api.request('/api/points?view=admin',{session:await session(reviewer)})).status,403);
@@ -271,22 +277,23 @@ async function main() {
             await input.press('Enter');
             await row.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           }
-          const claim = command(staff,'points','order.process');
-          await row.getByRole('button',{name:'认领订单',exact:true}).click();
-          assert.equal((await (await claim).json()).status,'processing');
+          record.stage=orderStage+'-claim';
+          const [claim] = await Promise.all([command(staff,'points','order.process'),
+            row.getByRole('button',{name:'认领订单',exact:true}).press('Enter')]);
+          assert.equal(claim.status(),200);
+          assert.equal((await claim.json()).status,'processing');
           await row.getByText(/已由你认领/).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
           await ownOrder.getByText(/管理员正在核验和处理此订单/).waitFor();
           assert.equal(await ownOrder.getByRole('button',{name:'取消并按原流水退款',exact:true}).isDisabled(),true);
           const action = row.getByRole('button',{name:outcome === 'failed' ? '确认未开通，退回积分' : '确认已人工开通',exact:true});
-          result = command(staff,'points','order.process');
-          await action.focus();
-          await action.press('Enter');
-          const decision = await result;
+          record.stage=orderStage+'-decision';
+          const [decision] = await Promise.all([command(staff,'points','order.process'),action.press('Enter')]);
           assert.equal(decision.status(),200);
           assert.equal((await decision.json()).status,outcome);
           await row.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
           assert.equal(await row.getByRole('button').count(),0);
+          record.stage=orderStage+'-reconcile';
           await staff.getByRole('button',{name:'返回待处理列表',exact:true}).click();
           await staff.getByText('暂无待处理订单。',{exact:true}).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
@@ -1475,6 +1482,14 @@ async function main() {
   console.log(JSON.stringify(record));
 }
 main().catch(error=>{
-  console.error(process.env.CI === 'true' ? 'Synthetic browser rehearsal failed' : error.message);
+  if (process.env.CI === 'true') {
+    // Log only fixed categories and source locations. Browser error text may
+    // contain page contents, URLs or request details.
+    const kind = ['AssertionError','TimeoutError','TypeError','Error'].includes(error?.name) ? error.name : 'OtherError';
+    const locations = Array.from(String(error?.stack).matchAll(/synthetic-cloud-browser\.cjs:(\d+:\d+)/g), match=>match[1]).slice(0,4);
+    console.error('Synthetic browser rehearsal failed: '+JSON.stringify({kind,locations}));
+  } else {
+    console.error(error.message);
+  }
   process.exitCode=1;
 });

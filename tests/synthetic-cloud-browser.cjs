@@ -660,45 +660,56 @@ async function main() {
         await hasPressed(a,'点赞攻略',true);
         await a.unroute('**/api/community?**');
         assert.equal(await editor.inputValue(),guideComment);
-        record.stage='guide-post-comment';
+        record.stage='guide-favorite';
         await guideReaction(a,'收藏攻略','favorite',true);
+        record.stage='guide-delayed-comment';
         const committed = Promise.withResolvers(), release = Promise.withResolvers();
         const nextDraft = '上一条攻略评论提交期间输入的新草稿';
-        await a.route('**/api/community',async route=>{
+        const holdCommentResponse = async route=>{
           const request = route.request();
           if (request.method()!=='POST' || request.postDataJSON().op!=='reply.create') return route.fallback();
+          let response;
           try {
-            const response = await api.request('/api/community',{session:other,body:request.postDataJSON()});
-            committed.resolve(response.status);
-            await release.promise;
-            await route.fulfill({status:response.status,body:response.raw,
-              headers:{'content-type':'application/json','cache-control':'no-store'}});
+            const headers = await request.allHeaders();
+            response = await api.request('/api/community',{body:request.postDataJSON(),headers:{
+              Cookie:headers.cookie,'X-CSRF-Token':headers['x-csrf-token'],
+            }});
           } catch (error) {
             committed.reject(error);
             await route.abort();
+            return;
           }
-        });
-        await guideButton(a,'发布攻略评论').click();
+          committed.resolve(response.status);
+          await release.promise;
+          await route.fulfill({status:response.status,body:response.raw,
+            headers:{'content-type':'application/json','cache-control':'no-store'}});
+        };
+        await a.route('**/api/community',holdCommentResponse);
+        let timeout;
         let posted;
         try {
-          let timeout;
-          try {
-            assert.equal(await Promise.race([committed.promise,new Promise((_,reject)=>{
-              timeout = setTimeout(()=>reject(Error('Expected comment transaction did not complete')),15000);
-            })]),200);
-          } finally { clearTimeout(timeout); }
+          const committedStatus = Promise.race([committed.promise,new Promise((_,reject)=>{
+            timeout = setTimeout(()=>reject(Error('Expected comment transaction did not complete')),15000);
+          })]);
+          const [status] = await Promise.all([committedStatus,guideButton(a,'发布攻略评论').click()]);
+          assert.equal(status,200);
           await editor.fill(nextDraft);
           const response = command(a,'community','reply.create');
           release.resolve();
           posted = await response;
-        } finally { release.resolve(); }
+          await posted.finished();
+        } finally {
+          clearTimeout(timeout);
+          release.resolve();
+          await a.unroute('**/api/community',holdCommentResponse);
+        }
         assert.equal(posted.status(),200);
         const {replyId:guideCommentId} = await posted.json();
         await discussion(a).getByText(guideComment,{exact:true}).waitFor();
         const {rows:[savedReply]} = await api.admin('SELECT author_id,item_id,content FROM community_lab.replies WHERE id=$1',[guideCommentId]);
         assert.deepEqual(savedReply,{author_id:other.memberId,item_id:guideId,content:guideComment});
         assert.equal(await editor.inputValue(),nextDraft);
-        await a.unroute('**/api/community');
+        record.stage='guide-next-comment';
         const [nextPosted] = await Promise.all([command(a,'community','reply.create'),guideButton(a,'发布攻略评论').click()]);
         assert.equal(nextPosted.status(),200);
         await discussion(a).getByText(nextDraft,{exact:true}).waitFor();

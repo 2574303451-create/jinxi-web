@@ -173,7 +173,7 @@ function SponsorshipRecords({ management }: { management?: {
   </OperationsRecords>;
 }
 function OperationsRecords<Record>({ kind, view, title, label, refresh, busy, children }: {
-  kind: 'sponsor' | 'announcement'; view: 'public' | 'private'; title: string; label: string; refresh: string;
+  kind: 'sponsor' | 'announcement' | 'team'; view: 'public' | 'private'; title: string; label: string; refresh: string;
   busy?: boolean; children: (items: Record[], heading: RefObject<HTMLHeadingElement | null>) => ReactNode;
 }) {
   const { client } = useSession();
@@ -262,12 +262,10 @@ function TeamEditor({ team, edit, setEdit, disabled, save }: {
 export function TeamPanel() {
   const { client, ready, state } = useSession(), cmd = useCommand();
   const [draft, setDraft] = useState<{ scope: string; edit: TeamEdit } | null>(null);
-  const load = useCallback(async () => {
-    const published = await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'public', limit: '50' }, false);
-    const mine = ready ? await client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private', limit: '50' }) : { items: [] };
-    return { published: published.items, mine: mine.items[0] ?? null };
-  }, [client, ready]);
-  const resource = useResource(load), mine = resource.data?.mine ?? null;
+  const load = useCallback(() => ready
+    ? client.request<{ items: TeamRecord[] }>('operations', null, { kind: 'team', view: 'private' })
+    : Promise.resolve(null), [client, ready]);
+  const resource = useResource(load), mine = ready ? resource.data?.items[0] ?? null : null;
   const scope = `${state.revision}:${state.member?.id ?? ''}:${mine?.id ?? 'new'}`;
   const edit = draft?.scope === scope ? draft.edit : null;
   const setEdit = (value: TeamEdit | null) => setDraft(current => value ? { scope, edit: value } : current?.scope === scope ? null : current);
@@ -288,18 +286,20 @@ export function TeamPanel() {
   });
   return <section className="integration-panel" aria-label="统一组队">
     <h2>寻找队伍</h2><p>容量包括队长；每个可信成员同时最多一队。没有伪造战绩、在线人数或战队积分。</p>
-    <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新队伍</button>
-    {resource.error && <p role="alert">{resource.error}</p>}
+    {ready && <button className="paper-button" onClick={resource.reload} disabled={resource.loading}>刷新我的队伍</button>}
+    {ready && resource.error && <p role="alert">{resource.error}</p>}
     {mine && <article className="integration-record" data-testid="own-team"><h3>本人队伍：{mine.name}</h3><p>{mine.myRole} · {mine.memberCount}/{mine.maxMembers}</p>{mine.myRole === 'member' && <button className="paper-button" disabled={cmd.busy || resource.loading} onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.leave', id: mine.id }))}>退出本人队伍</button>}</article>}
     {ready && resource.data && (!mine || mine.myRole === 'leader') && <TeamEditor key={mine?.id ?? 'new'}
       team={mine} edit={edit} setEdit={setEdit} disabled={cmd.busy || resource.loading} save={save} />}
-    <ul data-testid="team-list">{resource.data?.published.map(record => <li className="integration-record" key={record.id} data-team-id={record.id}>
-      <h3>{record.icon} {record.name}</h3><p>{record.slogan} · {record.memberCount}/{record.maxMembers}</p>
-      {record.description && <p className="whitespace-pre-wrap break-words">{record.description}</p>}
-      {record.requirements && <p className="whitespace-pre-wrap break-words"><strong>入队条件</strong> {record.requirements}</p>}
-      {ready && !mine && <button className="paper-button" disabled={cmd.busy || resource.loading}
-        onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.join', id: record.id, message: '' }))}>加入此合成队伍</button>}
-    </li>)}</ul>
+    <OperationsRecords<TeamRecord> kind="team" view="public" label="队伍" title="公开队伍" refresh="刷新队伍" busy={cmd.busy}>
+      {items => <ul data-testid="team-list">{items.map(record => <li className="integration-record" key={record.id} data-team-id={record.id}>
+        <h3>{record.icon} {record.name}</h3><p>{record.slogan} · {record.memberCount}/{record.maxMembers}</p>
+        {record.description && <p className="whitespace-pre-wrap break-words">{record.description}</p>}
+        {record.requirements && <p className="whitespace-pre-wrap break-words"><strong>入队条件</strong> {record.requirements}</p>}
+        {ready && resource.data && !mine && <button className="paper-button" disabled={cmd.busy || resource.loading}
+          onClick={() => void cmd.run(() => client.mutate('operations', { op: 'team.join', id: record.id, message: '' }))}>加入此合成队伍</button>}
+      </li>)}</ul>}
+    </OperationsRecords>
     {!ready && <PaperState kind="empty" title="登录合成账号后才能加入或管理队伍" />}
     {cmd.notice && <p role="status" className="paper-notice">{cmd.notice}</p>}
   </section>;

@@ -1223,21 +1223,20 @@ async function main() {
         const reviewGuides = guideManagement.getByRole('region',{name:'独立审核队列',exact:true});
         const ownOlder = ownerGuides.getByRole('button',{name:'查看更早记录',exact:true});
         const reviewOlder = reviewGuides.getByRole('button',{name:'查看更早记录',exact:true});
-        const checkGuides = async (region,key,expected) => {
-          const visible = region.locator(`[data-${key}-id]`);
-          await region.locator(`[data-${key}-id="${expected[0].id}"]`).waitFor();
-          assert.deepEqual(await visible.evaluateAll((rows,attr)=>rows.map(row=>row.getAttribute(attr)),`data-${key}-id`),expected.map(row=>row.id));
-        };
-        await checkGuides(ownerGuides,'item',ownGuideRows.slice(0,50));
-        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(0,50));
+        const checkGuides = (key,expected) => reviewer.waitForFunction(({attribute,ids})=>{
+          const rows = document.querySelectorAll(`[data-testid="manage-guide"] [${attribute}]`);
+          return rows.length === ids.length && Array.from(rows).every((row,index)=>row.getAttribute(attribute)===ids[index]);
+        },{attribute:`data-${key}-id`,ids:expected.map(row=>row.id)});
+        await checkGuides('item',ownGuideRows.slice(0,50));
+        await checkGuides('review',reviewGuideRows.slice(0,50));
         await ownOlder.focus();
         await reviewer.keyboard.press('Enter');
-        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        await checkGuides('item',ownGuideRows.slice(50));
         assert(await ownerGuides.getByRole('heading',{name:'本人内容',exact:true}).evaluate(node=>document.activeElement===node));
-        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(0,50));
+        await checkGuides('review',reviewGuideRows.slice(0,50));
         await reviewOlder.click();
-        await checkGuides(reviewGuides,'review',reviewGuideRows.slice(50));
-        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        await checkGuides('review',reviewGuideRows.slice(50));
+        await checkGuides('item',ownGuideRows.slice(50));
 
         const oldSubmission = reviewGuideRows.at(-1);
         const [rejected] = await Promise.all([command(reviewer,'community','item.review'),
@@ -1250,14 +1249,14 @@ async function main() {
         assert.deepEqual(reviewAudit,{actor_id:communityReviewer.memberId,operation:'item.review'});
         await reviewGuides.locator(`[data-review-id="${oldSubmission.id}"]`).waitFor({state:'detached'});
         const remainingOlder = reviewGuideRows.slice(50,-1);
-        if (remainingOlder.length) await checkGuides(reviewGuides,'review',remainingOlder);
+        if (remainingOlder.length) await checkGuides('review',remainingOlder);
         else await reviewGuides.getByText('暂无待审核内容',{exact:true}).waitFor();
         const anchor = reviewGuideRows[49];
         const ownerDeleted = await api.mutate('community',other,{op:'item.delete',id:anchor.id,version:anchor.version});
         assert.equal(ownerDeleted.status,200);
         await reviewGuides.getByRole('button',{name:'刷新审核队列',exact:true}).click();
         await reviewGuides.getByText('独立审核队列已更新，请返回第一页。',{exact:true}).waitFor();
-        await checkGuides(ownerGuides,'item',ownGuideRows.slice(50));
+        await checkGuides('item',ownGuideRows.slice(50));
         const olderOwned = ownGuideRows.at(-1);
         await ownerGuides.locator(`[data-item-id="${olderOwned.id}"]`).getByRole('button',{name:'编辑本人内容',exact:true}).click();
         const ownedEditor = guideManagement.getByRole('form',{name:'编辑本人内容',exact:true});
@@ -1270,7 +1269,7 @@ async function main() {
           FROM community_lab.items WHERE id=$1`,[olderOwned.id]);
         assert.deepEqual(storedDraft,{owner_id:communityReviewer.memberId,status:'draft',version:olderOwned.version+1,content:amended});
         await reviewGuides.getByRole('button',{name:'返回第一页',exact:true}).click();
-        await checkGuides(reviewGuides,'review',reviewGuideRows.filter(row=>![anchor.id,oldSubmission.id].includes(row.id)).slice(0,50));
+        await checkGuides('review',reviewGuideRows.filter(row=>![anchor.id,oldSubmission.id].includes(row.id)).slice(0,50));
 
         await reviewer.getByRole('button',{name:'退出统一会话',exact:true}).click();
         await reviewer.getByTestId('unified-session').filter({hasText:'anonymous'}).waitFor();
@@ -1279,7 +1278,7 @@ async function main() {
         assert.equal((await session(reviewer)).memberId,member.memberId);
         const newOwn = (await api.admin(`SELECT id FROM community_lab.items
           WHERE kind='guide' AND owner_id=$1 ORDER BY created_at DESC,id DESC`,[member.memberId])).rows;
-        if (newOwn.length) await checkGuides(ownerGuides,'item',newOwn);
+        if (newOwn.length) await checkGuides('item',newOwn);
         else await ownerGuides.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
         assert.equal(await reviewGuides.count(),0);
         assert.equal(await ownerGuides.getByRole('navigation',{name:'本人内容分页'}).count(),0);

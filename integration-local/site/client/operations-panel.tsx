@@ -4,6 +4,7 @@ import { Modal } from '../../../components/ui/modal';
 import { PaperState } from '../../../components/ui/paper';
 import { loadAnnouncementSanitizer, type AnnouncementSanitizer } from '../../../lib/announcement-html';
 import { PageControls } from './page-controls';
+import { ConfirmRemoval } from './confirm-removal';
 import { useCommand, useResource, useSession } from './session-context';
 type Permissions = { admin: boolean; staff: boolean };
 type AnnouncementRecord = {
@@ -32,24 +33,6 @@ type SponsorRecord = {
 const defaultSponsorDate = '2024-03-01T12:00';
 const shanghaiInput = (iso: string) => new Date(Date.parse(iso) + 8*60*60*1000).toISOString().slice(0,-1);
 const shanghaiInstant = (value: string) => new Date(value + '+08:00').toISOString();
-
-function ConfirmRemoval({ label, busy, heading, onConfirm }: {
-  label: string; busy: boolean; heading: RefObject<HTMLHeadingElement | null>; onConfirm: () => void;
-}) {
-  const [confirming, setConfirming] = useState(false);
-  const trigger = useRef<HTMLButtonElement>(null);
-  return <div>
-    <button ref={trigger} type="button" className="paper-button" aria-expanded={confirming} disabled={busy}
-      onClick={() => setConfirming(!confirming)}>删除{label}</button>
-    {confirming && <div className="integration-actions">
-      <p>删除后将停止展示，保留历史版本和审计记录。</p>
-      <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); trigger.current?.focus(); }}>取消删除</button>
-      <button type="button" className="paper-button" disabled={busy} onClick={() => {
-        setConfirming(false); heading.current?.focus(); onConfirm();
-      }}>确认删除{label}</button>
-    </div>}
-  </div>;
-}
 
 export function SafeAnnouncement({ html }: { html: string }) {
   const [safe, setSafe] = useState<string | null>(null);

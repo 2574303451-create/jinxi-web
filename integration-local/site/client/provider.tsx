@@ -71,8 +71,8 @@ function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'l
     onJoin: () => setJoinNotice(true), onProfile: () => setProfile(true),
     banner: null, dialogs: null, announcement: null, sponsorship: null,
     panels: { checkin: <AttendancePanel />, points: <PointsPanel />, teams: <TeamPanel />, tasks: <p className="paper-notice">游戏任务缺少可信来源及奖励规则。本轮不连接积分、不伪造任务成功。</p>, game: <p className="paper-notice">真实战绩与在线来源尚未核验，本轮不导入浏览器示例记录。</p> },
-    messageActions, messageManagement: <CommunityManagement kind="message" staff={permissions.staff} />, readGuide, readHomeGuides, saveGuide,
-    guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} />, guideDiscussion: props => <GuideDiscussion {...props} />,
+    messageActions, messageManagement: <CommunityManagement kind="message" staff={permissions.staff} admin={permissions.admin} />, readGuide, readHomeGuides, saveGuide,
+    guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} admin={permissions.admin} />, guideDiscussion: props => <GuideDiscussion {...props} />,
   };
   return <SiteRuntimeContext.Provider value={runtime}>
     <aside className="integration-bar" aria-label={surface === 'local' ? '本地统一集成状态' : '独立合成 TEST 状态'}>

@@ -1271,6 +1271,75 @@ async function main() {
         assert.equal(await ownerGuides.getByRole('navigation',{name:'本人内容分页'}).count(),0);
         record.scenarios.push('community-management-paginates-private-guides-and-review-queues-independently');
 
+        record.stage='published-community-moderation';
+        await resetVisitQuota();
+        assert.equal(await guideManagement.getByRole('button',{name:'管理已发布内容',exact:true}).count(),0);
+        await login(staff,'admin');
+        await navigate(staff);
+        await ready(staff);
+        await staff.getByTestId('unified-permissions').getByText('合成管理员',{exact:true}).waitFor();
+        await openMessages(staff);
+        const messageManagement = staff.getByTestId('manage-message');
+        await messageManagement.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        await messageManagement.getByRole('button',{name:'管理已发布内容',exact:true}).click();
+        const publishedMessages = messageManagement.getByRole('region',{name:'已发布内容管理',exact:true});
+        const messageRow = publishedMessages.locator(`[data-moderation-id="${messageId}"]`);
+        const storedMessage = async () => (await api.admin('SELECT owner_id,status,is_pinned,version FROM community_lab.items WHERE id=$1',[messageId])).rows[0];
+        const initialMessage = await storedMessage();
+        assert.deepEqual(initialMessage,{owner_id:other.memberId,status:'published',is_pinned:false,version:initialMessage.version});
+        const legacyMessage = (await api.admin("SELECT id FROM community_lab.items WHERE kind='message' AND legacy")).rows[0].id;
+        await messageRow.waitFor();
+        assert.equal(await publishedMessages.locator(`[data-moderation-id="${legacyMessage}"]`).count(),0);
+        for (const pinned of [true,false]) {
+          const [pin] = await Promise.all([command(staff,'community','item.pin'),
+            messageRow.getByRole('button',{name:pinned?'置顶':'取消置顶',exact:true}).click()]);
+          assert.equal(pin.status(),200);
+          assert.equal(pin.request().postDataJSON().pinned,pinned);
+          assert.equal((await storedMessage()).is_pinned,pinned);
+          const publicMessages = await api.request('/.netlify/functions/messages');
+          assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
+        }
+        const versionAfterPins = (await storedMessage()).version;
+        assert.equal(versionAfterPins,initialMessage.version+2);
+        const removeMessage = messageRow.getByRole('button',{name:'删除已发布内容',exact:true});
+        await removeMessage.click();
+        await messageRow.getByRole('button',{name:'取消删除',exact:true}).click();
+        assert(await removeMessage.evaluate(node=>document.activeElement===node));
+        assert.equal((await storedMessage()).version,versionAfterPins);
+        await removeMessage.click();
+        const [removedMessage] = await Promise.all([command(staff,'community','item.delete'),
+          messageRow.getByRole('button',{name:'确认删除已发布内容',exact:true}).click()]);
+        assert.equal(removedMessage.status(),200);
+        assert.deepEqual(await storedMessage(),{owner_id:other.memberId,status:'deleted',is_pinned:false,version:versionAfterPins+1});
+        assert(!(await api.request('/.netlify/functions/messages')).body.some(message=>message.id===messageId));
+        const actionAudit = (await api.admin(`SELECT operation,count(*)::int AS count FROM community_lab.audit
+          WHERE item_id=$1 AND actor_id=$2 AND operation IN('item.pin','item.delete') GROUP BY operation ORDER BY operation`,[messageId,adminSession.memberId])).rows;
+        assert.deepEqual(actionAudit,[{operation:'item.delete',count:1},{operation:'item.pin',count:2}]);
+
+        await navigate(staff,'/guides/');
+        await ready(staff);
+        const adminGuideManagement = staff.getByTestId('manage-guide');
+        await adminGuideManagement.getByText('暂无本人内容，历史同名记录不会自动认领。',{exact:true}).waitFor();
+        await adminGuideManagement.getByRole('button',{name:'管理已发布内容',exact:true}).click();
+        const guidePin = adminGuideManagement.locator(`[data-moderation-id="${guideId}"]`).getByRole('button',{name:'置顶',exact:true});
+        assert.equal((await Promise.all([command(staff,'community','item.pin'),guidePin.click()]))[0].status(),200);
+        const beforeArchive = (await api.admin('SELECT is_pinned,version FROM community_lab.items WHERE id=$1',[guideId])).rows[0];
+        assert.equal(beforeArchive.is_pinned,true);
+        await navigate(a,'/guides/');
+        await ready(a);
+        const ownerRow = a.getByTestId('manage-guide').locator(`[data-item-id="${guideId}"]`);
+        // The ordinary author's published guide is newer than the paging fixtures.
+        await ownerRow.getByRole('button',{name:'归档本人攻略',exact:true}).click();
+        const [archived] = await Promise.all([command(a,'community','item.archive'),
+          ownerRow.getByRole('button',{name:'确认归档本人攻略',exact:true}).click()]);
+        assert.equal(archived.status(),200);
+        const archivedGuide = (await api.admin('SELECT owner_id,status,is_pinned,version FROM community_lab.items WHERE id=$1',[guideId])).rows[0];
+        assert.deepEqual(archivedGuide,{owner_id:other.memberId,status:'archived',is_pinned:false,version:beforeArchive.version+1});
+        assert(!(await api.request('/api/community?kind=guide&scope=public')).body.items.some(item=>item.id===guideId));
+        const ownerAudit = (await api.admin("SELECT actor_id FROM community_lab.audit WHERE item_id=$1 AND operation='item.archive'",[guideId])).rows;
+        assert.deepEqual(ownerAudit,[{actor_id:other.memberId}]);
+        record.scenarios.push('published-community-admin-pin-and-soft-delete-and-owner-guide-archive');
+
         record.stage='attendance-history';
         await resetVisitQuota();
         const seededAttendance = await api.admin(`WITH records AS (

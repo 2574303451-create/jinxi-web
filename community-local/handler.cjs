@@ -3,7 +3,7 @@ const crypto=require('node:crypto');
 const {localSettings,tokenFrom}=require('../member-local/identity.cjs');
 const {verify}=require('./proof.cjs');
 const {CommunityError,fail,uuid,canonical}=require('./policy.cjs');
-const {role,project,mutate,managementPage}=require('./store.cjs');
+const {role,project,mutate,managementPage,publishedSummary}=require('./store.cjs');
 const {recoveryQuery,receipt}=require('../service-adapter/receipts.cjs');
 const hash=value=>crypto.createHash('sha256').update(value).digest();
 const header=(e,key)=>Object.entries(e.headers||{}).find(([k])=>k.toLowerCase()===key)?.[1]||'';
@@ -22,8 +22,9 @@ function managementQuery(query) {
  }
  return { kind: query.kind, scope: query.scope, anchorId, limit: Number(limit) };
 }
-async function requireReviewer(c) {
- if (!['reviewer', 'admin'].includes(await role(c))) fail(403, 'REVIEWER_REQUIRED');
+async function requireManagementRole(c, scope) {
+ if (scope === 'review' && !['reviewer','admin'].includes(await role(c))) fail(403,'REVIEWER_REQUIRED');
+ if (scope === 'published-admin' && await role(c) !== 'admin') fail(403,'ADMIN_REQUIRED');
 }
 function createCommunityHandler({settings,identity,connect,env=process.env}){
  return async event=>{
@@ -46,10 +47,10 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     if(Object.keys(body).some(k=>!['op','requestId',...fields[body.op]].includes(k)))fail(403,'CLIENT_AUTHORITY_REJECTED');
     if(!uuid(body.requestId))fail(400,'REQUEST_ID_REQUIRED');
    }else if(!recovering){
-    const validScope=['public','mine','review','member-feed'].includes(query.scope||'public');
+    const privateList = ['mine','review','published-admin'].includes(query.scope);
+    const validScope=privateList||['public','member-feed'].includes(query.scope||'public');
     const validKind=['message','guide'].includes(query.kind);
     const validMemberFeed=!memberFeed||(query.kind==='guide'?uuid(query.id):query.id===undefined);
-    const privateList = query.scope === 'mine' || query.scope === 'review';
     const allowed = privateList ? ['kind','scope','limit','cursor'] : ['kind','scope','id'];
     if(!validScope||!validKind||!validMemberFeed||Object.keys(query).some(k=>!allowed.includes(k)))fail(400,'INVALID_QUERY');
     if (privateList) management = managementQuery(query);
@@ -80,10 +81,10 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    let response;
    if(recovering)response=await receipt(c,'community',member.member.id,query.receipt);
    else if (management) {
-    if (management.scope === 'review') await requireReviewer(c);
+    await requireManagementRole(c, management.scope);
     const memberId = member.member.id;
     const { rows, nextCursor } = await managementPage(c, { ...management, memberId });
-    const items = await Promise.all(rows.map(row => project(c, row)));
+    const items = management.scope === 'published-admin' ? rows.map(publishedSummary) : await Promise.all(rows.map(row => project(c, row)));
     response = { memberId, items, nextCursor };
    }
    else if(method==='GET'){
@@ -108,9 +109,9 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
    // occur while content SQL waits or runs. A late response must not commit a
    // write, private read or replay receipt after that authorization has expired.
    if(member){
+    if (management) await requireManagementRole(c, management.scope);
     const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(tokenFrom(event))])).rows[0];
     if(!final?.live)fail(401,'SESSION_INVALID');
-    if (management?.scope === 'review') await requireReviewer(c);
    }
    await c.query('COMMIT');tx=false;return output(200,response);
   }catch(error){

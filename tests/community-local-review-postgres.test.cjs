@@ -143,5 +143,70 @@ test('independent community concurrency and revocation regressions on PostgreSQL
     assert(!refused.body.includes('合成专项正文'));
    }finally{await admin.end();}
   });
+  await t.test('only an active administrator receives compact, actionable published records',async()=>{
+   const member=await login('normal'),operator=await login('admin'),admin=await db.admin();
+   const operatorId=db.accounts.admin.memberId,owner=db.accounts.normal.memberId,reviewerId=db.accounts.reviewer.memberId;
+   const query={kind:'guide',scope:'published-admin',limit:'1'};
+   const get=(session,parameters=query,serve=handler)=>serve({httpMethod:'GET',headers:session?{cookie:session.cookie}:{},queryStringParameters:parameters});
+   try{
+    await admin.query("INSERT INTO community_lab.member_roles(member_id,role) VALUES($1,'reviewer') ON CONFLICT DO NOTHING",[reviewerId]);
+    const reviewer=await login('reviewer');
+    const content='合成发布摘要'.repeat(50);
+    const {rows:seeded}=await admin.query(`
+     INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status)
+     SELECT 'guide',$1,'合成摘要作者',jsonb_build_object('title','审核管理合成攻略','content',$2::text,'category','PVE','difficulty',1),state
+     FROM unnest(ARRAY['published','published','draft','submitted']) AS state
+     RETURNING id,status
+    `,[owner,content]);
+    const published=seeded.filter(r=>r.status==='published').map(r=>r.id).sort().reverse();
+    for(const [session,status] of [[null,401],[member,403],[reviewer,403]]) {
+     const denied=await get(session);
+     assert.equal(denied.statusCode,status);
+     assert(!denied.body.includes(published[0]));
+     if(session) assert.equal(JSON.parse(denied.body).code,'ADMIN_REQUIRED');
+    }
+    const first=await get(operator);
+    assert.equal(first.statusCode,200);
+    assert.equal(first.headers['Cache-Control'],'no-store');
+    const page=JSON.parse(first.body);
+    assert.equal(page.memberId,operatorId);
+    assert.deepEqual(page.items,[{id:published[0],version:1,isPinned:false,title:'审核管理合成攻略',content:content.slice(0,160),name:'合成摘要作者'}]);
+    const second=await get(operator,{...query,cursor:page.nextCursor});
+    assert.equal(second.statusCode,200);
+    assert.deepEqual(JSON.parse(second.body).items.map(row=>row.id),[published[1]]);
+    assert.equal(JSON.parse(second.body).nextCursor,null);
+    const legacy=(await admin.query("SELECT id FROM community_lab.items WHERE kind='guide' AND legacy")).rows[0].id;
+    const legacyAnchor=await get(operator,{...query,cursor:'published-admin.guide.'+legacy});
+    assert.equal(legacyAnchor.statusCode,409);
+    assert.equal(JSON.parse(legacyAnchor.body).code,'PAGE_CHANGED');
+    const review=(await get(operator,{kind:'guide',scope:'review',cursor:page.nextCursor}));
+    assert.equal(review.statusCode,400);
+    for (const session of [member,reviewer]) {
+     const denied=await handler(event(session,{op:'item.pin',id:published[0],version:1,pinned:true,requestId:crypto.randomUUID()}));
+     assert.equal(denied.statusCode,403);
+    }
+    let demoted=false;
+    const changed=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{
+     const c=await db.connectBusiness(),sqlQuery=c.query.bind(c);
+     c.query=async(sql,...args)=>{
+      const result=await sqlQuery(sql,...args);
+      if(!demoted&&sql.includes('AS cursor_valid')){
+       assert.equal(result.rows[0].id,published[0]);
+       const changed=await admin.query("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[operatorId]);
+       assert.equal(changed.rowCount,1);
+       demoted=true;
+      }
+      return result;
+     };
+     return c;
+    }});
+    const refused=await get(operator,query,changed);
+    assert.equal(demoted,true);
+    assert.equal(refused.statusCode,403);
+    assert.equal(JSON.parse(refused.body).code,'ADMIN_REQUIRED');
+    assert(!refused.body.includes(published[0]));
+    assert.equal((await admin.query('SELECT is_pinned FROM community_lab.items WHERE id=$1',[published[0]])).rows[0].is_pinned,false);
+   }finally{await admin.end();}
+  });
  }finally{await db.stop();}
 });

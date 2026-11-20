@@ -286,16 +286,11 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      RETURNING id,version,payload->>'content' AS body
     `,[authorId,lesson,withdrawn,deleted]);
     const target=body=>seeded.find(row=>row.body===body);
-    await admin.query(`
-     INSERT INTO community_lab.replies(item_id,author_id,author_label,content,created_at)
-     SELECT $1,$2,'合成旧回复作者','合成更早的可见回复','2020-01-01T00:00:00Z'
-     FROM generate_series(1,100)
-    `,[target(withdrawn).id,authorId]);
     const review=order('item.review',{id:target(lesson).id,version:1,decision:'reject'});
     const remove=order('item.delete',{id:target(deleted).id,version:1});
     const reaction=order('reaction.set',{id:target(withdrawn).id,type:'like',active:true});
     const reply=order('reply.create',{id:target(withdrawn).id,content:closedReply});
-    const cases=[[reviewer,review,lesson],[operator,remove,deleted],[visitor,reaction,withdrawn],[visitor,reply,closedReply]];
+    const cases=[[reviewer,review,lesson],[operator,remove,deleted],[visitor,reply,closedReply],[visitor,reaction,withdrawn]];
     for(const [session,body,content] of cases){
      const first=await send(session,body);
      assert.equal(first.statusCode,200);
@@ -303,8 +298,20 @@ test('independent community concurrency and revocation regressions on PostgreSQL
      const immediate=await send(session,body);
      assert.equal(immediate.statusCode,200);
      assert.equal(JSON.parse(immediate.body).item.id,body.id);
+     if(body.op==='reaction.set')assert(immediate.body.includes(closedReply));
     }
-    const {rows:[replyRow]}=await admin.query('SELECT id FROM community_lab.replies WHERE item_id=$1 AND author_id=$2',[reply.id,db.accounts.same.memberId]);
+    await admin.query(`
+     INSERT INTO community_lab.replies(item_id,author_id,author_label,content,created_at)
+     SELECT $1,$2,'合成旧回复作者','合成更早的可见回复','2020-01-01T00:00:00Z'
+     FROM generate_series(1,100)
+    `,[target(withdrawn).id,authorId]);
+    const overflow=await send(visitor,order('reply.create',{id:reply.id,content:'合成追加回复保留在成功响应中'}));
+    assert.equal(overflow.statusCode,200);
+    const overflowResult=JSON.parse(overflow.body);
+    assert.equal(overflowResult.item.replies.length,100);
+    assert(overflowResult.item.replies.some(row=>row.id===overflowResult.replyId));
+    assert((await send(visitor,reply)).body.includes(closedReply));
+    const {rows:[replyRow]}=await admin.query('SELECT id FROM community_lab.replies WHERE item_id=$1 AND author_id=$2 AND content=$3',[reply.id,db.accounts.same.memberId,closedReply]);
     const moderation=order('reply.delete',{id:reply.id,replyId:replyRow.id});
     assert.equal((await send(operator,moderation)).statusCode,200);
     const visibleReplay=await send(visitor,reaction);

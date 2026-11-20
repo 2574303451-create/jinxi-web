@@ -384,6 +384,91 @@ async function main() {
         assert.equal(await a.getByLabel('公告标题',{exact:true}).count(),0);
         record.scenarios.push('packed-home-announcement-visible-after-independent-review');
 
+        record.stage='announcement-history';
+        await resetVisitQuota();
+        const announcementOwner = await session(staff);
+        const announcementReviewer = await session(reviewer);
+        const archiveDraft = await api.mutate('operations',announcementOwner,{
+          op:'announcement.create',title:'早期合成公告草稿',contentHtml:'<p>旧稿正文</p>',expiresAt:null,
+        });
+        assert.equal(archiveDraft.status,200);
+        const archiveId = archiveDraft.body.item.id;
+        const seededAnnouncements = await api.admin(async c=>{
+          await c.query('BEGIN');
+          const owner = announcementOwner.memberId;
+          await c.query("SELECT set_config('operations.actor',$1,true)",[owner]);
+          const {rows} = await c.query(`INSERT INTO operations_lab.documents(kind,owner_id,last_editor,payload,status)
+            SELECT 'announcement',$1,$1,jsonb_build_object('title','合成公告历史 '||entry,'contentHtml','<p>合成历史正文</p>'),'draft'
+            FROM generate_series(1,51) AS entry RETURNING id`,[owner]);
+          const ids = rows.map(row=>row.id);
+          await c.query("UPDATE operations_lab.documents SET status='submitted',version=2 WHERE id=ANY($1::uuid[])",[ids]);
+          await c.query("SELECT set_config('operations.actor',$1,true)",[announcementReviewer.memberId]);
+          await c.query("UPDATE operations_lab.documents SET status='published',version=3 WHERE id=ANY($1::uuid[])",[ids]);
+          await c.query('COMMIT');
+          return ids.length;
+        });
+        assert.equal(seededAnnouncements,51);
+        const publishedHistory = (await api.admin(`SELECT id FROM operations_lab.documents WHERE kind='announcement' AND status='published'
+          ORDER BY published_at DESC,id DESC`)).rows.map(row=>row.id);
+        const announcementIds = (page,list) => page.getByTestId(list).locator('[data-item-id]').evaluateAll(nodes=>nodes.map(node=>node.dataset.itemId));
+        const archiveRow = page => page.getByTestId('managed-announcements').locator(`[data-item-id="${archiveId}"]`);
+        const publicAnnPager = a.getByRole('navigation',{name:'已公开公告分页',exact:true});
+        await a.getByRole('button',{name:'刷新公告',exact:true}).click();
+        await publicAnnPager.waitFor();
+        assert.deepEqual(await announcementIds(a,'public-announcements'),publishedHistory.slice(0,50));
+        await publicAnnPager.getByRole('button',{name:'查看更早记录',exact:true}).press('Enter');
+        await a.getByTestId('public-announcements').locator(`[data-item-id="${publishedHistory[50]}"]`).waitFor();
+        assert.deepEqual(await announcementIds(a,'public-announcements'),publishedHistory.slice(50));
+        assert(await a.getByRole('heading',{name:'已公开公告',exact:true}).evaluate(node=>node===document.activeElement));
+        assert.equal(await a.getByTestId('managed-announcements').count(),0);
+
+        const manageAnn = page => page.getByRole('region',{name:'公告审核与修订',exact:true});
+        const manageAnnPager = page => page.getByRole('navigation',{name:'公告审核与修订分页',exact:true});
+        const openAnnArchive = async page => {
+          await manageAnn(page).getByRole('button',{name:'刷新管理公告',exact:true}).click();
+          await manageAnnPager(page).getByRole('button',{name:'查看更早记录',exact:true}).click();
+          await archiveRow(page).waitFor();
+        };
+        const recoverAnnFirstPage = async page => {
+          await manageAnn(page).getByRole('alert').getByText('公告已更新，请返回第一页。',{exact:true}).waitFor();
+          assert.deepEqual(await announcementIds(page,'managed-announcements'),[]);
+          await manageAnnPager(page).getByRole('button',{name:'返回第一页',exact:true}).click();
+          await page.getByTestId('managed-announcements').locator('li').first().waitFor();
+        };
+        await openAnnArchive(staff);
+        await archiveRow(staff).getByRole('button',{name:'修订此公告',exact:true}).click();
+        assert.equal(await staff.getByLabel('公告标题',{exact:true}).inputValue(),'早期合成公告草稿');
+        await staff.getByLabel('公告富文本源',{exact:true}).fill('<p>早期公告修订正文</p>');
+        const [archiveEdited] = await Promise.all([command(staff,'operations','announcement.edit'),staff.getByRole('button',{name:'保存公告草稿',exact:true}).click()]);
+        assert.equal(archiveEdited.status(),200);
+        await recoverAnnFirstPage(staff);
+        await manageAnnPager(staff).getByRole('button',{name:'查看更早记录',exact:true}).click();
+        const [archiveSubmitted] = await Promise.all([command(staff,'operations','announcement.submit'),archiveRow(staff).getByRole('button',{name:'提交公告审核',exact:true}).click()]);
+        assert.equal(archiveSubmitted.status(),200);
+        await recoverAnnFirstPage(staff);
+        await openAnnArchive(reviewer);
+        const [archivePublished] = await Promise.all([command(reviewer,'operations','announcement.publish'),archiveRow(reviewer).getByRole('button',{name:'独立审核并发布',exact:true}).click()]);
+        assert.equal(archivePublished.status(),200);
+        await a.getByRole('button',{name:'刷新公告',exact:true}).click();
+        await a.getByRole('region',{name:'已公开公告',exact:true}).getByRole('alert').getByText('公告已更新，请返回第一页。',{exact:true}).waitFor();
+        await publicAnnPager.getByRole('button',{name:'返回第一页',exact:true}).click();
+        const visitorArchive = a.getByTestId('public-announcements').locator(`[data-item-id="${archiveId}"]`);
+        await visitorArchive.getByText('早期公告修订正文',{exact:true}).waitFor();
+        await manageAnn(staff).getByRole('button',{name:'刷新管理公告',exact:true}).click();
+        const [archiveWithdrawn] = await Promise.all([command(staff,'operations','announcement.withdraw'),archiveRow(staff).getByRole('button',{name:'撤回公告',exact:true}).click()]);
+        assert.equal(archiveWithdrawn.status(),200);
+        await a.getByRole('button',{name:'刷新公告',exact:true}).click();
+        await a.getByTestId('public-announcements').locator(`[data-item-id="${publishedHistory[0]}"]`).waitFor();
+        assert.equal(await visitorArchive.count(),0);
+        const {rows:archiveRevisions} = await api.admin(`SELECT data->>'status' AS status,actor_id FROM operations_lab.revisions
+          WHERE item_id=$1 ORDER BY version`,[archiveId]);
+        assert.deepEqual(archiveRevisions,[
+          {status:'draft',actor_id:announcementOwner.memberId},{status:'draft',actor_id:announcementOwner.memberId},
+          {status:'submitted',actor_id:announcementOwner.memberId},{status:'published',actor_id:announcementReviewer.memberId},
+          {status:'withdrawn',actor_id:announcementOwner.memberId},
+        ]);
+        record.scenarios.push('announcement-history-finds-revises-reviews-and-withdraws-an-older-draft');
+
         record.stage='sponsorship-visibility';
         await resetVisitQuota();
         for (const page of [staff,reviewer]) {

@@ -208,5 +208,55 @@ test('independent community concurrency and revocation regressions on PostgreSQL
     assert.equal((await admin.query('SELECT is_pinned FROM community_lab.items WHERE id=$1',[published[0]])).rows[0].is_pinned,false);
    }finally{await admin.end();}
   });
+  await t.test('administrator writes waiting for the content lock are refused after role demotion',async()=>{
+   const operator=await login('admin'),owner=await login('normal'),admin=await db.admin();
+   const operatorId=db.accounts.admin.memberId,ownerId=db.accounts.normal.memberId;
+   try{
+    const {rows:[item]}=await admin.query(`
+     INSERT INTO community_lab.items(kind,owner_id,author_label,payload,status)
+     VALUES('guide',$1,'合成归档作者','{"title":"合成归档","content":"合成正文","category":"PVE","difficulty":1}','published')
+     RETURNING id,version
+    `,[ownerId]);
+    const snapshot=async()=> (await admin.query('SELECT status,is_pinned,version FROM community_lab.items WHERE id=$1',[item.id])).rows[0];
+    for(const [op,fields,code] of [['item.pin',{pinned:true},'ADMIN_REQUIRED'],['item.delete',{},'NOT_OWNER']]){
+     await admin.query("UPDATE community_lab.member_roles SET role='admin' WHERE member_id=$1",[operatorId]);
+     await admin.query('SELECT pg_advisory_lock(hashtextextended($1,73))',[item.id]);
+     let enteredLock,pending;
+     const entered=new Promise(resolve=>{enteredLock=resolve;});
+     const waiting=createCommunityHandler({settings:db.settings,identity,env:{},connect:async()=>{
+      const c=await db.connectBusiness(),query=c.query.bind(c);
+      c.query=(sql,...values)=>{
+       if(sql.startsWith('SELECT pg_advisory_xact_lock(')) enteredLock();
+       return query(sql,...values);
+      };
+      return c;
+     }});
+     const requestId=crypto.randomUUID();
+     try{
+      pending=waiting(event(operator,{op,...fields,id:item.id,version:item.version,requestId}));
+      const step=await Promise.race([entered.then(()=>true),pending.then(()=>false)]);
+      assert.equal(step,true,'request reached the actual content lock');
+      const {rowCount}=await admin.query("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[operatorId]);
+      assert.equal(rowCount,1);
+     }finally{await admin.query('SELECT pg_advisory_unlock(hashtextextended($1,73))',[item.id]);}
+     const denied=await pending;
+     assert.equal(denied.statusCode,403);
+     assert.equal(JSON.parse(denied.body).code,code);
+     assert.deepEqual(await snapshot(),{status:'published',is_pinned:false,version:item.version});
+     assert.equal((await admin.query('SELECT id FROM community_lab.audit WHERE item_id=$1',[item.id])).rowCount,0);
+     assert.equal((await admin.query('SELECT request_id FROM community_lab.requests WHERE request_id=$1',[requestId])).rowCount,0);
+    }
+    const archive=await handler(event(owner,{op:'item.archive',id:item.id,version:item.version,requestId:crypto.randomUUID()}));
+    assert.equal(archive.statusCode,200);
+    const version=item.version+1;
+    for(const [op,fields,code] of [['item.edit',{title:'合成修改',content:'合成正文',category:'PVE',difficulty:1},'CONTENT_CLOSED'],
+      ['item.submit',{},'SUBMIT_STATE_CONFLICT']]){
+     const denied=await handler(event(owner,{op,...fields,id:item.id,version,requestId:crypto.randomUUID()}));
+     assert.equal(denied.statusCode,409);
+     assert.equal(JSON.parse(denied.body).code,code);
+    }
+    assert.deepEqual(await snapshot(),{status:'archived',is_pinned:false,version});
+   }finally{await admin.end();}
+  });
  }finally{await db.stop();}
 });

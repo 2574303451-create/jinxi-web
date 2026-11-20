@@ -12,7 +12,7 @@ export function ConfirmRemoval({ label, busy, heading, onConfirm, action = '删�
     <button ref={trigger} type="button" className="paper-button" aria-expanded={confirming} disabled={busy}
       onClick={() => setConfirming(!confirming)}>{action}{label}</button>
     {confirming && <div className="integration-actions">
-      <p>{description}</p>
+      <p className="break-words">{description}</p>
       <button type="button" className="paper-button" disabled={busy} onClick={() => { setConfirming(false); trigger.current?.focus(); }}>取消{action}</button>
       <button type="button" className="paper-button" disabled={busy} onClick={() => {
         setConfirming(false); heading.current?.focus(); onConfirm();

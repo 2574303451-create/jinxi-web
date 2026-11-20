@@ -101,13 +101,13 @@ export function CommunityManagement({ kind, staff, admin }: { kind: 'message' | 
       <div id={publishedId} hidden={!showPublished}>
         {showPublished && <CommunityPage<PublishedSummary> kind={kind} scope="published-admin" busy={cmd.busy}>{(items, heading, reload) =>
           <ul>{items.map(item => <li className="integration-record" key={item.id} data-moderation-id={item.id}>
-            <p><strong>{item.title || item.content}</strong></p>
+            <p className="break-words"><strong>{item.title || item.content}</strong></p>
             <p>{item.name}{item.isPinned && ' · 已置顶'}</p>
             <div className="integration-actions">
               <button type="button" className="paper-button" aria-pressed={Boolean(item.isPinned)} disabled={cmd.busy}
                 onClick={() => { heading.current?.focus(); updatePublished(item, 'item.pin', reload); }}>{item.isPinned ? '取消置顶' : '置顶'}</button>
               <ConfirmRemoval key={item.version} label="已发布内容" busy={cmd.busy} heading={heading}
-                description="删除后将停止展示，操作会留下审计记录。"
+                description={`删除「${item.title || item.content}」后将停止展示，操作会留下审计记录。`}
                 onConfirm={() => updatePublished(item, 'item.delete', reload)} />
             </div>
           </li>)}</ul>

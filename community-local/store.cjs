@@ -33,6 +33,15 @@ function publishedSummary(row) {
  return {id:row.id, version:row.version, isPinned:row.is_pinned, title:typeof title === 'string' ? title : undefined,
   content:typeof content === 'string' ? content.slice(0,160) : '', name:row.author_label};
 }
+const needsStaff = (op, item, actor) => op === 'item.review' || op === 'item.pin' ||
+ (op === 'item.delete' && item.owner_id !== actor);
+function requireItemAuthority(op, item, actor, staff) {
+ if (op === 'item.review') {
+  if (!['reviewer','admin'].includes(staff) || item.owner_id === actor) fail(403,'REVIEWER_REQUIRED');
+ } else if (op === 'item.pin') {
+  if (staff !== 'admin') fail(403,'ADMIN_REQUIRED');
+ } else if (item.owner_id !== actor && !(op === 'item.delete' && staff === 'admin')) fail(403,'NOT_OWNER');
+}
 async function project(c,r,{includeMyReactions=false}={}){
  const base={id:r.id,content:r.payload.content,category:r.payload.category,status:r.status,version:r.version,isPinned:r.is_pinned,ownership:r.legacy?'unverified-legacy':'verified'};
  const replies=r.status==='published'?(await c.query('SELECT id,author_label,content,created_at FROM community_lab.replies WHERE item_id=$1 AND NOT deleted ORDER BY created_at LIMIT 100',[r.id])).rows:[];
@@ -77,11 +86,10 @@ async function mutate(c,body,member){
   if(!uuid(body.id)||!Number.isInteger(body.version)||body.version<1)fail(400,'ITEM_VERSION_REQUIRED');
   const existing=(await c.query('SELECT * FROM community_lab.items WHERE id=$1',[body.id])).rows[0];if(!existing)fail(404,'NOT_FOUND');
   if(existing.legacy)fail(403,'LEGACY_OWNERSHIP_UNVERIFIED');
-  if(body.op==='item.review'){if(!['reviewer','admin'].includes(staff)||existing.owner_id===actor)fail(403,'REVIEWER_REQUIRED');}
-  else if(body.op==='item.pin'){if(staff!=='admin')fail(403,'ADMIN_REQUIRED');}
-  else if(existing.owner_id!==actor&&!(body.op==='item.delete'&&staff==='admin'))fail(403,'NOT_OWNER');
+  requireItemAuthority(body.op,existing,actor,staff);
   await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,73))',[body.id.toLowerCase()]);
   item=(await c.query('SELECT * FROM community_lab.items WHERE id=$1 FOR UPDATE',[body.id])).rows[0];if(!item)fail(404,'NOT_FOUND');
+  if (needsStaff(body.op,item,actor)) requireItemAuthority(body.op,item,actor,await role(c));
   if(item.version!==body.version)fail(409,'VERSION_CONFLICT');
   let data=item.payload,status=item.status,pinned=item.is_pinned;
   if(body.op==='item.edit'){

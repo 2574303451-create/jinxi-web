@@ -1,7 +1,8 @@
 "use client";
-import { useCallback, useRef, useState, type RefObject } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
+import { PageControls } from './page-controls';
 type AdminOrder = { id: string; itemName: string; ownerLabel: string; quantity: number; cost: string; status: string; canClose: boolean };
 type History = {
   orders: { id: string; status: string; cost: string }[];
@@ -11,22 +12,6 @@ type History = {
 };
 type Board = { entries: { publicId: string; position: number; label: string; score: string }[]; nextCursor: string | null };
 const orderLabels: Record<string,string> = { pending: '待处理', processing: '处理中', fulfilled: '已完成', failed: '未履约 · 已退款', cancelled: '已取消 · 已退款' };
-
-function PageControls({ label, olderLabel, atStart, next, loading, heading, onChange }: {
-  label: string; olderLabel: string; atStart: boolean; next?: string | null; loading: boolean;
-  heading: RefObject<HTMLHeadingElement | null>;
-  onChange: (cursor: string | null) => void;
-}) {
-  if (atStart && !next) return null;
-  const navigate = (cursor: string | null) => {
-    onChange(cursor);
-    heading.current?.focus();
-  };
-  return <nav className="integration-actions" aria-label={label} aria-busy={loading}>
-    <button type="button" className="paper-button" disabled={atStart} onClick={() => navigate(null)}>返回第一页</button>
-    <button type="button" className="paper-button" disabled={loading || !next} onClick={() => { if (next) navigate(next); }}>{olderLabel}</button>
-  </nav>;
-}
 
 export function PointsPanel() {
   const { client, ready } = useSession(), cmd = useCommand();

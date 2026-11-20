@@ -742,6 +742,63 @@ async function main() {
         assert.equal(await discussion(staff).getByRole('textbox').count(),0);
         record.scenarios.push('packed-guide-reactions-and-live-comments-keep-member-ids-private');
 
+        record.stage='attendance-history';
+        await resetVisitQuota();
+        const seededAttendance = await api.admin(`WITH records AS (
+          INSERT INTO attendance_lab.records(member_id,signed_at)
+          SELECT $1, TIMESTAMPTZ '2020-01-01 12:00:00+08' + make_interval(days => day)
+          FROM generate_series(0,30) AS day RETURNING id,member_id
+        ) INSERT INTO attendance_lab.reward_events(record_id,member_id) SELECT id,member_id FROM records`,[other.memberId]);
+        assert.equal(seededAttendance.rowCount,31);
+        const {rows:attendanceRows} = await api.admin(`SELECT id,business_date::text AS date FROM attendance_lab.records
+          WHERE member_id=$1 ORDER BY business_date DESC`,[other.memberId]);
+        assert(attendanceRows.length>30);
+        const expectedFirst = attendanceRows.slice(0,30).map(row=>row.id);
+        const expectedOlder = attendanceRows.slice(30).map(row=>row.id);
+        await navigate(a);
+        await ready(a);
+        const openAttendance = page => page.getByRole('button',{name:'签到事实',exact:true}).click();
+        const attendancePanel = page => page.getByRole('region',{name:'统一签到',exact:true});
+        const attendanceIds = page => attendancePanel(page).locator('[data-record-id]').evaluateAll(nodes=>nodes.map(node=>node.dataset.recordId));
+        const waitForRecord = (page,id) => attendancePanel(page).locator(`[data-record-id="${id}"]`).waitFor();
+        await openAttendance(a);
+        await waitForRecord(a,expectedFirst[0]);
+        assert.deepEqual(await attendanceIds(a),expectedFirst);
+        const summary = await attendancePanel(a).locator('dl').innerText();
+        const attendancePager = a.getByRole('navigation',{name:'签到记录分页',exact:true});
+        const older = attendancePager.getByRole('button',{name:'查看更早签到记录',exact:true});
+        const latest = attendancePager.getByRole('button',{name:'返回第一页',exact:true});
+        const pageRead = a.waitForResponse(response=>{
+          const url = new URL(response.url());
+          return url.pathname==='/api/attendance' && response.request().method()==='GET' &&
+            url.searchParams.get('before')===attendanceRows[29].date;
+        });
+        await older.press('Enter');
+        assert.equal((await pageRead).status(),200);
+        await waitForRecord(a,expectedOlder[0]);
+        assert.deepEqual(await attendanceIds(a),expectedOlder);
+        assert.equal(await attendancePanel(a).locator('dl').innerText(),summary);
+        assert(await attendancePanel(a).getByRole('heading',{name:'本人签到记录',exact:true}).evaluate(node=>node===document.activeElement));
+        assert(await older.isDisabled());
+        await latest.click();
+        await waitForRecord(a,expectedFirst[0]);
+        assert.deepEqual(await attendanceIds(a),expectedFirst);
+        await older.click();
+        await waitForRecord(a,expectedOlder[0]);
+
+        record.stage='attendance-history-account-switch';
+        await close(a);
+        await a.getByRole('button',{name:'退出统一会话',exact:true}).click();
+        await a.getByTestId('unified-session').filter({hasText:'anonymous'}).waitFor();
+        await resetVisitQuota();
+        await login(a,'normal');
+        const {rows:[normalAttendance]} = await api.admin('SELECT id FROM attendance_lab.records WHERE member_id=$1',[member.memberId]);
+        await openAttendance(a);
+        await waitForRecord(a,normalAttendance.id);
+        assert.deepEqual(await attendanceIds(a),[normalAttendance.id]);
+        assert.equal(await attendancePager.count(),0);
+        record.scenarios.push('attendance-history-paginates-private-records-and-resets-on-account-switch');
+
         record.stage='viewports';
         await navigate(a);
         await ready(a);

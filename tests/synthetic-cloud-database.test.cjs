@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { randomBytes } = require('node:crypto');
 const { freshDatabase, toolsFromArgs } = require('./synthetic-cloud-support.cjs');
 const { initialize, activateRoles, freezeRoles, rollbackEmpty } = require('../synthetic-cloud/database/initialize.cjs');
-const { roleState, schemaFingerprint, verifyInventory, appRoles } = require('../synthetic-cloud/database/guard.cjs');
+const { roleState, schemaFingerprint, verifyInventory, verifySchema, appRoles } = require('../synthetic-cloud/database/guard.cjs');
 const { seed } = require('../synthetic-cloud/database/seed.cjs');
 
 test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async t => {
@@ -149,6 +149,28 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
         await assert.rejects(db.connect(role,secrets[role],'postgres'),{code:'42501'});
         await assert.rejects(db.connect(role,secrets[role],'template1'),{code:'42501'});
       }
+    });
+    await t.test('connection-local trigger mode is rejected even with the approved fingerprint', async () => {
+      const root = await db.superuser();
+      const approval = { ...db.target, schemaFingerprint: initialized.schemaFingerprint };
+      try {
+        await root.query('BEGIN READ ONLY');
+        await root.query("SET LOCAL session_replication_role='replica'");
+        await root.query('SET LOCAL SESSION AUTHORIZATION jinxi_member_session');
+        const {rows:[identity]} = await root.query(`
+          SELECT current_user AS role, session_user AS session_role,
+            current_setting('session_replication_role') AS trigger_mode
+        `);
+        assert.deepEqual(identity,{role:'jinxi_member_session',session_role:'jinxi_member_session',trigger_mode:'replica'});
+        assert.equal(await schemaFingerprint(root),approval.schemaFingerprint);
+        await assert.rejects(verifySchema(root,approval,'member'), /SYNTHETIC_DATABASE_IDENTITY_MISMATCH/);
+      } finally {
+        await root.query('ROLLBACK');
+        await root.end();
+      }
+      const normal = await db.connect('jinxi_member_session',secrets.jinxi_member_session);
+      try { await verifySchema(normal,approval,'member'); }
+      finally { await normal.end(); }
     });
     await t.test('emergency freeze succeeds after schema drift, preserves all records and invalidates role logins', async () => {
       await client.query('GRANT SELECT ON b2_lab.guild_member_accounts TO jinxi_community_app');

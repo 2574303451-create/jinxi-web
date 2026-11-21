@@ -137,6 +137,32 @@ async function main() {
           return new URL(response.url()).pathname === '/api/'+module &&
             request.method()==='POST' && request.postDataJSON().op===op;
         });
+        async function traceRefresh(page, module, view, action) {
+          const reads = [];
+          const observe = request => {
+            const url = new URL(request.url());
+            if (request.method() === 'GET' && url.pathname === '/api/' + module &&
+                (url.searchParams.get('view') === view || url.searchParams.get('scope') === view) &&
+                reads.length < 12) reads.push({ request, status: null });
+          };
+          const complete = response => {
+            const read = reads.find(row => row.request === response.request());
+            if (read) read.status = response.status();
+          };
+          page.on('request', observe);
+          page.on('response', complete);
+          try {
+            return await action();
+          } catch (error) {
+            console.error('Synthetic refresh evidence: ' + JSON.stringify({
+              stage: record.stage, module, view, statuses: reads.map(row => row.status),
+            }));
+            throw error;
+          } finally {
+            page.off('request', observe);
+            page.off('response', complete);
+          }
+        }
         // Independent browser visits use the same loopback IP in this fixture.
         const resetVisitQuota = () => api.admin('TRUNCATE b2_lab.member_session_limits_v2');
         async function points(p) {
@@ -351,11 +377,13 @@ async function main() {
           const mirrorRow = mirror.locator('[data-admin-order-id="'+id+'"]');
           await mirrorRow.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           const claimOrder = row.getByRole('button',{name:'认领订单',exact:true}).and(row.locator('button:enabled'));
-          const [claim] = await Promise.all([command(staff,'points','order.process'),
-            claimOrder.press('Enter')]);
-          assert.equal(claim.status(),200);
-          assert.equal((await claim.json()).status,'processing');
-          await row.getByText(/已由你认领/).waitFor();
+          await traceRefresh(staff,'points','admin',async () => {
+            const [claim] = await Promise.all([command(staff,'points','order.process'),
+              claimOrder.press('Enter')]);
+            assert.equal(claim.status(),200);
+            assert.equal((await claim.json()).status,'processing');
+            await row.getByText(/已由你认领/).waitFor();
+          });
           record.stage=orderStage+'-cross-tab-claim';
           await mirrorRow.getByText(/已由你认领/).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
@@ -1435,15 +1463,17 @@ async function main() {
         });
         for (const pinned of [true,false]) {
           record.stage=pinned?'published-community-moderation-pin-message':'published-community-moderation-unpin-message';
-          const [pin] = await Promise.all([command(staff,'community','item.pin'),
-            messageRow.getByRole('button',{name:pinned?'置顶':'取消置顶',exact:true}).click()]);
-          assert.equal(pin.status(),200);
-          assert.equal(pin.request().postDataJSON().pinned,pinned);
-          assert.equal((await storedMessage()).is_pinned,pinned);
-          const publicMessages = await api.request('/.netlify/functions/messages');
-          assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
-          await messageManagement.getByText('操作已由服务器确认。',{exact:true}).waitFor();
-          await messageRow.getByRole('button',{name:pinned?'取消置顶':'置顶',exact:true,pressed:pinned}).waitFor();
+          await traceRefresh(staff,'community','published-admin',async () => {
+            const [pin] = await Promise.all([command(staff,'community','item.pin'),
+              messageRow.getByRole('button',{name:pinned?'置顶':'取消置顶',exact:true}).click()]);
+            assert.equal(pin.status(),200);
+            assert.equal(pin.request().postDataJSON().pinned,pinned);
+            assert.equal((await storedMessage()).is_pinned,pinned);
+            const publicMessages = await api.request('/.netlify/functions/messages');
+            assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
+            await messageManagement.getByText('操作已由服务器确认。',{exact:true}).waitFor();
+            await messageRow.getByRole('button',{name:pinned?'取消置顶':'置顶',exact:true,pressed:pinned}).waitFor();
+          });
           assert.equal(await staff.locator('html').getAttribute('data-pin-receipt-storage'),'aborted');
           await waitForCommunityAdminLists(messageManagement);
         }

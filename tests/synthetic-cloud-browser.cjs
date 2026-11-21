@@ -1703,7 +1703,21 @@ async function main() {
       } finally { await browser.close(); }
     }));
   } finally {
-    if (!record.passed && process.env.CI === 'true') console.error('Synthetic browser stage: '+record.stage);
+    if (!record.passed && process.env.CI === 'true') {
+      console.error('Synthetic browser stage: '+record.stage);
+      const codes = {};
+      // Read only the fixed SQLSTATE field of local PostgreSQL diagnostics.
+      // Never copy the private server log, SQL, parameters, or role names.
+      try {
+        const log = fs.readFileSync(path.join(db.folder,'postgres.private.log'),'utf8');
+        for (const match of log.matchAll(/^\d{4}-\d\d-\d\d [^\r\n]*? ([0-9A-Z]{5}) (?:ERROR|FATAL|PANIC):/gm)) {
+          codes[match[1]] = (codes[match[1]] ?? 0) + 1;
+        }
+      } catch {
+        record.postgresDiagnosticsUnavailable = true;
+      }
+      console.error('Synthetic PostgreSQL SQLSTATE counts: '+JSON.stringify(codes));
+    }
     fs.writeFileSync(path.join(evidence,'last-browser.json'),JSON.stringify(record,null,2)+'\n');
     await app.close();
   }

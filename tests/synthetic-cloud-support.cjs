@@ -103,7 +103,7 @@ async function freshDatabase({ pgBin, openssl }) {
     fs.appendFileSync(path.join(data, 'postgresql.conf'), "\nlisten_addresses = '127.0.0.1'\nport = 5432\njit = off\n" +
       (process.platform === 'win32' ? '' : "unix_socket_directories = ''\n") +
       "ssl = on\nssl_key_file = '" + keyPath + "'\nssl_cert_file = '" + certPath + "'\n" +
-      "log_parameter_max_length = 0\nlog_min_error_statement = 'fatal'\n");
+      "log_parameter_max_length = 0\nlog_min_error_statement = 'fatal'\nlog_line_prefix = '%m %e '\n");
     // On Windows the server may inherit the pg_ctl output pipes. A real file
     // lets pg_ctl return even while this temporary server keeps running.
     const log = fs.openSync(path.join(folder,'pg-ctl.private.log'),'a',0o600);

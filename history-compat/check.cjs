@@ -18,10 +18,16 @@ function hasValidMovement(row){
   integer(row.balance_before)&&integer(row.balance_after)&&
   BigInt(row.balance_before)+(row.direction===1?1n:-1n)*BigInt(row.point_delta)===BigInt(row.balance_after);
 }
+const checkinIntMax=2147483647;
+function checkinId(id){
+ const value=Number.isSafeInteger(id)?String(id):id;
+ return integer(value)&&value!=='0'&&BigInt(value)<=BigInt(checkinIntMax)?value:null;
+}
 function validCheckin(row){
  return day(row.checkin_date)&&instant(row.checkin_time)&&
-  Number.isSafeInteger(row.continuous_days)&&row.continuous_days>=1&&
-  row.is_continuous===(row.continuous_days>1)&&Number.isSafeInteger(row.reward_points)&&row.reward_points>=0;
+  Number.isInteger(row.continuous_days)&&row.continuous_days>=1&&row.continuous_days<=checkinIntMax&&
+  row.is_continuous===(row.continuous_days>1)&&
+  Number.isInteger(row.reward_points)&&row.reward_points>=0&&row.reward_points<=checkinIntMax;
 }
 function checkCheckinAwards({checkins,ledger},{owner,add,businessIds,ledgerIds,datePolicy}){
  // Use the verified member only to detect ambiguity across legacy aliases.
@@ -30,12 +36,15 @@ function checkCheckinAwards({checkins,ledger},{owner,add,businessIds,ledgerIds,d
   const member=owner(userId);
   return JSON.stringify(member?['member',member.memberId,date]:['legacy',userId,date]);
  };
- const facts=groups(checkins.filter(row=>day(row.checkin_date)),row=>key(row.user_id,row.checkin_date));
+ const facts=groups(checkins.filter(row=>nonBlankText(row.user_id)&&day(row.checkin_date)),row=>key(row.user_id,row.checkin_date));
  const awards=ledger.filter(row=>row.event_type==='checkin');
- const rewards=groups(awards.filter(row=>day(row.ext_json?.checkin_date)),
+ const rewards=groups(awards.filter(row=>nonBlankText(row.user_id)&&day(row.ext_json?.checkin_date)),
   row=>key(row.user_id,row.ext_json.checkin_date));
- const factIds=groups(checkins,row=>sourceId(row.id));
+ const factIds=groups(checkins,row=>checkinId(row.id));
  for(const row of checkins){
+  const id=checkinId(row.id);
+  if(id===null)add('checkin',row.id,'INVALID_CHECKIN_ID');
+  else if(factIds.get(id).length>1)add('checkin',row.id,'DUPLICATE_CHECKIN_ID');
   if(!owner(row.user_id))add('checkin',row.id,'UNPROVEN_CHECKIN_SUBJECT','unmapped');
   if(datePolicy!=='synthetic-clock-v1')add('checkin',row.id,'HISTORICAL_DATE_POLICY_UNPROVEN');
   if(!validCheckin(row))add('checkin',row.id,'INVALID_DATE_STREAK_OR_REWARD');
@@ -60,7 +69,7 @@ function checkCheckinAwards({checkins,ledger},{owner,add,businessIds,ledgerIds,d
    for(const row of credits)add('ledger',row.id,'CHECKIN_REWARD_LINK_AMBIGUOUS');
    continue;
   }
-  const [fact]=signIns,[award]=credits,factId=sourceId(fact.id);
+  const [fact]=signIns,[award]=credits,factId=checkinId(fact.id);
   const linked=factId!==null&&factIds.get(factId).length===1&&validCheckin(fact)&&owner(fact.user_id)&&
    award.user_id===fact.user_id&&award.scene==='daily_behavior'&&award.direction===1&&hasValidMovement(award)&&
    ledgerIds.get(award.id).length===1&&nonBlankText(award.biz_id)&&businessIds.get(award.biz_id).length===1&&

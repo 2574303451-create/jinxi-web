@@ -232,5 +232,35 @@ test('a reused business ID or a missing legacy user cannot prove a checkin rewar
  delete anchors.users[0].userId;
  delete fact.user_id;
  delete award.user_id;
- assert.deepEqual(conflicts(),['checkin','ledger']);
+ data.checkins.push({...fact,id:'2',user_id:null});
+ const unbound=checkHistory(data,anchors).findings;
+ assert.equal(unbound.filter(f=>f.code==='UNPROVEN_CHECKIN_SUBJECT').length,2);
+ assert(unbound.some(f=>f.code==='UNPROVEN_LEDGER_SUBJECT'));
+ assert(!unbound.some(f=>f.code==='DUPLICATE_CHECKIN_FACT'));
+});
+
+test('legacy checkin facts enforce serial identifiers and PostgreSQL integer fields',()=>{
+ const {data,anchors,fact}=syntheticLegacyCheckin();
+ const codes=()=>checkHistory(data,anchors).findings.filter(f=>f.entity==='checkin').map(f=>f.code);
+ for(const id of [1,'2147483647']){
+  fact.id=id;
+  assert.deepEqual(codes(),[]);
+ }
+ for(const id of ['synthetic-text-not-serial','2147483648',0,undefined]){
+  fact.id=id;
+  assert(codes().includes('INVALID_CHECKIN_ID'));
+  assert(codes().includes('CHECKIN_REWARD_LINK_CONFLICT'));
+ }
+ data.ledger.length=0;
+ fact.reward_points=0;
+ assert(codes().includes('INVALID_CHECKIN_ID'));
+ fact.id=1;
+ fact.reward_points=2147483648;
+ assert(codes().includes('INVALID_DATE_STREAK_OR_REWARD'));
+ fact.reward_points=0;
+ fact.continuous_days=2147483648;
+ assert(codes().includes('INVALID_DATE_STREAK_OR_REWARD'));
+ fact.continuous_days=3;
+ data.checkins.push({...fact,id:'1',checkin_date:'2024-03-01',checkin_time:'2024-03-01T04:00:00Z'});
+ assert.deepEqual(codes(),['DUPLICATE_CHECKIN_ID','DUPLICATE_CHECKIN_ID']);
 });

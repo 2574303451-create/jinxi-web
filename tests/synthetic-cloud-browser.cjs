@@ -1343,6 +1343,7 @@ async function main() {
           assert.equal((await storedMessage()).is_pinned,pinned);
           const publicMessages = await api.request('/.netlify/functions/messages');
           assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
+          await messageManagement.getByText('操作已由服务器确认。',{exact:true}).waitFor();
           await messageRow.getByRole('button',{name:pinned?'取消置顶':'置顶',exact:true,pressed:pinned}).waitFor();
           assert.equal(await staff.locator('html').getAttribute('data-pin-receipt-storage'),'aborted');
           await waitForCommunityAdminLists(messageManagement);

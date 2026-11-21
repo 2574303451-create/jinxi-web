@@ -18,12 +18,14 @@ function createJournal({indexedDB=globalThis.indexedDB,clock=()=>Date.now(),name
   });
  }
  return {
-  claim:(input,{renewConfirmed=false}={})=>transaction('readwrite',(store,done,abort)=>{
+  claim:(input,{renewConfirmed=false,expectedId}={})=>transaction('readwrite',(store,done,abort)=>{
    const now=clock(),row={v:1,...input,key:input.actor+':'+input.module+':'+input.digest,createdAt:now,expiresAt:now+TTL,state:'pending'};if(!valid(row))return abort();
    const all=store.getAll();all.onsuccess=()=>{
     if(all.result.length>MAX||all.result.some(r=>!valid(r)))return abort();
     if(renewConfirmed&&all.result.some(r=>r.actor===row.actor&&r.key!==row.key&&sameStateFamily(r,row)&&['pending','unknown'].includes(r.state)))return abort('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
     const prior=all.result.find(r=>r.key===row.key);
+    // A second tab may have replaced or forgotten the ID since the status lookup.
+    if (expectedId && prior?.id !== expectedId) return abort('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
     if(prior){if(renewConfirmed&&prior.state==='confirmed'){store.put(row);done({...row,fresh:true});}else done({...prior,fresh:false});return;}
     if(all.result.length>=MAX)return abort();store.add(row);done({...row,fresh:true});
    };

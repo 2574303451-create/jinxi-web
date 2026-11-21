@@ -128,6 +128,7 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       // Only these constrained target-state operations may start another intent
       // after confirmation. Unknown IDs and creation/financial IDs survive.
       let renewConfirmed = module === 'points' && ['visibility','rule.status','catalogue.status'].includes(body.op) || module === 'community' && body.op === 'reaction.set' || module === 'operations' && ['team.join','team.leave'].includes(body.op);
+      let expectedId;
       if (journal && renewConfirmed) {
         const family=(await journal.list(actor)).filter(r=>sameStateFamily(r,{module,op:body.op}));check(stamp, observed);
         const original=family.find(r=>r.key===key),wasUnknown=original&&['pending','unknown'].includes(original.state);
@@ -137,15 +138,20 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
           const status=await request(row.module,null,{receipt:row.id});check(stamp, observed);
           if(status.memberId!==actor||status.receipt?.requestId!==row.id||!['committed','unresolved'].includes(status.receipt.state))throw new SessionError('INVALID_RECEIPT');
           if(status.receipt.state==='committed'){
-            await journal.mark(row.key,row.id,'confirmed');check(stamp, observed);row.state='confirmed';
+            if (row.key === key) await rememberServerConfirmation(row.key, row.id);
+            else await journal.mark(row.key,row.id,'confirmed');
+            check(stamp, observed);
             if(pending.get(row.key)?.id===row.id)pending.delete(row.key);
           }else if(row.key!==key)throw new SessionError('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
         }
         // A same-value unknown retry remains the original request even after
         // lookup proves its commit. An older opposite receipt is not ordering proof.
-        if(wasUnknown)renewConfirmed=false;
+        if (wasUnknown) {
+          renewConfirmed = false;
+          expectedId = original.id;
+        }
       }
-      const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed }) : null;
+      const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed, expectedId }) : null;
       check(stamp, observed);
       receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
       if (saved && !['confirmed','rejected'].includes(saved.state) && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');

@@ -1,5 +1,28 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');const {createSession}=require('../integration-local/session.cjs');
-function memoryJournal(){const rows=new Map();return {rows,async claim(r,{renewConfirmed=false}={}){const key=r.actor+':'+r.module+':'+r.digest;if(rows.has(key)&&!(renewConfirmed&&rows.get(key).state==='confirmed'))return {...rows.get(key),fresh:false};const row={...r,key,state:'pending',createdAt:Date.now(),expiresAt:Date.now()+86400000};rows.set(key,row);return {...row,fresh:true};},async mark(key,id,state){const row=rows.get(key);assert.equal(row.id,id);if(row.state!=='confirmed')row.state=state;},async list(actor){return [...rows.values()].filter(r=>r.actor===actor);},async forget(key,id){assert.equal(rows.get(key).id,id);rows.delete(key);}};}
+function memoryJournal() {
+  const rows = new Map();
+  return {
+    rows,
+    async claim(r, { renewConfirmed = false, expectedId } = {}) {
+      const key = r.actor + ':' + r.module + ':' + r.digest, prior = rows.get(key);
+      if (expectedId && prior?.id !== expectedId) throw new Error('RECOVERY_REQUIRED_BEFORE_NEW_STATE');
+      if (prior && !(renewConfirmed && prior.state === 'confirmed')) return { ...prior, fresh: false };
+      const row = { ...r, key, state: 'pending', createdAt: Date.now(), expiresAt: Date.now() + 86400000 };
+      rows.set(key, row);
+      return { ...row, fresh: true };
+    },
+    async mark(key, id, state) {
+      const row = rows.get(key);
+      assert.equal(row.id, id);
+      if (row.state !== 'confirmed') row.state = state;
+    },
+    async list(actor) { return [...rows.values()].filter(r => r.actor === actor); },
+    async forget(key, id) {
+      assert.equal(rows.get(key).id, id);
+      rows.delete(key);
+    },
+  };
+}
 test('new session instance after lost commit reuses durable request ID and queries only the verified actor',async()=>{const journal=memoryJournal(),a=crypto.randomUUID(),b=crypto.randomUUID(),csrf='synthetic-test-csrf';let actor=a,lost=true,calls=[];const fetcher=async(url,opts)=>{const body=opts.body&&JSON.parse(opts.body);if(url.includes('/member'))return {ok:true,status:200,json:async()=>({member:{id:actor},csrfToken:csrf})};if(body){calls.push(body.requestId);if(lost){lost=false;throw Error('lost after commit');}return {ok:true,status:200,json:async()=>({memberId:actor,orderId:'same-order'})};}return {ok:true,status:200,json:async()=>({memberId:actor,receipt:{requestId:new URL('https://local'+url).searchParams.get('receipt'),state:'committed'}})};};const create=()=>createSession({journal,fetcher,epoch:()=>'',randomId:()=>crypto.randomUUID()});
  const first=create();await first.restore();await assert.rejects(first.mutate('points',{op:'redeem',itemId:'synthetic'}));const second=create();await second.restore();assert.equal((await second.recover())[0].serverState,'committed');await second.mutate('points',{op:'redeem',itemId:'synthetic'});assert.equal(calls[0],calls[1]);actor=b;const other=create();await other.restore();assert.deepEqual(await other.recover(),[]);await assert.rejects(other.forgetReceipt([...journal.rows.values()][0]));});
 test('storage failure prevents dispatch; absent server receipt is unresolved and cannot be forgotten',async()=>{let writes=0;const actor=crypto.randomUUID(),fetcher=async(url,opts)=>{if(opts.body)writes++;return {ok:true,status:200,json:async()=>url.includes('/member')?{member:{id:actor},csrfToken:'synthetic'}:{memberId:actor,receipt:{requestId:new URL('https://local'+url).searchParams.get('receipt'),state:'unresolved'}}};};const unavailable=createSession({journal:{claim:async()=>{throw Error('storage denied');}},fetcher,epoch:()=>'',randomId:()=>crypto.randomUUID()});await unavailable.restore();await assert.rejects(unavailable.mutate('points',{op:'redeem'}));assert.equal(writes,0);
@@ -115,4 +138,50 @@ test('a failed confirmation delayed across login switch never returns the old or
   assert.deepEqual(states, ['confirmed']);
   assert.deepEqual(await client.recover(), []);
   assert.equal([...journal.rows.values()][0].state, 'pending');
+});
+
+test('same-value setter reuses its confirmed server ID while storage failure still blocks the opposite value', async () => {
+  const journal = memoryJournal(), actor = crypto.randomUUID(), submitted = [];
+  const results = new Map();
+  journal.mark = async () => { throw new Error('RECOVERY_STORAGE_UNAVAILABLE'); };
+  const create = () => createSession({
+    journal, epoch: () => '', randomId: () => crypto.randomUUID(),
+    fetcher: async (url, options) => ({
+      ok: true, status: 200,
+      json: async () => {
+        if (url.includes('/member')) return { member: { id: actor }, csrfToken: 'synthetic' };
+        if (!options.body) {
+          const id = new URL(url, 'https://local.invalid').searchParams.get('receipt');
+          return { memberId: actor, receipt: { requestId: id, state: results.has(id) ? 'committed' : 'unresolved' } };
+        }
+        const { requestId, listed } = JSON.parse(options.body);
+        submitted.push(requestId);
+        if (!results.has(requestId)) results.set(requestId, { memberId: actor, listed });
+        return results.get(requestId);
+      },
+    }),
+  });
+  const body = { op: 'visibility', listed: true };
+  const first = create();
+  await first.restore();
+  assert.equal((await first.mutate('points', body)).listed, true);
+  const reopened = create();
+  await reopened.restore();
+  assert.equal((await reopened.mutate('points', body)).listed, true);
+  await assert.rejects(reopened.mutate('points', { ...body, listed: false }), /RECOVERY_STORAGE_UNAVAILABLE/);
+  assert.equal(submitted.length, 2);
+  assert.equal(submitted[0], submitted[1]);
+  assert.equal(results.size, 1);
+  assert.equal([...journal.rows.values()][0].state, 'pending');
+
+  const [original] = journal.rows.values();
+  const claim = journal.claim;
+  journal.claim = async (input, options) => {
+    // Simulate another tab recovering and forgetting the old ID after lookup.
+    journal.rows.delete(original.key);
+    return claim(input, options);
+  };
+  await assert.rejects(reopened.mutate('points', body), /RECOVERY_REQUIRED_BEFORE_NEW_STATE/);
+  assert.equal(submitted.length, 2);
+  assert.equal(journal.rows.size, 0);
 });

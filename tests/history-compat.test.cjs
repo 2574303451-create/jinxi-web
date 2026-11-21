@@ -264,3 +264,20 @@ test('legacy checkin facts enforce serial identifiers and PostgreSQL integer fie
  data.checkins.push({...fact,id:'1',checkin_date:'2024-03-01',checkin_time:'2024-03-01T04:00:00Z'});
  assert.deepEqual(codes(),['DUPLICATE_CHECKIN_ID','DUPLICATE_CHECKIN_ID']);
 });
+
+test('a matching legacy reward still reports a missing rule code',()=>{
+ const {data,anchors,award}=syntheticLegacyCheckin();
+ delete award.rule_code;
+ const report=checkHistory(data,anchors);
+ assert(report.findings.some(f=>f.entity==='ledger'&&f.code==='HISTORICAL_RULE_VERSION_UNPROVEN'));
+ assert(!report.findings.some(f=>f.code==='CHECKIN_REWARD_LINK_CONFLICT'));
+});
+
+test('a malformed historical fact can also be missing its reward ledger row',()=>{
+ const {data,anchors,fact}=syntheticLegacyCheckin();
+ data.ledger=[];
+ fact.continuous_days=0;
+ const report=checkHistory(data,anchors);
+ assert.deepEqual(report.findings.filter(f=>f.entity==='checkin').map(f=>f.code),
+  ['INVALID_DATE_STREAK_OR_REWARD','CHECKIN_REWARD_WITHOUT_LEDGER']);
+});

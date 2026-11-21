@@ -23,11 +23,12 @@ function checkinId(id){
  const value=Number.isSafeInteger(id)?String(id):id;
  return integer(value)&&value!=='0'&&BigInt(value)<=BigInt(checkinIntMax)?value:null;
 }
+const validCheckinReward=value=>Number.isInteger(value)&&value>=0&&value<=checkinIntMax;
 function validCheckin(row){
  return day(row.checkin_date)&&instant(row.checkin_time)&&
   Number.isInteger(row.continuous_days)&&row.continuous_days>=1&&row.continuous_days<=checkinIntMax&&
   row.is_continuous===(row.continuous_days>1)&&
-  Number.isInteger(row.reward_points)&&row.reward_points>=0&&row.reward_points<=checkinIntMax;
+  validCheckinReward(row.reward_points);
 }
 function checkCheckinAwards({checkins,ledger},{owner,add,businessIds,ledgerIds,datePolicy}){
  // Use the verified member only to detect ambiguity across legacy aliases.
@@ -61,7 +62,7 @@ function checkCheckinAwards({checkins,ledger},{owner,add,businessIds,ledgerIds,d
    continue;
   }
   if(!credits.length){
-   for(const row of signIns)if(validCheckin(row)&&row.reward_points>0)add('checkin',row.id,'CHECKIN_REWARD_WITHOUT_LEDGER');
+   for(const row of signIns)if(validCheckinReward(row.reward_points)&&row.reward_points>0)add('checkin',row.id,'CHECKIN_REWARD_WITHOUT_LEDGER');
    continue;
   }
   if(signIns.length!==1||credits.length!==1){
@@ -230,7 +231,10 @@ function checkHistory(data,anchors){
   if(integer(row.id)&&ledgerIds.get(row.id).length!==1)add('ledger',row.id,'DUPLICATE_LEDGER_ID');
   if(!nonBlankText(row.biz_id)||biz.get(row.biz_id).length>1)add('ledger',row.id,'DUPLICATE_OR_MISSING_BUSINESS_ID');
   const generatedDebitCode=isLegacyOrderDebit(row)&&row.rule_code==='redeem.item_exchange.consume';
-  if(row.rule_code&&!generatedDebitCode&&!(Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1))add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
+  if(!generatedDebitCode&&(row.event_type==='checkin'||row.rule_code)&&
+   !(nonBlankText(row.rule_code)&&Number.isInteger(row.ext_json?.rule_version)&&(ruleVersions.get(row.rule_code+':'+row.ext_json.rule_version)||[]).length===1)){
+   add('ledger',row.id,'HISTORICAL_RULE_VERSION_UNPROVEN');
+  }
   if(isCompensation(row)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
  checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds:biz,ledgerIds});

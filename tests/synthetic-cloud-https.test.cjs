@@ -353,6 +353,57 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert.equal((await call()).status,200);
       });
 
+      await t.test('interrupted credential changes retire a previously approved warm startup', async () => {
+        const env = {...bundle.envAtRuntime};
+        const entry = createEntry({approval:bundle.approval,deployId:bundle.deployId},env);
+        const key = credentialNames.points;
+        const original = env[key];
+        const { Client } = require('pg');
+        const connect = Client.prototype.connect;
+        const started = Promise.withResolvers(), resume = Promise.withResolvers();
+        let pointsChecks = 0, holdConnection = false, pending;
+        Client.prototype.connect = function (...args) {
+          if (this.connectionParameters.application_name === 'jinxi-approved-test-points') {
+            pointsChecks++;
+            if (holdConnection) {
+              holdConnection = false;
+              started.resolve();
+              return resume.promise.then(() => connect.apply(this,args));
+            }
+          }
+          return connect.apply(this,args);
+        };
+        try {
+          await withEnv({},async () => {
+            const call = () => entry(new Request(bundle.approval.origin+'/api/member?op=me',{
+              headers:{Authorization:bundle.authorization,Cookie:a.cookie},
+            }),bundle.context);
+            assert.equal((await call()).status,200);
+            assert.equal(pointsChecks,1);
+            assert.equal((await call()).status,200);
+            assert.equal(pointsChecks,1,'same credentials reuse a completed startup');
+
+            delete env[key];
+            assert.equal((await call()).status,503);
+            env[key] = original;
+            holdConnection = true;
+            pending = call();
+            await Promise.race([started.promise,pending.then(() => assert.fail('points startup was not rechecked'))]);
+            env[key] = crypto.randomBytes(32).toString('hex');
+            resume.resolve();
+            assert.equal((await pending).status,503);
+            assert.equal(pointsChecks,2);
+
+            env[key] = original;
+            assert.equal((await call()).status,200);
+            assert.equal(pointsChecks,3,'restoring the original credentials requires another startup');
+          });
+        } finally {
+          resume.resolve();
+          try { await pending; } finally { Client.prototype.connect = connect; }
+        }
+      });
+
       await t.test('logout, password change, expiry and disabled account block every write', async () => {
         async function denied(session) {
           const before = await counters();

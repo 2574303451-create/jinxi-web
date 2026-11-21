@@ -18,6 +18,18 @@ function createEntry(receipt, env = process.env) {
   // This receipt is bundled with the function, never accepted from a request.
   const bound = structuredClone(receipt);
   let startup;
+  function currentStartup() {
+    let secrets;
+    try {
+      secrets = readCredentials(env);
+    } catch (error) {
+      startup = undefined;
+      throw error;
+    }
+    const fingerprint = credentialFingerprint(secrets);
+    if (startup?.fingerprint !== fingerprint) startup = { fingerprint, promise: null, retryAt: 0 };
+    return { attempt: startup, secrets };
+  }
 
   return async function handle(request, context) {
     let url, approval;
@@ -51,10 +63,7 @@ function createEntry(receipt, env = process.env) {
     if (Number(request.headers.get('content-length')) > 65536) return reply(413, { code: 'BODY_REJECTED' });
 
     try {
-      const secrets = readCredentials(env);
-      const fingerprint = credentialFingerprint(secrets);
-      if (startup?.fingerprint !== fingerprint) startup = { fingerprint, promise: null, retryAt: 0 };
-      const attempt = startup;
+      const { attempt, secrets } = currentStartup();
       if (!attempt.promise) {
         if (Date.now() < attempt.retryAt) return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
         const trustedEnv = { ...env, NETLIFY: 'true', CONTEXT: 'production', COMMIT_REF: approval.commit };
@@ -69,7 +78,7 @@ function createEntry(receipt, env = process.env) {
       }
       const service = await attempt.promise;
       checkInvocation(bound, env, context, url.origin);
-      if (startup !== attempt || credentialFingerprint(readCredentials(env)) !== attempt.fingerprint) {
+      if (startup !== attempt || currentStartup().attempt !== attempt) {
         return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
       }
       if (publicName) {

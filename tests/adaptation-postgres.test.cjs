@@ -125,6 +125,30 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert.equal(closed,true);
   assert.deepEqual(await db.financialSnapshot(),old);
  });
+ await t.test('an empty rehearsal still requires a PostgreSQL ROLLBACK command tag',async()=>{
+  const {data,anchors}=syntheticHistory(1);
+  data.messages=[];
+  data.strategies=[];
+  anchors.records=[];
+  const empty={candidates:0,quarantined:0,rolledBack:true,legacyAndBusinessDataUnchanged:true};
+  assert.deepEqual(await rehearse(db,data,anchors),empty);
+  let command,closed=false;
+  const incorrect={...db,admin:async()=>{
+   const c=await db.admin();
+   return {
+    query:async(sql,...args)=>{
+     const result=await c.query(sql==='ROLLBACK'?'COMMIT':sql,...args);
+     if(sql==='ROLLBACK')command=result.command;
+     return result;
+    },
+    end:async()=>{await c.end();closed=true;},
+   };
+  }};
+  await assert.rejects(rehearse(incorrect,data,anchors),/REHEARSAL_ROLLBACK_UNCONFIRMED/);
+  assert.equal(command,'COMMIT');
+  assert.equal(closed,true);
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
  await t.test('historical redemption mismatches are rehearsed as findings without staging orders or money',async()=>{
   const {data,anchors,order,charge}=syntheticLegacyRedemption();
   const report=checkHistory(data,anchors);

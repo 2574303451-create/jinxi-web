@@ -5,7 +5,8 @@ const {checkHistory}=require('./check.cjs');
 async function rollbackAndClose(c,checkStaging){
   let problem;
   try{
-    try{await c.query('ROLLBACK');}catch{throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');}
+    const result=await c.query('ROLLBACK').catch(()=>null);
+    if(result?.command!=='ROLLBACK')throw Error('REHEARSAL_ROLLBACK_UNCONFIRMED');
     if(checkStaging){
       const {rows:[state]}=await c.query(`
         SELECT NOT EXISTS (SELECT 1 FROM pg_temp.compat_candidates)
@@ -25,7 +26,7 @@ async function rehearse(db,data,anchors){
  const c=await db.admin();let result,before,checkStaging=false;
  try{
   await c.query('BEGIN');const proof=(await c.query("SELECT current_database() AS db,host(inet_server_addr()) AS host,inet_server_port() AS port,i.* FROM jinxi_guard.environment_identity() i")).rows[0];
-  if(proof.db!=='jinxi_member_local'||proof.host!=='127.0.0.1'||proof.port!==55436||proof.environment_id!==db.settings.environmentId||proof.classification!=='synthetic-local'||fingerprint(proof.cluster_id,proof.database_oid,proof.database_name)!==db.settings.fingerprint)throw Error('REHEARSAL_RESOURCE_REJECTED');
+  if(!proof||proof.db!=='jinxi_member_local'||proof.host!=='127.0.0.1'||proof.port!==55436||proof.environment_id!==db.settings.environmentId||proof.classification!=='synthetic-local'||fingerprint(proof.cluster_id,proof.database_oid,proof.database_name)!==db.settings.fingerprint)throw Error('REHEARSAL_RESOURCE_REJECTED');
   before=await db.financialSnapshot();
   // Commit only the empty, session-local tables. PostgreSQL then allows their
   // rows to be staged in READ ONLY while rejecting writes to permanent tables.

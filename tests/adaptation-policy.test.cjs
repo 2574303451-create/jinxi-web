@@ -16,4 +16,20 @@ test('Fetch bridge preserves secure Cookie arrays, no-store and explicit routes,
  assert.equal((await fetch(new Request(url.replace('/jinxi-service/','/auth-login/')),{})).status,404);assert.equal(calls,1);
 });
 module.exports={fixture};
-test('wrong rehearsal resource is rejected BEFORE any private financial snapshot is read',async()=>{const settings={kind:'jinxi-member-local-v1',host:'127.0.0.1',port:55436,database:'jinxi_member_local',user:'jinxi_member_session',password:crypto.randomBytes(32).toString('hex'),origin:'https://127.0.0.1:3069',environmentId:crypto.randomUUID(),fingerprint:'a'.repeat(64),csrfKey:'b'.repeat(64),rateKey:'c'.repeat(64)};let reads=0;const db={settings,financialSnapshot:async()=>{reads++;return {};},admin:async()=>({query:async sql=>({rows:sql.startsWith('SELECT')?[{db:'wrong-resource',host:'127.0.0.1',port:55436}]:[]}),end:async()=>{}})};const {data,anchors}=require('../history-compat/fixture.cjs').syntheticHistory(1);await assert.rejects(require('../history-compat/rehearse.cjs').rehearse(db,data,anchors),/REHEARSAL_RESOURCE_REJECTED/);assert.equal(reads,0);});
+test('wrong or missing rehearsal resource is rejected before reading any financial snapshot',async()=>{
+ const settings={kind:'jinxi-member-local-v1',host:'127.0.0.1',port:55436,database:'jinxi_member_local',user:'jinxi_member_session',
+  password:crypto.randomBytes(32).toString('hex'),origin:'https://127.0.0.1:3069',environmentId:crypto.randomUUID(),
+  fingerprint:'a'.repeat(64),csrfKey:'b'.repeat(64),rateKey:'c'.repeat(64)};
+ const {data,anchors}=require('../history-compat/fixture.cjs').syntheticHistory(1);
+ const {rehearse}=require('../history-compat/rehearse.cjs');
+ for(const proof of [[],[{db:'wrong-resource',host:'127.0.0.1',port:55436}]]){
+  const calls=[];
+  const db={settings,financialSnapshot:async()=>{throw Error('FINANCIAL_SNAPSHOT_NOT_EXPECTED');},admin:async()=>({
+   query:async sql=>{calls.push(sql);return sql.startsWith('SELECT')?{rows:proof}:{command:sql};},
+   end:async()=>{calls.push('close');},
+  })};
+  await assert.rejects(rehearse(db,data,anchors),/REHEARSAL_RESOURCE_REJECTED/);
+  assert.equal(calls.length,4);
+  assert.deepEqual(calls.slice(-2),['ROLLBACK','close']);
+ }
+});

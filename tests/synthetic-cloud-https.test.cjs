@@ -331,6 +331,45 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         } finally { await root.end(); }
       });
 
+      await t.test('a rejected fifth community connection retries before SQL and respects the role limit', async () => {
+        const route = '/api/community?kind=message&scope=published-admin';
+        assert.equal((await request(route,{session:staff})).status,200);
+        const before = await counters();
+        const occupants = [];
+        const { Client } = require('pg');
+        const connect = Client.prototype.connect;
+        let refused = 0, pending, nextRefusal;
+        try {
+          for (let index=0;index<4;index++) {
+            occupants.push(await db.connect('jinxi_community_app',bundle.envAtRuntime[credentialNames.community]));
+          }
+          Client.prototype.connect = function (...args) {
+            const opened = connect.apply(this,args);
+            if (this.connectionParameters.application_name !== 'jinxi-approved-test-community') return opened;
+            return opened.catch(error => {
+              if (error.code === '53300') { refused++; nextRefusal?.resolve(); }
+              throw error;
+            });
+          };
+          assert.equal((await request(route,{session:staff})).status,503);
+          assert.equal(refused,4);
+          // Observe the first real refusal for the next request before freeing a slot.
+          nextRefusal = Promise.withResolvers();
+          pending = request(route,{session:staff});
+          await Promise.race([nextRefusal.promise,pending.then(() => assert.fail('connection pressure was not observed'))]);
+          await occupants.pop().end();
+          const recovered = await pending;
+          assert.equal(recovered.status,200);
+          assert(Array.isArray(recovered.body.items));
+          assert.equal(refused,5);
+          assert.deepEqual(await counters(),before);
+        } finally {
+          Client.prototype.connect = connect;
+          await Promise.allSettled(occupants.map(client=>client.end()));
+          await pending;
+        }
+      });
+
       await t.test('warm handler revalidates all roles when its credential set changes', async () => {
         const env = {...bundle.envAtRuntime};
         const entry = createEntry({approval:bundle.approval,deployId:bundle.deployId},env);

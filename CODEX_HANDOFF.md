@@ -1,10 +1,10 @@
-# 当前接管入口 · 第四阶段累计本地验收（2026-11-19，北京时间）
+# 当前接管入口 · 第四阶段累计验收（2026-11-21，北京时间）
 
-- 累计审核分支 `codex/jinxi-phase4-acceptance`。浏览器验收基准为 `eed923b647c764923f926cb41635d6efcec502ac`，包含兑换管理员独占认领、FAQ、公会动态及使用进程级 CA 的 Firefox HTTPS 验收。[浏览器基准 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44441911527)
-- 合入已审历史兼容基准 `d1322127e2ab45744f2a533b683d706b6e81283a`。有损数字绑定影响的作者记录隔离，精确大整数文本可保留可信归属，回滚确认丢失时拒绝生成成功回执。检查和预演使用合成资料。[历史兼容基准 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44357599303)
-- 新 Gate-only 站的两次许可均用于 `4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。首次 CLI 超时且平台没有对应部署，第二次部署 `6afe4688aa63d39d85b1938b` 缺少 Edge 注册。站点随即停用，未关联 Git，主域名和部署别名均复核为 404。真实 CDN 上的匿名 401、授权 200 和部署身份仍待验收。
-- Gate-only 独立修复版本为 `codex/jinxi-phase4-gate-upload-manifest` 的 `134b572f69a27b155dfeaab514457047f7f41297`，已用指定 CLI 的文件收集器核验。该版本仍需单次发布授权。发布前核验站点、额度、专用变量及停用权限。[修复版本 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44432015892) · [试点操作说明](synthetic-cloud/gate-only/MANUAL-PILOT.md)
-- 生产、原只读 TEST、main 和原 PR 继续沿用既有保护。云端业务及历史迁移仍待后续授权验收。
+- 累计业务审核基准为 `codex/jinxi-phase4-capability-revalidation` 的 `39d0224c7216519dbeb8fe6810526ce7ffc82455`。包含同一管理员跨标签刷新兑换、手动核验服务端角色、回执存储失败时保留原请求号、旧账号编号歧义隔离，以及此前验收的五组业务。首轮 CI 在兑换界面刷新断言超时，同一 SHA 的第二轮 24 步全部通过，含 Firefox 26 个场景及五种屏宽。[累计业务 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44886691015/attempts/2)
+- UI-DEFER-001（FAQ）和 UI-DEFER-002（公会动态）已有独立本地浏览器验收记录。合成历史预演验证了归属隔离与回滚，真实成员映射、历史对账及迁移仍需分别授权核验。[UI 验收记录](artifacts/rea-003/UI_AUDIT.md) · [历史兼容](history-compat/README.md)
+- Gate-only 只有一个可供下一次授权的独立发布候选，即 `codex/jinxi-phase4-gate-upload-manifest` 的 `134b572f69a27b155dfeaab514457047f7f41297`。累计业务审核基准继承该提交，Gate-only 入口和共享访问校验源码一致。审批和现场发布仍使用独立 Gate-only 提交的完整 SHA。指定 CLI 的离线收集器确认一个 Edge 路由、manifest 和 eszip、独立配置、无业务静态文件及 Node Functions。[Gate-only CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44432015892) · [试点操作说明](synthetic-cloud/gate-only/MANUAL-PILOT.md)
+- 两次单次发布许可均用于旧 SHA `4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。首次 CLI 超时且平台没有对应部署，第二次部署 `6afe4688aa63d39d85b1938b` 缺少 Edge 注册。随后已停用独立站，最近一次成功只读核验确认未关联 Git，主域名和永久链接均返回 404。2026-11-21 再查 Netlify API 时 TLS 握手中断，本次未取得新的站点状态。修复版如获单次授权，发布前须再次确认独立站状态、额度及停用权限，发布后实际验收匿名 401、授权 200、真实部署身份、业务路径拒绝和测试后停用。
+- 旧生产发布锁定、原只读 TEST 停止构建、`main` 和原 18 个 PR 继续沿用既有保护。云端业务 TEST 及历史迁移尚未启用。
 
 ---
 

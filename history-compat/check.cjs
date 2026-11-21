@@ -6,6 +6,10 @@ const day=v=>typeof v==='string'&&/^(?!0000)\d{4}-\d\d-\d\d$/.test(v)&&Number.is
 const instant=v=>typeof v==='string'&&/^\d{4}-\d\d-\d\dT(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(v)&&day(v.slice(0,10))&&Number.isFinite(Date.parse(v));
 const sourceId=v=>{const value=Number.isSafeInteger(v)?String(v):v;return typeof value==='string'&&/^[a-zA-Z0-9_-]{1,64}$/.test(value)?value:null;};
 const isLossyId=id=>Number.isInteger(id)&&!Number.isSafeInteger(id);
+function exactAccountId(id){
+ const value=Number.isSafeInteger(id)?String(id):id;
+ return integer(value)&&value!=='0'?value:null;
+}
 const ref=(v,i)=>sourceId(v)||'row-'+i;
 function groups(rows,key){const map=new Map();for(const row of rows){const k=key(row);if(!map.has(k))map.set(k,[]);map.get(k).push(row);}return map;}
 const nonBlankText=value=>typeof value==='string'&&value.trim().length>0;
@@ -121,7 +125,7 @@ function checkOrders(orders,ledger,businessIds,owner,add){
   if(!debitProven||refundInvalid||needsReversalReview||refunds.length!==refundsExpected)add('order',row.id,'ORDER_LEDGER_STATUS_UNPROVEN');
  }
 }
-function checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds,ledgerIds}){
+function checkPointAccounts(data,{bindings,usersByAccount,lossyUserBindings,owner,add,businessIds,ledgerIds}){
  const accountsByUser=groups(data.pointAccounts,r=>r.user_id);
  const ledgerByUser=groups(data.ledger,r=>r.user_id);
  const financialIdentities=groups([...data.pointAccounts,...data.ledger],r=>owner(r.user_id)?.memberId||null);
@@ -148,7 +152,7 @@ function checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds,
   const subject=owner(userId);
   if(!subject){add('pointAccount',userId,'UNPROVEN_BALANCE_SUBJECT','unmapped');continue;}
   if(accounts.length!==1)continue;
-  if(ambiguousOpeningAccounts.has(subject.legacyAccountId)){
+  if(ambiguousOpeningAccounts.has(subject.legacyAccountId)||lossyUserBindings.has(Number(subject.legacyAccountId))){
    add('pointAccount',userId,'OPENING_ACCOUNT_ALIAS_UNPROVEN');continue;
   }
   const [account]=accounts;
@@ -189,21 +193,35 @@ function checkHistory(data,anchors){
  if(names.some(k=>!Array.isArray(data[k])||data[k].length>10000||data[k].some(r=>!r||typeof r!=='object'||Array.isArray(r)))||!Array.isArray(anchors.members)||!Array.isArray(anchors.users)||!Array.isArray(anchors.records)||[...Object.keys(data),...Object.keys(anchors)].some(k=>/password|token|dsn|credential/i.test(k)))throw Error('HISTORY_SHAPE_REJECTED');
  const findings=[],mappings=[],subjects=new Map(),candidates=[];
  const add=(entity,id,code,status='ambiguous')=>findings.push({entity,ref:ref(id,findings.length),code,status});
- const profiles=groups(data.profiles,r=>r.employee_no),accounts=groups(data.accounts,r=>r.employee_no),ids=groups(data.accounts,r=>r.id),bindings=groups(anchors.members,r=>r.accountId),uuids=groups(anchors.members,r=>typeof r.memberId==='string'?r.memberId.toLowerCase():null);
+ const profiles=groups(data.profiles,r=>r.employee_no),accounts=groups(data.accounts,r=>r.employee_no);
+ const ids=groups(data.accounts,r=>exactAccountId(r.id)),bindings=groups(anchors.members,r=>exactAccountId(r.accountId));
+ const uuids=groups(anchors.members,r=>typeof r.memberId==='string'?r.memberId.toLowerCase():null);
+ // Rounded numbers flag contradictions only. They never establish an identity.
+ const lossyAccountIds=new Set(data.accounts.map(r=>r.id).filter(isLossyId));
+ const lossyMemberBindings=new Set(anchors.members.map(r=>r.accountId).filter(isLossyId));
+ const lossyUserBindings=new Set(anchors.users.map(r=>r.accountId).filter(isLossyId));
+ for(const [entity,rows] of [['memberBinding',anchors.members],['userBinding',anchors.users],['recordBinding',anchors.records]]){
+  for(const [i,binding] of rows.entries()){
+   if(!exactAccountId(binding.accountId))add(entity,String(i),'UNSUPPORTED_ACCOUNT_REFERENCE','unmapped');
+  }
+ }
  for(const [i,a]of data.accounts.entries()){
-  const p=profiles.get(a.employee_no)||[],b=bindings.get(a.id)||[],reasons=[];
-  if(!integer(a.id)||a.id==='0'||typeof a.employee_no!=='string'||!a.employee_no.length||a.employee_no.length>64)reasons.push('INVALID_LEGACY_IDENTIFIER');
-  if(p.length!==1||(accounts.get(a.employee_no)||[]).length!==1||(ids.get(a.id)||[]).length!==1)reasons.push('DUPLICATE_OR_MISSING_EMPLOYEE_MAPPING');
+  const id=exactAccountId(a.id),p=profiles.get(a.employee_no)||[],b=id?(bindings.get(id)||[]):[],reasons=[];
+  if(!id||typeof a.employee_no!=='string'||!a.employee_no.length||a.employee_no.length>64)reasons.push('INVALID_LEGACY_IDENTIFIER');
+  if(p.length!==1||(accounts.get(a.employee_no)||[]).length!==1||(id&&ids.get(id).length!==1))reasons.push('DUPLICATE_OR_MISSING_EMPLOYEE_MAPPING');
+  if(id&&lossyAccountIds.has(Number(id)))reasons.push('LOSSY_ACCOUNT_ID_AMBIGUITY');
+  if(id&&lossyMemberBindings.has(Number(id)))reasons.push('LOSSY_MEMBER_BINDING_AMBIGUITY');
   if(b.length!==1)reasons.push(b.length?'DUPLICATE_TRUST_BINDING':'MISSING_TRUST_BINDING');
   if(b.length===1&&(b[0].employeeNo!==a.employee_no||!uuid(b[0].memberId)||(uuids.get(b[0].memberId.toLowerCase())||[]).length!==1))reasons.push('TRUST_BINDING_CONFLICT');
   const status=reasons.length?reasons.every(r=>r==='MISSING_TRUST_BINDING')?'unmapped':'ambiguous':'trusted';
-  const row={legacyAccountId:ref(a.id,i),employeeNo:ref(a.employee_no,i),memberId:status==='trusted'?b[0].memberId.toLowerCase():null,status,reasons};mappings.push(row);subjects.set(a.id,row);for(const reason of reasons)add('account',a.id,reason,status);
+  const row={legacyAccountId:id||ref(a.id,i),employeeNo:ref(a.employee_no,i),memberId:status==='trusted'?b[0].memberId.toLowerCase():null,status,reasons};
+  mappings.push(row);if(id)subjects.set(id,row);for(const reason of reasons)add('account',a.id,reason,status);
  }
  for(const [i,p]of data.profiles.entries())if(!(accounts.get(p.employee_no)||[]).length)add('profile',p.employee_no||String(i),'PROFILE_WITHOUT_LOGIN_ACCOUNT','unmapped');
  const lossyBindings=new Set(anchors.records.filter(r=>isLossyId(r.id)).map(r=>r.kind+':'+r.id));
  for(const [i,r]of anchors.records.entries())if(sourceId(r.id)===null)add('recordBinding',String(i),'UNSUPPORTED_BINDING_SOURCE_ID','unmapped');
- const userBindings=groups(anchors.users,r=>r.userId),usersByAccount=groups(anchors.users,r=>r.accountId),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
- function owner(userId){if(!nonBlankText(userId))return null;const rows=userBindings.get(userId)||[];if(rows.length!==1)return null;const s=subjects.get(rows[0].accountId);return s?.status==='trusted'?s:null;}
+ const userBindings=groups(anchors.users,r=>r.userId),usersByAccount=groups(anchors.users,r=>exactAccountId(r.accountId)),records=groups(anchors.records.filter(r=>sourceId(r.id)!==null),r=>r.kind+':'+sourceId(r.id));
+ function owner(userId){if(!nonBlankText(userId))return null;const rows=userBindings.get(userId)||[];if(rows.length!==1)return null;const s=subjects.get(exactAccountId(rows[0].accountId));return s?.status==='trusted'?s:null;}
  const contentKinds=['messages','strategies'];
  const contentIds=Object.fromEntries(contentKinds.map(kind=>[kind,groups(data[kind],r=>sourceId(r.id))]));
  const lossySources=new Set(contentKinds.flatMap(kind=>data[kind].filter(r=>isLossyId(r.id)).map(r=>kind+':'+r.id)));
@@ -215,7 +233,7 @@ function checkHistory(data,anchors){
    if(lossySources.has(roundedKey)){add(kind,row.id,'LOSSY_SOURCE_ID_AMBIGUITY');continue;}
    if(lossyBindings.has(roundedKey)){add(kind,row.id,'LOSSY_AUTHOR_BINDING_AMBIGUITY');continue;}
   }
-  const b=records.get(kind+':'+row.id)||[],s=b.length===1?subjects.get(b[0].accountId):null;
+  const b=records.get(kind+':'+row.id)||[],s=b.length===1?subjects.get(exactAccountId(b[0].accountId)):null;
   if(s?.status!=='trusted')add(kind,row.id||String(i),b.length>1?'AUTHOR_BINDING_CONFLICT':'NO_TRUSTED_AUTHOR','unmapped');
   else candidates.push({kind,sourceId:ref(row.id,i),memberId:s.memberId});
   if(kind==='strategies'&&(!['PVE','PVP','新手向','老玩家回归','装备','战力系统'].includes(row.category)||!Number.isInteger(row.difficulty)||row.difficulty<1||row.difficulty>5))add(kind,row.id,'INCOMPATIBLE_STRATEGY_FIELDS');
@@ -237,7 +255,7 @@ function checkHistory(data,anchors){
   }
   if(isCompensation(row)){const origin=biz.get(row.ext_json?.origin_biz_id)||[];if(origin.length!==1||origin[0].user_id!==row.user_id||origin[0].direction===row.direction||origin[0].point_delta!==row.point_delta)add('ledger',row.id,'UNLINKED_COMPENSATION_OR_REVERSAL');if((compensations.get(row.ext_json?.origin_biz_id)||[]).length>1)add('ledger',row.id,'DUPLICATE_COMPENSATION');}
  }
- checkPointAccounts(data,{bindings,usersByAccount,owner,add,businessIds:biz,ledgerIds});
+ checkPointAccounts(data,{bindings,usersByAccount,lossyUserBindings,owner,add,businessIds:biz,ledgerIds});
  checkOrders(data.orders,data.ledger,biz,owner,add);
  for(const row of data.announcements){add('announcement',row.id,'LEGACY_AUTHOR_AND_PUBLICATION_POLICY_UNPROVEN','unmapped');if(!instant(row.created_at)||!instant(row.updated_at)||typeof row.content_html!=='string')add('announcement',row.id,'INVALID_ANNOUNCEMENT_FIELDS');}
  for(const row of data.sponsorships){if(!instant(row.sponsor_time))add('sponsorship',row.id,'INVALID_SPONSOR_TIME');add('sponsorship',row.id,'SOURCE_AUDIT_REQUIRED','unmapped');}

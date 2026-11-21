@@ -281,3 +281,54 @@ test('a malformed historical fact can also be missing its reward ledger row',()=
  assert.deepEqual(report.findings.filter(f=>f.entity==='checkin').map(f=>f.code),
   ['INVALID_DATE_STREAK_OR_REWARD','CHECKIN_REWARD_WITHOUT_LEDGER']);
 });
+
+test('a lossy account row or member anchor quarantines every exact ID in the same rounding bucket', () => {
+ for (const source of ['account', 'member anchor']) {
+  const { data, anchors } = syntheticHistory(3);
+  const rounded = JSON.parse('9007199254740993');
+  data.accounts[1].id = '9007199254740992';
+  anchors.members[1].accountId = data.accounts[1].id;
+  anchors.users[1].accountId = data.accounts[1].id;
+  data.strategies.push({ ...data.strategies[0], id: '2' }, { ...data.strategies[0], id: '3' });
+  anchors.records.push(
+   { kind: 'strategies', id: '2', accountId: data.accounts[1].id },
+   { kind: 'strategies', id: '3', accountId: data.accounts[2].id },
+  );
+  if (source === 'account') data.accounts.push({ id: rounded, employee_no: 'SYN-LOSSY' });
+  else anchors.members.push({ ...anchors.members[0], accountId: rounded, memberId: '00000000-0000-4000-8000-000000001234' });
+  const report = checkHistory(data, anchors);
+  assert.deepEqual(report.mappings.slice(0, 3).map(m => m.status), ['ambiguous', 'ambiguous', 'trusted']);
+  for (const mapping of report.mappings.slice(0, 2)) {
+   assert(mapping.reasons.includes(source === 'account' ? 'LOSSY_ACCOUNT_ID_AMBIGUITY' : 'LOSSY_MEMBER_BINDING_AMBIGUITY'));
+   assert.equal(mapping.memberId, null);
+  }
+  assert.deepEqual(report.candidates, [{ kind: 'strategies', sourceId: '3', memberId: anchors.members[2].memberId }]);
+ }
+});
+
+test('safe account numbers and decimal strings match without allowing an equivalent duplicate', () => {
+ const { data, anchors } = syntheticHistory(1);
+ data.accounts[0].id = 41;
+ anchors.members[0].accountId = '41';
+ anchors.users[0].accountId = 41;
+ anchors.records[0].accountId = '41';
+ const report = checkHistory(data, anchors);
+ assert.equal(report.mappings[0].legacyAccountId, '41');
+ assert.equal(report.mappings[0].status, 'trusted');
+ assert.equal(report.candidates.length, 1);
+ assert(!report.findings.some(f => f.entity === 'pointAccount'));
+ data.accounts.push({ id: '41', employee_no: 'SYN-OTHER' });
+ const duplicate = checkHistory(data, anchors);
+ assert.equal(duplicate.mappings[0].status, 'ambiguous');
+ assert.equal(duplicate.candidates.length, 0);
+});
+
+test('a lossy user binding withholds opening balance proof without assigning the alias or hiding independent authorship', () => {
+ const { data, anchors } = syntheticHistory(1);
+ anchors.users.push({ accountId: JSON.parse('9007199254740993'), userId: 'synthetic-lossy-alias' });
+ const report = checkHistory(data, anchors);
+ assert.equal(report.mappings[0].status, 'trusted');
+ assert.equal(report.candidates.length, 1);
+ assert(report.findings.some(f => f.entity === 'userBinding' && f.code === 'UNSUPPORTED_ACCOUNT_REFERENCE'));
+ assert(report.findings.some(f => f.entity === 'pointAccount' && f.code === 'OPENING_ACCOUNT_ALIAS_UNPROVEN'));
+});

@@ -207,6 +207,22 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
+ await t.test('a rounded legacy account ID cannot stage a candidate for the colliding exact account', async () => {
+  const { data, anchors } = syntheticHistory(2);
+  data.accounts[1].id = JSON.parse('9007199254740993');
+  const report = checkHistory(data, anchors);
+  assert.equal(report.summary.trusted, 0);
+  assert.equal(report.candidates.length, 0);
+  assert(report.findings.some(f => f.entity === 'account' && f.code === 'LOSSY_ACCOUNT_ID_AMBIGUITY'));
+  assert(report.findings.some(f => f.entity === 'strategies' && f.code === 'NO_TRUSTED_AUTHOR'));
+  assert.deepEqual(await rehearse(db, data, anchors), {
+   candidates: 0,
+   quarantined: report.findings.length,
+   rolledBack: true,
+   legacyAndBusinessDataUnchanged: true,
+  });
+  assert.deepEqual(await db.financialSnapshot(), old);
+ });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,data,anchors);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},data,anchors),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});
  }finally{await server?.close();await db.stop();}
 });

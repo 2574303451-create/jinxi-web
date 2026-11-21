@@ -178,7 +178,24 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await client.query('BEGIN READ ONLY');
       try { assert.notEqual(await schemaFingerprint(client),initialized.schemaFingerprint); }
       finally { await client.query('ROLLBACK'); }
-      await freezeRoles(client,db.target);
+      const held = await db.connect(appRoles[0],secrets[appRoles[0]]);
+      try {
+        const frozen = await freezeRoles(client,db.target);
+        assert.deepEqual(frozen,{frozenRoles:appRoles,remainingRoleSessions:1});
+        assert.equal((await held.query('SELECT 1 AS connected')).rows[0].connected,1);
+        await assert.rejects(db.connect(appRoles[0],secrets[appRoles[0]]));
+      } finally { await held.end(); }
+      assert.deepEqual(await freezeRoles(client,db.target),{frozenRoles:appRoles,remainingRoleSessions:0});
+      let inspectionFailed = false;
+      const unavailable = { query: (sql,values) => {
+        if (sql.includes('FROM pg_catalog.pg_stat_activity')) {
+          inspectionFailed = true;
+          return client.query('SELECT 1/0');
+        }
+        return client.query(sql,values);
+      } };
+      assert.deepEqual(await freezeRoles(unavailable,db.target),{frozenRoles:appRoles,remainingRoleSessions:null});
+      assert(inspectionFailed);
       await assert.rejects(roleState(client,false), /SYNTHETIC_ROLE_STATE_REJECTED/);
       await assert.rejects(db.connect(appRoles[0],secrets[appRoles[0]]));
       await client.query('REVOKE TEMP ON DATABASE jinxi_synthetic_write_v1 FROM jinxi_community_app');

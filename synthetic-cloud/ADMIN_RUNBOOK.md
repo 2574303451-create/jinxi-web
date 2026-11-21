@@ -35,6 +35,6 @@ Neon Free 当前列出每项目 100 CU-hours/月、1 GB PostgreSQL 存储、5 GB
 
 `database/admin.cjs` 从标准输入读取 JSON。在受控终端由密码库或本机受限程序注入，不把密码放进命令行、Git、日志或聊天。字段是 `action`、`target`、`password`、`expectedSchema`（初始化后使用）、`fixturePasswords`（seed）、`rolePasswords`（activate）。`target` 只有 projectId、branchId、endpointId、host、database、environmentId、fingerprint、serverAddresses、initializer。`inspect` 可省略 fingerprint 只读取得值。数据库指纹等于 cluster_id、database_oid、database_name 以 NUL 连接后的 SHA-256。生成七个 seed 密码时用 normal、same、reviewer、admin、first、locked、disabled，角色密码使用权限表中的固定角色名。使用密码库生成互异的 32 随机字节十六进制值。批准文件必须在后续提交绑定完整目标及有效期，`seed/activate/verify/rollback-empty` 还要求明确批准 schemaFingerprint。秘密留在运行端，管理输出只报状态和合成账号名。
 
-发生故障时先在 **新站** 停止构建和新请求，撤回发布到已批准的无写入版本。仅在新 Neon 项目冻结五个角色并轮换或清除本次凭据。冻结保留原批准目标的检查，原批准过期后仍可只执行 `freeze`。NOLOGIN 阻止新连接，查看新库 `pg_stat_activity` 并等待活动请求结束。必要时由管理员单独批准终止此新库中这五个角色的具体会话。检查新请求拒绝、旧会话不可继续使用，留存合成回执和账本便于对账。已含业务行时保留新库。`rollback-empty` 只适用于已冻结、结构一致、无活动连接与业务行且持有有效批准的初始化模型，依赖检查失败会事务回滚。空库 PUBLIC 权限保持关闭以便重新核验。
+发生故障时先在 **新站** 停止构建和新请求，撤回发布到已批准的无写入版本。仅在新 Neon 项目冻结五个角色并轮换或清除本次凭据。冻结保留原批准目标的检查，原批准过期后仍可执行 `freeze`。NOLOGIN 阻止新连接。命令返回的 `remainingRoleSessions` 是冻结提交后，当前库内五个业务角色连接数的快照，包含空闲连接。大于零时等待现有连接退出；`null` 表示未取得计数，需在新库查看 `pg_stat_activity`。必要时由管理员单独批准终止此新库中这五个角色的具体会话。检查新请求拒绝、旧会话不可继续使用，留存合成回执和账本便于对账。已含业务行时保留新库。`rollback-empty` 只适用于已冻结、结构一致、无活动连接与业务行且持有有效批准的初始化模型，依赖检查失败会事务回滚。空库 PUBLIC 权限保持关闭以便重新核验。
 
 本地只实测临时 PostgreSQL、独立静态导出、解包 Function、HTTPS 和 Edge。真实 Netlify 构建变量、路由及 Context、Neon 账号与权限、默认 ACL、证书、地址及实际账单仍由新资源验收确定。

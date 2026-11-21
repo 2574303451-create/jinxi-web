@@ -45,7 +45,7 @@ async function administer({ action, target, password, expectedSchema, rolePasswo
       return { seededAccounts: Object.values(accounts).map(({ account }) => account) };
     }
     if (action === 'activate') return { enabledRoles: await activateRoles(client, target, expectedSchema, rolePasswords || {}) };
-    if (action === 'freeze') { await freezeRoles(client, target); return { frozenRoles: appRoles }; }
+    if (action === 'freeze') return await freezeRoles(client, target);
     if (action === 'rollback-empty') { await rollbackEmpty(client, target, expectedSchema); return { schemaRemoved: true }; }
 
     await client.query("BEGIN READ ONLY; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='5s'");

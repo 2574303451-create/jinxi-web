@@ -132,6 +132,25 @@ async function freezeRoles(client, target) {
     const { rows } = await client.query('SELECT rolcanlogin FROM pg_roles WHERE rolname=ANY($1::text[])', [appRoles]);
     if (rows.length !== appRoles.length || rows.some(row => row.rolcanlogin !== false)) throw Error('SYNTHETIC_FREEZE_FAILED');
   });
+  // Inspect after the committed stop; observation failure must not undo or
+  // misreport committed NOLOGIN. The count includes idle connections.
+  let remainingRoleSessions = null;
+  try {
+    await client.query("BEGIN READ ONLY; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='5s'");
+    const { rows: [activity] } = await client.query(`
+      SELECT count(*)::int AS remaining
+      FROM pg_catalog.pg_stat_activity
+      WHERE datname=current_database() AND usename=ANY($1::text[])
+    `, [appRoles]);
+    if (Number.isSafeInteger(activity?.remaining) && activity.remaining >= 0) {
+      remainingRoleSessions = activity.remaining;
+    }
+  } catch {
+    // An unknown count must remain distinguishable from a drained database.
+  } finally {
+    await client.query('ROLLBACK').catch(() => {});
+  }
+  return { frozenRoles: appRoles, remainingRoleSessions };
 }
 
 async function rollbackEmpty(client, target, expected) {

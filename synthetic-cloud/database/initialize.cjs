@@ -44,7 +44,8 @@ async function transaction(client, action) {
   try {
     await client.query("BEGIN; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='10s'; SET LOCAL lock_timeout='2s'");
     const result = await action();
-    await client.query('COMMIT');
+    const confirmation = await client.query('COMMIT');
+    if (confirmation?.command !== 'COMMIT') throw new Error('SYNTHETIC_ADMIN_COMMIT_UNCONFIRMED');
     return result;
   } catch (error) {
     await client.query('ROLLBACK').catch(() => {});

@@ -62,6 +62,23 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await empty();
     });
     const initialized = await initialize(client,db.target);
+    await t.test('reject a rollback reported by PostgreSQL in response to COMMIT', async () => {
+      let command;
+      const abortBeforeCommit = { async query(sql, values) {
+        if (sql !== 'COMMIT') return client.query(sql, values);
+        await assert.rejects(client.query('SELECT 1/0'), { code:'22012' });
+        const result = await client.query(sql);
+        command = result.command;
+        return result;
+      } };
+      await assert.rejects(rollbackEmpty(abortBeforeCommit,db.target,initialized.schemaFingerprint),
+        /SYNTHETIC_ADMIN_COMMIT_UNCONFIRMED/);
+      assert.equal(command,'ROLLBACK');
+      await client.query('BEGIN READ ONLY');
+      try { assert.equal(await schemaFingerprint(client),initialized.schemaFingerprint); }
+      finally { await client.query('ROLLBACK'); }
+      await roleState(client,false);
+    });
     await t.test('owner is not superuser, initialized roles cannot log in, schema is repeatable', async () => {
       assert(Number.isInteger(postgresVersion) && postgresVersion >= 170000 && postgresVersion < 180000);
       assert.equal(initialized.postgresVersion,postgresVersion);

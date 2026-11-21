@@ -250,7 +250,15 @@ async function main() {
           const response = await roleResponse;
           assert.equal(response.status(),200);
           assert.deepEqual((await response.json()).permissions,{admin:false,staff:true});
-          await permissionLabel.getByText('合成审核员',{exact:true}).waitFor();
+          try {
+            await verification.waitForFunction(() =>
+              document.querySelector('[data-testid="unified-permissions"]')?.textContent === '合成审核员');
+          } catch (error) {
+            const label = await permissionLabel.textContent();
+            record.permissionAfterRecheck = ['未授予业务权限','核验权限中…','暂时无法核验业务权限','合成成员','合成审核员','合成管理员'].includes(label)
+              ? label : 'unexpected';
+            throw error;
+          }
           assert.equal(await verification.locator('[data-session-revision]').getAttribute('data-session-revision'),revision);
           await ready(verification);
           await verification.getByRole('button',{name:'合成感谢记录',exact:true}).click();

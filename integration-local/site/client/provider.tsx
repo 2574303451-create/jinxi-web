@@ -17,29 +17,41 @@ import { PointsPanel } from './points-panel';
 import { AnnouncementDialog, SponsorshipDialog, TeamPanel } from './operations-panel';
 const epoch = () => typeof document === 'undefined' ? '' : document.cookie.split(';').map(s => s.trim()).find(s => s.startsWith('__Host-jinxi_points_epoch=')) || '';
 const message = (r: any): Message => ({ ...r, timestamp: new Date(r.timestamp), replies: (r.replies || []).map((x: any) => ({ ...x, timestamp: new Date(x.timestamp) })), reactions: r.reactions || [] });
+const noStaffPermissions = { admin: false, staff: false };
 
 export function IntegrationProvider({ children, surface = 'local' }: { children: ReactNode; surface?: 'local' | 'synthetic-test' }) {
   const [client] = useState(() => createSession({ journal: createJournal(), fetcher: (...args: Parameters<typeof fetch>) => fetch(...args), epoch, randomId: () => crypto.randomUUID(), notify: () => { if (typeof window !== 'undefined') window.dispatchEvent(new Event('integration:data')); } }) as SessionClient);
+  const verify = useCallback(() => {
+    client.observeEpoch();
+    void client.restore().then(() => window.dispatchEvent(new Event('integration:capabilities')));
+  }, [client]);
   useEffect(() => {
     let channel: BroadcastChannel | undefined;
     try { channel = new BroadcastChannel('jinxi-local-integration'); channel.onmessage = () => { client.observeEpoch(); window.dispatchEvent(new Event('integration:remote-data')); }; } catch { /* Epoch polling also covers tabs without BroadcastChannel. */ }
     const announce = () => channel?.postMessage({ changed: true });
-    const verify = () => { client.observeEpoch(); void client.restore().then(() => window.dispatchEvent(new Event('integration:capabilities'))); };
     const visibility = () => { if (document.visibilityState === 'visible') verify(); };
     const unverify = () => client.unverify();
     void client.restore();
     const markerTimer = setInterval(() => client.observeEpoch(), 500), serverTimer = setInterval(() => { if (document.visibilityState === 'visible') verify(); }, 10000);
     window.addEventListener('integration:data', announce); window.addEventListener('online', verify); window.addEventListener('offline', unverify); window.addEventListener('focus', verify); document.addEventListener('visibilitychange', visibility);
     return () => { clearInterval(markerTimer); clearInterval(serverTimer); channel?.close(); window.removeEventListener('integration:data', announce); window.removeEventListener('online', verify); window.removeEventListener('offline', unverify); window.removeEventListener('focus', verify); document.removeEventListener('visibilitychange', visibility); };
-  }, [client]);
-  return <SessionContext.Provider value={client}><ConnectedSite surface={surface}>{children}</ConnectedSite></SessionContext.Provider>;
+  }, [client, verify]);
+  return <SessionContext.Provider value={client}><ConnectedSite surface={surface} onVerify={verify}>{children}</ConnectedSite></SessionContext.Provider>;
 }
-function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'local' | 'synthetic-test' }) {
+function ConnectedSite({ children, surface, onVerify }: { children: ReactNode; surface: 'local' | 'synthetic-test'; onVerify: () => void }) {
   const { client, state, ready } = useSession();
   const [auth, setAuth] = useState<'login' | 'password' | null>(null), [announcements, setAnnouncements] = useState(false), [sponsorship, setSponsorship] = useState(false), [joinNotice, setJoinNotice] = useState(false), [profile, setProfile] = useState(false), [panel, setPanel] = useState<'checkin' | 'points' | 'teams' | null>(null), [dataVersion, setDataVersion] = useState(0);
   const [recovery,setRecovery]=useState(false);
-  const permissionsLoad = useCallback(() => ready ? client.request('operations', null, { kind: 'team', view: 'private' }).then(r => r.permissions as { admin: boolean; staff: boolean }) : Promise.resolve({ admin: false, staff: false }), [client, ready]);
-  const privileges = useResource(permissionsLoad), permissions = privileges.data || { admin: false, staff: false };
+  const permissionsLoad = useCallback(async () => {
+    if (!ready) return null;
+    const { permissions } = await client.request<{ permissions: typeof noStaffPermissions }>('operations', null, { kind: 'team', view: 'private' });
+    return { revision: state.revision, permissions };
+  }, [client, ready, state.revision]);
+  const privileges = useResource(permissionsLoad);
+  const currentPrivileges = ready && privileges.data?.revision === state.revision ? privileges.data.permissions : null;
+  const permissions = currentPrivileges ?? noStaffPermissions;
+  const permissionLabel = !ready ? '未授予业务权限' : privileges.error ? '暂时无法核验业务权限' :
+    privileges.loading || !currentPrivileges ? '核验权限中…' : permissions.admin ? '合成管理员' : permissions.staff ? '合成审核员' : '合成成员';
   useEffect(() => { window.addEventListener('integration:capabilities', privileges.reload); return () => window.removeEventListener('integration:capabilities', privileges.reload); }, [privileges.reload]);
   useEffect(() => { const update = () => setDataVersion(n => n + 1); window.addEventListener('integration:data', update); window.addEventListener('integration:remote-data', update); return () => { window.removeEventListener('integration:data', update); window.removeEventListener('integration:remote-data', update); }; }, []);
   const messageActions = useMemo<MessageActions>(() => ({
@@ -79,12 +91,12 @@ function ConnectedSite({ children, surface }: { children: ReactNode; surface: 'l
       <strong>{surface === 'local' ? '本地合成集成预览 · 复用今夕网站' : '独立合成 TEST · 今夕公会'}</strong>
       <p>{surface === 'local' ? '与生产和云端 TEST 隔离；未接入真实成员、历史积分或支付。' : '本页仅使用合成成员、积分与兑换记录。'}</p>
       <p role="status" data-testid="unified-session">{state.member?.displayName || '未核验成员'} · {state.phase} · {state.message}</p>
-      <p data-testid="unified-permissions">{!ready ? '未授予业务权限' : privileges.loading ? '核验权限中…' : permissions.admin ? '合成管理员' : permissions.staff ? '合成审核员' : '合成成员'}</p>
+      <p data-testid="unified-permissions">{permissionLabel}</p>
       <div className="integration-actions">
         <button className="paper-button" onClick={() => setAuth('login')}>合成登录</button>
         <button className="paper-button" onClick={() => setAuth('password')} disabled={!state.member}>合成改密</button>
         <button className="paper-button" onClick={runtime.onLogout} disabled={!state.member}>退出统一会话</button>
-        <button className="paper-button" onClick={() => void client.restore()}>重新核验身份</button>
+        <button className="paper-button" onClick={onVerify}>重新核验身份</button>
         <button className="paper-button" onClick={() => setAnnouncements(true)}>公告发布与审核</button>
         <button className="paper-button" onClick={() => setSponsorship(true)}>合成感谢记录</button>
         <button className="paper-button" onClick={() => setRecovery(true)}>恢复未确认操作</button>

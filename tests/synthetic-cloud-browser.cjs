@@ -233,14 +233,21 @@ async function main() {
         const changedRole = await api.admin("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[verifiedSession.memberId]);
         assert.equal(changedRole.rowCount,1);
         try {
-          const [response] = await Promise.all([
-            verification.waitForResponse(candidate => {
-              const url = new URL(candidate.url());
-              return candidate.request().method()==='GET' && url.pathname==='/api/operations' &&
-                url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='private';
-            }),
-            verification.getByRole('button',{name:'重新核验身份',exact:true}).click(),
-          ]);
+          const identityResponse = verification.waitForResponse(candidate => {
+            const url = new URL(candidate.url());
+            return candidate.request().method()==='GET' && url.pathname==='/api/member' && url.searchParams.get('op')==='me';
+          });
+          const roleResponse = verification.waitForResponse(candidate => {
+            const url = new URL(candidate.url());
+            return candidate.request().method()==='GET' && url.pathname==='/api/operations' &&
+              url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='private';
+          });
+          // Surface a click failure before the read waiters time out.
+          void identityResponse.catch(() => {});
+          void roleResponse.catch(() => {});
+          await verification.getByRole('button',{name:'重新核验身份',exact:true}).click({timeout:5000});
+          assert.equal((await identityResponse).status(),200);
+          const response = await roleResponse;
           assert.equal(response.status(),200);
           assert.deepEqual((await response.json()).permissions,{admin:false,staff:true});
           await permissionLabel.getByText('合成审核员',{exact:true}).waitFor();

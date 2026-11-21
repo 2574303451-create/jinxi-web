@@ -317,18 +317,44 @@ test('safe account numbers and decimal strings match without allowing an equival
  assert.equal(report.mappings[0].status, 'trusted');
  assert.equal(report.candidates.length, 1);
  assert(!report.findings.some(f => f.entity === 'pointAccount'));
- data.accounts.push({ id: '41', employee_no: 'SYN-OTHER' });
- const duplicate = checkHistory(data, anchors);
- assert.equal(duplicate.mappings[0].status, 'ambiguous');
- assert.equal(duplicate.candidates.length, 0);
+ for (const duplicateId of ['41', '041']) {
+  data.accounts.push({ id: duplicateId, employee_no: 'SYN-OTHER' });
+  const duplicate = checkHistory(data, anchors);
+  assert.equal(duplicate.mappings[0].status, 'ambiguous');
+  assert.equal(duplicate.candidates.length, 0);
+  data.accounts.pop();
+ }
+});
+
+test('padded decimal account references cannot bypass the opening balance alias check', () => {
+ const { data, anchors } = syntheticHistory(1);
+ const accountId = anchors.members[0].accountId;
+ anchors.members[0].accountId = '00' + accountId;
+ anchors.users.push({ accountId: '0' + accountId, userId: 'synthetic-padded-alias' });
+ const report = checkHistory(data, anchors);
+ assert.equal(report.mappings[0].status, 'trusted');
+ assert.equal(report.mappings[0].legacyAccountId, accountId);
+ assert.equal(report.candidates.length, 1);
+ assert(report.findings.some(f => f.entity === 'pointAccount' && f.code === 'OPENING_ACCOUNT_ALIAS_UNPROVEN'));
 });
 
 test('a lossy user binding withholds opening balance proof without assigning the alias or hiding independent authorship', () => {
  const { data, anchors } = syntheticHistory(1);
- anchors.users.push({ accountId: JSON.parse('9007199254740993'), userId: 'synthetic-lossy-alias' });
+ const alias = 'synthetic-lossy-alias';
+ anchors.users.push({ accountId: JSON.parse('9007199254740993'), userId: alias });
+ data.ledger.push({ id: '7', user_id: alias, biz_id: 'synthetic-alias-movement', direction: 1, point_delta: '1', balance_before: '0', balance_after: '1' });
  const report = checkHistory(data, anchors);
  assert.equal(report.mappings[0].status, 'trusted');
  assert.equal(report.candidates.length, 1);
  assert(report.findings.some(f => f.entity === 'userBinding' && f.code === 'UNSUPPORTED_ACCOUNT_REFERENCE'));
+ assert(report.findings.some(f => f.entity === 'ledger' && f.ref === '7' && f.code === 'UNPROVEN_LEDGER_SUBJECT'));
  assert(report.findings.some(f => f.entity === 'pointAccount' && f.code === 'OPENING_ACCOUNT_ALIAS_UNPROVEN'));
+});
+
+test('malformed independent binding rows are rejected before reporting mapped identities', () => {
+ for (const kind of ['members', 'users', 'records']) {
+  const { data, anchors } = syntheticHistory(1);
+  anchors[kind].push(null);
+  assert.throws(() => checkHistory(data, anchors), { message: 'HISTORY_SHAPE_REJECTED' });
+ }
 });

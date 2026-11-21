@@ -221,6 +221,15 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
    rolledBack: true,
    legacyAndBusinessDataUnchanged: true,
   });
+  data.accounts[1].id = '0' + data.accounts[0].id;
+  const duplicate = checkHistory(data, anchors);
+  assert(duplicate.mappings.every(m => m.status === 'ambiguous' && m.reasons.includes('DUPLICATE_OR_MISSING_EMPLOYEE_MAPPING')));
+  assert.deepEqual(await rehearse(db, data, anchors), {
+   candidates: 0,
+   quarantined: duplicate.findings.length,
+   rolledBack: true,
+   legacyAndBusinessDataUnchanged: true,
+  });
   assert.deepEqual(await db.financialSnapshot(), old);
  });
  await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,data,anchors);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},data,anchors),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});

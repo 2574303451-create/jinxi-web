@@ -7,11 +7,12 @@ const instant=v=>typeof v==='string'&&/^\d{4}-\d\d-\d\dT(?:[01]\d|2[0-3]):[0-5]\
 const sourceId=v=>{const value=Number.isSafeInteger(v)?String(v):v;return typeof value==='string'&&/^[a-zA-Z0-9_-]{1,64}$/.test(value)?value:null;};
 const isLossyId=id=>Number.isInteger(id)&&!Number.isSafeInteger(id);
 function exactAccountId(id){
- const value=Number.isSafeInteger(id)?String(id):id;
+ const value=typeof id==='string'?id.replace(/^0+/,''):Number.isSafeInteger(id)?String(id):null;
  return integer(value)&&value!=='0'?value:null;
 }
 const ref=(v,i)=>sourceId(v)||'row-'+i;
 function groups(rows,key){const map=new Map();for(const row of rows){const k=key(row);if(!map.has(k))map.set(k,[]);map.get(k).push(row);}return map;}
+const recordArray=rows=>Array.isArray(rows)&&rows.every(row=>row&&typeof row==='object'&&!Array.isArray(row));
 const nonBlankText=value=>typeof value==='string'&&value.trim().length>0;
 function isLegacyOrderDebit(row){
  return row.direction===2&&row.scene==='redeem'&&row.event_type==='item_exchange';
@@ -190,7 +191,9 @@ function checkHistory(data,anchors){
  if(data?.kind!=='jinxi-synthetic-history-v1'||anchors?.kind!=='jinxi-synthetic-bindings-v1'||anchors.proofSource!=='synthetic-authoritative-fixture')throw Error('SYNTHETIC_HISTORY_AND_SEPARATE_BINDINGS_REQUIRED');
  const stack=[data,anchors];let nodes=0;while(stack.length){const value=stack.pop();if(value&&typeof value==='object'){if(++nodes>200000)throw Error('HISTORY_SHAPE_REJECTED');for(const[key,child]of Object.entries(value)){if(/password|csrf|token|credential|private.?key|connection.?string|^dsn$/i.test(key))throw Error('HISTORY_SENSITIVE_FIELD_REJECTED');if(child&&typeof child==='object')stack.push(child);}}}
  const names=['profiles','accounts','messages','strategies','checkins','pointAccounts','ledger','orders','rules','announcements','sponsorships'];
- if(names.some(k=>!Array.isArray(data[k])||data[k].length>10000||data[k].some(r=>!r||typeof r!=='object'||Array.isArray(r)))||!Array.isArray(anchors.members)||!Array.isArray(anchors.users)||!Array.isArray(anchors.records)||[...Object.keys(data),...Object.keys(anchors)].some(k=>/password|token|dsn|credential/i.test(k)))throw Error('HISTORY_SHAPE_REJECTED');
+ if(names.some(k=>!recordArray(data[k])||data[k].length>10000)||
+  [anchors.members,anchors.users,anchors.records].some(rows=>!recordArray(rows))||
+  [...Object.keys(data),...Object.keys(anchors)].some(k=>/password|token|dsn|credential/i.test(k)))throw Error('HISTORY_SHAPE_REJECTED');
  const findings=[],mappings=[],subjects=new Map(),candidates=[];
  const add=(entity,id,code,status='ambiguous')=>findings.push({entity,ref:ref(id,findings.length),code,status});
  const profiles=groups(data.profiles,r=>r.employee_no),accounts=groups(data.accounts,r=>r.employee_no);

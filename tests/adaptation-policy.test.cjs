@@ -8,6 +8,29 @@ test('context, origin, commit, expiry, database, environment and inherited crede
  const mutations=[f=>{f.env.CONTEXT='deploy-preview';},f=>{f.env.SITE_ID=crypto.randomUUID();},f=>{f.env.COMMIT_REF='b'.repeat(40);},f=>{delete f.env.JINXI_SERVICE_APPROVAL;},f=>{f.approval.expiresAt='2000-01-01T00:00:00Z';},f=>{f.approval.origin='https://jinxi-web.netlify.app';},f=>{f.approval.host=binding.hosts[0];},f=>{f.approval.environmentId=binding.environmentId;},f=>{f.approval.database='postgres';},f=>{f.env.DATABASE_URL='not-read';}];for(const mutate of mutations){const f=fixture();mutate(f);assert.throws(()=>approve(f.approval,f.env,f.secrets),/APPROVED_TEST_RESOURCE_REQUIRED/);}
 });
 test('cloud connection uses independent role and verified TLS; a connection failure is sanitized',async()=>{const f=fixture();let options;await assert.rejects(createCloudService({...f,Client:class{constructor(v){options=v;}async connect(){throw Error('private connection details');}async end(){}}}),/APPROVED_TEST_CONNECTION_FAILED/);assert.equal(options.user,roles.member);assert.deepEqual(options.ssl,{rejectUnauthorized:true});assert.equal(options.host,f.approval.host);assert.equal(options.port,5432);assert(!Object.hasOwn(options,'connectionString'));});
+
+for (const scenario of ['before retry', 'during connect']) {
+ test(`cloud approval expiring ${scenario} prevents SQL and closes the client`, async t => {
+  const f = fixture();
+  let now = Date.parse(f.approval.expiresAt) - 1;
+  t.mock.method(Date, 'now', () => now);
+  const calls = [];
+  class Client {
+   constructor({ user }) { calls.push(['construct', user]); }
+   async connect() {
+    calls.push(['connect']);
+    now++;
+    if (scenario === 'before retry') throw Object.assign(Error('fixture connection limit'), { code: '53300' });
+   }
+   async query() { assert.fail('expired approval must prevent every SQL statement'); }
+   async end() { calls.push(['end']); }
+  }
+  await assert.rejects(createCloudService({ ...f, Client }), scenario === 'before retry'
+   ? /APPROVED_TEST_RESOURCE_REQUIRED/ : /APPROVED_TEST_CONNECTION_FAILED/);
+  assert.deepEqual(calls, [['construct', roles.member], ['connect'], ['end']]);
+ });
+}
+
 test('Fetch bridge preserves secure Cookie arrays, no-store and explicit routes, refuses duplicate parameters',async()=>{
  let calls=0,seen;const service=router({origin:'https://synthetic-future-only.netlify.app',clientAddress:c=>c.ip,services:{member:async e=>{calls++;seen=e;return {statusCode:200,headers:{'Set-Cookie':'__Host-synthetic=x; Secure; HttpOnly; Path=/','Access-Control-Allow-Origin':'*'},body:'{"ok":true}'};}}});const fetch=netlifyFetch(service),url='https://synthetic-future-only.netlify.app/.netlify/functions/jinxi-service/member';
  const r=await fetch(new Request(url+'?op=me'),{ip:'192.0.2.1'});assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store, private');assert.equal(r.headers.get('access-control-allow-origin'),null);assert.equal(r.headers.getSetCookie().length,2);assert.equal(seen.localClientAddress,'192.0.2.1');

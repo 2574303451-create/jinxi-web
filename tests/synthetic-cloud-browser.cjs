@@ -395,32 +395,34 @@ async function main() {
           const release = Promise.withResolvers();
           const isOrderRead = url => url.pathname === '/api/points' && url.searchParams.get('view') === 'admin' &&
             (outcome === 'failed' ? url.searchParams.get('orderId') === id : url.searchParams.get('queue') === 'all');
-          await mirror.route(isOrderRead, async route => {
-            await release.promise;
-            await route.continue();
-          }, {times:1});
-          try {
-            const [decision] = await Promise.all([
-              command(staff,'points','order.process'), action.press('Enter'),
-              mirror.waitForRequest(request=>request.method()==='GET'&&isOrderRead(new URL(request.url()))),
-              mirrorRow.waitFor({state:'hidden'}),
-            ]);
-            assert.equal(decision.status(),200);
-            assert.equal((await decision.json()).status,outcome);
-            assert.equal(await mirrorRow.getByRole('button').count(),0);
-          } finally {
-            release.resolve();
-          }
-          if (outcome === 'failed') {
-            await mirrorRow.getByText(/未履约 · 已退款/).waitFor();
-            assert.equal(await mirrorRow.getByRole('button').count(),0);
-          } else {
-            await mirror.getByText('暂无本人处理中订单。',{exact:true}).waitFor();
-            assert.equal(await mirrorRow.count(),0);
-          }
-          await mirror.close();
-          await row.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
-          assert.equal(await row.getByRole('button').count(),0);
+          await traceRefresh(staff,'points','admin',async () => {
+            await mirror.route(isOrderRead, async route => {
+              await release.promise;
+              await route.continue();
+            }, {times:1});
+            try {
+              const [decision] = await Promise.all([
+                command(staff,'points','order.process'), action.press('Enter'),
+                mirror.waitForRequest(request=>request.method()==='GET'&&isOrderRead(new URL(request.url()))),
+                mirrorRow.waitFor({state:'hidden'}),
+              ]);
+              assert.equal(decision.status(),200);
+              assert.equal((await decision.json()).status,outcome);
+              assert.equal(await mirrorRow.getByRole('button').count(),0);
+            } finally {
+              release.resolve();
+            }
+            if (outcome === 'failed') {
+              await mirrorRow.getByText(/未履约 · 已退款/).waitFor();
+              assert.equal(await mirrorRow.getByRole('button').count(),0);
+            } else {
+              await mirror.getByText('暂无本人处理中订单。',{exact:true}).waitFor();
+              assert.equal(await mirrorRow.count(),0);
+            }
+            await mirror.close();
+            await row.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
+            assert.equal(await row.getByRole('button').count(),0);
+          });
           record.stage=orderStage+'-reconcile';
           await staff.getByRole('button',{name:'返回待处理列表',exact:true}).click();
           await staff.getByText('暂无待处理订单。',{exact:true}).waitFor();

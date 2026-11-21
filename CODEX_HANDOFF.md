@@ -3,7 +3,7 @@
 - 累计业务审核基准为 `codex/jinxi-phase4-capability-revalidation` 的 `39d0224c7216519dbeb8fe6810526ce7ffc82455`。包含同一管理员跨标签刷新兑换、手动核验服务端角色、回执存储失败时保留原请求号、旧账号编号歧义隔离，以及此前验收的五组业务。首轮 CI 在兑换界面刷新断言超时，同一 SHA 的第二轮 24 步全部通过，含 Firefox 26 个场景及五种屏宽。[累计业务 CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44886691015/attempts/2)
 - UI-DEFER-001（FAQ）和 UI-DEFER-002（公会动态）已有独立本地浏览器验收记录。合成历史预演验证了归属隔离与回滚，真实成员映射、历史对账及迁移仍需分别授权核验。[UI 验收记录](artifacts/rea-003/UI_AUDIT.md) · [历史兼容](history-compat/README.md)
 - Gate-only 只有一个可供下一次授权的独立发布候选，即 `codex/jinxi-phase4-gate-upload-manifest` 的 `134b572f69a27b155dfeaab514457047f7f41297`。累计业务审核基准继承该提交，Gate-only 入口和共享访问校验源码一致。审批和现场发布仍使用独立 Gate-only 提交的完整 SHA。指定 CLI 的离线收集器确认一个 Edge 路由、manifest 和 eszip、独立配置、无业务静态文件及 Node Functions。[Gate-only CI](https://github.com/2574303451-create/jinxi-web/actions/runs/44432015892) · [试点操作说明](synthetic-cloud/gate-only/MANUAL-PILOT.md)
-- 两次单次发布许可均用于旧 SHA `4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。首次 CLI 超时且平台没有对应部署，第二次部署 `6afe4688aa63d39d85b1938b` 缺少 Edge 注册。随后已停用独立站，最近一次成功只读核验确认未关联 Git，主域名和永久链接均返回 404。2026-11-21 再查 Netlify API 时 TLS 握手中断，本次未取得新的站点状态。修复版如获单次授权，发布前须再次确认独立站状态、额度及停用权限，发布后实际验收匿名 401、授权 200、真实部署身份、业务路径拒绝和测试后停用。
+- 两次单次发布许可均用于旧 SHA `4e9c1a3d25f232d18dc45987e9dd188ce507acc3`。首次 CLI 超时且平台没有对应部署，第二次部署 `6afe4688aa63d39d85b1938b` 缺少 Edge 注册。2026-11-21 17:03，北京时间，分批只读复核确认独立站仍停用、未关联 Git，仍只有该次历史部署，主域名和永久链接返回 404。站点无构建钩子、构建记录、流量拆分或集成，团队无共享变量、付费超额和付款方式，余量约 107.2 GB 带宽和 100 万次 Edge 调用。余量属于团队共享的当次快照。修复版如获单次授权，发布前须再次核对独立站状态、额度和停用权限，发布后实际验收匿名 401、授权 200、真实部署身份、业务路径拒绝和测试后停用。
 - 旧生产发布锁定、原只读 TEST 停止构建、`main` 和原 18 个 PR 继续沿用既有保护。云端业务 TEST 及历史迁移尚未启用。
 
 ---

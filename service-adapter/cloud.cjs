@@ -1,7 +1,7 @@
 // Server-only bridge, outside the original site's Functions and app trees.
 const crypto=require('node:crypto');
 const {setTimeout:delay}=require('node:timers/promises');
-const {approve,roles}=require('./resource.cjs'),{handlers}=require('./handlers.cjs');
+const {approve,approved,roles}=require('./resource.cjs'),{handlers}=require('./handlers.cjs');
 const disabled=require('./approval.disabled.json');
 const verifiers={
  member:require('../member-local/identity.cjs').verifyMember,
@@ -35,8 +35,14 @@ async function createCloudService({approval=disabled,env=process.env,secrets,ver
   // No connection strings, role escalation, SET ROLE, insecure SSL or fallback.
   for(const wait of [0,75,150,300]){
    if(wait)await delay(wait);
+   if(!approved(settings,env))break;
    const c=new Client({host:settings.host,port:settings.port,database:settings.database,user:roles[name],password:secrets[name],ssl:{rejectUnauthorized:true},connectionTimeoutMillis:3000,application_name:'jinxi-approved-test-'+name});
-   try{await c.connect();return c;}catch(error){
+   try{
+    await c.connect();
+    if(approved(settings,env))return c;
+    await c.end();
+    break;
+   }catch(error){
     await c.end().catch(()=>{});
     // Retry only a rejected connection. Business SQL has not started.
     if(error.code!=='53300')break;

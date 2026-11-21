@@ -350,7 +350,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
           pending = request(route,{session:staff});
           const deadline = Date.now()+1000;
           while (refusals()===initialRefusals+4 && Date.now()<deadline) {
-            await new Promise(resolve=>setTimeout(resolve,5));
+            await new Promise(resolve=>{ setTimeout(resolve,5); });
           }
           assert(refusals()>initialRefusals+4,'connection pressure was not observed');
           await occupants.pop().end();

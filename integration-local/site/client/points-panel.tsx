@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PaperState } from '../../../components/ui/paper';
 import { useCommand, useResource, useSession } from './session-context';
 import { PageControls } from './page-controls';
@@ -123,6 +123,13 @@ function MemberPointsPanel() {
     return { orderLookup, orders: adminOrders };
   }, [client, ready, data?.permissions.admin, orderLookup]);
   const orderSearch = useResource(loadOrder);
+  const canViewAdminOrders = Boolean(data?.permissions.admin);
+  useEffect(() => {
+    if (!canViewAdminOrders) return;
+    const reload = orderLookup ? orderSearch.reload : resource.reload;
+    window.addEventListener('integration:remote-data', reload);
+    return () => window.removeEventListener('integration:remote-data', reload);
+  }, [canViewAdminOrders, orderLookup, orderSearch.reload, resource.reload]);
   const normalizedOrderInput = orderInput.trim().toLowerCase();
   const showingLookup = Boolean(orderLookup) && normalizedOrderInput === orderLookup;
   const foundOrders = showingLookup && !orderSearch.loading && orderSearch.data?.orderLookup === orderLookup ? orderSearch.data.orders : null;

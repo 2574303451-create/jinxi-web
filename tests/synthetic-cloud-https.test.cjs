@@ -313,6 +313,24 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         } finally { await admin('ALTER TABLE attendance_lab.requests DROP COLUMN synthetic_drift'); }
       });
 
+      await t.test('warm service rejects altered database defaults and non-origin trigger mode', async () => {
+        const before = await counters();
+        const root = await db.superuser();
+        try {
+          for (const [name,value] of [['timezone','UTC'],['session_replication_role','replica']]) {
+            await root.query("ALTER DATABASE jinxi_synthetic_write_v1 SET " + name + " TO '" + value + "'");
+            try {
+              const r = await request('/api/member?op=me',{session:a});
+              assert.equal(r.status,503,name);
+              assert.equal(r.headers['set-cookie'],undefined);
+              assert.doesNotMatch(r.raw,/replica|timezone|jinxi_synthetic_write_v1/);
+              assert.deepEqual(await counters(),before);
+            } finally { await root.query('ALTER DATABASE jinxi_synthetic_write_v1 RESET ' + name); }
+          }
+          assert.equal((await request('/api/member?op=me',{session:a})).status,200);
+        } finally { await root.end(); }
+      });
+
       await t.test('logout, password change, expiry and disabled account block every write', async () => {
         async function denied(session) {
           const before = await counters();

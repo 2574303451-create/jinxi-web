@@ -81,6 +81,17 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
     });
     const accounts = await seed(client,db.target,initialized.schemaFingerprint);
     const secrets = Object.fromEntries(appRoles.map(role => [role,randomBytes(32).toString('hex')]));
+    await t.test('database defaults changing after approval prevent role activation', async () => {
+      await client.query("ALTER DATABASE jinxi_synthetic_write_v1 SET timezone TO 'UTC'");
+      try {
+        await assert.rejects(activateRoles(client,db.target,initialized.schemaFingerprint,secrets),
+          /SYNTHETIC_SCHEMA_FINGERPRINT_MISMATCH/);
+        await roleState(client,false);
+      } finally {
+        await client.query('ALTER DATABASE jinxi_synthetic_write_v1 RESET timezone');
+      }
+      assert.equal(await schemaFingerprint(client),initialized.schemaFingerprint);
+    });
     await t.test('seed, role secrets and column grants remain isolated', async () => {
       assert.equal(Object.keys(accounts).length,7);
       assert.equal(accounts.normal.nickname,accounts.same.nickname);

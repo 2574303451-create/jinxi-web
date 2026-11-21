@@ -156,6 +156,9 @@ const STRUCTURE = `
     UNION ALL SELECT 'role-settings',r.rolname,to_jsonb(d.setconfig)::text
       FROM pg_db_role_setting d JOIN expected_roles r ON r.oid=d.setrole
       WHERE d.setdatabase=0 OR d.setdatabase=(SELECT oid FROM pg_database WHERE datname=current_database())
+    UNION ALL SELECT 'database-settings',current_database(),to_jsonb(d.setconfig)::text
+      FROM pg_db_role_setting d
+      WHERE d.setrole=0 AND d.setdatabase=(SELECT oid FROM pg_database WHERE datname=current_database())
     UNION ALL SELECT 'acl:'||o.kind,o.name,jsonb_build_array(
       CASE WHEN a.grantor=i.oid THEN '<initializer>' ELSE pg_get_userbyid(a.grantor) END,
       CASE WHEN a.grantee=0 THEN 'PUBLIC' WHEN a.grantee=i.oid THEN '<initializer>' ELSE pg_get_userbyid(a.grantee) END,
@@ -206,12 +209,14 @@ async function roleState(client, enabled) {
 async function verifySchema(client, approval, module) {
   const { rows: [identity] } = await client.query(`
     SELECT i.*,current_user AS role,session_user AS session_role,host(inet_server_addr()) AS address,
-      inet_server_port() AS port,(SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()) AS tls
+      inet_server_port() AS port,(SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()) AS tls,
+      current_setting('session_replication_role') AS trigger_mode
     FROM jinxi_guard.environment_identity() i
   `);
   if (!identity || !roles[module] || identity.role !== roles[module] || identity.session_role !== roles[module] ||
       identity.database_name !== approval.database || identity.environment_id !== approval.environmentId ||
       identity.classification !== 'synthetic-test' || identity.tls !== true || identity.port !== 5432 ||
+      identity.trigger_mode !== 'origin' ||
       !approval.serverAddresses.includes(identity.address) ||
       fingerprint(identity.cluster_id,identity.database_oid,identity.database_name) !== approval.fingerprint) {
     throw Error('SYNTHETIC_DATABASE_IDENTITY_MISMATCH');

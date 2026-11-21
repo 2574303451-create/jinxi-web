@@ -15,7 +15,7 @@
 
 新站构建证明只包含非密钥配置。Netlify 构建时比对官方构建变量、Git HEAD 和干净工作树。候选分支、仓库地址、团队和站点、唯一部署 ID、源提交、HTTPS 域名、有效期必须一致。仅新站自身的 `production` Context 可通过。PR、其他分支、Preview Server、Build Hook 和两个原站明确拒绝。Function 每次核对已发布 deploy、Context、站点、团队及请求 origin。Netlify Functions 运行时仅用平台保证的 `SITE_ID`、`URL`，用受审构建证明补足 commit/branch/deploy，运行时如果另有相冲突的值也拒绝。[构建变量](https://docs.netlify.com/build/configure-builds/environment-variables/) · [Functions 变量](https://docs.netlify.com/build/functions/environment-variables/) · [Context](https://docs.netlify.com/build/functions/api/)
 
-只开放同源 `GET/POST /api/{member,community,attendance,points,operations}`。旧组件需要的 5 条公开读取路径由同一 Function 投影，忽略用户身份，POST 直接拒绝。启动先实际以五个最小角色登录，检查 TLS、库物理指纹、授权 UUID、地址及 schema 指纹；使用已审的成员、内容和账本处理器。启动后每次实际服务连接再核验部署的数据库身份、结构和角色。会话、CSRF、写事务和回执由原处理器校验。密钥或资源失败只返回安全错误，API 响应 `no-store, private`。
+只开放同源 `GET/POST /api/{member,community,attendance,points,operations}`。旧组件需要的 5 条公开读取路径由同一 Function 投影，忽略用户身份，POST 直接拒绝。启动先实际以五个最小角色登录，检查 TLS、库物理指纹、授权 UUID、地址及 schema 指纹；使用已审的成员、内容和账本处理器。热实例观察到专用凭据组变化后，必须重新核验五个角色。核验期间凭据再次变化时，请求不会进入业务处理。每次实际服务连接仍会核验数据库身份、结构和角色。会话、CSRF、写事务和回执由原处理器校验。密钥或资源失败只返回安全错误，API 响应 `no-store, private`。
 
 Next 16.4.5 的 `output: 'export'` 把网页导出为静态文件。数据请求由独立 Function 提供。该目录的静态构建不导入旧首页内嵌的真实档案、不复制全站 public 和历史 SQL，单独生成同源 CSP。Functions 产物及私有运行配置位于发布目录之外。[Next 静态导出](https://nextjs.org/docs/app/guides/static-exports) · [Netlify 包目录](https://docs.netlify.com/build/configure-builds/monorepos/)
 

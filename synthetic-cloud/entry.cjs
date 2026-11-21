@@ -1,3 +1,4 @@
+const { createHash } = require('node:crypto');
 const { createCloudService, netlifyFetch } = require('../service-adapter/cloud.cjs');
 const { publicContract } = require('../integration-local/public-contract.cjs');
 const { checkInvocation, readCredentials } = require('./binding.cjs');
@@ -11,11 +12,12 @@ const publicHeaders = privateHeaders({
   'Content-Type': 'application/json',
 }, 'Cookie, Origin, Authorization');
 const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: publicHeaders });
+const credentialFingerprint = secrets => createHash('sha256').update(JSON.stringify(secrets)).digest('hex');
 
 function createEntry(receipt, env = process.env) {
   // This receipt is bundled with the function, never accepted from a request.
   const bound = structuredClone(receipt);
-  let startup, retryAt = 0;
+  let startup;
 
   return async function handle(request, context) {
     let url, approval;
@@ -50,20 +52,26 @@ function createEntry(receipt, env = process.env) {
 
     try {
       const secrets = readCredentials(env);
-      if (!startup) {
-        if (Date.now() < retryAt) return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
+      const fingerprint = credentialFingerprint(secrets);
+      if (startup?.fingerprint !== fingerprint) startup = { fingerprint, promise: null, retryAt: 0 };
+      const attempt = startup;
+      if (!attempt.promise) {
+        if (Date.now() < attempt.retryAt) return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
         const trustedEnv = { ...env, NETLIFY: 'true', CONTEXT: 'production', COMMIT_REF: approval.commit };
-        startup = createCloudService({
+        attempt.promise = createCloudService({
           approval: { ...approval, port: 5432 }, env: trustedEnv, secrets,
           verifyDeployment: (client, role) => verifySchema(client, approval, role),
         }).catch(() => {
-          startup = undefined;
-          retryAt = Date.now() + 2000;
+          attempt.promise = null;
+          attempt.retryAt = Date.now() + 2000;
           throw Error('SYNTHETIC_SERVICE_UNAVAILABLE');
         });
       }
-      const service = await startup;
+      const service = await attempt.promise;
       checkInvocation(bound, env, context, url.origin);
+      if (startup !== attempt || credentialFingerprint(readCredentials(env)) !== attempt.fingerprint) {
+        return reply(503, { code: 'SYNTHETIC_SERVICE_UNAVAILABLE' });
+      }
       if (publicName) {
         const publicHandlers = Object.fromEntries(modules.map(name => ['/api/' + name, event => service({
           ...event, rawUrl: approval.origin + prefix + 'jinxi-service/' + name, path: prefix + 'jinxi-service/' + name,

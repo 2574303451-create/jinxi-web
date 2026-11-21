@@ -41,7 +41,7 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
    {...anchors.records[0],id:JSON.parse('9007199254740993'),accountId:anchors.members[1].accountId});
   const report=checkHistory(data,anchors);
   assert.deepEqual(report.candidates,[{kind:'strategies',sourceId:'safe-strategy',memberId:anchors.members[1].memberId}]);
-  const proof=await rehearse(db,report);
+  const proof=await rehearse(db,data,anchors);
   assert.deepEqual(proof,{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
@@ -52,8 +52,40 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   const report=checkHistory(data,anchors);
   assert.deepEqual(report.candidates,[]);
   assert(report.findings.some(f=>f.code==='LOSSY_SOURCE_ID_AMBIGUITY'&&f.ref===id));
-  const proof=await rehearse(db,report);
+  const proof=await rehearse(db,data,anchors);
   assert.deepEqual(proof,{candidates:0,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
+ await t.test('a saved report cannot stage a candidate not derived from the original synthetic sources',async()=>{
+  const {data,anchors}=syntheticHistory(1);
+  const report=checkHistory(data,anchors);
+  report.candidates.push({kind:'pointAccount',sourceId:'synthetic-added-after-check',memberId:anchors.members[0].memberId});
+  let connects=0;
+  await assert.rejects(rehearse({...db,admin:async()=>{connects++;return db.admin();}},report),/SYNTHETIC_HISTORY_AND_SEPARATE_BINDINGS_REQUIRED/);
+  assert.equal(connects,0);
+  assert.deepEqual(await db.financialSnapshot(),old);
+ });
+ await t.test('the rehearsal transaction rejects writes to persistent tables on PostgreSQL',async()=>{
+  const {data,anchors}=syntheticHistory(1);
+  const before=await counts();
+  let reached=false,closed=false;
+  const guarded={...db,admin:async()=>{
+   const c=await db.admin();
+   return {
+    query:async(sql,...args)=>{
+     if(/^INSERT INTO (?:pg_temp\.)?compat_candidates/.test(sql)){
+      reached=true;
+      return c.query('UPDATE community_lab.items SET payload=payload WHERE false');
+     }
+     return c.query(sql,...args);
+    },
+    end:async()=>{await c.end();closed=true;},
+   };
+  }};
+  await assert.rejects(rehearse(guarded,data,anchors),{code:'25006'});
+  assert.equal(reached,true);
+  assert.equal(closed,true);
+  assert.deepEqual(await counts(),before);
   assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('failed rollback acknowledgement cannot produce a successful rehearsal receipt',async()=>{
@@ -66,19 +98,43 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
     return response;
    },end:async()=>{await c.end();closed=true;if(loseCloseAck)throw Error('synthetic close failure');}};
   }};
-  await assert.rejects(rehearse(dbWithLostAck,checkHistory(data,anchors)),/REHEARSAL_ROLLBACK_UNCONFIRMED/);
+  await assert.rejects(rehearse(dbWithLostAck,data,anchors),/REHEARSAL_ROLLBACK_UNCONFIRMED/);
   assert.equal(withheld,true);assert.equal(closed,true);assert.deepEqual(await db.financialSnapshot(),old);}
+ });
+ await t.test('a rollback acknowledgement with remaining staged rows cannot produce a receipt',async()=>{
+  const {data,anchors}=syntheticHistory(1);
+  let observed=false,closed=false;
+  const inconsistent={...db,admin:async()=>{
+   const c=await db.admin();
+   return {
+    query:async(sql,...args)=>{
+     if(sql==='ROLLBACK'){
+      await c.query('COMMIT');
+      const {rows:[proof]}=await c.query('SELECT count(*)::int AS staged FROM pg_temp.compat_candidates');
+      assert.equal(proof.staged,1);
+      observed=true;
+      return {command:'ROLLBACK'};
+     }
+     return c.query(sql,...args);
+    },
+    end:async()=>{await c.end();closed=true;},
+   };
+  }};
+  await assert.rejects(rehearse(inconsistent,data,anchors),/REHEARSAL_STAGE_NOT_CLEARED/);
+  assert.equal(observed,true);
+  assert.equal(closed,true);
+  assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('historical redemption mismatches are rehearsed as findings without staging orders or money',async()=>{
   const {data,anchors,order,charge}=syntheticLegacyRedemption();
   const report=checkHistory(data,anchors);
   assert.deepEqual(report.findings.map(f=>f.entity),['messages']);
-  assert.deepEqual(await rehearse(db,report),{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   order.status='cancelled';
   const noRefund=checkHistory(data,anchors);
   assert(noRefund.findings.some(f=>f.entity==='order'&&f.code==='ORDER_LEDGER_STATUS_UNPROVEN'));
   assert.deepEqual(noRefund.candidates,report.candidates);
-  assert.deepEqual(await rehearse(db,noRefund),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   order.status='success';
   data.ledger.push({id:'2',user_id:order.user_id,biz_id:'SYN-REVERSAL',event_type:'reversal',direction:1,
    point_delta:'2',balance_before:'0',balance_after:'2',ext_json:{origin_biz_id:charge.biz_id}});
@@ -87,7 +143,7 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   assert(reversal.findings.some(f=>f.entity==='order'&&f.code==='ORDER_REVERSAL_POLICY_UNPROVEN'));
   assert.deepEqual(reversal.candidates,report.candidates);
   assert(reversal.findings.some(f=>f.entity==='pointAccount'&&f.code==='ACCOUNT_COMPENSATION_COUNTERS_UNPROVEN'));
-  assert.deepEqual(await rehearse(db,reversal),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
  await t.test('historical checkin award conflicts remain findings and never stage facts or points',async()=>{
@@ -95,19 +151,19 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   const current=await counts();
   const matched=checkHistory(data,anchors);
   assert.deepEqual(matched.candidates.map(row=>row.kind),['strategies']);
-  assert.deepEqual(await rehearse(db,matched),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
 
   award.ext_json.continuous_days+=1;
   const conflict=checkHistory(data,anchors);
   assert.deepEqual(conflict.findings.filter(f=>f.code==='CHECKIN_REWARD_LINK_CONFLICT').map(f=>f.entity).sort(),['checkin','ledger']);
   assert.deepEqual(conflict.candidates,matched.candidates);
-  assert.deepEqual(await rehearse(db,conflict),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:4,rolledBack:true,legacyAndBusinessDataUnchanged:true});
 
   data.checkins=[];
   const orphan=checkHistory(data,anchors);
   assert(orphan.findings.some(f=>f.entity==='ledger'&&f.code==='CHECKIN_REWARD_WITHOUT_FACT'));
   assert.deepEqual(orphan.candidates,matched.candidates);
-  assert.deepEqual(await rehearse(db,orphan),{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:3,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await counts(),current);
   assert.deepEqual(await db.financialSnapshot(),old);
  });
@@ -117,16 +173,16 @@ test('adaptation receipts and synthetic historical rehearsal on actual PostgreSQ
   const report=checkHistory(data,anchors);
   assert.deepEqual(report.findings.filter(f=>f.entity==='pointAccount').map(f=>f.code),['ACCOUNT_COUNTERS_LEDGER_INCONSISTENT']);
   assert.deepEqual(report.candidates.map(row=>row.kind),['strategies']);
-  assert.deepEqual(await rehearse(db,report),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   const alias='synthetic-partial-ledger-alias';
   anchors.users.push({userId:alias,accountId:anchors.members[0].accountId});
   data.pointAccounts[0].user_id=order.user_id=charge.user_id=alias;
   const partial=checkHistory(data,anchors);
   assert.deepEqual(partial.findings.filter(f=>f.entity==='pointAccount').map(f=>f.code),['OPENING_ACCOUNT_ALIAS_UNPROVEN']);
   assert.deepEqual(partial.candidates,report.candidates);
-  assert.deepEqual(await rehearse(db,partial),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
+  assert.deepEqual(await rehearse(db,data,anchors),{candidates:1,quarantined:2,rolledBack:true,legacyAndBusinessDataUnchanged:true});
   assert.deepEqual(await db.financialSnapshot(),old);
  });
- await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,r);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},r),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});
+ await t.test('synthetic 208 mapping rehearsal stages quarantined records and rolls everything back',async()=>{const {data,anchors}=syntheticHistory(),r=checkHistory(data,anchors),proof=await rehearse(db,data,anchors);assert.equal(r.summary.trusted,208);assert.deepEqual(proof,{candidates:1,quarantined:1,rolledBack:true,legacyAndBusinessDataUnchanged:true});await assert.rejects(rehearse({...db,settings:{...db.settings,fingerprint:'0'.repeat(64)}},data,anchors),/REHEARSAL_RESOURCE_REJECTED/);assert.deepEqual(await db.financialSnapshot(),old);});
  }finally{await server?.close();await db.stop();}
 });

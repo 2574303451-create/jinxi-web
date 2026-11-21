@@ -26,3 +26,93 @@ test('an older confirmed opposite does not renew a same-value unknown retry',asy
  await assert.rejects(c.mutate('points',{op:'visibility',listed:false}));await c.mutate('points',{op:'visibility',listed:false});
  assert.equal(ids[1],ids[2]);assert.equal(receipts.size,2);assert.equal(listed,false);
 });
+
+test('a confirmed debit survives receipt storage failure and keeps its ID across reload', async () => {
+  const journal = memoryJournal(), actor = crypto.randomUUID(), submitted = [], orders = new Map();
+  const mark = journal.mark;
+  const states = [];
+  let storageFails = true, refreshes = 0;
+  journal.mark = async (key, id, state) => {
+    states.push(state);
+    if (state === 'confirmed' && storageFails) throw new Error('RECOVERY_STORAGE_UNAVAILABLE');
+    await mark(key, id, state);
+  };
+  const create = () => createSession({
+    journal, epoch: () => '', randomId: () => crypto.randomUUID(), notify: () => refreshes++,
+    fetcher: async (url, options) => ({
+      ok: true, status: 200,
+      json: async () => {
+        if (url.includes('/member')) return { member: { id: actor }, csrfToken: 'synthetic' };
+        if (!options.body) {
+          const id = new URL(url, 'https://local.invalid').searchParams.get('receipt');
+          return { memberId: actor, receipt: { requestId: id, state: orders.has(id) ? 'committed' : 'unresolved' } };
+        }
+        const { requestId } = JSON.parse(options.body);
+        submitted.push(requestId);
+        if (!orders.has(requestId)) orders.set(requestId, { memberId: actor, orderId: crypto.randomUUID() });
+        return orders.get(requestId);
+      },
+    }),
+  });
+  const body = { op: 'redeem', itemId: 'synthetic' };
+  const first = create();
+  await first.restore();
+  const order = await first.mutate('points', body);
+  assert.equal(refreshes, 1);
+  assert.deepEqual(states, ['confirmed']);
+  assert.equal(journal.rows.size, 1);
+  assert.equal([...journal.rows.values()][0].state, 'pending');
+
+  const reopened = create();
+  await reopened.restore();
+  const [receipt] = await reopened.recover();
+  assert.equal(receipt.serverState, 'committed');
+  assert.equal(receipt.id, submitted[0]);
+  await assert.rejects(reopened.forgetReceipt(receipt), /RECOVERY_STORAGE_UNAVAILABLE/);
+  assert.equal(journal.rows.size, 1);
+
+  storageFails = false;
+  assert.deepEqual(await reopened.mutate('points', body), order);
+  assert.deepEqual(submitted, [receipt.id, receipt.id]);
+  assert.equal(orders.size, 1);
+  assert.equal([...journal.rows.values()][0].state, 'confirmed');
+  assert.equal(refreshes, 2);
+});
+
+test('a failed confirmation delayed across login switch never returns the old order or refreshes the new account', async () => {
+  const journal = memoryJournal(), a = crypto.randomUUID(), b = crypto.randomUUID();
+  const confirmation = Promise.withResolvers(), resume = Promise.withResolvers();
+  const states = [];
+  let actor = a, refreshes = 0;
+  journal.mark = async (_key, _id, state) => {
+    states.push(state);
+    if (state === 'confirmed') {
+      confirmation.resolve();
+      await resume.promise;
+      throw new Error('RECOVERY_STORAGE_UNAVAILABLE');
+    }
+  };
+  const client = createSession({
+    journal, epoch: () => '', randomId: () => crypto.randomUUID(), notify: () => refreshes++,
+    fetcher: async url => ({
+      ok: true, status: 200,
+      json: async () => url.includes('/member')
+        ? { member: { id: actor }, csrfToken: 'synthetic' }
+        : { memberId: a, orderId: 'old-synthetic-order' },
+    }),
+  });
+  await client.restore();
+  const old = client.mutate('points', { op: 'redeem', itemId: 'synthetic' });
+  const rejected = assert.rejects(old, { code: 'STALE_RESPONSE' });
+  await confirmation.promise;
+  actor = b;
+  client.invalidate();
+  await client.restore();
+  resume.resolve();
+  await rejected;
+  assert.equal(client.getSnapshot().member.id, b);
+  assert.equal(refreshes, 0);
+  assert.deepEqual(states, ['confirmed']);
+  assert.deepEqual(await client.recover(), []);
+  assert.equal([...journal.rows.values()][0].state, 'pending');
+});

@@ -96,12 +96,21 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
     }
     return data;
   }
+  async function rememberServerConfirmation(key, id) {
+    if (!journal) return;
+    try {
+      await journal.mark(key, id, 'confirmed');
+    } catch {
+      // The server has confirmed the result. Keep the already claimed ID
+      // available for recovery when the browser cannot update its local state.
+    }
+  }
   function mutate(module, body) {
     const stamp = generation, observed = marker, actor = credential?.member.id;
     const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(k => [k, canonical(value[k])])) : value;
     const payload = JSON.stringify(canonical(body)), running = JSON.stringify([stamp,module,payload]);
     if (flights.has(running)) return flights.get(running);
-    let key;
+    let key, receipt, serverConfirmed = false;
     const flight = (async () => {
       check(stamp, observed);
       if (!actor || state.phase !== 'ready') throw new SessionError('VERIFIED_SESSION_REQUIRED');
@@ -138,16 +147,17 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       }
       const saved = journal ? await journal.claim({ actor, module, op: body.op, digest: digestText, id: randomId() }, { renewConfirmed }) : null;
       check(stamp, observed);
-      const receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
+      receipt = saved ? { id: saved.id, unknown: !saved.fresh && saved.state !== 'rejected' && saved.state !== 'confirmed' } : pending.get(key) || { id: randomId(), unknown: false }; pending.set(key, receipt);
       if (saved && !['confirmed','rejected'].includes(saved.state) && Date.now() > saved.expiresAt) throw new SessionError('RECOVERY_EXPIRED_REQUIRES_QUERY');
       const result = await request(module, { ...body, requestId: receipt.id });
-      if (journal) await journal.mark(key, receipt.id, 'confirmed');
+      serverConfirmed = true;
+      await rememberServerConfirmation(key, receipt.id);
       check(stamp, observed);
-      pending.delete(key); notify(); return result;
+      if (pending.get(key) === receipt) pending.delete(key);
+      notify(); return result;
     })().catch(async e => {
       // No draft text is retained. An unconfirmed A receipt is never usable by B.
-      const receipt = key && pending.get(key);
-      if (receipt) {
+      if (!serverConfirmed && receipt && pending.get(key) === receipt) {
         if (e.status >= 500 || e.status === 408 || ['NETWORK_RESULT_UNKNOWN','INVALID_RESPONSE','STALE_RESPONSE','ACCOUNT_CHANGED','SUBJECT_MISMATCH'].includes(e.code)) receipt.unknown = true;
         // A later 401/403/429 only rejects that retry. It cannot establish that
         // the original unknown transaction did not commit, so keep its ID.
@@ -170,7 +180,8 @@ function createSession({ fetcher, epoch, randomId, notify = () => {}, journal = 
       check(stamp, observed);
       if (result.memberId !== actor || result.receipt?.requestId !== row.id || !['committed','unresolved'].includes(result.receipt.state)) throw new SessionError('INVALID_RECEIPT');
       if (result.receipt.state === 'committed') {
-        await journal.mark(row.key, row.id, 'confirmed');check(stamp, observed);
+        await rememberServerConfirmation(row.key, row.id);
+        check(stamp, observed);
         if (pending.get(row.key)?.id === row.id) pending.delete(row.key);
       }
       results.push({ ...row, serverState: result.receipt.state });

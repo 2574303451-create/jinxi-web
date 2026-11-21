@@ -1322,6 +1322,18 @@ async function main() {
         const legacyMessage = (await api.admin("SELECT id FROM community_lab.items WHERE kind='message' AND legacy")).rows[0].id;
         await messageRow.waitFor();
         assert.equal(await publishedMessages.locator(`[data-moderation-id="${legacyMessage}"]`).count(),0);
+        await staff.evaluate(() => {
+          const put = IDBObjectStore.prototype.put;
+          IDBObjectStore.prototype.put = function (row, ...rest) {
+            if (this.name === 'intents' && row?.op === 'item.pin' && row.state === 'confirmed') {
+              IDBObjectStore.prototype.put = put;
+              document.documentElement.dataset.pinReceiptStorage = 'aborted';
+              this.transaction.abort();
+              return;
+            }
+            return put.call(this, row, ...rest);
+          };
+        });
         for (const pinned of [true,false]) {
           record.stage=pinned?'published-community-moderation-pin-message':'published-community-moderation-unpin-message';
           const [pin] = await Promise.all([command(staff,'community','item.pin'),
@@ -1332,6 +1344,7 @@ async function main() {
           const publicMessages = await api.request('/.netlify/functions/messages');
           assert.equal(publicMessages.body.find(message=>message.id===messageId).isPinned,pinned);
           await messageRow.getByRole('button',{name:pinned?'取消置顶':'置顶',exact:true,pressed:pinned}).waitFor();
+          assert.equal(await staff.locator('html').getAttribute('data-pin-receipt-storage'),'aborted');
           await waitForCommunityAdminLists(messageManagement);
         }
         record.stage='published-community-moderation-remove-message';

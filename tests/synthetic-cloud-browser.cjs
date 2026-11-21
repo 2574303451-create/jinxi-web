@@ -212,6 +212,51 @@ async function main() {
         record.stage='manual-redemption-admin-queue';
         await navigate(staff);
         await login(staff,'admin');
+        record.stage='manual-identity-recheck-demotes-operator';
+        await resetVisitQuota();
+        const verification = await pageFor(adminContext);
+        await verification.addInitScript(() => {
+          // Suppress automatic focus/timer checks only in this fixture.
+          Object.defineProperty(document, 'visibilityState', { get: () => 'hidden' });
+          window.addEventListener('focus', event => event.stopImmediatePropagation(), true);
+        });
+        await navigate(verification);
+        await ready(verification);
+        const permissionLabel = verification.getByTestId('unified-permissions');
+        await permissionLabel.getByText('合成管理员',{exact:true}).waitFor();
+        await verification.getByRole('button',{name:'合成感谢记录',exact:true}).click();
+        const sponsorEditor = verification.getByRole('form',{name:'维护感谢记录',exact:true});
+        await sponsorEditor.waitFor();
+        await close(verification);
+        const verifiedSession = await session(verification);
+        const revision = await verification.locator('[data-session-revision]').getAttribute('data-session-revision');
+        const changedRole = await api.admin("UPDATE community_lab.member_roles SET role='reviewer' WHERE member_id=$1",[verifiedSession.memberId]);
+        assert.equal(changedRole.rowCount,1);
+        try {
+          const [response] = await Promise.all([
+            verification.waitForResponse(candidate => {
+              const url = new URL(candidate.url());
+              return candidate.request().method()==='GET' && url.pathname==='/api/operations' &&
+                url.searchParams.get('kind')==='team' && url.searchParams.get('view')==='private';
+            }),
+            verification.getByRole('button',{name:'重新核验身份',exact:true}).click(),
+          ]);
+          assert.equal(response.status(),200);
+          assert.deepEqual((await response.json()).permissions,{admin:false,staff:true});
+          await permissionLabel.getByText('合成审核员',{exact:true}).waitFor();
+          assert.equal(await verification.locator('[data-session-revision]').getAttribute('data-session-revision'),revision);
+          await ready(verification);
+          await verification.getByRole('button',{name:'合成感谢记录',exact:true}).click();
+          await verification.getByRole('heading',{name:'公开感谢记录',exact:true}).waitFor();
+          assert.equal(await sponsorEditor.count(),0);
+          assert.equal((await api.request('/api/points?view=admin',{session:verifiedSession})).status,403);
+        } finally {
+          await api.admin("UPDATE community_lab.member_roles SET role='admin' WHERE member_id=$1",[verifiedSession.memberId]);
+          await verification.close();
+        }
+        record.scenarios.push('manual-session-verification-also-refreshes-the-live-operator-role');
+        await navigate(staff);
+        await ready(staff);
         await navigate(reviewer);
         await login(reviewer,'reviewer');
         let previousRequest = lostRequest;

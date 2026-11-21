@@ -278,21 +278,59 @@ async function main() {
             await row.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           }
           record.stage=orderStage+'-claim';
+          const mirror = await pageFor(adminContext);
+          await navigate(mirror);
+          await ready(mirror);
+          await points(mirror);
+          if (outcome === 'failed') {
+            const mirrorInput = mirror.getByRole('searchbox',{name:'完整订单号',exact:true});
+            await mirrorInput.fill(id);
+            await mirrorInput.press('Enter');
+            await mirror.getByRole('button',{name:'返回待处理列表',exact:true}).waitFor();
+          }
+          const mirrorRow = mirror.locator('[data-admin-order-id="'+id+'"]');
+          await mirrorRow.getByRole('button',{name:'认领订单',exact:true}).waitFor();
           const claimOrder = row.getByRole('button',{name:'认领订单',exact:true}).and(row.locator('button:enabled'));
           const [claim] = await Promise.all([command(staff,'points','order.process'),
             claimOrder.press('Enter')]);
           assert.equal(claim.status(),200);
           assert.equal((await claim.json()).status,'processing');
           await row.getByText(/已由你认领/).waitFor();
+          record.stage=orderStage+'-cross-tab-claim';
+          await mirrorRow.getByText(/已由你认领/).waitFor();
           await a.getByRole('button',{name:'刷新积分记录',exact:true}).click();
           await ownOrder.getByText(/管理员正在核验和处理此订单/).waitFor();
           assert.equal(await ownOrder.getByRole('button',{name:'取消并按原流水退款',exact:true}).isDisabled(),true);
           const action = row.getByRole('button',{name:outcome === 'failed' ? '确认未开通，退回积分' : '确认已人工开通',exact:true})
             .and(row.locator('button:enabled'));
-          record.stage=orderStage+'-decision';
-          const [decision] = await Promise.all([command(staff,'points','order.process'),action.press('Enter')]);
-          assert.equal(decision.status(),200);
-          assert.equal((await decision.json()).status,outcome);
+          record.stage=orderStage+'-cross-tab-close';
+          const release = Promise.withResolvers();
+          const isOrderRead = url => url.pathname === '/api/points' && url.searchParams.get('view') === 'admin' &&
+            (outcome === 'failed' ? url.searchParams.get('orderId') === id : url.searchParams.get('queue') === 'all');
+          await mirror.route(isOrderRead, async route => {
+            await release.promise;
+            await route.continue();
+          }, {times:1});
+          try {
+            const [decision] = await Promise.all([
+              command(staff,'points','order.process'), action.press('Enter'),
+              mirror.waitForRequest(request=>request.method()==='GET'&&isOrderRead(new URL(request.url()))),
+              mirrorRow.waitFor({state:'hidden'}),
+            ]);
+            assert.equal(decision.status(),200);
+            assert.equal((await decision.json()).status,outcome);
+            assert.equal(await mirrorRow.getByRole('button').count(),0);
+          } finally {
+            release.resolve();
+          }
+          if (outcome === 'failed') {
+            await mirrorRow.getByText(/未履约 · 已退款/).waitFor();
+            assert.equal(await mirrorRow.getByRole('button').count(),0);
+          } else {
+            await mirror.getByText('暂无本人处理中订单。',{exact:true}).waitFor();
+            assert.equal(await mirrorRow.count(),0);
+          }
+          await mirror.close();
           await row.getByText(outcome === 'failed' ? /未履约 · 已退款/ : /已完成/).waitFor();
           assert.equal(await row.getByRole('button').count(),0);
           record.stage=orderStage+'-reconcile';
@@ -311,6 +349,7 @@ async function main() {
         }
         record.scenarios.push('manual-admin-queue-keyboard-fulfilment-and-failure-refund-with-member-and-reviewer-isolation');
         record.scenarios.push('administrator-exact-order-lookup-keeps-closed-orders-visible-without-actions');
+        record.scenarios.push('same-admin-tabs-refresh-claims-and-hide-obsolete-fulfilment-actions');
 
         record.stage='refund-and-account-switch';
         await close(a);

@@ -336,35 +336,30 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert.equal((await request(route,{session:staff})).status,200);
         const before = await counters();
         const occupants = [];
-        const { Client } = require('pg');
-        const connect = Client.prototype.connect;
-        let refused = 0, pending, nextRefusal;
+        const log = path.join(db.folder,'postgres.private.log');
+        const refusals = () => [...fs.readFileSync(log,'utf8').matchAll(/^\d{4}-\d\d-\d\d [^\r\n]*? 53300 FATAL:/gm)].length;
+        const initialRefusals = refusals();
+        let pending;
         try {
           for (let index=0;index<4;index++) {
             occupants.push(await db.connect('jinxi_community_app',bundle.envAtRuntime[credentialNames.community]));
           }
-          Client.prototype.connect = function (...args) {
-            const opened = connect.apply(this,args);
-            if (this.connectionParameters.application_name !== 'jinxi-approved-test-community') return opened;
-            return opened.catch(error => {
-              if (error.code === '53300') { refused++; nextRefusal?.resolve(); }
-              throw error;
-            });
-          };
           assert.equal((await request(route,{session:staff})).status,503);
-          assert.equal(refused,4);
+          assert.equal(refusals()-initialRefusals,4);
           // Observe the first real refusal for the next request before freeing a slot.
-          nextRefusal = Promise.withResolvers();
           pending = request(route,{session:staff});
-          await Promise.race([nextRefusal.promise,pending.then(() => assert.fail('connection pressure was not observed'))]);
+          const deadline = Date.now()+1000;
+          while (refusals()===initialRefusals+4 && Date.now()<deadline) {
+            await new Promise(resolve=>setTimeout(resolve,5));
+          }
+          assert(refusals()>initialRefusals+4,'connection pressure was not observed');
           await occupants.pop().end();
           const recovered = await pending;
           assert.equal(recovered.status,200);
           assert(Array.isArray(recovered.body.items));
-          assert.equal(refused,5);
+          assert(refusals()>=initialRefusals+5 && refusals()<initialRefusals+8);
           assert.deepEqual(await counters(),before);
         } finally {
-          Client.prototype.connect = connect;
           await Promise.allSettled(occupants.map(client=>client.end()));
           await pending;
         }

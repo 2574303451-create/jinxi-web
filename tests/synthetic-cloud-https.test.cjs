@@ -331,6 +331,28 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         } finally { await root.end(); }
       });
 
+      await t.test('warm handler revalidates all roles when its credential set changes', async () => {
+        const env = {...bundle.envAtRuntime};
+        const entry = createEntry({approval:bundle.approval,deployId:bundle.deployId},env);
+        const key = credentialNames.points;
+        const original = env[key];
+        const replacement = crypto.randomBytes(32).toString('hex');
+        const call = () => withEnv({},()=>entry(new Request(bundle.approval.origin+'/api/member?op=me',{
+          headers:{Authorization:bundle.authorization,Cookie:a.cookie},
+        }),bundle.context));
+        assert.equal((await call()).status,200);
+        const before = await counters();
+        env[key] = replacement;
+        const refused = await call();
+        assert.equal(refused.status,503);
+        assert.equal(refused.headers.get('set-cookie'),null);
+        const body = await refused.text();
+        assert(!body.includes(original) && !body.includes(replacement) && !body.includes(a.memberId));
+        assert.deepEqual(await counters(),before);
+        env[key] = original;
+        assert.equal((await call()).status,200);
+      });
+
       await t.test('logout, password change, expiry and disabled account block every write', async () => {
         async function denied(session) {
           const before = await counters();

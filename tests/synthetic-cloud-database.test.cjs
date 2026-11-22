@@ -62,6 +62,25 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       assert.equal(attempted,true);
       await empty();
     });
+    await t.test('initialization cannot begin DDL after approval expires at the lifecycle lock', async () => {
+      const expiry = Date.parse('2030-01-01T00:00:00Z');
+      const approval = { version:1, enabled:true, target:db.target, expiresAt:new Date(expiry).toISOString() };
+      let now = expiry - 1;
+      let beganDdl = false;
+      const clocked = { async query(sql, values) {
+        if (sql.includes('CREATE ROLE ')) beganDdl = true;
+        const result = await client.query(sql, values);
+        if (sql.startsWith('SELECT pg_advisory_xact_lock')) now = expiry;
+        return result;
+      } };
+      const checkApproval = () => verifyAdminApproval(approval,db.target,'initialize',undefined,now);
+      assert.doesNotThrow(checkApproval);
+      await assert.rejects(initialize(clocked,db.target,checkApproval), /SYNTHETIC_ADMIN_APPROVAL_REQUIRED/);
+      assert.equal(now,expiry);
+      assert.equal(beganDdl,false);
+      await empty();
+      await verifyInventory(client);
+    });
     const initialized = await initialize(client,db.target);
     for (const [name, action] of [['rollback-empty', rollbackEmpty], ['seed', seed]]) {
       await t.test(`${name} rejects a rollback reported by PostgreSQL in response to COMMIT`, async () => {
@@ -148,6 +167,27 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
     });
     const accounts = await seed(client,db.target,initialized.schemaFingerprint);
     const secrets = Object.fromEntries(appRoles.map(role => [role,randomBytes(32).toString('hex')]));
+    await t.test('approval expiry before commit restores NOLOGIN after role activation SQL', async () => {
+      const expiry = Date.parse('2030-01-01T00:00:00Z');
+      const expected = initialized.schemaFingerprint;
+      const approval = { version:1, enabled:true, target:db.target, expiresAt:new Date(expiry).toISOString(), schemaFingerprint:expected };
+      let now = expiry - 1;
+      let changes = 0;
+      const clocked = { async query(sql, values) {
+        const result = await client.query(sql, values);
+        if (sql.endsWith(' LOGIN CONNECTION LIMIT 4')) {
+          changes++;
+          now = expiry;
+        }
+        return result;
+      } };
+      const checkApproval = () => verifyAdminApproval(approval,db.target,'activate',expected,now);
+      assert.doesNotThrow(checkApproval);
+      await assert.rejects(activateRoles(clocked,db.target,expected,secrets,checkApproval), /SYNTHETIC_ADMIN_APPROVAL_REQUIRED/);
+      assert.equal(changes,appRoles.length);
+      await roleState(client,false);
+      for (const role of appRoles) await assert.rejects(db.connect(role,secrets[role]), { code:'28P01' });
+    });
     await t.test('database defaults changing after approval prevent role activation', async () => {
       await client.query("ALTER DATABASE jinxi_synthetic_write_v1 SET timezone TO 'UTC'");
       try {

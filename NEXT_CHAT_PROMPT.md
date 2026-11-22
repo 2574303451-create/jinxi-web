@@ -1,5 +1,17 @@
 请接管 JINXI-WEB 后续工作，按 Matt Pocock 技能采用有明确目标、完成条件和证据的执行方式。
 
+最新接续入口（优先于下方历史快照）：
+
+- 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree`，分支为 `codex/jinxi-phase4-synthetic-cloud-readiness`。先读 NEXT_SESSION_HANDOFF.md 顶部最新入口及 synthetic-cloud/CLOUD_READINESS.md，再按 AGENTS.md 读取协作约定并核对实际 Git。
+- A 的 `dbd6a3b24482872aaa1800b1e67236410062f1ae` 已验收；B 核心真实 Gate-only 的 `bf1af47e576465bb230f56971cb45d2d89fe5261` 已验收且站点已关闭。过去发布批准均已使用，不重复运行 A 或重新发布 Gate。
+- 当前 C0 合并两条基线，修复完整业务的 HTTP 站点元数据兼容，实际请求、构建和运行时 URL 仍须 HTTPS。用 `../business-commit-remote/cloud-readiness-evidence.json` 及 `final-evidence.json` 核对完整 SHA、必要检查、两轴审查与同 SHA CI；尚有条件未完成时只补这些条件，已完成则进入下一切片。
+- 后续 Neon 账号显示名称为 **JXhead**；先只读核对实际账号、套餐、额度、新空项目、新站和秘密变量作用域，准备具体资源申请。未授权业务云资源创建、实际数据库初始化、角色启用、云端业务凭据配置或业务发布；Gate 哈希变量例外不等同于业务数据库凭据例外。
+- 保护范围、业务规则及技能使用约定继续适用。下方的旧工作树、A 未推送、B 待申请等描述仅保留作历史快照，不据此回退当前进度。
+
+---
+
+历史快照：
+
 先切换到实际当前工作树
 E:/Recovery/.jinxi-research/phase4-legacy-access/worktree
 

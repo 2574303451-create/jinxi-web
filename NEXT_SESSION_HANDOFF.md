@@ -1,6 +1,17 @@
 # JINXI-WEB 新会话交接
 更新于 2026-11-22，北京时间。本文是当前工作入口，旧验收报告按需查阅。
 
+## 最新接续入口（优先于下方历史交接）
+
+- A 已完成：`codex/jinxi-phase4-business-commit-confirmation` / `dbd6a3b24482872aaa1800b1e67236410062f1ae`，匹配 SHA 的 CI `45013237598` 成功。
+- B 核心真实 Gate-only 验收已完成：候选 `bf1af47e576465bb230f56971cb45d2d89fe5261`，部署 `6b02e559458dbdc47e106825`；43 项成功探测后站点已关闭。诊断与修复的单次发布授权均已使用。自然到期、损坏/缺失秘密变量及平台 Edge 崩溃未做真实故障注入。
+- 当前 C0 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-readiness`。它合并上述两条基线，补齐完整业务的 HTTP 站点元数据兼容；实际请求、构建和运行时 URL 仍严格为 HTTPS。目标、验收和边界见 [CLOUD_READINESS.md](synthetic-cloud/CLOUD_READINESS.md)。
+- 用实际 `git rev-parse HEAD` 及 `../business-commit-remote/cloud-readiness-evidence.json` 核对本轮候选、本地验证、两轴审查、推送和同 SHA CI。完整状态索引仍为 `../business-commit-remote/final-evidence.json`；记录缺失或未完成时，只补尚未完成的条件。
+- 后续 Neon 账号显示名称为 **JXhead**。尚未创建独立业务云资源，未初始化云库、启用实际角色或发布业务部署；默认批准文件保持关闭。下一步先只读核对账号、套餐、预算、秘密变量作用域和空项目方案，形成资源申请后停在相应授权边界。
+- 保留原业务与 Gate 工作树及保护范围，复用未受影响的既有证据。下方旧基线、A 未推送、B 待批准等文字属于历史交接，不再代表当前状态。
+
+---
+
 ## 1. 本轮接手目标与工作方式
 
 用户已终止原持续目标，要求先整理有目标、节省 token 的计划，再由新会话接手。当前正在交接，未开启新的持续目标。

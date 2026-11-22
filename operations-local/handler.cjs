@@ -26,7 +26,10 @@ function createOperationsHandler({settings,identity,connect,env=process.env}){re
     if(prior){if(!crypto.timingSafeEqual(prior.request_hash,digest))fail(409,'REQUEST_CONFLICT');if(prior.required_role==='admin')ctx.requiredRole='admin';else if(prior.required_role==='staff'&&ctx.requiredRole!=='admin')ctx.requiredRole='staff';if(ctx.requiredRole==='admin'&&!ctx.admin||ctx.requiredRole==='staff'&&!ctx.staff)fail(403,'STAFF_REQUIRED');result={...prior.response,replayed:true};}else{result=await store.mutate(c,ctx,body);await c.query('INSERT INTO operations_lab.requests(actor_id,request_id,request_hash,required_role,response) VALUES($1,$2,$3,$4,$5)',[ctx.actor,body.requestId,digest,ctx.requiredRole||'member',result]);}await c.query('RELEASE SAVEPOINT business');
    }catch(e){if(!(e instanceof OperationsError)||![400,403,409].includes(e.status))throw e;await c.query('ROLLBACK TO SAVEPOINT business');status=e.status;result={error:'本机合成业务操作未获允许。',code:e.code};await c.query('INSERT INTO operations_lab.audit(actor_id,request_id,code) VALUES($1,$2,$3)',[ctx.actor,body.requestId,e.code]);}
   }else result=recovering?await receipt(c,'operations',ctx.actor,query.receipt):await store.state(c,ctx,query);
-  await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);if(!write)result.permissions={admin:ctx.admin,staff:ctx.staff};await c.query('COMMIT');tx=false;return output(status,{...result,memberId:ctx.actor,syntheticOnly:true});
+  await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);if(!write)result.permissions={admin:ctx.admin,staff:ctx.staff};
+  const confirmation=await c.query('COMMIT');
+  if(confirmation?.command!=='COMMIT')fail(503,'OPERATIONS_UNAVAILABLE');
+  tx=false;return output(status,{...result,memberId:ctx.actor,syntheticOnly:true});
  }catch(e){if(tx)await c.query('ROLLBACK').catch(()=>{});return output(e instanceof OperationsError?e.status:503,{error:'本机合成业务不可用或请求未获允许。',code:e instanceof OperationsError?e.code:'OPERATIONS_UNAVAILABLE'});}finally{await c?.end().catch(()=>{});}
 };}
 module.exports={createOperationsHandler};

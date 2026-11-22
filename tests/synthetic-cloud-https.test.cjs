@@ -202,7 +202,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
           const armed = new WeakSet();
           let command;
           Client.prototype.query = async function (sql,...args) {
-            if (this.connectionParameters.application_name === 'jinxi-approved-test-' + route) {
+            if (typeof sql === 'string' && this.connectionParameters.application_name === 'jinxi-approved-test-' + route) {
               if (sql.includes(marker)) armed.add(this);
               if (sql === 'COMMIT' && armed.has(this)) {
                 armed.delete(this);

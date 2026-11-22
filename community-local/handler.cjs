@@ -113,7 +113,9 @@ function createCommunityHandler({settings,identity,connect,env=process.env}){
     const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(tokenFrom(event))])).rows[0];
     if(!final?.live)fail(401,'SESSION_INVALID');
    }
-   await c.query('COMMIT');tx=false;return output(200,response);
+   const confirmation=await c.query('COMMIT');
+   if(confirmation?.command!=='COMMIT')fail(503,'COMMUNITY_UNAVAILABLE');
+   tx=false;return output(200,response);
   }catch(error){
    if(tx)await c.query('ROLLBACK').catch(()=>{});
    const known=error instanceof CommunityError,status=known?error.status:503;

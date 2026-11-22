@@ -45,7 +45,9 @@ function createAttendanceHandler({settings,identity,connect,env=process.env}){
    // Account/session rows remain locked. Time may still pass during business SQL.
    const final=(await c.query('SELECT expires_at>clock_timestamp() AND idle_expires_at>clock_timestamp() AS live FROM b2_lab.member_sessions_v2 WHERE token_hash=$1',[hash(token)])).rows[0];
    if(!final?.live)fail(401,'SESSION_INVALID');
-   await c.query('COMMIT');tx=false;return output(200,response);
+   const confirmation=await c.query('COMMIT');
+   if(confirmation?.command!=='COMMIT')fail(503,'ATTENDANCE_UNAVAILABLE');
+   tx=false;return output(200,response);
   }catch(error){if(tx)await c.query('ROLLBACK').catch(()=>{});const known=error instanceof AttendanceError;return output(known?error.status:503,{error:'本机签到请求未完成或未获允许。',code:known?error.code:'ATTENDANCE_UNAVAILABLE'});}
   finally{await c?.end().catch(()=>{});}
  };

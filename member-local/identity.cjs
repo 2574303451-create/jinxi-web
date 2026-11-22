@@ -87,7 +87,9 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
         allowed=(await rate('login-account:'+body.account.trim().toLowerCase(),10,900))&&allowed;
       }
       if(op==='change-password')allowed=(await rate('password-ip:'+String(clientAddress(event)),5,900))&&allowed;
-      await c.query('COMMIT');inTransaction=false;
+      const limitConfirmation=await c.query('COMMIT');
+      if(limitConfirmation?.command!=='COMMIT')reject(503,'MEMBER_SERVICE_UNAVAILABLE');
+      inTransaction=false;
       if(!allowed)reject(429,'RATE_LIMITED');
       await c.query('BEGIN');inTransaction=true;
       await c.query("SET LOCAL statement_timeout='3000ms'; SET LOCAL lock_timeout='2000ms'");
@@ -135,7 +137,9 @@ function createMemberHandler({settings,connect,env=process.env,clientAddress=()=
           response=output(200,{...dto(a),csrfToken:csrf(token),...(op==='profile'?{profile:{displayName:a.display_name,nickname:a.nickname,role:a.member_role,joinedOn:a.join_date||null}}:{})});
         }
       }
-      await c.query('COMMIT');inTransaction=false;return response;
+      const confirmation=await c.query('COMMIT');
+      if(confirmation?.command!=='COMMIT')reject(503,'MEMBER_SERVICE_UNAVAILABLE');
+      inTransaction=false;return response;
     }catch(error){
       if(inTransaction)await c.query('ROLLBACK').catch(()=>{});
       const known=error instanceof MemberError,status=known?error.status:503;

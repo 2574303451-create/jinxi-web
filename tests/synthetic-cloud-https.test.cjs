@@ -199,6 +199,10 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         const count = await sessionCount();
         const before = await counters();
         for (const {route,marker,body} of scenarios) {
+          const requestId = crypto.randomUUID();
+          const url = bundle.approval.origin+'/api/'+route;
+          const headers = {Authorization:bundle.authorization};
+          if (route !== 'member') Object.assign(headers,{Cookie:a.cookie,'X-CSRF-Token':a.csrf});
           const armed = new WeakSet();
           let command;
           Client.prototype.query = async function (sql,...args) {
@@ -214,10 +218,6 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
             }
             return query.call(this,sql,...args);
           };
-          const requestId = crypto.randomUUID();
-          const url = bundle.approval.origin+'/api/'+route;
-          const headers = {Authorization:bundle.authorization};
-          if (route !== 'member') Object.assign(headers,{Cookie:a.cookie,'X-CSRF-Token':a.csrf});
           let denied;
           try {
             denied = await withEnv({},()=>entry(new Request(url,{

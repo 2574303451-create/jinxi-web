@@ -19,7 +19,10 @@ export function manualProbe(sha, deadline, read = key => globalThis.Netlify.env.
       const contextChecks={
         account:ctx?.account?.id==='689e1405e8627000726e883c',
         site:ctx?.site?.id==='e8033919-6f54-4a27-b09d-26c14d8831ce',
-        siteOrigin:ctx?.site?.url===origin,requestOrigin:url.origin===origin,
+        // Netlify's primary site metadata can use HTTP while ssl_url uses HTTPS.
+        // Only these exact metadata values match; requests still require HTTPS.
+        siteOrigin:ctx?.site?.url===origin||ctx?.site?.url==='http://jinxi-synthetic-gate-test.netlify.app',
+        requestOrigin:url.origin===origin,
         deployContext:ctx?.deploy?.context==='production',published:ctx?.deploy?.published===true,
         deployId:typeof ctx?.deploy?.id==='string'&&/^[0-9a-f]{24}$/.test(ctx.deploy.id),
       };

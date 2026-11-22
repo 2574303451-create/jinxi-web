@@ -53,7 +53,7 @@ jobs:
         run: node scripts/run-clean.cjs --version
       - run: npm ci
       - name: Verify Gate-only refusal diagnostics and access boundaries
-        run: node --test tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/manual-diagnostics.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
+        run: node --test tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/manual-diagnostics.test.mjs synthetic-cloud/gate-only/manual-site-url.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
       - name: Raw TypeScript check
         shell: bash
         run: |

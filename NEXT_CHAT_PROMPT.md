@@ -2,10 +2,12 @@
 
 最新接续入口（优先于下方历史快照）：
 
-- 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-bootstrap-worktree`，分支为 `codex/jinxi-phase4-synthetic-cloud-bootstrap`。先读 NEXT_SESSION_HANDOFF.md 顶部最新入口及 synthetic-cloud/BOOTSTRAP_PREFLIGHT.md，再按 AGENTS.md 读取协作约定并核对实际 Git。
+- 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-strict-readiness-worktree`，分支为 `codex/jinxi-phase4-strict-cloud-readiness`。可执行源码基线为 `a230bfd1166a3623e988c35c7e0c771131a21a9e`，本轮仅更新文档，文档提交 SHA 用实际 Git 核对。先读 NEXT_SESSION_HANDOFF.md 顶部最新入口及 synthetic-cloud/STRICT_PLATFORM_FINDINGS.md，再按 AGENTS.md 读取协作约定。
 - A 的 `dbd6a3b24482872aaa1800b1e67236410062f1ae` 已验收；B 核心真实 Gate-only 的 `bf1af47e576465bb230f56971cb45d2d89fe5261` 已验收且站点已关闭。过去发布批准均已使用，不重复运行 A 或重新发布 Gate。
-- C0 的 `072f492b672c9ebd36b1f6d0c822fb9ab62b3276` 已完成，CI `45038923825` 成功。当前 C1 对 JXhead 既有专用合成项目做了只读目录核验，并修复本地六项默认表授权模板兼容。用 `../business-commit-remote/C1-evidence.json` 及 `final-evidence.json` 核对候选、检查、审查及同 SHA CI；只补未完成条件，不重跑 C0。
-- 用户确认目前没有本地私有管理凭据文件，原生直连 TLS/身份检查保留待接入。SQL Editor 的 `ssl=false` 不可充当 Node TLS 通过证据；现场日志参数也尚不符合角色密码配置门禁。不得提取控制台口令、收集聊天密码或放宽门禁。后续先完成专用项目的私有原生只读验证，再准备数据库命名、初始化和新站的具体申请。未授权云端写入、角色启用、业务秘密变量配置或发布；Gate 例外不等同于业务凭据例外。
+- C0 与 C1 已完成；C1 最终源码为 `a230bfd1166a3623e988c35c7e0c771131a21a9e`，同 SHA CI `45041814869` 成功。六项默认表授权兼容已通过真实 PostgreSQL 17 回归；无需重复运行已完成检查。
+- C2 原生只读验证已完成。用户委托处理凭据后，既有专用项目口令仅在本机进程内存临时使用，未输出、保存或重置。真实 Node `pg` 连接通过 TLS 1.3、CA、主机名与数据库身份校验，但后端 `pg_stat_ssl.ssl=false`。不要再询问私有凭据文件或重复获取口令。证据为 `../business-commit-remote/C2-evidence.json`、`C2-native-result.json`。
+- 用户选择继续保持严格隔离。C3 补充核对当前身份、官方文档、公开实现及只读 API：维护库 PUBLIC CONNECT、后端 TLS false、安全日志参数 -1 仍阻断；更严格的临时 `SET LOCAL` 实测返回 42501。当前没有已证实的受支持修复路径，不等同于证明 Neon 全平台不可能。详见研究文件与本地 `C3-evidence.json`、`C3-api-readonly.json`。
+- 下一步只在提供方给出可复核的三项受支持能力后，准备精确变更申请；证据清单及未发送问询稿已经备好。未经明确指令不发送外部消息，不升级付费、不创建替代资源、不初始化或启用角色、不部署。若需更换提供方，先确认目标和预算，再设计新资源身份合同；当前代码只接受 Neon 绑定，不能伪造为 Neon 或直接替换主机名。缺少新证据时停止云端初始化，不继续重复本地证明。
 - 保护范围、业务规则及技能使用约定继续适用。下方的旧工作树、A 未推送、B 待申请等描述仅保留作历史快照，不据此回退当前进度。
 
 ---

@@ -1,15 +1,18 @@
 # JINXI-WEB 新会话交接
-更新于 2026-11-22，北京时间。本文是当前工作入口，旧验收报告按需查阅。
+更新于 2026-11-23，北京时间。本文是当前工作入口，旧验收报告按需查阅。
 
 ## 最新接续入口（优先于下方历史交接）
 
 - A 已完成：`codex/jinxi-phase4-business-commit-confirmation` / `dbd6a3b24482872aaa1800b1e67236410062f1ae`，匹配 SHA 的 CI `45013237598` 成功。
 - B 核心真实 Gate-only 验收已完成：候选 `bf1af47e576465bb230f56971cb45d2d89fe5261`，部署 `6b02e559458dbdc47e106825`；43 项成功探测后站点已关闭。诊断与修复的单次发布授权均已使用。自然到期、损坏/缺失秘密变量及平台 Edge 崩溃未做真实故障注入。
 - C0 已完成：`codex/jinxi-phase4-synthetic-cloud-readiness` / `072f492b672c9ebd36b1f6d0c822fb9ab62b3276`，匹配 SHA 的 CI `45038923825` 成功。原工作树 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree` 保留。完整业务 HTTP 元数据兼容已修复，实际请求、构建和运行时 URL 仍严格为 HTTPS，见 [CLOUD_READINESS.md](synthetic-cloud/CLOUD_READINESS.md)。
-- 当前 C1 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-bootstrap-worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-bootstrap`。已对 JXhead 既有合成项目执行两组只读目录 SELECT 并回滚；按现场六项默认表授权模板补齐本地初始化兼容，见 [BOOTSTRAP_PREFLIGHT.md](synthetic-cloud/BOOTSTRAP_PREFLIGHT.md)。
-- 用实际 `git rev-parse HEAD` 及 `../business-commit-remote/C1-evidence.json` 核对本轮候选、必要检查、两轴审查、推送和同 SHA CI。完整索引仍为 `../business-commit-remote/final-evidence.json`，C0 证据为 `cloud-readiness-evidence.json`；只补尚未完成条件。
-- 现场默认库无业务对象或角色，SQL Editor 连接的 TLS 状态为 false，`log_parameter_max_length=-1`。这不等同于 Node 原生直连验收；密码配置门禁仍拒绝。用户明确没有本地私有管理凭据文件，直连验证保留待接入；不得从控制台提取口令或放宽身份/TLS/日志检查。
-- 本轮未创建资源、初始化云库、启用实际角色或发布业务部署，默认批准文件保持关闭。下一步先完成专用项目的私有原生只读验证，再准备精确数据库命名/权限与初始化方案；不要重复创建已存在的合成项目，也不要把 C1 修复当作云端写入批准。
+- C1 已完成：`codex/jinxi-phase4-synthetic-cloud-bootstrap` / `a230bfd1166a3623e988c35c7e0c771131a21a9e`，同 SHA CI `45041814869` 成功。原工作树 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-bootstrap-worktree` 保留。默认六项表授权兼容、PostgreSQL 17 生命周期 17/17、HTTPS 18/18、Firefox 26 场景及五宽度、类型/lint/语法/构建/导出已通过，Standards / Spec 均无未解决项。
+- C2 原生只读核验已完成，凭据接入问题已解决。用户委托处理后，既有专用项目口令仅在本机进程内存使用，未打印、落盘、重置或新建 API key。实际 Node `pg` 连接 TLS 1.3、CA、目标主机名及数据库身份均通过；临时服务已停止。详见本地 `C2-evidence.json`、`C2-native-result.json`；不再要求用户准备凭据文件，也不重复获取口令。
+- 当前 C3 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-strict-readiness-worktree`，分支 `codex/jinxi-phase4-strict-cloud-readiness`。可执行源码仍是上述 C1 SHA；C3 只更新文档，实际文档提交 SHA 用 `git rev-parse HEAD` 及本地 `C3-evidence.json` 核对。完整索引为 `../business-commit-remote/final-evidence.json`。
+- 用户选择保持严格隔离。当前实测：后端 `pg_stat_ssl.ssl=false`、服务端 `ssl=off`；维护库 `postgres`、`template1` 的 PUBLIC CONNECT 为 true，owner 是 `cloud_admin`，当前主体无撤权所需权限；`log_parameter_max_length=-1` 且更严格的临时 `SET LOCAL ...=0` 返回 42501。日志安全子集通过不等于满足口令配置门禁。API 维护库 GET 404、公开 hook 及泛型 pg_settings 均未提供已证实的修复路径；不据此断言平台级不可能。
+- [STRICT_PLATFORM_FINDINGS.md](synthetic-cloud/STRICT_PLATFORM_FINDINGS.md) 已列明官方来源、继续所需证据、未发送的提供方问询稿与停止条件。C3 的只读 API/目录结果及失败的事务内日志尝试保存在本地 `C3-api-readonly.json`。这些调用没有持久配置、对象、权限或业务数据写入；MCP 只读事务不冒称逐项显式 ROLLBACK。
+- 下一步需提供方明确证明维护库严格 CONNECT 隔离、后端 TLS true、安全日志 0 均有受支持实施路径，再准备包含目标、SQL/API、回退及验收的具体变更申请。当前不初始化、不设置角色口令、不启用角色、不部署。问询尚未发送，外部发送需用户明确指令；不自动升级付费。若改用其他提供方，先确认资源/预算并设计新的身份绑定，不复用或伪造 Neon 标识。没有新证据时停止本轮云端执行，避免无边界重复审计。
+- 默认批准文件仍关闭；没有创建资源、修改云端权限或发布业务部署。生产、旧 TEST、真实数据及原有工作树保持原保护范围；C0/C1 未受影响的检查按范围复用，不能将其 CI 记为新文档 SHA 的 CI。
 - 保留原业务与 Gate 工作树及保护范围，复用未受影响的既有证据。下方旧基线、A 未推送、B 待批准等文字属于历史交接，不再代表当前状态。
 
 ---

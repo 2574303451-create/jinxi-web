@@ -17,6 +17,45 @@ test('points transaction failure and revocation review on actual synthetic Postg
    }
    const created=await p.op(s,{op:'redeem',itemId:db.fixtures.itemId,quantity:1});assert.equal(created.status,200);const request={op:'order.cancel',orderId:created.body.orderId,requestId:crypto.randomUUID()},before=await p.snapshot();assert.equal((await p.call(s,request,{},faulty('INSERT INTO points_lab.ledger'))).status,503);assert.deepEqual(await p.snapshot(),before);assert.equal((await p.call(s,request)).status,200);assert.equal((await p.call(s,request)).body.replayed,true);assert.equal((await p.call(s)).body.account.balance,'4');
   });
+  await t.test('order and refund responses distinguish a rollback from a committed request with a lost response',async()=>{
+   const member=await p.login();await p.fund(member);
+   let command;
+   const withCommitFault=mode=>p.make({connect:async()=>{
+    const c=await db.connectPoints(),query=c.query.bind(c);
+    let commits=0;
+    c.query=async(sql,...values)=>{
+     if(sql!=='COMMIT'||++commits!==2)return query(sql,...values);
+     if(mode==='rollback')await assert.rejects(query('SELECT 1/0'),{code:'22012'});
+     const result=await query(sql,...values);command=result.command;
+     if(mode==='lost-response')throw Error('simulated transport loss after server commit');
+     return result;
+    };
+    return c;
+   }});
+   const redeem={op:'redeem',itemId:db.fixtures.itemId,quantity:1,requestId:crypto.randomUUID()};
+   const before=await p.snapshot();
+   const denied=await p.call(member,redeem,{},withCommitFault('rollback'));
+   assert.equal(command,'ROLLBACK');
+   assert.equal(denied.status,503);
+   assert.equal(denied.body.orderId,undefined);
+   assert.deepEqual(await p.snapshot(),before);
+   assert.equal((await p.call(member,null,{receipt:redeem.requestId})).body.receipt.state,'unresolved');
+   const order=await p.call(member,redeem);
+   assert.equal(order.status,200);
+
+   const cancel={op:'order.cancel',orderId:order.body.orderId,requestId:crypto.randomUUID()};
+   const unknown=await p.call(member,cancel,{},withCommitFault('lost-response'));
+   assert.equal(command,'COMMIT');
+   assert.equal(unknown.status,503);
+   const committed=await p.snapshot();
+   assert.equal((await p.call(member,null,{receipt:cancel.requestId})).body.receipt.state,'committed');
+   const replay=await p.call(member,cancel);
+   assert.equal(replay.status,200);
+   assert.equal(replay.body.replayed,true);
+   assert.equal(replay.body.status,'cancelled');
+   assert.deepEqual(committed.ledger.filter(entry=>entry.order_id===order.body.orderId).map(entry=>entry.kind),['redeem','refund']);
+   assert.deepEqual(await p.snapshot(),committed);
+  });
   for (const winner of ['cancelled','processing']) {
    await t.test(`member cancellation and staff claim contend: ${winner} commits first`, async () => {
     const member = await p.login(), staff = await p.login('admin');

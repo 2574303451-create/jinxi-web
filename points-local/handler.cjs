@@ -42,7 +42,10 @@ function createPointsHandler({settings,identity,connect,env=process.env}){
     }
    }else result=recovering?await receipt(c,'points',ctx.actor,query.receipt):await store.state(c,ctx,query);
    // Finish all deferred financial checks before the final live authorization.
-   await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);await c.query('COMMIT');tx=false;return output(status,{...result,...(!write&&query.view==='board'?{}:{memberId:ctx.actor}),syntheticOnly:true});
+   await c.query('SET CONSTRAINTS ALL IMMEDIATE');await authorize(c,ctx,event,write);
+   const confirmation=await c.query('COMMIT');
+   if(confirmation?.command!=='COMMIT')fail(503,'POINTS_UNAVAILABLE');
+   tx=false;return output(status,{...result,...(!write&&query.view==='board'?{}:{memberId:ctx.actor}),syntheticOnly:true});
   }catch(e){if(tx)await c.query('ROLLBACK').catch(()=>{});return output(e instanceof PointsError?e.status:503,{error:'本机合成积分服务不可用或请求未获允许。',code:e instanceof PointsError?e.code:'POINTS_UNAVAILABLE'});}
   finally{await c?.end().catch(()=>{});}
  };

@@ -2,10 +2,10 @@
 
 最新接续入口（优先于下方历史快照）：
 
-- 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree`，分支为 `codex/jinxi-phase4-synthetic-cloud-readiness`。先读 NEXT_SESSION_HANDOFF.md 顶部最新入口及 synthetic-cloud/CLOUD_READINESS.md，再按 AGENTS.md 读取协作约定并核对实际 Git。
+- 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-bootstrap-worktree`，分支为 `codex/jinxi-phase4-synthetic-cloud-bootstrap`。先读 NEXT_SESSION_HANDOFF.md 顶部最新入口及 synthetic-cloud/BOOTSTRAP_PREFLIGHT.md，再按 AGENTS.md 读取协作约定并核对实际 Git。
 - A 的 `dbd6a3b24482872aaa1800b1e67236410062f1ae` 已验收；B 核心真实 Gate-only 的 `bf1af47e576465bb230f56971cb45d2d89fe5261` 已验收且站点已关闭。过去发布批准均已使用，不重复运行 A 或重新发布 Gate。
-- 当前 C0 合并两条基线，修复完整业务的 HTTP 站点元数据兼容，实际请求、构建和运行时 URL 仍须 HTTPS。用 `../business-commit-remote/cloud-readiness-evidence.json` 及 `final-evidence.json` 核对完整 SHA、必要检查、两轴审查与同 SHA CI；尚有条件未完成时只补这些条件，已完成则进入下一切片。
-- 后续 Neon 账号显示名称为 **JXhead**；先只读核对实际账号、套餐、额度、新空项目、新站和秘密变量作用域，准备具体资源申请。未授权业务云资源创建、实际数据库初始化、角色启用、云端业务凭据配置或业务发布；Gate 哈希变量例外不等同于业务数据库凭据例外。
+- C0 的 `072f492b672c9ebd36b1f6d0c822fb9ab62b3276` 已完成，CI `45038923825` 成功。当前 C1 对 JXhead 既有专用合成项目做了只读目录核验，并修复本地六项默认表授权模板兼容。用 `../business-commit-remote/C1-evidence.json` 及 `final-evidence.json` 核对候选、检查、审查及同 SHA CI；只补未完成条件，不重跑 C0。
+- 用户确认目前没有本地私有管理凭据文件，原生直连 TLS/身份检查保留待接入。SQL Editor 的 `ssl=false` 不可充当 Node TLS 通过证据；现场日志参数也尚不符合角色密码配置门禁。不得提取控制台口令、收集聊天密码或放宽门禁。后续先完成专用项目的私有原生只读验证，再准备数据库命名、初始化和新站的具体申请。未授权云端写入、角色启用、业务秘密变量配置或发布；Gate 例外不等同于业务凭据例外。
 - 保护范围、业务规则及技能使用约定继续适用。下方的旧工作树、A 未推送、B 待申请等描述仅保留作历史快照，不据此回退当前进度。
 
 ---

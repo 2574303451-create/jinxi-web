@@ -5,9 +5,11 @@
 
 - A 已完成：`codex/jinxi-phase4-business-commit-confirmation` / `dbd6a3b24482872aaa1800b1e67236410062f1ae`，匹配 SHA 的 CI `45013237598` 成功。
 - B 核心真实 Gate-only 验收已完成：候选 `bf1af47e576465bb230f56971cb45d2d89fe5261`，部署 `6b02e559458dbdc47e106825`；43 项成功探测后站点已关闭。诊断与修复的单次发布授权均已使用。自然到期、损坏/缺失秘密变量及平台 Edge 崩溃未做真实故障注入。
-- 当前 C0 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-readiness`。它合并上述两条基线，补齐完整业务的 HTTP 站点元数据兼容；实际请求、构建和运行时 URL 仍严格为 HTTPS。目标、验收和边界见 [CLOUD_READINESS.md](synthetic-cloud/CLOUD_READINESS.md)。
-- 用实际 `git rev-parse HEAD` 及 `../business-commit-remote/cloud-readiness-evidence.json` 核对本轮候选、本地验证、两轴审查、推送和同 SHA CI。完整状态索引仍为 `../business-commit-remote/final-evidence.json`；记录缺失或未完成时，只补尚未完成的条件。
-- 后续 Neon 账号显示名称为 **JXhead**。尚未创建独立业务云资源，未初始化云库、启用实际角色或发布业务部署；默认批准文件保持关闭。下一步先只读核对账号、套餐、预算、秘密变量作用域和空项目方案，形成资源申请后停在相应授权边界。
+- C0 已完成：`codex/jinxi-phase4-synthetic-cloud-readiness` / `072f492b672c9ebd36b1f6d0c822fb9ab62b3276`，匹配 SHA 的 CI `45038923825` 成功。原工作树 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-readiness-worktree` 保留。完整业务 HTTP 元数据兼容已修复，实际请求、构建和运行时 URL 仍严格为 HTTPS，见 [CLOUD_READINESS.md](synthetic-cloud/CLOUD_READINESS.md)。
+- 当前 C1 工作树为 `E:/Recovery/.jinxi-research/phase4-legacy-access/cloud-bootstrap-worktree`，分支 `codex/jinxi-phase4-synthetic-cloud-bootstrap`。已对 JXhead 既有合成项目执行两组只读目录 SELECT 并回滚；按现场六项默认表授权模板补齐本地初始化兼容，见 [BOOTSTRAP_PREFLIGHT.md](synthetic-cloud/BOOTSTRAP_PREFLIGHT.md)。
+- 用实际 `git rev-parse HEAD` 及 `../business-commit-remote/C1-evidence.json` 核对本轮候选、必要检查、两轴审查、推送和同 SHA CI。完整索引仍为 `../business-commit-remote/final-evidence.json`，C0 证据为 `cloud-readiness-evidence.json`；只补尚未完成条件。
+- 现场默认库无业务对象或角色，SQL Editor 连接的 TLS 状态为 false，`log_parameter_max_length=-1`。这不等同于 Node 原生直连验收；密码配置门禁仍拒绝。用户明确没有本地私有管理凭据文件，直连验证保留待接入；不得从控制台提取口令或放宽身份/TLS/日志检查。
+- 本轮未创建资源、初始化云库、启用实际角色或发布业务部署，默认批准文件保持关闭。下一步先完成专用项目的私有原生只读验证，再准备精确数据库命名/权限与初始化方案；不要重复创建已存在的合成项目，也不要把 C1 修复当作云端写入批准。
 - 保留原业务与 Gate 工作树及保护范围，复用未受影响的既有证据。下方旧基线、A 未推送、B 待批准等文字属于历史交接，不再代表当前状态。
 
 ---

@@ -56,6 +56,8 @@ async function verifyTarget(client, target) {
 
 // Platform-specific default privileges must never affect the creators below.
 // Known Neon public templates belong to cloud_admin and are left intact.
+// Tables have either the original eight grants or the observed six grants
+// without REFERENCES/TRIGGER; both templates retain every grant option.
 async function verifyInventory(client, initialized = false) {
   const { rows: [state] } = await client.query(`
     SELECT EXISTS(SELECT 1 FROM pg_namespace
@@ -72,19 +74,27 @@ async function verifyInventory(client, initialized = false) {
         AND (backend_type='client backend' OR backend_type IS NULL))
         AS occupied,
       EXISTS(SELECT 1 FROM pg_default_acl d
+        CROSS JOIN LATERAL (
+          SELECT array_agg(
+            (CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee)::text END)
+            ||':'||a.privilege_type||':'||a.is_grantable::text
+            ORDER BY a.privilege_type COLLATE "C",a.grantee,a.is_grantable) AS grants
+          FROM aclexplode(d.defaclacl) a
+        ) actual
         WHERE pg_get_userbyid(d.defaclrole)<>'cloud_admin'
           OR d.defaclrole=(SELECT oid FROM pg_roles WHERE rolname=session_user)
           OR d.defaclnamespace<>'public'::regnamespace
           OR d.defaclobjtype NOT IN('r','S')
-          OR (SELECT array_agg(
-                (CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee)::text END)
-                ||':'||a.privilege_type||':'||a.is_grantable::text
-                ORDER BY a.privilege_type COLLATE "C",a.grantee,a.is_grantable) FROM aclexplode(d.defaclacl) a)
-            IS DISTINCT FROM CASE d.defaclobjtype WHEN 'r' THEN ARRAY[
+          OR CASE d.defaclobjtype WHEN 'r' THEN
+            actual.grants IS DISTINCT FROM ARRAY[
               'neon_superuser:DELETE:true','neon_superuser:INSERT:true','neon_superuser:MAINTAIN:true',
               'neon_superuser:REFERENCES:true','neon_superuser:SELECT:true','neon_superuser:TRIGGER:true',
-              'neon_superuser:TRUNCATE:true','neon_superuser:UPDATE:true']
-            ELSE ARRAY['neon_superuser:SELECT:true','neon_superuser:UPDATE:true','neon_superuser:USAGE:true'] END
+              'neon_superuser:TRUNCATE:true','neon_superuser:UPDATE:true'] AND
+            actual.grants IS DISTINCT FROM ARRAY[
+              'neon_superuser:DELETE:true','neon_superuser:INSERT:true','neon_superuser:MAINTAIN:true',
+              'neon_superuser:SELECT:true','neon_superuser:TRUNCATE:true','neon_superuser:UPDATE:true']
+            ELSE actual.grants IS DISTINCT FROM
+              ARRAY['neon_superuser:SELECT:true','neon_superuser:UPDATE:true','neon_superuser:USAGE:true'] END
       ) AS unsafe_defaults
   `, [initialized ? namespaces : [], initialized ? [...owners, ...appRoles] : []]);
   if (state.occupied !== false || state.unsafe_defaults !== false) throw Error('SYNTHETIC_DATABASE_NOT_EMPTY');

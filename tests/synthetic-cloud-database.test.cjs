@@ -49,6 +49,33 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await setDefaults('ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public REVOKE SELECT ON TABLES FROM PUBLIC');
       await verifyInventory(client);
     });
+    await t.test('the observed six-grant Neon table template can initialize an otherwise empty database', async () => {
+      const root = await db.superuser();
+      try {
+        await root.query('ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public REVOKE REFERENCES, TRIGGER ON TABLES FROM neon_superuser');
+      } finally { await root.end(); }
+      await verifyInventory(client);
+    });
+    await t.test('six-grant compatibility still refuses public grants, partial templates and missing grant options before DDL', async () => {
+      const variants = [
+        ['GRANT SELECT ON TABLES TO PUBLIC', 'REVOKE SELECT ON TABLES FROM PUBLIC'],
+        ['GRANT REFERENCES ON TABLES TO neon_superuser WITH GRANT OPTION', 'REVOKE REFERENCES ON TABLES FROM neon_superuser'],
+        ['REVOKE GRANT OPTION FOR SELECT ON TABLES FROM neon_superuser', 'GRANT SELECT ON TABLES TO neon_superuser WITH GRANT OPTION'],
+      ];
+      const alter = async clause => {
+        const root = await db.superuser();
+        try { await root.query('ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public '+clause); }
+        finally { await root.end(); }
+      };
+      for (const [change,restore] of variants) {
+        await alter(change);
+        try {
+          await assert.rejects(initialize(client,db.target), /SYNTHETIC_DATABASE_NOT_EMPTY/, change);
+          await empty();
+        } finally { await alter(restore); }
+        await verifyInventory(client);
+      }
+    });
     await t.test('mid-DDL failure rolls back all schema and roles', async () => {
       let attempted = false;
       const failing = { query: (sql,values) => {

@@ -28,11 +28,14 @@ test('build rejects mismatched identity, inherited credentials and stale approva
 test('output contains only a bound Edge entry, refuses preexisting content', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'jinxi-gate-'));
   try {
-    const gate = join(dir, 'gate-only');
-    mkdirSync(gate);
+    const synthetic = join(dir, 'synthetic-cloud');
+    const gate = join(synthetic, 'gate-only');
+    mkdirSync(gate, {recursive:true});
+    mkdirSync(join(dir, 'service-adapter'));
+    copyFileSync(new URL('../../service-adapter/site-origin.mjs', import.meta.url), join(dir, 'service-adapter/site-origin.mjs'));
     copyFileSync(new URL('./handler.mjs', import.meta.url), join(gate, 'handler.mjs'));
     for (const name of ['edge-access.mjs', 'access.mjs']) {
-      copyFileSync(new URL('../' + name, import.meta.url), join(dir, name));
+      copyFileSync(new URL('../' + name, import.meta.url), join(synthetic, name));
     }
     const output = join(gate, '.output');
     build.emit(output, binding);

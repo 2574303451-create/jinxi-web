@@ -3,6 +3,7 @@ const crypto=require('node:crypto');
 const {setTimeout:delay}=require('node:timers/promises');
 const {approve,approved,roles}=require('./resource.cjs'),{handlers}=require('./handlers.cjs');
 const disabled=require('./approval.disabled.json');
+const {matchesSiteMetadata}=require('./site-origin.mjs');
 const verifiers={
  member:require('../member-local/identity.cjs').verifyMember,
  community:require('../community-local/proof.cjs').verify,
@@ -72,7 +73,7 @@ async function createCloudService({approval=disabled,env=process.env,secrets,ver
  const services=handlers({settings,connections:serviceConnections,env,clientAddress:event=>event.localClientAddress});
  // Netlify Fetch API context.ip, not a client-controlled forwarding header.
  return router({services,origin:settings.origin,clientAddress:context=>{
-  const ip=context?.ip;if(context?.site?.id!==approval.siteId||new URL(context.site.url).origin!==approval.origin||context?.deploy?.context!=='production'||!require('node:net').isIP(ip||''))throw Error('TRUSTED_CLIENT_ADDRESS_REQUIRED');return ip;
+  const ip=context?.ip;if(context?.site?.id!==approval.siteId||!matchesSiteMetadata(approval.origin,context.site.url)||context?.deploy?.context!=='production'||!require('node:net').isIP(ip||''))throw Error('TRUSTED_CLIENT_ADDRESS_REQUIRED');return ip;
  }});
 }
 function netlifyFetch(service){return async(request,context)=>{

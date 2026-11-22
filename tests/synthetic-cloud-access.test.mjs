@@ -114,6 +114,27 @@ test('only the approved published deployment and its canonical origin are truste
   }
 });
 
+test('canonical HTTP site metadata still protects and serves the HTTPS business entry', async () => {
+  const x = fixture();
+  x.context.site.url = x.binding.origin.replace('https:', 'http:');
+  let forwarded = 0;
+  x.context.next = () => { forwarded++; return new Response('business reply'); };
+  assert.equal((await x.run(authorized(x, '/'), x.context)).status, 200);
+  assert.equal((await x.run(new Request(x.binding.origin + '/api/member'), x.context)).status, 401);
+  assert.equal(forwarded, 0);
+  assert.equal(await (await x.run(authorized(x, '/api/member'), x.context)).text(), 'business reply');
+  assert.equal(forwarded, 1);
+  for (const url of [undefined, '', x.binding.origin+'/', x.binding.origin+':443',
+    x.binding.origin+'?query', x.binding.origin+'#fragment',
+    x.binding.origin.replace('https://','https://user@'),
+    x.binding.origin.replace('synthetic-access-example','deploy-preview-1--synthetic-access-example'),
+    x.binding.origin.replace('https:','HTTP:'), 'https://another-site.netlify.app']) {
+    const reply = await x.run(authorized(x, '/api/member'), {...x.context,site:{...x.context.site,url}});
+    assert.equal(reply.status, 503);
+  }
+  assert.equal(forwarded, 1);
+});
+
 test('missing credentials/configuration or an exception deny without downstream use', async () => {
   const x = fixture();
   let forwarded = 0;

@@ -60,6 +60,7 @@ test('only the exact fresh checkout and trusted build metadata can produce a rec
 test('Runtime matches the published deploy, origin, site, team and approved SHA without build-only variables', () => {
   const x = configuration(), receipt = buildReceipt(x.env,x.commit,true);
   assert.equal(checkInvocation(receipt,x.runtime,x.context,x.approval.origin).commit,x.commit);
+  assert.equal(checkInvocation(receipt,x.runtime,{...x.context,site:{...x.context.site,url:x.approval.origin}},x.approval.origin).commit,x.commit);
   for (const bad of [
     { site:{ ...x.context.site,id:PROTECTED_SITE_ID } }, { account:{ id:'wrong' } },
     { deploy:{ ...x.context.deploy,id:'d'.repeat(24) } }, { deploy:{ ...x.context.deploy,context:'branch-deploy' } },
@@ -70,6 +71,21 @@ test('Runtime matches the published deploy, origin, site, team and approved SHA 
     { PGSSLMODE:'disable' }, { JINXI_SERVICE_APPROVAL:'wrong' }, { SITE_ID:previousTest.siteId },
   ]) assert.throws(() => checkInvocation(receipt,{ ...x.runtime,...env },x.context,x.approval.origin));
   assert.throws(() => checkInvocation(receipt,x.runtime,x.context,'https://other.netlify.app'));
+});
+
+test('HTTP provider metadata accepts only canonical HTTPS invocations and runtime URL', () => {
+  const x = configuration(), receipt = buildReceipt(x.env,x.commit,true);
+  const context = { ...x.context, site: { ...x.context.site, url:x.approval.origin.replace('https:', 'http:') } };
+  assert.equal(checkInvocation(receipt,x.runtime,context,x.approval.origin).commit,x.commit);
+  assert.throws(() => checkInvocation(receipt,x.runtime,context,context.site.url));
+  assert.throws(() => checkInvocation(receipt,{...x.runtime,URL:context.site.url},context,x.approval.origin));
+  for (const url of [undefined, '', x.approval.origin+'/', x.approval.origin+':443',
+    x.approval.origin+'?query', x.approval.origin+'#fragment',
+    x.approval.origin.replace('https://','https://user@'),
+    x.approval.origin.replace('synthetic-rehearsal','deploy-preview-1--synthetic-rehearsal'),
+    x.approval.origin.replace('https:','HTTP:'), 'https://another-site.netlify.app']) {
+    assert.throws(() => checkInvocation(receipt,x.runtime,{...context,site:{...context.site,url}},x.approval.origin));
+  }
 });
 
 test('unapproved requests, unsupported paths, legacy writes and missing keys are rejected with no private output', async () => {

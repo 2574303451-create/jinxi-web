@@ -1,10 +1,12 @@
 import { accessDigestKey, accessError, authorizeAccess, privateHeaders, privateResponse } from './access.mjs';
+import { matchesSiteMetadata } from '../service-adapter/site-origin.mjs';
 
 export function matchesDeploy(binding, context, origin, readEnv) {
   return binding && Date.parse(binding.expiresAt) > Date.now() &&
     context?.deploy?.context === 'production' && context.deploy.published === true &&
+    matchesSiteMetadata(binding.origin, context.site?.url) &&
     [
-      [binding.origin, origin], [binding.origin, context.site?.url],
+      [binding.origin, origin],
       [binding.commit, readEnv('JINXI_SERVICE_APPROVAL')], [binding.teamId, context.account?.id],
       [binding.siteId, context.site?.id], [binding.deployId, context.deploy.id],
     ].every(([expected, actual]) => typeof expected === 'string' && expected.length && expected === actual);

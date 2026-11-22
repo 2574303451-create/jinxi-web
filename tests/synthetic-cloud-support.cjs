@@ -155,7 +155,9 @@ function runtimeEnv(approval, passwords) {
     ...Object.fromEntries(Object.entries(credentialNames).map(([name,key]) => [key, roles[name] ? passwords[roles[name]] : hex()])) };
 }
 function contextFor(approval, deployId) {
-  return { account: { id: approval.teamId }, site: { id: approval.siteId, url: approval.origin },
+  // Exercise the HTTP provider metadata supported after the real Gate-only
+  // refusal. Build/runtime URL and incoming requests remain canonical HTTPS.
+  return { account: { id: approval.teamId }, site: { id: approval.siteId, url: approval.origin.replace('https:', 'http:') },
     deploy: { id: deployId, context: 'production', published: true }, ip: '127.0.0.1' };
 }
 

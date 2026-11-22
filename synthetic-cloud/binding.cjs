@@ -2,6 +2,7 @@ const { isIP } = require('node:net');
 const { PROTECTED_SITE_ID, FORBIDDEN_KEYS } = require('../netlify/functions/_shared/test-resource');
 const readOnlyTest = require('../netlify/functions/_shared/test-resource-binding.json');
 const { roles } = require('../service-adapter/resource.cjs');
+const { matchesSiteMetadata } = require('../service-adapter/site-origin.mjs');
 
 const DATABASE = 'jinxi_synthetic_write_v1';
 const REVISION = 'synthetic-write-v1';
@@ -85,7 +86,7 @@ function checkInvocation(receipt, env, context, origin) {
   if (origin !== approval.origin || env.SITE_ID !== approval.siteId || env.URL !== approval.origin ||
       env.JINXI_SERVICE_APPROVAL !== approval.commit ||
       context?.account?.id !== approval.teamId || context?.site?.id !== approval.siteId ||
-      context.site.url !== approval.origin || context?.deploy?.id !== receipt.deployId ||
+      !matchesSiteMetadata(approval.origin, context.site.url) || context?.deploy?.id !== receipt.deployId ||
       context.deploy.context !== 'production' || context.deploy.published !== true || !isIP(context.ip || '')) deny();
 
   // Only SITE_ID and URL are guaranteed at runtime. If build variables are

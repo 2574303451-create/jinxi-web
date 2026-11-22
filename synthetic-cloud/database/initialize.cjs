@@ -197,4 +197,4 @@ async function rollbackEmpty(client, target, expected) {
   });
 }
 
-module.exports = { initialize, activateRoles, freezeRoles, rollbackEmpty, boundSchema, boundChange, sourcePins };
+module.exports = { initialize, activateRoles, freezeRoles, rollbackEmpty, boundSchema, boundChange, sourcePins, transaction };

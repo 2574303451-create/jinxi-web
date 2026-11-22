@@ -1,6 +1,6 @@
 const crypto = require('node:crypto');
 const { hashPassword } = require('../../netlify/functions/_shared/password');
-const { boundChange } = require('./initialize.cjs');
+const { boundChange, transaction } = require('./initialize.cjs');
 const { roleState } = require('./guard.cjs');
 
 const definitions = [
@@ -15,10 +15,9 @@ function checkPasswords(passwords) {
 }
 
 async function seed(client, target, schemaFingerprint, passwords) {
-  const accounts = {};
   if (passwords !== undefined) checkPasswords(passwords);
-  try {
-    await client.query("BEGIN; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='10s'; SET LOCAL lock_timeout='2s'");
+  return transaction(client, async () => {
+    const accounts = {};
     await boundChange(client, target, schemaFingerprint);
     await roleState(client, false);
     for (const [kind, reset, locked, active] of definitions) {
@@ -43,12 +42,8 @@ async function seed(client, target, schemaFingerprint, passwords) {
     await client.query("INSERT INTO attendance_legacy.checkin_records VALUES(1,'synthetic-normal',$1,'2024-02-28','2024-02-28T00:00Z',3,true,9)", [accounts.normal.nickname]);
     await client.query("INSERT INTO operations_legacy.announcements VALUES(1,'合成旧公告','<p>仅用于旧结构验证</p>','合成旧署名','2020-01-01T00:00Z','2020-01-01T00:00Z')");
     await client.query("INSERT INTO operations_legacy.guild_sponsorship_entries VALUES(1,'同名合成感谢','2020-01-01T00:00Z','2020-01-01T00:00Z'),(2,'同名合成感谢','2020-01-02T00:00Z','2020-01-02T00:00Z')");
-    await client.query('COMMIT');
     return accounts;
-  } catch (error) {
-    await client.query('ROLLBACK').catch(() => {});
-    throw error;
-  }
+  });
 }
 
 module.exports = { seed, checkPasswords };

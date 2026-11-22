@@ -182,6 +182,62 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         assert.deepEqual(await counters(),before);
       });
 
+      await t.test('rolled-back rate limits, login and business writes never return success or receipts', async () => {
+        const { Client } = require('pg');
+        const query = Client.prototype.query;
+        const entry = createEntry({approval:bundle.approval,deployId:bundle.deployId},{...bundle.envAtRuntime});
+        const account = db.accounts.first;
+        const loginBody = {op:'login',account:account.account,password:account.password};
+        const scenarios = [
+          { route:'member', marker:'INSERT INTO b2_lab.member_session_limits_v2', body:loginBody },
+          { route:'member', marker:'INSERT INTO b2_lab.member_sessions_v2', body:loginBody },
+          { route:'community', marker:'INSERT INTO community_lab.items', body:{op:'message.create',content:'仅用于回滚核验',category:'闲聊',color:'#2360f5'} },
+          { route:'attendance', marker:'INSERT INTO attendance_lab.records', body:{op:'checkin'} },
+          { route:'operations', marker:'INSERT INTO operations_lab.teams', body:{op:'team.create',name:'回滚核验队伍',icon:'⭐',color:'#2360f5',slogan:'',description:'',requirements:'',maxMembers:2} },
+        ];
+        const sessionCount = async () => (await admin('SELECT count(*)::int AS n FROM b2_lab.member_sessions_v2')).rows[0].n;
+        const count = await sessionCount();
+        const before = await counters();
+        for (const {route,marker,body} of scenarios) {
+          const armed = new WeakSet();
+          let command;
+          Client.prototype.query = async function (sql,...args) {
+            if (this.connectionParameters.application_name === 'jinxi-approved-test-' + route) {
+              if (sql.includes(marker)) armed.add(this);
+              if (sql === 'COMMIT' && armed.has(this)) {
+                armed.delete(this);
+                await assert.rejects(query.call(this,'SELECT 1/0'),{code:'22012'});
+                const result = await query.call(this,sql,...args);
+                command = result.command;
+                return result;
+              }
+            }
+            return query.call(this,sql,...args);
+          };
+          const requestId = crypto.randomUUID();
+          const url = bundle.approval.origin+'/api/'+route;
+          const headers = {Authorization:bundle.authorization};
+          if (route !== 'member') Object.assign(headers,{Cookie:a.cookie,'X-CSRF-Token':a.csrf});
+          let denied;
+          try {
+            denied = await withEnv({},()=>entry(new Request(url,{
+              method:'POST',headers:{...headers,Origin:bundle.approval.origin,'Content-Type':'application/json'},
+              body:JSON.stringify(route === 'member' ? body : {...body,requestId}),
+            }),bundle.context));
+          } finally { Client.prototype.query = query; }
+          assert.equal(command,'ROLLBACK',marker);
+          assert.equal(denied.status,503,marker);
+          assert.equal(denied.headers.get('set-cookie'),null,marker);
+          if (route !== 'member') {
+            const recovery = await withEnv({},()=>entry(new Request(url+'?receipt='+requestId,{headers}),bundle.context));
+            assert.equal(recovery.status,200,marker);
+            assert.equal((await recovery.json()).receipt.state,'unresolved',marker);
+          }
+          assert.equal(await sessionCount(),count,marker);
+          assert.deepEqual(await counters(),before,marker);
+        }
+      });
+
       await t.test('messages, private guide ownership, independent publication and frozen historical attribution', async () => {
         const m = await mutate('community',a,{op:'message.create',content:'合成云端预演留言',category:'闲聊',color:'#2360f5'});
         assert.equal(m.status,200,m.body?.code);

@@ -14,12 +14,13 @@ function checkPasswords(passwords) {
       new Set(values).size !== values.length) throw Error('SYNTHETIC_FIXTURE_PASSWORDS_REQUIRED');
 }
 
-async function seed(client, target, schemaFingerprint, passwords) {
+async function seed(client, target, schemaFingerprint, passwords, checkApproval) {
   if (passwords !== undefined) checkPasswords(passwords);
   return transaction(client, async () => {
     const accounts = {};
     await boundChange(client, target, schemaFingerprint);
     await roleState(client, false);
+    checkApproval?.();
     for (const [kind, reset, locked, active] of definitions) {
       const account = 'synthetic-' + kind;
       const employeeNo = 'SYNTHETIC-' + kind;
@@ -43,7 +44,7 @@ async function seed(client, target, schemaFingerprint, passwords) {
     await client.query("INSERT INTO operations_legacy.announcements VALUES(1,'合成旧公告','<p>仅用于旧结构验证</p>','合成旧署名','2020-01-01T00:00Z','2020-01-01T00:00Z')");
     await client.query("INSERT INTO operations_legacy.guild_sponsorship_entries VALUES(1,'同名合成感谢','2020-01-01T00:00Z','2020-01-01T00:00Z'),(2,'同名合成感谢','2020-01-02T00:00Z','2020-01-02T00:00Z')");
     return accounts;
-  });
+  }, checkApproval);
 }
 
 module.exports = { seed, checkPasswords };

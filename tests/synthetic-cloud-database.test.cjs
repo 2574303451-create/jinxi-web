@@ -5,6 +5,7 @@ const { freshDatabase, toolsFromArgs } = require('./synthetic-cloud-support.cjs'
 const { initialize, activateRoles, freezeRoles, rollbackEmpty } = require('../synthetic-cloud/database/initialize.cjs');
 const { roleState, schemaFingerprint, verifyInventory, verifySchema, appRoles } = require('../synthetic-cloud/database/guard.cjs');
 const { seed } = require('../synthetic-cloud/database/seed.cjs');
+const { verifyAdminApproval } = require('../synthetic-cloud/database/admin.cjs');
 
 test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async t => {
   const db = await freshDatabase(toolsFromArgs(process.argv.slice(2)));
@@ -119,6 +120,31 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       assert.deepEqual(rows,[{ no_schema:true, no_roles:true }]);
       await verifyInventory(client);
       assert.equal((await initialize(client,db.target)).schemaFingerprint,initialized.schemaFingerprint);
+    });
+    await t.test('approval expiry after acquiring the lifecycle lock or before commit prevents a write', async () => {
+      const expected = initialized.schemaFingerprint;
+      const expiry = Date.parse('2030-01-01T00:00:00Z');
+      const approval = { version:1, enabled:true, target:db.target, expiresAt:new Date(expiry).toISOString(), schemaFingerprint:expected };
+      for (const [action, expireAt] of [['seed', /^SELECT pg_advisory_xact_lock/], ['rollback-empty', /^DROP ROLE /]]) {
+        let now = expiry - 1;
+        let matched = false;
+        let wroteSeed = false;
+        const clocked = { async query(sql, values) {
+          const result = await client.query(sql, values);
+          if (sql.startsWith('INSERT INTO b2_lab.guild_member_profiles')) wroteSeed = true;
+          if (expireAt.test(sql)) { matched = true; now = expiry; }
+          return result;
+        } };
+        const checkApproval = () => verifyAdminApproval(approval,db.target,action,expected,now);
+        assert.doesNotThrow(checkApproval);
+        const write = action === 'seed' ? seed(clocked,db.target,expected,undefined,checkApproval)
+          : rollbackEmpty(clocked,db.target,expected,checkApproval);
+        await assert.rejects(write,/SYNTHETIC_ADMIN_APPROVAL_REQUIRED/);
+        assert.equal(matched,true);
+        assert.equal(wroteSeed,false);
+        assert.deepEqual((await client.query('SELECT count(*)::int AS accounts FROM b2_lab.guild_member_accounts')).rows,[{ accounts:0 }]);
+        await roleState(client,false);
+      }
     });
     const accounts = await seed(client,db.target,initialized.schemaFingerprint);
     const secrets = Object.fromEntries(appRoles.map(role => [role,randomBytes(32).toString('hex')]));

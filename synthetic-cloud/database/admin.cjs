@@ -28,7 +28,8 @@ async function administer({ action, target, password, expectedSchema, rolePasswo
     throw Error('SYNTHETIC_ADMIN_INPUT_REJECTED');
   }
   checkTarget(action === 'inspect' ? { ...target, fingerprint: target?.fingerprint ?? '0'.repeat(64) } : target);
-  if (action !== 'inspect') verifyAdminApproval(approval,target,action,expectedSchema);
+  const checkApproval = action === 'inspect' ? undefined : () => verifyAdminApproval(approval,target,action,expectedSchema);
+  checkApproval?.();
   if (action === 'seed') checkPasswords(fixturePasswords);
   if (Object.keys(process.env).some(key => /^PG[A-Z]/.test(key)) ||
       process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') throw Error('SYNTHETIC_ADMIN_INHERITED_CONFIGURATION_REJECTED');
@@ -39,14 +40,15 @@ async function administer({ action, target, password, expectedSchema, rolePasswo
 
   try {
     await client.connect();
-    if (action === 'initialize') return await initialize(client, target);
+    checkApproval?.();
+    if (action === 'initialize') return await initialize(client, target, checkApproval);
     if (action === 'seed') {
-      const accounts = await seed(client, target, expectedSchema, fixturePasswords);
+      const accounts = await seed(client, target, expectedSchema, fixturePasswords, checkApproval);
       return { seededAccounts: Object.values(accounts).map(({ account }) => account) };
     }
-    if (action === 'activate') return { enabledRoles: await activateRoles(client, target, expectedSchema, rolePasswords || {}) };
+    if (action === 'activate') return { enabledRoles: await activateRoles(client, target, expectedSchema, rolePasswords || {}, checkApproval) };
     if (action === 'freeze') return await freezeRoles(client, target);
-    if (action === 'rollback-empty') { await rollbackEmpty(client, target, expectedSchema); return { schemaRemoved: true }; }
+    if (action === 'rollback-empty') { await rollbackEmpty(client, target, expectedSchema, checkApproval); return { schemaRemoved: true }; }
 
     await client.query("BEGIN READ ONLY; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='5s'");
     if (action === 'inspect') {

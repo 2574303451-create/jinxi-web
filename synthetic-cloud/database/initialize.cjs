@@ -40,10 +40,11 @@ function schemaSteps() {
   });
 }
 
-async function transaction(client, action) {
+async function transaction(client, action, checkApproval) {
   try {
     await client.query("BEGIN; SET LOCAL search_path=pg_catalog; SET LOCAL statement_timeout='10s'; SET LOCAL lock_timeout='2s'");
     const result = await action();
+    checkApproval?.();
     const confirmation = await client.query('COMMIT');
     if (confirmation?.command !== 'COMMIT') throw new Error('SYNTHETIC_ADMIN_COMMIT_UNCONFIRMED');
     return result;
@@ -74,7 +75,7 @@ async function boundChange(client, target, expected) {
   await boundSchema(client,target,expected);
 }
 
-async function initialize(client, target) {
+async function initialize(client, target, checkApproval) {
   return transaction(client, async () => {
     const actual = await verifyTarget(client, target);
     await lockLifecycle(client);
@@ -83,15 +84,16 @@ async function initialize(client, target) {
       SELECT d.datacl::text AS database_acl,n.nspacl::text AS public_acl
       FROM pg_database d,pg_namespace n WHERE d.datname=current_database() AND n.nspname='public'
     `)).rows[0];
+    checkApproval?.();
     for (const sql of schemaSteps()) await client.query(sql);
     await client.query("INSERT INTO jinxi_guard.environment_registration VALUES (1,$1,'synthetic-test')", [target.environmentId]);
     await roleState(client, false);
     return { revision: REVISION, fingerprint: target.fingerprint, schemaFingerprint: await schemaFingerprint(client),
       postgresVersion: actual.version, initialAcl };
-  });
+  }, checkApproval);
 }
 
-async function activateRoles(client, target, expected, secrets) {
+async function activateRoles(client, target, expected, secrets, checkApproval) {
   return transaction(client, async () => {
     await boundChange(client, target, expected);
     await roleState(client, false);
@@ -102,6 +104,7 @@ async function activateRoles(client, target, expected, secrets) {
     const parameters = (await client.query("SELECT current_setting('log_parameter_max_length') AS length, current_setting('log_min_error_statement') AS errors")).rows[0];
     if (!safeLogging(logging) || parameters.length !== '0' ||
         !['fatal','panic'].includes(parameters.errors)) throw Error('SYNTHETIC_ROLE_LOGGING_UNPROVEN');
+    checkApproval?.();
     await client.query("SET LOCAL password_encryption='scram-sha-256'");
     // Never put a password in submitted SQL. The role names are fixed source
     // constants and the protected password setting lasts only this transaction.
@@ -120,7 +123,7 @@ async function activateRoles(client, target, expected, secrets) {
       await client.query('ALTER ROLE ' + role + ' LOGIN CONNECTION LIMIT 4');
     }
     return roleState(client, true);
-  });
+  }, checkApproval);
 }
 
 async function freezeRoles(client, target) {
@@ -154,7 +157,7 @@ async function freezeRoles(client, target) {
   return { frozenRoles: appRoles, remainingRoleSessions };
 }
 
-async function rollbackEmpty(client, target, expected) {
+async function rollbackEmpty(client, target, expected, checkApproval) {
   await transaction(client, async () => {
     await boundChange(client, target, expected);
     await roleState(client, false);
@@ -177,6 +180,7 @@ async function rollbackEmpty(client, target, expected) {
       WHERE c.contype='f' AND n.nspname=ANY($1::text[])
     `,[namespaces])).rows;
     const identifier = name => '"' + name.replaceAll('"','""') + '"';
+    checkApproval?.();
     // Remove the reviewed foreign keys first, then drop only the named model.
     // RESTRICT leaves everything in place if an external dependency exists.
     for (const row of constraints) {
@@ -194,7 +198,7 @@ async function rollbackEmpty(client, target, expected) {
     await client.query('DROP SCHEMA ' + namespaces.map(identifier).join(',') + ' RESTRICT');
     for (const role of appRoles) await client.query('REVOKE CONNECT ON DATABASE ' + DATABASE + ' FROM ' + role);
     for (const role of [...appRoles, ...owners].reverse()) await client.query('DROP ROLE ' + role);
-  });
+  }, checkApproval);
 }
 
 module.exports = { initialize, activateRoles, freezeRoles, rollbackEmpty, boundSchema, boundChange, sourcePins, transaction };

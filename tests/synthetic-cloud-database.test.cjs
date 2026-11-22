@@ -101,6 +101,25 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await empty();
       assert.equal((await initialize(client,db.target)).schemaFingerprint,initialized.schemaFingerprint);
     });
+    await t.test('loss of a commit response requires inspecting the database before retrying', async () => {
+      const disconnected = new Error('simulated transport loss after server commit');
+      const lostResponse = { async query(sql, values) {
+        const result = await client.query(sql, values);
+        if (sql === 'COMMIT') {
+          assert.equal(result.command,'COMMIT');
+          throw disconnected;
+        }
+        return result;
+      } };
+      await assert.rejects(rollbackEmpty(lostResponse,db.target,initialized.schemaFingerprint),
+        error => error === disconnected);
+      await client.end();
+      client = await db.admin();
+      const { rows } = await client.query("SELECT to_regnamespace('jinxi_guard') IS NULL AS no_schema, NOT EXISTS(SELECT FROM pg_roles WHERE rolname=ANY($1::text[])) AS no_roles", [appRoles]);
+      assert.deepEqual(rows,[{ no_schema:true, no_roles:true }]);
+      await verifyInventory(client);
+      assert.equal((await initialize(client,db.target)).schemaFingerprint,initialized.schemaFingerprint);
+    });
     const accounts = await seed(client,db.target,initialized.schemaFingerprint);
     const secrets = Object.fromEntries(appRoles.map(role => [role,randomBytes(32).toString('hex')]));
     await t.test('database defaults changing after approval prevent role activation', async () => {

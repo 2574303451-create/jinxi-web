@@ -56,7 +56,7 @@ jobs:
         run: |
           npm run test:integration-unit
           npm run test:adaptation
-          node --test tests/synthetic-cloud-boundary.test.cjs tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
+          node --test tests/synthetic-cloud-boundary.test.cjs tests/synthetic-cloud-access.test.mjs synthetic-cloud/gate-only/gate.test.mjs synthetic-cloud/gate-only/manual.test.mjs synthetic-cloud/gate-only/manual-diagnostics.test.mjs synthetic-cloud/gate-only/manual-site-url.test.mjs synthetic-cloud/gate-only/upload-manifest.test.mjs
       - name: Run synthetic transaction and package rehearsals on PostgreSQL 17
         shell: bash
         run: |

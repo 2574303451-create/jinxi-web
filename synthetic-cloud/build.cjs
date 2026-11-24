@@ -34,7 +34,7 @@ function exportFile(relative, source, approval, secrets) {
 
 function inspectExport(approval, env) {
   const secrets = [...Object.values(credentialNames), accessDigestKey].map(name => env[name])
-    .filter(value => typeof value === 'string' && value.length >= 24);
+    .filter(value => typeof value === 'string' && value.length >= 16);
   for (const relative of fs.readdirSync(staticExport,{recursive:true})) {
     const absolute = path.join(staticExport,relative), stat = fs.lstatSync(absolute);
     if (stat.isSymbolicLink()) throw Error('SYNTHETIC_STATIC_FILE_REJECTED');

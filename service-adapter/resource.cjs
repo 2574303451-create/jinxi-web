@@ -1,3 +1,4 @@
+const { managedRolePassword } = require('../synthetic-cloud/database/managed-policy.cjs');
 // Server-only capabilities. No request parameter or frontend flag registers one.
 const binding=require('../netlify/functions/_shared/test-resource-binding.json');
 const {PROTECTED_SITE_ID,FORBIDDEN_KEYS}=require('../netlify/functions/_shared/test-resource');
@@ -9,7 +10,7 @@ function approve(approval,env,secrets){
  if(!/^[a-f0-9-]{36}$/.test(approval.siteId||'')||[binding.siteId,PROTECTED_SITE_ID,'jinxi-web','jinxi-web-test'].includes(approval.siteId)||!/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(approval.origin||'')||['https://jinxi-web.netlify.app','https://jinxi-web-test.netlify.app'].includes(approval.origin))denied();
  if(!/^[a-f0-9]{40}$/.test(approval.commit||'')||!Number.isFinite(Date.parse(approval.expiresAt))||Date.parse(approval.expiresAt)<=Date.now()||!/^ep-[a-z0-9-]+(?:\.[a-z0-9-]+)*\.neon\.tech$/.test(approval.host||'')||binding.hosts.includes(approval.host)||approval.port!==5432||!/^[a-z][a-z0-9_]{0,62}$/.test(approval.database||'')||['postgres','template0','template1'].includes(approval.database))denied();
  if(!/^[a-f0-9-]{36}$/.test(approval.environmentId||'')||approval.environmentId===binding.environmentId||!/^[a-f0-9]{64}$/.test(approval.fingerprint||'')||approval.fingerprint===binding.fingerprint||!Array.isArray(approval.serverAddresses)||!approval.serverAddresses.length||approval.serverAddresses.some(x=>typeof x!=='string'||!require('node:net').isIP(x)))denied();
- if(!secrets||![secrets.csrfKey,secrets.rateKey].every(v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v))||Object.keys(roles).some(k=>typeof secrets[k]!=='string'||secrets[k].length<24))denied();
+ if(!secrets||![secrets.csrfKey,secrets.rateKey].every(v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v))||Object.keys(roles).some(k=>typeof secrets[k]!=='string'||(secrets[k].length<24&&!managedRolePassword(approval,secrets[k]))))denied();
  if(Object.keys(env).some(k=>FORBIDDEN_KEYS.includes(k)||/^JINXI_(PRODUCTION|PREVIEW|LOCAL|SESSION)_|^NEXT_PUBLIC_.*(?:SECRET|PASSWORD|TOKEN|DATABASE)/.test(k)))denied();
  const value=Object.freeze({kind:'jinxi-approved-test-v1',host:approval.host,port:approval.port,database:approval.database,user:roles.member,password:secrets.member,origin:approval.origin,environmentId:approval.environmentId,fingerprint:approval.fingerprint,csrfKey:secrets.csrfKey,rateKey:secrets.rateKey});
  registered.set(value,{approval:Object.freeze({...approval,serverAddresses:Object.freeze([...approval.serverAddresses])}),env:Object.freeze({...env})});return value;

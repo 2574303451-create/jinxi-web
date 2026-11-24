@@ -29,4 +29,8 @@ function activationLoggingSafe(loggingSafe, parameters, managed) {
     parameters.duration_logging === 'off';
 }
 
-module.exports = { managedTarget, transportVerified, verifiedManagedSocket, activationLoggingSafe };
+function managedRolePassword(target, value) {
+  return managedTarget(target) && typeof value === 'string' && /^npg_[A-Za-z0-9]{12}$/.test(value);
+}
+
+module.exports = { managedRolePassword, managedTarget, transportVerified, verifiedManagedSocket, activationLoggingSafe };

@@ -1,3 +1,4 @@
+const { managedRolePassword } = require('./database/managed-policy.cjs');
 const { isIP } = require('node:net');
 const { PROTECTED_SITE_ID, FORBIDDEN_KEYS } = require('../netlify/functions/_shared/test-resource');
 const readOnlyTest = require('../netlify/functions/_shared/test-resource-binding.json');
@@ -100,10 +101,12 @@ function checkInvocation(receipt, env, context, origin) {
   return approval;
 }
 
-function readCredentials(env) {
+function readCredentials(env, approval) {
   const secrets = Object.fromEntries(Object.entries(credentialNames).map(([key, name]) => [key, env[name]]));
   const values = Object.values(secrets);
-  if (values.some(value => typeof value !== 'string' || !hex.test(value)) || new Set(values).size !== values.length) deny();
+  if (Object.entries(secrets).some(([key,value]) => typeof value !== 'string' ||
+      !(hex.test(value) || (Object.hasOwn(roles,key) && managedRolePassword(approval,value)))) ||
+      new Set(values).size !== values.length) deny();
   return secrets;
 }
 

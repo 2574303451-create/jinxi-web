@@ -21,7 +21,7 @@ function createEntry(receipt, env = process.env) {
   function currentStartup() {
     let secrets;
     try {
-      secrets = readCredentials(env);
+      secrets = readCredentials(env, bound.approval);
     } catch (error) {
       startup = undefined;
       throw error;

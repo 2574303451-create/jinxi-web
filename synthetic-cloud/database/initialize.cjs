@@ -3,6 +3,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { DATABASE, REVISION } = require('../binding.cjs');
 const { namespaces, owners, appRoles, verifyTarget, verifyInventory, schemaFingerprint, roleState } = require('./guard.cjs');
+const { managedTarget, activationLoggingSafe } = require('./managed-policy.cjs');
 const { loggingSql, safeLogging } = require('../../scripts/setup-test-reader-password.cjs');
 
 const sourcePins = {
@@ -87,7 +88,7 @@ async function initialize(client, target, checkApproval) {
     checkApproval?.();
     for (const sql of schemaSteps()) await client.query(sql);
     await client.query("INSERT INTO jinxi_guard.environment_registration VALUES (1,$1,'synthetic-test')", [target.environmentId]);
-    await roleState(client, false);
+    await roleState(client, false, target);
     return { revision: REVISION, fingerprint: target.fingerprint, schemaFingerprint: await schemaFingerprint(client),
       postgresVersion: actual.version, initialAcl };
   }, checkApproval);
@@ -107,14 +108,15 @@ function passwordVerifier(password, iterations) {
 async function activateRoles(client, target, expected, secrets, checkApproval) {
   return transaction(client, async () => {
     await boundChange(client, target, expected);
-    await roleState(client, false);
+    await roleState(client, false, target);
     const values = appRoles.map(role => secrets[role]);
     if (values.some(value => typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) ||
         new Set(values).size !== values.length) throw Error('SYNTHETIC_ROLE_SECRET_REJECTED');
     const logging = (await client.query(loggingSql)).rows[0];
-    const parameters = (await client.query("SELECT current_setting('log_parameter_max_length') AS length, current_setting('log_min_error_statement') AS errors")).rows[0];
-    if (!safeLogging(logging) || parameters.length !== '0' ||
-        !['fatal','panic'].includes(parameters.errors)) throw Error('SYNTHETIC_ROLE_LOGGING_UNPROVEN');
+    const parameters = (await client.query("SELECT current_setting('log_parameter_max_length') AS length, current_setting('log_transaction_sample_rate') AS tx_sample, current_setting('log_duration') AS duration_logging, current_setting('log_min_error_statement') AS errors")).rows[0];
+    if (!activationLoggingSafe(safeLogging(logging), parameters, managedTarget(target))) {
+      throw Error('SYNTHETIC_ROLE_LOGGING_UNPROVEN');
+    }
     checkApproval?.();
     const { rows: [policy] } = await client.query("SELECT current_setting('scram_iterations')::integer AS iterations");
     if (!Number.isSafeInteger(policy.iterations) || policy.iterations < 1) throw Error('SYNTHETIC_ROLE_SECRET_REJECTED');
@@ -134,7 +136,7 @@ async function activateRoles(client, target, expected, secrets, checkApproval) {
       await client.query("SELECT set_config('jinxi_synthetic.password_input','',true)");
       await client.query('ALTER ROLE ' + role + ' LOGIN CONNECTION LIMIT 4');
     }
-    return roleState(client, true);
+    return roleState(client, true, target);
   }, checkApproval);
 }
 
@@ -172,7 +174,7 @@ async function freezeRoles(client, target) {
 async function rollbackEmpty(client, target, expected, checkApproval) {
   await transaction(client, async () => {
     await boundChange(client, target, expected);
-    await roleState(client, false);
+    await roleState(client, false, target);
     await verifyInventory(client, true);
     const { rows } = await client.query(`
       SELECT n.nspname AS schema,c.relname AS name FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace

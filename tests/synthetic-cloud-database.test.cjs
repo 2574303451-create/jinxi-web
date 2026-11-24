@@ -109,6 +109,37 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
       await verifyInventory(client);
     });
     const initialized = await initialize(client,db.target);
+    await t.test('managed test policy requires verified transport, quiet logs and exact maintenance grants', async () => {
+      const { verifiedManagedSocket, activationLoggingSafe, managedTarget } = require('../synthetic-cloud/database/managed-policy.cjs');
+      const { Client } = require('pg');
+      const tlsClient = new Client({ host:'localhost', port:5432, database:client.database,
+        user:client.user, password:client.password, ssl:{ ca:db.cert, rejectUnauthorized:true } });
+      try {
+        await tlsClient.connect();
+        assert.equal(verifiedManagedSocket(tlsClient,'localhost'),true);
+        assert.equal(verifiedManagedSocket(tlsClient,'wrong.invalid'),false);
+        assert.equal(verifiedManagedSocket({},'localhost'),false);
+      } finally { await tlsClient.end(); }
+      assert.equal(managedTarget(db.target),false);
+      const parameters = { errors:'panic',length:'-1',tx_sample:'0',duration_logging:'off' };
+      assert.equal(activationLoggingSafe(true,parameters,true),true);
+      assert.equal(activationLoggingSafe(true,parameters,false),false);
+      assert.equal(activationLoggingSafe(false,parameters,true),false);
+      for (const change of [{ tx_sample:'1' },{ duration_logging:'on' },{ length:'100' },{ errors:'warning' }]) {
+        assert.equal(activationLoggingSafe(true,{ ...parameters,...change },true),false);
+      }
+      const root = await db.superuser();
+      // Exercise the managed ACL SQL against a disposable database, without adding a
+      // second approved resource to the production policy.
+      const managedSql = { query:(sql,[apps,owners]) => root.query(sql,[apps,owners,true]) };
+      try {
+        await root.query('BEGIN; ALTER DATABASE template1 OWNER TO cloud_admin; SET LOCAL ROLE cloud_admin; REVOKE ALL ON DATABASE template1 FROM PUBLIC; GRANT CONNECT ON DATABASE template1 TO PUBLIC; RESET ROLE');
+        await roleState(managedSql,false);
+        await assert.rejects(roleState(root,false),/SYNTHETIC_ROLE_STATE_REJECTED/);
+        await root.query('GRANT TEMP ON DATABASE template1 TO PUBLIC');
+        await assert.rejects(roleState(managedSql,false),/SYNTHETIC_ROLE_STATE_REJECTED/);
+      } finally { await root.query('ROLLBACK'); await root.end(); }
+    });
     for (const [name, action] of [['rollback-empty', rollbackEmpty], ['seed', seed]]) {
       await t.test(`${name} rejects a rollback reported by PostgreSQL in response to COMMIT`, async () => {
         let command;

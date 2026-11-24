@@ -19,7 +19,7 @@ async function seed(client, target, schemaFingerprint, passwords, checkApproval)
   return transaction(client, async () => {
     const accounts = {};
     await boundChange(client, target, schemaFingerprint);
-    await roleState(client, false);
+    await roleState(client, false, target);
     checkApproval?.();
     for (const [kind, reset, locked, active] of definitions) {
       const account = 'synthetic-' + kind;

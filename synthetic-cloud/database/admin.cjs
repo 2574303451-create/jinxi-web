@@ -54,13 +54,13 @@ async function administer({ action, target, password, expectedSchema, rolePasswo
     if (action === 'inspect') {
       const actual = await inspectTarget(client, target);
       await verifyInventory(client);
-      return { database: actual.database, postgresVersion: actual.version, address: actual.address, tls: true,
+      return { database: actual.database, postgresVersion: actual.version, address: actual.address, tls: true, backendTls: actual.tls,
         fingerprint: fingerprint(actual.cluster_id, actual.database_oid, actual.database), empty: true };
     }
     await boundSchema(client, target, expectedSchema);
     const { rows } = await client.query('SELECT rolname,rolcanlogin FROM pg_roles WHERE rolname=ANY($1::text[])', [appRoles]);
     const enabled = rows.every(row => row.rolcanlogin === true);
-    return { schemaFingerprint: await schemaFingerprint(client), roles: await roleState(client, enabled), enabled };
+    return { schemaFingerprint: await schemaFingerprint(client), roles: await roleState(client, enabled, target), enabled };
   } finally {
     await client.query('ROLLBACK').catch(() => {});
     await client.end().catch(() => {});

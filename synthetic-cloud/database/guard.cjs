@@ -1,3 +1,4 @@
+const { managedTarget, transportVerified } = require('./managed-policy.cjs');
 const { createHash } = require('node:crypto');
 const { fingerprint } = require('../../netlify/functions/_shared/function-security');
 const { roles } = require('../../service-adapter/resource.cjs');
@@ -32,7 +33,7 @@ async function targetIdentity(client, target) {
   const { rows: [meta] } = await client.query(METADATA);
   if (!meta || meta.database !== DATABASE || meta.initializer !== target.initializer ||
       meta.actor !== target.initializer || meta.owner !== target.initializer ||
-      meta.superuser !== false || meta.create_role !== true || meta.tls !== true || meta.port !== 5432 ||
+      meta.superuser !== false || meta.create_role !== true || !transportVerified(client, { ...target, fingerprint: fingerprint(meta.cluster_id,meta.database_oid,meta.database) }, meta.tls) || meta.port !== 5432 ||
       !Number.isInteger(meta.version) || meta.version < 170000 || meta.version >= 180000 || !target.serverAddresses.includes(meta.address) ||
       !meta.databases.includes(DATABASE) || meta.databases.some(name => ![DATABASE, 'postgres'].includes(name))) {
     throw Error('SYNTHETIC_DATABASE_TARGET_REJECTED');
@@ -185,7 +186,7 @@ async function schemaFingerprint(client) {
   return createHash('sha256').update(REVISION + '\n' + JSON.stringify(rows)).digest('hex');
 }
 
-async function roleState(client, enabled) {
+async function roleState(client, enabled, target) {
   const { rows } = await client.query(`
     WITH initializer AS (SELECT proowner AS oid FROM pg_proc WHERE oid='jinxi_guard.environment_identity()'::regprocedure),
     owner_proof AS (
@@ -205,10 +206,15 @@ async function roleState(client, enabled) {
       OR EXISTS(SELECT 1 FROM pg_proc WHERE proowner=r.oid) AS unsafe,
       has_database_privilege(r.oid,current_database(),'CONNECT') AS connect,
       EXISTS(SELECT 1 FROM pg_database d WHERE d.datallowconn AND d.datname<>current_database()
-        AND has_database_privilege(r.oid,d.oid,'CONNECT')) AS other_database,
+        AND has_database_privilege(r.oid,d.oid,'CONNECT')
+        AND NOT ($3::boolean AND pg_get_userbyid(d.datdba)='cloud_admin' AND
+          ((d.datname='postgres' AND NOT d.datistemplate AND d.datacl IS NULL)
+          OR (d.datname='template1' AND d.datistemplate AND
+            ARRAY(SELECT acl::text FROM unnest(d.datacl) acl ORDER BY acl::text COLLATE "C")
+              = ARRAY['=c/cloud_admin','cloud_admin=CTc/cloud_admin'])))) AS other_database,
       valid_owners
     FROM pg_roles r CROSS JOIN owner_proof WHERE rolname=ANY($1::text[]) ORDER BY rolname
-  `, [appRoles, owners]);
+  `, [appRoles, owners, managedTarget(target)]);
   if (rows.length !== appRoles.length || rows.some(row =>
     row.login !== enabled || row.unsafe !== false || row.connect !== true || row.other_database !== false ||
     row.valid_owners !== owners.length ||
@@ -225,14 +231,14 @@ async function verifySchema(client, approval, module) {
   `);
   if (!identity || !roles[module] || identity.role !== roles[module] || identity.session_role !== roles[module] ||
       identity.database_name !== approval.database || identity.environment_id !== approval.environmentId ||
-      identity.classification !== 'synthetic-test' || identity.tls !== true || identity.port !== 5432 ||
+      identity.classification !== 'synthetic-test' || !transportVerified(client, approval, identity.tls) || identity.port !== 5432 ||
       identity.trigger_mode !== 'origin' ||
       !approval.serverAddresses.includes(identity.address) ||
       fingerprint(identity.cluster_id,identity.database_oid,identity.database_name) !== approval.fingerprint) {
     throw Error('SYNTHETIC_DATABASE_IDENTITY_MISMATCH');
   }
   if (await schemaFingerprint(client) !== approval.schemaFingerprint) throw Error('SYNTHETIC_SCHEMA_FINGERPRINT_MISMATCH');
-  await roleState(client, true);
+  await roleState(client, true, approval);
 }
 
 module.exports = { namespaces, owners, appRoles, checkTarget, inspectTarget, verifyTarget, verifyInventory, schemaFingerprint, roleState, verifySchema };

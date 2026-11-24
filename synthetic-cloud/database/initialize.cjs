@@ -93,6 +93,17 @@ async function initialize(client, target, checkApproval) {
   }, checkApproval);
 }
 
+// The caller validates passwords as 64 hex characters, so SCRAM's Unicode
+// normalization leaves the input unchanged.
+function passwordVerifier(password, iterations) {
+  const salt = crypto.randomBytes(16);
+  const salted = crypto.pbkdf2Sync(password, salt, iterations, 32, 'sha256');
+  const clientKey = crypto.createHmac('sha256', salted).update('Client Key').digest();
+  const stored = crypto.createHash('sha256').update(clientKey).digest('base64');
+  const server = crypto.createHmac('sha256', salted).update('Server Key').digest('base64');
+  return 'SCRAM-SHA-256$' + iterations + ':' + salt.toString('base64') + '$' + stored + ':' + server;
+}
+
 async function activateRoles(client, target, expected, secrets, checkApproval) {
   return transaction(client, async () => {
     await boundChange(client, target, expected);
@@ -105,11 +116,12 @@ async function activateRoles(client, target, expected, secrets, checkApproval) {
     if (!safeLogging(logging) || parameters.length !== '0' ||
         !['fatal','panic'].includes(parameters.errors)) throw Error('SYNTHETIC_ROLE_LOGGING_UNPROVEN');
     checkApproval?.();
-    await client.query("SET LOCAL password_encryption='scram-sha-256'");
+    const { rows: [policy] } = await client.query("SELECT current_setting('scram_iterations')::integer AS iterations");
+    if (!Number.isSafeInteger(policy.iterations) || policy.iterations < 1) throw Error('SYNTHETIC_ROLE_SECRET_REJECTED');
     // Never put a password in submitted SQL. The role names are fixed source
     // constants and the protected password setting lasts only this transaction.
     for (const [index, role] of appRoles.entries()) {
-      await client.query("SELECT set_config('jinxi_synthetic.password_input',$1,true)", [values[index]]);
+      await client.query("SELECT set_config('jinxi_synthetic.password_input',$1,true)", [passwordVerifier(values[index], Math.max(4096, policy.iterations))]);
       await client.query(`
         DO $role_password$ BEGIN
           BEGIN

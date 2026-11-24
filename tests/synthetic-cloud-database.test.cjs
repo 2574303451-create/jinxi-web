@@ -260,7 +260,18 @@ test('PG17 TLS bootstrap and rollback on a fresh local synthetic target', async 
         await assert.rejects(activateRoles(client,db.target,initialized.schemaFingerprint,secrets),{code:'55P03'});
         await roleState(client,false);
       } finally { await lock.query('ROLLBACK'); await lock.end(); }
-      await activateRoles(client,db.target,initialized.schemaFingerprint,secrets);
+      let submittedVerifiers = 0;
+      const observed = { query(sql, params) {
+        const submitted = JSON.stringify([sql, params]);
+        assert.ok(!Object.values(secrets).some(secret => submitted.includes(secret)), 'raw role password reached SQL');
+        if (sql.includes("set_config('jinxi_synthetic.password_input',$1")) {
+          assert.match(params[0], /^SCRAM-SHA-256\$/);
+          submittedVerifiers++;
+        }
+        return client.query(sql, params);
+      } };
+      await activateRoles(observed,db.target,initialized.schemaFingerprint,secrets);
+      assert.equal(submittedVerifiers, appRoles.length);
       const root = await db.superuser();
       try {
         assert.equal((await root.query("SELECT count(*)::int AS n FROM pg_authid WHERE rolname=ANY($1::text[]) AND rolpassword LIKE 'SCRAM-SHA-256$%'",[appRoles])).rows[0].n,5);

@@ -173,7 +173,7 @@ async function main() {
 
         record.stage='static-login';
         await navigate(a);
-        await a.getByRole('heading',{name:'独立合成 TEST',exact:true}).waitFor();
+        await a.getByRole('heading',{name:'今夕公会测试站',level:1,exact:true}).waitFor();
         await login(a,'normal');
         const member = await session(a);
         assert.equal(member.memberId,db.accounts.normal.memberId);

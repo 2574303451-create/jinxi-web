@@ -1,0 +1,85 @@
+.synthetic-welcome {
+  padding-block: clamp(28px, 6vw, 64px) clamp(24px, 4vw, 44px);
+}
+
+.synthetic-welcome h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.12;
+  font-weight: 900;
+}
+
+.synthetic-welcome p {
+  margin: 12px 0 20px;
+  max-width: 36em;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.synthetic-welcome .synthetic-member {
+  margin-bottom: 0;
+}
+
+.synthetic-member strong {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.synthetic-services h2 {
+  margin: 0 0 14px;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.synthetic-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.synthetic-service {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 100px;
+  padding: 16px;
+  border: 2px solid var(--line);
+  border-radius: var(--button-radius);
+  background: var(--surface);
+  text-align: start;
+}
+
+.synthetic-service:hover {
+  background: var(--accent);
+}
+
+.synthetic-service strong {
+  display: block;
+  font-size: 1.06rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.synthetic-service span span {
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.4;
+}
+
+.integration-bar.synthetic-test-tools {
+  width: min(100% - 32px, 1248px);
+  margin: 36px auto 24px;
+  box-shadow: none;
+}
+
+@media (max-width: 700px) {
+  .synthetic-service-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .synthetic-service {
+    min-height: 70px;
+    padding: 12px;
+  }
+}

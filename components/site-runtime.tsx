@@ -38,6 +38,8 @@ export interface SiteRuntime {
   messageManagement: ReactNode;
   canWrite: boolean;
   dataVersion: number;
+  readPublicAnnouncements?: () => Promise<{id: string; title: string}[]>;
+  readPublicMessages?: () => Promise<Message[]>;
   readGuide: (id: string, signal?: AbortSignal) => Promise<Strategy>;
   readHomeGuides: (feed: HomeGuideFeed, force?: boolean) => Promise<HomeGuide[]>;
   saveGuide: (draft: StrategySubmission) => Promise<void>;

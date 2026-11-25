@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowRight, Megaphone, MessageCircle, RefreshCw } from "lucide-react";
-import {
-  fetchAnnouncements,
-  type Announcement,
-} from "../../services/announcement-service";
+import { fetchAnnouncements } from "../../services/announcement-service";
 import { useSiteRuntime } from "../site-runtime";
 
 export function CommunityUpdates({
@@ -15,8 +12,10 @@ export function CommunityUpdates({
   onAnnouncement: () => void;
   onMessages: () => void;
 }) {
-  const dataVersion = useSiteRuntime()?.dataVersion;
-  const [items, setItems] = useState<Announcement[]>([]);
+  const runtime = useSiteRuntime();
+  const dataVersion = runtime?.dataVersion;
+  const read = runtime?.readPublicAnnouncements ?? fetchAnnouncements;
+  const [items, setItems] = useState<{id: string; title: string}[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [reload, setReload] = useState(0);
@@ -25,7 +24,7 @@ export function CommunityUpdates({
     let active = true;
     setLoading(true);
     setError(false);
-    fetchAnnouncements()
+    read()
       .then((data) => {
         if (active) setItems(data.slice(0, 3));
       })
@@ -38,7 +37,7 @@ export function CommunityUpdates({
     return () => {
       active = false;
     };
-  }, [reload, dataVersion]);
+  }, [read, reload, dataVersion]);
 
   return (
     <div className="community-layout">

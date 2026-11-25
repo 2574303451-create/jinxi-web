@@ -5,9 +5,10 @@ import '../../../app/globals.css';
 import '../../../styles/guild-theme.css';
 import '../../../styles/community-components.css';
 import '../../../integration-local/site/client/integration.css';
+import './test-home.css';
 
 export const metadata: Metadata = {
-  title: '今夕公会 · 独立合成 TEST',
+  title: '今夕公会测试站',
   robots: { index: false, follow: false },
 };
 

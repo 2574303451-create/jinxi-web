@@ -14,6 +14,7 @@ export interface GuildNavigationProps {
   onJoin: () => void;
   onAnnouncement: () => void;
   onProfile?: () => void;
+  testSite?: boolean;
 }
 
 export function GuildNavigation(props: GuildNavigationProps) {
@@ -61,20 +62,19 @@ export function GuildNavigation(props: GuildNavigationProps) {
           aria-label="主导航"
         >
           <div className="nav-primary">
-            <a href="#about" onClick={() => setOpen(false)}>
-              公会介绍
-            </a>
-            <a href="#members" onClick={() => setOpen(false)}>
-              成员
-            </a>
+            {!props.testSite && <>
+              <a href="#about" onClick={() => setOpen(false)}>公会介绍</a>
+              <a href="#members" onClick={() => setOpen(false)}>成员</a>
+            </>}
+            {props.testSite && <a href="#actions" onClick={() => setOpen(false)}>会员服务</a>}
             <button onClick={() => {
               // The mobile entry becomes hidden when the dialog opens.
               if (open) menuRef.current?.focus({ preventScroll: true });
               act(props.onAnnouncement);
             }}>公告活动</button>
-            <a href="#actions" onClick={() => setOpen(false)}>
+            {!props.testSite && <a href="#actions" onClick={() => setOpen(false)}>
               签到与任务
-            </a>
+            </a>}
             <a href="/guides/" onClick={() => setOpen(false)}>攻略交流</a>
           </div>
           <div className="nav-account">
@@ -92,12 +92,12 @@ export function GuildNavigation(props: GuildNavigationProps) {
             ) : (
               <button onClick={() => act(props.onLogin)}>登录</button>
             )}
-            <button
+            {!props.testSite && <button
               className="guild-button compact dark"
               onClick={() => act(props.onJoin)}
             >
               加入今夕 <ArrowUpRight size={15} />
-            </button>
+            </button>}
           </div>
         </nav>
       </div>

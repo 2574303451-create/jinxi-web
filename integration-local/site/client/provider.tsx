@@ -77,19 +77,31 @@ function ConnectedSite({ children, surface, onVerify }: { children: ReactNode; s
   const saveGuide = useCallback(async (draft: StrategySubmission) => {
     await client.mutate('community', { op: 'guide.create', title: draft.title, content: draft.content, category: draft.category, difficulty: draft.difficulty, tags: draft.tags.filter(Boolean), mediaFiles: draft.mediaFiles || [] });
   }, [client]);
+  const readPublicAnnouncements = useCallback(async () => {
+    const { items } = await client.request<{items: {id: string; title: string}[]}>(
+      'operations', null, { kind: 'announcement', view: 'public', limit: '3' }, false);
+    return items;
+  }, [client]);
+  const readPublicMessages = useCallback(async () => {
+    const { items } = await client.request('community', null, { kind: 'message', scope: 'public' }, false);
+    return items.map(message);
+  }, [client]);
   const runtime: SiteRuntime = {
     accountLabel: state.member?.id || '', displayName: state.member?.displayName || '', canWrite: ready, dataVersion,
     onLogin: () => setAuth('login'), onPassword: () => setAuth('password'), onLogout: () => { void client.authenticate('logout').catch(() => {}); }, onAnnouncement: () => setAnnouncements(true),
     onJoin: () => setJoinNotice(true), onProfile: () => setProfile(true),
     banner: null, dialogs: null, announcement: null, sponsorship: null,
+    ...(surface === 'synthetic-test' ? { readPublicAnnouncements, readPublicMessages } : {}),
     panels: { checkin: <AttendancePanel />, points: <PointsPanel />, teams: <TeamPanel />, tasks: <p className="paper-notice">游戏任务缺少可信来源及奖励规则。本轮不连接积分、不伪造任务成功。</p>, game: <p className="paper-notice">真实战绩与在线来源尚未核验，本轮不导入浏览器示例记录。</p> },
     messageActions, messageManagement: <CommunityManagement kind="message" staff={permissions.staff} admin={permissions.admin} />, readGuide, readHomeGuides, saveGuide,
     guideManagement: <CommunityManagement kind="guide" staff={permissions.staff} admin={permissions.admin} />, guideDiscussion: props => <GuideDiscussion {...props} />,
   };
+  const site = <div key={`${state.revision}-${permissions.admin}-${permissions.staff}`} data-session-revision={state.revision}>{children}</div>;
   return <SiteRuntimeContext.Provider value={runtime}>
-    <aside className="integration-bar" aria-label={surface === 'local' ? '本地统一集成状态' : '独立合成 TEST 状态'}>
-      <strong>{surface === 'local' ? '本地合成集成预览 · 复用今夕网站' : '独立合成 TEST · 今夕公会'}</strong>
-      <p>{surface === 'local' ? '与生产和云端 TEST 隔离；未接入真实成员、历史积分或支付。' : '本页仅使用合成成员、积分与兑换记录。'}</p>
+    {surface === 'synthetic-test' && site}
+    <aside className={`integration-bar${surface === 'synthetic-test' ? ' synthetic-test-tools' : ''}`} aria-label={surface === 'local' ? '本地统一集成状态' : '测试验收工具'}>
+      <strong>{surface === 'local' ? '本地合成集成预览 · 复用今夕网站' : '测试验收工具'}</strong>
+      {surface === 'local' && <p>与生产和云端 TEST 隔离；未接入真实成员、历史积分或支付。</p>}
       <p role="status" data-testid="unified-session">{state.member?.displayName || '未核验成员'} · {state.phase} · {state.message}</p>
       <p data-testid="unified-permissions">{permissionLabel}</p>
       <div className="integration-actions">
@@ -103,7 +115,7 @@ function ConnectedSite({ children, surface, onVerify }: { children: ReactNode; s
         {(['checkin','points','teams'] as const).map((k,i) => <button className="paper-button" key={k} onClick={() => setPanel(k)}>{['签到事实','账户与兑换','可信组队'][i]}</button>)}
       </div>
     </aside>
-    <div key={`${state.revision}-${permissions.admin}-${permissions.staff}`} data-session-revision={state.revision}>{children}</div>
+    {surface === 'local' && site}
     <AuthDialog key={(auth || 'closed') + (state.member?.id || 'anonymous') + epoch()} mode={auth} close={() => setAuth(null)} />
     <div key={`private-${state.revision}-${permissions.admin}-${permissions.staff}`}>
       <Modal isOpen={recovery} onClose={()=>setRecovery(false)} title="本人操作回执核对" legacy={false} size="lg"><RecoveryPanel /></Modal>

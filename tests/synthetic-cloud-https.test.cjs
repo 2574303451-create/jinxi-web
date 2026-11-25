@@ -33,7 +33,7 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         }), { code:'UNABLE_TO_VERIFY_LEAF_SIGNATURE' });
         const home = await request('/');
         assert.equal(home.status,200);
-        assert.match(home.raw,/独立合成 TEST/);
+        assert.match(home.raw,/<h1 id="welcome-title">今夕公会测试站<\/h1>/);
         assert.match(home.headers['content-security-policy'],/script-src 'self' 'sha256-/);
         assert.doesNotMatch(home.headers['content-security-policy'],/unsafe-eval|script-src[^;]*unsafe-inline/);
         assert.equal((await request('/guides/')).status,200);

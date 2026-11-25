@@ -13,9 +13,10 @@ export function privateHeaders(init, vary) {
   return headers;
 }
 
-export function accessError(status, head = false, challenge = true) {
-  const headers = privateHeaders({ 'Content-Type': 'text/plain; charset=utf-8' }, 'Authorization, Cookie');
-  if (status === 401 && challenge) headers.set('WWW-Authenticate', 'Basic realm="JINXI synthetic TEST", charset="UTF-8"');
+export function accessError(status, head = false, challenge) {
+  const vary = challenge === undefined ? 'Authorization' : 'Authorization, Cookie';
+  const headers = privateHeaders({ 'Content-Type': 'text/plain; charset=utf-8' }, vary);
+  if (status === 401 && challenge !== false) headers.set('WWW-Authenticate', 'Basic realm="JINXI synthetic TEST", charset="UTF-8"');
   const message = status === 401 ? 'TEST_ACCESS_REQUIRED' :
     status === 404 ? 'TEST_ROUTE_NOT_FOUND' : status === 405 ? 'TEST_METHOD_REJECTED' : 'TEST_ACCESS_UNAVAILABLE';
   return new Response(head ? null : message, { status, headers });

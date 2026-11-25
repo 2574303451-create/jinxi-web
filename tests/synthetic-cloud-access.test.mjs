@@ -27,7 +27,7 @@ function fixture() {
     '/guides/index.html': 'private guide',
     '/404.html': 'private error document',
     '/_next/static/example.js': 'private asset',
-  }).map(([path, body]) => [path, { bytes: Buffer.from(body).toString('base64'), type: 'text/plain' }]));
+  }).map(([path, body]) => [path, { bytes: Buffer.from(body).toString('base64'), type: path.endsWith('.html') ? 'text/html' : 'text/plain' }]));
   return { binding, context, authorization, vars, assets, run: createAccessEdge(binding, assets, "default-src 'self';", key => vars[key]) };
 }
 
@@ -74,13 +74,47 @@ test('all paths and methods require the same visitor proof before responding or 
     for (const method of ['GET', 'HEAD', 'POST']) {
       const reply = await x.run(new Request(x.binding.origin + path, { method }), x.context);
       assert.equal(reply.status, 401);
-      assert.match(reply.headers.get('WWW-Authenticate'), /^Basic /);
+      assert.equal(reply.headers.get('WWW-Authenticate'), null);
       assert.equal(reply.headers.get('Location'), null);
       assert.equal(await reply.text(), method === 'HEAD' ? '' : 'TEST_ACCESS_REQUIRED');
       uncacheable(reply);
     }
   }
   assert.equal(forwarded, 0);
+});
+
+test('one document challenge establishes a session without prompting for background requests', async () => {
+  const x = fixture();
+  const navigation = { 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Dest': 'document' };
+  const request = (path, headers) => new Request(x.binding.origin + path, { headers });
+  const initial = await x.run(request('/', navigation), x.context);
+  assert.equal(initial.status, 401);
+  assert.match(initial.headers.get('WWW-Authenticate'), /^Basic /);
+  const signedIn = await x.run(authorized(x, '/', { headers: navigation }), x.context);
+  assert.equal(signedIn.status, 200);
+  const field = signedIn.headers.get('Set-Cookie');
+  assert.match(field, /^__Host-jinxi_test_access=/);
+  assert.match(field, /Path=\/; Secure; HttpOnly; SameSite=Lax; Max-Age=/);
+  const cookie = field.split(';')[0];
+  x.context.next = () => new Response('business reply');
+  for (const path of ['/_next/static/example.js', '/api/member']) {
+    const response = await x.run(request(path, { Cookie: cookie }), x.context);
+    assert.equal(response.status, 200);
+    uncacheable(response);
+    assert.match(response.headers.get('Vary'), /Cookie/i);
+    for (const badCookie of [cookie.slice(0,-1) + (cookie.endsWith('0') ? '1' : '0'),
+      cookie + '; ' + cookie, cookie.replace(/=\d+\./, '=1.')]) {
+      const denied = await x.run(request(path, { Cookie: badCookie }), x.context);
+      assert.equal(denied.status, 401);
+      assert.equal(denied.headers.get('WWW-Authenticate'), null);
+    }
+  }
+  const changedDeploy = { ...x.binding, deployId: 'another-deploy' };
+  const next = createAccessEdge(changedDeploy, x.assets, "default-src 'self';", key => x.vars[key]);
+  const changedContext = { ...x.context, deploy: { ...x.context.deploy, id: changedDeploy.deployId } };
+  assert.equal((await next(request('/api/member', { Cookie: cookie }), changedContext)).status, 401);
+  x.vars[accessDigestKey] = createHash('sha256').update(randomBytes(32)).digest('hex');
+  assert.equal((await x.run(request('/api/member', { Cookie: cookie }), x.context)).status, 401);
 });
 
 test('wrong and malformed credentials, cookie-only and URL-only values do not authorize', async () => {

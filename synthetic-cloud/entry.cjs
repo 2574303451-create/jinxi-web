@@ -3,7 +3,7 @@ const { createCloudService, netlifyFetch } = require('../service-adapter/cloud.c
 const { publicContract } = require('../integration-local/public-contract.cjs');
 const { checkInvocation, readCredentials } = require('./binding.cjs');
 const { verifySchema } = require('./database/guard.cjs');
-const { accessDigestKey, accessError, authorizeAccess, privateHeaders, privateResponse } = require('./access.mjs');
+const { accessDigestKey, accessError, authorizeBrowserAccess, privateHeaders, privateResponse } = require('./access.mjs');
 
 const prefix = '/.netlify/functions/';
 const modules = ['member', 'community', 'attendance', 'points', 'operations'];
@@ -41,7 +41,9 @@ function createEntry(receipt, env = process.env) {
     }
 
     try {
-      const refusal = await authorizeAccess(request, env[accessDigestKey]);
+      const { refusal } = await authorizeBrowserAccess(request, env[accessDigestKey], {
+        origin: approval.origin, siteId: approval.siteId, deployId: bound.deployId, expiresAt: approval.expiresAt,
+      });
       if (refusal) return refusal;
     } catch {
       return accessError(503, request.method === 'HEAD');

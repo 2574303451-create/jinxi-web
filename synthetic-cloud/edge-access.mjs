@@ -1,4 +1,4 @@
-import { accessDigestKey, accessError, authorizeAccess, privateHeaders, privateResponse } from './access.mjs';
+import { accessDigestKey, accessError, authorizeBrowserAccess, privateHeaders, privateResponse } from './access.mjs';
 import { matchesSiteMetadata } from '../service-adapter/site-origin.mjs';
 
 export function matchesDeploy(binding, context, origin, readEnv) {
@@ -12,7 +12,7 @@ export function matchesDeploy(binding, context, origin, readEnv) {
     ].every(([expected, actual]) => typeof expected === 'string' && expected.length && expected === actual);
 }
 
-function serveAsset(file, request, policy) {
+function serveAsset(file, request, policy, cookie) {
   const headers = privateHeaders({
     'Content-Type': file.type,
     'Content-Security-Policy': policy,
@@ -20,7 +20,8 @@ function serveAsset(file, request, policy) {
     'X-Frame-Options': 'DENY',
     'Referrer-Policy': 'no-referrer',
     'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=()',
-  }, 'Authorization');
+  }, 'Authorization, Cookie');
+  if (cookie) headers.append('Set-Cookie', cookie);
   const bytes = Uint8Array.from(atob(file.bytes), character => character.charCodeAt(0));
   const head = request.method === 'HEAD';
   if (file.type === 'video/mp4') {
@@ -48,16 +49,20 @@ export function createAccessEdge(binding, assets, policy, readEnv = key => globa
     try {
       const url = new URL(request.url);
       if (!matchesDeploy(binding, context, url.origin, readEnv) || !assets || !policy) return accessError(503, head);
-      const refusal = await authorizeAccess(request, readEnv(accessDigestKey));
+      const pathname = url.pathname;
+      const path = pathname.endsWith('/') ? pathname + 'index.html' : pathname;
+      const isDocument = request.method === 'GET' && Object.hasOwn(assets, path) &&
+        assets[path].type.startsWith('text/html') &&
+        request.headers.get('sec-fetch-mode') === 'navigate' &&
+        request.headers.get('sec-fetch-dest') === 'document';
+      const { refusal, cookie } = await authorizeBrowserAccess(request, readEnv(accessDigestKey), binding, isDocument);
       if (refusal) return refusal;
 
-      const pathname = url.pathname;
       if (pathname.startsWith('/api/') || pathname.startsWith('/.netlify/functions/')) {
         return privateResponse(await context.next(request));
       }
       if (request.method !== 'GET' && !head) return accessError(405, head);
-      const path = pathname.endsWith('/') ? pathname + 'index.html' : pathname;
-      if (Object.hasOwn(assets, path)) return serveAsset(assets[path], request, policy);
+      if (Object.hasOwn(assets, path)) return serveAsset(assets[path], request, policy, cookie);
       if (!pathname.endsWith('/') && Object.hasOwn(assets, pathname + '/index.html')) {
         return new Response(null, { status: 308, headers: privateHeaders({ Location: pathname + '/' }, 'Authorization') });
       }

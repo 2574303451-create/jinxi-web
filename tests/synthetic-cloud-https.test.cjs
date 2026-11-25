@@ -88,10 +88,21 @@ test('packaged Netlify Fetch function + static export + TLS PostgreSQL', async t
         const scriptPath = home.raw.match(/src="(\/_next\/static\/[^"]+\.js)"/)?.[1];
         assert(scriptPath, 'a real JavaScript resource from the packaged home page');
         assert.equal((await request(scriptPath)).status,200);
+        const navigation = { 'Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document' };
+        const gate = await visitor('/',{headers:navigation});
+        assert.match(gate.headers['www-authenticate'],/^Basic /);
+        const document = await request('/',{headers:navigation});
+        assert.equal(document.status,200);
+        const cookie = document.headers['set-cookie'][0].split(';')[0];
+        assert.match(cookie,/^__Host-jinxi_test_access=/);
+        assert.equal((await visitor(scriptPath,{headers:{Cookie:cookie}})).status,200);
+        const announcements = await visitor('/.netlify/functions/announcements',{headers:{Cookie:cookie}});
+        assert.equal(announcements.status,200);
         for (const route of ['/',scriptPath,'/guides','/logo.png','/fixtures/operations-motion.mp4','/404.html',
           '/unrecognized','/.netlify/functions/jinxi-service','/.netlify/functions/messages','/api/member']) {
           const denied = await visitor(route);
           assert.equal(denied.status,401);
+          assert.equal(denied.headers['www-authenticate'],undefined);
           assert.equal(denied.headers['netlify-cdn-cache-control'],'no-store');
           assert.equal(denied.headers['location'],undefined);
           assert.equal(denied.raw,'TEST_ACCESS_REQUIRED');
